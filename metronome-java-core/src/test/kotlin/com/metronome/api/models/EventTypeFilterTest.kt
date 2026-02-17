@@ -2,17 +2,35 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.metronome.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class EventTypeFilterTest {
+internal class EventTypeFilterTest {
 
     @Test
-    fun createEventTypeFilter() {
+    fun create() {
         val eventTypeFilter =
             EventTypeFilter.builder().addInValue("string").addNotInValue("string").build()
-        assertThat(eventTypeFilter).isNotNull
-        assertThat(eventTypeFilter.inValues().get()).containsExactly("string")
-        assertThat(eventTypeFilter.notInValues().get()).containsExactly("string")
+
+        assertThat(eventTypeFilter.inValues().getOrNull()).containsExactly("string")
+        assertThat(eventTypeFilter.notInValues().getOrNull()).containsExactly("string")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val eventTypeFilter =
+            EventTypeFilter.builder().addInValue("string").addNotInValue("string").build()
+
+        val roundtrippedEventTypeFilter =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(eventTypeFilter),
+                jacksonTypeRef<EventTypeFilter>(),
+            )
+
+        assertThat(roundtrippedEventTypeFilter).isEqualTo(eventTypeFilter)
     }
 }

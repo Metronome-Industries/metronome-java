@@ -2,23 +2,45 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.metronome.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CommitRateTest {
+internal class CommitRateTest {
 
     @Test
-    fun createCommitRate() {
+    fun create() {
         val commitRate =
             CommitRate.builder()
                 .rateType(CommitRate.RateType.FLAT)
                 .price(0.0)
                 .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .build()
-        assertThat(commitRate).isNotNull
+
         assertThat(commitRate.rateType()).isEqualTo(CommitRate.RateType.FLAT)
         assertThat(commitRate.price()).contains(0.0)
-        assertThat(commitRate.tiers().get())
+        assertThat(commitRate.tiers().getOrNull())
             .containsExactly(Tier.builder().price(0.0).size(0.0).build())
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val commitRate =
+            CommitRate.builder()
+                .rateType(CommitRate.RateType.FLAT)
+                .price(0.0)
+                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                .build()
+
+        val roundtrippedCommitRate =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(commitRate),
+                jacksonTypeRef<CommitRate>(),
+            )
+
+        assertThat(roundtrippedCommitRate).isEqualTo(commitRate)
     }
 }

@@ -8,14 +8,13 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.models.EventTypeFilter
 import com.metronome.api.models.Id
 import com.metronome.api.models.PropertyFilter
-import com.metronome.api.models.V1BillableMetricArchiveParams
-import com.metronome.api.models.V1BillableMetricCreateParams
-import com.metronome.api.models.V1BillableMetricRetrieveParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricCreateParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class BillableMetricServiceAsyncTest {
+internal class BillableMetricServiceAsyncTest {
 
     @Test
     fun create() {
@@ -28,12 +27,12 @@ class BillableMetricServiceAsyncTest {
 
         val billableMetricFuture =
             billableMetricServiceAsync.create(
-                V1BillableMetricCreateParams.builder()
+                BillableMetricCreateParams.builder()
                     .name("CPU Hours")
                     .aggregationKey("cpu_hours")
-                    .aggregationType(V1BillableMetricCreateParams.AggregationType.COUNT)
+                    .aggregationType(BillableMetricCreateParams.AggregationType.SUM)
                     .customFields(
-                        V1BillableMetricCreateParams.CustomFields.builder()
+                        BillableMetricCreateParams.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -88,7 +87,7 @@ class BillableMetricServiceAsyncTest {
 
         val billableMetricFuture =
             billableMetricServiceAsync.retrieve(
-                V1BillableMetricRetrieveParams.builder()
+                BillableMetricRetrieveParams.builder()
                     .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .build()
             )
@@ -123,9 +122,7 @@ class BillableMetricServiceAsyncTest {
 
         val responseFuture =
             billableMetricServiceAsync.archive(
-                V1BillableMetricArchiveParams.builder()
-                    .id(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
-                    .build()
+                Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
             )
 
         val response = responseFuture.get()

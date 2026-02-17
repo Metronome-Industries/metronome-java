@@ -1,21 +1,35 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1BillableMetricArchiveParams
-import com.metronome.api.models.V1BillableMetricArchiveResponse
-import com.metronome.api.models.V1BillableMetricCreateParams
-import com.metronome.api.models.V1BillableMetricCreateResponse
-import com.metronome.api.models.V1BillableMetricListPageAsync
-import com.metronome.api.models.V1BillableMetricListParams
-import com.metronome.api.models.V1BillableMetricRetrieveParams
-import com.metronome.api.models.V1BillableMetricRetrieveResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.Id
+import com.metronome.api.models.v1.billablemetrics.BillableMetricArchiveParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricArchiveResponse
+import com.metronome.api.models.v1.billablemetrics.BillableMetricCreateParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricCreateResponse
+import com.metronome.api.models.v1.billablemetrics.BillableMetricListPageAsync
+import com.metronome.api.models.v1.billablemetrics.BillableMetricListParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface BillableMetricServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): BillableMetricServiceAsync
 
     /**
      * Create billable metrics programmatically with this endpoint—an essential step in configuring
@@ -42,11 +56,15 @@ interface BillableMetricServiceAsync {
      *   which have been optimized for ultra low latency and high throughput workflows.
      * - Use SQL billable metrics if you require more flexible aggregation options.
      */
-    @JvmOverloads
     fun create(
-        params: V1BillableMetricCreateParams,
+        params: BillableMetricCreateParams
+    ): CompletableFuture<BillableMetricCreateResponse> = create(params, RequestOptions.none())
+
+    /** @see create */
+    fun create(
+        params: BillableMetricCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1BillableMetricCreateResponse>
+    ): CompletableFuture<BillableMetricCreateResponse>
 
     /**
      * Retrieves the complete configuration for a specific billable metric by its ID. Use this to
@@ -58,11 +76,15 @@ interface BillableMetricServiceAsync {
      * - Archived billable metrics will include an `archived_at` timestamp; they no longer process
      *   new usage events but remain accessible for historical reference.
      */
-    @JvmOverloads
     fun retrieve(
-        params: V1BillableMetricRetrieveParams,
+        params: BillableMetricRetrieveParams
+    ): CompletableFuture<BillableMetricRetrieveResponse> = retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
+    fun retrieve(
+        params: BillableMetricRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1BillableMetricRetrieveResponse>
+    ): CompletableFuture<BillableMetricRetrieveResponse>
 
     /**
      * Retrieves all billable metrics with their complete configurations. Use this for programmatic
@@ -70,20 +92,23 @@ interface BillableMetricServiceAsync {
      * auditing for orphaned or archived metrics. Important: Archived metrics are excluded by
      * default; use `include_archived`=`true` parameter to include them.
      */
-    @JvmOverloads
+    fun list(): CompletableFuture<BillableMetricListPageAsync> =
+        list(BillableMetricListParams.none())
+
+    /** @see list */
     fun list(
-        params: V1BillableMetricListParams = V1BillableMetricListParams.none(),
+        params: BillableMetricListParams = BillableMetricListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1BillableMetricListPageAsync>
+    ): CompletableFuture<BillableMetricListPageAsync>
 
-    /**
-     * Retrieves all billable metrics with their complete configurations. Use this for programmatic
-     * discovery and management of billable metrics, such as associating metrics to products and
-     * auditing for orphaned or archived metrics. Important: Archived metrics are excluded by
-     * default; use `include_archived`=`true` parameter to include them.
-     */
-    fun list(requestOptions: RequestOptions): CompletableFuture<V1BillableMetricListPageAsync> =
-        list(V1BillableMetricListParams.none(), requestOptions)
+    /** @see list */
+    fun list(
+        params: BillableMetricListParams = BillableMetricListParams.none()
+    ): CompletableFuture<BillableMetricListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see list */
+    fun list(requestOptions: RequestOptions): CompletableFuture<BillableMetricListPageAsync> =
+        list(BillableMetricListParams.none(), requestOptions)
 
     /**
      * Use this endpoint to retire billable metrics that are no longer used. After a billable metric
@@ -95,9 +120,121 @@ interface BillableMetricServiceAsync {
      * Archived billable metrics will be returned on the `getBillableMetric` and
      * `listBillableMetrics` endpoints with a populated `archived_at` field.
      */
-    @JvmOverloads
     fun archive(
-        params: V1BillableMetricArchiveParams,
+        params: BillableMetricArchiveParams
+    ): CompletableFuture<BillableMetricArchiveResponse> = archive(params, RequestOptions.none())
+
+    /** @see archive */
+    fun archive(
+        params: BillableMetricArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1BillableMetricArchiveResponse>
+    ): CompletableFuture<BillableMetricArchiveResponse>
+
+    /** @see archive */
+    fun archive(
+        id: Id,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BillableMetricArchiveResponse> =
+        archive(BillableMetricArchiveParams.builder().id(id).build(), requestOptions)
+
+    /** @see archive */
+    fun archive(id: Id): CompletableFuture<BillableMetricArchiveResponse> =
+        archive(id, RequestOptions.none())
+
+    /**
+     * A view of [BillableMetricServiceAsync] that provides access to raw HTTP responses for each
+     * method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BillableMetricServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/billable-metrics/create`, but is otherwise the
+         * same as [BillableMetricServiceAsync.create].
+         */
+        fun create(
+            params: BillableMetricCreateParams
+        ): CompletableFuture<HttpResponseFor<BillableMetricCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            params: BillableMetricCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetricCreateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/billable-metrics/{billable_metric_id}`, but is
+         * otherwise the same as [BillableMetricServiceAsync.retrieve].
+         */
+        fun retrieve(
+            params: BillableMetricRetrieveParams
+        ): CompletableFuture<HttpResponseFor<BillableMetricRetrieveResponse>> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        fun retrieve(
+            params: BillableMetricRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetricRetrieveResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/billable-metrics`, but is otherwise the same as
+         * [BillableMetricServiceAsync.list].
+         */
+        fun list(): CompletableFuture<HttpResponseFor<BillableMetricListPageAsync>> =
+            list(BillableMetricListParams.none())
+
+        /** @see list */
+        fun list(
+            params: BillableMetricListParams = BillableMetricListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetricListPageAsync>>
+
+        /** @see list */
+        fun list(
+            params: BillableMetricListParams = BillableMetricListParams.none()
+        ): CompletableFuture<HttpResponseFor<BillableMetricListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<BillableMetricListPageAsync>> =
+            list(BillableMetricListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /v1/billable-metrics/archive`, but is otherwise the
+         * same as [BillableMetricServiceAsync.archive].
+         */
+        fun archive(
+            params: BillableMetricArchiveParams
+        ): CompletableFuture<HttpResponseFor<BillableMetricArchiveResponse>> =
+            archive(params, RequestOptions.none())
+
+        /** @see archive */
+        fun archive(
+            params: BillableMetricArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetricArchiveResponse>>
+
+        /** @see archive */
+        fun archive(
+            id: Id,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetricArchiveResponse>> =
+            archive(BillableMetricArchiveParams.builder().id(id).build(), requestOptions)
+
+        /** @see archive */
+        fun archive(id: Id): CompletableFuture<HttpResponseFor<BillableMetricArchiveResponse>> =
+            archive(id, RequestOptions.none())
+    }
 }

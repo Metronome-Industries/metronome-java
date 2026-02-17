@@ -1,27 +1,42 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.blocking.v1.contracts
 
+import com.google.errorprone.annotations.MustBeClosed
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1ContractRateCardArchiveParams
-import com.metronome.api.models.V1ContractRateCardArchiveResponse
-import com.metronome.api.models.V1ContractRateCardCreateParams
-import com.metronome.api.models.V1ContractRateCardCreateResponse
-import com.metronome.api.models.V1ContractRateCardListPage
-import com.metronome.api.models.V1ContractRateCardListParams
-import com.metronome.api.models.V1ContractRateCardRetrieveParams
-import com.metronome.api.models.V1ContractRateCardRetrieveRateScheduleParams
-import com.metronome.api.models.V1ContractRateCardRetrieveRateScheduleResponse
-import com.metronome.api.models.V1ContractRateCardRetrieveResponse
-import com.metronome.api.models.V1ContractRateCardUpdateParams
-import com.metronome.api.models.V1ContractRateCardUpdateResponse
-import com.metronome.api.services.blocking.v1.contracts.rateCards.NamedScheduleService
-import com.metronome.api.services.blocking.v1.contracts.rateCards.ProductOrderService
-import com.metronome.api.services.blocking.v1.contracts.rateCards.RateService
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.Id
+import com.metronome.api.models.v1.contracts.ratecards.RateCardArchiveParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardArchiveResponse
+import com.metronome.api.models.v1.contracts.ratecards.RateCardCreateParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardCreateResponse
+import com.metronome.api.models.v1.contracts.ratecards.RateCardListPage
+import com.metronome.api.models.v1.contracts.ratecards.RateCardListParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveRateScheduleParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveRateScheduleResponse
+import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveResponse
+import com.metronome.api.models.v1.contracts.ratecards.RateCardUpdateParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardUpdateResponse
+import com.metronome.api.services.blocking.v1.contracts.ratecards.NamedScheduleService
+import com.metronome.api.services.blocking.v1.contracts.ratecards.ProductOrderService
+import com.metronome.api.services.blocking.v1.contracts.ratecards.RateService
+import java.util.function.Consumer
 
 interface RateCardService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateCardService
 
     fun productOrders(): ProductOrderService
 
@@ -59,22 +74,38 @@ interface RateCardService {
      *   card's alias schedule will be updated. The alias will reference the rate card to which it
      *   was most recently assigned.
      */
-    @JvmOverloads
+    fun create(params: RateCardCreateParams): RateCardCreateResponse =
+        create(params, RequestOptions.none())
+
+    /** @see create */
     fun create(
-        params: V1ContractRateCardCreateParams,
+        params: RateCardCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractRateCardCreateResponse
+    ): RateCardCreateResponse
 
     /**
      * Return details for a specific rate card including name, description, and aliases. This
      * endpoint does not return rates - use the dedicated getRates or getRateSchedule endpoints to
      * understand the rates on a rate card.
      */
-    @JvmOverloads
+    fun retrieve(params: RateCardRetrieveParams): RateCardRetrieveResponse =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
     fun retrieve(
-        params: V1ContractRateCardRetrieveParams,
+        params: RateCardRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractRateCardRetrieveResponse
+    ): RateCardRetrieveResponse
+
+    /** @see retrieve */
+    fun retrieve(
+        id: Id,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): RateCardRetrieveResponse =
+        retrieve(RateCardRetrieveParams.builder().id(id).build(), requestOptions)
+
+    /** @see retrieve */
+    fun retrieve(id: Id): RateCardRetrieveResponse = retrieve(id, RequestOptions.none())
 
     /**
      * Update the metadata properties of an existing rate card, including its name, description, and
@@ -104,7 +135,6 @@ interface RateCardService {
      *   Metronome.
      *
      * #### How scheduled aliases work for PLG grandfathering:
-     *
      * Initial setup:
      * - Add alias to current rate card: Assign a stable alias (e.g., "standard-pricing") to your
      *   active rate card
@@ -120,30 +150,35 @@ interface RateCardService {
      * - Automatic cutover: Starting at the scheduled time, new contracts created in your PLG
      *   workflow using that alias will automatically reference the new rate card
      */
-    @JvmOverloads
+    fun update(params: RateCardUpdateParams): RateCardUpdateResponse =
+        update(params, RequestOptions.none())
+
+    /** @see update */
     fun update(
-        params: V1ContractRateCardUpdateParams,
+        params: RateCardUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractRateCardUpdateResponse
+    ): RateCardUpdateResponse
 
     /**
      * List all rate cards. Returns rate card IDs, names, descriptions, aliases, and other details.
      * To view the rates associated with a given rate card, use the getRates or getRateSchedule
      * endpoints.
      */
-    @JvmOverloads
+    fun list(): RateCardListPage = list(RateCardListParams.none())
+
+    /** @see list */
     fun list(
-        params: V1ContractRateCardListParams = V1ContractRateCardListParams.none(),
+        params: RateCardListParams = RateCardListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractRateCardListPage
+    ): RateCardListPage
 
-    /**
-     * List all rate cards. Returns rate card IDs, names, descriptions, aliases, and other details.
-     * To view the rates associated with a given rate card, use the getRates or getRateSchedule
-     * endpoints.
-     */
-    fun list(requestOptions: RequestOptions): V1ContractRateCardListPage =
-        list(V1ContractRateCardListParams.none(), requestOptions)
+    /** @see list */
+    fun list(params: RateCardListParams = RateCardListParams.none()): RateCardListPage =
+        list(params, RequestOptions.none())
+
+    /** @see list */
+    fun list(requestOptions: RequestOptions): RateCardListPage =
+        list(RateCardListParams.none(), requestOptions)
 
     /**
      * Permanently disable a rate card by archiving it, preventing use in new contracts while
@@ -151,11 +186,24 @@ interface RateCardService {
      * consolidating rate cards, or removing outdated pricing structures. Returns the archived rate
      * card ID and stops the rate card from appearing in contract creation workflows.
      */
-    @JvmOverloads
+    fun archive(params: RateCardArchiveParams): RateCardArchiveResponse =
+        archive(params, RequestOptions.none())
+
+    /** @see archive */
     fun archive(
-        params: V1ContractRateCardArchiveParams,
+        params: RateCardArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractRateCardArchiveResponse
+    ): RateCardArchiveResponse
+
+    /** @see archive */
+    fun archive(
+        id: Id,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): RateCardArchiveResponse =
+        archive(RateCardArchiveParams.builder().id(id).build(), requestOptions)
+
+    /** @see archive */
+    fun archive(id: Id): RateCardArchiveResponse = archive(id, RequestOptions.none())
 
     /**
      * A rate card defines the prices that you charge for your products. Rate cards support
@@ -169,9 +217,158 @@ interface RateCardService {
      * If you want to understand the rates for a specific customer's contract, inclusive of
      * contract-level overrides, use the `getContractRateSchedule` endpoint.
      */
-    @JvmOverloads
     fun retrieveRateSchedule(
-        params: V1ContractRateCardRetrieveRateScheduleParams,
+        params: RateCardRetrieveRateScheduleParams
+    ): RateCardRetrieveRateScheduleResponse = retrieveRateSchedule(params, RequestOptions.none())
+
+    /** @see retrieveRateSchedule */
+    fun retrieveRateSchedule(
+        params: RateCardRetrieveRateScheduleParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractRateCardRetrieveRateScheduleResponse
+    ): RateCardRetrieveRateScheduleResponse
+
+    /** A view of [RateCardService] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateCardService.WithRawResponse
+
+        fun productOrders(): ProductOrderService.WithRawResponse
+
+        fun rates(): RateService.WithRawResponse
+
+        fun namedSchedules(): NamedScheduleService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/create`, but is
+         * otherwise the same as [RateCardService.create].
+         */
+        @MustBeClosed
+        fun create(params: RateCardCreateParams): HttpResponseFor<RateCardCreateResponse> =
+            create(params, RequestOptions.none())
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            params: RateCardCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateCardCreateResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/get`, but is
+         * otherwise the same as [RateCardService.retrieve].
+         */
+        @MustBeClosed
+        fun retrieve(params: RateCardRetrieveParams): HttpResponseFor<RateCardRetrieveResponse> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(
+            params: RateCardRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateCardRetrieveResponse>
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(
+            id: Id,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateCardRetrieveResponse> =
+            retrieve(RateCardRetrieveParams.builder().id(id).build(), requestOptions)
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(id: Id): HttpResponseFor<RateCardRetrieveResponse> =
+            retrieve(id, RequestOptions.none())
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/update`, but is
+         * otherwise the same as [RateCardService.update].
+         */
+        @MustBeClosed
+        fun update(params: RateCardUpdateParams): HttpResponseFor<RateCardUpdateResponse> =
+            update(params, RequestOptions.none())
+
+        /** @see update */
+        @MustBeClosed
+        fun update(
+            params: RateCardUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateCardUpdateResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/list`, but is
+         * otherwise the same as [RateCardService.list].
+         */
+        @MustBeClosed
+        fun list(): HttpResponseFor<RateCardListPage> = list(RateCardListParams.none())
+
+        /** @see list */
+        @MustBeClosed
+        fun list(
+            params: RateCardListParams = RateCardListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateCardListPage>
+
+        /** @see list */
+        @MustBeClosed
+        fun list(
+            params: RateCardListParams = RateCardListParams.none()
+        ): HttpResponseFor<RateCardListPage> = list(params, RequestOptions.none())
+
+        /** @see list */
+        @MustBeClosed
+        fun list(requestOptions: RequestOptions): HttpResponseFor<RateCardListPage> =
+            list(RateCardListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/archive`, but is
+         * otherwise the same as [RateCardService.archive].
+         */
+        @MustBeClosed
+        fun archive(params: RateCardArchiveParams): HttpResponseFor<RateCardArchiveResponse> =
+            archive(params, RequestOptions.none())
+
+        /** @see archive */
+        @MustBeClosed
+        fun archive(
+            params: RateCardArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateCardArchiveResponse>
+
+        /** @see archive */
+        @MustBeClosed
+        fun archive(
+            id: Id,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateCardArchiveResponse> =
+            archive(RateCardArchiveParams.builder().id(id).build(), requestOptions)
+
+        /** @see archive */
+        @MustBeClosed
+        fun archive(id: Id): HttpResponseFor<RateCardArchiveResponse> =
+            archive(id, RequestOptions.none())
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/getRateSchedule`,
+         * but is otherwise the same as [RateCardService.retrieveRateSchedule].
+         */
+        @MustBeClosed
+        fun retrieveRateSchedule(
+            params: RateCardRetrieveRateScheduleParams
+        ): HttpResponseFor<RateCardRetrieveRateScheduleResponse> =
+            retrieveRateSchedule(params, RequestOptions.none())
+
+        /** @see retrieveRateSchedule */
+        @MustBeClosed
+        fun retrieveRateSchedule(
+            params: RateCardRetrieveRateScheduleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateCardRetrieveRateScheduleResponse>
+    }
 }

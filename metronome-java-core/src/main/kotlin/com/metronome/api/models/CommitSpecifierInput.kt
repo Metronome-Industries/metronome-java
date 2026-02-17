@@ -10,98 +10,125 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.NoAutoDetect
-import com.metronome.api.core.immutableEmptyMap
+import com.metronome.api.core.checkKnown
 import com.metronome.api.core.toImmutable
+import com.metronome.api.errors.MetronomeInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-@NoAutoDetect
 class CommitSpecifierInput
-@JsonCreator
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    @JsonProperty("presentation_group_values")
-    @ExcludeMissing
-    private val presentationGroupValues: JsonField<PresentationGroupValues> = JsonMissing.of(),
-    @JsonProperty("pricing_group_values")
-    @ExcludeMissing
-    private val pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
-    @JsonProperty("product_id")
-    @ExcludeMissing
-    private val productId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("product_tags")
-    @ExcludeMissing
-    private val productTags: JsonField<List<String>> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val presentationGroupValues: JsonField<PresentationGroupValues>,
+    private val pricingGroupValues: JsonField<PricingGroupValues>,
+    private val productId: JsonField<String>,
+    private val productTags: JsonField<List<String>>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("presentation_group_values")
+        @ExcludeMissing
+        presentationGroupValues: JsonField<PresentationGroupValues> = JsonMissing.of(),
+        @JsonProperty("pricing_group_values")
+        @ExcludeMissing
+        pricingGroupValues: JsonField<PricingGroupValues> = JsonMissing.of(),
+        @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("product_tags")
+        @ExcludeMissing
+        productTags: JsonField<List<String>> = JsonMissing.of(),
+    ) : this(presentationGroupValues, pricingGroupValues, productId, productTags, mutableMapOf())
 
     /**
      * If provided, the specifier will apply to product usage with these set of presentation group
      * values.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun presentationGroupValues(): Optional<PresentationGroupValues> =
-        Optional.ofNullable(presentationGroupValues.getNullable("presentation_group_values"))
+        presentationGroupValues.getOptional("presentation_group_values")
 
     /**
      * If provided, the specifier will apply to product usage with these set of pricing group
      * values.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun pricingGroupValues(): Optional<PricingGroupValues> =
-        Optional.ofNullable(pricingGroupValues.getNullable("pricing_group_values"))
-
-    /** If provided, the specifier will only apply to the product with the specified ID. */
-    fun productId(): Optional<String> = Optional.ofNullable(productId.getNullable("product_id"))
-
-    /** If provided, the specifier will only apply to products with all the specified tags. */
-    fun productTags(): Optional<List<String>> =
-        Optional.ofNullable(productTags.getNullable("product_tags"))
+        pricingGroupValues.getOptional("pricing_group_values")
 
     /**
-     * If provided, the specifier will apply to product usage with these set of presentation group
-     * values.
+     * If provided, the specifier will only apply to the product with the specified ID.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun productId(): Optional<String> = productId.getOptional("product_id")
+
+    /**
+     * If provided, the specifier will only apply to products with all the specified tags.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun productTags(): Optional<List<String>> = productTags.getOptional("product_tags")
+
+    /**
+     * Returns the raw JSON value of [presentationGroupValues].
+     *
+     * Unlike [presentationGroupValues], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
     @JsonProperty("presentation_group_values")
     @ExcludeMissing
     fun _presentationGroupValues(): JsonField<PresentationGroupValues> = presentationGroupValues
 
     /**
-     * If provided, the specifier will apply to product usage with these set of pricing group
-     * values.
+     * Returns the raw JSON value of [pricingGroupValues].
+     *
+     * Unlike [pricingGroupValues], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     @JsonProperty("pricing_group_values")
     @ExcludeMissing
     fun _pricingGroupValues(): JsonField<PricingGroupValues> = pricingGroupValues
 
-    /** If provided, the specifier will only apply to the product with the specified ID. */
+    /**
+     * Returns the raw JSON value of [productId].
+     *
+     * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
-    /** If provided, the specifier will only apply to products with all the specified tags. */
+    /**
+     * Returns the raw JSON value of [productTags].
+     *
+     * Unlike [productTags], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("product_tags")
     @ExcludeMissing
     fun _productTags(): JsonField<List<String>> = productTags
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): CommitSpecifierInput = apply {
-        if (validated) {
-            return@apply
-        }
-
-        presentationGroupValues().ifPresent { it.validate() }
-        pricingGroupValues().ifPresent { it.validate() }
-        productId()
-        productTags()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /** Returns a mutable builder for constructing an instance of [CommitSpecifierInput]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -131,8 +158,11 @@ private constructor(
             presentationGroupValues(JsonField.of(presentationGroupValues))
 
         /**
-         * If provided, the specifier will apply to product usage with these set of presentation
-         * group values.
+         * Sets [Builder.presentationGroupValues] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.presentationGroupValues] with a well-typed
+         * [PresentationGroupValues] value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
          */
         fun presentationGroupValues(presentationGroupValues: JsonField<PresentationGroupValues>) =
             apply {
@@ -147,8 +177,11 @@ private constructor(
             pricingGroupValues(JsonField.of(pricingGroupValues))
 
         /**
-         * If provided, the specifier will apply to product usage with these set of pricing group
-         * values.
+         * Sets [Builder.pricingGroupValues] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.pricingGroupValues] with a well-typed
+         * [PricingGroupValues] value instead. This method is primarily for setting the field to an
+         * undocumented or not yet supported value.
          */
         fun pricingGroupValues(pricingGroupValues: JsonField<PricingGroupValues>) = apply {
             this.pricingGroupValues = pricingGroupValues
@@ -157,28 +190,38 @@ private constructor(
         /** If provided, the specifier will only apply to the product with the specified ID. */
         fun productId(productId: String) = productId(JsonField.of(productId))
 
-        /** If provided, the specifier will only apply to the product with the specified ID. */
+        /**
+         * Sets [Builder.productId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
         /** If provided, the specifier will only apply to products with all the specified tags. */
         fun productTags(productTags: List<String>) = productTags(JsonField.of(productTags))
 
-        /** If provided, the specifier will only apply to products with all the specified tags. */
+        /**
+         * Sets [Builder.productTags] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productTags] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun productTags(productTags: JsonField<List<String>>) = apply {
             this.productTags = productTags.map { it.toMutableList() }
         }
 
-        /** If provided, the specifier will only apply to products with all the specified tags. */
+        /**
+         * Adds a single [String] to [productTags].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addProductTag(productTag: String) = apply {
             productTags =
-                (productTags ?: JsonField.of(mutableListOf())).apply {
-                    asKnown()
-                        .orElseThrow {
-                            IllegalStateException(
-                                "Field was set to non-list type: ${javaClass.simpleName}"
-                            )
-                        }
-                        .add(productTag)
+                (productTags ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("productTags", it).add(productTag)
                 }
         }
 
@@ -201,46 +244,77 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [CommitSpecifierInput].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): CommitSpecifierInput =
             CommitSpecifierInput(
                 presentationGroupValues,
                 pricingGroupValues,
                 productId,
                 (productTags ?: JsonMissing.of()).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): CommitSpecifierInput = apply {
+        if (validated) {
+            return@apply
+        }
+
+        presentationGroupValues().ifPresent { it.validate() }
+        pricingGroupValues().ifPresent { it.validate() }
+        productId()
+        productTags()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: MetronomeInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (presentationGroupValues.asKnown().getOrNull()?.validity() ?: 0) +
+            (pricingGroupValues.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (productId.asKnown().isPresent) 1 else 0) +
+            (productTags.asKnown().getOrNull()?.size ?: 0)
 
     /**
      * If provided, the specifier will apply to product usage with these set of presentation group
      * values.
      */
-    @NoAutoDetect
     class PresentationGroupValues
     @JsonCreator
     private constructor(
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
     ) {
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-        private var validated: Boolean = false
-
-        fun validate(): PresentationGroupValues = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [PresentationGroupValues].
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -273,21 +347,53 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [PresentationGroupValues].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): PresentationGroupValues =
                 PresentationGroupValues(additionalProperties.toImmutable())
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): PresentationGroupValues = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is PresentationGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is PresentationGroupValues &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -299,32 +405,22 @@ private constructor(
      * If provided, the specifier will apply to product usage with these set of pricing group
      * values.
      */
-    @NoAutoDetect
     class PricingGroupValues
     @JsonCreator
     private constructor(
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
     ) {
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-        private var validated: Boolean = false
-
-        fun validate(): PricingGroupValues = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [PricingGroupValues]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -357,20 +453,51 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [PricingGroupValues].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): PricingGroupValues = PricingGroupValues(additionalProperties.toImmutable())
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): PricingGroupValues = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is PricingGroupValues && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is PricingGroupValues && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -382,12 +509,23 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CommitSpecifierInput && presentationGroupValues == other.presentationGroupValues && pricingGroupValues == other.pricingGroupValues && productId == other.productId && productTags == other.productTags && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CommitSpecifierInput &&
+            presentationGroupValues == other.presentationGroupValues &&
+            pricingGroupValues == other.pricingGroupValues &&
+            productId == other.productId &&
+            productTags == other.productTags &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(presentationGroupValues, pricingGroupValues, productId, productTags, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            presentationGroupValues,
+            pricingGroupValues,
+            productId,
+            productTags,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

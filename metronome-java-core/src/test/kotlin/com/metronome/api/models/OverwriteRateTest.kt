@@ -2,14 +2,17 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.JsonValue
+import com.metronome.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class OverwriteRateTest {
+internal class OverwriteRateTest {
 
     @Test
-    fun createOverwriteRate() {
+    fun create() {
         val overwriteRate =
             OverwriteRate.builder()
                 .rateType(OverwriteRate.RateType.FLAT)
@@ -29,7 +32,7 @@ class OverwriteRateTest {
                 .quantity(0.0)
                 .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .build()
-        assertThat(overwriteRate).isNotNull
+
         assertThat(overwriteRate.rateType()).isEqualTo(OverwriteRate.RateType.FLAT)
         assertThat(overwriteRate.creditType())
             .contains(
@@ -47,7 +50,39 @@ class OverwriteRateTest {
         assertThat(overwriteRate.isProrated()).contains(true)
         assertThat(overwriteRate.price()).contains(0.0)
         assertThat(overwriteRate.quantity()).contains(0.0)
-        assertThat(overwriteRate.tiers().get())
+        assertThat(overwriteRate.tiers().getOrNull())
             .containsExactly(Tier.builder().price(0.0).size(0.0).build())
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val overwriteRate =
+            OverwriteRate.builder()
+                .rateType(OverwriteRate.RateType.FLAT)
+                .creditType(
+                    CreditTypeData.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .name("name")
+                        .build()
+                )
+                .customRate(
+                    OverwriteRate.CustomRate.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
+                .isProrated(true)
+                .price(0.0)
+                .quantity(0.0)
+                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                .build()
+
+        val roundtrippedOverwriteRate =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(overwriteRate),
+                jacksonTypeRef<OverwriteRate>(),
+            )
+
+        assertThat(roundtrippedOverwriteRate).isEqualTo(overwriteRate)
     }
 }

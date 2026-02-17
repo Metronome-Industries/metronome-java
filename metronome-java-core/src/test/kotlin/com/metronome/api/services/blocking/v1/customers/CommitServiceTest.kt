@@ -6,15 +6,15 @@ import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CommitSpecifierInput
-import com.metronome.api.models.V1CustomerCommitCreateParams
-import com.metronome.api.models.V1CustomerCommitListParams
-import com.metronome.api.models.V1CustomerCommitUpdateEndDateParams
+import com.metronome.api.models.v1.customers.commits.CommitCreateParams
+import com.metronome.api.models.v1.customers.commits.CommitListParams
+import com.metronome.api.models.v1.customers.commits.CommitUpdateEndDateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class CommitServiceTest {
+internal class CommitServiceTest {
 
     @Test
     fun create() {
@@ -27,11 +27,11 @@ class CommitServiceTest {
 
         val commit =
             commitService.create(
-                V1CustomerCommitCreateParams.builder()
+                CommitCreateParams.builder()
                     .accessSchedule(
-                        V1CustomerCommitCreateParams.AccessSchedule.builder()
+                        CommitCreateParams.AccessSchedule.builder()
                             .addScheduleItem(
-                                V1CustomerCommitCreateParams.AccessSchedule.ScheduleItem.builder()
+                                CommitCreateParams.AccessSchedule.ScheduleItem.builder()
                                     .amount(1000.0)
                                     .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
                                     .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
@@ -43,34 +43,31 @@ class CommitServiceTest {
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .priority(100.0)
                     .productId("f14d6729-6a44-4b13-9908-9387f1918790")
-                    .type(V1CustomerCommitCreateParams.Type.PREPAID)
+                    .type(CommitCreateParams.Type.PREPAID)
                     .addApplicableContractId("string")
                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addApplicableProductTag("string")
                     .customFields(
-                        V1CustomerCommitCreateParams.CustomFields.builder()
+                        CommitCreateParams.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
                     .description("description")
                     .invoiceContractId("e57d6929-c2f1-4796-a9a8-63cedefe848d")
                     .invoiceSchedule(
-                        V1CustomerCommitCreateParams.InvoiceSchedule.builder()
+                        CommitCreateParams.InvoiceSchedule.builder()
                             .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                             .doNotInvoice(false)
                             .recurringSchedule(
-                                V1CustomerCommitCreateParams.InvoiceSchedule.RecurringSchedule
-                                    .builder()
+                                CommitCreateParams.InvoiceSchedule.RecurringSchedule.builder()
                                     .amountDistribution(
-                                        V1CustomerCommitCreateParams.InvoiceSchedule
-                                            .RecurringSchedule
+                                        CommitCreateParams.InvoiceSchedule.RecurringSchedule
                                             .AmountDistribution
                                             .DIVIDED
                                     )
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .frequency(
-                                        V1CustomerCommitCreateParams.InvoiceSchedule
-                                            .RecurringSchedule
+                                        CommitCreateParams.InvoiceSchedule.RecurringSchedule
                                             .Frequency
                                             .MONTHLY
                                     )
@@ -81,7 +78,7 @@ class CommitServiceTest {
                                     .build()
                             )
                             .addScheduleItem(
-                                V1CustomerCommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
+                                CommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
                                     .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
                                     .amount(0.0)
                                     .quantity(1.0)
@@ -92,7 +89,7 @@ class CommitServiceTest {
                     )
                     .name("My Commit")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
-                    .rateType(V1CustomerCommitCreateParams.RateType.COMMIT_RATE)
+                    .rateType(CommitCreateParams.RateType.COMMIT_RATE)
                     .salesforceOpportunityId("salesforce_opportunity_id")
                     .addSpecifier(
                         CommitSpecifierInput.builder()
@@ -128,7 +125,7 @@ class CommitServiceTest {
 
         val page =
             commitService.list(
-                V1CustomerCommitListParams.builder()
+                CommitListParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .build()
             )
@@ -147,7 +144,7 @@ class CommitServiceTest {
 
         val response =
             commitService.updateEndDate(
-                V1CustomerCommitUpdateEndDateParams.builder()
+                CommitUpdateEndDateParams.builder()
                     .commitId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))

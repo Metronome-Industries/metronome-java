@@ -2,14 +2,17 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.JsonValue
+import com.metronome.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class BalanceFilterTest {
+internal class BalanceFilterTest {
 
     @Test
-    fun createBalanceFilter() {
+    fun create() {
         val balanceFilter =
             BalanceFilter.builder()
                 .addBalanceType(BalanceFilter.BalanceType.PREPAID_COMMIT)
@@ -20,8 +23,8 @@ class BalanceFilterTest {
                 )
                 .addId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
-        assertThat(balanceFilter).isNotNull
-        assertThat(balanceFilter.balanceTypes().get())
+
+        assertThat(balanceFilter.balanceTypes().getOrNull())
             .containsExactly(BalanceFilter.BalanceType.PREPAID_COMMIT)
         assertThat(balanceFilter.customFields())
             .contains(
@@ -29,7 +32,30 @@ class BalanceFilterTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(balanceFilter.ids().get())
+        assertThat(balanceFilter.ids().getOrNull())
             .containsExactly("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val balanceFilter =
+            BalanceFilter.builder()
+                .addBalanceType(BalanceFilter.BalanceType.PREPAID_COMMIT)
+                .customFields(
+                    BalanceFilter.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .addId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .build()
+
+        val roundtrippedBalanceFilter =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(balanceFilter),
+                jacksonTypeRef<BalanceFilter>(),
+            )
+
+        assertThat(roundtrippedBalanceFilter).isEqualTo(balanceFilter)
     }
 }

@@ -33,9 +33,14 @@ import com.metronome.api.services.async.v1.SettingServiceAsync
 import com.metronome.api.services.async.v1.SettingServiceAsyncImpl
 import com.metronome.api.services.async.v1.UsageServiceAsync
 import com.metronome.api.services.async.v1.UsageServiceAsyncImpl
+import java.util.function.Consumer
 
 class V1ServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     V1ServiceAsync {
+
+    private val withRawResponse: V1ServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     private val alerts: AlertServiceAsync by lazy { AlertServiceAsyncImpl(clientOptions) }
 
@@ -77,6 +82,11 @@ class V1ServiceAsyncImpl internal constructor(private val clientOptions: ClientO
 
     private val settings: SettingServiceAsync by lazy { SettingServiceAsyncImpl(clientOptions) }
 
+    override fun withRawResponse(): V1ServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): V1ServiceAsync =
+        V1ServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun alerts(): AlertServiceAsync = alerts
 
     override fun plans(): PlanServiceAsync = plans
@@ -106,4 +116,105 @@ class V1ServiceAsyncImpl internal constructor(private val clientOptions: ClientO
     override fun payments(): PaymentServiceAsync = payments
 
     override fun settings(): SettingServiceAsync = settings
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        V1ServiceAsync.WithRawResponse {
+
+        private val alerts: AlertServiceAsync.WithRawResponse by lazy {
+            AlertServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val plans: PlanServiceAsync.WithRawResponse by lazy {
+            PlanServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val creditGrants: CreditGrantServiceAsync.WithRawResponse by lazy {
+            CreditGrantServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val pricingUnits: PricingUnitServiceAsync.WithRawResponse by lazy {
+            PricingUnitServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val customers: CustomerServiceAsync.WithRawResponse by lazy {
+            CustomerServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val dashboards: DashboardServiceAsync.WithRawResponse by lazy {
+            DashboardServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val usage: UsageServiceAsync.WithRawResponse by lazy {
+            UsageServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val auditLogs: AuditLogServiceAsync.WithRawResponse by lazy {
+            AuditLogServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val customFields: CustomFieldServiceAsync.WithRawResponse by lazy {
+            CustomFieldServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val billableMetrics: BillableMetricServiceAsync.WithRawResponse by lazy {
+            BillableMetricServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val services: ServiceServiceAsync.WithRawResponse by lazy {
+            ServiceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val invoices: InvoiceServiceAsync.WithRawResponse by lazy {
+            InvoiceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val contracts: ContractServiceAsync.WithRawResponse by lazy {
+            ContractServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val payments: PaymentServiceAsync.WithRawResponse by lazy {
+            PaymentServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val settings: SettingServiceAsync.WithRawResponse by lazy {
+            SettingServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): V1ServiceAsync.WithRawResponse =
+            V1ServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        override fun alerts(): AlertServiceAsync.WithRawResponse = alerts
+
+        override fun plans(): PlanServiceAsync.WithRawResponse = plans
+
+        override fun creditGrants(): CreditGrantServiceAsync.WithRawResponse = creditGrants
+
+        override fun pricingUnits(): PricingUnitServiceAsync.WithRawResponse = pricingUnits
+
+        override fun customers(): CustomerServiceAsync.WithRawResponse = customers
+
+        override fun dashboards(): DashboardServiceAsync.WithRawResponse = dashboards
+
+        override fun usage(): UsageServiceAsync.WithRawResponse = usage
+
+        override fun auditLogs(): AuditLogServiceAsync.WithRawResponse = auditLogs
+
+        override fun customFields(): CustomFieldServiceAsync.WithRawResponse = customFields
+
+        override fun billableMetrics(): BillableMetricServiceAsync.WithRawResponse = billableMetrics
+
+        override fun services(): ServiceServiceAsync.WithRawResponse = services
+
+        override fun invoices(): InvoiceServiceAsync.WithRawResponse = invoices
+
+        override fun contracts(): ContractServiceAsync.WithRawResponse = contracts
+
+        override fun payments(): PaymentServiceAsync.WithRawResponse = payments
+
+        override fun settings(): SettingServiceAsync.WithRawResponse = settings
+    }
 }

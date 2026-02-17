@@ -5,76 +5,115 @@ package com.metronome.api.services.async.v1.customers
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.handlers.emptyHandler
+import com.metronome.api.core.handlers.errorBodyHandler
 import com.metronome.api.core.handlers.errorHandler
 import com.metronome.api.core.handlers.jsonHandler
-import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
+import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
-import com.metronome.api.core.json
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.core.http.json
+import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepareAsync
-import com.metronome.api.errors.MetronomeError
-import com.metronome.api.models.V1CustomerNamedScheduleRetrieveParams
-import com.metronome.api.models.V1CustomerNamedScheduleRetrieveResponse
-import com.metronome.api.models.V1CustomerNamedScheduleUpdateParams
+import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleRetrieveParams
+import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleRetrieveResponse
+import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleUpdateParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class NamedScheduleServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     NamedScheduleServiceAsync {
 
-    private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
-
-    private val retrieveHandler: Handler<V1CustomerNamedScheduleRetrieveResponse> =
-        jsonHandler<V1CustomerNamedScheduleRetrieveResponse>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * Get a named schedule for the given customer. This endpoint's availability is dependent on
-     * your client's configuration.
-     */
-    override fun retrieve(
-        params: V1CustomerNamedScheduleRetrieveParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<V1CustomerNamedScheduleRetrieveResponse> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("v1", "customers", "getNamedSchedule")
-                .body(json(clientOptions.jsonMapper, params._body()))
-                .build()
-                .prepareAsync(clientOptions, params)
-        return request
-            .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-            .thenApply { response ->
-                response
-                    .use { retrieveHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            it.validate()
-                        }
-                    }
-            }
+    private val withRawResponse: NamedScheduleServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
     }
 
-    private val updateHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
+    override fun withRawResponse(): NamedScheduleServiceAsync.WithRawResponse = withRawResponse
 
-    /**
-     * Update a named schedule for the given customer. This endpoint's availability is dependent on
-     * your client's configuration.
-     */
-    override fun update(
-        params: V1CustomerNamedScheduleUpdateParams,
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleServiceAsync =
+        NamedScheduleServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+    override fun retrieve(
+        params: NamedScheduleRetrieveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<Void?> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("v1", "customers", "updateNamedSchedule")
-                .body(json(clientOptions.jsonMapper, params._body()))
-                .build()
-                .prepareAsync(clientOptions, params)
-        return request
-            .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-            .thenApply { response -> response.use { updateHandler.handle(it) } }
+    ): CompletableFuture<NamedScheduleRetrieveResponse> =
+        // post /v1/customers/getNamedSchedule
+        withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
+
+    override fun update(
+        params: NamedScheduleUpdateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        // post /v1/customers/updateNamedSchedule
+        withRawResponse().update(params, requestOptions).thenAccept {}
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        NamedScheduleServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): NamedScheduleServiceAsync.WithRawResponse =
+            NamedScheduleServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        private val retrieveHandler: Handler<NamedScheduleRetrieveResponse> =
+            jsonHandler<NamedScheduleRetrieveResponse>(clientOptions.jsonMapper)
+
+        override fun retrieve(
+            params: NamedScheduleRetrieveParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<NamedScheduleRetrieveResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "customers", "getNamedSchedule")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { retrieveHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val updateHandler: Handler<Void?> = emptyHandler()
+
+        override fun update(
+            params: NamedScheduleUpdateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "customers", "updateNamedSchedule")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response.use { updateHandler.handle(it) }
+                    }
+                }
+        }
     }
 }

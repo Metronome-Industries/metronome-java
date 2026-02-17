@@ -4,79 +4,85 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorBodyHandler
 import com.metronome.api.core.handlers.errorHandler
 import com.metronome.api.core.handlers.jsonHandler
-import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
+import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
-import com.metronome.api.errors.MetronomeError
-import com.metronome.api.models.V1AuditLogListPage
-import com.metronome.api.models.V1AuditLogListParams
+import com.metronome.api.models.v1.auditlogs.AuditLogListPage
+import com.metronome.api.models.v1.auditlogs.AuditLogListPageResponse
+import com.metronome.api.models.v1.auditlogs.AuditLogListParams
+import java.util.function.Consumer
 
 class AuditLogServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AuditLogService {
 
-    private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: AuditLogService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val listHandler: Handler<V1AuditLogListPage.Response> =
-        jsonHandler<V1AuditLogListPage.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
+    override fun withRawResponse(): AuditLogService.WithRawResponse = withRawResponse
 
-    /**
-     * Get a comprehensive audit trail of all operations performed in your Metronome account,
-     * whether initiated through the API, web interface, or automated processes. This endpoint
-     * provides detailed logs of who did what and when, enabling compliance reporting, security
-     * monitoring, and operational troubleshooting across all interaction channels.
-     *
-     * ### Use this endpoint to:
-     * - Monitor all account activity for security and compliance purposes
-     * - Track configuration changes regardless of source (API, UI, or system)
-     * - Investigate issues by reviewing historical operations
-     *
-     * ### Key response fields:
-     *
-     * An array of AuditLog objects containing:
-     * - id: Unique identifier for the audit log entry
-     * - timestamp: When the action occurred (RFC 3339 format)
-     * - actor: Information about who performed the action
-     * - request: Details including request ID, IP address, and user agent
-     * - `resource_type`: The type of resource affected (e.g., customer, contract, invoice)
-     * - `resource_id`: The specific resource identifier
-     * - `action`: The operation performed
-     * - `next_page`: Cursor for continuous log retrieval
-     *
-     * ### Usage guidelines:
-     * - Continuous retrieval: The next_page token enables uninterrupted log streaming—save it
-     *   between requests to ensure no logs are missed
-     * - Empty responses: An empty data array means no new logs yet; continue polling with the same
-     *   next_page token
-     * - Date filtering:
-     *     - `starting_on`: Earliest logs to return (inclusive)
-     *     - `ending_before`: Latest logs to return (exclusive)
-     *     - Cannot be used with `next_page`
-     * - Resource filtering: Must specify both `resource_type` and `resource_id` together
-     * - Sort order: Default is `date_asc`; use `date_desc` for newest first
-     */
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AuditLogService =
+        AuditLogServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun list(
-        params: V1AuditLogListParams,
+        params: AuditLogListParams,
         requestOptions: RequestOptions,
-    ): V1AuditLogListPage {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "auditLogs")
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { listHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
+    ): AuditLogListPage =
+        // get /v1/auditLogs
+        withRawResponse().list(params, requestOptions).parse()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        AuditLogService.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): AuditLogService.WithRawResponse =
+            AuditLogServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        private val listHandler: Handler<AuditLogListPageResponse> =
+            jsonHandler<AuditLogListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: AuditLogListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AuditLogListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "auditLogs")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        AuditLogListPage.builder()
+                            .service(AuditLogServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
-            .let { V1AuditLogListPage.of(this, params, it) }
+        }
     }
 }

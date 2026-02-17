@@ -1,11 +1,15 @@
 plugins {
-    id("metronome.kotlin")
-    id("java")
+    id("metronome.java")
     application
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
-    implementation(project(":metronome-java"))
+    implementation(project(":metronome-java-core"))
+    implementation(project(":metronome-java-client-okhttp"))
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -14,5 +18,12 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 application {
-    mainClass = "com.metronome.api.example.Main"
+    // Use `./gradlew :metronome-java-example:run` to run `Main`
+    // Use `./gradlew :metronome-java-example:run -Pexample=Something` to run `SomethingExample`
+    mainClass = "com.metronome.api.example.${
+        if (project.hasProperty("example"))
+            "${project.property("example")}Example"
+        else
+            "Main"
+    }"
 }

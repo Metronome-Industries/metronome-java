@@ -4,154 +4,225 @@ package com.metronome.api.services.async.v1
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorBodyHandler
 import com.metronome.api.core.handlers.errorHandler
 import com.metronome.api.core.handlers.jsonHandler
-import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
+import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepareAsync
-import com.metronome.api.errors.MetronomeError
-import com.metronome.api.models.V1PlanGetDetailsParams
-import com.metronome.api.models.V1PlanGetDetailsResponse
-import com.metronome.api.models.V1PlanListChargesPageAsync
-import com.metronome.api.models.V1PlanListChargesParams
-import com.metronome.api.models.V1PlanListCustomersPageAsync
-import com.metronome.api.models.V1PlanListCustomersParams
-import com.metronome.api.models.V1PlanListPageAsync
-import com.metronome.api.models.V1PlanListParams
+import com.metronome.api.models.v1.plans.PlanGetDetailsParams
+import com.metronome.api.models.v1.plans.PlanGetDetailsResponse
+import com.metronome.api.models.v1.plans.PlanListChargesPageAsync
+import com.metronome.api.models.v1.plans.PlanListChargesPageResponse
+import com.metronome.api.models.v1.plans.PlanListChargesParams
+import com.metronome.api.models.v1.plans.PlanListCustomersPageAsync
+import com.metronome.api.models.v1.plans.PlanListCustomersPageResponse
+import com.metronome.api.models.v1.plans.PlanListCustomersParams
+import com.metronome.api.models.v1.plans.PlanListPageAsync
+import com.metronome.api.models.v1.plans.PlanListPageResponse
+import com.metronome.api.models.v1.plans.PlanListParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class PlanServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     PlanServiceAsync {
 
-    private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: PlanServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val listHandler: Handler<V1PlanListPageAsync.Response> =
-        jsonHandler<V1PlanListPageAsync.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
+    override fun withRawResponse(): PlanServiceAsync.WithRawResponse = withRawResponse
 
-    /**
-     * List all available plans. This is a Plans (deprecated) endpoint. New clients should implement
-     * using Contracts.
-     */
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanServiceAsync =
+        PlanServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun list(
-        params: V1PlanListParams,
+        params: PlanListParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<V1PlanListPageAsync> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "plans")
-                .build()
-                .prepareAsync(clientOptions, params)
-        return request
-            .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-            .thenApply { response ->
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            it.validate()
-                        }
-                    }
-                    .let { V1PlanListPageAsync.of(this, params, it) }
-            }
-    }
+    ): CompletableFuture<PlanListPageAsync> =
+        // get /v1/plans
+        withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    private val getDetailsHandler: Handler<V1PlanGetDetailsResponse> =
-        jsonHandler<V1PlanGetDetailsResponse>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * Fetch high level details of a specific plan. This is a Plans (deprecated) endpoint. New
-     * clients should implement using Contracts.
-     */
     override fun getDetails(
-        params: V1PlanGetDetailsParams,
+        params: PlanGetDetailsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<V1PlanGetDetailsResponse> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "planDetails", params.getPathParam(0))
-                .build()
-                .prepareAsync(clientOptions, params)
-        return request
-            .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-            .thenApply { response ->
-                response
-                    .use { getDetailsHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            it.validate()
-                        }
-                    }
-            }
-    }
+    ): CompletableFuture<PlanGetDetailsResponse> =
+        // get /v1/planDetails/{plan_id}
+        withRawResponse().getDetails(params, requestOptions).thenApply { it.parse() }
 
-    private val listChargesHandler: Handler<V1PlanListChargesPageAsync.Response> =
-        jsonHandler<V1PlanListChargesPageAsync.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * Fetches a list of charges of a specific plan. This is a Plans (deprecated) endpoint. New
-     * clients should implement using Contracts.
-     */
     override fun listCharges(
-        params: V1PlanListChargesParams,
+        params: PlanListChargesParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<V1PlanListChargesPageAsync> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "planDetails", params.getPathParam(0), "charges")
-                .build()
-                .prepareAsync(clientOptions, params)
-        return request
-            .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-            .thenApply { response ->
-                response
-                    .use { listChargesHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            it.validate()
-                        }
-                    }
-                    .let { V1PlanListChargesPageAsync.of(this, params, it) }
-            }
-    }
+    ): CompletableFuture<PlanListChargesPageAsync> =
+        // get /v1/planDetails/{plan_id}/charges
+        withRawResponse().listCharges(params, requestOptions).thenApply { it.parse() }
 
-    private val listCustomersHandler: Handler<V1PlanListCustomersPageAsync.Response> =
-        jsonHandler<V1PlanListCustomersPageAsync.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * Fetches a list of customers on a specific plan (by default, only currently active plans are
-     * included). This is a Plans (deprecated) endpoint. New clients should implement using
-     * Contracts.
-     */
     override fun listCustomers(
-        params: V1PlanListCustomersParams,
+        params: PlanListCustomersParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<V1PlanListCustomersPageAsync> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "planDetails", params.getPathParam(0), "customers")
-                .build()
-                .prepareAsync(clientOptions, params)
-        return request
-            .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-            .thenApply { response ->
-                response
-                    .use { listCustomersHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            it.validate()
-                        }
+    ): CompletableFuture<PlanListCustomersPageAsync> =
+        // get /v1/planDetails/{plan_id}/customers
+        withRawResponse().listCustomers(params, requestOptions).thenApply { it.parse() }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        PlanServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PlanServiceAsync.WithRawResponse =
+            PlanServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        private val listHandler: Handler<PlanListPageResponse> =
+            jsonHandler<PlanListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: PlanListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PlanListPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "plans")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                PlanListPageAsync.builder()
+                                    .service(PlanServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
+                            }
                     }
-                    .let { V1PlanListCustomersPageAsync.of(this, params, it) }
-            }
+                }
+        }
+
+        private val getDetailsHandler: Handler<PlanGetDetailsResponse> =
+            jsonHandler<PlanGetDetailsResponse>(clientOptions.jsonMapper)
+
+        override fun getDetails(
+            params: PlanGetDetailsParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PlanGetDetailsResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "planDetails", params._pathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { getDetailsHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val listChargesHandler: Handler<PlanListChargesPageResponse> =
+            jsonHandler<PlanListChargesPageResponse>(clientOptions.jsonMapper)
+
+        override fun listCharges(
+            params: PlanListChargesParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PlanListChargesPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "planDetails", params._pathParam(0), "charges")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listChargesHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                PlanListChargesPageAsync.builder()
+                                    .service(PlanServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
+                            }
+                    }
+                }
+        }
+
+        private val listCustomersHandler: Handler<PlanListCustomersPageResponse> =
+            jsonHandler<PlanListCustomersPageResponse>(clientOptions.jsonMapper)
+
+        override fun listCustomers(
+            params: PlanListCustomersParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PlanListCustomersPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "planDetails", params._pathParam(0), "customers")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listCustomersHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                PlanListCustomersPageAsync.builder()
+                                    .service(PlanServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
+                            }
+                    }
+                }
+        }
     }
 }

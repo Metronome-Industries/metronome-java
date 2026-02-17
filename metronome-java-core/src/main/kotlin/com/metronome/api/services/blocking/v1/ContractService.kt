@@ -1,41 +1,56 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.blocking.v1
 
+import com.google.errorprone.annotations.MustBeClosed
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1ContractAddManualBalanceEntryParams
-import com.metronome.api.models.V1ContractAmendParams
-import com.metronome.api.models.V1ContractAmendResponse
-import com.metronome.api.models.V1ContractArchiveParams
-import com.metronome.api.models.V1ContractArchiveResponse
-import com.metronome.api.models.V1ContractCreateHistoricalInvoicesParams
-import com.metronome.api.models.V1ContractCreateHistoricalInvoicesResponse
-import com.metronome.api.models.V1ContractCreateParams
-import com.metronome.api.models.V1ContractCreateResponse
-import com.metronome.api.models.V1ContractGetNetBalanceParams
-import com.metronome.api.models.V1ContractGetNetBalanceResponse
-import com.metronome.api.models.V1ContractListBalancesPage
-import com.metronome.api.models.V1ContractListBalancesParams
-import com.metronome.api.models.V1ContractListParams
-import com.metronome.api.models.V1ContractListResponse
-import com.metronome.api.models.V1ContractRetrieveParams
-import com.metronome.api.models.V1ContractRetrieveRateScheduleParams
-import com.metronome.api.models.V1ContractRetrieveRateScheduleResponse
-import com.metronome.api.models.V1ContractRetrieveResponse
-import com.metronome.api.models.V1ContractRetrieveSubscriptionQuantityHistoryParams
-import com.metronome.api.models.V1ContractRetrieveSubscriptionQuantityHistoryResponse
-import com.metronome.api.models.V1ContractScheduleProServicesInvoiceParams
-import com.metronome.api.models.V1ContractScheduleProServicesInvoiceResponse
-import com.metronome.api.models.V1ContractSetUsageFilterParams
-import com.metronome.api.models.V1ContractUpdateEndDateParams
-import com.metronome.api.models.V1ContractUpdateEndDateResponse
+import com.metronome.api.core.http.HttpResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.contracts.ContractAddManualBalanceEntryParams
+import com.metronome.api.models.v1.contracts.ContractAmendParams
+import com.metronome.api.models.v1.contracts.ContractAmendResponse
+import com.metronome.api.models.v1.contracts.ContractArchiveParams
+import com.metronome.api.models.v1.contracts.ContractArchiveResponse
+import com.metronome.api.models.v1.contracts.ContractCreateHistoricalInvoicesParams
+import com.metronome.api.models.v1.contracts.ContractCreateHistoricalInvoicesResponse
+import com.metronome.api.models.v1.contracts.ContractCreateParams
+import com.metronome.api.models.v1.contracts.ContractCreateResponse
+import com.metronome.api.models.v1.contracts.ContractGetNetBalanceParams
+import com.metronome.api.models.v1.contracts.ContractGetNetBalanceResponse
+import com.metronome.api.models.v1.contracts.ContractListBalancesPage
+import com.metronome.api.models.v1.contracts.ContractListBalancesParams
+import com.metronome.api.models.v1.contracts.ContractListParams
+import com.metronome.api.models.v1.contracts.ContractListResponse
+import com.metronome.api.models.v1.contracts.ContractRetrieveParams
+import com.metronome.api.models.v1.contracts.ContractRetrieveRateScheduleParams
+import com.metronome.api.models.v1.contracts.ContractRetrieveRateScheduleResponse
+import com.metronome.api.models.v1.contracts.ContractRetrieveResponse
+import com.metronome.api.models.v1.contracts.ContractRetrieveSubscriptionQuantityHistoryParams
+import com.metronome.api.models.v1.contracts.ContractRetrieveSubscriptionQuantityHistoryResponse
+import com.metronome.api.models.v1.contracts.ContractScheduleProServicesInvoiceParams
+import com.metronome.api.models.v1.contracts.ContractScheduleProServicesInvoiceResponse
+import com.metronome.api.models.v1.contracts.ContractSetUsageFilterParams
+import com.metronome.api.models.v1.contracts.ContractUpdateEndDateParams
+import com.metronome.api.models.v1.contracts.ContractUpdateEndDateResponse
 import com.metronome.api.services.blocking.v1.contracts.NamedScheduleService
 import com.metronome.api.services.blocking.v1.contracts.ProductService
 import com.metronome.api.services.blocking.v1.contracts.RateCardService
+import java.util.function.Consumer
 
 interface ContractService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): ContractService
 
     fun products(): ProductService
 
@@ -64,7 +79,6 @@ interface ContractService {
      *   dates which can be edited over time in the case of co-term upsells.
      *
      * #### Rate Card
-     *
      * If you are offering usage based pricing, you can set a rate card for the contract to
      * reference through `rate_card_id` or `rate_card_alias`. The rate card is a store of all of
      * your usage based products and their centralized pricing. Any new products or price changes on
@@ -77,7 +91,6 @@ interface ContractService {
      * [Rate Cards](https://docs.metronome.com/pricing-packaging/create-manage-rate-cards/).
      *
      * #### Overrides and discounts
-     *
      * Customize pricing on the contract through time-bounded overrides that can target specific
      * products, product families, or complex usage scenarios. Overrides enable two key
      * capabilities:
@@ -89,7 +102,6 @@ interface ContractService {
      * [Contract Overrides](https://docs.metronome.com/manage-product-access/add-contract-override/).
      *
      * #### Commits and Credits
-     *
      * Using commits, configure prepaid or postpaid spending commitments where customers promise to
      * spend a certain amount over the contract period paid in advance or in arrears. Use credits to
      * provide free spending allowances. Under the hood these are the same mechanisms, however,
@@ -111,7 +123,6 @@ interface ContractService {
      * [Credits and Commits](https://docs.metronome.com/pricing-packaging/apply-credits-commits/).
      *
      * #### Subscriptions
-     *
      * You can add a fixed recurring charge to a contract, like monthly licenses or seat-based fees,
      * using the subscription charge. Subscription charges are defined on your rate card and you can
      * select which subscription is applicable to add to each contract. When you add a subscription
@@ -126,13 +137,11 @@ interface ContractService {
      * [Subscriptions](https://docs.metronome.com/manage-product-access/create-subscription/).
      *
      * #### Scheduled Charges
-     *
      * Set up one-time, recurring, or entirely custom charges that occur on specific dates, separate
      * from usage-based billing or commitments. These can be used to model non-recurring platform
      * charges or professional services.
      *
      * #### Threshold Billing
-     *
      * Metronome allows you to configure automatic billing triggers when customers reach spending
      * thresholds to prevent fraud and manage risk. You can use `spend_threshold_configuration` to
      * trigger an invoice to cover current charges whenever the threshold is reached or you can
@@ -152,21 +161,27 @@ interface ContractService {
      *   `usage_filters` to route the correct usage to each contract.
      *   [Read more about usage filters](https://docs.metronome.com/manage-product-access/provision-customer/#create-a-usage-filter).
      */
-    @JvmOverloads
+    fun create(params: ContractCreateParams): ContractCreateResponse =
+        create(params, RequestOptions.none())
+
+    /** @see create */
     fun create(
-        params: V1ContractCreateParams,
+        params: ContractCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractCreateResponse
+    ): ContractCreateResponse
 
     /**
      * This is the v1 endpoint to get a contract. New clients should implement using the v2
      * endpoint.
      */
-    @JvmOverloads
+    fun retrieve(params: ContractRetrieveParams): ContractRetrieveResponse =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
     fun retrieve(
-        params: V1ContractRetrieveParams,
+        params: ContractRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractRetrieveResponse
+    ): ContractRetrieveResponse
 
     /**
      * Retrieves all contracts for a specific customer, including pricing, terms, credits, and
@@ -176,11 +191,13 @@ interface ContractService {
      * ⚠️ Note: This is the legacy v1 endpoint - new integrations should use the v2 endpoint for
      * enhanced features.
      */
-    @JvmOverloads
+    fun list(params: ContractListParams): ContractListResponse = list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V1ContractListParams,
+        params: ContractListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractListResponse
+    ): ContractListResponse
 
     /**
      * Manually adjust the available balance on a commit or credit. This entry is appended to the
@@ -194,15 +211,17 @@ interface ContractService {
      * - Issue credits to customers in the form of increased balance on existing commit or credit
      *
      * ### Usage guidelines:
-     *
      * Manual ledger entries can be extremely useful for resolving discrepancies in Metronome.
      * However, most corrections to inaccurate billings can be modified upstream of the commit,
      * whether that is via contract editing, rate editing, or other actions that cause an invoice to
      * be recalculated.
      */
-    @JvmOverloads
+    fun addManualBalanceEntry(params: ContractAddManualBalanceEntryParams) =
+        addManualBalanceEntry(params, RequestOptions.none())
+
+    /** @see addManualBalanceEntry */
     fun addManualBalanceEntry(
-        params: V1ContractAddManualBalanceEntryParams,
+        params: ContractAddManualBalanceEntryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
@@ -213,11 +232,14 @@ interface ContractService {
      * Metronome representative for more details. Once contract editing is enabled, access to this
      * endpoint will be removed.
      */
-    @JvmOverloads
+    fun amend(params: ContractAmendParams): ContractAmendResponse =
+        amend(params, RequestOptions.none())
+
+    /** @see amend */
     fun amend(
-        params: V1ContractAmendParams,
+        params: ContractAmendParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractAmendResponse
+    ): ContractAmendResponse
 
     /**
      * Permanently end and archive a contract along with all its terms. Any draft invoices will be
@@ -226,7 +248,6 @@ interface ContractService {
      * be removed from a customer.
      *
      * #### Impact on commits and credits:
-     *
      * When archiving a contract, all associated commits and credits are also archived. For prepaid
      * commits with active segments, Metronome automatically generates expiration ledger entries to
      * close out any remaining balances, ensuring accurate accounting of unused prepaid amounts.
@@ -234,16 +255,18 @@ interface ContractService {
      * `PREPAID_COMMIT_EXPIRATION`.
      *
      * #### Archived contract visibility:
-     *
      * Archived contracts remain accessible for historical reporting and audit purposes. They can be
      * retrieved using the `ListContracts` endpoint by setting the `include_archived` parameter to
      * `true` or in the Metronome UI when the "Show archived" option is enabled.
      */
-    @JvmOverloads
+    fun archive(params: ContractArchiveParams): ContractArchiveResponse =
+        archive(params, RequestOptions.none())
+
+    /** @see archive */
     fun archive(
-        params: V1ContractArchiveParams,
+        params: ContractArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractArchiveResponse
+    ): ContractArchiveResponse
 
     /**
      * Create historical usage invoices for past billing periods on specific contracts. Use this
@@ -251,11 +274,16 @@ interface ContractService {
      * ranges. Supports preview mode to validate invoice data before creation. Ideal for billing
      * migrations or correcting past billing periods.
      */
-    @JvmOverloads
     fun createHistoricalInvoices(
-        params: V1ContractCreateHistoricalInvoicesParams,
+        params: ContractCreateHistoricalInvoicesParams
+    ): ContractCreateHistoricalInvoicesResponse =
+        createHistoricalInvoices(params, RequestOptions.none())
+
+    /** @see createHistoricalInvoices */
+    fun createHistoricalInvoices(
+        params: ContractCreateHistoricalInvoicesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractCreateHistoricalInvoicesResponse
+    ): ContractCreateHistoricalInvoicesResponse
 
     /**
      * Retrieve the combined current balance across any grouping of credits and commits for a
@@ -271,7 +299,6 @@ interface ContractService {
      *   in
      *
      * ### Filtering options:
-     *
      * Balance filters allow you to scope the calculation to specific subsets of commits and
      * credits. When using multiple filter objects, they are OR'd together — if a commit or credit
      * matches any filter, it's included in the net balance. Within a single filter object, all
@@ -299,11 +326,14 @@ interface ContractService {
      *   treated as zero when calculating the net balance
      * - **Credit types**: If `credit_type_id` is not specified, the balance defaults to USD (cents)
      */
-    @JvmOverloads
+    fun getNetBalance(params: ContractGetNetBalanceParams): ContractGetNetBalanceResponse =
+        getNetBalance(params, RequestOptions.none())
+
+    /** @see getNetBalance */
     fun getNetBalance(
-        params: V1ContractGetNetBalanceParams,
+        params: ContractGetNetBalanceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractGetNetBalanceResponse
+    ): ContractGetNetBalanceResponse
 
     /**
      * Retrieve a comprehensive view of all available balances (commits and credits) for a customer.
@@ -318,7 +348,6 @@ interface ContractService {
      * - Filter balances by contract or date ranges
      *
      * ### Key response fields:
-     *
      * An array of balance objects (all credits and commits) containing:
      * - Balance details: Current available amount for each commit or credit
      * - Metadata: Product associations, priorities, applicable date ranges
@@ -335,11 +364,14 @@ interface ContractService {
      * - Balance logic: Reflects currently accessible amounts, excluding expired/future segments
      * - Manual adjustments: Includes all manual ledger entries, even future-dated ones
      */
-    @JvmOverloads
+    fun listBalances(params: ContractListBalancesParams): ContractListBalancesPage =
+        listBalances(params, RequestOptions.none())
+
+    /** @see listBalances */
     fun listBalances(
-        params: V1ContractListBalancesParams,
+        params: ContractListBalancesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractListBalancesPage
+    ): ContractListBalancesPage
 
     /**
      * For a specific customer and contract, get the rates at a specific point in time. This
@@ -350,11 +382,15 @@ interface ContractService {
      * inclusive of any negotiated discounts or promotions, use this endpoint. This endpoint only
      * returns rates that are entitled.
      */
-    @JvmOverloads
     fun retrieveRateSchedule(
-        params: V1ContractRetrieveRateScheduleParams,
+        params: ContractRetrieveRateScheduleParams
+    ): ContractRetrieveRateScheduleResponse = retrieveRateSchedule(params, RequestOptions.none())
+
+    /** @see retrieveRateSchedule */
+    fun retrieveRateSchedule(
+        params: ContractRetrieveRateScheduleParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractRetrieveRateScheduleResponse
+    ): ContractRetrieveRateScheduleResponse
 
     /**
      * Get the history of subscription quantities and prices over time for a given
@@ -367,21 +403,31 @@ interface ContractService {
      * model changes to the number of seats in Metronome, you can increment or decrement the
      * quantity on a subscription at any point in the past or future.
      */
-    @JvmOverloads
     fun retrieveSubscriptionQuantityHistory(
-        params: V1ContractRetrieveSubscriptionQuantityHistoryParams,
+        params: ContractRetrieveSubscriptionQuantityHistoryParams
+    ): ContractRetrieveSubscriptionQuantityHistoryResponse =
+        retrieveSubscriptionQuantityHistory(params, RequestOptions.none())
+
+    /** @see retrieveSubscriptionQuantityHistory */
+    fun retrieveSubscriptionQuantityHistory(
+        params: ContractRetrieveSubscriptionQuantityHistoryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractRetrieveSubscriptionQuantityHistoryResponse
+    ): ContractRetrieveSubscriptionQuantityHistoryResponse
 
     /**
      * Create a new scheduled invoice for Professional Services terms on a contract. This endpoint's
      * availability is dependent on your client's configuration.
      */
-    @JvmOverloads
     fun scheduleProServicesInvoice(
-        params: V1ContractScheduleProServicesInvoiceParams,
+        params: ContractScheduleProServicesInvoiceParams
+    ): ContractScheduleProServicesInvoiceResponse =
+        scheduleProServicesInvoice(params, RequestOptions.none())
+
+    /** @see scheduleProServicesInvoice */
+    fun scheduleProServicesInvoice(
+        params: ContractScheduleProServicesInvoiceParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractScheduleProServicesInvoiceResponse
+    ): ContractScheduleProServicesInvoiceResponse
 
     /**
      * If a customer has multiple contracts with overlapping rates, the usage filter routes usage to
@@ -398,13 +444,15 @@ interface ContractService {
      * - Update the usage filter associated with the contract over time.
      *
      * ### Usage guidelines:
-     *
      * To use usage filters, the `group_key` must be defined on the billable metrics underlying the
      * rate card on the contracts.
      */
-    @JvmOverloads
+    fun setUsageFilter(params: ContractSetUsageFilterParams) =
+        setUsageFilter(params, RequestOptions.none())
+
+    /** @see setUsageFilter */
     fun setUsageFilter(
-        params: V1ContractSetUsageFilterParams,
+        params: ContractSetUsageFilterParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
@@ -415,9 +463,252 @@ interface ContractService {
      * extended. In-advance subscriptions will not be extended. Use this if a contract's end date
      * has changed or if a perpetual contract ends.
      */
-    @JvmOverloads
+    fun updateEndDate(params: ContractUpdateEndDateParams): ContractUpdateEndDateResponse =
+        updateEndDate(params, RequestOptions.none())
+
+    /** @see updateEndDate */
     fun updateEndDate(
-        params: V1ContractUpdateEndDateParams,
+        params: ContractUpdateEndDateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1ContractUpdateEndDateResponse
+    ): ContractUpdateEndDateResponse
+
+    /** A view of [ContractService] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): ContractService.WithRawResponse
+
+        fun products(): ProductService.WithRawResponse
+
+        fun rateCards(): RateCardService.WithRawResponse
+
+        fun namedSchedules(): NamedScheduleService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/create`, but is otherwise the same as
+         * [ContractService.create].
+         */
+        @MustBeClosed
+        fun create(params: ContractCreateParams): HttpResponseFor<ContractCreateResponse> =
+            create(params, RequestOptions.none())
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            params: ContractCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractCreateResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/get`, but is otherwise the same as
+         * [ContractService.retrieve].
+         */
+        @MustBeClosed
+        fun retrieve(params: ContractRetrieveParams): HttpResponseFor<ContractRetrieveResponse> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(
+            params: ContractRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractRetrieveResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/list`, but is otherwise the same as
+         * [ContractService.list].
+         */
+        @MustBeClosed
+        fun list(params: ContractListParams): HttpResponseFor<ContractListResponse> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        @MustBeClosed
+        fun list(
+            params: ContractListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractListResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/addManualBalanceLedgerEntry`, but is
+         * otherwise the same as [ContractService.addManualBalanceEntry].
+         */
+        @MustBeClosed
+        fun addManualBalanceEntry(params: ContractAddManualBalanceEntryParams): HttpResponse =
+            addManualBalanceEntry(params, RequestOptions.none())
+
+        /** @see addManualBalanceEntry */
+        @MustBeClosed
+        fun addManualBalanceEntry(
+            params: ContractAddManualBalanceEntryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/amend`, but is otherwise the same as
+         * [ContractService.amend].
+         */
+        @MustBeClosed
+        fun amend(params: ContractAmendParams): HttpResponseFor<ContractAmendResponse> =
+            amend(params, RequestOptions.none())
+
+        /** @see amend */
+        @MustBeClosed
+        fun amend(
+            params: ContractAmendParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractAmendResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/archive`, but is otherwise the same
+         * as [ContractService.archive].
+         */
+        @MustBeClosed
+        fun archive(params: ContractArchiveParams): HttpResponseFor<ContractArchiveResponse> =
+            archive(params, RequestOptions.none())
+
+        /** @see archive */
+        @MustBeClosed
+        fun archive(
+            params: ContractArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractArchiveResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/createHistoricalInvoices`, but is
+         * otherwise the same as [ContractService.createHistoricalInvoices].
+         */
+        @MustBeClosed
+        fun createHistoricalInvoices(
+            params: ContractCreateHistoricalInvoicesParams
+        ): HttpResponseFor<ContractCreateHistoricalInvoicesResponse> =
+            createHistoricalInvoices(params, RequestOptions.none())
+
+        /** @see createHistoricalInvoices */
+        @MustBeClosed
+        fun createHistoricalInvoices(
+            params: ContractCreateHistoricalInvoicesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractCreateHistoricalInvoicesResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerBalances/getNetBalance`, but
+         * is otherwise the same as [ContractService.getNetBalance].
+         */
+        @MustBeClosed
+        fun getNetBalance(
+            params: ContractGetNetBalanceParams
+        ): HttpResponseFor<ContractGetNetBalanceResponse> =
+            getNetBalance(params, RequestOptions.none())
+
+        /** @see getNetBalance */
+        @MustBeClosed
+        fun getNetBalance(
+            params: ContractGetNetBalanceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractGetNetBalanceResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerBalances/list`, but is
+         * otherwise the same as [ContractService.listBalances].
+         */
+        @MustBeClosed
+        fun listBalances(
+            params: ContractListBalancesParams
+        ): HttpResponseFor<ContractListBalancesPage> = listBalances(params, RequestOptions.none())
+
+        /** @see listBalances */
+        @MustBeClosed
+        fun listBalances(
+            params: ContractListBalancesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractListBalancesPage>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/getContractRateSchedule`, but is
+         * otherwise the same as [ContractService.retrieveRateSchedule].
+         */
+        @MustBeClosed
+        fun retrieveRateSchedule(
+            params: ContractRetrieveRateScheduleParams
+        ): HttpResponseFor<ContractRetrieveRateScheduleResponse> =
+            retrieveRateSchedule(params, RequestOptions.none())
+
+        /** @see retrieveRateSchedule */
+        @MustBeClosed
+        fun retrieveRateSchedule(
+            params: ContractRetrieveRateScheduleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractRetrieveRateScheduleResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/getSubscriptionQuantityHistory`, but
+         * is otherwise the same as [ContractService.retrieveSubscriptionQuantityHistory].
+         */
+        @MustBeClosed
+        fun retrieveSubscriptionQuantityHistory(
+            params: ContractRetrieveSubscriptionQuantityHistoryParams
+        ): HttpResponseFor<ContractRetrieveSubscriptionQuantityHistoryResponse> =
+            retrieveSubscriptionQuantityHistory(params, RequestOptions.none())
+
+        /** @see retrieveSubscriptionQuantityHistory */
+        @MustBeClosed
+        fun retrieveSubscriptionQuantityHistory(
+            params: ContractRetrieveSubscriptionQuantityHistoryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractRetrieveSubscriptionQuantityHistoryResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/scheduleProServicesInvoice`, but is
+         * otherwise the same as [ContractService.scheduleProServicesInvoice].
+         */
+        @MustBeClosed
+        fun scheduleProServicesInvoice(
+            params: ContractScheduleProServicesInvoiceParams
+        ): HttpResponseFor<ContractScheduleProServicesInvoiceResponse> =
+            scheduleProServicesInvoice(params, RequestOptions.none())
+
+        /** @see scheduleProServicesInvoice */
+        @MustBeClosed
+        fun scheduleProServicesInvoice(
+            params: ContractScheduleProServicesInvoiceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractScheduleProServicesInvoiceResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/setUsageFilter`, but is otherwise the
+         * same as [ContractService.setUsageFilter].
+         */
+        @MustBeClosed
+        fun setUsageFilter(params: ContractSetUsageFilterParams): HttpResponse =
+            setUsageFilter(params, RequestOptions.none())
+
+        /** @see setUsageFilter */
+        @MustBeClosed
+        fun setUsageFilter(
+            params: ContractSetUsageFilterParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/updateEndDate`, but is otherwise the
+         * same as [ContractService.updateEndDate].
+         */
+        @MustBeClosed
+        fun updateEndDate(
+            params: ContractUpdateEndDateParams
+        ): HttpResponseFor<ContractUpdateEndDateResponse> =
+            updateEndDate(params, RequestOptions.none())
+
+        /** @see updateEndDate */
+        @MustBeClosed
+        fun updateEndDate(
+            params: ContractUpdateEndDateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractUpdateEndDateResponse>
+    }
 }

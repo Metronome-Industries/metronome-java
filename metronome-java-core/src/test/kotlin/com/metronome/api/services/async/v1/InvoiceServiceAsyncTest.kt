@@ -4,13 +4,13 @@ package com.metronome.api.services.async.v1
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
-import com.metronome.api.models.V1InvoiceRegenerateParams
-import com.metronome.api.models.V1InvoiceVoidParams
+import com.metronome.api.models.v1.invoices.InvoiceRegenerateParams
+import com.metronome.api.models.v1.invoices.InvoiceVoidParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class InvoiceServiceAsyncTest {
+internal class InvoiceServiceAsyncTest {
 
     @Test
     fun regenerate() {
@@ -23,9 +23,7 @@ class InvoiceServiceAsyncTest {
 
         val responseFuture =
             invoiceServiceAsync.regenerate(
-                V1InvoiceRegenerateParams.builder()
-                    .id("6a37bb88-8538-48c5-b37b-a41c836328bd")
-                    .build()
+                InvoiceRegenerateParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
             )
 
         val response = responseFuture.get()
@@ -43,7 +41,7 @@ class InvoiceServiceAsyncTest {
 
         val responseFuture =
             invoiceServiceAsync.void_(
-                V1InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
+                InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
             )
 
         val response = responseFuture.get()

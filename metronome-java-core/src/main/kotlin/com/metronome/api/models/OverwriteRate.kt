@@ -11,119 +11,173 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
-import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-@NoAutoDetect
 class OverwriteRate
-@JsonCreator
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    @JsonProperty("rate_type")
-    @ExcludeMissing
-    private val rateType: JsonField<RateType> = JsonMissing.of(),
-    @JsonProperty("credit_type")
-    @ExcludeMissing
-    private val creditType: JsonField<CreditTypeData> = JsonMissing.of(),
-    @JsonProperty("custom_rate")
-    @ExcludeMissing
-    private val customRate: JsonField<CustomRate> = JsonMissing.of(),
-    @JsonProperty("is_prorated")
-    @ExcludeMissing
-    private val isProrated: JsonField<Boolean> = JsonMissing.of(),
-    @JsonProperty("price") @ExcludeMissing private val price: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("quantity")
-    @ExcludeMissing
-    private val quantity: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("tiers")
-    @ExcludeMissing
-    private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val rateType: JsonField<RateType>,
+    private val creditType: JsonField<CreditTypeData>,
+    private val customRate: JsonField<CustomRate>,
+    private val isProrated: JsonField<Boolean>,
+    private val price: JsonField<Double>,
+    private val quantity: JsonField<Double>,
+    private val tiers: JsonField<List<Tier>>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
+    @JsonCreator
+    private constructor(
+        @JsonProperty("rate_type") @ExcludeMissing rateType: JsonField<RateType> = JsonMissing.of(),
+        @JsonProperty("credit_type")
+        @ExcludeMissing
+        creditType: JsonField<CreditTypeData> = JsonMissing.of(),
+        @JsonProperty("custom_rate")
+        @ExcludeMissing
+        customRate: JsonField<CustomRate> = JsonMissing.of(),
+        @JsonProperty("is_prorated")
+        @ExcludeMissing
+        isProrated: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("price") @ExcludeMissing price: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("tiers") @ExcludeMissing tiers: JsonField<List<Tier>> = JsonMissing.of(),
+    ) : this(rateType, creditType, customRate, isProrated, price, quantity, tiers, mutableMapOf())
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun rateType(): RateType = rateType.getRequired("rate_type")
 
-    fun creditType(): Optional<CreditTypeData> =
-        Optional.ofNullable(creditType.getNullable("credit_type"))
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun creditType(): Optional<CreditTypeData> = creditType.getOptional("credit_type")
 
-    /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-    fun customRate(): Optional<CustomRate> =
-        Optional.ofNullable(customRate.getNullable("custom_rate"))
+    /**
+     * Only set for CUSTOM rate_type. This field is interpreted by custom rate processors.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun customRate(): Optional<CustomRate> = customRate.getOptional("custom_rate")
 
     /**
      * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to true.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun isProrated(): Optional<Boolean> = Optional.ofNullable(isProrated.getNullable("is_prorated"))
+    fun isProrated(): Optional<Boolean> = isProrated.getOptional("is_prorated")
 
     /**
      * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
      * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun price(): Optional<Double> = Optional.ofNullable(price.getNullable("price"))
+    fun price(): Optional<Double> = price.getOptional("price")
 
-    /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
-    fun quantity(): Optional<Double> = Optional.ofNullable(quantity.getNullable("quantity"))
+    /**
+     * Default quantity. For SUBSCRIPTION rate_type, this must be >=0.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun quantity(): Optional<Double> = quantity.getOptional("quantity")
 
-    /** Only set for TIERED rate_type. */
-    fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
+    /**
+     * Only set for TIERED rate_type.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun tiers(): Optional<List<Tier>> = tiers.getOptional("tiers")
 
+    /**
+     * Returns the raw JSON value of [rateType].
+     *
+     * Unlike [rateType], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
 
+    /**
+     * Returns the raw JSON value of [creditType].
+     *
+     * Unlike [creditType], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("credit_type")
     @ExcludeMissing
     fun _creditType(): JsonField<CreditTypeData> = creditType
 
-    /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+    /**
+     * Returns the raw JSON value of [customRate].
+     *
+     * Unlike [customRate], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("custom_rate")
     @ExcludeMissing
     fun _customRate(): JsonField<CustomRate> = customRate
 
     /**
-     * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to true.
+     * Returns the raw JSON value of [isProrated].
+     *
+     * Unlike [isProrated], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("is_prorated") @ExcludeMissing fun _isProrated(): JsonField<Boolean> = isProrated
 
     /**
-     * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
-     * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+     * Returns the raw JSON value of [price].
+     *
+     * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
-    /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+    /**
+     * Returns the raw JSON value of [quantity].
+     *
+     * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
-    /** Only set for TIERED rate_type. */
+    /**
+     * Returns the raw JSON value of [tiers].
+     *
+     * Unlike [tiers], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): OverwriteRate = apply {
-        if (validated) {
-            return@apply
-        }
-
-        rateType()
-        creditType().ifPresent { it.validate() }
-        customRate().ifPresent { it.validate() }
-        isProrated()
-        price()
-        quantity()
-        tiers().ifPresent { it.forEach { it.validate() } }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [OverwriteRate].
+         *
+         * The following fields are required:
+         * ```java
+         * .rateType()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -153,10 +207,24 @@ private constructor(
 
         fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
+        /**
+         * Sets [Builder.rateType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.rateType] with a well-typed [RateType] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
         fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
+        /**
+         * Sets [Builder.creditType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.creditType] with a well-typed [CreditTypeData] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun creditType(creditType: JsonField<CreditTypeData>) = apply {
             this.creditType = creditType
         }
@@ -164,7 +232,13 @@ private constructor(
         /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
         fun customRate(customRate: CustomRate) = customRate(JsonField.of(customRate))
 
-        /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
+        /**
+         * Sets [Builder.customRate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customRate] with a well-typed [CustomRate] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun customRate(customRate: JsonField<CustomRate>) = apply { this.customRate = customRate }
 
         /**
@@ -174,8 +248,11 @@ private constructor(
         fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
 
         /**
-         * Default proration configuration. Only valid for SUBSCRIPTION rate_type. Must be set to
-         * true.
+         * Sets [Builder.isProrated] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.isProrated] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
@@ -186,37 +263,46 @@ private constructor(
         fun price(price: Double) = price(JsonField.of(price))
 
         /**
-         * Default price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
-         * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         * Sets [Builder.price] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.price] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun price(price: JsonField<Double>) = apply { this.price = price }
 
         /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
         fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-        /** Default quantity. For SUBSCRIPTION rate_type, this must be >=0. */
+        /**
+         * Sets [Builder.quantity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantity] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
         /** Only set for TIERED rate_type. */
         fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
-        /** Only set for TIERED rate_type. */
+        /**
+         * Sets [Builder.tiers] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tiers] with a well-typed `List<Tier>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun tiers(tiers: JsonField<List<Tier>>) = apply {
             this.tiers = tiers.map { it.toMutableList() }
         }
 
-        /** Only set for TIERED rate_type. */
+        /**
+         * Adds a single [Tier] to [tiers].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addTier(tier: Tier) = apply {
             tiers =
-                (tiers ?: JsonField.of(mutableListOf())).apply {
-                    asKnown()
-                        .orElseThrow {
-                            IllegalStateException(
-                                "Field was set to non-list type: ${javaClass.simpleName}"
-                            )
-                        }
-                        .add(tier)
-                }
+                (tiers ?: JsonField.of(mutableListOf())).also { checkKnown("tiers", it).add(tier) }
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -238,6 +324,18 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [OverwriteRate].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .rateType()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): OverwriteRate =
             OverwriteRate(
                 checkRequired("rateType", rateType),
@@ -247,9 +345,49 @@ private constructor(
                 price,
                 quantity,
                 (tiers ?: JsonMissing.of()).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): OverwriteRate = apply {
+        if (validated) {
+            return@apply
+        }
+
+        rateType().validate()
+        creditType().ifPresent { it.validate() }
+        customRate().ifPresent { it.validate() }
+        isProrated()
+        price()
+        quantity()
+        tiers().ifPresent { it.forEach { it.validate() } }
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: MetronomeInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (rateType.asKnown().getOrNull()?.validity() ?: 0) +
+            (creditType.asKnown().getOrNull()?.validity() ?: 0) +
+            (customRate.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (isProrated.asKnown().isPresent) 1 else 0) +
+            (if (price.asKnown().isPresent) 1 else 0) +
+            (if (quantity.asKnown().isPresent) 1 else 0) +
+            (tiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     class RateType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -362,12 +500,39 @@ private constructor(
                 MetronomeInvalidDataException("Value is not a String")
             }
 
+        private var validated: Boolean = false
+
+        fun validate(): RateType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is RateType && value == other.value /* spotless:on */
+            return other is RateType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -376,32 +541,22 @@ private constructor(
     }
 
     /** Only set for CUSTOM rate_type. This field is interpreted by custom rate processors. */
-    @NoAutoDetect
     class CustomRate
     @JsonCreator
     private constructor(
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
     ) {
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-        private var validated: Boolean = false
-
-        fun validate(): CustomRate = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [CustomRate]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -434,20 +589,51 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [CustomRate].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): CustomRate = CustomRate(additionalProperties.toImmutable())
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomRate = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is CustomRate && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is CustomRate && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -459,12 +645,29 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is OverwriteRate && rateType == other.rateType && creditType == other.creditType && customRate == other.customRate && isProrated == other.isProrated && price == other.price && quantity == other.quantity && tiers == other.tiers && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is OverwriteRate &&
+            rateType == other.rateType &&
+            creditType == other.creditType &&
+            customRate == other.customRate &&
+            isProrated == other.isProrated &&
+            price == other.price &&
+            quantity == other.quantity &&
+            tiers == other.tiers &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(rateType, creditType, customRate, isProrated, price, quantity, tiers, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            rateType,
+            creditType,
+            customRate,
+            isProrated,
+            price,
+            quantity,
+            tiers,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

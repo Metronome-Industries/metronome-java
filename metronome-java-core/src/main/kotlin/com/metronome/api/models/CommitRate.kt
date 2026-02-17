@@ -11,69 +11,100 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
-import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A distinct rate on the rate card. You can choose to use this rate rather than list rate when
  * consuming a credit or commit.
  */
-@NoAutoDetect
 class CommitRate
-@JsonCreator
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    @JsonProperty("rate_type")
-    @ExcludeMissing
-    private val rateType: JsonField<RateType> = JsonMissing.of(),
-    @JsonProperty("price") @ExcludeMissing private val price: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("tiers")
-    @ExcludeMissing
-    private val tiers: JsonField<List<Tier>> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val rateType: JsonField<RateType>,
+    private val price: JsonField<Double>,
+    private val tiers: JsonField<List<Tier>>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
+    @JsonCreator
+    private constructor(
+        @JsonProperty("rate_type") @ExcludeMissing rateType: JsonField<RateType> = JsonMissing.of(),
+        @JsonProperty("price") @ExcludeMissing price: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("tiers") @ExcludeMissing tiers: JsonField<List<Tier>> = JsonMissing.of(),
+    ) : this(rateType, price, tiers, mutableMapOf())
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun rateType(): RateType = rateType.getRequired("rate_type")
 
-    /** Commit rate price. For FLAT rate_type, this must be >=0. */
-    fun price(): Optional<Double> = Optional.ofNullable(price.getNullable("price"))
+    /**
+     * Commit rate price. For FLAT rate_type, this must be >=0.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun price(): Optional<Double> = price.getOptional("price")
 
-    /** Only set for TIERED rate_type. */
-    fun tiers(): Optional<List<Tier>> = Optional.ofNullable(tiers.getNullable("tiers"))
+    /**
+     * Only set for TIERED rate_type.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun tiers(): Optional<List<Tier>> = tiers.getOptional("tiers")
 
+    /**
+     * Returns the raw JSON value of [rateType].
+     *
+     * Unlike [rateType], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
 
-    /** Commit rate price. For FLAT rate_type, this must be >=0. */
+    /**
+     * Returns the raw JSON value of [price].
+     *
+     * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
-    /** Only set for TIERED rate_type. */
+    /**
+     * Returns the raw JSON value of [tiers].
+     *
+     * Unlike [tiers], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("tiers") @ExcludeMissing fun _tiers(): JsonField<List<Tier>> = tiers
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): CommitRate = apply {
-        if (validated) {
-            return@apply
-        }
-
-        rateType()
-        price()
-        tiers().ifPresent { it.forEach { it.validate() } }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [CommitRate].
+         *
+         * The following fields are required:
+         * ```java
+         * .rateType()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -95,34 +126,48 @@ private constructor(
 
         fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
+        /**
+         * Sets [Builder.rateType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.rateType] with a well-typed [RateType] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
         /** Commit rate price. For FLAT rate_type, this must be >=0. */
         fun price(price: Double) = price(JsonField.of(price))
 
-        /** Commit rate price. For FLAT rate_type, this must be >=0. */
+        /**
+         * Sets [Builder.price] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.price] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun price(price: JsonField<Double>) = apply { this.price = price }
 
         /** Only set for TIERED rate_type. */
         fun tiers(tiers: List<Tier>) = tiers(JsonField.of(tiers))
 
-        /** Only set for TIERED rate_type. */
+        /**
+         * Sets [Builder.tiers] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tiers] with a well-typed `List<Tier>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun tiers(tiers: JsonField<List<Tier>>) = apply {
             this.tiers = tiers.map { it.toMutableList() }
         }
 
-        /** Only set for TIERED rate_type. */
+        /**
+         * Adds a single [Tier] to [tiers].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addTier(tier: Tier) = apply {
             tiers =
-                (tiers ?: JsonField.of(mutableListOf())).apply {
-                    asKnown()
-                        .orElseThrow {
-                            IllegalStateException(
-                                "Field was set to non-list type: ${javaClass.simpleName}"
-                            )
-                        }
-                        .add(tier)
-                }
+                (tiers ?: JsonField.of(mutableListOf())).also { checkKnown("tiers", it).add(tier) }
         }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -144,14 +189,58 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [CommitRate].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .rateType()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): CommitRate =
             CommitRate(
                 checkRequired("rateType", rateType),
                 price,
                 (tiers ?: JsonMissing.of()).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): CommitRate = apply {
+        if (validated) {
+            return@apply
+        }
+
+        rateType().validate()
+        price()
+        tiers().ifPresent { it.forEach { it.validate() } }
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: MetronomeInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (rateType.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (price.asKnown().isPresent) 1 else 0) +
+            (tiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     class RateType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -264,12 +353,39 @@ private constructor(
                 MetronomeInvalidDataException("Value is not a String")
             }
 
+        private var validated: Boolean = false
+
+        fun validate(): RateType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is RateType && value == other.value /* spotless:on */
+            return other is RateType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -282,12 +398,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CommitRate && rateType == other.rateType && price == other.price && tiers == other.tiers && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CommitRate &&
+            rateType == other.rateType &&
+            price == other.price &&
+            tiers == other.tiers &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(rateType, price, tiers, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

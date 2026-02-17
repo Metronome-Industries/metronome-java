@@ -1,28 +1,42 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1.contracts
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1ContractRateCardArchiveParams
-import com.metronome.api.models.V1ContractRateCardArchiveResponse
-import com.metronome.api.models.V1ContractRateCardCreateParams
-import com.metronome.api.models.V1ContractRateCardCreateResponse
-import com.metronome.api.models.V1ContractRateCardListPageAsync
-import com.metronome.api.models.V1ContractRateCardListParams
-import com.metronome.api.models.V1ContractRateCardRetrieveParams
-import com.metronome.api.models.V1ContractRateCardRetrieveRateScheduleParams
-import com.metronome.api.models.V1ContractRateCardRetrieveRateScheduleResponse
-import com.metronome.api.models.V1ContractRateCardRetrieveResponse
-import com.metronome.api.models.V1ContractRateCardUpdateParams
-import com.metronome.api.models.V1ContractRateCardUpdateResponse
-import com.metronome.api.services.async.v1.contracts.rateCards.NamedScheduleServiceAsync
-import com.metronome.api.services.async.v1.contracts.rateCards.ProductOrderServiceAsync
-import com.metronome.api.services.async.v1.contracts.rateCards.RateServiceAsync
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.Id
+import com.metronome.api.models.v1.contracts.ratecards.RateCardArchiveParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardArchiveResponse
+import com.metronome.api.models.v1.contracts.ratecards.RateCardCreateParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardCreateResponse
+import com.metronome.api.models.v1.contracts.ratecards.RateCardListPageAsync
+import com.metronome.api.models.v1.contracts.ratecards.RateCardListParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveRateScheduleParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveRateScheduleResponse
+import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveResponse
+import com.metronome.api.models.v1.contracts.ratecards.RateCardUpdateParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardUpdateResponse
+import com.metronome.api.services.async.v1.contracts.ratecards.NamedScheduleServiceAsync
+import com.metronome.api.services.async.v1.contracts.ratecards.ProductOrderServiceAsync
+import com.metronome.api.services.async.v1.contracts.ratecards.RateServiceAsync
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface RateCardServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateCardServiceAsync
 
     fun productOrders(): ProductOrderServiceAsync
 
@@ -60,22 +74,39 @@ interface RateCardServiceAsync {
      *   card's alias schedule will be updated. The alias will reference the rate card to which it
      *   was most recently assigned.
      */
-    @JvmOverloads
+    fun create(params: RateCardCreateParams): CompletableFuture<RateCardCreateResponse> =
+        create(params, RequestOptions.none())
+
+    /** @see create */
     fun create(
-        params: V1ContractRateCardCreateParams,
+        params: RateCardCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1ContractRateCardCreateResponse>
+    ): CompletableFuture<RateCardCreateResponse>
 
     /**
      * Return details for a specific rate card including name, description, and aliases. This
      * endpoint does not return rates - use the dedicated getRates or getRateSchedule endpoints to
      * understand the rates on a rate card.
      */
-    @JvmOverloads
+    fun retrieve(params: RateCardRetrieveParams): CompletableFuture<RateCardRetrieveResponse> =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
     fun retrieve(
-        params: V1ContractRateCardRetrieveParams,
+        params: RateCardRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1ContractRateCardRetrieveResponse>
+    ): CompletableFuture<RateCardRetrieveResponse>
+
+    /** @see retrieve */
+    fun retrieve(
+        id: Id,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<RateCardRetrieveResponse> =
+        retrieve(RateCardRetrieveParams.builder().id(id).build(), requestOptions)
+
+    /** @see retrieve */
+    fun retrieve(id: Id): CompletableFuture<RateCardRetrieveResponse> =
+        retrieve(id, RequestOptions.none())
 
     /**
      * Update the metadata properties of an existing rate card, including its name, description, and
@@ -105,7 +136,6 @@ interface RateCardServiceAsync {
      *   Metronome.
      *
      * #### How scheduled aliases work for PLG grandfathering:
-     *
      * Initial setup:
      * - Add alias to current rate card: Assign a stable alias (e.g., "standard-pricing") to your
      *   active rate card
@@ -121,30 +151,36 @@ interface RateCardServiceAsync {
      * - Automatic cutover: Starting at the scheduled time, new contracts created in your PLG
      *   workflow using that alias will automatically reference the new rate card
      */
-    @JvmOverloads
+    fun update(params: RateCardUpdateParams): CompletableFuture<RateCardUpdateResponse> =
+        update(params, RequestOptions.none())
+
+    /** @see update */
     fun update(
-        params: V1ContractRateCardUpdateParams,
+        params: RateCardUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1ContractRateCardUpdateResponse>
+    ): CompletableFuture<RateCardUpdateResponse>
 
     /**
      * List all rate cards. Returns rate card IDs, names, descriptions, aliases, and other details.
      * To view the rates associated with a given rate card, use the getRates or getRateSchedule
      * endpoints.
      */
-    @JvmOverloads
+    fun list(): CompletableFuture<RateCardListPageAsync> = list(RateCardListParams.none())
+
+    /** @see list */
     fun list(
-        params: V1ContractRateCardListParams = V1ContractRateCardListParams.none(),
+        params: RateCardListParams = RateCardListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1ContractRateCardListPageAsync>
+    ): CompletableFuture<RateCardListPageAsync>
 
-    /**
-     * List all rate cards. Returns rate card IDs, names, descriptions, aliases, and other details.
-     * To view the rates associated with a given rate card, use the getRates or getRateSchedule
-     * endpoints.
-     */
-    fun list(requestOptions: RequestOptions): CompletableFuture<V1ContractRateCardListPageAsync> =
-        list(V1ContractRateCardListParams.none(), requestOptions)
+    /** @see list */
+    fun list(
+        params: RateCardListParams = RateCardListParams.none()
+    ): CompletableFuture<RateCardListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see list */
+    fun list(requestOptions: RequestOptions): CompletableFuture<RateCardListPageAsync> =
+        list(RateCardListParams.none(), requestOptions)
 
     /**
      * Permanently disable a rate card by archiving it, preventing use in new contracts while
@@ -152,11 +188,25 @@ interface RateCardServiceAsync {
      * consolidating rate cards, or removing outdated pricing structures. Returns the archived rate
      * card ID and stops the rate card from appearing in contract creation workflows.
      */
-    @JvmOverloads
+    fun archive(params: RateCardArchiveParams): CompletableFuture<RateCardArchiveResponse> =
+        archive(params, RequestOptions.none())
+
+    /** @see archive */
     fun archive(
-        params: V1ContractRateCardArchiveParams,
+        params: RateCardArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1ContractRateCardArchiveResponse>
+    ): CompletableFuture<RateCardArchiveResponse>
+
+    /** @see archive */
+    fun archive(
+        id: Id,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<RateCardArchiveResponse> =
+        archive(RateCardArchiveParams.builder().id(id).build(), requestOptions)
+
+    /** @see archive */
+    fun archive(id: Id): CompletableFuture<RateCardArchiveResponse> =
+        archive(id, RequestOptions.none())
 
     /**
      * A rate card defines the prices that you charge for your products. Rate cards support
@@ -170,9 +220,157 @@ interface RateCardServiceAsync {
      * If you want to understand the rates for a specific customer's contract, inclusive of
      * contract-level overrides, use the `getContractRateSchedule` endpoint.
      */
-    @JvmOverloads
     fun retrieveRateSchedule(
-        params: V1ContractRateCardRetrieveRateScheduleParams,
+        params: RateCardRetrieveRateScheduleParams
+    ): CompletableFuture<RateCardRetrieveRateScheduleResponse> =
+        retrieveRateSchedule(params, RequestOptions.none())
+
+    /** @see retrieveRateSchedule */
+    fun retrieveRateSchedule(
+        params: RateCardRetrieveRateScheduleParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1ContractRateCardRetrieveRateScheduleResponse>
+    ): CompletableFuture<RateCardRetrieveRateScheduleResponse>
+
+    /**
+     * A view of [RateCardServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): RateCardServiceAsync.WithRawResponse
+
+        fun productOrders(): ProductOrderServiceAsync.WithRawResponse
+
+        fun rates(): RateServiceAsync.WithRawResponse
+
+        fun namedSchedules(): NamedScheduleServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/create`, but is
+         * otherwise the same as [RateCardServiceAsync.create].
+         */
+        fun create(
+            params: RateCardCreateParams
+        ): CompletableFuture<HttpResponseFor<RateCardCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            params: RateCardCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateCardCreateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/get`, but is
+         * otherwise the same as [RateCardServiceAsync.retrieve].
+         */
+        fun retrieve(
+            params: RateCardRetrieveParams
+        ): CompletableFuture<HttpResponseFor<RateCardRetrieveResponse>> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        fun retrieve(
+            params: RateCardRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateCardRetrieveResponse>>
+
+        /** @see retrieve */
+        fun retrieve(
+            id: Id,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateCardRetrieveResponse>> =
+            retrieve(RateCardRetrieveParams.builder().id(id).build(), requestOptions)
+
+        /** @see retrieve */
+        fun retrieve(id: Id): CompletableFuture<HttpResponseFor<RateCardRetrieveResponse>> =
+            retrieve(id, RequestOptions.none())
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/update`, but is
+         * otherwise the same as [RateCardServiceAsync.update].
+         */
+        fun update(
+            params: RateCardUpdateParams
+        ): CompletableFuture<HttpResponseFor<RateCardUpdateResponse>> =
+            update(params, RequestOptions.none())
+
+        /** @see update */
+        fun update(
+            params: RateCardUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateCardUpdateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/list`, but is
+         * otherwise the same as [RateCardServiceAsync.list].
+         */
+        fun list(): CompletableFuture<HttpResponseFor<RateCardListPageAsync>> =
+            list(RateCardListParams.none())
+
+        /** @see list */
+        fun list(
+            params: RateCardListParams = RateCardListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateCardListPageAsync>>
+
+        /** @see list */
+        fun list(
+            params: RateCardListParams = RateCardListParams.none()
+        ): CompletableFuture<HttpResponseFor<RateCardListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<RateCardListPageAsync>> =
+            list(RateCardListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/archive`, but is
+         * otherwise the same as [RateCardServiceAsync.archive].
+         */
+        fun archive(
+            params: RateCardArchiveParams
+        ): CompletableFuture<HttpResponseFor<RateCardArchiveResponse>> =
+            archive(params, RequestOptions.none())
+
+        /** @see archive */
+        fun archive(
+            params: RateCardArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateCardArchiveResponse>>
+
+        /** @see archive */
+        fun archive(
+            id: Id,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateCardArchiveResponse>> =
+            archive(RateCardArchiveParams.builder().id(id).build(), requestOptions)
+
+        /** @see archive */
+        fun archive(id: Id): CompletableFuture<HttpResponseFor<RateCardArchiveResponse>> =
+            archive(id, RequestOptions.none())
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/getRateSchedule`,
+         * but is otherwise the same as [RateCardServiceAsync.retrieveRateSchedule].
+         */
+        fun retrieveRateSchedule(
+            params: RateCardRetrieveRateScheduleParams
+        ): CompletableFuture<HttpResponseFor<RateCardRetrieveRateScheduleResponse>> =
+            retrieveRateSchedule(params, RequestOptions.none())
+
+        /** @see retrieveRateSchedule */
+        fun retrieveRateSchedule(
+            params: RateCardRetrieveRateScheduleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateCardRetrieveRateScheduleResponse>>
+    }
 }

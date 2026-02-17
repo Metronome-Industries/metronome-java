@@ -1,19 +1,34 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1UsageIngestParams
-import com.metronome.api.models.V1UsageListPageAsync
-import com.metronome.api.models.V1UsageListParams
-import com.metronome.api.models.V1UsageListWithGroupsPageAsync
-import com.metronome.api.models.V1UsageListWithGroupsParams
-import com.metronome.api.models.V1UsageSearchParams
+import com.metronome.api.core.http.HttpResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.usage.UsageIngestParams
+import com.metronome.api.models.v1.usage.UsageListPageAsync
+import com.metronome.api.models.v1.usage.UsageListParams
+import com.metronome.api.models.v1.usage.UsageListWithGroupsPageAsync
+import com.metronome.api.models.v1.usage.UsageListWithGroupsParams
+import com.metronome.api.models.v1.usage.UsageSearchParams
+import com.metronome.api.models.v1.usage.UsageSearchResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface UsageServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): UsageServiceAsync
 
     /**
      * Retrieve aggregated usage data across multiple customers and billable metrics in a single
@@ -28,7 +43,6 @@ interface UsageServiceAsync {
      * - Support capacity planning with historical usage patterns
      *
      * ### Key response fields:
-     *
      * An array of `UsageBatchAggregate` objects containing:
      * - `customer_id`: The customer this usage belongs to
      * - `billable_metric_id` and `billable_metric_name`: What was measured
@@ -46,11 +60,14 @@ interface UsageServiceAsync {
      * - Pagination: Use `next_page` cursor to retrieve large datasets
      * - Null values: Group values may be null when no usage matches that group
      */
-    @JvmOverloads
+    fun list(params: UsageListParams): CompletableFuture<UsageListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V1UsageListParams,
+        params: UsageListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1UsageListPageAsync>
+    ): CompletableFuture<UsageListPageAsync>
 
     /**
      * The ingest endpoint is the primary method for sending usage events to Metronome, serving as
@@ -62,7 +79,6 @@ interface UsageServiceAsync {
      * [Send usage events](/guides/events/send-usage-events) guide to learn more about usage events.
      *
      * ### Use this endpoint to:
-     *
      * Create a customer usage pipeline into Metronome that drives billable metrics, credit
      * drawdown, and invoicing. Track customer behavior, resource consumption, and feature usage
      *
@@ -78,7 +94,6 @@ interface UsageServiceAsync {
      * - Duplicate events are automatically detected and ignored (34-day deduplication window)
      *
      * #### Event structure:
-     *
      * Usage events are simple JSON objects designed for flexibility and ease of integration:
      * ```json
      * {
@@ -98,7 +113,6 @@ interface UsageServiceAsync {
      * Learn more about [usage event structure definitions](/guides/events/design-usage-events).
      *
      * #### Transaction ID
-     *
      * The transaction_id serves as your idempotency key, ensuring events are processed exactly
      * once. Metronome maintains a 34-day deduplication window - significantly longer than typical
      * 12-hour windows - enabling robust backfill scenarios without duplicate billing.
@@ -108,7 +122,6 @@ interface UsageServiceAsync {
      *     - Include enough context to avoid collisions across different event sources
      *
      * #### Customer ID
-     *
      * Identifies which customer should be billed for this usage. Supports two identification
      * methods:
      * - Metronome Customer ID: The UUID returned when creating a customer
@@ -118,100 +131,29 @@ interface UsageServiceAsync {
      * have multiple aliases for flexibility.
      *
      * #### Event Type:
-     *
      * Categorizes the event type for billable metric matching. Choose descriptive names that aligns
      * with the product surface area.
      *
      * #### Properties:
-     *
      * Flexible metadata also used to match billable metrics or to be used to serve as group keys to
      * create multiple pricing dimensions or breakdown costs by novel properties for end customers
      * or internal finance teams measuring underlying COGs.
      */
-    @JvmOverloads
+    fun ingest(): CompletableFuture<Void?> = ingest(UsageIngestParams.none())
+
+    /** @see ingest */
     fun ingest(
-        params: V1UsageIngestParams = V1UsageIngestParams.none(),
+        params: UsageIngestParams = UsageIngestParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
-    /**
-     * The ingest endpoint is the primary method for sending usage events to Metronome, serving as
-     * the foundation for all billing calculations in your usage-based pricing model. This
-     * high-throughput endpoint is designed for real-time streaming ingestion, supports backdating
-     * 34 days, and is built to handle mission-critical usage data with enterprise-grade
-     * reliability. Metronome supports 100,000 events per second without requiring pre-aggregation
-     * or rollups and can scale up from there. See the
-     * [Send usage events](/guides/events/send-usage-events) guide to learn more about usage events.
-     *
-     * ### Use this endpoint to:
-     *
-     * Create a customer usage pipeline into Metronome that drives billable metrics, credit
-     * drawdown, and invoicing. Track customer behavior, resource consumption, and feature usage
-     *
-     * ### What happens when you send events:
-     * - Events are validated and processed in real-time
-     * - Events are matched to customers using customer IDs or customer ingest aliases
-     * - Events are matched to billable metrics and are immediately available for usage and spend
-     *   calculations
-     *
-     * ### Usage guidelines:
-     * - Historical events can be backdated up to 34 days and will immediately impact live customer
-     *   spend
-     * - Duplicate events are automatically detected and ignored (34-day deduplication window)
-     *
-     * #### Event structure:
-     *
-     * Usage events are simple JSON objects designed for flexibility and ease of integration:
-     * ```json
-     * {
-     *   "transaction_id": "2021-01-01T00:00:00Z_cluster42",
-     *   "customer_id": "team@example.com",
-     *   "event_type": "api_request",
-     *   "timestamp": "2021-01-01T00:00:00Z",
-     *   "properties": {
-     *     "endpoint": "/v1/users",
-     *     "method": "POST",
-     *     "response_time_ms": 45,
-     *     "region": "us-west-2"
-     *   }
-     * }
-     * ```
-     *
-     * Learn more about [usage event structure definitions](/guides/events/design-usage-events).
-     *
-     * #### Transaction ID
-     *
-     * The transaction_id serves as your idempotency key, ensuring events are processed exactly
-     * once. Metronome maintains a 34-day deduplication window - significantly longer than typical
-     * 12-hour windows - enabling robust backfill scenarios without duplicate billing.
-     * - Best Practices:
-     *     - Use UUIDs for one-time events: uuid4()
-     *     - For heartbeat events, use deterministic IDs
-     *     - Include enough context to avoid collisions across different event sources
-     *
-     * #### Customer ID
-     *
-     * Identifies which customer should be billed for this usage. Supports two identification
-     * methods:
-     * - Metronome Customer ID: The UUID returned when creating a customer
-     * - Ingest Alias: Your system's identifier (email, account number, etc.)
-     *
-     * Ingest aliases enable seamless integration without requiring ID mapping, and customers can
-     * have multiple aliases for flexibility.
-     *
-     * #### Event Type:
-     *
-     * Categorizes the event type for billable metric matching. Choose descriptive names that aligns
-     * with the product surface area.
-     *
-     * #### Properties:
-     *
-     * Flexible metadata also used to match billable metrics or to be used to serve as group keys to
-     * create multiple pricing dimensions or breakdown costs by novel properties for end customers
-     * or internal finance teams measuring underlying COGs.
-     */
+    /** @see ingest */
+    fun ingest(params: UsageIngestParams = UsageIngestParams.none()): CompletableFuture<Void?> =
+        ingest(params, RequestOptions.none())
+
+    /** @see ingest */
     fun ingest(requestOptions: RequestOptions): CompletableFuture<Void?> =
-        ingest(V1UsageIngestParams.none(), requestOptions)
+        ingest(UsageIngestParams.none(), requestOptions)
 
     /**
      * Retrieve granular usage data for a specific customer and billable metric, with the ability to
@@ -225,7 +167,6 @@ interface UsageServiceAsync {
      * - Identify high-usage segments for optimization opportunities
      *
      * ### Key response fields:
-     *
      * An array of `PagedUsageAggregate` objects containing:
      * - `starting_on` and `ending_before`: Time window boundaries
      * - `group_key`: The dimension being grouped by (e.g., "region")
@@ -242,11 +183,16 @@ interface UsageServiceAsync {
      * - Pagination: Use limit and `next_page` for large result sets
      * - Null handling: `group_value` may be null for unmatched data
      */
-    @JvmOverloads
     fun listWithGroups(
-        params: V1UsageListWithGroupsParams,
+        params: UsageListWithGroupsParams
+    ): CompletableFuture<UsageListWithGroupsPageAsync> =
+        listWithGroups(params, RequestOptions.none())
+
+    /** @see listWithGroups */
+    fun listWithGroups(
+        params: UsageListWithGroupsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1UsageListWithGroupsPageAsync>
+    ): CompletableFuture<UsageListWithGroupsPageAsync>
 
     /**
      * This endpoint retrieves events by transaction ID for events that occurred within the last 34
@@ -274,14 +220,93 @@ interface UsageServiceAsync {
      * - Processing status and duplicate detection flags
      *
      * ### Usage guidelines:
-     *
      * ⚠️ Important: This endpoint is heavily rate limited and designed for sampling workflows only.
      * Do not use this endpoint to check every event in your system. Instead, implement a sampling
      * strategy to randomly validate a subset of events for observability purposes.
      */
-    @JvmOverloads
+    fun search(params: UsageSearchParams): CompletableFuture<List<UsageSearchResponse>> =
+        search(params, RequestOptions.none())
+
+    /** @see search */
     fun search(
-        params: V1UsageSearchParams,
+        params: UsageSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List<UnnamedSchemaWithArrayParent0>>
+    ): CompletableFuture<List<UsageSearchResponse>>
+
+    /** A view of [UsageServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): UsageServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/usage`, but is otherwise the same as
+         * [UsageServiceAsync.list].
+         */
+        fun list(params: UsageListParams): CompletableFuture<HttpResponseFor<UsageListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: UsageListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<UsageListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/ingest`, but is otherwise the same as
+         * [UsageServiceAsync.ingest].
+         */
+        fun ingest(): CompletableFuture<HttpResponse> = ingest(UsageIngestParams.none())
+
+        /** @see ingest */
+        fun ingest(
+            params: UsageIngestParams = UsageIngestParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+
+        /** @see ingest */
+        fun ingest(
+            params: UsageIngestParams = UsageIngestParams.none()
+        ): CompletableFuture<HttpResponse> = ingest(params, RequestOptions.none())
+
+        /** @see ingest */
+        fun ingest(requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
+            ingest(UsageIngestParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /v1/usage/groups`, but is otherwise the same as
+         * [UsageServiceAsync.listWithGroups].
+         */
+        fun listWithGroups(
+            params: UsageListWithGroupsParams
+        ): CompletableFuture<HttpResponseFor<UsageListWithGroupsPageAsync>> =
+            listWithGroups(params, RequestOptions.none())
+
+        /** @see listWithGroups */
+        fun listWithGroups(
+            params: UsageListWithGroupsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<UsageListWithGroupsPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/events/search`, but is otherwise the same as
+         * [UsageServiceAsync.search].
+         */
+        fun search(
+            params: UsageSearchParams
+        ): CompletableFuture<HttpResponseFor<List<UsageSearchResponse>>> =
+            search(params, RequestOptions.none())
+
+        /** @see search */
+        fun search(
+            params: UsageSearchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<List<UsageSearchResponse>>>
+    }
 }

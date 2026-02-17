@@ -2,13 +2,15 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.metronome.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CommitHierarchyConfigurationTest {
+internal class CommitHierarchyConfigurationTest {
 
     @Test
-    fun createCommitHierarchyConfiguration() {
+    fun create() {
         val commitHierarchyConfiguration =
             CommitHierarchyConfiguration.builder()
                 .childAccess(
@@ -21,7 +23,7 @@ class CommitHierarchyConfigurationTest {
                         .build()
                 )
                 .build()
-        assertThat(commitHierarchyConfiguration).isNotNull
+
         assertThat(commitHierarchyConfiguration.childAccess())
             .isEqualTo(
                 CommitHierarchyConfiguration.ChildAccess.ofCommitHierarchyChildAccessAll(
@@ -34,5 +36,30 @@ class CommitHierarchyConfigurationTest {
                         .build()
                 )
             )
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val commitHierarchyConfiguration =
+            CommitHierarchyConfiguration.builder()
+                .childAccess(
+                    CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.builder()
+                        .type(
+                            CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll
+                                .Type
+                                .ALL
+                        )
+                        .build()
+                )
+                .build()
+
+        val roundtrippedCommitHierarchyConfiguration =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(commitHierarchyConfiguration),
+                jacksonTypeRef<CommitHierarchyConfiguration>(),
+            )
+
+        assertThat(roundtrippedCommitHierarchyConfiguration).isEqualTo(commitHierarchyConfiguration)
     }
 }

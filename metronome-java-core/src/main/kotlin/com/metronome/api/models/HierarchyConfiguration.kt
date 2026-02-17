@@ -20,14 +20,16 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.allMaxBy
+import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.getOrThrow
-import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Either a **parent** configuration with a list of children or a **child** configuration with a
@@ -56,13 +58,12 @@ private constructor(
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-    fun <T> accept(visitor: Visitor<T>): T {
-        return when {
+    fun <T> accept(visitor: Visitor<T>): T =
+        when {
             parent != null -> visitor.visitParent(parent)
             child != null -> visitor.visitChild(child)
             else -> visitor.unknown(_json)
         }
-    }
 
     private var validated: Boolean = false
 
@@ -85,15 +86,40 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: MetronomeInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        accept(
+            object : Visitor<Int> {
+                override fun visitParent(parent: ParentHierarchyConfiguration) = parent.validity()
+
+                override fun visitChild(child: ChildHierarchyConfiguration) = child.validity()
+
+                override fun unknown(json: JsonValue?) = 0
+            }
+        )
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is HierarchyConfiguration && parent == other.parent && child == other.child /* spotless:on */
+        return other is HierarchyConfiguration && parent == other.parent && child == other.child
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(parent, child) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(parent, child)
 
     override fun toString(): String =
         when {
@@ -143,16 +169,27 @@ private constructor(
         override fun ObjectCodec.deserialize(node: JsonNode): HierarchyConfiguration {
             val json = JsonValue.fromJsonNode(node)
 
-            tryDeserialize(node, jacksonTypeRef<ParentHierarchyConfiguration>()) { it.validate() }
-                ?.let {
-                    return HierarchyConfiguration(parent = it, _json = json)
-                }
-            tryDeserialize(node, jacksonTypeRef<ChildHierarchyConfiguration>()) { it.validate() }
-                ?.let {
-                    return HierarchyConfiguration(child = it, _json = json)
-                }
-
-            return HierarchyConfiguration(_json = json)
+            val bestMatches =
+                sequenceOf(
+                        tryDeserialize(node, jacksonTypeRef<ParentHierarchyConfiguration>())?.let {
+                            HierarchyConfiguration(parent = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<ChildHierarchyConfiguration>())?.let {
+                            HierarchyConfiguration(child = it, _json = json)
+                        },
+                    )
+                    .filterNotNull()
+                    .allMaxBy { it.validity() }
+                    .toList()
+            return when (bestMatches.size) {
+                // This can happen if what we're deserializing is completely incompatible with all
+                // the possible variants (e.g. deserializing from boolean).
+                0 -> HierarchyConfiguration(_json = json)
+                1 -> bestMatches.single()
+                // If there's more than one match with the highest validity, then use the first
+                // completely valid match, or simply the first match if none are completely valid.
+                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+            }
         }
     }
 
@@ -173,53 +210,79 @@ private constructor(
         }
     }
 
-    @NoAutoDetect
     class ParentHierarchyConfiguration
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @JsonProperty("children")
-        @ExcludeMissing
-        private val children: JsonField<List<Child>> = JsonMissing.of(),
-        @JsonProperty("parent_behavior")
-        @ExcludeMissing
-        private val parentBehavior: JsonField<ParentBehavior> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val children: JsonField<List<Child>>,
+        private val parentBehavior: JsonField<ParentBehavior>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        /** List of contracts that belong to this parent. */
+        @JsonCreator
+        private constructor(
+            @JsonProperty("children")
+            @ExcludeMissing
+            children: JsonField<List<Child>> = JsonMissing.of(),
+            @JsonProperty("parent_behavior")
+            @ExcludeMissing
+            parentBehavior: JsonField<ParentBehavior> = JsonMissing.of(),
+        ) : this(children, parentBehavior, mutableMapOf())
+
+        /**
+         * List of contracts that belong to this parent.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun children(): List<Child> = children.getRequired("children")
 
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun parentBehavior(): Optional<ParentBehavior> =
-            Optional.ofNullable(parentBehavior.getNullable("parent_behavior"))
+            parentBehavior.getOptional("parent_behavior")
 
-        /** List of contracts that belong to this parent. */
+        /**
+         * Returns the raw JSON value of [children].
+         *
+         * Unlike [children], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("children") @ExcludeMissing fun _children(): JsonField<List<Child>> = children
 
+        /**
+         * Returns the raw JSON value of [parentBehavior].
+         *
+         * Unlike [parentBehavior], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("parent_behavior")
         @ExcludeMissing
         fun _parentBehavior(): JsonField<ParentBehavior> = parentBehavior
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): ParentHierarchyConfiguration = apply {
-            if (validated) {
-                return@apply
-            }
-
-            children().forEach { it.validate() }
-            parentBehavior().ifPresent { it.validate() }
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [ParentHierarchyConfiguration].
+             *
+             * The following fields are required:
+             * ```java
+             * .children()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -241,28 +304,39 @@ private constructor(
             /** List of contracts that belong to this parent. */
             fun children(children: List<Child>) = children(JsonField.of(children))
 
-            /** List of contracts that belong to this parent. */
+            /**
+             * Sets [Builder.children] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.children] with a well-typed `List<Child>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun children(children: JsonField<List<Child>>) = apply {
                 this.children = children.map { it.toMutableList() }
             }
 
-            /** List of contracts that belong to this parent. */
+            /**
+             * Adds a single [Child] to [children].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addChild(child: Child) = apply {
                 children =
-                    (children ?: JsonField.of(mutableListOf())).apply {
-                        asKnown()
-                            .orElseThrow {
-                                IllegalStateException(
-                                    "Field was set to non-list type: ${javaClass.simpleName}"
-                                )
-                            }
-                            .add(child)
+                    (children ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("children", it).add(child)
                     }
             }
 
             fun parentBehavior(parentBehavior: ParentBehavior) =
                 parentBehavior(JsonField.of(parentBehavior))
 
+            /**
+             * Sets [Builder.parentBehavior] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.parentBehavior] with a well-typed [ParentBehavior]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun parentBehavior(parentBehavior: JsonField<ParentBehavior>) = apply {
                 this.parentBehavior = parentBehavior
             }
@@ -286,60 +360,132 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [ParentHierarchyConfiguration].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .children()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): ParentHierarchyConfiguration =
                 ParentHierarchyConfiguration(
                     checkRequired("children", children).map { it.toImmutable() },
                     parentBehavior,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): ParentHierarchyConfiguration = apply {
+            if (validated) {
+                return@apply
+            }
+
+            children().forEach { it.validate() }
+            parentBehavior().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (children.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (parentBehavior.asKnown().getOrNull()?.validity() ?: 0)
+
         class Child
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @JsonProperty("contract_id")
-            @ExcludeMissing
-            private val contractId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("customer_id")
-            @ExcludeMissing
-            private val customerId: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val contractId: JsonField<String>,
+            private val customerId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
+            @JsonCreator
+            private constructor(
+                @JsonProperty("contract_id")
+                @ExcludeMissing
+                contractId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("customer_id")
+                @ExcludeMissing
+                customerId: JsonField<String> = JsonMissing.of(),
+            ) : this(contractId, customerId, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun contractId(): String = contractId.getRequired("contract_id")
 
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun customerId(): String = customerId.getRequired("customer_id")
 
+            /**
+             * Returns the raw JSON value of [contractId].
+             *
+             * Unlike [contractId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("contract_id")
             @ExcludeMissing
             fun _contractId(): JsonField<String> = contractId
 
+            /**
+             * Returns the raw JSON value of [customerId].
+             *
+             * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("customer_id")
             @ExcludeMissing
             fun _customerId(): JsonField<String> = customerId
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): Child = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                contractId()
-                customerId()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Child].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .contractId()
+                 * .customerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -359,12 +505,26 @@ private constructor(
 
                 fun contractId(contractId: String) = contractId(JsonField.of(contractId))
 
+                /**
+                 * Sets [Builder.contractId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.contractId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun contractId(contractId: JsonField<String>) = apply {
                     this.contractId = contractId
                 }
 
                 fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
+                /**
+                 * Sets [Builder.customerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.customerId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun customerId(customerId: JsonField<String>) = apply {
                     this.customerId = customerId
                 }
@@ -391,25 +551,72 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Child].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .contractId()
+                 * .customerId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Child =
                     Child(
                         checkRequired("contractId", contractId),
                         checkRequired("customerId", customerId),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Child = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                contractId()
+                customerId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (contractId.asKnown().isPresent) 1 else 0) +
+                    (if (customerId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is Child && contractId == other.contractId && customerId == other.customerId && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Child &&
+                    contractId == other.contractId &&
+                    customerId == other.customerId &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(contractId, customerId, additionalProperties) }
-            /* spotless:on */
+            private val hashCode: Int by lazy {
+                Objects.hash(contractId, customerId, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
@@ -417,31 +624,19 @@ private constructor(
                 "Child{contractId=$contractId, customerId=$customerId, additionalProperties=$additionalProperties}"
         }
 
-        @NoAutoDetect
         class ParentBehavior
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @JsonProperty("invoice_consolidation_type")
-            @ExcludeMissing
-            private val invoiceConsolidationType: JsonField<InvoiceConsolidationType> =
-                JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val invoiceConsolidationType: JsonField<InvoiceConsolidationType>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
-            /**
-             * Indicates the desired behavior of consolidated invoices generated by the parent in a
-             * customer hierarchy
-             *
-             * **CONCATENATE**: Statements on the invoices of child customers will be appended to
-             * the consolidated invoice
-             *
-             * **NONE**: Do not generate consolidated invoices
-             */
-            fun invoiceConsolidationType(): Optional<InvoiceConsolidationType> =
-                Optional.ofNullable(
-                    invoiceConsolidationType.getNullable("invoice_consolidation_type")
-                )
+            @JsonCreator
+            private constructor(
+                @JsonProperty("invoice_consolidation_type")
+                @ExcludeMissing
+                invoiceConsolidationType: JsonField<InvoiceConsolidationType> = JsonMissing.of()
+            ) : this(invoiceConsolidationType, mutableMapOf())
 
             /**
              * Indicates the desired behavior of consolidated invoices generated by the parent in a
@@ -451,31 +646,39 @@ private constructor(
              * the consolidated invoice
              *
              * **NONE**: Do not generate consolidated invoices
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun invoiceConsolidationType(): Optional<InvoiceConsolidationType> =
+                invoiceConsolidationType.getOptional("invoice_consolidation_type")
+
+            /**
+             * Returns the raw JSON value of [invoiceConsolidationType].
+             *
+             * Unlike [invoiceConsolidationType], this method doesn't throw if the JSON field has an
+             * unexpected type.
              */
             @JsonProperty("invoice_consolidation_type")
             @ExcludeMissing
             fun _invoiceConsolidationType(): JsonField<InvoiceConsolidationType> =
                 invoiceConsolidationType
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): ParentBehavior = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                invoiceConsolidationType()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /** Returns a mutable builder for constructing an instance of [ParentBehavior]. */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -505,13 +708,11 @@ private constructor(
                     invoiceConsolidationType(JsonField.of(invoiceConsolidationType))
 
                 /**
-                 * Indicates the desired behavior of consolidated invoices generated by the parent
-                 * in a customer hierarchy
+                 * Sets [Builder.invoiceConsolidationType] to an arbitrary JSON value.
                  *
-                 * **CONCATENATE**: Statements on the invoices of child customers will be appended
-                 * to the consolidated invoice
-                 *
-                 * **NONE**: Do not generate consolidated invoices
+                 * You should usually call [Builder.invoiceConsolidationType] with a well-typed
+                 * [InvoiceConsolidationType] value instead. This method is primarily for setting
+                 * the field to an undocumented or not yet supported value.
                  */
                 fun invoiceConsolidationType(
                     invoiceConsolidationType: JsonField<InvoiceConsolidationType>
@@ -539,9 +740,43 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [ParentBehavior].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): ParentBehavior =
-                    ParentBehavior(invoiceConsolidationType, additionalProperties.toImmutable())
+                    ParentBehavior(invoiceConsolidationType, additionalProperties.toMutableMap())
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): ParentBehavior = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                invoiceConsolidationType().ifPresent { it.validate() }
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (invoiceConsolidationType.asKnown().getOrNull()?.validity() ?: 0)
 
             /**
              * Indicates the desired behavior of consolidated invoices generated by the parent in a
@@ -649,12 +884,39 @@ private constructor(
                         MetronomeInvalidDataException("Value is not a String")
                     }
 
+                private var validated: Boolean = false
+
+                fun validate(): InvoiceConsolidationType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
                         return true
                     }
 
-                    return /* spotless:off */ other is InvoiceConsolidationType && value == other.value /* spotless:on */
+                    return other is InvoiceConsolidationType && value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -667,12 +929,14 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ParentBehavior && invoiceConsolidationType == other.invoiceConsolidationType && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is ParentBehavior &&
+                    invoiceConsolidationType == other.invoiceConsolidationType &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(invoiceConsolidationType, additionalProperties) }
-            /* spotless:on */
+            private val hashCode: Int by lazy {
+                Objects.hash(invoiceConsolidationType, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
@@ -685,12 +949,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ParentHierarchyConfiguration && children == other.children && parentBehavior == other.parentBehavior && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is ParentHierarchyConfiguration &&
+                children == other.children &&
+                parentBehavior == other.parentBehavior &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(children, parentBehavior, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(children, parentBehavior, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -698,24 +965,30 @@ private constructor(
             "ParentHierarchyConfiguration{children=$children, parentBehavior=$parentBehavior, additionalProperties=$additionalProperties}"
     }
 
-    @NoAutoDetect
     class ChildHierarchyConfiguration
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @JsonProperty("parent")
-        @ExcludeMissing
-        private val parent: JsonField<Parent> = JsonMissing.of(),
-        @JsonProperty("payer")
-        @ExcludeMissing
-        private val payer: JsonField<Payer> = JsonMissing.of(),
-        @JsonProperty("usage_statement_behavior")
-        @ExcludeMissing
-        private val usageStatementBehavior: JsonField<UsageStatementBehavior> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val parent: JsonField<Parent>,
+        private val payer: JsonField<Payer>,
+        private val usageStatementBehavior: JsonField<UsageStatementBehavior>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        /** The single parent contract/customer for this child. */
+        @JsonCreator
+        private constructor(
+            @JsonProperty("parent") @ExcludeMissing parent: JsonField<Parent> = JsonMissing.of(),
+            @JsonProperty("payer") @ExcludeMissing payer: JsonField<Payer> = JsonMissing.of(),
+            @JsonProperty("usage_statement_behavior")
+            @ExcludeMissing
+            usageStatementBehavior: JsonField<UsageStatementBehavior> = JsonMissing.of(),
+        ) : this(parent, payer, usageStatementBehavior, mutableMapOf())
+
+        /**
+         * The single parent contract/customer for this child.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun parent(): Parent = parent.getRequired("parent")
 
         /**
@@ -724,8 +997,11 @@ private constructor(
          * **SELF**: The child pays for its own invoice charges
          *
          * **PARENT**: The parent pays for the child's invoice charges
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun payer(): Optional<Payer> = Optional.ofNullable(payer.getNullable("payer"))
+        fun payer(): Optional<Payer> = payer.getOptional("payer")
 
         /**
          * Indicates the behavior of the child's invoice statements on the parent's invoices.
@@ -735,56 +1011,60 @@ private constructor(
          *
          * **SEPARATE**: Child's invoice statements will appear not appear on parent's consolidated
          * invoices
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun usageStatementBehavior(): Optional<UsageStatementBehavior> =
-            Optional.ofNullable(usageStatementBehavior.getNullable("usage_statement_behavior"))
+            usageStatementBehavior.getOptional("usage_statement_behavior")
 
-        /** The single parent contract/customer for this child. */
+        /**
+         * Returns the raw JSON value of [parent].
+         *
+         * Unlike [parent], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("parent") @ExcludeMissing fun _parent(): JsonField<Parent> = parent
 
         /**
-         * Indicates which customer should pay for the child's invoice charges
+         * Returns the raw JSON value of [payer].
          *
-         * **SELF**: The child pays for its own invoice charges
-         *
-         * **PARENT**: The parent pays for the child's invoice charges
+         * Unlike [payer], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("payer") @ExcludeMissing fun _payer(): JsonField<Payer> = payer
 
         /**
-         * Indicates the behavior of the child's invoice statements on the parent's invoices.
+         * Returns the raw JSON value of [usageStatementBehavior].
          *
-         * **CONSOLIDATE**: Child's invoice statements will be added to parent's consolidated
-         * invoices
-         *
-         * **SEPARATE**: Child's invoice statements will appear not appear on parent's consolidated
-         * invoices
+         * Unlike [usageStatementBehavior], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("usage_statement_behavior")
         @ExcludeMissing
         fun _usageStatementBehavior(): JsonField<UsageStatementBehavior> = usageStatementBehavior
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): ChildHierarchyConfiguration = apply {
-            if (validated) {
-                return@apply
-            }
-
-            parent().validate()
-            payer()
-            usageStatementBehavior()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [ChildHierarchyConfiguration].
+             *
+             * The following fields are required:
+             * ```java
+             * .parent()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -808,7 +1088,13 @@ private constructor(
             /** The single parent contract/customer for this child. */
             fun parent(parent: Parent) = parent(JsonField.of(parent))
 
-            /** The single parent contract/customer for this child. */
+            /**
+             * Sets [Builder.parent] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.parent] with a well-typed [Parent] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun parent(parent: JsonField<Parent>) = apply { this.parent = parent }
 
             /**
@@ -821,11 +1107,11 @@ private constructor(
             fun payer(payer: Payer) = payer(JsonField.of(payer))
 
             /**
-             * Indicates which customer should pay for the child's invoice charges
+             * Sets [Builder.payer] to an arbitrary JSON value.
              *
-             * **SELF**: The child pays for its own invoice charges
-             *
-             * **PARENT**: The parent pays for the child's invoice charges
+             * You should usually call [Builder.payer] with a well-typed [Payer] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
             fun payer(payer: JsonField<Payer>) = apply { this.payer = payer }
 
@@ -842,13 +1128,11 @@ private constructor(
                 usageStatementBehavior(JsonField.of(usageStatementBehavior))
 
             /**
-             * Indicates the behavior of the child's invoice statements on the parent's invoices.
+             * Sets [Builder.usageStatementBehavior] to an arbitrary JSON value.
              *
-             * **CONSOLIDATE**: Child's invoice statements will be added to parent's consolidated
-             * invoices
-             *
-             * **SEPARATE**: Child's invoice statements will appear not appear on parent's
-             * consolidated invoices
+             * You should usually call [Builder.usageStatementBehavior] with a well-typed
+             * [UsageStatementBehavior] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
             fun usageStatementBehavior(usageStatementBehavior: JsonField<UsageStatementBehavior>) =
                 apply {
@@ -874,62 +1158,136 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [ChildHierarchyConfiguration].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .parent()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): ChildHierarchyConfiguration =
                 ChildHierarchyConfiguration(
                     checkRequired("parent", parent),
                     payer,
                     usageStatementBehavior,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
+        private var validated: Boolean = false
+
+        fun validate(): ChildHierarchyConfiguration = apply {
+            if (validated) {
+                return@apply
+            }
+
+            parent().validate()
+            payer().ifPresent { it.validate() }
+            usageStatementBehavior().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (parent.asKnown().getOrNull()?.validity() ?: 0) +
+                (payer.asKnown().getOrNull()?.validity() ?: 0) +
+                (usageStatementBehavior.asKnown().getOrNull()?.validity() ?: 0)
+
         /** The single parent contract/customer for this child. */
-        @NoAutoDetect
         class Parent
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @JsonProperty("contract_id")
-            @ExcludeMissing
-            private val contractId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("customer_id")
-            @ExcludeMissing
-            private val customerId: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val contractId: JsonField<String>,
+            private val customerId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
+            @JsonCreator
+            private constructor(
+                @JsonProperty("contract_id")
+                @ExcludeMissing
+                contractId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("customer_id")
+                @ExcludeMissing
+                customerId: JsonField<String> = JsonMissing.of(),
+            ) : this(contractId, customerId, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun contractId(): String = contractId.getRequired("contract_id")
 
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun customerId(): String = customerId.getRequired("customer_id")
 
+            /**
+             * Returns the raw JSON value of [contractId].
+             *
+             * Unlike [contractId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("contract_id")
             @ExcludeMissing
             fun _contractId(): JsonField<String> = contractId
 
+            /**
+             * Returns the raw JSON value of [customerId].
+             *
+             * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("customer_id")
             @ExcludeMissing
             fun _customerId(): JsonField<String> = customerId
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): Parent = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                contractId()
-                customerId()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Parent].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .contractId()
+                 * .customerId()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -949,12 +1307,26 @@ private constructor(
 
                 fun contractId(contractId: String) = contractId(JsonField.of(contractId))
 
+                /**
+                 * Sets [Builder.contractId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.contractId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun contractId(contractId: JsonField<String>) = apply {
                     this.contractId = contractId
                 }
 
                 fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
+                /**
+                 * Sets [Builder.customerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.customerId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun customerId(customerId: JsonField<String>) = apply {
                     this.customerId = customerId
                 }
@@ -981,25 +1353,72 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Parent].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .contractId()
+                 * .customerId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Parent =
                     Parent(
                         checkRequired("contractId", contractId),
                         checkRequired("customerId", customerId),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Parent = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                contractId()
+                customerId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (contractId.asKnown().isPresent) 1 else 0) +
+                    (if (customerId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is Parent && contractId == other.contractId && customerId == other.customerId && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Parent &&
+                    contractId == other.contractId &&
+                    customerId == other.customerId &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(contractId, customerId, additionalProperties) }
-            /* spotless:on */
+            private val hashCode: Int by lazy {
+                Objects.hash(contractId, customerId, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
@@ -1103,12 +1522,39 @@ private constructor(
                     MetronomeInvalidDataException("Value is not a String")
                 }
 
+            private var validated: Boolean = false
+
+            fun validate(): Payer = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is Payer && value == other.value /* spotless:on */
+                return other is Payer && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1222,12 +1668,39 @@ private constructor(
                     MetronomeInvalidDataException("Value is not a String")
                 }
 
+            private var validated: Boolean = false
+
+            fun validate(): UsageStatementBehavior = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is UsageStatementBehavior && value == other.value /* spotless:on */
+                return other is UsageStatementBehavior && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1240,12 +1713,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ChildHierarchyConfiguration && parent == other.parent && payer == other.payer && usageStatementBehavior == other.usageStatementBehavior && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is ChildHierarchyConfiguration &&
+                parent == other.parent &&
+                payer == other.payer &&
+                usageStatementBehavior == other.usageStatementBehavior &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(parent, payer, usageStatementBehavior, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(parent, payer, usageStatementBehavior, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 

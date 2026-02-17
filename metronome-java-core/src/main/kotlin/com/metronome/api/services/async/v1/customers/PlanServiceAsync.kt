@@ -1,31 +1,47 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1.customers
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1CustomerPlanAddParams
-import com.metronome.api.models.V1CustomerPlanAddResponse
-import com.metronome.api.models.V1CustomerPlanEndParams
-import com.metronome.api.models.V1CustomerPlanEndResponse
-import com.metronome.api.models.V1CustomerPlanListPageAsync
-import com.metronome.api.models.V1CustomerPlanListParams
-import com.metronome.api.models.V1CustomerPlanListPriceAdjustmentsPageAsync
-import com.metronome.api.models.V1CustomerPlanListPriceAdjustmentsParams
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.customers.plans.PlanAddParams
+import com.metronome.api.models.v1.customers.plans.PlanAddResponse
+import com.metronome.api.models.v1.customers.plans.PlanEndParams
+import com.metronome.api.models.v1.customers.plans.PlanEndResponse
+import com.metronome.api.models.v1.customers.plans.PlanListPageAsync
+import com.metronome.api.models.v1.customers.plans.PlanListParams
+import com.metronome.api.models.v1.customers.plans.PlanListPriceAdjustmentsPageAsync
+import com.metronome.api.models.v1.customers.plans.PlanListPriceAdjustmentsParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface PlanServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanServiceAsync
 
     /**
      * List the given customer's plans in reverse-chronological order. This is a Plans (deprecated)
      * endpoint. New clients should implement using Contracts.
      */
-    @JvmOverloads
+    fun list(params: PlanListParams): CompletableFuture<PlanListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V1CustomerPlanListParams,
+        params: PlanListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerPlanListPageAsync>
+    ): CompletableFuture<PlanListPageAsync>
 
     /**
      * Associate an existing customer with a plan for a specified date range. See the
@@ -33,21 +49,27 @@ interface PlanServiceAsync {
      * for details on the price adjustments. This is a Plans (deprecated) endpoint. New clients
      * should implement using Contracts.
      */
-    @JvmOverloads
+    fun add(params: PlanAddParams): CompletableFuture<PlanAddResponse> =
+        add(params, RequestOptions.none())
+
+    /** @see add */
     fun add(
-        params: V1CustomerPlanAddParams,
+        params: PlanAddParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerPlanAddResponse>
+    ): CompletableFuture<PlanAddResponse>
 
     /**
      * Change the end date of a customer's plan. This is a Plans (deprecated) endpoint. New clients
      * should implement using Contracts.
      */
-    @JvmOverloads
+    fun end(params: PlanEndParams): CompletableFuture<PlanEndResponse> =
+        end(params, RequestOptions.none())
+
+    /** @see end */
     fun end(
-        params: V1CustomerPlanEndParams,
+        params: PlanEndParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerPlanEndResponse>
+    ): CompletableFuture<PlanEndResponse>
 
     /**
      * Lists a customer plans adjustments. See the
@@ -55,9 +77,81 @@ interface PlanServiceAsync {
      * for details. This is a Plans (deprecated) endpoint. New clients should implement using
      * Contracts.
      */
-    @JvmOverloads
     fun listPriceAdjustments(
-        params: V1CustomerPlanListPriceAdjustmentsParams,
+        params: PlanListPriceAdjustmentsParams
+    ): CompletableFuture<PlanListPriceAdjustmentsPageAsync> =
+        listPriceAdjustments(params, RequestOptions.none())
+
+    /** @see listPriceAdjustments */
+    fun listPriceAdjustments(
+        params: PlanListPriceAdjustmentsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerPlanListPriceAdjustmentsPageAsync>
+    ): CompletableFuture<PlanListPriceAdjustmentsPageAsync>
+
+    /** A view of [PlanServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `get /v1/customers/{customer_id}/plans`, but is otherwise
+         * the same as [PlanServiceAsync.list].
+         */
+        fun list(params: PlanListParams): CompletableFuture<HttpResponseFor<PlanListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: PlanListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/{customer_id}/plans/add`, but is
+         * otherwise the same as [PlanServiceAsync.add].
+         */
+        fun add(params: PlanAddParams): CompletableFuture<HttpResponseFor<PlanAddResponse>> =
+            add(params, RequestOptions.none())
+
+        /** @see add */
+        fun add(
+            params: PlanAddParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanAddResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /v1/customers/{customer_id}/plans/{customer_plan_id}/end`, but is otherwise the same as
+         * [PlanServiceAsync.end].
+         */
+        fun end(params: PlanEndParams): CompletableFuture<HttpResponseFor<PlanEndResponse>> =
+            end(params, RequestOptions.none())
+
+        /** @see end */
+        fun end(
+            params: PlanEndParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanEndResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /v1/customers/{customer_id}/plans/{customer_plan_id}/priceAdjustments`, but is otherwise
+         * the same as [PlanServiceAsync.listPriceAdjustments].
+         */
+        fun listPriceAdjustments(
+            params: PlanListPriceAdjustmentsParams
+        ): CompletableFuture<HttpResponseFor<PlanListPriceAdjustmentsPageAsync>> =
+            listPriceAdjustments(params, RequestOptions.none())
+
+        /** @see listPriceAdjustments */
+        fun listPriceAdjustments(
+            params: PlanListPriceAdjustmentsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PlanListPriceAdjustmentsPageAsync>>
+    }
 }

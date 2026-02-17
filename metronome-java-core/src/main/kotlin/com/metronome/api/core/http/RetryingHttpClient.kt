@@ -1,8 +1,11 @@
 package com.metronome.api.core.http
 
+import com.metronome.api.core.DefaultSleeper
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.Sleeper
 import com.metronome.api.core.checkRequired
 import com.metronome.api.errors.MetronomeIoException
+import com.metronome.api.errors.MetronomeRetryableException
 import java.io.IOException
 import java.time.Clock
 import java.time.Duration
@@ -10,8 +13,6 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.time.temporal.ChronoUnit
-import java.util.Timer
-import java.util.TimerTask
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ThreadLocalRandom
@@ -23,16 +24,13 @@ import kotlin.math.pow
 class RetryingHttpClient
 private constructor(
     private val httpClient: HttpClient,
+    private val sleeper: Sleeper,
     private val clock: Clock,
     private val maxRetries: Int,
     private val idempotencyHeader: String?,
 ) : HttpClient {
 
     override fun execute(request: HttpRequest, requestOptions: RequestOptions): HttpResponse {
-        if (!isRetryable(request) || maxRetries <= 0) {
-            return httpClient.execute(request, requestOptions)
-        }
-
         var modifiedRequest = maybeAddIdempotencyHeader(request)
 
         // Don't send the current retry count in the headers if the caller set their own value.
@@ -44,6 +42,10 @@ private constructor(
         while (true) {
             if (shouldSendRetryCount) {
                 modifiedRequest = setRetryCountHeader(modifiedRequest, retries)
+            }
+
+            if (!isRetryable(modifiedRequest)) {
+                return httpClient.execute(modifiedRequest, requestOptions)
             }
 
             val response =
@@ -62,10 +64,10 @@ private constructor(
                     null
                 }
 
-            val backoffMillis = getRetryBackoffMillis(retries, response)
+            val backoffDuration = getRetryBackoffDuration(retries, response)
             // All responses must be closed, so close the failed one before retrying.
             response?.close()
-            Thread.sleep(backoffMillis.toMillis())
+            sleeper.sleep(backoffDuration)
         }
     }
 
@@ -73,10 +75,6 @@ private constructor(
         request: HttpRequest,
         requestOptions: RequestOptions,
     ): CompletableFuture<HttpResponse> {
-        if (!isRetryable(request) || maxRetries <= 0) {
-            return httpClient.executeAsync(request, requestOptions)
-        }
-
         val modifiedRequest = maybeAddIdempotencyHeader(request)
 
         // Don't send the current retry count in the headers if the caller set their own value.
@@ -92,8 +90,12 @@ private constructor(
             val requestWithRetryCount =
                 if (shouldSendRetryCount) setRetryCountHeader(request, retries) else request
 
-            return httpClient
-                .executeAsync(requestWithRetryCount, requestOptions)
+            val responseFuture = httpClient.executeAsync(requestWithRetryCount, requestOptions)
+            if (!isRetryable(requestWithRetryCount)) {
+                return responseFuture
+            }
+
+            return responseFuture
                 .handleAsync(
                     fun(
                         response: HttpResponse?,
@@ -111,10 +113,10 @@ private constructor(
                             }
                         }
 
-                        val backoffMillis = getRetryBackoffMillis(retries, response)
+                        val backoffDuration = getRetryBackoffDuration(retries, response)
                         // All responses must be closed, so close the failed one before retrying.
                         response?.close()
-                        return sleepAsync(backoffMillis.toMillis()).thenCompose {
+                        return sleeper.sleepAsync(backoffDuration).thenCompose {
                             executeWithRetries(requestWithRetryCount, requestOptions)
                         }
                     }
@@ -128,7 +130,10 @@ private constructor(
         return executeWithRetries(modifiedRequest, requestOptions)
     }
 
-    override fun close() = httpClient.close()
+    override fun close() {
+        httpClient.close()
+        sleeper.close()
+    }
 
     private fun isRetryable(request: HttpRequest): Boolean =
         // Some requests, such as when a request body is being streamed, cannot be retried because
@@ -175,11 +180,12 @@ private constructor(
     }
 
     private fun shouldRetry(throwable: Throwable): Boolean =
-        // Only retry IOException and MetronomeIoException, other exceptions are not intended to be
-        // retried.
-        throwable is IOException || throwable is MetronomeIoException
+        // Only retry known retryable exceptions, other exceptions are not intended to be retried.
+        throwable is IOException ||
+            throwable is MetronomeIoException ||
+            throwable is MetronomeRetryableException
 
-    private fun getRetryBackoffMillis(retries: Int, response: HttpResponse?): Duration {
+    private fun getRetryBackoffDuration(retries: Int, response: HttpResponse?): Duration {
         // About the Retry-After header:
         // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
         response
@@ -226,32 +232,20 @@ private constructor(
 
     companion object {
 
-        private val TIMER = Timer("RetryingHttpClient", true)
-
-        private fun sleepAsync(millis: Long): CompletableFuture<Void> {
-            val future = CompletableFuture<Void>()
-            TIMER.schedule(
-                object : TimerTask() {
-                    override fun run() {
-                        future.complete(null)
-                    }
-                },
-                millis,
-            )
-            return future
-        }
-
         @JvmStatic fun builder() = Builder()
     }
 
     class Builder internal constructor() {
 
         private var httpClient: HttpClient? = null
+        private var sleeper: Sleeper? = null
         private var clock: Clock = Clock.systemUTC()
         private var maxRetries: Int = 2
         private var idempotencyHeader: String? = null
 
         fun httpClient(httpClient: HttpClient) = apply { this.httpClient = httpClient }
+
+        fun sleeper(sleeper: Sleeper) = apply { this.sleeper = sleeper }
 
         fun clock(clock: Clock) = apply { this.clock = clock }
 
@@ -262,6 +256,7 @@ private constructor(
         fun build(): HttpClient =
             RetryingHttpClient(
                 checkRequired("httpClient", httpClient),
+                sleeper ?: DefaultSleeper(),
                 clock,
                 maxRetries,
                 idempotencyHeader,

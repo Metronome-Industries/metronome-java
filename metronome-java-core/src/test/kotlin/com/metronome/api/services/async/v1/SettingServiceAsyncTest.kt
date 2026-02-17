@@ -4,12 +4,12 @@ package com.metronome.api.services.async.v1
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
-import com.metronome.api.models.V1SettingUpsertAvalaraCredentialsParams
+import com.metronome.api.models.v1.settings.SettingUpsertAvalaraCredentialsParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class SettingServiceAsyncTest {
+internal class SettingServiceAsyncTest {
 
     @Test
     fun upsertAvalaraCredentials() {
@@ -22,9 +22,9 @@ class SettingServiceAsyncTest {
 
         val responseFuture =
             settingServiceAsync.upsertAvalaraCredentials(
-                V1SettingUpsertAvalaraCredentialsParams.builder()
+                SettingUpsertAvalaraCredentialsParams.builder()
                     .avalaraEnvironment(
-                        V1SettingUpsertAvalaraCredentialsParams.AvalaraEnvironment.PRODUCTION
+                        SettingUpsertAvalaraCredentialsParams.AvalaraEnvironment.PRODUCTION
                     )
                     .avalaraPassword("my_password_123")
                     .avalaraUsername("test@metronome.com")

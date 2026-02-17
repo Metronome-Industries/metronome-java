@@ -1,26 +1,42 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1PaymentAttemptParams
-import com.metronome.api.models.V1PaymentAttemptResponse
-import com.metronome.api.models.V1PaymentCancelParams
-import com.metronome.api.models.V1PaymentCancelResponse
-import com.metronome.api.models.V1PaymentListPageAsync
-import com.metronome.api.models.V1PaymentListParams
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.payments.PaymentAttemptParams
+import com.metronome.api.models.v1.payments.PaymentAttemptResponse
+import com.metronome.api.models.v1.payments.PaymentCancelParams
+import com.metronome.api.models.v1.payments.PaymentCancelResponse
+import com.metronome.api.models.v1.payments.PaymentListPageAsync
+import com.metronome.api.models.v1.payments.PaymentListParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface PaymentServiceAsync {
 
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): PaymentServiceAsync
+
     /** Fetch all payment attempts for the given invoice. */
-    @JvmOverloads
+    fun list(params: PaymentListParams): CompletableFuture<PaymentListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V1PaymentListParams,
+        params: PaymentListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1PaymentListPageAsync>
+    ): CompletableFuture<PaymentListPageAsync>
 
     /**
      * Trigger a new attempt by canceling any existing attempts for this invoice and creating a new
@@ -32,16 +48,82 @@ interface PaymentServiceAsync {
      *
      * Attempting to payment on an ineligible Invoice or Customer will result in a `400` response.
      */
-    @JvmOverloads
+    fun attempt(params: PaymentAttemptParams): CompletableFuture<PaymentAttemptResponse> =
+        attempt(params, RequestOptions.none())
+
+    /** @see attempt */
     fun attempt(
-        params: V1PaymentAttemptParams,
+        params: PaymentAttemptParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1PaymentAttemptResponse>
+    ): CompletableFuture<PaymentAttemptResponse>
 
     /** Cancel an existing payment attempt for an invoice. */
-    @JvmOverloads
+    fun cancel(params: PaymentCancelParams): CompletableFuture<PaymentCancelResponse> =
+        cancel(params, RequestOptions.none())
+
+    /** @see cancel */
     fun cancel(
-        params: V1PaymentCancelParams,
+        params: PaymentCancelParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1PaymentCancelResponse>
+    ): CompletableFuture<PaymentCancelResponse>
+
+    /**
+     * A view of [PaymentServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PaymentServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/payments/list`, but is otherwise the same as
+         * [PaymentServiceAsync.list].
+         */
+        fun list(
+            params: PaymentListParams
+        ): CompletableFuture<HttpResponseFor<PaymentListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: PaymentListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PaymentListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/payments/attempt`, but is otherwise the same as
+         * [PaymentServiceAsync.attempt].
+         */
+        fun attempt(
+            params: PaymentAttemptParams
+        ): CompletableFuture<HttpResponseFor<PaymentAttemptResponse>> =
+            attempt(params, RequestOptions.none())
+
+        /** @see attempt */
+        fun attempt(
+            params: PaymentAttemptParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PaymentAttemptResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/payments/cancel`, but is otherwise the same as
+         * [PaymentServiceAsync.cancel].
+         */
+        fun cancel(
+            params: PaymentCancelParams
+        ): CompletableFuture<HttpResponseFor<PaymentCancelResponse>> =
+            cancel(params, RequestOptions.none())
+
+        /** @see cancel */
+        fun cancel(
+            params: PaymentCancelParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PaymentCancelResponse>>
+    }
 }

@@ -5,14 +5,14 @@ package com.metronome.api.services.blocking.v1.contracts
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
-import com.metronome.api.models.V1ContractNamedScheduleRetrieveParams
-import com.metronome.api.models.V1ContractNamedScheduleUpdateParams
+import com.metronome.api.models.v1.contracts.namedschedules.NamedScheduleRetrieveParams
+import com.metronome.api.models.v1.contracts.namedschedules.NamedScheduleUpdateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class NamedScheduleServiceTest {
+internal class NamedScheduleServiceTest {
 
     @Test
     fun retrieve() {
@@ -25,7 +25,7 @@ class NamedScheduleServiceTest {
 
         val namedSchedule =
             namedScheduleService.retrieve(
-                V1ContractNamedScheduleRetrieveParams.builder()
+                NamedScheduleRetrieveParams.builder()
                     .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .scheduleName("my-schedule")
                     .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
@@ -45,7 +45,7 @@ class NamedScheduleServiceTest {
         val namedScheduleService = client.v1().contracts().namedSchedules()
 
         namedScheduleService.update(
-            V1ContractNamedScheduleUpdateParams.builder()
+            NamedScheduleUpdateParams.builder()
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .scheduleName("my-schedule")
                 .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))

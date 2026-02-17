@@ -4,13 +4,13 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.V1AlertArchiveParams
-import com.metronome.api.models.V1AlertCreateParams
+import com.metronome.api.models.v1.alerts.AlertArchiveParams
+import com.metronome.api.models.v1.alerts.AlertCreateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class AlertServiceTest {
+internal class AlertServiceTest {
 
     @Test
     fun create() {
@@ -23,16 +23,16 @@ class AlertServiceTest {
 
         val alert =
             alertService.create(
-                V1AlertCreateParams.builder()
-                    .alertType(V1AlertCreateParams.AlertType.LOW_CREDIT_BALANCE_REACHED)
+                AlertCreateParams.builder()
+                    .alertType(AlertCreateParams.AlertType.SPEND_THRESHOLD_REACHED)
                     .name("\$100 spend threshold reached")
                     .threshold(10000.0)
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addCreditGrantTypeFilter("enterprise")
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                     .addCustomFieldFilter(
-                        V1AlertCreateParams.CustomFieldFilter.builder()
-                            .entity(V1AlertCreateParams.CustomFieldFilter.Entity.CONTRACT)
+                        AlertCreateParams.CustomFieldFilter.builder()
+                            .entity(AlertCreateParams.CustomFieldFilter.Entity.CONTRACT)
                             .key("key")
                             .value("value")
                             .build()
@@ -40,12 +40,12 @@ class AlertServiceTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .evaluateOnCreate(true)
                     .addGroupValue(
-                        V1AlertCreateParams.GroupValue.builder().key("key").value("value").build()
+                        AlertCreateParams.GroupValue.builder().key("key").value("value").build()
                     )
                     .addInvoiceTypesFilter("SCHEDULED or USAGE")
                     .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .seatFilter(
-                        V1AlertCreateParams.SeatFilter.builder()
+                        AlertCreateParams.SeatFilter.builder()
                             .seatGroupKey("seat_group_key")
                             .seatGroupValue("seat_group_value")
                             .build()
@@ -68,7 +68,7 @@ class AlertServiceTest {
 
         val response =
             alertService.archive(
-                V1AlertArchiveParams.builder()
+                AlertArchiveParams.builder()
                     .id("8deed800-1b7a-495d-a207-6c52bac54dc9")
                     .releaseUniquenessKey(true)
                     .build()

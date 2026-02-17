@@ -1,18 +1,34 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.blocking.v1
 
+import com.google.errorprone.annotations.MustBeClosed
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1UsageIngestParams
-import com.metronome.api.models.V1UsageListPage
-import com.metronome.api.models.V1UsageListParams
-import com.metronome.api.models.V1UsageListWithGroupsPage
-import com.metronome.api.models.V1UsageListWithGroupsParams
-import com.metronome.api.models.V1UsageSearchParams
+import com.metronome.api.core.http.HttpResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.usage.UsageIngestParams
+import com.metronome.api.models.v1.usage.UsageListPage
+import com.metronome.api.models.v1.usage.UsageListParams
+import com.metronome.api.models.v1.usage.UsageListWithGroupsPage
+import com.metronome.api.models.v1.usage.UsageListWithGroupsParams
+import com.metronome.api.models.v1.usage.UsageSearchParams
+import com.metronome.api.models.v1.usage.UsageSearchResponse
+import java.util.function.Consumer
 
 interface UsageService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): UsageService
 
     /**
      * Retrieve aggregated usage data across multiple customers and billable metrics in a single
@@ -27,7 +43,6 @@ interface UsageService {
      * - Support capacity planning with historical usage patterns
      *
      * ### Key response fields:
-     *
      * An array of `UsageBatchAggregate` objects containing:
      * - `customer_id`: The customer this usage belongs to
      * - `billable_metric_id` and `billable_metric_name`: What was measured
@@ -45,11 +60,13 @@ interface UsageService {
      * - Pagination: Use `next_page` cursor to retrieve large datasets
      * - Null values: Group values may be null when no usage matches that group
      */
-    @JvmOverloads
+    fun list(params: UsageListParams): UsageListPage = list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V1UsageListParams,
+        params: UsageListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1UsageListPage
+    ): UsageListPage
 
     /**
      * The ingest endpoint is the primary method for sending usage events to Metronome, serving as
@@ -61,7 +78,6 @@ interface UsageService {
      * [Send usage events](/guides/events/send-usage-events) guide to learn more about usage events.
      *
      * ### Use this endpoint to:
-     *
      * Create a customer usage pipeline into Metronome that drives billable metrics, credit
      * drawdown, and invoicing. Track customer behavior, resource consumption, and feature usage
      *
@@ -77,7 +93,6 @@ interface UsageService {
      * - Duplicate events are automatically detected and ignored (34-day deduplication window)
      *
      * #### Event structure:
-     *
      * Usage events are simple JSON objects designed for flexibility and ease of integration:
      * ```json
      * {
@@ -97,7 +112,6 @@ interface UsageService {
      * Learn more about [usage event structure definitions](/guides/events/design-usage-events).
      *
      * #### Transaction ID
-     *
      * The transaction_id serves as your idempotency key, ensuring events are processed exactly
      * once. Metronome maintains a 34-day deduplication window - significantly longer than typical
      * 12-hour windows - enabling robust backfill scenarios without duplicate billing.
@@ -107,7 +121,6 @@ interface UsageService {
      *     - Include enough context to avoid collisions across different event sources
      *
      * #### Customer ID
-     *
      * Identifies which customer should be billed for this usage. Supports two identification
      * methods:
      * - Metronome Customer ID: The UUID returned when creating a customer
@@ -117,99 +130,28 @@ interface UsageService {
      * have multiple aliases for flexibility.
      *
      * #### Event Type:
-     *
      * Categorizes the event type for billable metric matching. Choose descriptive names that aligns
      * with the product surface area.
      *
      * #### Properties:
-     *
      * Flexible metadata also used to match billable metrics or to be used to serve as group keys to
      * create multiple pricing dimensions or breakdown costs by novel properties for end customers
      * or internal finance teams measuring underlying COGs.
      */
-    @JvmOverloads
+    fun ingest() = ingest(UsageIngestParams.none())
+
+    /** @see ingest */
     fun ingest(
-        params: V1UsageIngestParams = V1UsageIngestParams.none(),
+        params: UsageIngestParams = UsageIngestParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
-    /**
-     * The ingest endpoint is the primary method for sending usage events to Metronome, serving as
-     * the foundation for all billing calculations in your usage-based pricing model. This
-     * high-throughput endpoint is designed for real-time streaming ingestion, supports backdating
-     * 34 days, and is built to handle mission-critical usage data with enterprise-grade
-     * reliability. Metronome supports 100,000 events per second without requiring pre-aggregation
-     * or rollups and can scale up from there. See the
-     * [Send usage events](/guides/events/send-usage-events) guide to learn more about usage events.
-     *
-     * ### Use this endpoint to:
-     *
-     * Create a customer usage pipeline into Metronome that drives billable metrics, credit
-     * drawdown, and invoicing. Track customer behavior, resource consumption, and feature usage
-     *
-     * ### What happens when you send events:
-     * - Events are validated and processed in real-time
-     * - Events are matched to customers using customer IDs or customer ingest aliases
-     * - Events are matched to billable metrics and are immediately available for usage and spend
-     *   calculations
-     *
-     * ### Usage guidelines:
-     * - Historical events can be backdated up to 34 days and will immediately impact live customer
-     *   spend
-     * - Duplicate events are automatically detected and ignored (34-day deduplication window)
-     *
-     * #### Event structure:
-     *
-     * Usage events are simple JSON objects designed for flexibility and ease of integration:
-     * ```json
-     * {
-     *   "transaction_id": "2021-01-01T00:00:00Z_cluster42",
-     *   "customer_id": "team@example.com",
-     *   "event_type": "api_request",
-     *   "timestamp": "2021-01-01T00:00:00Z",
-     *   "properties": {
-     *     "endpoint": "/v1/users",
-     *     "method": "POST",
-     *     "response_time_ms": 45,
-     *     "region": "us-west-2"
-     *   }
-     * }
-     * ```
-     *
-     * Learn more about [usage event structure definitions](/guides/events/design-usage-events).
-     *
-     * #### Transaction ID
-     *
-     * The transaction_id serves as your idempotency key, ensuring events are processed exactly
-     * once. Metronome maintains a 34-day deduplication window - significantly longer than typical
-     * 12-hour windows - enabling robust backfill scenarios without duplicate billing.
-     * - Best Practices:
-     *     - Use UUIDs for one-time events: uuid4()
-     *     - For heartbeat events, use deterministic IDs
-     *     - Include enough context to avoid collisions across different event sources
-     *
-     * #### Customer ID
-     *
-     * Identifies which customer should be billed for this usage. Supports two identification
-     * methods:
-     * - Metronome Customer ID: The UUID returned when creating a customer
-     * - Ingest Alias: Your system's identifier (email, account number, etc.)
-     *
-     * Ingest aliases enable seamless integration without requiring ID mapping, and customers can
-     * have multiple aliases for flexibility.
-     *
-     * #### Event Type:
-     *
-     * Categorizes the event type for billable metric matching. Choose descriptive names that aligns
-     * with the product surface area.
-     *
-     * #### Properties:
-     *
-     * Flexible metadata also used to match billable metrics or to be used to serve as group keys to
-     * create multiple pricing dimensions or breakdown costs by novel properties for end customers
-     * or internal finance teams measuring underlying COGs.
-     */
-    fun ingest(requestOptions: RequestOptions) = ingest(V1UsageIngestParams.none(), requestOptions)
+    /** @see ingest */
+    fun ingest(params: UsageIngestParams = UsageIngestParams.none()) =
+        ingest(params, RequestOptions.none())
+
+    /** @see ingest */
+    fun ingest(requestOptions: RequestOptions) = ingest(UsageIngestParams.none(), requestOptions)
 
     /**
      * Retrieve granular usage data for a specific customer and billable metric, with the ability to
@@ -223,7 +165,6 @@ interface UsageService {
      * - Identify high-usage segments for optimization opportunities
      *
      * ### Key response fields:
-     *
      * An array of `PagedUsageAggregate` objects containing:
      * - `starting_on` and `ending_before`: Time window boundaries
      * - `group_key`: The dimension being grouped by (e.g., "region")
@@ -240,11 +181,14 @@ interface UsageService {
      * - Pagination: Use limit and `next_page` for large result sets
      * - Null handling: `group_value` may be null for unmatched data
      */
-    @JvmOverloads
+    fun listWithGroups(params: UsageListWithGroupsParams): UsageListWithGroupsPage =
+        listWithGroups(params, RequestOptions.none())
+
+    /** @see listWithGroups */
     fun listWithGroups(
-        params: V1UsageListWithGroupsParams,
+        params: UsageListWithGroupsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1UsageListWithGroupsPage
+    ): UsageListWithGroupsPage
 
     /**
      * This endpoint retrieves events by transaction ID for events that occurred within the last 34
@@ -272,14 +216,96 @@ interface UsageService {
      * - Processing status and duplicate detection flags
      *
      * ### Usage guidelines:
-     *
      * ⚠️ Important: This endpoint is heavily rate limited and designed for sampling workflows only.
      * Do not use this endpoint to check every event in your system. Instead, implement a sampling
      * strategy to randomly validate a subset of events for observability purposes.
      */
-    @JvmOverloads
+    fun search(params: UsageSearchParams): List<UsageSearchResponse> =
+        search(params, RequestOptions.none())
+
+    /** @see search */
     fun search(
-        params: V1UsageSearchParams,
+        params: UsageSearchParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<UnnamedSchemaWithArrayParent0>
+    ): List<UsageSearchResponse>
+
+    /** A view of [UsageService] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): UsageService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/usage`, but is otherwise the same as
+         * [UsageService.list].
+         */
+        @MustBeClosed
+        fun list(params: UsageListParams): HttpResponseFor<UsageListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        @MustBeClosed
+        fun list(
+            params: UsageListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<UsageListPage>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/ingest`, but is otherwise the same as
+         * [UsageService.ingest].
+         */
+        @MustBeClosed fun ingest(): HttpResponse = ingest(UsageIngestParams.none())
+
+        /** @see ingest */
+        @MustBeClosed
+        fun ingest(
+            params: UsageIngestParams = UsageIngestParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /** @see ingest */
+        @MustBeClosed
+        fun ingest(params: UsageIngestParams = UsageIngestParams.none()): HttpResponse =
+            ingest(params, RequestOptions.none())
+
+        /** @see ingest */
+        @MustBeClosed
+        fun ingest(requestOptions: RequestOptions): HttpResponse =
+            ingest(UsageIngestParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /v1/usage/groups`, but is otherwise the same as
+         * [UsageService.listWithGroups].
+         */
+        @MustBeClosed
+        fun listWithGroups(
+            params: UsageListWithGroupsParams
+        ): HttpResponseFor<UsageListWithGroupsPage> = listWithGroups(params, RequestOptions.none())
+
+        /** @see listWithGroups */
+        @MustBeClosed
+        fun listWithGroups(
+            params: UsageListWithGroupsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<UsageListWithGroupsPage>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/events/search`, but is otherwise the same as
+         * [UsageService.search].
+         */
+        @MustBeClosed
+        fun search(params: UsageSearchParams): HttpResponseFor<List<UsageSearchResponse>> =
+            search(params, RequestOptions.none())
+
+        /** @see search */
+        @MustBeClosed
+        fun search(
+            params: UsageSearchParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<List<UsageSearchResponse>>
+    }
 }

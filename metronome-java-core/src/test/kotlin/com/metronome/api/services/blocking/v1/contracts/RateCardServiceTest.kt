@@ -6,17 +6,15 @@ import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.Id
-import com.metronome.api.models.V1ContractRateCardArchiveParams
-import com.metronome.api.models.V1ContractRateCardCreateParams
-import com.metronome.api.models.V1ContractRateCardRetrieveParams
-import com.metronome.api.models.V1ContractRateCardRetrieveRateScheduleParams
-import com.metronome.api.models.V1ContractRateCardUpdateParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardCreateParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveRateScheduleParams
+import com.metronome.api.models.v1.contracts.ratecards.RateCardUpdateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class RateCardServiceTest {
+internal class RateCardServiceTest {
 
     @Test
     fun create() {
@@ -29,23 +27,23 @@ class RateCardServiceTest {
 
         val rateCard =
             rateCardService.create(
-                V1ContractRateCardCreateParams.builder()
+                RateCardCreateParams.builder()
                     .name("My Rate Card")
                     .addAlias(
-                        V1ContractRateCardCreateParams.Alias.builder()
+                        RateCardCreateParams.Alias.builder()
                             .name("my-rate-card")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )
                     .addCreditTypeConversion(
-                        V1ContractRateCardCreateParams.CreditTypeConversion.builder()
+                        RateCardCreateParams.CreditTypeConversion.builder()
                             .customCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                             .fiatPerCustomCredit(2.0)
                             .build()
                     )
                     .customFields(
-                        V1ContractRateCardCreateParams.CustomFields.builder()
+                        RateCardCreateParams.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -68,9 +66,7 @@ class RateCardServiceTest {
 
         val rateCard =
             rateCardService.retrieve(
-                V1ContractRateCardRetrieveParams.builder()
-                    .id(Id.builder().id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe").build())
-                    .build()
+                Id.builder().id("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe").build()
             )
 
         rateCard.validate()
@@ -87,10 +83,10 @@ class RateCardServiceTest {
 
         val rateCard =
             rateCardService.update(
-                V1ContractRateCardUpdateParams.builder()
+                RateCardUpdateParams.builder()
                     .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .addAlias(
-                        V1ContractRateCardUpdateParams.Alias.builder()
+                        RateCardUpdateParams.Alias.builder()
                             .name("name")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -128,11 +124,7 @@ class RateCardServiceTest {
         val rateCardService = client.v1().contracts().rateCards()
 
         val response =
-            rateCardService.archive(
-                V1ContractRateCardArchiveParams.builder()
-                    .id(Id.builder().id("12b21470-4570-40df-8998-449d0b0bc52f").build())
-                    .build()
-            )
+            rateCardService.archive(Id.builder().id("12b21470-4570-40df-8998-449d0b0bc52f").build())
 
         response.validate()
     }
@@ -148,21 +140,19 @@ class RateCardServiceTest {
 
         val response =
             rateCardService.retrieveRateSchedule(
-                V1ContractRateCardRetrieveRateScheduleParams.builder()
+                RateCardRetrieveRateScheduleParams.builder()
                     .limit(1L)
                     .nextPage("next_page")
                     .rateCardId("f3d51ae8-f283-44e1-9933-a3cf9ad7a6fe")
                     .startingAt(OffsetDateTime.parse("2024-01-01T00:00:00.000Z"))
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addSelector(
-                        V1ContractRateCardRetrieveRateScheduleParams.Selector.builder()
+                        RateCardRetrieveRateScheduleParams.Selector.builder()
                             .billingFrequency(
-                                V1ContractRateCardRetrieveRateScheduleParams.Selector
-                                    .BillingFrequency
-                                    .MONTHLY
+                                RateCardRetrieveRateScheduleParams.Selector.BillingFrequency.MONTHLY
                             )
                             .partialPricingGroupValues(
-                                V1ContractRateCardRetrieveRateScheduleParams.Selector
+                                RateCardRetrieveRateScheduleParams.Selector
                                     .PartialPricingGroupValues
                                     .builder()
                                     .putAdditionalProperty("region", JsonValue.from("us-west-2"))
@@ -170,8 +160,7 @@ class RateCardServiceTest {
                                     .build()
                             )
                             .pricingGroupValues(
-                                V1ContractRateCardRetrieveRateScheduleParams.Selector
-                                    .PricingGroupValues
+                                RateCardRetrieveRateScheduleParams.Selector.PricingGroupValues
                                     .builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()

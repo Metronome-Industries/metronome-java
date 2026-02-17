@@ -10,123 +10,203 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.checkRequired
-import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
+import com.metronome.api.errors.MetronomeInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-@NoAutoDetect
 class ProService
-@JsonCreator
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("max_amount")
-    @ExcludeMissing
-    private val maxAmount: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("product_id")
-    @ExcludeMissing
-    private val productId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("quantity")
-    @ExcludeMissing
-    private val quantity: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("unit_price")
-    @ExcludeMissing
-    private val unitPrice: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
-    @ExcludeMissing
-    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
-    @JsonProperty("description")
-    @ExcludeMissing
-    private val description: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("netsuite_sales_order_id")
-    @ExcludeMissing
-    private val netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val maxAmount: JsonField<Double>,
+    private val productId: JsonField<String>,
+    private val quantity: JsonField<Double>,
+    private val unitPrice: JsonField<Double>,
+    private val customFields: JsonField<CustomFields>,
+    private val description: JsonField<String>,
+    private val netsuiteSalesOrderId: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("max_amount") @ExcludeMissing maxAmount: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("unit_price") @ExcludeMissing unitPrice: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("netsuite_sales_order_id")
+        @ExcludeMissing
+        netsuiteSalesOrderId: JsonField<String> = JsonMissing.of(),
+    ) : this(
+        id,
+        maxAmount,
+        productId,
+        quantity,
+        unitPrice,
+        customFields,
+        description,
+        netsuiteSalesOrderId,
+        mutableMapOf(),
+    )
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
-    /** Maximum amount for the term. */
+    /**
+     * Maximum amount for the term.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun maxAmount(): Double = maxAmount.getRequired("max_amount")
 
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun productId(): String = productId.getRequired("product_id")
 
-    /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+    /**
+     * Quantity for the charge. Will be multiplied by unit_price to determine the amount.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun quantity(): Double = quantity.getRequired("quantity")
 
     /**
      * Unit price for the charge. Will be multiplied by quantity to determine the amount and must be
      * specified.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun unitPrice(): Double = unitPrice.getRequired("unit_price")
 
-    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
-    fun customFields(): Optional<CustomFields> =
-        Optional.ofNullable(customFields.getNullable("custom_fields"))
+    /**
+     * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun customFields(): Optional<CustomFields> = customFields.getOptional("custom_fields")
 
-    fun description(): Optional<String> =
-        Optional.ofNullable(description.getNullable("description"))
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun description(): Optional<String> = description.getOptional("description")
 
-    /** This field's availability is dependent on your client's configuration. */
+    /**
+     * This field's availability is dependent on your client's configuration.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun netsuiteSalesOrderId(): Optional<String> =
-        Optional.ofNullable(netsuiteSalesOrderId.getNullable("netsuite_sales_order_id"))
+        netsuiteSalesOrderId.getOptional("netsuite_sales_order_id")
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** Maximum amount for the term. */
+    /**
+     * Returns the raw JSON value of [maxAmount].
+     *
+     * Unlike [maxAmount], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("max_amount") @ExcludeMissing fun _maxAmount(): JsonField<Double> = maxAmount
 
+    /**
+     * Returns the raw JSON value of [productId].
+     *
+     * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
-    /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+    /**
+     * Returns the raw JSON value of [quantity].
+     *
+     * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
     /**
-     * Unit price for the charge. Will be multiplied by quantity to determine the amount and must be
-     * specified.
+     * Returns the raw JSON value of [unitPrice].
+     *
+     * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("unit_price") @ExcludeMissing fun _unitPrice(): JsonField<Double> = unitPrice
 
-    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
+    /**
+     * Returns the raw JSON value of [customFields].
+     *
+     * Unlike [customFields], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("custom_fields")
     @ExcludeMissing
     fun _customFields(): JsonField<CustomFields> = customFields
 
+    /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
-    /** This field's availability is dependent on your client's configuration. */
+    /**
+     * Returns the raw JSON value of [netsuiteSalesOrderId].
+     *
+     * Unlike [netsuiteSalesOrderId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("netsuite_sales_order_id")
     @ExcludeMissing
     fun _netsuiteSalesOrderId(): JsonField<String> = netsuiteSalesOrderId
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): ProService = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        maxAmount()
-        productId()
-        quantity()
-        unitPrice()
-        customFields().ifPresent { it.validate() }
-        description()
-        netsuiteSalesOrderId()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [ProService].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .maxAmount()
+         * .productId()
+         * .quantity()
+         * .unitPrice()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -158,22 +238,46 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Maximum amount for the term. */
         fun maxAmount(maxAmount: Double) = maxAmount(JsonField.of(maxAmount))
 
-        /** Maximum amount for the term. */
+        /**
+         * Sets [Builder.maxAmount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.maxAmount] with a well-typed [Double] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun maxAmount(maxAmount: JsonField<Double>) = apply { this.maxAmount = maxAmount }
 
         fun productId(productId: String) = productId(JsonField.of(productId))
 
+        /**
+         * Sets [Builder.productId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
         /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
         fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
-        /** Quantity for the charge. Will be multiplied by unit_price to determine the amount. */
+        /**
+         * Sets [Builder.quantity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantity] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
         /**
@@ -183,28 +287,50 @@ private constructor(
         fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
         /**
-         * Unit price for the charge. Will be multiplied by quantity to determine the amount and
-         * must be specified.
+         * Sets [Builder.unitPrice] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.unitPrice] with a well-typed [Double] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
+        /**
+         * Sets [Builder.customFields] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customFields] with a well-typed [CustomFields] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
 
         fun description(description: String) = description(JsonField.of(description))
 
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun description(description: JsonField<String>) = apply { this.description = description }
 
         /** This field's availability is dependent on your client's configuration. */
         fun netsuiteSalesOrderId(netsuiteSalesOrderId: String) =
             netsuiteSalesOrderId(JsonField.of(netsuiteSalesOrderId))
 
-        /** This field's availability is dependent on your client's configuration. */
+        /**
+         * Sets [Builder.netsuiteSalesOrderId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.netsuiteSalesOrderId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun netsuiteSalesOrderId(netsuiteSalesOrderId: JsonField<String>) = apply {
             this.netsuiteSalesOrderId = netsuiteSalesOrderId
         }
@@ -228,6 +354,22 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [ProService].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .maxAmount()
+         * .productId()
+         * .quantity()
+         * .unitPrice()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ProService =
             ProService(
                 checkRequired("id", id),
@@ -238,37 +380,69 @@ private constructor(
                 customFields,
                 description,
                 netsuiteSalesOrderId,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
+    private var validated: Boolean = false
+
+    fun validate(): ProService = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        maxAmount()
+        productId()
+        quantity()
+        unitPrice()
+        customFields().ifPresent { it.validate() }
+        description()
+        netsuiteSalesOrderId()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: MetronomeInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (id.asKnown().isPresent) 1 else 0) +
+            (if (maxAmount.asKnown().isPresent) 1 else 0) +
+            (if (productId.asKnown().isPresent) 1 else 0) +
+            (if (quantity.asKnown().isPresent) 1 else 0) +
+            (if (unitPrice.asKnown().isPresent) 1 else 0) +
+            (customFields.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (description.asKnown().isPresent) 1 else 0) +
+            (if (netsuiteSalesOrderId.asKnown().isPresent) 1 else 0)
+
     /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
-    @NoAutoDetect
     class CustomFields
     @JsonCreator
     private constructor(
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
     ) {
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-        private var validated: Boolean = false
-
-        fun validate(): CustomFields = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [CustomFields]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -301,20 +475,51 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [CustomFields].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFields = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is CustomFields && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -326,12 +531,31 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ProService && id == other.id && maxAmount == other.maxAmount && productId == other.productId && quantity == other.quantity && unitPrice == other.unitPrice && customFields == other.customFields && description == other.description && netsuiteSalesOrderId == other.netsuiteSalesOrderId && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is ProService &&
+            id == other.id &&
+            maxAmount == other.maxAmount &&
+            productId == other.productId &&
+            quantity == other.quantity &&
+            unitPrice == other.unitPrice &&
+            customFields == other.customFields &&
+            description == other.description &&
+            netsuiteSalesOrderId == other.netsuiteSalesOrderId &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, maxAmount, productId, quantity, unitPrice, customFields, description, netsuiteSalesOrderId, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            maxAmount,
+            productId,
+            quantity,
+            unitPrice,
+            customFields,
+            description,
+            netsuiteSalesOrderId,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

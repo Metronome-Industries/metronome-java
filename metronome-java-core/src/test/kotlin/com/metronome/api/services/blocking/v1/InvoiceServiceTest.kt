@@ -4,13 +4,13 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.V1InvoiceRegenerateParams
-import com.metronome.api.models.V1InvoiceVoidParams
+import com.metronome.api.models.v1.invoices.InvoiceRegenerateParams
+import com.metronome.api.models.v1.invoices.InvoiceVoidParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class InvoiceServiceTest {
+internal class InvoiceServiceTest {
 
     @Test
     fun regenerate() {
@@ -23,9 +23,7 @@ class InvoiceServiceTest {
 
         val response =
             invoiceService.regenerate(
-                V1InvoiceRegenerateParams.builder()
-                    .id("6a37bb88-8538-48c5-b37b-a41c836328bd")
-                    .build()
+                InvoiceRegenerateParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
             )
 
         response.validate()
@@ -42,7 +40,7 @@ class InvoiceServiceTest {
 
         val response =
             invoiceService.void_(
-                V1InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
+                InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
             )
 
         response.validate()

@@ -4,14 +4,14 @@ package com.metronome.api.services.async.v1
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
-import com.metronome.api.models.V1PlanGetDetailsParams
-import com.metronome.api.models.V1PlanListChargesParams
-import com.metronome.api.models.V1PlanListCustomersParams
+import com.metronome.api.models.v1.plans.PlanGetDetailsParams
+import com.metronome.api.models.v1.plans.PlanListChargesParams
+import com.metronome.api.models.v1.plans.PlanListCustomersParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class PlanServiceAsyncTest {
+internal class PlanServiceAsyncTest {
 
     @Test
     fun list() {
@@ -39,7 +39,7 @@ class PlanServiceAsyncTest {
 
         val responseFuture =
             planServiceAsync.getDetails(
-                V1PlanGetDetailsParams.builder()
+                PlanGetDetailsParams.builder()
                     .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
@@ -59,7 +59,7 @@ class PlanServiceAsyncTest {
 
         val pageFuture =
             planServiceAsync.listCharges(
-                V1PlanListChargesParams.builder()
+                PlanListChargesParams.builder()
                     .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
@@ -79,7 +79,7 @@ class PlanServiceAsyncTest {
 
         val pageFuture =
             planServiceAsync.listCustomers(
-                V1PlanListCustomersParams.builder()
+                PlanListCustomersParams.builder()
                     .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )

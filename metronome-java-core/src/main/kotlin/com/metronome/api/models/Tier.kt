@@ -10,50 +10,74 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.checkRequired
-import com.metronome.api.core.immutableEmptyMap
-import com.metronome.api.core.toImmutable
+import com.metronome.api.errors.MetronomeInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
-@NoAutoDetect
 class Tier
-@JsonCreator
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    @JsonProperty("price") @ExcludeMissing private val price: JsonField<Double> = JsonMissing.of(),
-    @JsonProperty("size") @ExcludeMissing private val size: JsonField<Double> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val price: JsonField<Double>,
+    private val size: JsonField<Double>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
+    @JsonCreator
+    private constructor(
+        @JsonProperty("price") @ExcludeMissing price: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("size") @ExcludeMissing size: JsonField<Double> = JsonMissing.of(),
+    ) : this(price, size, mutableMapOf())
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun price(): Double = price.getRequired("price")
 
-    fun size(): Optional<Double> = Optional.ofNullable(size.getNullable("size"))
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun size(): Optional<Double> = size.getOptional("size")
 
+    /**
+     * Returns the raw JSON value of [price].
+     *
+     * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Double> = price
 
+    /**
+     * Returns the raw JSON value of [size].
+     *
+     * Unlike [size], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("size") @ExcludeMissing fun _size(): JsonField<Double> = size
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): Tier = apply {
-        if (validated) {
-            return@apply
-        }
-
-        price()
-        size()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Tier].
+         *
+         * The following fields are required:
+         * ```java
+         * .price()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -73,10 +97,22 @@ private constructor(
 
         fun price(price: Double) = price(JsonField.of(price))
 
+        /**
+         * Sets [Builder.price] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.price] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun price(price: JsonField<Double>) = apply { this.price = price }
 
         fun size(size: Double) = size(JsonField.of(size))
 
+        /**
+         * Sets [Builder.size] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.size] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun size(size: JsonField<Double>) = apply { this.size = size }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -98,21 +134,63 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [Tier].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .price()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): Tier =
-            Tier(checkRequired("price", price), size, additionalProperties.toImmutable())
+            Tier(checkRequired("price", price), size, additionalProperties.toMutableMap())
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): Tier = apply {
+        if (validated) {
+            return@apply
+        }
+
+        price()
+        size()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: MetronomeInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (price.asKnown().isPresent) 1 else 0) + (if (size.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is Tier && price == other.price && size == other.size && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Tier &&
+            price == other.price &&
+            size == other.size &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(price, size, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

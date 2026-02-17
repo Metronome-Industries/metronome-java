@@ -1,33 +1,99 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.blocking.v1.customers
 
+import com.google.errorprone.annotations.MustBeClosed
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1CustomerNamedScheduleRetrieveParams
-import com.metronome.api.models.V1CustomerNamedScheduleRetrieveResponse
-import com.metronome.api.models.V1CustomerNamedScheduleUpdateParams
+import com.metronome.api.core.http.HttpResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleRetrieveParams
+import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleRetrieveResponse
+import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleUpdateParams
+import java.util.function.Consumer
 
 interface NamedScheduleService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleService
 
     /**
      * Get a named schedule for the given customer. This endpoint's availability is dependent on
      * your client's configuration.
      */
-    @JvmOverloads
+    fun retrieve(params: NamedScheduleRetrieveParams): NamedScheduleRetrieveResponse =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
     fun retrieve(
-        params: V1CustomerNamedScheduleRetrieveParams,
+        params: NamedScheduleRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1CustomerNamedScheduleRetrieveResponse
+    ): NamedScheduleRetrieveResponse
 
     /**
      * Update a named schedule for the given customer. This endpoint's availability is dependent on
      * your client's configuration.
      */
-    @JvmOverloads
+    fun update(params: NamedScheduleUpdateParams) = update(params, RequestOptions.none())
+
+    /** @see update */
     fun update(
-        params: V1CustomerNamedScheduleUpdateParams,
+        params: NamedScheduleUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
+
+    /**
+     * A view of [NamedScheduleService] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): NamedScheduleService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/getNamedSchedule`, but is otherwise
+         * the same as [NamedScheduleService.retrieve].
+         */
+        @MustBeClosed
+        fun retrieve(
+            params: NamedScheduleRetrieveParams
+        ): HttpResponseFor<NamedScheduleRetrieveResponse> = retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        @MustBeClosed
+        fun retrieve(
+            params: NamedScheduleRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NamedScheduleRetrieveResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/updateNamedSchedule`, but is
+         * otherwise the same as [NamedScheduleService.update].
+         */
+        @MustBeClosed
+        fun update(params: NamedScheduleUpdateParams): HttpResponse =
+            update(params, RequestOptions.none())
+
+        /** @see update */
+        @MustBeClosed
+        fun update(
+            params: NamedScheduleUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+    }
 }

@@ -5,15 +5,15 @@ package com.metronome.api.services.async.v1
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
-import com.metronome.api.models.V1CustomFieldAddKeyParams
-import com.metronome.api.models.V1CustomFieldDeleteValuesParams
-import com.metronome.api.models.V1CustomFieldRemoveKeyParams
-import com.metronome.api.models.V1CustomFieldSetValuesParams
+import com.metronome.api.models.v1.customfields.CustomFieldAddKeyParams
+import com.metronome.api.models.v1.customfields.CustomFieldDeleteValuesParams
+import com.metronome.api.models.v1.customfields.CustomFieldRemoveKeyParams
+import com.metronome.api.models.v1.customfields.CustomFieldSetValuesParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class CustomFieldServiceAsyncTest {
+internal class CustomFieldServiceAsyncTest {
 
     @Test
     fun addKey() {
@@ -26,9 +26,9 @@ class CustomFieldServiceAsyncTest {
 
         val future =
             customFieldServiceAsync.addKey(
-                V1CustomFieldAddKeyParams.builder()
+                CustomFieldAddKeyParams.builder()
                     .enforceUniqueness(true)
-                    .entity(V1CustomFieldAddKeyParams.Entity.ALERT)
+                    .entity(CustomFieldAddKeyParams.Entity.CUSTOMER)
                     .key("x_account_id")
                     .build()
             )
@@ -47,8 +47,8 @@ class CustomFieldServiceAsyncTest {
 
         val future =
             customFieldServiceAsync.deleteValues(
-                V1CustomFieldDeleteValuesParams.builder()
-                    .entity(V1CustomFieldDeleteValuesParams.Entity.ALERT)
+                CustomFieldDeleteValuesParams.builder()
+                    .entity(CustomFieldDeleteValuesParams.Entity.CUSTOMER)
                     .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
                     .addKey("x_account_id")
                     .build()
@@ -83,8 +83,8 @@ class CustomFieldServiceAsyncTest {
 
         val future =
             customFieldServiceAsync.removeKey(
-                V1CustomFieldRemoveKeyParams.builder()
-                    .entity(V1CustomFieldRemoveKeyParams.Entity.ALERT)
+                CustomFieldRemoveKeyParams.builder()
+                    .entity(CustomFieldRemoveKeyParams.Entity.CUSTOMER)
                     .key("x_account_id")
                     .build()
             )
@@ -103,16 +103,16 @@ class CustomFieldServiceAsyncTest {
 
         val future =
             customFieldServiceAsync.setValues(
-                V1CustomFieldSetValuesParams.builder()
+                CustomFieldSetValuesParams.builder()
                     .customFields(
-                        V1CustomFieldSetValuesParams.CustomFields.builder()
+                        CustomFieldSetValuesParams.CustomFields.builder()
                             .putAdditionalProperty(
                                 "x_account_id",
                                 JsonValue.from("KyVnHhSBWl7eY2bl"),
                             )
                             .build()
                     )
-                    .entity(V1CustomFieldSetValuesParams.Entity.ALERT)
+                    .entity(CustomFieldSetValuesParams.Entity.CUSTOMER)
                     .entityId("99594816-e8a5-4bca-be21-8d1de0f45120")
                     .build()
             )

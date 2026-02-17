@@ -4,49 +4,77 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorBodyHandler
 import com.metronome.api.core.handlers.errorHandler
 import com.metronome.api.core.handlers.jsonHandler
-import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
+import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
-import com.metronome.api.errors.MetronomeError
-import com.metronome.api.models.V1ServiceListParams
-import com.metronome.api.models.V1ServiceListResponse
+import com.metronome.api.models.v1.services.ServiceListParams
+import com.metronome.api.models.v1.services.ServiceListResponse
+import java.util.function.Consumer
 
 class ServiceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ServiceService {
 
-    private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: ServiceService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val listHandler: Handler<V1ServiceListResponse> =
-        jsonHandler<V1ServiceListResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+    override fun withRawResponse(): ServiceService.WithRawResponse = withRawResponse
 
-    /**
-     * Gets Metronome's service registry with associated IP addresses for security allowlisting and
-     * firewall configuration. Use this endpoint to maintain an up-to-date list of IPs that your
-     * systems should trust for Metronome communications. Returns service names and their current IP
-     * ranges, with new IPs typically appearing 30+ days before first use to ensure smooth allowlist
-     * updates.
-     */
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ServiceService =
+        ServiceServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun list(
-        params: V1ServiceListParams,
+        params: ServiceListParams,
         requestOptions: RequestOptions,
-    ): V1ServiceListResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "services")
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { listHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
+    ): ServiceListResponse =
+        // get /v1/services
+        withRawResponse().list(params, requestOptions).parse()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        ServiceService.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ServiceService.WithRawResponse =
+            ServiceServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        private val listHandler: Handler<ServiceListResponse> =
+            jsonHandler<ServiceListResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: ServiceListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ServiceListResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "services")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
+        }
     }
 }

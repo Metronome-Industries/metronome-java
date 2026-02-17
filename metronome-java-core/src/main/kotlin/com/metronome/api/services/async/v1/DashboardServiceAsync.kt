@@ -1,15 +1,28 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1DashboardGetEmbeddableUrlParams
-import com.metronome.api.models.V1DashboardGetEmbeddableUrlResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlParams
+import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface DashboardServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): DashboardServiceAsync
 
     /**
      * Generate secure, embeddable dashboard URLs that allow you to seamlessly integrate Metronome's
@@ -37,9 +50,44 @@ interface DashboardServiceAsync {
      * - Iframe implementation: Embed the returned URL directly in an iframe element
      * - Responsive design: Dashboards automatically adapt to container dimensions
      */
-    @JvmOverloads
     fun getEmbeddableUrl(
-        params: V1DashboardGetEmbeddableUrlParams,
+        params: DashboardGetEmbeddableUrlParams
+    ): CompletableFuture<DashboardGetEmbeddableUrlResponse> =
+        getEmbeddableUrl(params, RequestOptions.none())
+
+    /** @see getEmbeddableUrl */
+    fun getEmbeddableUrl(
+        params: DashboardGetEmbeddableUrlParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1DashboardGetEmbeddableUrlResponse>
+    ): CompletableFuture<DashboardGetEmbeddableUrlResponse>
+
+    /**
+     * A view of [DashboardServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): DashboardServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/dashboards/getEmbeddableUrl`, but is otherwise
+         * the same as [DashboardServiceAsync.getEmbeddableUrl].
+         */
+        fun getEmbeddableUrl(
+            params: DashboardGetEmbeddableUrlParams
+        ): CompletableFuture<HttpResponseFor<DashboardGetEmbeddableUrlResponse>> =
+            getEmbeddableUrl(params, RequestOptions.none())
+
+        /** @see getEmbeddableUrl */
+        fun getEmbeddableUrl(
+            params: DashboardGetEmbeddableUrlParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DashboardGetEmbeddableUrlResponse>>
+    }
 }

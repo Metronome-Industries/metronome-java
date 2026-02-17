@@ -33,8 +33,13 @@ import com.metronome.api.services.blocking.v1.SettingService
 import com.metronome.api.services.blocking.v1.SettingServiceImpl
 import com.metronome.api.services.blocking.v1.UsageService
 import com.metronome.api.services.blocking.v1.UsageServiceImpl
+import java.util.function.Consumer
 
 class V1ServiceImpl internal constructor(private val clientOptions: ClientOptions) : V1Service {
+
+    private val withRawResponse: V1Service.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     private val alerts: AlertService by lazy { AlertServiceImpl(clientOptions) }
 
@@ -68,6 +73,11 @@ class V1ServiceImpl internal constructor(private val clientOptions: ClientOption
 
     private val settings: SettingService by lazy { SettingServiceImpl(clientOptions) }
 
+    override fun withRawResponse(): V1Service.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): V1Service =
+        V1ServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun alerts(): AlertService = alerts
 
     override fun plans(): PlanService = plans
@@ -97,4 +107,105 @@ class V1ServiceImpl internal constructor(private val clientOptions: ClientOption
     override fun payments(): PaymentService = payments
 
     override fun settings(): SettingService = settings
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        V1Service.WithRawResponse {
+
+        private val alerts: AlertService.WithRawResponse by lazy {
+            AlertServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val plans: PlanService.WithRawResponse by lazy {
+            PlanServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val creditGrants: CreditGrantService.WithRawResponse by lazy {
+            CreditGrantServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val pricingUnits: PricingUnitService.WithRawResponse by lazy {
+            PricingUnitServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val customers: CustomerService.WithRawResponse by lazy {
+            CustomerServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val dashboards: DashboardService.WithRawResponse by lazy {
+            DashboardServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val usage: UsageService.WithRawResponse by lazy {
+            UsageServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val auditLogs: AuditLogService.WithRawResponse by lazy {
+            AuditLogServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val customFields: CustomFieldService.WithRawResponse by lazy {
+            CustomFieldServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val billableMetrics: BillableMetricService.WithRawResponse by lazy {
+            BillableMetricServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val services: ServiceService.WithRawResponse by lazy {
+            ServiceServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val invoices: InvoiceService.WithRawResponse by lazy {
+            InvoiceServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val contracts: ContractService.WithRawResponse by lazy {
+            ContractServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val payments: PaymentService.WithRawResponse by lazy {
+            PaymentServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val settings: SettingService.WithRawResponse by lazy {
+            SettingServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): V1Service.WithRawResponse =
+            V1ServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        override fun alerts(): AlertService.WithRawResponse = alerts
+
+        override fun plans(): PlanService.WithRawResponse = plans
+
+        override fun creditGrants(): CreditGrantService.WithRawResponse = creditGrants
+
+        override fun pricingUnits(): PricingUnitService.WithRawResponse = pricingUnits
+
+        override fun customers(): CustomerService.WithRawResponse = customers
+
+        override fun dashboards(): DashboardService.WithRawResponse = dashboards
+
+        override fun usage(): UsageService.WithRawResponse = usage
+
+        override fun auditLogs(): AuditLogService.WithRawResponse = auditLogs
+
+        override fun customFields(): CustomFieldService.WithRawResponse = customFields
+
+        override fun billableMetrics(): BillableMetricService.WithRawResponse = billableMetrics
+
+        override fun services(): ServiceService.WithRawResponse = services
+
+        override fun invoices(): InvoiceService.WithRawResponse = invoices
+
+        override fun contracts(): ContractService.WithRawResponse = contracts
+
+        override fun payments(): PaymentService.WithRawResponse = payments
+
+        override fun settings(): SettingService.WithRawResponse = settings
+    }
 }

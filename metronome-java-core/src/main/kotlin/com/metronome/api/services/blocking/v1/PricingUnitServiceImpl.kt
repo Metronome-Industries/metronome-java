@@ -4,51 +4,85 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorBodyHandler
 import com.metronome.api.core.handlers.errorHandler
 import com.metronome.api.core.handlers.jsonHandler
-import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
+import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
-import com.metronome.api.errors.MetronomeError
-import com.metronome.api.models.V1PricingUnitListPage
-import com.metronome.api.models.V1PricingUnitListParams
+import com.metronome.api.models.v1.pricingunits.PricingUnitListPage
+import com.metronome.api.models.v1.pricingunits.PricingUnitListPageResponse
+import com.metronome.api.models.v1.pricingunits.PricingUnitListParams
+import java.util.function.Consumer
 
 class PricingUnitServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     PricingUnitService {
 
-    private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: PricingUnitService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val listHandler: Handler<V1PricingUnitListPage.Response> =
-        jsonHandler<V1PricingUnitListPage.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
+    override fun withRawResponse(): PricingUnitService.WithRawResponse = withRawResponse
 
-    /**
-     * List all pricing units. All fiat currency types (for example, USD or GBP) will be included,
-     * as well as any custom pricing units that were configured. Custom pricing units can be used to
-     * charge for usage in a non-fiat pricing unit, for example AI credits.
-     *
-     * Note: The USD (cents) pricing unit is 2714e483-4ff1-48e4-9e25-ac732e8f24f2.
-     */
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PricingUnitService =
+        PricingUnitServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun list(
-        params: V1PricingUnitListParams,
+        params: PricingUnitListParams,
         requestOptions: RequestOptions,
-    ): V1PricingUnitListPage {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "credit-types", "list")
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { listHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
+    ): PricingUnitListPage =
+        // get /v1/credit-types/list
+        withRawResponse().list(params, requestOptions).parse()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        PricingUnitService.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PricingUnitService.WithRawResponse =
+            PricingUnitServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        private val listHandler: Handler<PricingUnitListPageResponse> =
+            jsonHandler<PricingUnitListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: PricingUnitListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PricingUnitListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "credit-types", "list")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        PricingUnitListPage.builder()
+                            .service(PricingUnitServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
-            .let { V1PricingUnitListPage.of(this, params, it) }
+        }
     }
 }

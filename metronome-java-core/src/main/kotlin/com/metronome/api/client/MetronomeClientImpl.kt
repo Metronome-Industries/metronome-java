@@ -8,6 +8,7 @@ import com.metronome.api.services.blocking.V1Service
 import com.metronome.api.services.blocking.V1ServiceImpl
 import com.metronome.api.services.blocking.V2Service
 import com.metronome.api.services.blocking.V2ServiceImpl
+import java.util.function.Consumer
 
 class MetronomeClientImpl(private val clientOptions: ClientOptions) : MetronomeClient {
 
@@ -22,15 +23,47 @@ class MetronomeClientImpl(private val clientOptions: ClientOptions) : MetronomeC
     // Pass the original clientOptions so that this client sets its own User-Agent.
     private val async: MetronomeClientAsync by lazy { MetronomeClientAsyncImpl(clientOptions) }
 
+    private val withRawResponse: MetronomeClient.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
+
     private val v2: V2Service by lazy { V2ServiceImpl(clientOptionsWithUserAgent) }
 
     private val v1: V1Service by lazy { V1ServiceImpl(clientOptionsWithUserAgent) }
 
     override fun async(): MetronomeClientAsync = async
 
+    override fun withRawResponse(): MetronomeClient.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetronomeClient =
+        MetronomeClientImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun v2(): V2Service = v2
 
     override fun v1(): V1Service = v1
 
-    override fun close() = clientOptions.httpClient.close()
+    override fun close() = clientOptions.close()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        MetronomeClient.WithRawResponse {
+
+        private val v2: V2Service.WithRawResponse by lazy {
+            V2ServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val v1: V1Service.WithRawResponse by lazy {
+            V1ServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): MetronomeClient.WithRawResponse =
+            MetronomeClientImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        override fun v2(): V2Service.WithRawResponse = v2
+
+        override fun v1(): V1Service.WithRawResponse = v1
+    }
 }

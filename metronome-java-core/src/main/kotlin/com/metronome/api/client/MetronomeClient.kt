@@ -2,8 +2,10 @@
 
 package com.metronome.api.client
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.services.blocking.V1Service
 import com.metronome.api.services.blocking.V2Service
+import java.util.function.Consumer
 
 /**
  * A client for interacting with the Metronome REST API synchronously. You can also switch to
@@ -29,6 +31,18 @@ interface MetronomeClient {
      */
     fun async(): MetronomeClientAsync
 
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetronomeClient
+
     fun v2(): V2Service
 
     fun v1(): V1Service
@@ -45,4 +59,19 @@ interface MetronomeClient {
      * method.
      */
     fun close()
+
+    /** A view of [MetronomeClient] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetronomeClient.WithRawResponse
+
+        fun v2(): V2Service.WithRawResponse
+
+        fun v1(): V1Service.WithRawResponse
+    }
 }

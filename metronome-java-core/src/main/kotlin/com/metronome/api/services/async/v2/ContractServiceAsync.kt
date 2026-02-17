@@ -1,25 +1,38 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v2
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V2ContractEditCommitParams
-import com.metronome.api.models.V2ContractEditCommitResponse
-import com.metronome.api.models.V2ContractEditCreditParams
-import com.metronome.api.models.V2ContractEditCreditResponse
-import com.metronome.api.models.V2ContractEditParams
-import com.metronome.api.models.V2ContractEditResponse
-import com.metronome.api.models.V2ContractGetEditHistoryParams
-import com.metronome.api.models.V2ContractGetEditHistoryResponse
-import com.metronome.api.models.V2ContractListParams
-import com.metronome.api.models.V2ContractListResponse
-import com.metronome.api.models.V2ContractRetrieveParams
-import com.metronome.api.models.V2ContractRetrieveResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v2.contracts.ContractEditCommitParams
+import com.metronome.api.models.v2.contracts.ContractEditCommitResponse
+import com.metronome.api.models.v2.contracts.ContractEditCreditParams
+import com.metronome.api.models.v2.contracts.ContractEditCreditResponse
+import com.metronome.api.models.v2.contracts.ContractEditParams
+import com.metronome.api.models.v2.contracts.ContractEditResponse
+import com.metronome.api.models.v2.contracts.ContractGetEditHistoryParams
+import com.metronome.api.models.v2.contracts.ContractGetEditHistoryResponse
+import com.metronome.api.models.v2.contracts.ContractListParams
+import com.metronome.api.models.v2.contracts.ContractListResponse
+import com.metronome.api.models.v2.contracts.ContractRetrieveParams
+import com.metronome.api.models.v2.contracts.ContractRetrieveResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface ContractServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): ContractServiceAsync
 
     /**
      * Gets the details for a specific contract, including contract term, rate card information,
@@ -38,11 +51,14 @@ interface ContractServiceAsync {
      *   ledgers in the credit and commit responses. Using these fields will cause the query to be
      *   slower.
      */
-    @JvmOverloads
+    fun retrieve(params: ContractRetrieveParams): CompletableFuture<ContractRetrieveResponse> =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
     fun retrieve(
-        params: V2ContractRetrieveParams,
+        params: ContractRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V2ContractRetrieveResponse>
+    ): CompletableFuture<ContractRetrieveResponse>
 
     /**
      * For a given customer, lists all of their contracts in chronological order.
@@ -54,16 +70,18 @@ interface ContractServiceAsync {
      *   (e.g. this customer started out on the Pro Plan, then downgraded to the Starter plan).
      *
      * ### Usage guidelines:
-     *
      * Use the `starting_at`, `covering_date`, and `include_archived` parameters to filter the list
      * of returned contracts. For example, to list only currently active contracts, pass
      * `covering_date` equal to the current time.
      */
-    @JvmOverloads
+    fun list(params: ContractListParams): CompletableFuture<ContractListResponse> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V2ContractListParams,
+        params: ContractListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V2ContractListResponse>
+    ): CompletableFuture<ContractListResponse>
 
     /**
      * The ability to edit a contract helps you react quickly to the needs of your customers and
@@ -85,11 +103,14 @@ interface ContractServiceAsync {
      * - Contract editing must be enabled to use this endpoint. Reach out to your Metronome
      *   representative to learn more.
      */
-    @JvmOverloads
+    fun edit(params: ContractEditParams): CompletableFuture<ContractEditResponse> =
+        edit(params, RequestOptions.none())
+
+    /** @see edit */
     fun edit(
-        params: V2ContractEditParams,
+        params: ContractEditParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V2ContractEditResponse>
+    ): CompletableFuture<ContractEditResponse>
 
     /**
      * Edit specific details for a contract-level or customer-level commit. Use this endpoint to
@@ -106,11 +127,15 @@ interface ContractServiceAsync {
      * - You cannot remove an commit access schedule segment that was applied to a finalized
      *   invoice. You can void the invoice beforehand and then remove the access schedule segment.
      */
-    @JvmOverloads
     fun editCommit(
-        params: V2ContractEditCommitParams,
+        params: ContractEditCommitParams
+    ): CompletableFuture<ContractEditCommitResponse> = editCommit(params, RequestOptions.none())
+
+    /** @see editCommit */
+    fun editCommit(
+        params: ContractEditCommitParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V2ContractEditCommitResponse>
+    ): CompletableFuture<ContractEditCommitResponse>
 
     /**
      * Edit details for a contract-level or customer-level credit.
@@ -125,11 +150,15 @@ interface ContractServiceAsync {
      * - You cannot remove an access schedule segment that was applied to a finalized invoice. You
      *   can void the invoice beforehand and then remove the access schedule segment.
      */
-    @JvmOverloads
     fun editCredit(
-        params: V2ContractEditCreditParams,
+        params: ContractEditCreditParams
+    ): CompletableFuture<ContractEditCreditResponse> = editCredit(params, RequestOptions.none())
+
+    /** @see editCredit */
+    fun editCredit(
+        params: ContractEditCreditParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V2ContractEditCreditResponse>
+    ): CompletableFuture<ContractEditCreditResponse>
 
     /**
      * List all the edits made to a contract over time. In Metronome, you can edit a contract at any
@@ -145,9 +174,119 @@ interface ContractServiceAsync {
      * - Details on each individual edit - for example showing that in one edit, a user added two
      *   discounts and incremented a subscription quantity.
      */
-    @JvmOverloads
     fun getEditHistory(
-        params: V2ContractGetEditHistoryParams,
+        params: ContractGetEditHistoryParams
+    ): CompletableFuture<ContractGetEditHistoryResponse> =
+        getEditHistory(params, RequestOptions.none())
+
+    /** @see getEditHistory */
+    fun getEditHistory(
+        params: ContractGetEditHistoryParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V2ContractGetEditHistoryResponse>
+    ): CompletableFuture<ContractGetEditHistoryResponse>
+
+    /**
+     * A view of [ContractServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ContractServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v2/contracts/get`, but is otherwise the same as
+         * [ContractServiceAsync.retrieve].
+         */
+        fun retrieve(
+            params: ContractRetrieveParams
+        ): CompletableFuture<HttpResponseFor<ContractRetrieveResponse>> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        fun retrieve(
+            params: ContractRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ContractRetrieveResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v2/contracts/list`, but is otherwise the same as
+         * [ContractServiceAsync.list].
+         */
+        fun list(
+            params: ContractListParams
+        ): CompletableFuture<HttpResponseFor<ContractListResponse>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: ContractListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ContractListResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v2/contracts/edit`, but is otherwise the same as
+         * [ContractServiceAsync.edit].
+         */
+        fun edit(
+            params: ContractEditParams
+        ): CompletableFuture<HttpResponseFor<ContractEditResponse>> =
+            edit(params, RequestOptions.none())
+
+        /** @see edit */
+        fun edit(
+            params: ContractEditParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ContractEditResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v2/contracts/commits/edit`, but is otherwise the
+         * same as [ContractServiceAsync.editCommit].
+         */
+        fun editCommit(
+            params: ContractEditCommitParams
+        ): CompletableFuture<HttpResponseFor<ContractEditCommitResponse>> =
+            editCommit(params, RequestOptions.none())
+
+        /** @see editCommit */
+        fun editCommit(
+            params: ContractEditCommitParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ContractEditCommitResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v2/contracts/credits/edit`, but is otherwise the
+         * same as [ContractServiceAsync.editCredit].
+         */
+        fun editCredit(
+            params: ContractEditCreditParams
+        ): CompletableFuture<HttpResponseFor<ContractEditCreditResponse>> =
+            editCredit(params, RequestOptions.none())
+
+        /** @see editCredit */
+        fun editCredit(
+            params: ContractEditCreditParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ContractEditCreditResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v2/contracts/getEditHistory`, but is otherwise the
+         * same as [ContractServiceAsync.getEditHistory].
+         */
+        fun getEditHistory(
+            params: ContractGetEditHistoryParams
+        ): CompletableFuture<HttpResponseFor<ContractGetEditHistoryResponse>> =
+            getEditHistory(params, RequestOptions.none())
+
+        /** @see getEditHistory */
+        fun getEditHistory(
+            params: ContractGetEditHistoryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ContractGetEditHistoryResponse>>
+    }
 }

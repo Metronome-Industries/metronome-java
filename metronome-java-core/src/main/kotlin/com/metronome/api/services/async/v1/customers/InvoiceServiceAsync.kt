@@ -1,24 +1,36 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1.customers
 
-import com.google.errorprone.annotations.MustBeClosed
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponse
-import com.metronome.api.models.V1CustomerInvoiceAddChargeParams
-import com.metronome.api.models.V1CustomerInvoiceAddChargeResponse
-import com.metronome.api.models.V1CustomerInvoiceListBreakdownsPageAsync
-import com.metronome.api.models.V1CustomerInvoiceListBreakdownsParams
-import com.metronome.api.models.V1CustomerInvoiceListPageAsync
-import com.metronome.api.models.V1CustomerInvoiceListParams
-import com.metronome.api.models.V1CustomerInvoiceRetrieveParams
-import com.metronome.api.models.V1CustomerInvoiceRetrievePdfParams
-import com.metronome.api.models.V1CustomerInvoiceRetrieveResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.customers.invoices.InvoiceAddChargeParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceAddChargeResponse
+import com.metronome.api.models.v1.customers.invoices.InvoiceListBreakdownsPageAsync
+import com.metronome.api.models.v1.customers.invoices.InvoiceListBreakdownsParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceListPageAsync
+import com.metronome.api.models.v1.customers.invoices.InvoiceListParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceRetrieveParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceRetrievePdfParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceRetrieveResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface InvoiceServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvoiceServiceAsync
 
     /**
      * Retrieve detailed information for a specific invoice by its unique identifier. This endpoint
@@ -32,7 +44,6 @@ interface InvoiceServiceAsync {
      * - Validate customer pricing and credit applications for customer support queries.
      *
      * ### Key response fields:
-     *
      * Invoice status (DRAFT, FINALIZED, VOID) Billing period start and end dates Total amount and
      * amount due after credits Detailed line items broken down by:
      * - Customer and contract information
@@ -51,11 +62,14 @@ interface InvoiceServiceAsync {
      * - For voided invoices, the response will indicate VOID status but retain all original line
      *   item details
      */
-    @JvmOverloads
+    fun retrieve(params: InvoiceRetrieveParams): CompletableFuture<InvoiceRetrieveResponse> =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
     fun retrieve(
-        params: V1CustomerInvoiceRetrieveParams,
+        params: InvoiceRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerInvoiceRetrieveResponse>
+    ): CompletableFuture<InvoiceRetrieveResponse>
 
     /**
      * Retrieves a paginated list of invoices for a specific customer, with flexible filtering
@@ -71,7 +85,6 @@ interface InvoiceServiceAsync {
      * - Generate financial reports by filtering invoices within specific date ranges
      *
      * ### Key response fields:
-     *
      * Array of invoice objects containing:
      * - Invoice ID and status (DRAFT, FINALIZED, VOID)
      * - Invoice type (USAGE, SCHEDULED)
@@ -95,21 +108,27 @@ interface InvoiceServiceAsync {
      *   applicable
      * - Voided invoices are included in results by default unless filtered out by status
      */
-    @JvmOverloads
+    fun list(params: InvoiceListParams): CompletableFuture<InvoiceListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V1CustomerInvoiceListParams,
+        params: InvoiceListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerInvoiceListPageAsync>
+    ): CompletableFuture<InvoiceListPageAsync>
 
     /**
      * Add a one time charge to the specified invoice. This is a Plans (deprecated) endpoint. New
      * clients should implement using Contracts.
      */
-    @JvmOverloads
+    fun addCharge(params: InvoiceAddChargeParams): CompletableFuture<InvoiceAddChargeResponse> =
+        addCharge(params, RequestOptions.none())
+
+    /** @see addCharge */
     fun addCharge(
-        params: V1CustomerInvoiceAddChargeParams,
+        params: InvoiceAddChargeParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerInvoiceAddChargeResponse>
+    ): CompletableFuture<InvoiceAddChargeResponse>
 
     /**
      * Retrieve granular time-series breakdowns of invoice data at hourly or daily intervals. This
@@ -125,7 +144,6 @@ interface InvoiceServiceAsync {
      * - Power real-time cost monitoring and alerting systems
      *
      * ### Key response fields:
-     *
      * An array of BreakdownInvoice objects, each containing:
      * - All standard invoice fields (ID, customer, commit, line items, totals, status)
      * - Line items with quantities and costs for that specific period
@@ -144,11 +162,16 @@ interface InvoiceServiceAsync {
      * - Zero quantity filtering: Use `skip_zero_qty_line_items=true` to exclude periods with no
      *   usage
      */
-    @JvmOverloads
     fun listBreakdowns(
-        params: V1CustomerInvoiceListBreakdownsParams,
+        params: InvoiceListBreakdownsParams
+    ): CompletableFuture<InvoiceListBreakdownsPageAsync> =
+        listBreakdowns(params, RequestOptions.none())
+
+    /** @see listBreakdowns */
+    fun listBreakdowns(
+        params: InvoiceListBreakdownsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerInvoiceListBreakdownsPageAsync>
+    ): CompletableFuture<InvoiceListBreakdownsPageAsync>
 
     /**
      * Retrieve a PDF version of a specific invoice by its unique identifier. This endpoint
@@ -173,10 +196,101 @@ interface InvoiceServiceAsync {
      * - Use appropriate headers to handle the binary response in your application (e.g., setting
      *   `Content-Type: application/pdf`)
      */
-    @JvmOverloads
-    @MustBeClosed
+    fun retrievePdf(params: InvoiceRetrievePdfParams): CompletableFuture<HttpResponse> =
+        retrievePdf(params, RequestOptions.none())
+
+    /** @see retrievePdf */
     fun retrievePdf(
-        params: V1CustomerInvoiceRetrievePdfParams,
+        params: InvoiceRetrievePdfParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<HttpResponse>
+
+    /**
+     * A view of [InvoiceServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): InvoiceServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `get /v1/customers/{customer_id}/invoices/{invoice_id}`,
+         * but is otherwise the same as [InvoiceServiceAsync.retrieve].
+         */
+        fun retrieve(
+            params: InvoiceRetrieveParams
+        ): CompletableFuture<HttpResponseFor<InvoiceRetrieveResponse>> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        fun retrieve(
+            params: InvoiceRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<InvoiceRetrieveResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/customers/{customer_id}/invoices`, but is
+         * otherwise the same as [InvoiceServiceAsync.list].
+         */
+        fun list(
+            params: InvoiceListParams
+        ): CompletableFuture<HttpResponseFor<InvoiceListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: InvoiceListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<InvoiceListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/{customer_id}/addCharge`, but is
+         * otherwise the same as [InvoiceServiceAsync.addCharge].
+         */
+        fun addCharge(
+            params: InvoiceAddChargeParams
+        ): CompletableFuture<HttpResponseFor<InvoiceAddChargeResponse>> =
+            addCharge(params, RequestOptions.none())
+
+        /** @see addCharge */
+        fun addCharge(
+            params: InvoiceAddChargeParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<InvoiceAddChargeResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/customers/{customer_id}/invoices/breakdowns`,
+         * but is otherwise the same as [InvoiceServiceAsync.listBreakdowns].
+         */
+        fun listBreakdowns(
+            params: InvoiceListBreakdownsParams
+        ): CompletableFuture<HttpResponseFor<InvoiceListBreakdownsPageAsync>> =
+            listBreakdowns(params, RequestOptions.none())
+
+        /** @see listBreakdowns */
+        fun listBreakdowns(
+            params: InvoiceListBreakdownsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<InvoiceListBreakdownsPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get
+         * /v1/customers/{customer_id}/invoices/{invoice_id}/pdf`, but is otherwise the same as
+         * [InvoiceServiceAsync.retrievePdf].
+         */
+        fun retrievePdf(params: InvoiceRetrievePdfParams): CompletableFuture<HttpResponse> =
+            retrievePdf(params, RequestOptions.none())
+
+        /** @see retrievePdf */
+        fun retrievePdf(
+            params: InvoiceRetrievePdfParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+    }
 }

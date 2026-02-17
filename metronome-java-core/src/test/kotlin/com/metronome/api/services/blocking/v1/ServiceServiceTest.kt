@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class ServiceServiceTest {
+internal class ServiceServiceTest {
 
     @Test
     fun list() {
@@ -19,8 +19,8 @@ class ServiceServiceTest {
                 .build()
         val serviceService = client.v1().services()
 
-        val service = serviceService.list()
+        val services = serviceService.list()
 
-        service.validate()
+        services.validate()
     }
 }

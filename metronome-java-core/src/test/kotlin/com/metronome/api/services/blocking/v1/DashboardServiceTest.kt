@@ -5,12 +5,12 @@ package com.metronome.api.services.blocking.v1
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
-import com.metronome.api.models.V1DashboardGetEmbeddableUrlParams
+import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class DashboardServiceTest {
+internal class DashboardServiceTest {
 
     @Test
     fun getEmbeddableUrl() {
@@ -23,16 +23,15 @@ class DashboardServiceTest {
 
         val response =
             dashboardService.getEmbeddableUrl(
-                V1DashboardGetEmbeddableUrlParams.builder()
+                DashboardGetEmbeddableUrlParams.builder()
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
-                    .dashboard(V1DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
+                    .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
                     .addBmGroupKeyOverride(
-                        V1DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
+                        DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
                             .groupKeyName("tenant_id")
                             .displayName("Org ID")
                             .valueDisplayNames(
-                                V1DashboardGetEmbeddableUrlParams.BmGroupKeyOverride
-                                    .ValueDisplayNames
+                                DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
                                     .builder()
                                     .putAdditionalProperty("48ecb18f358f", JsonValue.from("bar"))
                                     .putAdditionalProperty("e358f3ce242d", JsonValue.from("bar"))
@@ -41,19 +40,19 @@ class DashboardServiceTest {
                             .build()
                     )
                     .addColorOverride(
-                        V1DashboardGetEmbeddableUrlParams.ColorOverride.builder()
-                            .name(V1DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
+                        DashboardGetEmbeddableUrlParams.ColorOverride.builder()
+                            .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
                             .value("#ff0000")
                             .build()
                     )
                     .addDashboardOption(
-                        V1DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                        DashboardGetEmbeddableUrlParams.DashboardOption.builder()
                             .key("show_zero_usage_line_items")
                             .value("false")
                             .build()
                     )
                     .addDashboardOption(
-                        V1DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                        DashboardGetEmbeddableUrlParams.DashboardOption.builder()
                             .key("hide_voided_invoices")
                             .value("true")
                             .build()

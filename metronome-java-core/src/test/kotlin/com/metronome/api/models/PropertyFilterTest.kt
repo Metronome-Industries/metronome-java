@@ -2,13 +2,16 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.metronome.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PropertyFilterTest {
+internal class PropertyFilterTest {
 
     @Test
-    fun createPropertyFilter() {
+    fun create() {
         val propertyFilter =
             PropertyFilter.builder()
                 .name("name")
@@ -16,10 +19,30 @@ class PropertyFilterTest {
                 .addInValue("string")
                 .addNotInValue("string")
                 .build()
-        assertThat(propertyFilter).isNotNull
+
         assertThat(propertyFilter.name()).isEqualTo("name")
         assertThat(propertyFilter.exists()).contains(true)
-        assertThat(propertyFilter.inValues().get()).containsExactly("string")
-        assertThat(propertyFilter.notInValues().get()).containsExactly("string")
+        assertThat(propertyFilter.inValues().getOrNull()).containsExactly("string")
+        assertThat(propertyFilter.notInValues().getOrNull()).containsExactly("string")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val propertyFilter =
+            PropertyFilter.builder()
+                .name("name")
+                .exists(true)
+                .addInValue("string")
+                .addNotInValue("string")
+                .build()
+
+        val roundtrippedPropertyFilter =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(propertyFilter),
+                jacksonTypeRef<PropertyFilter>(),
+            )
+
+        assertThat(roundtrippedPropertyFilter).isEqualTo(propertyFilter)
     }
 }

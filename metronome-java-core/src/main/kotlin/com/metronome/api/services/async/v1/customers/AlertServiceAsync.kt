@@ -1,18 +1,32 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1.customers
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1CustomerAlertListPageAsync
-import com.metronome.api.models.V1CustomerAlertListParams
-import com.metronome.api.models.V1CustomerAlertResetParams
-import com.metronome.api.models.V1CustomerAlertRetrieveParams
-import com.metronome.api.models.V1CustomerAlertRetrieveResponse
+import com.metronome.api.core.http.HttpResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.customers.alerts.AlertListPageAsync
+import com.metronome.api.models.v1.customers.alerts.AlertListParams
+import com.metronome.api.models.v1.customers.alerts.AlertResetParams
+import com.metronome.api.models.v1.customers.alerts.AlertRetrieveParams
+import com.metronome.api.models.v1.customers.alerts.AlertRetrieveResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface AlertServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): AlertServiceAsync
 
     /**
      * Retrieve the real-time evaluation status for a specific threshold notification-customer pair.
@@ -32,7 +46,6 @@ interface AlertServiceAsync {
      *   interfaces
      *
      * ### Key response fields:
-     *
      * A CustomerAlert object containing:
      * - `customer_status`: The current evaluation state
      * - `ok` - Customer is within acceptable thresholds
@@ -62,11 +75,14 @@ interface AlertServiceAsync {
      * - Error handling: Returns 404 if either the customer or alert_id doesn't exist or isn't
      *   accessible to your organization
      */
-    @JvmOverloads
+    fun retrieve(params: AlertRetrieveParams): CompletableFuture<AlertRetrieveResponse> =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
     fun retrieve(
-        params: V1CustomerAlertRetrieveParams,
+        params: AlertRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerAlertRetrieveResponse>
+    ): CompletableFuture<AlertRetrieveResponse>
 
     /**
      * Retrieve all threshold notification configurations and their current statuses for a specific
@@ -96,11 +112,14 @@ interface AlertServiceAsync {
      * - Filtering: Pass the `alert_statuses` array to include disabled or archived threshold
      *   notifications in results
      */
-    @JvmOverloads
+    fun list(params: AlertListParams): CompletableFuture<AlertListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V1CustomerAlertListParams,
+        params: AlertListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerAlertListPageAsync>
+    ): CompletableFuture<AlertListPageAsync>
 
     /**
      * Force an immediate re-evaluation of a specific threshold notification for a customer,
@@ -128,9 +147,66 @@ interface AlertServiceAsync {
      * - Asynchronous processing: The reset completes immediately, but re-evaluation happens in the
      *   background
      */
-    @JvmOverloads
+    fun reset(params: AlertResetParams): CompletableFuture<Void?> =
+        reset(params, RequestOptions.none())
+
+    /** @see reset */
     fun reset(
-        params: V1CustomerAlertResetParams,
+        params: AlertResetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
+
+    /** A view of [AlertServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): AlertServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customer-alerts/get`, but is otherwise the same
+         * as [AlertServiceAsync.retrieve].
+         */
+        fun retrieve(
+            params: AlertRetrieveParams
+        ): CompletableFuture<HttpResponseFor<AlertRetrieveResponse>> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        fun retrieve(
+            params: AlertRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<AlertRetrieveResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customer-alerts/list`, but is otherwise the
+         * same as [AlertServiceAsync.list].
+         */
+        fun list(params: AlertListParams): CompletableFuture<HttpResponseFor<AlertListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: AlertListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<AlertListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customer-alerts/reset`, but is otherwise the
+         * same as [AlertServiceAsync.reset].
+         */
+        fun reset(params: AlertResetParams): CompletableFuture<HttpResponse> =
+            reset(params, RequestOptions.none())
+
+        /** @see reset */
+        fun reset(
+            params: AlertResetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+    }
 }

@@ -2,15 +2,18 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.JsonValue
+import com.metronome.api.core.jsonMapper
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CreditTest {
+internal class CreditTest {
 
     @Test
-    fun createCredit() {
+    fun create() {
         val credit =
             Credit.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -110,7 +113,7 @@ class CreditTest {
                 )
                 .uniquenessKey("x")
                 .build()
-        assertThat(credit).isNotNull
+
         assertThat(credit.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(credit.product())
             .isEqualTo(
@@ -139,11 +142,11 @@ class CreditTest {
                     )
                     .build()
             )
-        assertThat(credit.applicableContractIds().get())
+        assertThat(credit.applicableContractIds().getOrNull())
             .containsExactly("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(credit.applicableProductIds().get())
+        assertThat(credit.applicableProductIds().getOrNull())
             .containsExactly("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(credit.applicableProductTags().get()).containsExactly("string")
+        assertThat(credit.applicableProductTags().getOrNull()).containsExactly("string")
         assertThat(credit.balance()).contains(0.0)
         assertThat(credit.contract())
             .contains(Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
@@ -170,7 +173,7 @@ class CreditTest {
                     )
                     .build()
             )
-        assertThat(credit.ledger().get())
+        assertThat(credit.ledger().getOrNull())
             .containsExactly(
                 Credit.Ledger.ofCreditSegmentStartLedgerEntry(
                     Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
@@ -187,7 +190,7 @@ class CreditTest {
         assertThat(credit.rateType()).contains(Credit.RateType.COMMIT_RATE)
         assertThat(credit.recurringCreditId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(credit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
-        assertThat(credit.specifiers().get())
+        assertThat(credit.specifiers().getOrNull())
             .containsExactly(
                 CommitSpecifier.builder()
                     .presentationGroupValues(
@@ -217,5 +220,114 @@ class CreditTest {
                     .build()
             )
         assertThat(credit.uniquenessKey()).contains("x")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val credit =
+            Credit.builder()
+                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .product(
+                    Credit.Product.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .name("name")
+                        .build()
+                )
+                .type(Credit.Type.CREDIT)
+                .accessSchedule(
+                    ScheduleDuration.builder()
+                        .addScheduleItem(
+                            ScheduleDuration.ScheduleItem.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .amount(0.0)
+                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .build()
+                        )
+                        .creditType(
+                            CreditTypeData.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .build()
+                )
+                .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addApplicableProductTag("string")
+                .balance(0.0)
+                .contract(
+                    Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+                )
+                .customFields(
+                    Credit.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .description("description")
+                .hierarchyConfiguration(
+                    CommitHierarchyConfiguration.builder()
+                        .childAccess(
+                            CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll
+                                .builder()
+                                .type(
+                                    CommitHierarchyConfiguration.ChildAccess
+                                        .CommitHierarchyChildAccessAll
+                                        .Type
+                                        .ALL
+                                )
+                                .build()
+                        )
+                        .build()
+                )
+                .addLedger(
+                    Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
+                        .amount(0.0)
+                        .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .type(Credit.Ledger.CreditSegmentStartLedgerEntry.Type.CREDIT_SEGMENT_START)
+                        .build()
+                )
+                .name("name")
+                .netsuiteSalesOrderId("netsuite_sales_order_id")
+                .priority(0.0)
+                .rateType(Credit.RateType.COMMIT_RATE)
+                .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .salesforceOpportunityId("salesforce_opportunity_id")
+                .addSpecifier(
+                    CommitSpecifier.builder()
+                        .presentationGroupValues(
+                            CommitSpecifier.PresentationGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .pricingGroupValues(
+                            CommitSpecifier.PricingGroupValues.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addProductTag("string")
+                        .build()
+                )
+                .subscriptionConfig(
+                    Credit.SubscriptionConfig.builder()
+                        .allocation(Credit.SubscriptionConfig.Allocation.INDIVIDUAL)
+                        .applySeatIncreaseConfig(
+                            Credit.SubscriptionConfig.ApplySeatIncreaseConfig.builder()
+                                .isProrated(true)
+                                .build()
+                        )
+                        .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
+                .uniquenessKey("x")
+                .build()
+
+        val roundtrippedCredit =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(credit), jacksonTypeRef<Credit>())
+
+        assertThat(roundtrippedCredit).isEqualTo(credit)
     }
 }

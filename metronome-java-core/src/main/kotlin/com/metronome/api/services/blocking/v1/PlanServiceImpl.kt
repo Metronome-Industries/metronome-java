@@ -4,137 +4,205 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorBodyHandler
 import com.metronome.api.core.handlers.errorHandler
 import com.metronome.api.core.handlers.jsonHandler
-import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
+import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
-import com.metronome.api.errors.MetronomeError
-import com.metronome.api.models.V1PlanGetDetailsParams
-import com.metronome.api.models.V1PlanGetDetailsResponse
-import com.metronome.api.models.V1PlanListChargesPage
-import com.metronome.api.models.V1PlanListChargesParams
-import com.metronome.api.models.V1PlanListCustomersPage
-import com.metronome.api.models.V1PlanListCustomersParams
-import com.metronome.api.models.V1PlanListPage
-import com.metronome.api.models.V1PlanListParams
+import com.metronome.api.models.v1.plans.PlanGetDetailsParams
+import com.metronome.api.models.v1.plans.PlanGetDetailsResponse
+import com.metronome.api.models.v1.plans.PlanListChargesPage
+import com.metronome.api.models.v1.plans.PlanListChargesPageResponse
+import com.metronome.api.models.v1.plans.PlanListChargesParams
+import com.metronome.api.models.v1.plans.PlanListCustomersPage
+import com.metronome.api.models.v1.plans.PlanListCustomersPageResponse
+import com.metronome.api.models.v1.plans.PlanListCustomersParams
+import com.metronome.api.models.v1.plans.PlanListPage
+import com.metronome.api.models.v1.plans.PlanListPageResponse
+import com.metronome.api.models.v1.plans.PlanListParams
+import java.util.function.Consumer
 
 class PlanServiceImpl internal constructor(private val clientOptions: ClientOptions) : PlanService {
 
-    private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
-
-    private val listHandler: Handler<V1PlanListPage.Response> =
-        jsonHandler<V1PlanListPage.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * List all available plans. This is a Plans (deprecated) endpoint. New clients should implement
-     * using Contracts.
-     */
-    override fun list(params: V1PlanListParams, requestOptions: RequestOptions): V1PlanListPage {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "plans")
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { listHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
-            }
-            .let { V1PlanListPage.of(this, params, it) }
+    private val withRawResponse: PlanService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
     }
 
-    private val getDetailsHandler: Handler<V1PlanGetDetailsResponse> =
-        jsonHandler<V1PlanGetDetailsResponse>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
+    override fun withRawResponse(): PlanService.WithRawResponse = withRawResponse
 
-    /**
-     * Fetch high level details of a specific plan. This is a Plans (deprecated) endpoint. New
-     * clients should implement using Contracts.
-     */
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PlanService =
+        PlanServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+    override fun list(params: PlanListParams, requestOptions: RequestOptions): PlanListPage =
+        // get /v1/plans
+        withRawResponse().list(params, requestOptions).parse()
+
     override fun getDetails(
-        params: V1PlanGetDetailsParams,
+        params: PlanGetDetailsParams,
         requestOptions: RequestOptions,
-    ): V1PlanGetDetailsResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "planDetails", params.getPathParam(0))
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { getDetailsHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
-            }
-    }
+    ): PlanGetDetailsResponse =
+        // get /v1/planDetails/{plan_id}
+        withRawResponse().getDetails(params, requestOptions).parse()
 
-    private val listChargesHandler: Handler<V1PlanListChargesPage.Response> =
-        jsonHandler<V1PlanListChargesPage.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * Fetches a list of charges of a specific plan. This is a Plans (deprecated) endpoint. New
-     * clients should implement using Contracts.
-     */
     override fun listCharges(
-        params: V1PlanListChargesParams,
+        params: PlanListChargesParams,
         requestOptions: RequestOptions,
-    ): V1PlanListChargesPage {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "planDetails", params.getPathParam(0), "charges")
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { listChargesHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
-            }
-            .let { V1PlanListChargesPage.of(this, params, it) }
-    }
+    ): PlanListChargesPage =
+        // get /v1/planDetails/{plan_id}/charges
+        withRawResponse().listCharges(params, requestOptions).parse()
 
-    private val listCustomersHandler: Handler<V1PlanListCustomersPage.Response> =
-        jsonHandler<V1PlanListCustomersPage.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /**
-     * Fetches a list of customers on a specific plan (by default, only currently active plans are
-     * included). This is a Plans (deprecated) endpoint. New clients should implement using
-     * Contracts.
-     */
     override fun listCustomers(
-        params: V1PlanListCustomersParams,
+        params: PlanListCustomersParams,
         requestOptions: RequestOptions,
-    ): V1PlanListCustomersPage {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .addPathSegments("v1", "planDetails", params.getPathParam(0), "customers")
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { listCustomersHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
+    ): PlanListCustomersPage =
+        // get /v1/planDetails/{plan_id}/customers
+        withRawResponse().listCustomers(params, requestOptions).parse()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        PlanService.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PlanService.WithRawResponse =
+            PlanServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        private val listHandler: Handler<PlanListPageResponse> =
+            jsonHandler<PlanListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: PlanListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PlanListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "plans")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        PlanListPage.builder()
+                            .service(PlanServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
-            .let { V1PlanListCustomersPage.of(this, params, it) }
+        }
+
+        private val getDetailsHandler: Handler<PlanGetDetailsResponse> =
+            jsonHandler<PlanGetDetailsResponse>(clientOptions.jsonMapper)
+
+        override fun getDetails(
+            params: PlanGetDetailsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PlanGetDetailsResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "planDetails", params._pathParam(0))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { getDetailsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val listChargesHandler: Handler<PlanListChargesPageResponse> =
+            jsonHandler<PlanListChargesPageResponse>(clientOptions.jsonMapper)
+
+        override fun listCharges(
+            params: PlanListChargesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PlanListChargesPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "planDetails", params._pathParam(0), "charges")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listChargesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        PlanListChargesPage.builder()
+                            .service(PlanServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
+            }
+        }
+
+        private val listCustomersHandler: Handler<PlanListCustomersPageResponse> =
+            jsonHandler<PlanListCustomersPageResponse>(clientOptions.jsonMapper)
+
+        override fun listCustomers(
+            params: PlanListCustomersParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PlanListCustomersPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "planDetails", params._pathParam(0), "customers")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listCustomersHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        PlanListCustomersPage.builder()
+                            .service(PlanServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
+            }
+        }
     }
 }

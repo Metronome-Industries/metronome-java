@@ -6,18 +6,17 @@ import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.Id
-import com.metronome.api.models.QuantityConversion
-import com.metronome.api.models.QuantityRounding
-import com.metronome.api.models.V1ContractProductArchiveParams
-import com.metronome.api.models.V1ContractProductCreateParams
-import com.metronome.api.models.V1ContractProductRetrieveParams
-import com.metronome.api.models.V1ContractProductUpdateParams
+import com.metronome.api.models.v1.contracts.products.ProductArchiveParams
+import com.metronome.api.models.v1.contracts.products.ProductCreateParams
+import com.metronome.api.models.v1.contracts.products.ProductUpdateParams
+import com.metronome.api.models.v1.contracts.products.QuantityConversion
+import com.metronome.api.models.v1.contracts.products.QuantityRounding
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class ProductServiceTest {
+internal class ProductServiceTest {
 
     @Test
     fun create() {
@@ -30,14 +29,14 @@ class ProductServiceTest {
 
         val product =
             productService.create(
-                V1ContractProductCreateParams.builder()
+                ProductCreateParams.builder()
                     .name("My Product")
-                    .type(V1ContractProductCreateParams.Type.FIXED)
+                    .type(ProductCreateParams.Type.USAGE)
                     .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .addCompositeProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addCompositeTag("string")
                     .customFields(
-                        V1ContractProductCreateParams.CustomFields.builder()
+                        ProductCreateParams.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -77,11 +76,7 @@ class ProductServiceTest {
         val productService = client.v1().contracts().products()
 
         val product =
-            productService.retrieve(
-                V1ContractProductRetrieveParams.builder()
-                    .id(Id.builder().id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc").build())
-                    .build()
-            )
+            productService.retrieve(Id.builder().id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc").build())
 
         product.validate()
     }
@@ -97,7 +92,7 @@ class ProductServiceTest {
 
         val product =
             productService.update(
-                V1ContractProductUpdateParams.builder()
+                ProductUpdateParams.builder()
                     .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -155,7 +150,7 @@ class ProductServiceTest {
 
         val response =
             productService.archive(
-                V1ContractProductArchiveParams.builder()
+                ProductArchiveParams.builder()
                     .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )

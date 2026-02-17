@@ -4,75 +4,83 @@ package com.metronome.api.services.async.v1
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorBodyHandler
 import com.metronome.api.core.handlers.errorHandler
 import com.metronome.api.core.handlers.jsonHandler
-import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
+import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
-import com.metronome.api.core.json
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.core.http.json
+import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepareAsync
-import com.metronome.api.errors.MetronomeError
-import com.metronome.api.models.V1DashboardGetEmbeddableUrlParams
-import com.metronome.api.models.V1DashboardGetEmbeddableUrlResponse
+import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlParams
+import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class DashboardServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     DashboardServiceAsync {
 
-    private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
+    private val withRawResponse: DashboardServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val getEmbeddableUrlHandler: Handler<V1DashboardGetEmbeddableUrlResponse> =
-        jsonHandler<V1DashboardGetEmbeddableUrlResponse>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
+    override fun withRawResponse(): DashboardServiceAsync.WithRawResponse = withRawResponse
 
-    /**
-     * Generate secure, embeddable dashboard URLs that allow you to seamlessly integrate Metronome's
-     * billing visualizations directly into your application. This endpoint creates authenticated
-     * iframe-ready URLs for customer-specific dashboards, providing a white-labeled billing
-     * experience without building custom UI.
-     *
-     * ### Use this endpoint to:
-     * - Embed billing dashboards directly in your customer portal or admin interface
-     * - Provide self-service access to invoices, usage data, and credit balances
-     * - Build white-labeled billing experiences with minimal development effort
-     *
-     * ### Key response fields:
-     * - A secure, time-limited URL that can be embedded in an iframe
-     * - The URL includes authentication tokens and configuration parameters
-     * - URLs are customer-specific and respect your security settings
-     *
-     * ### Usage guidelines:
-     * - Dashboard types: Choose from `invoices`, `usage`, or `commits_and_credits`
-     * - Customization options:
-     *     - `dashboard_options`: Configure whether you want invoices to show zero usage line items
-     *     - `color_overrides`: Match your brand's color palette
-     *     - `bm_group_key_overrides`: Customize how dimensions are displayed (for the usage
-     *       embeddable dashboard)
-     * - Iframe implementation: Embed the returned URL directly in an iframe element
-     * - Responsive design: Dashboards automatically adapt to container dimensions
-     */
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): DashboardServiceAsync =
+        DashboardServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun getEmbeddableUrl(
-        params: V1DashboardGetEmbeddableUrlParams,
+        params: DashboardGetEmbeddableUrlParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<V1DashboardGetEmbeddableUrlResponse> {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("v1", "dashboards", "getEmbeddableUrl")
-                .body(json(clientOptions.jsonMapper, params._body()))
-                .build()
-                .prepareAsync(clientOptions, params)
-        return request
-            .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-            .thenApply { response ->
-                response
-                    .use { getEmbeddableUrlHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                            it.validate()
-                        }
+    ): CompletableFuture<DashboardGetEmbeddableUrlResponse> =
+        // post /v1/dashboards/getEmbeddableUrl
+        withRawResponse().getEmbeddableUrl(params, requestOptions).thenApply { it.parse() }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        DashboardServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): DashboardServiceAsync.WithRawResponse =
+            DashboardServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        private val getEmbeddableUrlHandler: Handler<DashboardGetEmbeddableUrlResponse> =
+            jsonHandler<DashboardGetEmbeddableUrlResponse>(clientOptions.jsonMapper)
+
+        override fun getEmbeddableUrl(
+            params: DashboardGetEmbeddableUrlParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<DashboardGetEmbeddableUrlResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "dashboards", "getEmbeddableUrl")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { getEmbeddableUrlHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
                     }
-            }
+                }
+        }
     }
 }

@@ -12,18 +12,18 @@ import com.metronome.api.models.PrepaidBalanceThresholdConfigurationV2
 import com.metronome.api.models.SpendThresholdConfigurationV2
 import com.metronome.api.models.Tier
 import com.metronome.api.models.UpdateBaseThresholdCommit
-import com.metronome.api.models.V2ContractEditCommitParams
-import com.metronome.api.models.V2ContractEditCreditParams
-import com.metronome.api.models.V2ContractEditParams
-import com.metronome.api.models.V2ContractGetEditHistoryParams
-import com.metronome.api.models.V2ContractListParams
-import com.metronome.api.models.V2ContractRetrieveParams
+import com.metronome.api.models.v2.contracts.ContractEditCommitParams
+import com.metronome.api.models.v2.contracts.ContractEditCreditParams
+import com.metronome.api.models.v2.contracts.ContractEditParams
+import com.metronome.api.models.v2.contracts.ContractGetEditHistoryParams
+import com.metronome.api.models.v2.contracts.ContractListParams
+import com.metronome.api.models.v2.contracts.ContractRetrieveParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class ContractServiceAsyncTest {
+internal class ContractServiceAsyncTest {
 
     @Test
     fun retrieve() {
@@ -36,7 +36,7 @@ class ContractServiceAsyncTest {
 
         val contractFuture =
             contractServiceAsync.retrieve(
-                V2ContractRetrieveParams.builder()
+                ContractRetrieveParams.builder()
                     .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .asOfDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -58,9 +58,9 @@ class ContractServiceAsyncTest {
                 .build()
         val contractServiceAsync = client.v2().contracts()
 
-        val contractFuture =
+        val contractsFuture =
             contractServiceAsync.list(
-                V2ContractListParams.builder()
+                ContractListParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .includeArchived(true)
@@ -70,8 +70,8 @@ class ContractServiceAsyncTest {
                     .build()
             )
 
-        val contract = contractFuture.get()
-        contract.validate()
+        val contracts = contractsFuture.get()
+        contracts.validate()
     }
 
     @Test
@@ -85,17 +85,17 @@ class ContractServiceAsyncTest {
 
         val responseFuture =
             contractServiceAsync.edit(
-                V2ContractEditParams.builder()
+                ContractEditParams.builder()
                     .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .addBillingProviderConfigurationUpdate(
-                        V2ContractEditParams.AddBillingProviderConfigurationUpdate.builder()
+                        ContractEditParams.AddBillingProviderConfigurationUpdate.builder()
                             .billingProviderConfiguration(
-                                V2ContractEditParams.AddBillingProviderConfigurationUpdate
+                                ContractEditParams.AddBillingProviderConfigurationUpdate
                                     .BillingProviderConfiguration
                                     .builder()
                                     .billingProvider(
-                                        V2ContractEditParams.AddBillingProviderConfigurationUpdate
+                                        ContractEditParams.AddBillingProviderConfigurationUpdate
                                             .BillingProviderConfiguration
                                             .BillingProvider
                                             .AWS_MARKETPLACE
@@ -104,7 +104,7 @@ class ContractServiceAsyncTest {
                                         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                     )
                                     .deliveryMethod(
-                                        V2ContractEditParams.AddBillingProviderConfigurationUpdate
+                                        ContractEditParams.AddBillingProviderConfigurationUpdate
                                             .BillingProviderConfiguration
                                             .DeliveryMethod
                                             .DIRECT_TO_BILLING_PROVIDER
@@ -112,10 +112,10 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .schedule(
-                                V2ContractEditParams.AddBillingProviderConfigurationUpdate.Schedule
+                                ContractEditParams.AddBillingProviderConfigurationUpdate.Schedule
                                     .builder()
                                     .effectiveAt(
-                                        V2ContractEditParams.AddBillingProviderConfigurationUpdate
+                                        ContractEditParams.AddBillingProviderConfigurationUpdate
                                             .Schedule
                                             .EffectiveAt
                                             .START_OF_CURRENT_PERIOD
@@ -125,13 +125,13 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddCommit(
-                        V2ContractEditParams.AddCommit.builder()
+                        ContractEditParams.AddCommit.builder()
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .type(V2ContractEditParams.AddCommit.Type.PREPAID)
+                            .type(ContractEditParams.AddCommit.Type.PREPAID)
                             .accessSchedule(
-                                V2ContractEditParams.AddCommit.AccessSchedule.builder()
+                                ContractEditParams.AddCommit.AccessSchedule.builder()
                                     .addScheduleItem(
-                                        V2ContractEditParams.AddCommit.AccessSchedule.ScheduleItem
+                                        ContractEditParams.AddCommit.AccessSchedule.ScheduleItem
                                             .builder()
                                             .amount(0.0)
                                             .endingBefore(
@@ -149,7 +149,7 @@ class ContractServiceAsyncTest {
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
                             .customFields(
-                                V2ContractEditParams.AddCommit.CustomFields.builder()
+                                ContractEditParams.AddCommit.CustomFields.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -171,15 +171,15 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .invoiceSchedule(
-                                V2ContractEditParams.AddCommit.InvoiceSchedule.builder()
+                                ContractEditParams.AddCommit.InvoiceSchedule.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .doNotInvoice(true)
                                     .recurringSchedule(
-                                        V2ContractEditParams.AddCommit.InvoiceSchedule
+                                        ContractEditParams.AddCommit.InvoiceSchedule
                                             .RecurringSchedule
                                             .builder()
                                             .amountDistribution(
-                                                V2ContractEditParams.AddCommit.InvoiceSchedule
+                                                ContractEditParams.AddCommit.InvoiceSchedule
                                                     .RecurringSchedule
                                                     .AmountDistribution
                                                     .DIVIDED
@@ -188,7 +188,7 @@ class ContractServiceAsyncTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .frequency(
-                                                V2ContractEditParams.AddCommit.InvoiceSchedule
+                                                ContractEditParams.AddCommit.InvoiceSchedule
                                                     .RecurringSchedule
                                                     .Frequency
                                                     .MONTHLY
@@ -202,7 +202,7 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addScheduleItem(
-                                        V2ContractEditParams.AddCommit.InvoiceSchedule.ScheduleItem
+                                        ContractEditParams.AddCommit.InvoiceSchedule.ScheduleItem
                                             .builder()
                                             .timestamp(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -217,14 +217,14 @@ class ContractServiceAsyncTest {
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .paymentGateConfig(
-                                V2ContractEditParams.AddCommit.PaymentGateConfig.builder()
+                                ContractEditParams.AddCommit.PaymentGateConfig.builder()
                                     .paymentGateType(
-                                        V2ContractEditParams.AddCommit.PaymentGateConfig
+                                        ContractEditParams.AddCommit.PaymentGateConfig
                                             .PaymentGateType
                                             .NONE
                                     )
                                     .precalculatedTaxConfig(
-                                        V2ContractEditParams.AddCommit.PaymentGateConfig
+                                        ContractEditParams.AddCommit.PaymentGateConfig
                                             .PrecalculatedTaxConfig
                                             .builder()
                                             .taxAmount(0.0)
@@ -232,17 +232,16 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .stripeConfig(
-                                        V2ContractEditParams.AddCommit.PaymentGateConfig
-                                            .StripeConfig
+                                        ContractEditParams.AddCommit.PaymentGateConfig.StripeConfig
                                             .builder()
                                             .paymentType(
-                                                V2ContractEditParams.AddCommit.PaymentGateConfig
+                                                ContractEditParams.AddCommit.PaymentGateConfig
                                                     .StripeConfig
                                                     .PaymentType
                                                     .INVOICE
                                             )
                                             .invoiceMetadata(
-                                                V2ContractEditParams.AddCommit.PaymentGateConfig
+                                                ContractEditParams.AddCommit.PaymentGateConfig
                                                     .StripeConfig
                                                     .InvoiceMetadata
                                                     .builder()
@@ -256,13 +255,12 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .taxType(
-                                        V2ContractEditParams.AddCommit.PaymentGateConfig.TaxType
-                                            .NONE
+                                        ContractEditParams.AddCommit.PaymentGateConfig.TaxType.NONE
                                     )
                                     .build()
                             )
                             .priority(0.0)
-                            .rateType(V2ContractEditParams.AddCommit.RateType.COMMIT_RATE)
+                            .rateType(ContractEditParams.AddCommit.RateType.COMMIT_RATE)
                             .rolloverFraction(0.0)
                             .addSpecifier(
                                 CommitSpecifierInput.builder()
@@ -284,11 +282,11 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddCredit(
-                        V2ContractEditParams.AddCredit.builder()
+                        ContractEditParams.AddCredit.builder()
                             .accessSchedule(
-                                V2ContractEditParams.AddCredit.AccessSchedule.builder()
+                                ContractEditParams.AddCredit.AccessSchedule.builder()
                                     .addScheduleItem(
-                                        V2ContractEditParams.AddCredit.AccessSchedule.ScheduleItem
+                                        ContractEditParams.AddCredit.AccessSchedule.ScheduleItem
                                             .builder()
                                             .amount(0.0)
                                             .endingBefore(
@@ -306,7 +304,7 @@ class ContractServiceAsyncTest {
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
                             .customFields(
-                                V2ContractEditParams.AddCredit.CustomFields.builder()
+                                ContractEditParams.AddCredit.CustomFields.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -330,7 +328,7 @@ class ContractServiceAsyncTest {
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(0.0)
-                            .rateType(V2ContractEditParams.AddCredit.RateType.COMMIT_RATE)
+                            .rateType(ContractEditParams.AddCredit.RateType.COMMIT_RATE)
                             .addSpecifier(
                                 CommitSpecifierInput.builder()
                                     .presentationGroupValues(
@@ -350,17 +348,17 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddDiscount(
-                        V2ContractEditParams.AddDiscount.builder()
+                        ContractEditParams.AddDiscount.builder()
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .schedule(
-                                V2ContractEditParams.AddDiscount.Schedule.builder()
+                                ContractEditParams.AddDiscount.Schedule.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .doNotInvoice(true)
                                     .recurringSchedule(
-                                        V2ContractEditParams.AddDiscount.Schedule.RecurringSchedule
+                                        ContractEditParams.AddDiscount.Schedule.RecurringSchedule
                                             .builder()
                                             .amountDistribution(
-                                                V2ContractEditParams.AddDiscount.Schedule
+                                                ContractEditParams.AddDiscount.Schedule
                                                     .RecurringSchedule
                                                     .AmountDistribution
                                                     .DIVIDED
@@ -369,7 +367,7 @@ class ContractServiceAsyncTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .frequency(
-                                                V2ContractEditParams.AddDiscount.Schedule
+                                                ContractEditParams.AddDiscount.Schedule
                                                     .RecurringSchedule
                                                     .Frequency
                                                     .MONTHLY
@@ -383,7 +381,7 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addScheduleItem(
-                                        V2ContractEditParams.AddDiscount.Schedule.ScheduleItem
+                                        ContractEditParams.AddDiscount.Schedule.ScheduleItem
                                             .builder()
                                             .timestamp(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -396,7 +394,7 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .customFields(
-                                V2ContractEditParams.AddDiscount.CustomFields.builder()
+                                ContractEditParams.AddDiscount.CustomFields.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -405,7 +403,7 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddOverride(
-                        V2ContractEditParams.AddOverride.builder()
+                        ContractEditParams.AddOverride.builder()
                             .startingAt(OffsetDateTime.parse("2024-11-02T00:00:00Z"))
                             .addApplicableProductTag("string")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -413,22 +411,22 @@ class ContractServiceAsyncTest {
                             .isCommitSpecific(true)
                             .multiplier(2.0)
                             .addOverrideSpecifier(
-                                V2ContractEditParams.AddOverride.OverrideSpecifier.builder()
+                                ContractEditParams.AddOverride.OverrideSpecifier.builder()
                                     .billingFrequency(
-                                        V2ContractEditParams.AddOverride.OverrideSpecifier
+                                        ContractEditParams.AddOverride.OverrideSpecifier
                                             .BillingFrequency
                                             .MONTHLY
                                     )
                                     .addCommitId("string")
                                     .presentationGroupValues(
-                                        V2ContractEditParams.AddOverride.OverrideSpecifier
+                                        ContractEditParams.AddOverride.OverrideSpecifier
                                             .PresentationGroupValues
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
                                             .build()
                                     )
                                     .pricingGroupValues(
-                                        V2ContractEditParams.AddOverride.OverrideSpecifier
+                                        ContractEditParams.AddOverride.OverrideSpecifier
                                             .PricingGroupValues
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -441,13 +439,13 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .overwriteRate(
-                                V2ContractEditParams.AddOverride.OverwriteRate.builder()
+                                ContractEditParams.AddOverride.OverwriteRate.builder()
                                     .rateType(
-                                        V2ContractEditParams.AddOverride.OverwriteRate.RateType.FLAT
+                                        ContractEditParams.AddOverride.OverwriteRate.RateType.FLAT
                                     )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .customRate(
-                                        V2ContractEditParams.AddOverride.OverwriteRate.CustomRate
+                                        ContractEditParams.AddOverride.OverwriteRate.CustomRate
                                             .builder()
                                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                                             .build()
@@ -460,14 +458,14 @@ class ContractServiceAsyncTest {
                             )
                             .priority(100.0)
                             .productId("d4fc086c-d8e5-4091-a235-fbba5da4ec14")
-                            .target(V2ContractEditParams.AddOverride.Target.COMMIT_RATE)
+                            .target(ContractEditParams.AddOverride.Target.COMMIT_RATE)
                             .addTier(
-                                V2ContractEditParams.AddOverride.Tier.builder()
+                                ContractEditParams.AddOverride.Tier.builder()
                                     .multiplier(0.0)
                                     .size(0.0)
                                     .build()
                             )
-                            .type(V2ContractEditParams.AddOverride.Type.OVERWRITE)
+                            .type(ContractEditParams.AddOverride.Type.MULTIPLIER)
                             .build()
                     )
                     .addPrepaidBalanceThresholdConfiguration(
@@ -539,13 +537,13 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddProfessionalService(
-                        V2ContractEditParams.AddProfessionalService.builder()
+                        ContractEditParams.AddProfessionalService.builder()
                             .maxAmount(0.0)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .quantity(0.0)
                             .unitPrice(0.0)
                             .customFields(
-                                V2ContractEditParams.AddProfessionalService.CustomFields.builder()
+                                ContractEditParams.AddProfessionalService.CustomFields.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -554,19 +552,19 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddRecurringCommit(
-                        V2ContractEditParams.AddRecurringCommit.builder()
+                        ContractEditParams.AddRecurringCommit.builder()
                             .accessAmount(
-                                V2ContractEditParams.AddRecurringCommit.AccessAmount.builder()
+                                ContractEditParams.AddRecurringCommit.AccessAmount.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
                                     .quantity(0.0)
                                     .build()
                             )
                             .commitDuration(
-                                V2ContractEditParams.AddRecurringCommit.CommitDuration.builder()
+                                ContractEditParams.AddRecurringCommit.CommitDuration.builder()
                                     .value(0.0)
                                     .unit(
-                                        V2ContractEditParams.AddRecurringCommit.CommitDuration.Unit
+                                        ContractEditParams.AddRecurringCommit.CommitDuration.Unit
                                             .PERIODS
                                     )
                                     .build()
@@ -595,7 +593,7 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .invoiceAmount(
-                                V2ContractEditParams.AddRecurringCommit.InvoiceAmount.builder()
+                                ContractEditParams.AddRecurringCommit.InvoiceAmount.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .unitPrice(0.0)
@@ -603,10 +601,10 @@ class ContractServiceAsyncTest {
                             )
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .proration(V2ContractEditParams.AddRecurringCommit.Proration.NONE)
-                            .rateType(V2ContractEditParams.AddRecurringCommit.RateType.COMMIT_RATE)
+                            .proration(ContractEditParams.AddRecurringCommit.Proration.NONE)
+                            .rateType(ContractEditParams.AddRecurringCommit.RateType.COMMIT_RATE)
                             .recurrenceFrequency(
-                                V2ContractEditParams.AddRecurringCommit.RecurrenceFrequency.MONTHLY
+                                ContractEditParams.AddRecurringCommit.RecurrenceFrequency.MONTHLY
                             )
                             .rolloverFraction(0.0)
                             .addSpecifier(
@@ -626,9 +624,9 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .subscriptionConfig(
-                                V2ContractEditParams.AddRecurringCommit.SubscriptionConfig.builder()
+                                ContractEditParams.AddRecurringCommit.SubscriptionConfig.builder()
                                     .applySeatIncreaseConfig(
-                                        V2ContractEditParams.AddRecurringCommit.SubscriptionConfig
+                                        ContractEditParams.AddRecurringCommit.SubscriptionConfig
                                             .ApplySeatIncreaseConfig
                                             .builder()
                                             .isProrated(true)
@@ -636,7 +634,7 @@ class ContractServiceAsyncTest {
                                     )
                                     .subscriptionId("subscription_id")
                                     .allocation(
-                                        V2ContractEditParams.AddRecurringCommit.SubscriptionConfig
+                                        ContractEditParams.AddRecurringCommit.SubscriptionConfig
                                             .Allocation
                                             .POOLED
                                     )
@@ -646,19 +644,19 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddRecurringCredit(
-                        V2ContractEditParams.AddRecurringCredit.builder()
+                        ContractEditParams.AddRecurringCredit.builder()
                             .accessAmount(
-                                V2ContractEditParams.AddRecurringCredit.AccessAmount.builder()
+                                ContractEditParams.AddRecurringCredit.AccessAmount.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
                                     .quantity(0.0)
                                     .build()
                             )
                             .commitDuration(
-                                V2ContractEditParams.AddRecurringCredit.CommitDuration.builder()
+                                ContractEditParams.AddRecurringCredit.CommitDuration.builder()
                                     .value(0.0)
                                     .unit(
-                                        V2ContractEditParams.AddRecurringCredit.CommitDuration.Unit
+                                        ContractEditParams.AddRecurringCredit.CommitDuration.Unit
                                             .PERIODS
                                     )
                                     .build()
@@ -688,10 +686,10 @@ class ContractServiceAsyncTest {
                             )
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .proration(V2ContractEditParams.AddRecurringCredit.Proration.NONE)
-                            .rateType(V2ContractEditParams.AddRecurringCredit.RateType.COMMIT_RATE)
+                            .proration(ContractEditParams.AddRecurringCredit.Proration.NONE)
+                            .rateType(ContractEditParams.AddRecurringCredit.RateType.COMMIT_RATE)
                             .recurrenceFrequency(
-                                V2ContractEditParams.AddRecurringCredit.RecurrenceFrequency.MONTHLY
+                                ContractEditParams.AddRecurringCredit.RecurrenceFrequency.MONTHLY
                             )
                             .rolloverFraction(0.0)
                             .addSpecifier(
@@ -711,9 +709,9 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .subscriptionConfig(
-                                V2ContractEditParams.AddRecurringCredit.SubscriptionConfig.builder()
+                                ContractEditParams.AddRecurringCredit.SubscriptionConfig.builder()
                                     .applySeatIncreaseConfig(
-                                        V2ContractEditParams.AddRecurringCredit.SubscriptionConfig
+                                        ContractEditParams.AddRecurringCredit.SubscriptionConfig
                                             .ApplySeatIncreaseConfig
                                             .builder()
                                             .isProrated(true)
@@ -721,7 +719,7 @@ class ContractServiceAsyncTest {
                                     )
                                     .subscriptionId("subscription_id")
                                     .allocation(
-                                        V2ContractEditParams.AddRecurringCredit.SubscriptionConfig
+                                        ContractEditParams.AddRecurringCredit.SubscriptionConfig
                                             .Allocation
                                             .POOLED
                                     )
@@ -731,12 +729,12 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddResellerRoyalty(
-                        V2ContractEditParams.AddResellerRoyalty.builder()
-                            .resellerType(V2ContractEditParams.AddResellerRoyalty.ResellerType.AWS)
+                        ContractEditParams.AddResellerRoyalty.builder()
+                            .resellerType(ContractEditParams.AddResellerRoyalty.ResellerType.AWS)
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
                             .awsOptions(
-                                V2ContractEditParams.AddResellerRoyalty.AwsOptions.builder()
+                                ContractEditParams.AddResellerRoyalty.AwsOptions.builder()
                                     .awsAccountNumber("aws_account_number")
                                     .awsOfferId("aws_offer_id")
                                     .awsPayerReferenceId("aws_payer_reference_id")
@@ -745,7 +743,7 @@ class ContractServiceAsyncTest {
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .fraction(0.0)
                             .gcpOptions(
-                                V2ContractEditParams.AddResellerRoyalty.GcpOptions.builder()
+                                ContractEditParams.AddResellerRoyalty.GcpOptions.builder()
                                     .gcpAccountId("gcp_account_id")
                                     .gcpOfferId("gcp_offer_id")
                                     .build()
@@ -756,19 +754,19 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addRevenueSystemConfigurationUpdate(
-                        V2ContractEditParams.AddRevenueSystemConfigurationUpdate.builder()
+                        ContractEditParams.AddRevenueSystemConfigurationUpdate.builder()
                             .revenueSystemConfiguration(
-                                V2ContractEditParams.AddRevenueSystemConfigurationUpdate
+                                ContractEditParams.AddRevenueSystemConfigurationUpdate
                                     .RevenueSystemConfiguration
                                     .builder()
                                     .deliveryMethod(
-                                        V2ContractEditParams.AddRevenueSystemConfigurationUpdate
+                                        ContractEditParams.AddRevenueSystemConfigurationUpdate
                                             .RevenueSystemConfiguration
                                             .DeliveryMethod
                                             .DIRECT_TO_BILLING_PROVIDER
                                     )
                                     .provider(
-                                        V2ContractEditParams.AddRevenueSystemConfigurationUpdate
+                                        ContractEditParams.AddRevenueSystemConfigurationUpdate
                                             .RevenueSystemConfiguration
                                             .Provider
                                             .NETSUITE
@@ -779,10 +777,10 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .schedule(
-                                V2ContractEditParams.AddRevenueSystemConfigurationUpdate.Schedule
+                                ContractEditParams.AddRevenueSystemConfigurationUpdate.Schedule
                                     .builder()
                                     .effectiveAt(
-                                        V2ContractEditParams.AddRevenueSystemConfigurationUpdate
+                                        ContractEditParams.AddRevenueSystemConfigurationUpdate
                                             .Schedule
                                             .EffectiveAt
                                             .START_OF_CURRENT_PERIOD
@@ -792,18 +790,18 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddScheduledCharge(
-                        V2ContractEditParams.AddScheduledCharge.builder()
+                        ContractEditParams.AddScheduledCharge.builder()
                             .productId("2e30f074-d04c-412e-a134-851ebfa5ceb2")
                             .schedule(
-                                V2ContractEditParams.AddScheduledCharge.Schedule.builder()
+                                ContractEditParams.AddScheduledCharge.Schedule.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .doNotInvoice(true)
                                     .recurringSchedule(
-                                        V2ContractEditParams.AddScheduledCharge.Schedule
+                                        ContractEditParams.AddScheduledCharge.Schedule
                                             .RecurringSchedule
                                             .builder()
                                             .amountDistribution(
-                                                V2ContractEditParams.AddScheduledCharge.Schedule
+                                                ContractEditParams.AddScheduledCharge.Schedule
                                                     .RecurringSchedule
                                                     .AmountDistribution
                                                     .DIVIDED
@@ -812,7 +810,7 @@ class ContractServiceAsyncTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .frequency(
-                                                V2ContractEditParams.AddScheduledCharge.Schedule
+                                                ContractEditParams.AddScheduledCharge.Schedule
                                                     .RecurringSchedule
                                                     .Frequency
                                                     .MONTHLY
@@ -826,8 +824,7 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addScheduleItem(
-                                        V2ContractEditParams.AddScheduledCharge.Schedule
-                                            .ScheduleItem
+                                        ContractEditParams.AddScheduledCharge.Schedule.ScheduleItem
                                             .builder()
                                             .timestamp(
                                                 OffsetDateTime.parse("2020-02-15T00:00:00.000Z")
@@ -840,7 +837,7 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .customFields(
-                                V2ContractEditParams.AddScheduledCharge.CustomFields.builder()
+                                ContractEditParams.AddScheduledCharge.CustomFields.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -890,24 +887,23 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addAddSubscription(
-                        V2ContractEditParams.AddSubscription.builder()
+                        ContractEditParams.AddSubscription.builder()
                             .collectionSchedule(
-                                V2ContractEditParams.AddSubscription.CollectionSchedule.ADVANCE
+                                ContractEditParams.AddSubscription.CollectionSchedule.ADVANCE
                             )
                             .proration(
-                                V2ContractEditParams.AddSubscription.Proration.builder()
+                                ContractEditParams.AddSubscription.Proration.builder()
                                     .invoiceBehavior(
-                                        V2ContractEditParams.AddSubscription.Proration
-                                            .InvoiceBehavior
+                                        ContractEditParams.AddSubscription.Proration.InvoiceBehavior
                                             .BILL_IMMEDIATELY
                                     )
                                     .isProrated(true)
                                     .build()
                             )
                             .subscriptionRate(
-                                V2ContractEditParams.AddSubscription.SubscriptionRate.builder()
+                                ContractEditParams.AddSubscription.SubscriptionRate.builder()
                                     .billingFrequency(
-                                        V2ContractEditParams.AddSubscription.SubscriptionRate
+                                        ContractEditParams.AddSubscription.SubscriptionRate
                                             .BillingFrequency
                                             .MONTHLY
                                     )
@@ -915,7 +911,7 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .customFields(
-                                V2ContractEditParams.AddSubscription.CustomFields.builder()
+                                ContractEditParams.AddSubscription.CustomFields.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -924,11 +920,10 @@ class ContractServiceAsyncTest {
                             .initialQuantity(0.0)
                             .name("name")
                             .quantityManagementMode(
-                                V2ContractEditParams.AddSubscription.QuantityManagementMode
-                                    .SEAT_BASED
+                                ContractEditParams.AddSubscription.QuantityManagementMode.SEAT_BASED
                             )
                             .seatConfig(
-                                V2ContractEditParams.AddSubscription.SeatConfig.builder()
+                                ContractEditParams.AddSubscription.SeatConfig.builder()
                                     .addInitialSeatId("string")
                                     .seatGroupKey("seat_group_key")
                                     .initialUnassignedSeats(0.0)
@@ -940,33 +935,33 @@ class ContractServiceAsyncTest {
                     )
                     .allowContractEndingBeforeFinalizedInvoice(true)
                     .addArchiveCommit(
-                        V2ContractEditParams.ArchiveCommit.builder()
+                        ContractEditParams.ArchiveCommit.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
                     .addArchiveCredit(
-                        V2ContractEditParams.ArchiveCredit.builder()
+                        ContractEditParams.ArchiveCredit.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
                     .addArchiveScheduledCharge(
-                        V2ContractEditParams.ArchiveScheduledCharge.builder()
+                        ContractEditParams.ArchiveScheduledCharge.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
                     .addRemoveOverride(
-                        V2ContractEditParams.RemoveOverride.builder()
+                        ContractEditParams.RemoveOverride.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
                     .uniquenessKey("x")
                     .addUpdateCommit(
-                        V2ContractEditParams.UpdateCommit.builder()
+                        ContractEditParams.UpdateCommit.builder()
                             .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .accessSchedule(
-                                V2ContractEditParams.UpdateCommit.AccessSchedule.builder()
+                                ContractEditParams.UpdateCommit.AccessSchedule.builder()
                                     .addAddScheduleItem(
-                                        V2ContractEditParams.UpdateCommit.AccessSchedule
+                                        ContractEditParams.UpdateCommit.AccessSchedule
                                             .AddScheduleItem
                                             .builder()
                                             .amount(0.0)
@@ -979,14 +974,14 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addRemoveScheduleItem(
-                                        V2ContractEditParams.UpdateCommit.AccessSchedule
+                                        ContractEditParams.UpdateCommit.AccessSchedule
                                             .RemoveScheduleItem
                                             .builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
                                     .addUpdateScheduleItem(
-                                        V2ContractEditParams.UpdateCommit.AccessSchedule
+                                        ContractEditParams.UpdateCommit.AccessSchedule
                                             .UpdateScheduleItem
                                             .builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1021,9 +1016,9 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .invoiceSchedule(
-                                V2ContractEditParams.UpdateCommit.InvoiceSchedule.builder()
+                                ContractEditParams.UpdateCommit.InvoiceSchedule.builder()
                                     .addAddScheduleItem(
-                                        V2ContractEditParams.UpdateCommit.InvoiceSchedule
+                                        ContractEditParams.UpdateCommit.InvoiceSchedule
                                             .AddScheduleItem
                                             .builder()
                                             .timestamp(
@@ -1035,14 +1030,14 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addRemoveScheduleItem(
-                                        V2ContractEditParams.UpdateCommit.InvoiceSchedule
+                                        ContractEditParams.UpdateCommit.InvoiceSchedule
                                             .RemoveScheduleItem
                                             .builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
                                     .addUpdateScheduleItem(
-                                        V2ContractEditParams.UpdateCommit.InvoiceSchedule
+                                        ContractEditParams.UpdateCommit.InvoiceSchedule
                                             .UpdateScheduleItem
                                             .builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1060,19 +1055,19 @@ class ContractServiceAsyncTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(0.0)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .rateType(V2ContractEditParams.UpdateCommit.RateType.LIST_RATE)
+                            .rateType(ContractEditParams.UpdateCommit.RateType.LIST_RATE)
                             .rolloverFraction(0.0)
                             .build()
                     )
                     .updateContractEndDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .updateContractName("update_contract_name")
                     .addUpdateCredit(
-                        V2ContractEditParams.UpdateCredit.builder()
+                        ContractEditParams.UpdateCredit.builder()
                             .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .accessSchedule(
-                                V2ContractEditParams.UpdateCredit.AccessSchedule.builder()
+                                ContractEditParams.UpdateCredit.AccessSchedule.builder()
                                     .addAddScheduleItem(
-                                        V2ContractEditParams.UpdateCredit.AccessSchedule
+                                        ContractEditParams.UpdateCredit.AccessSchedule
                                             .AddScheduleItem
                                             .builder()
                                             .amount(0.0)
@@ -1085,14 +1080,14 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addRemoveScheduleItem(
-                                        V2ContractEditParams.UpdateCredit.AccessSchedule
+                                        ContractEditParams.UpdateCredit.AccessSchedule
                                             .RemoveScheduleItem
                                             .builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
                                     .addUpdateScheduleItem(
-                                        V2ContractEditParams.UpdateCredit.AccessSchedule
+                                        ContractEditParams.UpdateCredit.AccessSchedule
                                             .UpdateScheduleItem
                                             .builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1130,15 +1125,14 @@ class ContractServiceAsyncTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(0.0)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .rateType(V2ContractEditParams.UpdateCredit.RateType.LIST_RATE)
+                            .rateType(ContractEditParams.UpdateCredit.RateType.LIST_RATE)
                             .build()
                     )
                     .updateNetPaymentTermsDays(0.0)
                     .updatePrepaidBalanceThresholdConfiguration(
-                        V2ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration.builder()
+                        ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration.builder()
                             .commit(
-                                V2ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration
-                                    .Commit
+                                ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration.Commit
                                     .builder()
                                     .description("description")
                                     .name("name")
@@ -1205,44 +1199,44 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addUpdateRecurringCommit(
-                        V2ContractEditParams.UpdateRecurringCommit.builder()
+                        ContractEditParams.UpdateRecurringCommit.builder()
                             .recurringCommitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .accessAmount(
-                                V2ContractEditParams.UpdateRecurringCommit.AccessAmount.builder()
+                                ContractEditParams.UpdateRecurringCommit.AccessAmount.builder()
                                     .quantity(0.0)
                                     .unitPrice(0.0)
                                     .build()
                             )
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .invoiceAmount(
-                                V2ContractEditParams.UpdateRecurringCommit.InvoiceAmount.builder()
+                                ContractEditParams.UpdateRecurringCommit.InvoiceAmount.builder()
                                     .quantity(0.0)
                                     .unitPrice(0.0)
                                     .build()
                             )
-                            .rateType(V2ContractEditParams.UpdateRecurringCommit.RateType.LIST_RATE)
+                            .rateType(ContractEditParams.UpdateRecurringCommit.RateType.LIST_RATE)
                             .build()
                     )
                     .addUpdateRecurringCredit(
-                        V2ContractEditParams.UpdateRecurringCredit.builder()
+                        ContractEditParams.UpdateRecurringCredit.builder()
                             .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .accessAmount(
-                                V2ContractEditParams.UpdateRecurringCredit.AccessAmount.builder()
+                                ContractEditParams.UpdateRecurringCredit.AccessAmount.builder()
                                     .quantity(0.0)
                                     .unitPrice(0.0)
                                     .build()
                             )
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .rateType(V2ContractEditParams.UpdateRecurringCredit.RateType.LIST_RATE)
+                            .rateType(ContractEditParams.UpdateRecurringCredit.RateType.LIST_RATE)
                             .build()
                     )
                     .addUpdateScheduledCharge(
-                        V2ContractEditParams.UpdateScheduledCharge.builder()
+                        ContractEditParams.UpdateScheduledCharge.builder()
                             .scheduledChargeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .invoiceSchedule(
-                                V2ContractEditParams.UpdateScheduledCharge.InvoiceSchedule.builder()
+                                ContractEditParams.UpdateScheduledCharge.InvoiceSchedule.builder()
                                     .addAddScheduleItem(
-                                        V2ContractEditParams.UpdateScheduledCharge.InvoiceSchedule
+                                        ContractEditParams.UpdateScheduledCharge.InvoiceSchedule
                                             .AddScheduleItem
                                             .builder()
                                             .timestamp(
@@ -1254,14 +1248,14 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addRemoveScheduleItem(
-                                        V2ContractEditParams.UpdateScheduledCharge.InvoiceSchedule
+                                        ContractEditParams.UpdateScheduledCharge.InvoiceSchedule
                                             .RemoveScheduleItem
                                             .builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
                                     .addUpdateScheduleItem(
-                                        V2ContractEditParams.UpdateScheduledCharge.InvoiceSchedule
+                                        ContractEditParams.UpdateScheduledCharge.InvoiceSchedule
                                             .UpdateScheduleItem
                                             .builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1279,7 +1273,7 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .updateSpendThresholdConfiguration(
-                        V2ContractEditParams.UpdateSpendThresholdConfiguration.builder()
+                        ContractEditParams.UpdateSpendThresholdConfiguration.builder()
                             .commit(
                                 UpdateBaseThresholdCommit.builder()
                                     .description("description")
@@ -1320,20 +1314,20 @@ class ContractServiceAsyncTest {
                             .build()
                     )
                     .addUpdateSubscription(
-                        V2ContractEditParams.UpdateSubscription.builder()
+                        ContractEditParams.UpdateSubscription.builder()
                             .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .quantityManagementModeUpdate(
-                                V2ContractEditParams.UpdateSubscription.QuantityManagementModeUpdate
+                                ContractEditParams.UpdateSubscription.QuantityManagementModeUpdate
                                     .builder()
                                     .quantityManagementMode(
-                                        V2ContractEditParams.UpdateSubscription
+                                        ContractEditParams.UpdateSubscription
                                             .QuantityManagementModeUpdate
                                             .QuantityManagementMode
                                             .SEAT_BASED
                                     )
                                     .seatConfig(
-                                        V2ContractEditParams.UpdateSubscription
+                                        ContractEditParams.UpdateSubscription
                                             .QuantityManagementModeUpdate
                                             .SeatConfig
                                             .builder()
@@ -1343,17 +1337,16 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .addQuantityUpdate(
-                                V2ContractEditParams.UpdateSubscription.QuantityUpdate.builder()
+                                ContractEditParams.UpdateSubscription.QuantityUpdate.builder()
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .quantity(0.0)
                                     .quantityDelta(0.0)
                                     .build()
                             )
                             .seatUpdates(
-                                V2ContractEditParams.UpdateSubscription.SeatUpdates.builder()
+                                ContractEditParams.UpdateSubscription.SeatUpdates.builder()
                                     .addAddSeatId(
-                                        V2ContractEditParams.UpdateSubscription.SeatUpdates
-                                            .AddSeatId
+                                        ContractEditParams.UpdateSubscription.SeatUpdates.AddSeatId
                                             .builder()
                                             .addSeatId("string")
                                             .startingAt(
@@ -1362,7 +1355,7 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addAddUnassignedSeat(
-                                        V2ContractEditParams.UpdateSubscription.SeatUpdates
+                                        ContractEditParams.UpdateSubscription.SeatUpdates
                                             .AddUnassignedSeat
                                             .builder()
                                             .quantity(1.0)
@@ -1372,7 +1365,7 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addRemoveSeatId(
-                                        V2ContractEditParams.UpdateSubscription.SeatUpdates
+                                        ContractEditParams.UpdateSubscription.SeatUpdates
                                             .RemoveSeatId
                                             .builder()
                                             .addSeatId("string")
@@ -1382,7 +1375,7 @@ class ContractServiceAsyncTest {
                                             .build()
                                     )
                                     .addRemoveUnassignedSeat(
-                                        V2ContractEditParams.UpdateSubscription.SeatUpdates
+                                        ContractEditParams.UpdateSubscription.SeatUpdates
                                             .RemoveUnassignedSeat
                                             .builder()
                                             .quantity(1.0)
@@ -1413,27 +1406,25 @@ class ContractServiceAsyncTest {
 
         val responseFuture =
             contractServiceAsync.editCommit(
-                V2ContractEditCommitParams.builder()
+                ContractEditCommitParams.builder()
                     .commitId("5e7e82cf-ccb7-428c-a96f-a8e4f67af822")
                     .customerId("4c91c473-fc12-445a-9c38-40421d47023f")
                     .accessSchedule(
-                        V2ContractEditCommitParams.AccessSchedule.builder()
+                        ContractEditCommitParams.AccessSchedule.builder()
                             .addAddScheduleItem(
-                                V2ContractEditCommitParams.AccessSchedule.AddScheduleItem.builder()
+                                ContractEditCommitParams.AccessSchedule.AddScheduleItem.builder()
                                     .amount(0.0)
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
                             .addRemoveScheduleItem(
-                                V2ContractEditCommitParams.AccessSchedule.RemoveScheduleItem
-                                    .builder()
+                                ContractEditCommitParams.AccessSchedule.RemoveScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
                             .addUpdateScheduleItem(
-                                V2ContractEditCommitParams.AccessSchedule.UpdateScheduleItem
-                                    .builder()
+                                ContractEditCommitParams.AccessSchedule.UpdateScheduleItem.builder()
                                     .id("d5edbd32-c744-48cb-9475-a9bca0e6fa39")
                                     .amount(0.0)
                                     .endingBefore(OffsetDateTime.parse("2025-03-12T00:00:00Z"))
@@ -1463,9 +1454,9 @@ class ContractServiceAsyncTest {
                     )
                     .invoiceContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .invoiceSchedule(
-                        V2ContractEditCommitParams.InvoiceSchedule.builder()
+                        ContractEditCommitParams.InvoiceSchedule.builder()
                             .addAddScheduleItem(
-                                V2ContractEditCommitParams.InvoiceSchedule.AddScheduleItem.builder()
+                                ContractEditCommitParams.InvoiceSchedule.AddScheduleItem.builder()
                                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .amount(0.0)
                                     .quantity(0.0)
@@ -1473,13 +1464,13 @@ class ContractServiceAsyncTest {
                                     .build()
                             )
                             .addRemoveScheduleItem(
-                                V2ContractEditCommitParams.InvoiceSchedule.RemoveScheduleItem
+                                ContractEditCommitParams.InvoiceSchedule.RemoveScheduleItem
                                     .builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
                             .addUpdateScheduleItem(
-                                V2ContractEditCommitParams.InvoiceSchedule.UpdateScheduleItem
+                                ContractEditCommitParams.InvoiceSchedule.UpdateScheduleItem
                                     .builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .amount(0.0)
@@ -1493,7 +1484,7 @@ class ContractServiceAsyncTest {
                     .name("name")
                     .priority(0.0)
                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .rateType(V2ContractEditCommitParams.RateType.LIST_RATE)
+                    .rateType(ContractEditCommitParams.RateType.LIST_RATE)
                     .addSpecifier(
                         CommitSpecifierInput.builder()
                             .presentationGroupValues(
@@ -1528,27 +1519,25 @@ class ContractServiceAsyncTest {
 
         val responseFuture =
             contractServiceAsync.editCredit(
-                V2ContractEditCreditParams.builder()
+                ContractEditCreditParams.builder()
                     .creditId("5e7e82cf-ccb7-428c-a96f-a8e4f67af822")
                     .customerId("4c91c473-fc12-445a-9c38-40421d47023f")
                     .accessSchedule(
-                        V2ContractEditCreditParams.AccessSchedule.builder()
+                        ContractEditCreditParams.AccessSchedule.builder()
                             .addAddScheduleItem(
-                                V2ContractEditCreditParams.AccessSchedule.AddScheduleItem.builder()
+                                ContractEditCreditParams.AccessSchedule.AddScheduleItem.builder()
                                     .amount(0.0)
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
                             .addRemoveScheduleItem(
-                                V2ContractEditCreditParams.AccessSchedule.RemoveScheduleItem
-                                    .builder()
+                                ContractEditCreditParams.AccessSchedule.RemoveScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
                             .addUpdateScheduleItem(
-                                V2ContractEditCreditParams.AccessSchedule.UpdateScheduleItem
-                                    .builder()
+                                ContractEditCreditParams.AccessSchedule.UpdateScheduleItem.builder()
                                     .id("d5edbd32-c744-48cb-9475-a9bca0e6fa39")
                                     .amount(0.0)
                                     .endingBefore(OffsetDateTime.parse("2025-03-12T00:00:00Z"))
@@ -1579,7 +1568,7 @@ class ContractServiceAsyncTest {
                     .name("name")
                     .priority(0.0)
                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .rateType(V2ContractEditCreditParams.RateType.LIST_RATE)
+                    .rateType(ContractEditCreditParams.RateType.LIST_RATE)
                     .addSpecifier(
                         CommitSpecifierInput.builder()
                             .presentationGroupValues(
@@ -1614,7 +1603,7 @@ class ContractServiceAsyncTest {
 
         val responseFuture =
             contractServiceAsync.getEditHistory(
-                V2ContractGetEditHistoryParams.builder()
+                ContractGetEditHistoryParams.builder()
                     .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .build()

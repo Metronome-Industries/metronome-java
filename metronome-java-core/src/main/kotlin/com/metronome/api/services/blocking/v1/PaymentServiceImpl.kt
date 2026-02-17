@@ -4,112 +4,158 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
+import com.metronome.api.core.handlers.errorBodyHandler
 import com.metronome.api.core.handlers.errorHandler
 import com.metronome.api.core.handlers.jsonHandler
-import com.metronome.api.core.handlers.withErrorHandler
 import com.metronome.api.core.http.HttpMethod
 import com.metronome.api.core.http.HttpRequest
+import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
-import com.metronome.api.core.json
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.core.http.json
+import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
-import com.metronome.api.errors.MetronomeError
-import com.metronome.api.models.V1PaymentAttemptParams
-import com.metronome.api.models.V1PaymentAttemptResponse
-import com.metronome.api.models.V1PaymentCancelParams
-import com.metronome.api.models.V1PaymentCancelResponse
-import com.metronome.api.models.V1PaymentListPage
-import com.metronome.api.models.V1PaymentListParams
+import com.metronome.api.models.v1.payments.PaymentAttemptParams
+import com.metronome.api.models.v1.payments.PaymentAttemptResponse
+import com.metronome.api.models.v1.payments.PaymentCancelParams
+import com.metronome.api.models.v1.payments.PaymentCancelResponse
+import com.metronome.api.models.v1.payments.PaymentListPage
+import com.metronome.api.models.v1.payments.PaymentListPageResponse
+import com.metronome.api.models.v1.payments.PaymentListParams
+import java.util.function.Consumer
 
 class PaymentServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     PaymentService {
 
-    private val errorHandler: Handler<MetronomeError> = errorHandler(clientOptions.jsonMapper)
-
-    private val listHandler: Handler<V1PaymentListPage.Response> =
-        jsonHandler<V1PaymentListPage.Response>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /** Fetch all payment attempts for the given invoice. */
-    override fun list(
-        params: V1PaymentListParams,
-        requestOptions: RequestOptions,
-    ): V1PaymentListPage {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("v1", "payments", "list")
-                .body(json(clientOptions.jsonMapper, params._body()))
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { listHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
-            }
-            .let { V1PaymentListPage.of(this, params, it) }
+    private val withRawResponse: PaymentService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
     }
 
-    private val attemptHandler: Handler<V1PaymentAttemptResponse> =
-        jsonHandler<V1PaymentAttemptResponse>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
+    override fun withRawResponse(): PaymentService.WithRawResponse = withRawResponse
 
-    /**
-     * Trigger a new attempt by canceling any existing attempts for this invoice and creating a new
-     * Payment. This will trigger another attempt to charge the Customer's configured Payment
-     * Gateway. Payment can only be attempted if all of the following are true:
-     * - The Metronome Invoice is finalized
-     * - PLG Invoicing is configured for the Customer
-     * - You cannot attempt payments for invoices that have already been `paid` or `voided`.
-     *
-     * Attempting to payment on an ineligible Invoice or Customer will result in a `400` response.
-     */
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PaymentService =
+        PaymentServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+    override fun list(params: PaymentListParams, requestOptions: RequestOptions): PaymentListPage =
+        // post /v1/payments/list
+        withRawResponse().list(params, requestOptions).parse()
+
     override fun attempt(
-        params: V1PaymentAttemptParams,
+        params: PaymentAttemptParams,
         requestOptions: RequestOptions,
-    ): V1PaymentAttemptResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("v1", "payments", "attempt")
-                .body(json(clientOptions.jsonMapper, params._body()))
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { attemptHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
-            }
-    }
+    ): PaymentAttemptResponse =
+        // post /v1/payments/attempt
+        withRawResponse().attempt(params, requestOptions).parse()
 
-    private val cancelHandler: Handler<V1PaymentCancelResponse> =
-        jsonHandler<V1PaymentCancelResponse>(clientOptions.jsonMapper)
-            .withErrorHandler(errorHandler)
-
-    /** Cancel an existing payment attempt for an invoice. */
     override fun cancel(
-        params: V1PaymentCancelParams,
+        params: PaymentCancelParams,
         requestOptions: RequestOptions,
-    ): V1PaymentCancelResponse {
-        val request =
-            HttpRequest.builder()
-                .method(HttpMethod.POST)
-                .addPathSegments("v1", "payments", "cancel")
-                .body(json(clientOptions.jsonMapper, params._body()))
-                .build()
-                .prepare(clientOptions, params)
-        val response = clientOptions.httpClient.execute(request, requestOptions)
-        return response
-            .use { cancelHandler.handle(it) }
-            .also {
-                if (requestOptions.responseValidation ?: clientOptions.responseValidation) {
-                    it.validate()
-                }
+    ): PaymentCancelResponse =
+        // post /v1/payments/cancel
+        withRawResponse().cancel(params, requestOptions).parse()
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        PaymentService.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PaymentService.WithRawResponse =
+            PaymentServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+
+        private val listHandler: Handler<PaymentListPageResponse> =
+            jsonHandler<PaymentListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: PaymentListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PaymentListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "payments", "list")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        PaymentListPage.builder()
+                            .service(PaymentServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
+        }
+
+        private val attemptHandler: Handler<PaymentAttemptResponse> =
+            jsonHandler<PaymentAttemptResponse>(clientOptions.jsonMapper)
+
+        override fun attempt(
+            params: PaymentAttemptParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PaymentAttemptResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "payments", "attempt")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { attemptHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val cancelHandler: Handler<PaymentCancelResponse> =
+            jsonHandler<PaymentCancelResponse>(clientOptions.jsonMapper)
+
+        override fun cancel(
+            params: PaymentCancelParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PaymentCancelResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "payments", "cancel")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { cancelHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
     }
 }

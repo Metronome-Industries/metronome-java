@@ -11,66 +11,113 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
-import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-@NoAutoDetect
 class Subscription
-@JsonCreator
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    @JsonProperty("billing_periods")
-    @ExcludeMissing
-    private val billingPeriods: JsonField<BillingPeriods> = JsonMissing.of(),
-    @JsonProperty("collection_schedule")
-    @ExcludeMissing
-    private val collectionSchedule: JsonField<CollectionSchedule> = JsonMissing.of(),
-    @JsonProperty("proration")
-    @ExcludeMissing
-    private val proration: JsonField<Proration> = JsonMissing.of(),
-    @JsonProperty("quantity_management_mode")
-    @ExcludeMissing
-    private val quantityManagementMode: JsonField<QuantityManagementMode> = JsonMissing.of(),
-    @JsonProperty("quantity_schedule")
-    @ExcludeMissing
-    private val quantitySchedule: JsonField<List<QuantitySchedule>> = JsonMissing.of(),
-    @JsonProperty("starting_at")
-    @ExcludeMissing
-    private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("subscription_rate")
-    @ExcludeMissing
-    private val subscriptionRate: JsonField<SubscriptionRate> = JsonMissing.of(),
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("custom_fields")
-    @ExcludeMissing
-    private val customFields: JsonField<CustomFields> = JsonMissing.of(),
-    @JsonProperty("description")
-    @ExcludeMissing
-    private val description: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("ending_before")
-    @ExcludeMissing
-    private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("fiat_credit_type_id")
-    @ExcludeMissing
-    private val fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("seat_config")
-    @ExcludeMissing
-    private val seatConfig: JsonField<SeatConfig> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val billingPeriods: JsonField<BillingPeriods>,
+    private val collectionSchedule: JsonField<CollectionSchedule>,
+    private val proration: JsonField<Proration>,
+    private val quantityManagementMode: JsonField<QuantityManagementMode>,
+    private val quantitySchedule: JsonField<List<QuantitySchedule>>,
+    private val startingAt: JsonField<OffsetDateTime>,
+    private val subscriptionRate: JsonField<SubscriptionRate>,
+    private val id: JsonField<String>,
+    private val customFields: JsonField<CustomFields>,
+    private val description: JsonField<String>,
+    private val endingBefore: JsonField<OffsetDateTime>,
+    private val fiatCreditTypeId: JsonField<String>,
+    private val name: JsonField<String>,
+    private val seatConfig: JsonField<SeatConfig>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    /** Previous, current, and next billing periods for the subscription. */
+    @JsonCreator
+    private constructor(
+        @JsonProperty("billing_periods")
+        @ExcludeMissing
+        billingPeriods: JsonField<BillingPeriods> = JsonMissing.of(),
+        @JsonProperty("collection_schedule")
+        @ExcludeMissing
+        collectionSchedule: JsonField<CollectionSchedule> = JsonMissing.of(),
+        @JsonProperty("proration")
+        @ExcludeMissing
+        proration: JsonField<Proration> = JsonMissing.of(),
+        @JsonProperty("quantity_management_mode")
+        @ExcludeMissing
+        quantityManagementMode: JsonField<QuantityManagementMode> = JsonMissing.of(),
+        @JsonProperty("quantity_schedule")
+        @ExcludeMissing
+        quantitySchedule: JsonField<List<QuantitySchedule>> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("subscription_rate")
+        @ExcludeMissing
+        subscriptionRate: JsonField<SubscriptionRate> = JsonMissing.of(),
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("custom_fields")
+        @ExcludeMissing
+        customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("fiat_credit_type_id")
+        @ExcludeMissing
+        fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("seat_config")
+        @ExcludeMissing
+        seatConfig: JsonField<SeatConfig> = JsonMissing.of(),
+    ) : this(
+        billingPeriods,
+        collectionSchedule,
+        proration,
+        quantityManagementMode,
+        quantitySchedule,
+        startingAt,
+        subscriptionRate,
+        id,
+        customFields,
+        description,
+        endingBefore,
+        fiatCreditTypeId,
+        name,
+        seatConfig,
+        mutableMapOf(),
+    )
+
+    /**
+     * Previous, current, and next billing periods for the subscription.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun billingPeriods(): BillingPeriods = billingPeriods.getRequired("billing_periods")
 
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun collectionSchedule(): CollectionSchedule =
         collectionSchedule.getRequired("collection_schedule")
 
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun proration(): Proration = proration.getRequired("proration")
 
     /**
@@ -82,6 +129,9 @@ private constructor(
      * quantity, rather than directly providing the quantity. You must use a **SEAT_BASED**
      * subscription to use a linked recurring credit with an allocation per seat. `seat_config` must
      * be provided with this option.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun quantityManagementMode(): QuantityManagementMode =
         quantityManagementMode.getRequired("quantity_management_mode")
@@ -89,130 +139,220 @@ private constructor(
     /**
      * List of quantity schedule items for the subscription. Only includes the current quantity and
      * future quantity changes.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun quantitySchedule(): List<QuantitySchedule> =
         quantitySchedule.getRequired("quantity_schedule")
 
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun subscriptionRate(): SubscriptionRate = subscriptionRate.getRequired("subscription_rate")
 
-    fun id(): Optional<String> = Optional.ofNullable(id.getNullable("id"))
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun id(): Optional<String> = id.getOptional("id")
 
-    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
-    fun customFields(): Optional<CustomFields> =
-        Optional.ofNullable(customFields.getNullable("custom_fields"))
+    /**
+     * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun customFields(): Optional<CustomFields> = customFields.getOptional("custom_fields")
 
-    fun description(): Optional<String> =
-        Optional.ofNullable(description.getNullable("description"))
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun description(): Optional<String> = description.getOptional("description")
 
-    fun endingBefore(): Optional<OffsetDateTime> =
-        Optional.ofNullable(endingBefore.getNullable("ending_before"))
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
 
-    fun fiatCreditTypeId(): Optional<String> =
-        Optional.ofNullable(fiatCreditTypeId.getNullable("fiat_credit_type_id"))
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun fiatCreditTypeId(): Optional<String> = fiatCreditTypeId.getOptional("fiat_credit_type_id")
 
-    fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun name(): Optional<String> = name.getOptional("name")
 
-    fun seatConfig(): Optional<SeatConfig> =
-        Optional.ofNullable(seatConfig.getNullable("seat_config"))
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun seatConfig(): Optional<SeatConfig> = seatConfig.getOptional("seat_config")
 
-    /** Previous, current, and next billing periods for the subscription. */
+    /**
+     * Returns the raw JSON value of [billingPeriods].
+     *
+     * Unlike [billingPeriods], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("billing_periods")
     @ExcludeMissing
     fun _billingPeriods(): JsonField<BillingPeriods> = billingPeriods
 
+    /**
+     * Returns the raw JSON value of [collectionSchedule].
+     *
+     * Unlike [collectionSchedule], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("collection_schedule")
     @ExcludeMissing
     fun _collectionSchedule(): JsonField<CollectionSchedule> = collectionSchedule
 
+    /**
+     * Returns the raw JSON value of [proration].
+     *
+     * Unlike [proration], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("proration") @ExcludeMissing fun _proration(): JsonField<Proration> = proration
 
     /**
-     * Determines how the subscription's quantity is controlled. Defaults to QUANTITY_ONLY.
-     * **QUANTITY_ONLY**: The subscription quantity is specified directly on the subscription.
-     * `initial_quantity` must be provided with this option. Compatible with recurring
-     * commits/credits that use POOLED allocation. **SEAT_BASED**: Use when you want to pass
-     * specific seat identifiers (e.g. add user_123) to increment and decrement a subscription
-     * quantity, rather than directly providing the quantity. You must use a **SEAT_BASED**
-     * subscription to use a linked recurring credit with an allocation per seat. `seat_config` must
-     * be provided with this option.
+     * Returns the raw JSON value of [quantityManagementMode].
+     *
+     * Unlike [quantityManagementMode], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
     @JsonProperty("quantity_management_mode")
     @ExcludeMissing
     fun _quantityManagementMode(): JsonField<QuantityManagementMode> = quantityManagementMode
 
     /**
-     * List of quantity schedule items for the subscription. Only includes the current quantity and
-     * future quantity changes.
+     * Returns the raw JSON value of [quantitySchedule].
+     *
+     * Unlike [quantitySchedule], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     @JsonProperty("quantity_schedule")
     @ExcludeMissing
     fun _quantitySchedule(): JsonField<List<QuantitySchedule>> = quantitySchedule
 
+    /**
+     * Returns the raw JSON value of [startingAt].
+     *
+     * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("starting_at")
     @ExcludeMissing
     fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
+    /**
+     * Returns the raw JSON value of [subscriptionRate].
+     *
+     * Unlike [subscriptionRate], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("subscription_rate")
     @ExcludeMissing
     fun _subscriptionRate(): JsonField<SubscriptionRate> = subscriptionRate
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
+    /**
+     * Returns the raw JSON value of [customFields].
+     *
+     * Unlike [customFields], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("custom_fields")
     @ExcludeMissing
     fun _customFields(): JsonField<CustomFields> = customFields
 
+    /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
+    /**
+     * Returns the raw JSON value of [endingBefore].
+     *
+     * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("ending_before")
     @ExcludeMissing
     fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
+    /**
+     * Returns the raw JSON value of [fiatCreditTypeId].
+     *
+     * Unlike [fiatCreditTypeId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("fiat_credit_type_id")
     @ExcludeMissing
     fun _fiatCreditTypeId(): JsonField<String> = fiatCreditTypeId
 
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+    /**
+     * Returns the raw JSON value of [seatConfig].
+     *
+     * Unlike [seatConfig], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("seat_config")
     @ExcludeMissing
     fun _seatConfig(): JsonField<SeatConfig> = seatConfig
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): Subscription = apply {
-        if (validated) {
-            return@apply
-        }
-
-        billingPeriods().validate()
-        collectionSchedule()
-        proration().validate()
-        quantityManagementMode()
-        quantitySchedule().forEach { it.validate() }
-        startingAt()
-        subscriptionRate().validate()
-        id()
-        customFields().ifPresent { it.validate() }
-        description()
-        endingBefore()
-        fiatCreditTypeId()
-        name()
-        seatConfig().ifPresent { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [Subscription].
+         *
+         * The following fields are required:
+         * ```java
+         * .billingPeriods()
+         * .collectionSchedule()
+         * .proration()
+         * .quantityManagementMode()
+         * .quantitySchedule()
+         * .startingAt()
+         * .subscriptionRate()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -258,7 +398,13 @@ private constructor(
         fun billingPeriods(billingPeriods: BillingPeriods) =
             billingPeriods(JsonField.of(billingPeriods))
 
-        /** Previous, current, and next billing periods for the subscription. */
+        /**
+         * Sets [Builder.billingPeriods] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billingPeriods] with a well-typed [BillingPeriods] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun billingPeriods(billingPeriods: JsonField<BillingPeriods>) = apply {
             this.billingPeriods = billingPeriods
         }
@@ -266,12 +412,26 @@ private constructor(
         fun collectionSchedule(collectionSchedule: CollectionSchedule) =
             collectionSchedule(JsonField.of(collectionSchedule))
 
+        /**
+         * Sets [Builder.collectionSchedule] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.collectionSchedule] with a well-typed
+         * [CollectionSchedule] value instead. This method is primarily for setting the field to an
+         * undocumented or not yet supported value.
+         */
         fun collectionSchedule(collectionSchedule: JsonField<CollectionSchedule>) = apply {
             this.collectionSchedule = collectionSchedule
         }
 
         fun proration(proration: Proration) = proration(JsonField.of(proration))
 
+        /**
+         * Sets [Builder.proration] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.proration] with a well-typed [Proration] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun proration(proration: JsonField<Proration>) = apply { this.proration = proration }
 
         /**
@@ -288,14 +448,11 @@ private constructor(
             quantityManagementMode(JsonField.of(quantityManagementMode))
 
         /**
-         * Determines how the subscription's quantity is controlled. Defaults to QUANTITY_ONLY.
-         * **QUANTITY_ONLY**: The subscription quantity is specified directly on the subscription.
-         * `initial_quantity` must be provided with this option. Compatible with recurring
-         * commits/credits that use POOLED allocation. **SEAT_BASED**: Use when you want to pass
-         * specific seat identifiers (e.g. add user_123) to increment and decrement a subscription
-         * quantity, rather than directly providing the quantity. You must use a **SEAT_BASED**
-         * subscription to use a linked recurring credit with an allocation per seat. `seat_config`
-         * must be provided with this option.
+         * Sets [Builder.quantityManagementMode] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantityManagementMode] with a well-typed
+         * [QuantityManagementMode] value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
          */
         fun quantityManagementMode(quantityManagementMode: JsonField<QuantityManagementMode>) =
             apply {
@@ -310,32 +467,37 @@ private constructor(
             quantitySchedule(JsonField.of(quantitySchedule))
 
         /**
-         * List of quantity schedule items for the subscription. Only includes the current quantity
-         * and future quantity changes.
+         * Sets [Builder.quantitySchedule] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantitySchedule] with a well-typed
+         * `List<QuantitySchedule>` value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
          */
         fun quantitySchedule(quantitySchedule: JsonField<List<QuantitySchedule>>) = apply {
             this.quantitySchedule = quantitySchedule.map { it.toMutableList() }
         }
 
         /**
-         * List of quantity schedule items for the subscription. Only includes the current quantity
-         * and future quantity changes.
+         * Adds a single [QuantitySchedule] to [Builder.quantitySchedule].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addQuantitySchedule(quantitySchedule: QuantitySchedule) = apply {
             this.quantitySchedule =
-                (this.quantitySchedule ?: JsonField.of(mutableListOf())).apply {
-                    asKnown()
-                        .orElseThrow {
-                            IllegalStateException(
-                                "Field was set to non-list type: ${javaClass.simpleName}"
-                            )
-                        }
-                        .add(quantitySchedule)
+                (this.quantitySchedule ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("quantitySchedule", it).add(quantitySchedule)
                 }
         }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
+        /**
+         * Sets [Builder.startingAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
             this.startingAt = startingAt
         }
@@ -343,28 +505,61 @@ private constructor(
         fun subscriptionRate(subscriptionRate: SubscriptionRate) =
             subscriptionRate(JsonField.of(subscriptionRate))
 
+        /**
+         * Sets [Builder.subscriptionRate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriptionRate] with a well-typed [SubscriptionRate]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun subscriptionRate(subscriptionRate: JsonField<SubscriptionRate>) = apply {
             this.subscriptionRate = subscriptionRate
         }
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
-        /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
+        /**
+         * Sets [Builder.customFields] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customFields] with a well-typed [CustomFields] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun customFields(customFields: JsonField<CustomFields>) = apply {
             this.customFields = customFields
         }
 
         fun description(description: String) = description(JsonField.of(description))
 
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun description(description: JsonField<String>) = apply { this.description = description }
 
         fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
+        /**
+         * Sets [Builder.endingBefore] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
             this.endingBefore = endingBefore
         }
@@ -372,16 +567,36 @@ private constructor(
         fun fiatCreditTypeId(fiatCreditTypeId: String) =
             fiatCreditTypeId(JsonField.of(fiatCreditTypeId))
 
+        /**
+         * Sets [Builder.fiatCreditTypeId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.fiatCreditTypeId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun fiatCreditTypeId(fiatCreditTypeId: JsonField<String>) = apply {
             this.fiatCreditTypeId = fiatCreditTypeId
         }
 
         fun name(name: String) = name(JsonField.of(name))
 
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun seatConfig(seatConfig: SeatConfig) = seatConfig(JsonField.of(seatConfig))
 
+        /**
+         * Sets [Builder.seatConfig] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.seatConfig] with a well-typed [SeatConfig] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun seatConfig(seatConfig: JsonField<SeatConfig>) = apply { this.seatConfig = seatConfig }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -403,6 +618,24 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [Subscription].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .billingPeriods()
+         * .collectionSchedule()
+         * .proration()
+         * .quantityManagementMode()
+         * .quantitySchedule()
+         * .startingAt()
+         * .subscriptionRate()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): Subscription =
             Subscription(
                 checkRequired("billingPeriods", billingPeriods),
@@ -419,59 +652,137 @@ private constructor(
                 fiatCreditTypeId,
                 name,
                 seatConfig,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
+    private var validated: Boolean = false
+
+    fun validate(): Subscription = apply {
+        if (validated) {
+            return@apply
+        }
+
+        billingPeriods().validate()
+        collectionSchedule().validate()
+        proration().validate()
+        quantityManagementMode().validate()
+        quantitySchedule().forEach { it.validate() }
+        startingAt()
+        subscriptionRate().validate()
+        id()
+        customFields().ifPresent { it.validate() }
+        description()
+        endingBefore()
+        fiatCreditTypeId()
+        name()
+        seatConfig().ifPresent { it.validate() }
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: MetronomeInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (billingPeriods.asKnown().getOrNull()?.validity() ?: 0) +
+            (collectionSchedule.asKnown().getOrNull()?.validity() ?: 0) +
+            (proration.asKnown().getOrNull()?.validity() ?: 0) +
+            (quantityManagementMode.asKnown().getOrNull()?.validity() ?: 0) +
+            (quantitySchedule.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (startingAt.asKnown().isPresent) 1 else 0) +
+            (subscriptionRate.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (id.asKnown().isPresent) 1 else 0) +
+            (customFields.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (description.asKnown().isPresent) 1 else 0) +
+            (if (endingBefore.asKnown().isPresent) 1 else 0) +
+            (if (fiatCreditTypeId.asKnown().isPresent) 1 else 0) +
+            (if (name.asKnown().isPresent) 1 else 0) +
+            (seatConfig.asKnown().getOrNull()?.validity() ?: 0)
+
     /** Previous, current, and next billing periods for the subscription. */
-    @NoAutoDetect
     class BillingPeriods
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @JsonProperty("current")
-        @ExcludeMissing
-        private val current: JsonField<Current> = JsonMissing.of(),
-        @JsonProperty("next") @ExcludeMissing private val next: JsonField<Next> = JsonMissing.of(),
-        @JsonProperty("previous")
-        @ExcludeMissing
-        private val previous: JsonField<Previous> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val current: JsonField<Current>,
+        private val next: JsonField<Next>,
+        private val previous: JsonField<Previous>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        fun current(): Optional<Current> = Optional.ofNullable(current.getNullable("current"))
+        @JsonCreator
+        private constructor(
+            @JsonProperty("current") @ExcludeMissing current: JsonField<Current> = JsonMissing.of(),
+            @JsonProperty("next") @ExcludeMissing next: JsonField<Next> = JsonMissing.of(),
+            @JsonProperty("previous")
+            @ExcludeMissing
+            previous: JsonField<Previous> = JsonMissing.of(),
+        ) : this(current, next, previous, mutableMapOf())
 
-        fun next(): Optional<Next> = Optional.ofNullable(next.getNullable("next"))
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun current(): Optional<Current> = current.getOptional("current")
 
-        fun previous(): Optional<Previous> = Optional.ofNullable(previous.getNullable("previous"))
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun next(): Optional<Next> = next.getOptional("next")
 
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun previous(): Optional<Previous> = previous.getOptional("previous")
+
+        /**
+         * Returns the raw JSON value of [current].
+         *
+         * Unlike [current], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("current") @ExcludeMissing fun _current(): JsonField<Current> = current
 
+        /**
+         * Returns the raw JSON value of [next].
+         *
+         * Unlike [next], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("next") @ExcludeMissing fun _next(): JsonField<Next> = next
 
+        /**
+         * Returns the raw JSON value of [previous].
+         *
+         * Unlike [previous], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("previous") @ExcludeMissing fun _previous(): JsonField<Previous> = previous
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): BillingPeriods = apply {
-            if (validated) {
-                return@apply
-            }
-
-            current().ifPresent { it.validate() }
-            next().ifPresent { it.validate() }
-            previous().ifPresent { it.validate() }
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [BillingPeriods]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -493,14 +804,35 @@ private constructor(
 
             fun current(current: Current) = current(JsonField.of(current))
 
+            /**
+             * Sets [Builder.current] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.current] with a well-typed [Current] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun current(current: JsonField<Current>) = apply { this.current = current }
 
             fun next(next: Next) = next(JsonField.of(next))
 
+            /**
+             * Sets [Builder.next] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.next] with a well-typed [Next] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun next(next: JsonField<Next>) = apply { this.next = next }
 
             fun previous(previous: Previous) = previous(JsonField.of(previous))
 
+            /**
+             * Sets [Builder.previous] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.previous] with a well-typed [Previous] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun previous(previous: JsonField<Previous>) = apply { this.previous = previous }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -522,56 +854,123 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [BillingPeriods].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): BillingPeriods =
-                BillingPeriods(current, next, previous, additionalProperties.toImmutable())
+                BillingPeriods(current, next, previous, additionalProperties.toMutableMap())
         }
 
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): BillingPeriods = apply {
+            if (validated) {
+                return@apply
+            }
+
+            current().ifPresent { it.validate() }
+            next().ifPresent { it.validate() }
+            previous().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (current.asKnown().getOrNull()?.validity() ?: 0) +
+                (next.asKnown().getOrNull()?.validity() ?: 0) +
+                (previous.asKnown().getOrNull()?.validity() ?: 0)
+
         class Current
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @JsonProperty("ending_before")
-            @ExcludeMissing
-            private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("starting_at")
-            @ExcludeMissing
-            private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val endingBefore: JsonField<OffsetDateTime>,
+            private val startingAt: JsonField<OffsetDateTime>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
+            @JsonCreator
+            private constructor(
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            ) : this(endingBefore, startingAt, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
+            /**
+             * Returns the raw JSON value of [endingBefore].
+             *
+             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("ending_before")
             @ExcludeMissing
             fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
+            /**
+             * Returns the raw JSON value of [startingAt].
+             *
+             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("starting_at")
             @ExcludeMissing
             fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): Current = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                endingBefore()
-                startingAt()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Current].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .endingBefore()
+                 * .startingAt()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -592,12 +991,26 @@ private constructor(
                 fun endingBefore(endingBefore: OffsetDateTime) =
                     endingBefore(JsonField.of(endingBefore))
 
+                /**
+                 * Sets [Builder.endingBefore] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                     this.endingBefore = endingBefore
                 }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
+                /**
+                 * Sets [Builder.startingAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                     this.startingAt = startingAt
                 }
@@ -624,65 +1037,30 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Current].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .endingBefore()
+                 * .startingAt()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Current =
                     Current(
                         checkRequired("endingBefore", endingBefore),
                         checkRequired("startingAt", startingAt),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
 
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Current && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(endingBefore, startingAt, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Current{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
-        }
-
-        @NoAutoDetect
-        class Next
-        @JsonCreator
-        private constructor(
-            @JsonProperty("ending_before")
-            @ExcludeMissing
-            private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("starting_at")
-            @ExcludeMissing
-            private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-        ) {
-
-            fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
-
-            fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
-
-            @JsonProperty("ending_before")
-            @ExcludeMissing
-            fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
-
-            @JsonProperty("starting_at")
-            @ExcludeMissing
-            fun _startingAt(): JsonField<OffsetDateTime> = startingAt
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
             private var validated: Boolean = false
 
-            fun validate(): Next = apply {
+            fun validate(): Current = apply {
                 if (validated) {
                     return@apply
                 }
@@ -692,10 +1070,121 @@ private constructor(
                 validated = true
             }
 
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (endingBefore.asKnown().isPresent) 1 else 0) +
+                    (if (startingAt.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Current &&
+                    endingBefore == other.endingBefore &&
+                    startingAt == other.startingAt &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(endingBefore, startingAt, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Current{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+        }
+
+        class Next
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val endingBefore: JsonField<OffsetDateTime>,
+            private val startingAt: JsonField<OffsetDateTime>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            ) : this(endingBefore, startingAt, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+            /**
+             * Returns the raw JSON value of [endingBefore].
+             *
+             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("ending_before")
+            @ExcludeMissing
+            fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+            /**
+             * Returns the raw JSON value of [startingAt].
+             *
+             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("starting_at")
+            @ExcludeMissing
+            fun _startingAt(): JsonField<OffsetDateTime> = startingAt
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Next].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .endingBefore()
+                 * .startingAt()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -716,12 +1205,26 @@ private constructor(
                 fun endingBefore(endingBefore: OffsetDateTime) =
                     endingBefore(JsonField.of(endingBefore))
 
+                /**
+                 * Sets [Builder.endingBefore] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                     this.endingBefore = endingBefore
                 }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
+                /**
+                 * Sets [Builder.startingAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                     this.startingAt = startingAt
                 }
@@ -748,65 +1251,30 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Next].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .endingBefore()
+                 * .startingAt()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Next =
                     Next(
                         checkRequired("endingBefore", endingBefore),
                         checkRequired("startingAt", startingAt),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
 
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Next && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(endingBefore, startingAt, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Next{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
-        }
-
-        @NoAutoDetect
-        class Previous
-        @JsonCreator
-        private constructor(
-            @JsonProperty("ending_before")
-            @ExcludeMissing
-            private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("starting_at")
-            @ExcludeMissing
-            private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-        ) {
-
-            fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
-
-            fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
-
-            @JsonProperty("ending_before")
-            @ExcludeMissing
-            fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
-
-            @JsonProperty("starting_at")
-            @ExcludeMissing
-            fun _startingAt(): JsonField<OffsetDateTime> = startingAt
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
             private var validated: Boolean = false
 
-            fun validate(): Previous = apply {
+            fun validate(): Next = apply {
                 if (validated) {
                     return@apply
                 }
@@ -816,10 +1284,121 @@ private constructor(
                 validated = true
             }
 
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (endingBefore.asKnown().isPresent) 1 else 0) +
+                    (if (startingAt.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Next &&
+                    endingBefore == other.endingBefore &&
+                    startingAt == other.startingAt &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(endingBefore, startingAt, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Next{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+        }
+
+        class Previous
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val endingBefore: JsonField<OffsetDateTime>,
+            private val startingAt: JsonField<OffsetDateTime>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            ) : this(endingBefore, startingAt, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+            /**
+             * Returns the raw JSON value of [endingBefore].
+             *
+             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("ending_before")
+            @ExcludeMissing
+            fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+            /**
+             * Returns the raw JSON value of [startingAt].
+             *
+             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("starting_at")
+            @ExcludeMissing
+            fun _startingAt(): JsonField<OffsetDateTime> = startingAt
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Previous].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .endingBefore()
+                 * .startingAt()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -840,12 +1419,26 @@ private constructor(
                 fun endingBefore(endingBefore: OffsetDateTime) =
                     endingBefore(JsonField.of(endingBefore))
 
+                /**
+                 * Sets [Builder.endingBefore] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                     this.endingBefore = endingBefore
                 }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
+                /**
+                 * Sets [Builder.startingAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                     this.startingAt = startingAt
                 }
@@ -872,25 +1465,72 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Previous].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .endingBefore()
+                 * .startingAt()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Previous =
                     Previous(
                         checkRequired("endingBefore", endingBefore),
                         checkRequired("startingAt", startingAt),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Previous = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                endingBefore()
+                startingAt()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (endingBefore.asKnown().isPresent) 1 else 0) +
+                    (if (startingAt.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is Previous && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Previous &&
+                    endingBefore == other.endingBefore &&
+                    startingAt == other.startingAt &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(endingBefore, startingAt, additionalProperties) }
-            /* spotless:on */
+            private val hashCode: Int by lazy {
+                Objects.hash(endingBefore, startingAt, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
@@ -903,12 +1543,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is BillingPeriods && current == other.current && next == other.next && previous == other.previous && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is BillingPeriods &&
+                current == other.current &&
+                next == other.next &&
+                previous == other.previous &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(current, next, previous, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(current, next, previous, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1008,12 +1652,39 @@ private constructor(
                 MetronomeInvalidDataException("Value is not a String")
             }
 
+        private var validated: Boolean = false
+
+        fun validate(): CollectionSchedule = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is CollectionSchedule && value == other.value /* spotless:on */
+            return other is CollectionSchedule && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1021,52 +1692,78 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    @NoAutoDetect
     class Proration
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @JsonProperty("invoice_behavior")
-        @ExcludeMissing
-        private val invoiceBehavior: JsonField<InvoiceBehavior> = JsonMissing.of(),
-        @JsonProperty("is_prorated")
-        @ExcludeMissing
-        private val isProrated: JsonField<Boolean> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val invoiceBehavior: JsonField<InvoiceBehavior>,
+        private val isProrated: JsonField<Boolean>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
+        @JsonCreator
+        private constructor(
+            @JsonProperty("invoice_behavior")
+            @ExcludeMissing
+            invoiceBehavior: JsonField<InvoiceBehavior> = JsonMissing.of(),
+            @JsonProperty("is_prorated")
+            @ExcludeMissing
+            isProrated: JsonField<Boolean> = JsonMissing.of(),
+        ) : this(invoiceBehavior, isProrated, mutableMapOf())
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun invoiceBehavior(): InvoiceBehavior = invoiceBehavior.getRequired("invoice_behavior")
 
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun isProrated(): Boolean = isProrated.getRequired("is_prorated")
 
+        /**
+         * Returns the raw JSON value of [invoiceBehavior].
+         *
+         * Unlike [invoiceBehavior], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("invoice_behavior")
         @ExcludeMissing
         fun _invoiceBehavior(): JsonField<InvoiceBehavior> = invoiceBehavior
 
+        /**
+         * Returns the raw JSON value of [isProrated].
+         *
+         * Unlike [isProrated], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("is_prorated")
         @ExcludeMissing
         fun _isProrated(): JsonField<Boolean> = isProrated
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Proration = apply {
-            if (validated) {
-                return@apply
-            }
-
-            invoiceBehavior()
-            isProrated()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [Proration].
+             *
+             * The following fields are required:
+             * ```java
+             * .invoiceBehavior()
+             * .isProrated()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1087,12 +1784,26 @@ private constructor(
             fun invoiceBehavior(invoiceBehavior: InvoiceBehavior) =
                 invoiceBehavior(JsonField.of(invoiceBehavior))
 
+            /**
+             * Sets [Builder.invoiceBehavior] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.invoiceBehavior] with a well-typed [InvoiceBehavior]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun invoiceBehavior(invoiceBehavior: JsonField<InvoiceBehavior>) = apply {
                 this.invoiceBehavior = invoiceBehavior
             }
 
             fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
 
+            /**
+             * Sets [Builder.isProrated] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.isProrated] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1114,13 +1825,57 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Proration].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .invoiceBehavior()
+             * .isProrated()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Proration =
                 Proration(
                     checkRequired("invoiceBehavior", invoiceBehavior),
                     checkRequired("isProrated", isProrated),
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): Proration = apply {
+            if (validated) {
+                return@apply
+            }
+
+            invoiceBehavior().validate()
+            isProrated()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (invoiceBehavior.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (isProrated.asKnown().isPresent) 1 else 0)
 
         class InvoiceBehavior
         @JsonCreator
@@ -1214,12 +1969,39 @@ private constructor(
                     MetronomeInvalidDataException("Value is not a String")
                 }
 
+            private var validated: Boolean = false
+
+            fun validate(): InvoiceBehavior = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is InvoiceBehavior && value == other.value /* spotless:on */
+                return other is InvoiceBehavior && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1232,12 +2014,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Proration && invoiceBehavior == other.invoiceBehavior && isProrated == other.isProrated && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Proration &&
+                invoiceBehavior == other.invoiceBehavior &&
+                isProrated == other.isProrated &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(invoiceBehavior, isProrated, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(invoiceBehavior, isProrated, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1350,12 +2135,39 @@ private constructor(
                 MetronomeInvalidDataException("Value is not a String")
             }
 
+        private var validated: Boolean = false
+
+        fun validate(): QuantityManagementMode = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is QuantityManagementMode && value == other.value /* spotless:on */
+            return other is QuantityManagementMode && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1363,61 +2175,95 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    @NoAutoDetect
     class QuantitySchedule
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @JsonProperty("quantity")
-        @ExcludeMissing
-        private val quantity: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("starting_at")
-        @ExcludeMissing
-        private val startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("ending_before")
-        @ExcludeMissing
-        private val endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val quantity: JsonField<Double>,
+        private val startingAt: JsonField<OffsetDateTime>,
+        private val endingBefore: JsonField<OffsetDateTime>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
+        @JsonCreator
+        private constructor(
+            @JsonProperty("quantity")
+            @ExcludeMissing
+            quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("starting_at")
+            @ExcludeMissing
+            startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("ending_before")
+            @ExcludeMissing
+            endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        ) : this(quantity, startingAt, endingBefore, mutableMapOf())
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun quantity(): Double = quantity.getRequired("quantity")
 
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
-        fun endingBefore(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endingBefore.getNullable("ending_before"))
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
 
+        /**
+         * Returns the raw JSON value of [quantity].
+         *
+         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
+        /**
+         * Returns the raw JSON value of [startingAt].
+         *
+         * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("starting_at")
         @ExcludeMissing
         fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
+        /**
+         * Returns the raw JSON value of [endingBefore].
+         *
+         * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("ending_before")
         @ExcludeMissing
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): QuantitySchedule = apply {
-            if (validated) {
-                return@apply
-            }
-
-            quantity()
-            startingAt()
-            endingBefore()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [QuantitySchedule].
+             *
+             * The following fields are required:
+             * ```java
+             * .quantity()
+             * .startingAt()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1439,10 +2285,24 @@ private constructor(
 
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
+            /**
+             * Sets [Builder.quantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantity] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
             fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
+            /**
+             * Sets [Builder.startingAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
             }
@@ -1450,6 +2310,13 @@ private constructor(
             fun endingBefore(endingBefore: OffsetDateTime) =
                 endingBefore(JsonField.of(endingBefore))
 
+            /**
+             * Sets [Builder.endingBefore] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
@@ -1473,26 +2340,76 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [QuantitySchedule].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .quantity()
+             * .startingAt()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): QuantitySchedule =
                 QuantitySchedule(
                     checkRequired("quantity", quantity),
                     checkRequired("startingAt", startingAt),
                     endingBefore,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): QuantitySchedule = apply {
+            if (validated) {
+                return@apply
+            }
+
+            quantity()
+            startingAt()
+            endingBefore()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (quantity.asKnown().isPresent) 1 else 0) +
+                (if (startingAt.asKnown().isPresent) 1 else 0) +
+                (if (endingBefore.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is QuantitySchedule && quantity == other.quantity && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is QuantitySchedule &&
+                quantity == other.quantity &&
+                startingAt == other.startingAt &&
+                endingBefore == other.endingBefore &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(quantity, startingAt, endingBefore, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(quantity, startingAt, endingBefore, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1500,50 +2417,74 @@ private constructor(
             "QuantitySchedule{quantity=$quantity, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
     }
 
-    @NoAutoDetect
     class SubscriptionRate
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @JsonProperty("billing_frequency")
-        @ExcludeMissing
-        private val billingFrequency: JsonField<BillingFrequency> = JsonMissing.of(),
-        @JsonProperty("product")
-        @ExcludeMissing
-        private val product: JsonField<Product> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val billingFrequency: JsonField<BillingFrequency>,
+        private val product: JsonField<Product>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
+        @JsonCreator
+        private constructor(
+            @JsonProperty("billing_frequency")
+            @ExcludeMissing
+            billingFrequency: JsonField<BillingFrequency> = JsonMissing.of(),
+            @JsonProperty("product") @ExcludeMissing product: JsonField<Product> = JsonMissing.of(),
+        ) : this(billingFrequency, product, mutableMapOf())
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun billingFrequency(): BillingFrequency = billingFrequency.getRequired("billing_frequency")
 
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun product(): Product = product.getRequired("product")
 
+        /**
+         * Returns the raw JSON value of [billingFrequency].
+         *
+         * Unlike [billingFrequency], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("billing_frequency")
         @ExcludeMissing
         fun _billingFrequency(): JsonField<BillingFrequency> = billingFrequency
 
+        /**
+         * Returns the raw JSON value of [product].
+         *
+         * Unlike [product], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("product") @ExcludeMissing fun _product(): JsonField<Product> = product
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): SubscriptionRate = apply {
-            if (validated) {
-                return@apply
-            }
-
-            billingFrequency()
-            product().validate()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [SubscriptionRate].
+             *
+             * The following fields are required:
+             * ```java
+             * .billingFrequency()
+             * .product()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1564,12 +2505,26 @@ private constructor(
             fun billingFrequency(billingFrequency: BillingFrequency) =
                 billingFrequency(JsonField.of(billingFrequency))
 
+            /**
+             * Sets [Builder.billingFrequency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.billingFrequency] with a well-typed
+             * [BillingFrequency] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
             fun billingFrequency(billingFrequency: JsonField<BillingFrequency>) = apply {
                 this.billingFrequency = billingFrequency
             }
 
             fun product(product: Product) = product(JsonField.of(product))
 
+            /**
+             * Sets [Builder.product] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.product] with a well-typed [Product] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun product(product: JsonField<Product>) = apply { this.product = product }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1591,13 +2546,57 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [SubscriptionRate].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .billingFrequency()
+             * .product()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): SubscriptionRate =
                 SubscriptionRate(
                     checkRequired("billingFrequency", billingFrequency),
                     checkRequired("product", product),
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): SubscriptionRate = apply {
+            if (validated) {
+                return@apply
+            }
+
+            billingFrequency().validate()
+            product().validate()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (billingFrequency.asKnown().getOrNull()?.validity() ?: 0) +
+                (product.asKnown().getOrNull()?.validity() ?: 0)
 
         class BillingFrequency
         @JsonCreator
@@ -1704,12 +2703,39 @@ private constructor(
                     MetronomeInvalidDataException("Value is not a String")
                 }
 
+            private var validated: Boolean = false
+
+            fun validate(): BillingFrequency = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is BillingFrequency && value == other.value /* spotless:on */
+                return other is BillingFrequency && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1717,48 +2743,71 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        @NoAutoDetect
         class Product
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @JsonProperty("id")
-            @ExcludeMissing
-            private val id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("name")
-            @ExcludeMissing
-            private val name: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val id: JsonField<String>,
+            private val name: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            ) : this(id, name, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun name(): String = name.getRequired("name")
 
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+            /**
+             * Returns the raw JSON value of [name].
+             *
+             * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): Product = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                id()
-                name()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of [Product].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .name()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -1778,10 +2827,24 @@ private constructor(
 
                 fun id(id: String) = id(JsonField.of(id))
 
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun name(name: String) = name(JsonField.of(name))
 
+                /**
+                 * Sets [Builder.name] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.name] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun name(name: JsonField<String>) = apply { this.name = name }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1806,25 +2869,69 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Product].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .name()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): Product =
                     Product(
                         checkRequired("id", id),
                         checkRequired("name", name),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): Product = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                name()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) + (if (name.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is Product && id == other.id && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is Product &&
+                    id == other.id &&
+                    name == other.name &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(id, name, additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -1837,12 +2944,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is SubscriptionRate && billingFrequency == other.billingFrequency && product == other.product && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is SubscriptionRate &&
+                billingFrequency == other.billingFrequency &&
+                product == other.product &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(billingFrequency, product, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(billingFrequency, product, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1851,32 +2961,22 @@ private constructor(
     }
 
     /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
-    @NoAutoDetect
     class CustomFields
     @JsonCreator
     private constructor(
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
     ) {
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
-        private var validated: Boolean = false
-
-        fun validate(): CustomFields = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /** Returns a mutable builder for constructing an instance of [CustomFields]. */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -1909,36 +3009,70 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [CustomFields].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): CustomFields = CustomFields(additionalProperties.toImmutable())
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFields = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is CustomFields && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is CustomFields && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    @NoAutoDetect
     class SeatConfig
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @JsonProperty("seat_group_key")
-        @ExcludeMissing
-        private val seatGroupKey: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val seatGroupKey: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("seat_group_key")
+            @ExcludeMissing
+            seatGroupKey: JsonField<String> = JsonMissing.of()
+        ) : this(seatGroupKey, mutableMapOf())
 
         /**
          * The property name, sent on usage events, that identifies the seat ID associated with the
@@ -1946,39 +3080,44 @@ private constructor(
          * must be set as a group key on billable metrics and a presentation/pricing group key on
          * contract products. This allows linked recurring credits with an allocation per seat to be
          * consumed by only one seat's usage.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun seatGroupKey(): String = seatGroupKey.getRequired("seat_group_key")
 
         /**
-         * The property name, sent on usage events, that identifies the seat ID associated with the
-         * usage event. For example, the property name might be seat_id or user_id. The property
-         * must be set as a group key on billable metrics and a presentation/pricing group key on
-         * contract products. This allows linked recurring credits with an allocation per seat to be
-         * consumed by only one seat's usage.
+         * Returns the raw JSON value of [seatGroupKey].
+         *
+         * Unlike [seatGroupKey], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("seat_group_key")
         @ExcludeMissing
         fun _seatGroupKey(): JsonField<String> = seatGroupKey
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): SeatConfig = apply {
-            if (validated) {
-                return@apply
-            }
-
-            seatGroupKey()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [SeatConfig].
+             *
+             * The following fields are required:
+             * ```java
+             * .seatGroupKey()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -2004,11 +3143,11 @@ private constructor(
             fun seatGroupKey(seatGroupKey: String) = seatGroupKey(JsonField.of(seatGroupKey))
 
             /**
-             * The property name, sent on usage events, that identifies the seat ID associated with
-             * the usage event. For example, the property name might be seat_id or user_id. The
-             * property must be set as a group key on billable metrics and a presentation/pricing
-             * group key on contract products. This allows linked recurring credits with an
-             * allocation per seat to be consumed by only one seat's usage.
+             * Sets [Builder.seatGroupKey] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.seatGroupKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun seatGroupKey(seatGroupKey: JsonField<String>) = apply {
                 this.seatGroupKey = seatGroupKey
@@ -2033,24 +3172,64 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [SeatConfig].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .seatGroupKey()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): SeatConfig =
                 SeatConfig(
                     checkRequired("seatGroupKey", seatGroupKey),
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): SeatConfig = apply {
+            if (validated) {
+                return@apply
+            }
+
+            seatGroupKey()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int = (if (seatGroupKey.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is SeatConfig && seatGroupKey == other.seatGroupKey && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is SeatConfig &&
+                seatGroupKey == other.seatGroupKey &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(seatGroupKey, additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -2063,12 +3242,43 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Subscription && billingPeriods == other.billingPeriods && collectionSchedule == other.collectionSchedule && proration == other.proration && quantityManagementMode == other.quantityManagementMode && quantitySchedule == other.quantitySchedule && startingAt == other.startingAt && subscriptionRate == other.subscriptionRate && id == other.id && customFields == other.customFields && description == other.description && endingBefore == other.endingBefore && fiatCreditTypeId == other.fiatCreditTypeId && name == other.name && seatConfig == other.seatConfig && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Subscription &&
+            billingPeriods == other.billingPeriods &&
+            collectionSchedule == other.collectionSchedule &&
+            proration == other.proration &&
+            quantityManagementMode == other.quantityManagementMode &&
+            quantitySchedule == other.quantitySchedule &&
+            startingAt == other.startingAt &&
+            subscriptionRate == other.subscriptionRate &&
+            id == other.id &&
+            customFields == other.customFields &&
+            description == other.description &&
+            endingBefore == other.endingBefore &&
+            fiatCreditTypeId == other.fiatCreditTypeId &&
+            name == other.name &&
+            seatConfig == other.seatConfig &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(billingPeriods, collectionSchedule, proration, quantityManagementMode, quantitySchedule, startingAt, subscriptionRate, id, customFields, description, endingBefore, fiatCreditTypeId, name, seatConfig, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            billingPeriods,
+            collectionSchedule,
+            proration,
+            quantityManagementMode,
+            quantitySchedule,
+            startingAt,
+            subscriptionRate,
+            id,
+            customFields,
+            description,
+            endingBefore,
+            fiatCreditTypeId,
+            name,
+            seatConfig,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

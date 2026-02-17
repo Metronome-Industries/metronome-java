@@ -4,14 +4,14 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.V1PaymentAttemptParams
-import com.metronome.api.models.V1PaymentCancelParams
-import com.metronome.api.models.V1PaymentListParams
+import com.metronome.api.models.v1.payments.PaymentAttemptParams
+import com.metronome.api.models.v1.payments.PaymentCancelParams
+import com.metronome.api.models.v1.payments.PaymentListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class PaymentServiceTest {
+internal class PaymentServiceTest {
 
     @Test
     fun list() {
@@ -24,7 +24,7 @@ class PaymentServiceTest {
 
         val page =
             paymentService.list(
-                V1PaymentListParams.builder()
+                PaymentListParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .invoiceId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .build()
@@ -44,7 +44,7 @@ class PaymentServiceTest {
 
         val response =
             paymentService.attempt(
-                V1PaymentAttemptParams.builder()
+                PaymentAttemptParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .invoiceId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .build()
@@ -64,7 +64,7 @@ class PaymentServiceTest {
 
         val response =
             paymentService.cancel(
-                V1PaymentCancelParams.builder()
+                PaymentCancelParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .invoiceId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .build()

@@ -11,69 +11,106 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.NoAutoDetect
 import com.metronome.api.core.checkRequired
-import com.metronome.api.core.immutableEmptyMap
-import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import java.util.Collections
 import java.util.Objects
+import kotlin.jvm.optionals.getOrNull
 
-@NoAutoDetect
 class RecurringCommitSubscriptionConfig
-@JsonCreator
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    @JsonProperty("allocation")
-    @ExcludeMissing
-    private val allocation: JsonField<Allocation> = JsonMissing.of(),
-    @JsonProperty("apply_seat_increase_config")
-    @ExcludeMissing
-    private val applySeatIncreaseConfig: JsonField<ApplySeatIncreaseConfig> = JsonMissing.of(),
-    @JsonProperty("subscription_id")
-    @ExcludeMissing
-    private val subscriptionId: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val allocation: JsonField<Allocation>,
+    private val applySeatIncreaseConfig: JsonField<ApplySeatIncreaseConfig>,
+    private val subscriptionId: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
+    @JsonCreator
+    private constructor(
+        @JsonProperty("allocation")
+        @ExcludeMissing
+        allocation: JsonField<Allocation> = JsonMissing.of(),
+        @JsonProperty("apply_seat_increase_config")
+        @ExcludeMissing
+        applySeatIncreaseConfig: JsonField<ApplySeatIncreaseConfig> = JsonMissing.of(),
+        @JsonProperty("subscription_id")
+        @ExcludeMissing
+        subscriptionId: JsonField<String> = JsonMissing.of(),
+    ) : this(allocation, applySeatIncreaseConfig, subscriptionId, mutableMapOf())
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun allocation(): Allocation = allocation.getRequired("allocation")
 
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun applySeatIncreaseConfig(): ApplySeatIncreaseConfig =
         applySeatIncreaseConfig.getRequired("apply_seat_increase_config")
 
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun subscriptionId(): String = subscriptionId.getRequired("subscription_id")
 
+    /**
+     * Returns the raw JSON value of [allocation].
+     *
+     * Unlike [allocation], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("allocation")
     @ExcludeMissing
     fun _allocation(): JsonField<Allocation> = allocation
 
+    /**
+     * Returns the raw JSON value of [applySeatIncreaseConfig].
+     *
+     * Unlike [applySeatIncreaseConfig], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
     @JsonProperty("apply_seat_increase_config")
     @ExcludeMissing
     fun _applySeatIncreaseConfig(): JsonField<ApplySeatIncreaseConfig> = applySeatIncreaseConfig
 
+    /**
+     * Returns the raw JSON value of [subscriptionId].
+     *
+     * Unlike [subscriptionId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("subscription_id")
     @ExcludeMissing
     fun _subscriptionId(): JsonField<String> = subscriptionId
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): RecurringCommitSubscriptionConfig = apply {
-        if (validated) {
-            return@apply
-        }
-
-        allocation()
-        applySeatIncreaseConfig().validate()
-        subscriptionId()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [RecurringCommitSubscriptionConfig].
+         *
+         * The following fields are required:
+         * ```java
+         * .allocation()
+         * .applySeatIncreaseConfig()
+         * .subscriptionId()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -97,11 +134,25 @@ private constructor(
 
         fun allocation(allocation: Allocation) = allocation(JsonField.of(allocation))
 
+        /**
+         * Sets [Builder.allocation] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.allocation] with a well-typed [Allocation] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun allocation(allocation: JsonField<Allocation>) = apply { this.allocation = allocation }
 
         fun applySeatIncreaseConfig(applySeatIncreaseConfig: ApplySeatIncreaseConfig) =
             applySeatIncreaseConfig(JsonField.of(applySeatIncreaseConfig))
 
+        /**
+         * Sets [Builder.applySeatIncreaseConfig] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.applySeatIncreaseConfig] with a well-typed
+         * [ApplySeatIncreaseConfig] value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
         fun applySeatIncreaseConfig(applySeatIncreaseConfig: JsonField<ApplySeatIncreaseConfig>) =
             apply {
                 this.applySeatIncreaseConfig = applySeatIncreaseConfig
@@ -109,6 +160,13 @@ private constructor(
 
         fun subscriptionId(subscriptionId: String) = subscriptionId(JsonField.of(subscriptionId))
 
+        /**
+         * Sets [Builder.subscriptionId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriptionId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun subscriptionId(subscriptionId: JsonField<String>) = apply {
             this.subscriptionId = subscriptionId
         }
@@ -132,14 +190,60 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [RecurringCommitSubscriptionConfig].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .allocation()
+         * .applySeatIncreaseConfig()
+         * .subscriptionId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): RecurringCommitSubscriptionConfig =
             RecurringCommitSubscriptionConfig(
                 checkRequired("allocation", allocation),
                 checkRequired("applySeatIncreaseConfig", applySeatIncreaseConfig),
                 checkRequired("subscriptionId", subscriptionId),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): RecurringCommitSubscriptionConfig = apply {
+        if (validated) {
+            return@apply
+        }
+
+        allocation().validate()
+        applySeatIncreaseConfig().validate()
+        subscriptionId()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: MetronomeInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (allocation.asKnown().getOrNull()?.validity() ?: 0) +
+            (applySeatIncreaseConfig.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (subscriptionId.asKnown().isPresent) 1 else 0)
 
     class Allocation @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -230,12 +334,39 @@ private constructor(
                 MetronomeInvalidDataException("Value is not a String")
             }
 
+        private var validated: Boolean = false
+
+        fun validate(): Allocation = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Allocation && value == other.value /* spotless:on */
+            return other is Allocation && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -243,44 +374,59 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    @NoAutoDetect
     class ApplySeatIncreaseConfig
-    @JsonCreator
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        @JsonProperty("is_prorated")
-        @ExcludeMissing
-        private val isProrated: JsonField<Boolean> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val isProrated: JsonField<Boolean>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
-        /** Indicates whether a mid-period seat increase should be prorated. */
+        @JsonCreator
+        private constructor(
+            @JsonProperty("is_prorated")
+            @ExcludeMissing
+            isProrated: JsonField<Boolean> = JsonMissing.of()
+        ) : this(isProrated, mutableMapOf())
+
+        /**
+         * Indicates whether a mid-period seat increase should be prorated.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun isProrated(): Boolean = isProrated.getRequired("is_prorated")
 
-        /** Indicates whether a mid-period seat increase should be prorated. */
+        /**
+         * Returns the raw JSON value of [isProrated].
+         *
+         * Unlike [isProrated], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("is_prorated")
         @ExcludeMissing
         fun _isProrated(): JsonField<Boolean> = isProrated
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): ApplySeatIncreaseConfig = apply {
-            if (validated) {
-                return@apply
-            }
-
-            isProrated()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
+            /**
+             * Returns a mutable builder for constructing an instance of [ApplySeatIncreaseConfig].
+             *
+             * The following fields are required:
+             * ```java
+             * .isProrated()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
@@ -299,7 +445,13 @@ private constructor(
             /** Indicates whether a mid-period seat increase should be prorated. */
             fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
 
-            /** Indicates whether a mid-period seat increase should be prorated. */
+            /**
+             * Sets [Builder.isProrated] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.isProrated] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -321,24 +473,63 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [ApplySeatIncreaseConfig].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .isProrated()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): ApplySeatIncreaseConfig =
                 ApplySeatIncreaseConfig(
                     checkRequired("isProrated", isProrated),
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): ApplySeatIncreaseConfig = apply {
+            if (validated) {
+                return@apply
+            }
+
+            isProrated()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = (if (isProrated.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is ApplySeatIncreaseConfig && isProrated == other.isProrated && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is ApplySeatIncreaseConfig &&
+                isProrated == other.isProrated &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(isProrated, additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -351,12 +542,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is RecurringCommitSubscriptionConfig && allocation == other.allocation && applySeatIncreaseConfig == other.applySeatIncreaseConfig && subscriptionId == other.subscriptionId && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is RecurringCommitSubscriptionConfig &&
+            allocation == other.allocation &&
+            applySeatIncreaseConfig == other.applySeatIncreaseConfig &&
+            subscriptionId == other.subscriptionId &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(allocation, applySeatIncreaseConfig, subscriptionId, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(allocation, applySeatIncreaseConfig, subscriptionId, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

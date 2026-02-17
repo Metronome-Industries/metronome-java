@@ -1,6 +1,14 @@
 rootProject.name = "metronome-java-root"
 
-include("metronome-java")
-include("metronome-java-client-okhttp")
-include("metronome-java-core")
-include("metronome-java-example")
+val projectNames = rootDir.listFiles()
+    ?.asSequence()
+    .orEmpty()
+    .filter { file ->
+        file.isDirectory &&
+        file.name.startsWith("metronome-java") &&
+        file.listFiles()?.asSequence().orEmpty().any { it.name == "build.gradle.kts" }
+    }
+    .map { it.name }
+    .toList()
+println("projects: $projectNames")
+projectNames.forEach { include(it) }

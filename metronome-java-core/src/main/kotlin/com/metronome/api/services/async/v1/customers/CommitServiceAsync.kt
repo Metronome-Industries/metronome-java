@@ -1,19 +1,32 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1.customers
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1CustomerCommitCreateParams
-import com.metronome.api.models.V1CustomerCommitCreateResponse
-import com.metronome.api.models.V1CustomerCommitListPageAsync
-import com.metronome.api.models.V1CustomerCommitListParams
-import com.metronome.api.models.V1CustomerCommitUpdateEndDateParams
-import com.metronome.api.models.V1CustomerCommitUpdateEndDateResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.customers.commits.CommitCreateParams
+import com.metronome.api.models.v1.customers.commits.CommitCreateResponse
+import com.metronome.api.models.v1.customers.commits.CommitListPageAsync
+import com.metronome.api.models.v1.customers.commits.CommitListParams
+import com.metronome.api.models.v1.customers.commits.CommitUpdateEndDateParams
+import com.metronome.api.models.v1.customers.commits.CommitUpdateEndDateResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface CommitServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): CommitServiceAsync
 
     /**
      * Creates customer-level commits that establish spending commitments for customers across their
@@ -24,7 +37,6 @@ interface CommitServiceAsync {
      * contract/create or contract/edit APIs.
      *
      * ### Use this endpoint to:
-     *
      * Use this endpoint when you need to establish customer-level spending commitments that can be
      * applied across multiple contracts or scoped to specific contracts. Customer-level commits are
      * ideal for:
@@ -46,7 +58,6 @@ interface CommitServiceAsync {
      * - For postpaid commits: only one schedule item is allowed in both schedules.
      *
      * #### Scoping flexibility:
-     *
      * Customer-level commits can be configured in a few ways:
      * - Contract-specific: Use the `applicable_contract_ids` field to limit the commit to specific
      *   contracts
@@ -54,29 +65,29 @@ interface CommitServiceAsync {
      *   all of the customer's contracts
      *
      * #### Product targeting:
-     *
      * Commits can be scoped to specific products using applicable_product_ids,
      * applicable_product_tags, or specifiers, or left unrestricted to apply to all products.
      *
      * #### Priority considerations:
-     *
      * When multiple commits are applicable, the one with the lower priority value will be consumed
      * first. If there is a tie, contract level commits and credits will be applied before customer
      * level commits and credits. Plan your priority scheme carefully to ensure commits are applied
      * in the desired order.
      *
      * ### Usage guidelines:
-     *
      * ⚠️ Preferred Alternative: In most cases, you should add commits directly to contracts using
      * the create contract or edit contract APIs instead of creating customer-level commits.
      * Contract-level commits provide better organization and are the recommended approach for
      * standard use cases.
      */
-    @JvmOverloads
+    fun create(params: CommitCreateParams): CompletableFuture<CommitCreateResponse> =
+        create(params, RequestOptions.none())
+
+    /** @see create */
     fun create(
-        params: V1CustomerCommitCreateParams,
+        params: CommitCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerCommitCreateResponse>
+    ): CompletableFuture<CommitCreateResponse>
 
     /**
      * Retrieve all commit agreements for a customer, including both prepaid and postpaid
@@ -93,7 +104,6 @@ interface CommitServiceAsync {
      * - Manage rollover balances between contract periods
      *
      * ### Key response fields:
-     *
      * An array of Commit objects containing:
      * - Commit type: PREPAID (pay upfront) or POSTPAID (pay at true-up)
      * - Rate type: COMMIT_RATE (discounted) or LIST_RATE (standard pricing)
@@ -118,11 +128,14 @@ interface CommitServiceAsync {
      *     - include_balance: Adds current balance calculation (slower)
      * - Optional filtering: Use commit_id to retrieve a specific commit
      */
-    @JvmOverloads
+    fun list(params: CommitListParams): CompletableFuture<CommitListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V1CustomerCommitListParams,
+        params: CommitListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerCommitListPageAsync>
+    ): CompletableFuture<CommitListPageAsync>
 
     /**
      * Shortens the end date of a prepaid commit to terminate it earlier than originally scheduled.
@@ -131,13 +144,76 @@ interface CommitServiceAsync {
      * (earlier), not extend it.
      *
      * ### Usage guidelines:
-     *
      * To extend commit end dates or make other comprehensive edits, use the 'edit commit' endpoint
      * instead.
      */
-    @JvmOverloads
     fun updateEndDate(
-        params: V1CustomerCommitUpdateEndDateParams,
+        params: CommitUpdateEndDateParams
+    ): CompletableFuture<CommitUpdateEndDateResponse> = updateEndDate(params, RequestOptions.none())
+
+    /** @see updateEndDate */
+    fun updateEndDate(
+        params: CommitUpdateEndDateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerCommitUpdateEndDateResponse>
+    ): CompletableFuture<CommitUpdateEndDateResponse>
+
+    /**
+     * A view of [CommitServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CommitServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerCommits/create`, but is
+         * otherwise the same as [CommitServiceAsync.create].
+         */
+        fun create(
+            params: CommitCreateParams
+        ): CompletableFuture<HttpResponseFor<CommitCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            params: CommitCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CommitCreateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerCommits/list`, but is
+         * otherwise the same as [CommitServiceAsync.list].
+         */
+        fun list(
+            params: CommitListParams
+        ): CompletableFuture<HttpResponseFor<CommitListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: CommitListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CommitListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerCommits/updateEndDate`, but
+         * is otherwise the same as [CommitServiceAsync.updateEndDate].
+         */
+        fun updateEndDate(
+            params: CommitUpdateEndDateParams
+        ): CompletableFuture<HttpResponseFor<CommitUpdateEndDateResponse>> =
+            updateEndDate(params, RequestOptions.none())
+
+        /** @see updateEndDate */
+        fun updateEndDate(
+            params: CommitUpdateEndDateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CommitUpdateEndDateResponse>>
+    }
 }

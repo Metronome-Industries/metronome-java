@@ -1,19 +1,32 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1.customers
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1CustomerCreditCreateParams
-import com.metronome.api.models.V1CustomerCreditCreateResponse
-import com.metronome.api.models.V1CustomerCreditListPageAsync
-import com.metronome.api.models.V1CustomerCreditListParams
-import com.metronome.api.models.V1CustomerCreditUpdateEndDateParams
-import com.metronome.api.models.V1CustomerCreditUpdateEndDateResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.customers.credits.CreditCreateParams
+import com.metronome.api.models.v1.customers.credits.CreditCreateResponse
+import com.metronome.api.models.v1.customers.credits.CreditListPageAsync
+import com.metronome.api.models.v1.customers.credits.CreditListParams
+import com.metronome.api.models.v1.customers.credits.CreditUpdateEndDateParams
+import com.metronome.api.models.v1.customers.credits.CreditUpdateEndDateResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface CreditServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): CreditServiceAsync
 
     /**
      * Creates customer-level credits that provide spending allowances or free credit balances for
@@ -21,7 +34,6 @@ interface CreditServiceAsync {
      * to customer contracts using the contract/create or contract/edit APIs.
      *
      * ### Use this endpoint to:
-     *
      * Use this endpoint when you need to provision credits directly at the customer level that can
      * be applied across multiple contracts or scoped to specific contracts. Customer-level credits
      * are ideal for:
@@ -30,7 +42,6 @@ interface CreditServiceAsync {
      * - Migration scenarios where you need to preserve existing customer balances
      *
      * #### Scoping flexibility:
-     *
      * Customer-level credits can be configured in two ways:
      * - Contract-specific: Use the applicable_contract_ids field to limit the credit to specific
      *   contracts
@@ -38,35 +49,34 @@ interface CreditServiceAsync {
      *   all of the customer's contracts
      *
      * #### Product Targeting:
-     *
      * Credits can be scoped to specific products using `applicable_product_ids` or
      * `applicable_product_tags`, or left unrestricted to apply to all products.
      *
      * #### Priority considerations:
-     *
      * When multiple credits are applicable, the one with the lower priority value will be consumed
      * first. If there is a tie, contract level commits and credits will be applied before customer
      * level commits and credits. Plan your priority scheme carefully to ensure credits are applied
      * in the desired order.
      *
      * #### Access Schedule Required:
-     *
      * You must provide an `access_schedule` that defines when and how much credit becomes available
      * to the customer over time. This usually is aligned to the contract schedule or starts
      * immediately and is set to expire in the future.
      *
      * ### Usage Guidelines:
-     *
      * ⚠️ Preferred Alternative: In most cases, you should add credits directly to contracts using
      * the contract/create or contract/edit APIs instead of creating customer-level credits.
      * Contract-level credits provide better organization, and are easier for finance teams to
      * recognize revenue, and are the recommended approach for most use cases.
      */
-    @JvmOverloads
+    fun create(params: CreditCreateParams): CompletableFuture<CreditCreateResponse> =
+        create(params, RequestOptions.none())
+
+    /** @see create */
     fun create(
-        params: V1CustomerCreditCreateParams,
+        params: CreditCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerCreditCreateResponse>
+    ): CompletableFuture<CreditCreateResponse>
 
     /**
      * Retrieve a detailed list of all credits available to a customer, including promotional
@@ -82,7 +92,6 @@ interface CreditServiceAsync {
      * - Monitor promotional credit utilization • Support customer inquiries about available credits
      *
      * ### Key response fields:
-     *
      * An array of Credit objects containing:
      * - Credit details: Name, priority, and which applicable products/tags it applies to
      * - Product ID: The `product_id` of the credit. This is for external mapping into your
@@ -106,11 +115,14 @@ interface CreditServiceAsync {
      *     - `include_balance`: Adds current balance calculation (slower)
      * - Optional filtering: Use credit_id to retrieve a specific commit
      */
-    @JvmOverloads
+    fun list(params: CreditListParams): CompletableFuture<CreditListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
     fun list(
-        params: V1CustomerCreditListParams,
+        params: CreditListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerCreditListPageAsync>
+    ): CompletableFuture<CreditListPageAsync>
 
     /**
      * Shortens the end date of an existing customer credit to terminate it earlier than originally
@@ -119,9 +131,73 @@ interface CreditServiceAsync {
      * Note: To extend credit end dates or make comprehensive edits, use the 'edit credit' endpoint
      * instead.
      */
-    @JvmOverloads
     fun updateEndDate(
-        params: V1CustomerCreditUpdateEndDateParams,
+        params: CreditUpdateEndDateParams
+    ): CompletableFuture<CreditUpdateEndDateResponse> = updateEndDate(params, RequestOptions.none())
+
+    /** @see updateEndDate */
+    fun updateEndDate(
+        params: CreditUpdateEndDateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerCreditUpdateEndDateResponse>
+    ): CompletableFuture<CreditUpdateEndDateResponse>
+
+    /**
+     * A view of [CreditServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CreditServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerCredits/create`, but is
+         * otherwise the same as [CreditServiceAsync.create].
+         */
+        fun create(
+            params: CreditCreateParams
+        ): CompletableFuture<HttpResponseFor<CreditCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            params: CreditCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CreditCreateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerCredits/list`, but is
+         * otherwise the same as [CreditServiceAsync.list].
+         */
+        fun list(
+            params: CreditListParams
+        ): CompletableFuture<HttpResponseFor<CreditListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: CreditListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CreditListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerCredits/updateEndDate`, but
+         * is otherwise the same as [CreditServiceAsync.updateEndDate].
+         */
+        fun updateEndDate(
+            params: CreditUpdateEndDateParams
+        ): CompletableFuture<HttpResponseFor<CreditUpdateEndDateResponse>> =
+            updateEndDate(params, RequestOptions.none())
+
+        /** @see updateEndDate */
+        fun updateEndDate(
+            params: CreditUpdateEndDateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CreditUpdateEndDateResponse>>
+    }
 }

@@ -2,15 +2,18 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.JsonValue
+import com.metronome.api.core.jsonMapper
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ContractV2Test {
+internal class ContractV2Test {
 
     @Test
-    fun createContractV2() {
+    fun create() {
         val contractV2 =
             ContractV2.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -901,7 +904,7 @@ class ContractV2Test {
                 .totalContractValue(0.0)
                 .uniquenessKey("x")
                 .build()
-        assertThat(contractV2).isNotNull
+
         assertThat(contractV2.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(contractV2.commits())
             .containsExactly(
@@ -1182,7 +1185,7 @@ class ContractV2Test {
             )
         assertThat(contractV2.archivedAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(contractV2.credits().get())
+        assertThat(contractV2.credits().getOrNull())
             .containsExactly(
                 ContractV2.Credit.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1308,7 +1311,7 @@ class ContractV2Test {
                     )
                     .build()
             )
-        assertThat(contractV2.discounts().get())
+        assertThat(contractV2.discounts().getOrNull())
             .containsExactly(
                 Discount.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1442,7 +1445,7 @@ class ContractV2Test {
                     .build()
             )
         assertThat(contractV2.priority()).contains(0.0)
-        assertThat(contractV2.professionalServices().get())
+        assertThat(contractV2.professionalServices().getOrNull())
             .containsExactly(
                 ProService.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1460,7 +1463,7 @@ class ContractV2Test {
                     .build()
             )
         assertThat(contractV2.rateCardId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(contractV2.recurringCommits().get())
+        assertThat(contractV2.recurringCommits().getOrNull())
             .containsExactly(
                 ContractV2.RecurringCommit.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1552,7 +1555,7 @@ class ContractV2Test {
                     )
                     .build()
             )
-        assertThat(contractV2.recurringCredits().get())
+        assertThat(contractV2.recurringCredits().getOrNull())
             .containsExactly(
                 ContractV2.RecurringCredit.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1637,7 +1640,7 @@ class ContractV2Test {
                     )
                     .build()
             )
-        assertThat(contractV2.resellerRoyalties().get())
+        assertThat(contractV2.resellerRoyalties().getOrNull())
             .containsExactly(
                 ContractV2.ResellerRoyalty.builder()
                     .resellerType(ContractV2.ResellerRoyalty.ResellerType.AWS)
@@ -1701,7 +1704,7 @@ class ContractV2Test {
                     .thresholdAmount(0.0)
                     .build()
             )
-        assertThat(contractV2.subscriptions().get())
+        assertThat(contractV2.subscriptions().getOrNull())
             .containsExactly(
                 Subscription.builder()
                     .billingPeriods(
@@ -1774,5 +1777,908 @@ class ContractV2Test {
             )
         assertThat(contractV2.totalContractValue()).contains(0.0)
         assertThat(contractV2.uniquenessKey()).contains("x")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val contractV2 =
+            ContractV2.builder()
+                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addCommit(
+                    ContractV2.Commit.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .product(
+                            ContractV2.Commit.Product.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .type(ContractV2.Commit.Type.PREPAID)
+                        .accessSchedule(
+                            ScheduleDuration.builder()
+                                .addScheduleItem(
+                                    ScheduleDuration.ScheduleItem.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .amount(0.0)
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
+                                )
+                                .creditType(
+                                    CreditTypeData.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .balance(0.0)
+                        .contract(
+                            ContractV2.Commit.Contract.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .customFields(
+                            ContractV2.Commit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .description("description")
+                        .hierarchyConfiguration(
+                            CommitHierarchyConfiguration.builder()
+                                .childAccess(
+                                    CommitHierarchyConfiguration.ChildAccess
+                                        .CommitHierarchyChildAccessAll
+                                        .builder()
+                                        .type(
+                                            CommitHierarchyConfiguration.ChildAccess
+                                                .CommitHierarchyChildAccessAll
+                                                .Type
+                                                .ALL
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .invoiceContract(
+                            ContractV2.Commit.InvoiceContract.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .invoiceSchedule(
+                            SchedulePointInTime.builder()
+                                .creditType(
+                                    CreditTypeData.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
+                                        .build()
+                                )
+                                .doNotInvoice(true)
+                                .addScheduleItem(
+                                    SchedulePointInTime.ScheduleItem.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .amount(0.0)
+                                        .quantity(0.0)
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .unitPrice(0.0)
+                                        .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addLedger(
+                            ContractV2.Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry.builder()
+                                .amount(0.0)
+                                .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .type(
+                                    ContractV2.Commit.Ledger.PrepaidCommitSegmentStartLedgerEntry
+                                        .Type
+                                        .PREPAID_COMMIT_SEGMENT_START
+                                )
+                                .build()
+                        )
+                        .name("name")
+                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                        .priority(0.0)
+                        .rateType(ContractV2.Commit.RateType.COMMIT_RATE)
+                        .recurringCommitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .rolledOverFrom(
+                            ContractV2.Commit.RolledOverFrom.builder()
+                                .commitId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .rolloverFraction(0.0)
+                        .salesforceOpportunityId("salesforce_opportunity_id")
+                        .addSpecifier(
+                            CommitSpecifier.builder()
+                                .presentationGroupValues(
+                                    CommitSpecifier.PresentationGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .pricingGroupValues(
+                                    CommitSpecifier.PricingGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addProductTag("string")
+                                .build()
+                        )
+                        .subscriptionConfig(
+                            RecurringCommitSubscriptionConfig.builder()
+                                .allocation(RecurringCommitSubscriptionConfig.Allocation.INDIVIDUAL)
+                                .applySeatIncreaseConfig(
+                                    RecurringCommitSubscriptionConfig.ApplySeatIncreaseConfig
+                                        .builder()
+                                        .isProrated(true)
+                                        .build()
+                                )
+                                .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .build()
+                )
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .createdBy("created_by")
+                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addOverride(
+                    ContractV2.Override.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addApplicableProductTag("string")
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .entitled(true)
+                        .isCommitSpecific(true)
+                        .multiplier(0.0)
+                        .addOverrideSpecifier(
+                            ContractV2.Override.OverrideSpecifier.builder()
+                                .billingFrequency(
+                                    ContractV2.Override.OverrideSpecifier.BillingFrequency.MONTHLY
+                                )
+                                .addCommitId("string")
+                                .presentationGroupValues(
+                                    ContractV2.Override.OverrideSpecifier.PresentationGroupValues
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .pricingGroupValues(
+                                    ContractV2.Override.OverrideSpecifier.PricingGroupValues
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addProductTag("string")
+                                .addRecurringCommitId("string")
+                                .addRecurringCreditId("string")
+                                .build()
+                        )
+                        .addOverrideTier(OverrideTier.builder().multiplier(0.0).size(0.0).build())
+                        .overwriteRate(
+                            ContractV2.Override.OverwriteRate.builder()
+                                .rateType(ContractV2.Override.OverwriteRate.RateType.FLAT)
+                                .creditType(
+                                    CreditTypeData.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
+                                        .build()
+                                )
+                                .customRate(
+                                    ContractV2.Override.OverwriteRate.CustomRate.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .isProrated(true)
+                                .price(0.0)
+                                .quantity(0.0)
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                                .build()
+                        )
+                        .priority(0.0)
+                        .product(
+                            ContractV2.Override.Product.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .target(ContractV2.Override.Target.COMMIT_RATE)
+                        .type(ContractV2.Override.Type.OVERWRITE)
+                        .build()
+                )
+                .addScheduledCharge(
+                    ScheduledCharge.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .product(
+                            ScheduledCharge.Product.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .schedule(
+                            SchedulePointInTime.builder()
+                                .creditType(
+                                    CreditTypeData.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
+                                        .build()
+                                )
+                                .doNotInvoice(true)
+                                .addScheduleItem(
+                                    SchedulePointInTime.ScheduleItem.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .amount(0.0)
+                                        .quantity(0.0)
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .unitPrice(0.0)
+                                        .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .customFields(
+                            ScheduledCharge.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .name("x")
+                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                        .build()
+                )
+                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addTransition(
+                    ContractV2.Transition.builder()
+                        .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .type(ContractV2.Transition.Type.SUPERSEDE)
+                        .build()
+                )
+                .addUsageFilter(
+                    ContractV2.UsageFilter.builder()
+                        .groupKey("group_key")
+                        .addGroupValue("string")
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
+                )
+                .usageStatementSchedule(
+                    ContractV2.UsageStatementSchedule.builder()
+                        .billingAnchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .frequency(ContractV2.UsageStatementSchedule.Frequency.MONTHLY)
+                        .build()
+                )
+                .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addCredit(
+                    ContractV2.Credit.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .product(
+                            ContractV2.Credit.Product.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .type(ContractV2.Credit.Type.CREDIT)
+                        .accessSchedule(
+                            ScheduleDuration.builder()
+                                .addScheduleItem(
+                                    ScheduleDuration.ScheduleItem.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .amount(0.0)
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
+                                )
+                                .creditType(
+                                    CreditTypeData.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
+                        .balance(0.0)
+                        .contract(
+                            ContractV2.Credit.Contract.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .customFields(
+                            ContractV2.Credit.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .description("description")
+                        .hierarchyConfiguration(
+                            CommitHierarchyConfiguration.builder()
+                                .childAccess(
+                                    CommitHierarchyConfiguration.ChildAccess
+                                        .CommitHierarchyChildAccessAll
+                                        .builder()
+                                        .type(
+                                            CommitHierarchyConfiguration.ChildAccess
+                                                .CommitHierarchyChildAccessAll
+                                                .Type
+                                                .ALL
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addLedger(
+                            ContractV2.Credit.Ledger.CreditSegmentStartLedgerEntry.builder()
+                                .amount(0.0)
+                                .segmentId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .type(
+                                    ContractV2.Credit.Ledger.CreditSegmentStartLedgerEntry.Type
+                                        .CREDIT_SEGMENT_START
+                                )
+                                .build()
+                        )
+                        .name("name")
+                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                        .priority(0.0)
+                        .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .salesforceOpportunityId("salesforce_opportunity_id")
+                        .addSpecifier(
+                            CommitSpecifier.builder()
+                                .presentationGroupValues(
+                                    CommitSpecifier.PresentationGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .pricingGroupValues(
+                                    CommitSpecifier.PricingGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addProductTag("string")
+                                .build()
+                        )
+                        .subscriptionConfig(
+                            RecurringCommitSubscriptionConfig.builder()
+                                .allocation(RecurringCommitSubscriptionConfig.Allocation.INDIVIDUAL)
+                                .applySeatIncreaseConfig(
+                                    RecurringCommitSubscriptionConfig.ApplySeatIncreaseConfig
+                                        .builder()
+                                        .isProrated(true)
+                                        .build()
+                                )
+                                .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .build()
+                )
+                .customFields(
+                    ContractV2.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .customerBillingProviderConfiguration(
+                    ContractV2.CustomerBillingProviderConfiguration.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .billingProvider(
+                            ContractV2.CustomerBillingProviderConfiguration.BillingProvider
+                                .AWS_MARKETPLACE
+                        )
+                        .deliveryMethod(
+                            ContractV2.CustomerBillingProviderConfiguration.DeliveryMethod
+                                .DIRECT_TO_BILLING_PROVIDER
+                        )
+                        .build()
+                )
+                .addDiscount(
+                    Discount.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .product(
+                            Discount.Product.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .schedule(
+                            SchedulePointInTime.builder()
+                                .creditType(
+                                    CreditTypeData.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
+                                        .build()
+                                )
+                                .doNotInvoice(true)
+                                .addScheduleItem(
+                                    SchedulePointInTime.ScheduleItem.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .amount(0.0)
+                                        .quantity(0.0)
+                                        .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                        .unitPrice(0.0)
+                                        .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .customFields(
+                            Discount.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .name("x")
+                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                        .build()
+                )
+                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .hasMore(ContractV2.HasMore.builder().commits(true).credits(true).build())
+                .hierarchyConfiguration(
+                    ContractV2.HierarchyConfiguration.ParentHierarchyConfiguration.builder()
+                        .addChild(
+                            ContractV2.HierarchyConfiguration.ParentHierarchyConfiguration.Child
+                                .builder()
+                                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .parentBehavior(
+                            ContractV2.HierarchyConfiguration.ParentHierarchyConfiguration
+                                .ParentBehavior
+                                .builder()
+                                .invoiceConsolidationType(
+                                    ContractV2.HierarchyConfiguration.ParentHierarchyConfiguration
+                                        .ParentBehavior
+                                        .InvoiceConsolidationType
+                                        .CONCATENATE
+                                )
+                                .build()
+                        )
+                        .build()
+                )
+                .multiplierOverridePrioritization(
+                    ContractV2.MultiplierOverridePrioritization.LOWEST_MULTIPLIER
+                )
+                .name("name")
+                .netPaymentTermsDays(0.0)
+                .netsuiteSalesOrderId("netsuite_sales_order_id")
+                .prepaidBalanceThresholdConfiguration(
+                    PrepaidBalanceThresholdConfigurationV2.builder()
+                        .commit(
+                            PrepaidBalanceThresholdConfigurationV2.Commit.builder()
+                                .description("description")
+                                .name("name")
+                                .productId("product_id")
+                                .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addApplicableProductTag("string")
+                                .addSpecifier(
+                                    CommitSpecifierInput.builder()
+                                        .presentationGroupValues(
+                                            CommitSpecifierInput.PresentationGroupValues.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string"),
+                                                )
+                                                .build()
+                                        )
+                                        .pricingGroupValues(
+                                            CommitSpecifierInput.PricingGroupValues.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string"),
+                                                )
+                                                .build()
+                                        )
+                                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .addProductTag("string")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .isEnabled(true)
+                        .paymentGateConfig(
+                            PaymentGateConfigV2.builder()
+                                .paymentGateType(PaymentGateConfigV2.PaymentGateType.NONE)
+                                .precalculatedTaxConfig(
+                                    PaymentGateConfigV2.PrecalculatedTaxConfig.builder()
+                                        .taxAmount(0.0)
+                                        .taxName("tax_name")
+                                        .build()
+                                )
+                                .stripeConfig(
+                                    PaymentGateConfigV2.StripeConfig.builder()
+                                        .paymentType(
+                                            PaymentGateConfigV2.StripeConfig.PaymentType.INVOICE
+                                        )
+                                        .invoiceMetadata(
+                                            PaymentGateConfigV2.StripeConfig.InvoiceMetadata
+                                                .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string"),
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .taxType(PaymentGateConfigV2.TaxType.NONE)
+                                .build()
+                        )
+                        .rechargeToAmount(0.0)
+                        .thresholdAmount(0.0)
+                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
+                .priority(0.0)
+                .addProfessionalService(
+                    ProService.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .maxAmount(0.0)
+                        .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .quantity(0.0)
+                        .unitPrice(0.0)
+                        .customFields(
+                            ProService.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .description("description")
+                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                        .build()
+                )
+                .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addRecurringCommit(
+                    ContractV2.RecurringCommit.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .accessAmount(
+                            ContractV2.RecurringCommit.AccessAmount.builder()
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .unitPrice(0.0)
+                                .quantity(0.0)
+                                .build()
+                        )
+                        .commitDuration(
+                            ContractV2.RecurringCommit.CommitDuration.builder()
+                                .value(0.0)
+                                .unit(ContractV2.RecurringCommit.CommitDuration.Unit.PERIODS)
+                                .build()
+                        )
+                        .priority(0.0)
+                        .product(
+                            ContractV2.RecurringCommit.Product.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .rateType(ContractV2.RecurringCommit.RateType.COMMIT_RATE)
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
+                        .contract(
+                            ContractV2.RecurringCommit.Contract.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .description("description")
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .hierarchyConfiguration(
+                            CommitHierarchyConfiguration.builder()
+                                .childAccess(
+                                    CommitHierarchyConfiguration.ChildAccess
+                                        .CommitHierarchyChildAccessAll
+                                        .builder()
+                                        .type(
+                                            CommitHierarchyConfiguration.ChildAccess
+                                                .CommitHierarchyChildAccessAll
+                                                .Type
+                                                .ALL
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .invoiceAmount(
+                            ContractV2.RecurringCommit.InvoiceAmount.builder()
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .quantity(0.0)
+                                .unitPrice(0.0)
+                                .build()
+                        )
+                        .name("name")
+                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                        .proration(ContractV2.RecurringCommit.Proration.NONE)
+                        .recurrenceFrequency(ContractV2.RecurringCommit.RecurrenceFrequency.MONTHLY)
+                        .rolloverFraction(0.0)
+                        .addSpecifier(
+                            CommitSpecifier.builder()
+                                .presentationGroupValues(
+                                    CommitSpecifier.PresentationGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .pricingGroupValues(
+                                    CommitSpecifier.PricingGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addProductTag("string")
+                                .build()
+                        )
+                        .subscriptionConfig(
+                            RecurringCommitSubscriptionConfig.builder()
+                                .allocation(RecurringCommitSubscriptionConfig.Allocation.INDIVIDUAL)
+                                .applySeatIncreaseConfig(
+                                    RecurringCommitSubscriptionConfig.ApplySeatIncreaseConfig
+                                        .builder()
+                                        .isProrated(true)
+                                        .build()
+                                )
+                                .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .build()
+                )
+                .addRecurringCredit(
+                    ContractV2.RecurringCredit.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .accessAmount(
+                            ContractV2.RecurringCredit.AccessAmount.builder()
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .unitPrice(0.0)
+                                .quantity(0.0)
+                                .build()
+                        )
+                        .commitDuration(
+                            ContractV2.RecurringCredit.CommitDuration.builder()
+                                .value(0.0)
+                                .unit(ContractV2.RecurringCredit.CommitDuration.Unit.PERIODS)
+                                .build()
+                        )
+                        .priority(0.0)
+                        .product(
+                            ContractV2.RecurringCredit.Product.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .rateType(ContractV2.RecurringCredit.RateType.COMMIT_RATE)
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addApplicableProductTag("string")
+                        .contract(
+                            ContractV2.RecurringCredit.Contract.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .description("description")
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .hierarchyConfiguration(
+                            CommitHierarchyConfiguration.builder()
+                                .childAccess(
+                                    CommitHierarchyConfiguration.ChildAccess
+                                        .CommitHierarchyChildAccessAll
+                                        .builder()
+                                        .type(
+                                            CommitHierarchyConfiguration.ChildAccess
+                                                .CommitHierarchyChildAccessAll
+                                                .Type
+                                                .ALL
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .name("name")
+                        .netsuiteSalesOrderId("netsuite_sales_order_id")
+                        .proration(ContractV2.RecurringCredit.Proration.NONE)
+                        .recurrenceFrequency(ContractV2.RecurringCredit.RecurrenceFrequency.MONTHLY)
+                        .rolloverFraction(0.0)
+                        .addSpecifier(
+                            CommitSpecifier.builder()
+                                .presentationGroupValues(
+                                    CommitSpecifier.PresentationGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .pricingGroupValues(
+                                    CommitSpecifier.PricingGroupValues.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addProductTag("string")
+                                .build()
+                        )
+                        .subscriptionConfig(
+                            RecurringCommitSubscriptionConfig.builder()
+                                .allocation(RecurringCommitSubscriptionConfig.Allocation.INDIVIDUAL)
+                                .applySeatIncreaseConfig(
+                                    RecurringCommitSubscriptionConfig.ApplySeatIncreaseConfig
+                                        .builder()
+                                        .isProrated(true)
+                                        .build()
+                                )
+                                .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .build()
+                )
+                .addResellerRoyalty(
+                    ContractV2.ResellerRoyalty.builder()
+                        .resellerType(ContractV2.ResellerRoyalty.ResellerType.AWS)
+                        .addSegment(
+                            ContractV2.ResellerRoyalty.Segment.builder()
+                                .fraction(0.0)
+                                .netsuiteResellerId("netsuite_reseller_id")
+                                .resellerType(ContractV2.ResellerRoyalty.Segment.ResellerType.AWS)
+                                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .addApplicableProductId("string")
+                                .addApplicableProductTag("string")
+                                .awsAccountNumber("aws_account_number")
+                                .awsOfferId("aws_offer_id")
+                                .awsPayerReferenceId("aws_payer_reference_id")
+                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .gcpAccountId("gcp_account_id")
+                                .gcpOfferId("gcp_offer_id")
+                                .resellerContractValue(0.0)
+                                .build()
+                        )
+                        .build()
+                )
+                .salesforceOpportunityId("salesforce_opportunity_id")
+                .scheduledChargesOnUsageInvoices(ContractV2.ScheduledChargesOnUsageInvoices.ALL)
+                .spendThresholdConfiguration(
+                    SpendThresholdConfigurationV2.builder()
+                        .commit(
+                            UpdateBaseThresholdCommit.builder()
+                                .description("description")
+                                .name("name")
+                                .productId("product_id")
+                                .build()
+                        )
+                        .isEnabled(true)
+                        .paymentGateConfig(
+                            PaymentGateConfigV2.builder()
+                                .paymentGateType(PaymentGateConfigV2.PaymentGateType.NONE)
+                                .precalculatedTaxConfig(
+                                    PaymentGateConfigV2.PrecalculatedTaxConfig.builder()
+                                        .taxAmount(0.0)
+                                        .taxName("tax_name")
+                                        .build()
+                                )
+                                .stripeConfig(
+                                    PaymentGateConfigV2.StripeConfig.builder()
+                                        .paymentType(
+                                            PaymentGateConfigV2.StripeConfig.PaymentType.INVOICE
+                                        )
+                                        .invoiceMetadata(
+                                            PaymentGateConfigV2.StripeConfig.InvoiceMetadata
+                                                .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string"),
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .taxType(PaymentGateConfigV2.TaxType.NONE)
+                                .build()
+                        )
+                        .thresholdAmount(0.0)
+                        .build()
+                )
+                .addSubscription(
+                    Subscription.builder()
+                        .billingPeriods(
+                            Subscription.BillingPeriods.builder()
+                                .current(
+                                    Subscription.BillingPeriods.Current.builder()
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
+                                )
+                                .next(
+                                    Subscription.BillingPeriods.Next.builder()
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
+                                )
+                                .previous(
+                                    Subscription.BillingPeriods.Previous.builder()
+                                        .endingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .startingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                        .proration(
+                            Subscription.Proration.builder()
+                                .invoiceBehavior(
+                                    Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY
+                                )
+                                .isProrated(true)
+                                .build()
+                        )
+                        .quantityManagementMode(Subscription.QuantityManagementMode.SEAT_BASED)
+                        .addQuantitySchedule(
+                            Subscription.QuantitySchedule.builder()
+                                .quantity(0.0)
+                                .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .build()
+                        )
+                        .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .subscriptionRate(
+                            Subscription.SubscriptionRate.builder()
+                                .billingFrequency(
+                                    Subscription.SubscriptionRate.BillingFrequency.MONTHLY
+                                )
+                                .product(
+                                    Subscription.SubscriptionRate.Product.builder()
+                                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .name("name")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .customFields(
+                            Subscription.CustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .description("description")
+                        .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .name("name")
+                        .seatConfig(
+                            Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build()
+                        )
+                        .build()
+                )
+                .totalContractValue(0.0)
+                .uniquenessKey("x")
+                .build()
+
+        val roundtrippedContractV2 =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(contractV2),
+                jacksonTypeRef<ContractV2>(),
+            )
+
+        assertThat(roundtrippedContractV2).isEqualTo(contractV2)
     }
 }

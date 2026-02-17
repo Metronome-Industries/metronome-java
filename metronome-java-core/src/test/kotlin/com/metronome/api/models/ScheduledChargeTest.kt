@@ -2,15 +2,17 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.JsonValue
+import com.metronome.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ScheduledChargeTest {
+internal class ScheduledChargeTest {
 
     @Test
-    fun createScheduledCharge() {
+    fun create() {
         val scheduledCharge =
             ScheduledCharge.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -50,7 +52,7 @@ class ScheduledChargeTest {
                 .name("x")
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .build()
-        assertThat(scheduledCharge).isNotNull
+
         assertThat(scheduledCharge.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(scheduledCharge.product())
             .isEqualTo(
@@ -91,5 +93,57 @@ class ScheduledChargeTest {
             )
         assertThat(scheduledCharge.name()).contains("x")
         assertThat(scheduledCharge.netsuiteSalesOrderId()).contains("netsuite_sales_order_id")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val scheduledCharge =
+            ScheduledCharge.builder()
+                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .product(
+                    ScheduledCharge.Product.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .name("name")
+                        .build()
+                )
+                .schedule(
+                    SchedulePointInTime.builder()
+                        .creditType(
+                            CreditTypeData.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .name("name")
+                                .build()
+                        )
+                        .doNotInvoice(true)
+                        .addScheduleItem(
+                            SchedulePointInTime.ScheduleItem.builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .amount(0.0)
+                                .quantity(0.0)
+                                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .unitPrice(0.0)
+                                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .build()
+                )
+                .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customFields(
+                    ScheduledCharge.CustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .name("x")
+                .netsuiteSalesOrderId("netsuite_sales_order_id")
+                .build()
+
+        val roundtrippedScheduledCharge =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(scheduledCharge),
+                jacksonTypeRef<ScheduledCharge>(),
+            )
+
+        assertThat(roundtrippedScheduledCharge).isEqualTo(scheduledCharge)
     }
 }

@@ -1,16 +1,30 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.blocking.v1
 
+import com.google.errorprone.annotations.MustBeClosed
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1AlertArchiveParams
-import com.metronome.api.models.V1AlertArchiveResponse
-import com.metronome.api.models.V1AlertCreateParams
-import com.metronome.api.models.V1AlertCreateResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.alerts.AlertArchiveParams
+import com.metronome.api.models.v1.alerts.AlertArchiveResponse
+import com.metronome.api.models.v1.alerts.AlertCreateParams
+import com.metronome.api.models.v1.alerts.AlertCreateResponse
+import java.util.function.Consumer
 
 interface AlertService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): AlertService
 
     /**
      * Create a new threshold notification to monitor customer spending, balances, and billing
@@ -31,7 +45,6 @@ interface AlertService {
      * - Scale billing operations by automating threshold-based workflows and notifications
      *
      * ### Key response fields:
-     *
      * A successful response returns a CustomerAlert object containing:
      * - The threshold notification configuration with its unique ID and current status
      * - The customer's evaluation status (ok, in_alarm, or evaluating)
@@ -53,11 +66,14 @@ interface AlertService {
      *   notification evaluations in real-time as usage events stream in, unlike competitors who
      *   rely on periodic polling or batch evaluation cycles
      */
-    @JvmOverloads
+    fun create(params: AlertCreateParams): AlertCreateResponse =
+        create(params, RequestOptions.none())
+
+    /** @see create */
     fun create(
-        params: V1AlertCreateParams,
+        params: AlertCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1AlertCreateResponse
+    ): AlertCreateResponse
 
     /**
      * Permanently disable a threshold notification and remove it from active monitoring across all
@@ -83,9 +99,53 @@ interface AlertService {
      * - Historical preservation: Archive operation maintains threshold notification history and
      *   configuration for compliance and auditing
      */
-    @JvmOverloads
+    fun archive(params: AlertArchiveParams): AlertArchiveResponse =
+        archive(params, RequestOptions.none())
+
+    /** @see archive */
     fun archive(
-        params: V1AlertArchiveParams,
+        params: AlertArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1AlertArchiveResponse
+    ): AlertArchiveResponse
+
+    /** A view of [AlertService] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): AlertService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/alerts/create`, but is otherwise the same as
+         * [AlertService.create].
+         */
+        @MustBeClosed
+        fun create(params: AlertCreateParams): HttpResponseFor<AlertCreateResponse> =
+            create(params, RequestOptions.none())
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            params: AlertCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AlertCreateResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/alerts/archive`, but is otherwise the same as
+         * [AlertService.archive].
+         */
+        @MustBeClosed
+        fun archive(params: AlertArchiveParams): HttpResponseFor<AlertArchiveResponse> =
+            archive(params, RequestOptions.none())
+
+        /** @see archive */
+        @MustBeClosed
+        fun archive(
+            params: AlertArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<AlertArchiveResponse>
+    }
 }

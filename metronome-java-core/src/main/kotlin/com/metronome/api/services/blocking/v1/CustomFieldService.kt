@@ -1,18 +1,33 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.blocking.v1
 
+import com.google.errorprone.annotations.MustBeClosed
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1CustomFieldAddKeyParams
-import com.metronome.api.models.V1CustomFieldDeleteValuesParams
-import com.metronome.api.models.V1CustomFieldListKeysPage
-import com.metronome.api.models.V1CustomFieldListKeysParams
-import com.metronome.api.models.V1CustomFieldRemoveKeyParams
-import com.metronome.api.models.V1CustomFieldSetValuesParams
+import com.metronome.api.core.http.HttpResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.customfields.CustomFieldAddKeyParams
+import com.metronome.api.models.v1.customfields.CustomFieldDeleteValuesParams
+import com.metronome.api.models.v1.customfields.CustomFieldListKeysPage
+import com.metronome.api.models.v1.customfields.CustomFieldListKeysParams
+import com.metronome.api.models.v1.customfields.CustomFieldRemoveKeyParams
+import com.metronome.api.models.v1.customfields.CustomFieldSetValuesParams
+import java.util.function.Consumer
 
 interface CustomFieldService {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): CustomFieldService
 
     /**
      * Creates a new custom field key for a given entity (e.g. billable metric, contract, alert).
@@ -38,9 +53,11 @@ interface CustomFieldService {
      * - Custom fields for customers, contracts, invoices, products, commits, scheduled charges, and
      *   subscriptions are passed down to the invoice.
      */
-    @JvmOverloads
+    fun addKey(params: CustomFieldAddKeyParams) = addKey(params, RequestOptions.none())
+
+    /** @see addKey */
     fun addKey(
-        params: V1CustomFieldAddKeyParams,
+        params: CustomFieldAddKeyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
@@ -50,9 +67,12 @@ interface CustomFieldService {
      * other fields on the same entity. Requires the entity type, entity ID, and array of keys to
      * remove.
      */
-    @JvmOverloads
+    fun deleteValues(params: CustomFieldDeleteValuesParams) =
+        deleteValues(params, RequestOptions.none())
+
+    /** @see deleteValues */
     fun deleteValues(
-        params: V1CustomFieldDeleteValuesParams,
+        params: CustomFieldDeleteValuesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
@@ -62,29 +82,33 @@ interface CustomFieldService {
      * before setting values on entities or to audit your custom field configuration across
      * different entity types.
      */
-    @JvmOverloads
-    fun listKeys(
-        params: V1CustomFieldListKeysParams = V1CustomFieldListKeysParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): V1CustomFieldListKeysPage
+    fun listKeys(): CustomFieldListKeysPage = listKeys(CustomFieldListKeysParams.none())
 
-    /**
-     * Retrieve all your active custom field keys, with optional filtering by entity type (customer,
-     * contract, product, etc.). Use this endpoint to discover what custom field keys are available
-     * before setting values on entities or to audit your custom field configuration across
-     * different entity types.
-     */
-    fun listKeys(requestOptions: RequestOptions): V1CustomFieldListKeysPage =
-        listKeys(V1CustomFieldListKeysParams.none(), requestOptions)
+    /** @see listKeys */
+    fun listKeys(
+        params: CustomFieldListKeysParams = CustomFieldListKeysParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomFieldListKeysPage
+
+    /** @see listKeys */
+    fun listKeys(
+        params: CustomFieldListKeysParams = CustomFieldListKeysParams.none()
+    ): CustomFieldListKeysPage = listKeys(params, RequestOptions.none())
+
+    /** @see listKeys */
+    fun listKeys(requestOptions: RequestOptions): CustomFieldListKeysPage =
+        listKeys(CustomFieldListKeysParams.none(), requestOptions)
 
     /**
      * Removes a custom field key from the allowlist for a specific entity type, preventing future
      * use of that key across all instances of the entity. Existing values for this key on entity
      * instances will no longer be accessible once the key is removed.
      */
-    @JvmOverloads
+    fun removeKey(params: CustomFieldRemoveKeyParams) = removeKey(params, RequestOptions.none())
+
+    /** @see removeKey */
     fun removeKey(
-        params: V1CustomFieldRemoveKeyParams,
+        params: CustomFieldRemoveKeyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
@@ -93,9 +117,112 @@ interface CustomFieldService {
      * for matching keys while preserving other fields. All updates are transactional—either all
      * values are set or none are. Custom field values are limited to 200 characters each.
      */
-    @JvmOverloads
+    fun setValues(params: CustomFieldSetValuesParams) = setValues(params, RequestOptions.none())
+
+    /** @see setValues */
     fun setValues(
-        params: V1CustomFieldSetValuesParams,
+        params: CustomFieldSetValuesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
+
+    /**
+     * A view of [CustomFieldService] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CustomFieldService.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customFields/addKey`, but is otherwise the same
+         * as [CustomFieldService.addKey].
+         */
+        @MustBeClosed
+        fun addKey(params: CustomFieldAddKeyParams): HttpResponse =
+            addKey(params, RequestOptions.none())
+
+        /** @see addKey */
+        @MustBeClosed
+        fun addKey(
+            params: CustomFieldAddKeyParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customFields/deleteValues`, but is otherwise
+         * the same as [CustomFieldService.deleteValues].
+         */
+        @MustBeClosed
+        fun deleteValues(params: CustomFieldDeleteValuesParams): HttpResponse =
+            deleteValues(params, RequestOptions.none())
+
+        /** @see deleteValues */
+        @MustBeClosed
+        fun deleteValues(
+            params: CustomFieldDeleteValuesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customFields/listKeys`, but is otherwise the
+         * same as [CustomFieldService.listKeys].
+         */
+        @MustBeClosed
+        fun listKeys(): HttpResponseFor<CustomFieldListKeysPage> =
+            listKeys(CustomFieldListKeysParams.none())
+
+        /** @see listKeys */
+        @MustBeClosed
+        fun listKeys(
+            params: CustomFieldListKeysParams = CustomFieldListKeysParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomFieldListKeysPage>
+
+        /** @see listKeys */
+        @MustBeClosed
+        fun listKeys(
+            params: CustomFieldListKeysParams = CustomFieldListKeysParams.none()
+        ): HttpResponseFor<CustomFieldListKeysPage> = listKeys(params, RequestOptions.none())
+
+        /** @see listKeys */
+        @MustBeClosed
+        fun listKeys(requestOptions: RequestOptions): HttpResponseFor<CustomFieldListKeysPage> =
+            listKeys(CustomFieldListKeysParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customFields/removeKey`, but is otherwise the
+         * same as [CustomFieldService.removeKey].
+         */
+        @MustBeClosed
+        fun removeKey(params: CustomFieldRemoveKeyParams): HttpResponse =
+            removeKey(params, RequestOptions.none())
+
+        /** @see removeKey */
+        @MustBeClosed
+        fun removeKey(
+            params: CustomFieldRemoveKeyParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customFields/setValues`, but is otherwise the
+         * same as [CustomFieldService.setValues].
+         */
+        @MustBeClosed
+        fun setValues(params: CustomFieldSetValuesParams): HttpResponse =
+            setValues(params, RequestOptions.none())
+
+        /** @see setValues */
+        @MustBeClosed
+        fun setValues(
+            params: CustomFieldSetValuesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+    }
 }

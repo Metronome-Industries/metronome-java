@@ -1,32 +1,34 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.metronome.api.services.async.v1
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
-import com.metronome.api.models.V1CustomerArchiveParams
-import com.metronome.api.models.V1CustomerArchiveResponse
-import com.metronome.api.models.V1CustomerCreateParams
-import com.metronome.api.models.V1CustomerCreateResponse
-import com.metronome.api.models.V1CustomerListBillableMetricsPageAsync
-import com.metronome.api.models.V1CustomerListBillableMetricsParams
-import com.metronome.api.models.V1CustomerListCostsPageAsync
-import com.metronome.api.models.V1CustomerListCostsParams
-import com.metronome.api.models.V1CustomerListPageAsync
-import com.metronome.api.models.V1CustomerListParams
-import com.metronome.api.models.V1CustomerPreviewEventsParams
-import com.metronome.api.models.V1CustomerPreviewEventsResponse
-import com.metronome.api.models.V1CustomerRetrieveBillingConfigurationsParams
-import com.metronome.api.models.V1CustomerRetrieveBillingConfigurationsResponse
-import com.metronome.api.models.V1CustomerRetrieveParams
-import com.metronome.api.models.V1CustomerRetrieveResponse
-import com.metronome.api.models.V1CustomerSetBillingConfigurationsParams
-import com.metronome.api.models.V1CustomerSetBillingConfigurationsResponse
-import com.metronome.api.models.V1CustomerSetIngestAliasesParams
-import com.metronome.api.models.V1CustomerSetNameParams
-import com.metronome.api.models.V1CustomerSetNameResponse
-import com.metronome.api.models.V1CustomerUpdateConfigParams
+import com.metronome.api.core.http.HttpResponse
+import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.Id
+import com.metronome.api.models.v1.customers.CustomerArchiveParams
+import com.metronome.api.models.v1.customers.CustomerArchiveResponse
+import com.metronome.api.models.v1.customers.CustomerCreateParams
+import com.metronome.api.models.v1.customers.CustomerCreateResponse
+import com.metronome.api.models.v1.customers.CustomerListBillableMetricsPageAsync
+import com.metronome.api.models.v1.customers.CustomerListBillableMetricsParams
+import com.metronome.api.models.v1.customers.CustomerListCostsPageAsync
+import com.metronome.api.models.v1.customers.CustomerListCostsParams
+import com.metronome.api.models.v1.customers.CustomerListPageAsync
+import com.metronome.api.models.v1.customers.CustomerListParams
+import com.metronome.api.models.v1.customers.CustomerPreviewEventsParams
+import com.metronome.api.models.v1.customers.CustomerPreviewEventsResponse
+import com.metronome.api.models.v1.customers.CustomerRetrieveBillingConfigurationsParams
+import com.metronome.api.models.v1.customers.CustomerRetrieveBillingConfigurationsResponse
+import com.metronome.api.models.v1.customers.CustomerRetrieveParams
+import com.metronome.api.models.v1.customers.CustomerRetrieveResponse
+import com.metronome.api.models.v1.customers.CustomerSetBillingConfigurationsParams
+import com.metronome.api.models.v1.customers.CustomerSetBillingConfigurationsResponse
+import com.metronome.api.models.v1.customers.CustomerSetIngestAliasesParams
+import com.metronome.api.models.v1.customers.CustomerSetNameParams
+import com.metronome.api.models.v1.customers.CustomerSetNameResponse
+import com.metronome.api.models.v1.customers.CustomerUpdateConfigParams
 import com.metronome.api.services.async.v1.customers.AlertServiceAsync
 import com.metronome.api.services.async.v1.customers.BillingConfigServiceAsync
 import com.metronome.api.services.async.v1.customers.CommitServiceAsync
@@ -35,8 +37,21 @@ import com.metronome.api.services.async.v1.customers.InvoiceServiceAsync
 import com.metronome.api.services.async.v1.customers.NamedScheduleServiceAsync
 import com.metronome.api.services.async.v1.customers.PlanServiceAsync
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface CustomerServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): CustomerServiceAsync
 
     fun alerts(): AlertServiceAsync
 
@@ -58,12 +73,10 @@ interface CustomerServiceAsync {
      * collected.
      *
      * ### Use this endpoint to:
-     *
      * Execute your customer provisioning workflows for either PLG motions, where customers
      * originate in your platform, or SLG motions, where customers originate in your sales system.
      *
      * ### Key response fields:
-     *
      * This end-point returns the `customer_id` created by the request. This id can be used to fetch
      * relevant billing configurations and create contracts.
      *
@@ -81,15 +94,17 @@ interface CustomerServiceAsync {
      *   after the creation process as well.
      *
      * ### Usage guidelines:
-     *
      * For details on different billing configurations for different systems, review the
      * `/setCustomerBillingConfiguration` end-point.
      */
-    @JvmOverloads
+    fun create(params: CustomerCreateParams): CompletableFuture<CustomerCreateResponse> =
+        create(params, RequestOptions.none())
+
+    /** @see create */
     fun create(
-        params: V1CustomerCreateParams,
+        params: CustomerCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerCreateResponse>
+    ): CompletableFuture<CustomerCreateResponse>
 
     /**
      * Get detailed information for a specific customer by their Metronome ID. Returns customer
@@ -100,11 +115,14 @@ interface CustomerServiceAsync {
      * Note: If searching for a customer billing configuration, use the
      * `/getCustomerBillingConfigurations` endpoint.
      */
-    @JvmOverloads
+    fun retrieve(params: CustomerRetrieveParams): CompletableFuture<CustomerRetrieveResponse> =
+        retrieve(params, RequestOptions.none())
+
+    /** @see retrieve */
     fun retrieve(
-        params: V1CustomerRetrieveParams,
+        params: CustomerRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerRetrieveResponse>
+    ): CompletableFuture<CustomerRetrieveResponse>
 
     /**
      * Gets a paginated list of all customers in your Metronome account. Use this endpoint to browse
@@ -112,20 +130,22 @@ interface CustomerServiceAsync {
      * external systems. Returns customer details including IDs, names, and configuration settings.
      * Supports filtering and pagination parameters for efficient data retrieval.
      */
-    @JvmOverloads
+    fun list(): CompletableFuture<CustomerListPageAsync> = list(CustomerListParams.none())
+
+    /** @see list */
     fun list(
-        params: V1CustomerListParams = V1CustomerListParams.none(),
+        params: CustomerListParams = CustomerListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerListPageAsync>
+    ): CompletableFuture<CustomerListPageAsync>
 
-    /**
-     * Gets a paginated list of all customers in your Metronome account. Use this endpoint to browse
-     * your customer base, implement customer search functionality, or sync customer data with
-     * external systems. Returns customer details including IDs, names, and configuration settings.
-     * Supports filtering and pagination parameters for efficient data retrieval.
-     */
-    fun list(requestOptions: RequestOptions): CompletableFuture<V1CustomerListPageAsync> =
-        list(V1CustomerListParams.none(), requestOptions)
+    /** @see list */
+    fun list(
+        params: CustomerListParams = CustomerListParams.none()
+    ): CompletableFuture<CustomerListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see list */
+    fun list(requestOptions: RequestOptions): CompletableFuture<CustomerListPageAsync> =
+        list(CustomerListParams.none(), requestOptions)
 
     /**
      * Use this endpoint to archive a customer while preserving auditability. Archiving a customer
@@ -139,33 +159,55 @@ interface CustomerServiceAsync {
      *   first remove the ingest alias from the customer prior to archiving.
      * - Any notifications associated with the customer will no longer be triggered.
      */
-    @JvmOverloads
+    fun archive(params: CustomerArchiveParams): CompletableFuture<CustomerArchiveResponse> =
+        archive(params, RequestOptions.none())
+
+    /** @see archive */
     fun archive(
-        params: V1CustomerArchiveParams,
+        params: CustomerArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerArchiveResponse>
+    ): CompletableFuture<CustomerArchiveResponse>
+
+    /** @see archive */
+    fun archive(
+        id: Id,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerArchiveResponse> =
+        archive(CustomerArchiveParams.builder().id(id).build(), requestOptions)
+
+    /** @see archive */
+    fun archive(id: Id): CompletableFuture<CustomerArchiveResponse> =
+        archive(id, RequestOptions.none())
 
     /**
      * Get all billable metrics available for a specific customer. Supports pagination and filtering
      * by current plan status or archived metrics. Use this endpoint to see which metrics are being
      * tracked for billing calculations for a given customer.
      */
-    @JvmOverloads
     fun listBillableMetrics(
-        params: V1CustomerListBillableMetricsParams,
+        params: CustomerListBillableMetricsParams
+    ): CompletableFuture<CustomerListBillableMetricsPageAsync> =
+        listBillableMetrics(params, RequestOptions.none())
+
+    /** @see listBillableMetrics */
+    fun listBillableMetrics(
+        params: CustomerListBillableMetricsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerListBillableMetricsPageAsync>
+    ): CompletableFuture<CustomerListBillableMetricsPageAsync>
 
     /**
      * Fetch daily pending costs for the specified customer, broken down by credit type and line
      * items. Note: this is not supported for customers whose plan includes a UNIQUE-type billable
      * metric. This is a Plans (deprecated) endpoint. New clients should implement using Contracts.
      */
-    @JvmOverloads
+    fun listCosts(params: CustomerListCostsParams): CompletableFuture<CustomerListCostsPageAsync> =
+        listCosts(params, RequestOptions.none())
+
+    /** @see listCosts */
     fun listCosts(
-        params: V1CustomerListCostsParams,
+        params: CustomerListCostsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerListCostsPageAsync>
+    ): CompletableFuture<CustomerListCostsPageAsync>
 
     /**
      * Preview how a set of events will affect a customer's invoices. Generates draft invoices for a
@@ -173,22 +215,32 @@ interface CustomerServiceAsync {
      * for testing how new events will affect the customer's invoices before they are actually
      * processed. Customers on contracts with SQL billable metrics are not supported.
      */
-    @JvmOverloads
     fun previewEvents(
-        params: V1CustomerPreviewEventsParams,
+        params: CustomerPreviewEventsParams
+    ): CompletableFuture<CustomerPreviewEventsResponse> =
+        previewEvents(params, RequestOptions.none())
+
+    /** @see previewEvents */
+    fun previewEvents(
+        params: CustomerPreviewEventsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerPreviewEventsResponse>
+    ): CompletableFuture<CustomerPreviewEventsResponse>
 
     /**
      * Returns all billing configurations previously set for the customer. Use during the contract
      * provisioning process to fetch the `billing_provider_configuration_id` needed to set the
      * contract billing configuration.
      */
-    @JvmOverloads
     fun retrieveBillingConfigurations(
-        params: V1CustomerRetrieveBillingConfigurationsParams,
+        params: CustomerRetrieveBillingConfigurationsParams
+    ): CompletableFuture<CustomerRetrieveBillingConfigurationsResponse> =
+        retrieveBillingConfigurations(params, RequestOptions.none())
+
+    /** @see retrieveBillingConfigurations */
+    fun retrieveBillingConfigurations(
+        params: CustomerRetrieveBillingConfigurationsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerRetrieveBillingConfigurationsResponse>
+    ): CompletableFuture<CustomerRetrieveBillingConfigurationsResponse>
 
     /**
      * Create a billing configuration for a customer. Once created, these configurations are
@@ -219,20 +271,23 @@ interface CustomerServiceAsync {
      *   event-driven billing workflows.
      *
      * ### Key response fields:
-     *
      * The id for the customer billing configuration. This id can be used to associate the billing
      * configuration to a contract.
      *
      * ### Usage guidelines:
-     *
      * Must use the `delivery_method_id` if you have multiple Stripe accounts connected to
      * Metronome.
      */
-    @JvmOverloads
     fun setBillingConfigurations(
-        params: V1CustomerSetBillingConfigurationsParams,
+        params: CustomerSetBillingConfigurationsParams
+    ): CompletableFuture<CustomerSetBillingConfigurationsResponse> =
+        setBillingConfigurations(params, RequestOptions.none())
+
+    /** @see setBillingConfigurations */
+    fun setBillingConfigurations(
+        params: CustomerSetBillingConfigurationsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerSetBillingConfigurationsResponse>
+    ): CompletableFuture<CustomerSetBillingConfigurationsResponse>
 
     /**
      * Sets the ingest aliases for a customer. Use this endpoint to associate a Metronome customer
@@ -247,9 +302,12 @@ interface CustomerServiceAsync {
      * - Use multiple ingest aliases to model child organizations within a single Metronome
      *   customer.
      */
-    @JvmOverloads
+    fun setIngestAliases(params: CustomerSetIngestAliasesParams): CompletableFuture<Void?> =
+        setIngestAliases(params, RequestOptions.none())
+
+    /** @see setIngestAliases */
     fun setIngestAliases(
-        params: V1CustomerSetIngestAliasesParams,
+        params: CustomerSetIngestAliasesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
 
@@ -259,11 +317,14 @@ interface CustomerServiceAsync {
      * reporting. Returns the updated customer object with the new name applied immediately across
      * all billing documents and interfaces.
      */
-    @JvmOverloads
+    fun setName(params: CustomerSetNameParams): CompletableFuture<CustomerSetNameResponse> =
+        setName(params, RequestOptions.none())
+
+    /** @see setName */
     fun setName(
-        params: V1CustomerSetNameParams,
+        params: CustomerSetNameParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<V1CustomerSetNameResponse>
+    ): CompletableFuture<CustomerSetNameResponse>
 
     /**
      * Update configuration settings for a specific customer, such as external system integrations
@@ -271,9 +332,239 @@ interface CustomerServiceAsync {
      * endpoint to modify customer configurations without affecting core customer data like name or
      * ingest aliases.
      */
-    @JvmOverloads
+    fun updateConfig(params: CustomerUpdateConfigParams): CompletableFuture<Void?> =
+        updateConfig(params, RequestOptions.none())
+
+    /** @see updateConfig */
     fun updateConfig(
-        params: V1CustomerUpdateConfigParams,
+        params: CustomerUpdateConfigParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Void?>
+
+    /**
+     * A view of [CustomerServiceAsync] that provides access to raw HTTP responses for each method.
+     */
+    interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CustomerServiceAsync.WithRawResponse
+
+        fun alerts(): AlertServiceAsync.WithRawResponse
+
+        fun plans(): PlanServiceAsync.WithRawResponse
+
+        fun invoices(): InvoiceServiceAsync.WithRawResponse
+
+        fun billingConfig(): BillingConfigServiceAsync.WithRawResponse
+
+        fun commits(): CommitServiceAsync.WithRawResponse
+
+        fun credits(): CreditServiceAsync.WithRawResponse
+
+        fun namedSchedules(): NamedScheduleServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers`, but is otherwise the same as
+         * [CustomerServiceAsync.create].
+         */
+        fun create(
+            params: CustomerCreateParams
+        ): CompletableFuture<HttpResponseFor<CustomerCreateResponse>> =
+            create(params, RequestOptions.none())
+
+        /** @see create */
+        fun create(
+            params: CustomerCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerCreateResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/customers/{customer_id}`, but is otherwise the
+         * same as [CustomerServiceAsync.retrieve].
+         */
+        fun retrieve(
+            params: CustomerRetrieveParams
+        ): CompletableFuture<HttpResponseFor<CustomerRetrieveResponse>> =
+            retrieve(params, RequestOptions.none())
+
+        /** @see retrieve */
+        fun retrieve(
+            params: CustomerRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerRetrieveResponse>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/customers`, but is otherwise the same as
+         * [CustomerServiceAsync.list].
+         */
+        fun list(): CompletableFuture<HttpResponseFor<CustomerListPageAsync>> =
+            list(CustomerListParams.none())
+
+        /** @see list */
+        fun list(
+            params: CustomerListParams = CustomerListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerListPageAsync>>
+
+        /** @see list */
+        fun list(
+            params: CustomerListParams = CustomerListParams.none()
+        ): CompletableFuture<HttpResponseFor<CustomerListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<CustomerListPageAsync>> =
+            list(CustomerListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/archive`, but is otherwise the same
+         * as [CustomerServiceAsync.archive].
+         */
+        fun archive(
+            params: CustomerArchiveParams
+        ): CompletableFuture<HttpResponseFor<CustomerArchiveResponse>> =
+            archive(params, RequestOptions.none())
+
+        /** @see archive */
+        fun archive(
+            params: CustomerArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerArchiveResponse>>
+
+        /** @see archive */
+        fun archive(
+            id: Id,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerArchiveResponse>> =
+            archive(CustomerArchiveParams.builder().id(id).build(), requestOptions)
+
+        /** @see archive */
+        fun archive(id: Id): CompletableFuture<HttpResponseFor<CustomerArchiveResponse>> =
+            archive(id, RequestOptions.none())
+
+        /**
+         * Returns a raw HTTP response for `get /v1/customers/{customer_id}/billable-metrics`, but
+         * is otherwise the same as [CustomerServiceAsync.listBillableMetrics].
+         */
+        fun listBillableMetrics(
+            params: CustomerListBillableMetricsParams
+        ): CompletableFuture<HttpResponseFor<CustomerListBillableMetricsPageAsync>> =
+            listBillableMetrics(params, RequestOptions.none())
+
+        /** @see listBillableMetrics */
+        fun listBillableMetrics(
+            params: CustomerListBillableMetricsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerListBillableMetricsPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/customers/{customer_id}/costs`, but is otherwise
+         * the same as [CustomerServiceAsync.listCosts].
+         */
+        fun listCosts(
+            params: CustomerListCostsParams
+        ): CompletableFuture<HttpResponseFor<CustomerListCostsPageAsync>> =
+            listCosts(params, RequestOptions.none())
+
+        /** @see listCosts */
+        fun listCosts(
+            params: CustomerListCostsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerListCostsPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/{customer_id}/previewEvents`, but is
+         * otherwise the same as [CustomerServiceAsync.previewEvents].
+         */
+        fun previewEvents(
+            params: CustomerPreviewEventsParams
+        ): CompletableFuture<HttpResponseFor<CustomerPreviewEventsResponse>> =
+            previewEvents(params, RequestOptions.none())
+
+        /** @see previewEvents */
+        fun previewEvents(
+            params: CustomerPreviewEventsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerPreviewEventsResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/getCustomerBillingProviderConfigurations`, but
+         * is otherwise the same as [CustomerServiceAsync.retrieveBillingConfigurations].
+         */
+        fun retrieveBillingConfigurations(
+            params: CustomerRetrieveBillingConfigurationsParams
+        ): CompletableFuture<HttpResponseFor<CustomerRetrieveBillingConfigurationsResponse>> =
+            retrieveBillingConfigurations(params, RequestOptions.none())
+
+        /** @see retrieveBillingConfigurations */
+        fun retrieveBillingConfigurations(
+            params: CustomerRetrieveBillingConfigurationsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerRetrieveBillingConfigurationsResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/setCustomerBillingProviderConfigurations`, but
+         * is otherwise the same as [CustomerServiceAsync.setBillingConfigurations].
+         */
+        fun setBillingConfigurations(
+            params: CustomerSetBillingConfigurationsParams
+        ): CompletableFuture<HttpResponseFor<CustomerSetBillingConfigurationsResponse>> =
+            setBillingConfigurations(params, RequestOptions.none())
+
+        /** @see setBillingConfigurations */
+        fun setBillingConfigurations(
+            params: CustomerSetBillingConfigurationsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerSetBillingConfigurationsResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/{customer_id}/setIngestAliases`, but
+         * is otherwise the same as [CustomerServiceAsync.setIngestAliases].
+         */
+        fun setIngestAliases(
+            params: CustomerSetIngestAliasesParams
+        ): CompletableFuture<HttpResponse> = setIngestAliases(params, RequestOptions.none())
+
+        /** @see setIngestAliases */
+        fun setIngestAliases(
+            params: CustomerSetIngestAliasesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/{customer_id}/setName`, but is
+         * otherwise the same as [CustomerServiceAsync.setName].
+         */
+        fun setName(
+            params: CustomerSetNameParams
+        ): CompletableFuture<HttpResponseFor<CustomerSetNameResponse>> =
+            setName(params, RequestOptions.none())
+
+        /** @see setName */
+        fun setName(
+            params: CustomerSetNameParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerSetNameResponse>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/{customer_id}/updateConfig`, but is
+         * otherwise the same as [CustomerServiceAsync.updateConfig].
+         */
+        fun updateConfig(params: CustomerUpdateConfigParams): CompletableFuture<HttpResponse> =
+            updateConfig(params, RequestOptions.none())
+
+        /** @see updateConfig */
+        fun updateConfig(
+            params: CustomerUpdateConfigParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+    }
 }

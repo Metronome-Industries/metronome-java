@@ -10,20 +10,22 @@ import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.V1CustomerInvoiceAddChargeParams
-import com.metronome.api.models.V1CustomerInvoiceListBreakdownsParams
-import com.metronome.api.models.V1CustomerInvoiceListParams
-import com.metronome.api.models.V1CustomerInvoiceRetrieveParams
-import com.metronome.api.models.V1CustomerInvoiceRetrievePdfParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceAddChargeParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceListBreakdownsParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceListParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceRetrieveParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceRetrievePdfParams
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.parallel.ResourceLock
 
 @ExtendWith(TestServerExtension::class)
 @WireMockTest
-class InvoiceServiceTest {
+@ResourceLock("https://github.com/wiremock/wiremock/issues/169")
+internal class InvoiceServiceTest {
 
     @Test
     fun retrieve() {
@@ -36,7 +38,7 @@ class InvoiceServiceTest {
 
         val invoice =
             invoiceService.retrieve(
-                V1CustomerInvoiceRetrieveParams.builder()
+                InvoiceRetrieveParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
                     .skipZeroQtyLineItems(true)
@@ -57,7 +59,7 @@ class InvoiceServiceTest {
 
         val page =
             invoiceService.list(
-                V1CustomerInvoiceListParams.builder()
+                InvoiceListParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .build()
             )
@@ -76,7 +78,7 @@ class InvoiceServiceTest {
 
         val response =
             invoiceService.addCharge(
-                V1CustomerInvoiceAddChargeParams.builder()
+                InvoiceAddChargeParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")
                     .customerPlanId("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
@@ -101,7 +103,7 @@ class InvoiceServiceTest {
 
         val page =
             invoiceService.listBreakdowns(
-                V1CustomerInvoiceListBreakdownsParams.builder()
+                InvoiceListBreakdownsParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -124,7 +126,7 @@ class InvoiceServiceTest {
 
         val response =
             invoiceService.retrievePdf(
-                V1CustomerInvoiceRetrievePdfParams.builder()
+                InvoiceRetrievePdfParams.builder()
                     .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                     .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
                     .build()

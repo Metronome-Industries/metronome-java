@@ -6,15 +6,15 @@ import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CommitSpecifierInput
-import com.metronome.api.models.V1CustomerCreditCreateParams
-import com.metronome.api.models.V1CustomerCreditListParams
-import com.metronome.api.models.V1CustomerCreditUpdateEndDateParams
+import com.metronome.api.models.v1.customers.credits.CreditCreateParams
+import com.metronome.api.models.v1.customers.credits.CreditListParams
+import com.metronome.api.models.v1.customers.credits.CreditUpdateEndDateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class CreditServiceTest {
+internal class CreditServiceTest {
 
     @Test
     fun create() {
@@ -27,11 +27,11 @@ class CreditServiceTest {
 
         val credit =
             creditService.create(
-                V1CustomerCreditCreateParams.builder()
+                CreditCreateParams.builder()
                     .accessSchedule(
-                        V1CustomerCreditCreateParams.AccessSchedule.builder()
+                        CreditCreateParams.AccessSchedule.builder()
                             .addScheduleItem(
-                                V1CustomerCreditCreateParams.AccessSchedule.ScheduleItem.builder()
+                                CreditCreateParams.AccessSchedule.ScheduleItem.builder()
                                     .amount(1000.0)
                                     .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
                                     .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
@@ -47,14 +47,14 @@ class CreditServiceTest {
                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addApplicableProductTag("string")
                     .customFields(
-                        V1CustomerCreditCreateParams.CustomFields.builder()
+                        CreditCreateParams.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
                     .description("description")
                     .name("My Credit")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
-                    .rateType(V1CustomerCreditCreateParams.RateType.COMMIT_RATE)
+                    .rateType(CreditCreateParams.RateType.COMMIT_RATE)
                     .salesforceOpportunityId("salesforce_opportunity_id")
                     .addSpecifier(
                         CommitSpecifierInput.builder()
@@ -90,7 +90,7 @@ class CreditServiceTest {
 
         val page =
             creditService.list(
-                V1CustomerCreditListParams.builder()
+                CreditListParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                     .build()
             )
@@ -109,7 +109,7 @@ class CreditServiceTest {
 
         val response =
             creditService.updateEndDate(
-                V1CustomerCreditUpdateEndDateParams.builder()
+                CreditUpdateEndDateParams.builder()
                     .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                     .creditId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")

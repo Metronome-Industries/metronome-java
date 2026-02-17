@@ -2,7 +2,6 @@
 
 package com.metronome.api.services
 
-import com.fasterxml.jackson.databind.json.JsonMapper
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath
@@ -16,27 +15,24 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.metronome.api.client.MetronomeClient
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.BaseThresholdCommit
 import com.metronome.api.models.BaseUsageFilter
 import com.metronome.api.models.CommitHierarchyConfiguration
 import com.metronome.api.models.CommitSpecifierInput
-import com.metronome.api.models.Id
 import com.metronome.api.models.PaymentGateConfig
 import com.metronome.api.models.PrepaidBalanceThresholdConfiguration
 import com.metronome.api.models.SpendThresholdConfiguration
 import com.metronome.api.models.Tier
-import com.metronome.api.models.V1ContractCreateParams
-import com.metronome.api.models.V1ContractCreateResponse
-import com.metronome.api.models.V1UsageIngestParams
+import com.metronome.api.models.v1.contracts.ContractCreateParams
+import com.metronome.api.models.v1.usage.UsageIngestParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.parallel.ResourceLock
 
 @WireMockTest
-class ServiceParamsTest {
-
-    private val JSON_MAPPER: JsonMapper = jsonMapper()
+@ResourceLock("https://github.com/wiremock/wiremock/issues/169")
+internal class ServiceParamsTest {
 
     private lateinit var client: MetronomeClient
 
@@ -44,51 +40,40 @@ class ServiceParamsTest {
     fun beforeEach(wmRuntimeInfo: WireMockRuntimeInfo) {
         client =
             MetronomeOkHttpClient.builder()
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
                 .bearerToken("My Bearer Token")
-                .webhookSecret("My Webhook Secret")
-                .baseUrl(wmRuntimeInfo.getHttpBaseUrl())
                 .build()
     }
 
     @Test
-    fun contractsCreateWithAdditionalParams() {
-        val additionalHeaders = mutableMapOf<String, List<String>>()
+    fun create() {
+        val contractService = client.v1().contracts()
+        stubFor(post(anyUrl()).willReturn(ok("{}")))
 
-        additionalHeaders.put("x-test-header", listOf("abc1234"))
-
-        val additionalQueryParams = mutableMapOf<String, List<String>>()
-
-        additionalQueryParams.put("test_query_param", listOf("def567"))
-
-        val additionalBodyProperties = mutableMapOf<String, JsonValue>()
-
-        additionalBodyProperties.put("testBodyProperty", JsonValue.from("ghi890"))
-
-        val params =
-            V1ContractCreateParams.builder()
+        contractService.create(
+            ContractCreateParams.builder()
                 .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                 .billingProviderConfiguration(
-                    V1ContractCreateParams.BillingProviderConfiguration.builder()
+                    ContractCreateParams.BillingProviderConfiguration.builder()
                         .billingProvider(
-                            V1ContractCreateParams.BillingProviderConfiguration.BillingProvider
-                                .AWS_MARKETPLACE
+                            ContractCreateParams.BillingProviderConfiguration.BillingProvider.STRIPE
                         )
                         .billingProviderConfigurationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .deliveryMethod(
-                            V1ContractCreateParams.BillingProviderConfiguration.DeliveryMethod
+                            ContractCreateParams.BillingProviderConfiguration.DeliveryMethod
                                 .DIRECT_TO_BILLING_PROVIDER
                         )
                         .build()
                 )
                 .addCommit(
-                    V1ContractCreateParams.Commit.builder()
+                    ContractCreateParams.Commit.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .type(V1ContractCreateParams.Commit.Type.PREPAID)
+                        .type(ContractCreateParams.Commit.Type.PREPAID)
                         .accessSchedule(
-                            V1ContractCreateParams.Commit.AccessSchedule.builder()
+                            ContractCreateParams.Commit.AccessSchedule.builder()
                                 .addScheduleItem(
-                                    V1ContractCreateParams.Commit.AccessSchedule.ScheduleItem
+                                    ContractCreateParams.Commit.AccessSchedule.ScheduleItem
                                         .builder()
                                         .amount(0.0)
                                         .endingBefore(
@@ -106,7 +91,7 @@ class ServiceParamsTest {
                         .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductTag("string")
                         .customFields(
-                            V1ContractCreateParams.Commit.CustomFields.builder()
+                            ContractCreateParams.Commit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -128,14 +113,14 @@ class ServiceParamsTest {
                                 .build()
                         )
                         .invoiceSchedule(
-                            V1ContractCreateParams.Commit.InvoiceSchedule.builder()
+                            ContractCreateParams.Commit.InvoiceSchedule.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .doNotInvoice(true)
                                 .recurringSchedule(
-                                    V1ContractCreateParams.Commit.InvoiceSchedule.RecurringSchedule
+                                    ContractCreateParams.Commit.InvoiceSchedule.RecurringSchedule
                                         .builder()
                                         .amountDistribution(
-                                            V1ContractCreateParams.Commit.InvoiceSchedule
+                                            ContractCreateParams.Commit.InvoiceSchedule
                                                 .RecurringSchedule
                                                 .AmountDistribution
                                                 .DIVIDED
@@ -144,7 +129,7 @@ class ServiceParamsTest {
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .frequency(
-                                            V1ContractCreateParams.Commit.InvoiceSchedule
+                                            ContractCreateParams.Commit.InvoiceSchedule
                                                 .RecurringSchedule
                                                 .Frequency
                                                 .MONTHLY
@@ -158,7 +143,7 @@ class ServiceParamsTest {
                                         .build()
                                 )
                                 .addScheduleItem(
-                                    V1ContractCreateParams.Commit.InvoiceSchedule.ScheduleItem
+                                    ContractCreateParams.Commit.InvoiceSchedule.ScheduleItem
                                         .builder()
                                         .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .amount(0.0)
@@ -171,13 +156,13 @@ class ServiceParamsTest {
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .paymentGateConfig(
-                            V1ContractCreateParams.Commit.PaymentGateConfig.builder()
+                            ContractCreateParams.Commit.PaymentGateConfig.builder()
                                 .paymentGateType(
-                                    V1ContractCreateParams.Commit.PaymentGateConfig.PaymentGateType
+                                    ContractCreateParams.Commit.PaymentGateConfig.PaymentGateType
                                         .NONE
                                 )
                                 .precalculatedTaxConfig(
-                                    V1ContractCreateParams.Commit.PaymentGateConfig
+                                    ContractCreateParams.Commit.PaymentGateConfig
                                         .PrecalculatedTaxConfig
                                         .builder()
                                         .taxAmount(0.0)
@@ -185,16 +170,16 @@ class ServiceParamsTest {
                                         .build()
                                 )
                                 .stripeConfig(
-                                    V1ContractCreateParams.Commit.PaymentGateConfig.StripeConfig
+                                    ContractCreateParams.Commit.PaymentGateConfig.StripeConfig
                                         .builder()
                                         .paymentType(
-                                            V1ContractCreateParams.Commit.PaymentGateConfig
+                                            ContractCreateParams.Commit.PaymentGateConfig
                                                 .StripeConfig
                                                 .PaymentType
                                                 .INVOICE
                                         )
                                         .invoiceMetadata(
-                                            V1ContractCreateParams.Commit.PaymentGateConfig
+                                            ContractCreateParams.Commit.PaymentGateConfig
                                                 .StripeConfig
                                                 .InvoiceMetadata
                                                 .builder()
@@ -207,13 +192,11 @@ class ServiceParamsTest {
                                         .onSessionPayment(true)
                                         .build()
                                 )
-                                .taxType(
-                                    V1ContractCreateParams.Commit.PaymentGateConfig.TaxType.NONE
-                                )
+                                .taxType(ContractCreateParams.Commit.PaymentGateConfig.TaxType.NONE)
                                 .build()
                         )
                         .priority(0.0)
-                        .rateType(V1ContractCreateParams.Commit.RateType.COMMIT_RATE)
+                        .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                         .rolloverFraction(0.0)
                         .addSpecifier(
                             CommitSpecifierInput.builder()
@@ -235,11 +218,11 @@ class ServiceParamsTest {
                         .build()
                 )
                 .addCredit(
-                    V1ContractCreateParams.Credit.builder()
+                    ContractCreateParams.Credit.builder()
                         .accessSchedule(
-                            V1ContractCreateParams.Credit.AccessSchedule.builder()
+                            ContractCreateParams.Credit.AccessSchedule.builder()
                                 .addScheduleItem(
-                                    V1ContractCreateParams.Credit.AccessSchedule.ScheduleItem
+                                    ContractCreateParams.Credit.AccessSchedule.ScheduleItem
                                         .builder()
                                         .amount(0.0)
                                         .endingBefore(
@@ -257,7 +240,7 @@ class ServiceParamsTest {
                         .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductTag("string")
                         .customFields(
-                            V1ContractCreateParams.Credit.CustomFields.builder()
+                            ContractCreateParams.Credit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -281,7 +264,7 @@ class ServiceParamsTest {
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .priority(0.0)
-                        .rateType(V1ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                        .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
                         .addSpecifier(
                             CommitSpecifierInput.builder()
                                 .presentationGroupValues(
@@ -301,23 +284,22 @@ class ServiceParamsTest {
                         .build()
                 )
                 .customFields(
-                    V1ContractCreateParams.CustomFields.builder()
+                    ContractCreateParams.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
                 .addDiscount(
-                    V1ContractCreateParams.Discount.builder()
+                    ContractCreateParams.Discount.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .schedule(
-                            V1ContractCreateParams.Discount.Schedule.builder()
+                            ContractCreateParams.Discount.Schedule.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .doNotInvoice(true)
                                 .recurringSchedule(
-                                    V1ContractCreateParams.Discount.Schedule.RecurringSchedule
+                                    ContractCreateParams.Discount.Schedule.RecurringSchedule
                                         .builder()
                                         .amountDistribution(
-                                            V1ContractCreateParams.Discount.Schedule
-                                                .RecurringSchedule
+                                            ContractCreateParams.Discount.Schedule.RecurringSchedule
                                                 .AmountDistribution
                                                 .DIVIDED
                                         )
@@ -325,8 +307,7 @@ class ServiceParamsTest {
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .frequency(
-                                            V1ContractCreateParams.Discount.Schedule
-                                                .RecurringSchedule
+                                            ContractCreateParams.Discount.Schedule.RecurringSchedule
                                                 .Frequency
                                                 .MONTHLY
                                         )
@@ -339,7 +320,7 @@ class ServiceParamsTest {
                                         .build()
                                 )
                                 .addScheduleItem(
-                                    V1ContractCreateParams.Discount.Schedule.ScheduleItem.builder()
+                                    ContractCreateParams.Discount.Schedule.ScheduleItem.builder()
                                         .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .amount(0.0)
                                         .quantity(0.0)
@@ -349,7 +330,7 @@ class ServiceParamsTest {
                                 .build()
                         )
                         .customFields(
-                            V1ContractCreateParams.Discount.CustomFields.builder()
+                            ContractCreateParams.Discount.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -359,37 +340,37 @@ class ServiceParamsTest {
                 )
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .hierarchyConfiguration(
-                    V1ContractCreateParams.HierarchyConfiguration.builder()
+                    ContractCreateParams.HierarchyConfiguration.builder()
                         .parent(
-                            V1ContractCreateParams.HierarchyConfiguration.Parent.builder()
+                            ContractCreateParams.HierarchyConfiguration.Parent.builder()
                                 .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
                         .parentBehavior(
-                            V1ContractCreateParams.HierarchyConfiguration.ParentBehavior.builder()
+                            ContractCreateParams.HierarchyConfiguration.ParentBehavior.builder()
                                 .invoiceConsolidationType(
-                                    V1ContractCreateParams.HierarchyConfiguration.ParentBehavior
+                                    ContractCreateParams.HierarchyConfiguration.ParentBehavior
                                         .InvoiceConsolidationType
                                         .CONCATENATE
                                 )
                                 .build()
                         )
-                        .payer(V1ContractCreateParams.HierarchyConfiguration.Payer.SELF)
+                        .payer(ContractCreateParams.HierarchyConfiguration.Payer.SELF)
                         .usageStatementBehavior(
-                            V1ContractCreateParams.HierarchyConfiguration.UsageStatementBehavior
+                            ContractCreateParams.HierarchyConfiguration.UsageStatementBehavior
                                 .CONSOLIDATE
                         )
                         .build()
                 )
                 .multiplierOverridePrioritization(
-                    V1ContractCreateParams.MultiplierOverridePrioritization.LOWEST_MULTIPLIER
+                    ContractCreateParams.MultiplierOverridePrioritization.LOWEST_MULTIPLIER
                 )
                 .name("name")
                 .netPaymentTermsDays(0.0)
                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                 .addOverride(
-                    V1ContractCreateParams.Override.builder()
+                    ContractCreateParams.Override.builder()
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addApplicableProductTag("string")
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -397,22 +378,21 @@ class ServiceParamsTest {
                         .isCommitSpecific(true)
                         .multiplier(0.0)
                         .addOverrideSpecifier(
-                            V1ContractCreateParams.Override.OverrideSpecifier.builder()
+                            ContractCreateParams.Override.OverrideSpecifier.builder()
                                 .billingFrequency(
-                                    V1ContractCreateParams.Override.OverrideSpecifier
-                                        .BillingFrequency
+                                    ContractCreateParams.Override.OverrideSpecifier.BillingFrequency
                                         .MONTHLY
                                 )
                                 .addCommitId("string")
                                 .presentationGroupValues(
-                                    V1ContractCreateParams.Override.OverrideSpecifier
+                                    ContractCreateParams.Override.OverrideSpecifier
                                         .PresentationGroupValues
                                         .builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
                                 .pricingGroupValues(
-                                    V1ContractCreateParams.Override.OverrideSpecifier
+                                    ContractCreateParams.Override.OverrideSpecifier
                                         .PricingGroupValues
                                         .builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -425,14 +405,11 @@ class ServiceParamsTest {
                                 .build()
                         )
                         .overwriteRate(
-                            V1ContractCreateParams.Override.OverwriteRate.builder()
-                                .rateType(
-                                    V1ContractCreateParams.Override.OverwriteRate.RateType.FLAT
-                                )
+                            ContractCreateParams.Override.OverwriteRate.builder()
+                                .rateType(ContractCreateParams.Override.OverwriteRate.RateType.FLAT)
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customRate(
-                                    V1ContractCreateParams.Override.OverwriteRate.CustomRate
-                                        .builder()
+                                    ContractCreateParams.Override.OverwriteRate.CustomRate.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                                         .build()
                                 )
@@ -444,14 +421,14 @@ class ServiceParamsTest {
                         )
                         .priority(0.0)
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .target(V1ContractCreateParams.Override.Target.COMMIT_RATE)
+                        .target(ContractCreateParams.Override.Target.COMMIT_RATE)
                         .addTier(
-                            V1ContractCreateParams.Override.Tier.builder()
+                            ContractCreateParams.Override.Tier.builder()
                                 .multiplier(0.0)
                                 .size(0.0)
                                 .build()
                         )
-                        .type(V1ContractCreateParams.Override.Type.OVERWRITE)
+                        .type(ContractCreateParams.Override.Type.OVERWRITE)
                         .build()
                 )
                 .packageAlias("package_alias")
@@ -523,13 +500,13 @@ class ServiceParamsTest {
                         .build()
                 )
                 .addProfessionalService(
-                    V1ContractCreateParams.ProfessionalService.builder()
+                    ContractCreateParams.ProfessionalService.builder()
                         .maxAmount(0.0)
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .quantity(0.0)
                         .unitPrice(0.0)
                         .customFields(
-                            V1ContractCreateParams.ProfessionalService.CustomFields.builder()
+                            ContractCreateParams.ProfessionalService.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -540,20 +517,19 @@ class ServiceParamsTest {
                 .rateCardAlias("rate_card_alias")
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
                 .addRecurringCommit(
-                    V1ContractCreateParams.RecurringCommit.builder()
+                    ContractCreateParams.RecurringCommit.builder()
                         .accessAmount(
-                            V1ContractCreateParams.RecurringCommit.AccessAmount.builder()
+                            ContractCreateParams.RecurringCommit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
                                 .quantity(0.0)
                                 .build()
                         )
                         .commitDuration(
-                            V1ContractCreateParams.RecurringCommit.CommitDuration.builder()
+                            ContractCreateParams.RecurringCommit.CommitDuration.builder()
                                 .value(0.0)
                                 .unit(
-                                    V1ContractCreateParams.RecurringCommit.CommitDuration.Unit
-                                        .PERIODS
+                                    ContractCreateParams.RecurringCommit.CommitDuration.Unit.PERIODS
                                 )
                                 .build()
                         )
@@ -581,7 +557,7 @@ class ServiceParamsTest {
                                 .build()
                         )
                         .invoiceAmount(
-                            V1ContractCreateParams.RecurringCommit.InvoiceAmount.builder()
+                            ContractCreateParams.RecurringCommit.InvoiceAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .quantity(0.0)
                                 .unitPrice(0.0)
@@ -589,10 +565,10 @@ class ServiceParamsTest {
                         )
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
-                        .proration(V1ContractCreateParams.RecurringCommit.Proration.NONE)
-                        .rateType(V1ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
+                        .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                        .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                         .recurrenceFrequency(
-                            V1ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
+                            ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
                         )
                         .rolloverFraction(0.0)
                         .addSpecifier(
@@ -612,9 +588,9 @@ class ServiceParamsTest {
                                 .build()
                         )
                         .subscriptionConfig(
-                            V1ContractCreateParams.RecurringCommit.SubscriptionConfig.builder()
+                            ContractCreateParams.RecurringCommit.SubscriptionConfig.builder()
                                 .applySeatIncreaseConfig(
-                                    V1ContractCreateParams.RecurringCommit.SubscriptionConfig
+                                    ContractCreateParams.RecurringCommit.SubscriptionConfig
                                         .ApplySeatIncreaseConfig
                                         .builder()
                                         .isProrated(true)
@@ -622,7 +598,7 @@ class ServiceParamsTest {
                                 )
                                 .subscriptionId("subscription_id")
                                 .allocation(
-                                    V1ContractCreateParams.RecurringCommit.SubscriptionConfig
+                                    ContractCreateParams.RecurringCommit.SubscriptionConfig
                                         .Allocation
                                         .INDIVIDUAL
                                 )
@@ -632,20 +608,19 @@ class ServiceParamsTest {
                         .build()
                 )
                 .addRecurringCredit(
-                    V1ContractCreateParams.RecurringCredit.builder()
+                    ContractCreateParams.RecurringCredit.builder()
                         .accessAmount(
-                            V1ContractCreateParams.RecurringCredit.AccessAmount.builder()
+                            ContractCreateParams.RecurringCredit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
                                 .quantity(0.0)
                                 .build()
                         )
                         .commitDuration(
-                            V1ContractCreateParams.RecurringCredit.CommitDuration.builder()
+                            ContractCreateParams.RecurringCredit.CommitDuration.builder()
                                 .value(0.0)
                                 .unit(
-                                    V1ContractCreateParams.RecurringCredit.CommitDuration.Unit
-                                        .PERIODS
+                                    ContractCreateParams.RecurringCredit.CommitDuration.Unit.PERIODS
                                 )
                                 .build()
                         )
@@ -674,10 +649,10 @@ class ServiceParamsTest {
                         )
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
-                        .proration(V1ContractCreateParams.RecurringCredit.Proration.NONE)
-                        .rateType(V1ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
+                        .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                        .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                         .recurrenceFrequency(
-                            V1ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
+                            ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
                         )
                         .rolloverFraction(0.0)
                         .addSpecifier(
@@ -697,9 +672,9 @@ class ServiceParamsTest {
                                 .build()
                         )
                         .subscriptionConfig(
-                            V1ContractCreateParams.RecurringCredit.SubscriptionConfig.builder()
+                            ContractCreateParams.RecurringCredit.SubscriptionConfig.builder()
                                 .applySeatIncreaseConfig(
-                                    V1ContractCreateParams.RecurringCredit.SubscriptionConfig
+                                    ContractCreateParams.RecurringCredit.SubscriptionConfig
                                         .ApplySeatIncreaseConfig
                                         .builder()
                                         .isProrated(true)
@@ -707,7 +682,7 @@ class ServiceParamsTest {
                                 )
                                 .subscriptionId("subscription_id")
                                 .allocation(
-                                    V1ContractCreateParams.RecurringCredit.SubscriptionConfig
+                                    ContractCreateParams.RecurringCredit.SubscriptionConfig
                                         .Allocation
                                         .INDIVIDUAL
                                 )
@@ -717,15 +692,15 @@ class ServiceParamsTest {
                         .build()
                 )
                 .addResellerRoyalty(
-                    V1ContractCreateParams.ResellerRoyalty.builder()
+                    ContractCreateParams.ResellerRoyalty.builder()
                         .fraction(0.0)
                         .netsuiteResellerId("netsuite_reseller_id")
-                        .resellerType(V1ContractCreateParams.ResellerRoyalty.ResellerType.AWS)
+                        .resellerType(ContractCreateParams.ResellerRoyalty.ResellerType.AWS)
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductTag("string")
                         .awsOptions(
-                            V1ContractCreateParams.ResellerRoyalty.AwsOptions.builder()
+                            ContractCreateParams.ResellerRoyalty.AwsOptions.builder()
                                 .awsAccountNumber("aws_account_number")
                                 .awsOfferId("aws_offer_id")
                                 .awsPayerReferenceId("aws_payer_reference_id")
@@ -733,7 +708,7 @@ class ServiceParamsTest {
                         )
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .gcpOptions(
-                            V1ContractCreateParams.ResellerRoyalty.GcpOptions.builder()
+                            ContractCreateParams.ResellerRoyalty.GcpOptions.builder()
                                 .gcpAccountId("gcp_account_id")
                                 .gcpOfferId("gcp_offer_id")
                                 .build()
@@ -742,31 +717,28 @@ class ServiceParamsTest {
                         .build()
                 )
                 .revenueSystemConfiguration(
-                    V1ContractCreateParams.RevenueSystemConfiguration.builder()
+                    ContractCreateParams.RevenueSystemConfiguration.builder()
                         .deliveryMethod(
-                            V1ContractCreateParams.RevenueSystemConfiguration.DeliveryMethod
+                            ContractCreateParams.RevenueSystemConfiguration.DeliveryMethod
                                 .DIRECT_TO_BILLING_PROVIDER
                         )
-                        .provider(
-                            V1ContractCreateParams.RevenueSystemConfiguration.Provider.NETSUITE
-                        )
+                        .provider(ContractCreateParams.RevenueSystemConfiguration.Provider.NETSUITE)
                         .revenueSystemConfigurationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .addScheduledCharge(
-                    V1ContractCreateParams.ScheduledCharge.builder()
+                    ContractCreateParams.ScheduledCharge.builder()
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .schedule(
-                            V1ContractCreateParams.ScheduledCharge.Schedule.builder()
+                            ContractCreateParams.ScheduledCharge.Schedule.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .doNotInvoice(true)
                                 .recurringSchedule(
-                                    V1ContractCreateParams.ScheduledCharge.Schedule
-                                        .RecurringSchedule
+                                    ContractCreateParams.ScheduledCharge.Schedule.RecurringSchedule
                                         .builder()
                                         .amountDistribution(
-                                            V1ContractCreateParams.ScheduledCharge.Schedule
+                                            ContractCreateParams.ScheduledCharge.Schedule
                                                 .RecurringSchedule
                                                 .AmountDistribution
                                                 .DIVIDED
@@ -775,7 +747,7 @@ class ServiceParamsTest {
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .frequency(
-                                            V1ContractCreateParams.ScheduledCharge.Schedule
+                                            ContractCreateParams.ScheduledCharge.Schedule
                                                 .RecurringSchedule
                                                 .Frequency
                                                 .MONTHLY
@@ -789,7 +761,7 @@ class ServiceParamsTest {
                                         .build()
                                 )
                                 .addScheduleItem(
-                                    V1ContractCreateParams.ScheduledCharge.Schedule.ScheduleItem
+                                    ContractCreateParams.ScheduledCharge.Schedule.ScheduleItem
                                         .builder()
                                         .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .amount(0.0)
@@ -800,7 +772,7 @@ class ServiceParamsTest {
                                 .build()
                         )
                         .customFields(
-                            V1ContractCreateParams.ScheduledCharge.CustomFields.builder()
+                            ContractCreateParams.ScheduledCharge.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -809,7 +781,7 @@ class ServiceParamsTest {
                         .build()
                 )
                 .scheduledChargesOnUsageInvoices(
-                    V1ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
+                    ContractCreateParams.ScheduledChargesOnUsageInvoices.ALL
                 )
                 .spendThresholdConfiguration(
                     SpendThresholdConfiguration.builder()
@@ -852,23 +824,23 @@ class ServiceParamsTest {
                         .build()
                 )
                 .addSubscription(
-                    V1ContractCreateParams.Subscription.builder()
+                    ContractCreateParams.Subscription.builder()
                         .collectionSchedule(
-                            V1ContractCreateParams.Subscription.CollectionSchedule.ADVANCE
+                            ContractCreateParams.Subscription.CollectionSchedule.ADVANCE
                         )
                         .proration(
-                            V1ContractCreateParams.Subscription.Proration.builder()
+                            ContractCreateParams.Subscription.Proration.builder()
                                 .invoiceBehavior(
-                                    V1ContractCreateParams.Subscription.Proration.InvoiceBehavior
+                                    ContractCreateParams.Subscription.Proration.InvoiceBehavior
                                         .BILL_IMMEDIATELY
                                 )
                                 .isProrated(true)
                                 .build()
                         )
                         .subscriptionRate(
-                            V1ContractCreateParams.Subscription.SubscriptionRate.builder()
+                            ContractCreateParams.Subscription.SubscriptionRate.builder()
                                 .billingFrequency(
-                                    V1ContractCreateParams.Subscription.SubscriptionRate
+                                    ContractCreateParams.Subscription.SubscriptionRate
                                         .BillingFrequency
                                         .MONTHLY
                                 )
@@ -876,7 +848,7 @@ class ServiceParamsTest {
                                 .build()
                         )
                         .customFields(
-                            V1ContractCreateParams.Subscription.CustomFields.builder()
+                            ContractCreateParams.Subscription.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -885,10 +857,10 @@ class ServiceParamsTest {
                         .initialQuantity(0.0)
                         .name("name")
                         .quantityManagementMode(
-                            V1ContractCreateParams.Subscription.QuantityManagementMode.SEAT_BASED
+                            ContractCreateParams.Subscription.QuantityManagementMode.SEAT_BASED
                         )
                         .seatConfig(
-                            V1ContractCreateParams.Subscription.SeatConfig.builder()
+                            ContractCreateParams.Subscription.SeatConfig.builder()
                                 .addInitialSeatId("string")
                                 .seatGroupKey("seat_group_key")
                                 .initialUnassignedSeats(0.0)
@@ -900,13 +872,13 @@ class ServiceParamsTest {
                 )
                 .totalContractValue(0.0)
                 .transition(
-                    V1ContractCreateParams.Transition.builder()
+                    ContractCreateParams.Transition.builder()
                         .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .type(V1ContractCreateParams.Transition.Type.SUPERSEDE)
+                        .type(ContractCreateParams.Transition.Type.SUPERSEDE)
                         .futureInvoiceBehavior(
-                            V1ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
+                            ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                 .trueup(
-                                    V1ContractCreateParams.Transition.FutureInvoiceBehavior.Trueup
+                                    ContractCreateParams.Transition.FutureInvoiceBehavior.Trueup
                                         .REMOVE
                                 )
                                 .build()
@@ -922,58 +894,44 @@ class ServiceParamsTest {
                         .build()
                 )
                 .usageStatementSchedule(
-                    V1ContractCreateParams.UsageStatementSchedule.builder()
-                        .frequency(V1ContractCreateParams.UsageStatementSchedule.Frequency.MONTHLY)
+                    ContractCreateParams.UsageStatementSchedule.builder()
+                        .frequency(ContractCreateParams.UsageStatementSchedule.Frequency.MONTHLY)
                         .billingAnchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .day(V1ContractCreateParams.UsageStatementSchedule.Day.FIRST_OF_MONTH)
+                        .day(ContractCreateParams.UsageStatementSchedule.Day.FIRST_OF_MONTH)
                         .invoiceGenerationStartingAt(
                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                         )
                         .build()
                 )
-                .additionalHeaders(additionalHeaders)
-                .additionalBodyProperties(additionalBodyProperties)
-                .additionalQueryParams(additionalQueryParams)
+                .putAdditionalHeader("Secret-Header", "42")
+                .putAdditionalQueryParam("secret_query_param", "42")
+                .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
                 .build()
-
-        val apiResponse =
-            V1ContractCreateResponse.builder()
-                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
-                .build()
-
-        stubFor(
-            post(anyUrl())
-                .withHeader("x-test-header", equalTo("abc1234"))
-                .withQueryParam("test_query_param", equalTo("def567"))
-                .withRequestBody(matchingJsonPath("$.testBodyProperty", equalTo("ghi890")))
-                .willReturn(ok(JSON_MAPPER.writeValueAsString(apiResponse)))
         )
 
-        client.v1().contracts().create(params)
-
-        verify(postRequestedFor(anyUrl()))
+        verify(
+            postRequestedFor(anyUrl())
+                .withHeader("Secret-Header", equalTo("42"))
+                .withQueryParam("secret_query_param", equalTo("42"))
+                .withRequestBody(matchingJsonPath("$.secretProperty", equalTo("42")))
+        )
     }
 
     @Test
-    fun usagesIngestWithAdditionalParams() {
-        val additionalHeaders = mutableMapOf<String, List<String>>()
+    fun ingest() {
+        val usageService = client.v1().usage()
+        stubFor(post(anyUrl()).willReturn(ok("{}")))
 
-        additionalHeaders.put("x-test-header", listOf("abc1234"))
-
-        val additionalQueryParams = mutableMapOf<String, List<String>>()
-
-        additionalQueryParams.put("test_query_param", listOf("def567"))
-
-        val params =
-            V1UsageIngestParams.builder()
+        usageService.ingest(
+            UsageIngestParams.builder()
                 .addUsage(
-                    V1UsageIngestParams.Usage.builder()
+                    UsageIngestParams.Usage.builder()
                         .customerId("team@example.com")
                         .eventType("heartbeat")
                         .timestamp("2021-01-01T00:00:00Z")
                         .transactionId("2021-01-01T00:00:00Z_cluster42")
                         .properties(
-                            V1UsageIngestParams.Usage.Properties.builder()
+                            UsageIngestParams.Usage.Properties.builder()
                                 .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
                                 .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
                                 .putAdditionalProperty("region", JsonValue.from("bar"))
@@ -981,19 +939,15 @@ class ServiceParamsTest {
                         )
                         .build()
                 )
-                .additionalHeaders(additionalHeaders)
-                .additionalQueryParams(additionalQueryParams)
+                .putAdditionalHeader("Secret-Header", "42")
+                .putAdditionalQueryParam("secret_query_param", "42")
                 .build()
-
-        stubFor(
-            post(anyUrl())
-                .withHeader("x-test-header", equalTo("abc1234"))
-                .withQueryParam("test_query_param", equalTo("def567"))
-                .willReturn(ok())
         )
 
-        client.v1().usage().ingest(params)
-
-        verify(postRequestedFor(anyUrl()))
+        verify(
+            postRequestedFor(anyUrl())
+                .withHeader("Secret-Header", equalTo("42"))
+                .withQueryParam("secret_query_param", equalTo("42"))
+        )
     }
 }

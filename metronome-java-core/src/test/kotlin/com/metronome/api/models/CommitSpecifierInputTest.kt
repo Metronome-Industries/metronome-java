@@ -2,14 +2,17 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.JsonValue
+import com.metronome.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CommitSpecifierInputTest {
+internal class CommitSpecifierInputTest {
 
     @Test
-    fun createCommitSpecifierInput() {
+    fun create() {
         val commitSpecifierInput =
             CommitSpecifierInput.builder()
                 .presentationGroupValues(
@@ -25,7 +28,7 @@ class CommitSpecifierInputTest {
                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .addProductTag("string")
                 .build()
-        assertThat(commitSpecifierInput).isNotNull
+
         assertThat(commitSpecifierInput.presentationGroupValues())
             .contains(
                 CommitSpecifierInput.PresentationGroupValues.builder()
@@ -40,6 +43,34 @@ class CommitSpecifierInputTest {
             )
         assertThat(commitSpecifierInput.productId())
             .contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(commitSpecifierInput.productTags().get()).containsExactly("string")
+        assertThat(commitSpecifierInput.productTags().getOrNull()).containsExactly("string")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val commitSpecifierInput =
+            CommitSpecifierInput.builder()
+                .presentationGroupValues(
+                    CommitSpecifierInput.PresentationGroupValues.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .pricingGroupValues(
+                    CommitSpecifierInput.PricingGroupValues.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .addProductTag("string")
+                .build()
+
+        val roundtrippedCommitSpecifierInput =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(commitSpecifierInput),
+                jacksonTypeRef<CommitSpecifierInput>(),
+            )
+
+        assertThat(roundtrippedCommitSpecifierInput).isEqualTo(commitSpecifierInput)
     }
 }

@@ -2,22 +2,43 @@
 
 package com.metronome.api.models
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.metronome.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class UpdateBaseThresholdCommitTest {
+internal class UpdateBaseThresholdCommitTest {
 
     @Test
-    fun createUpdateBaseThresholdCommit() {
+    fun create() {
         val updateBaseThresholdCommit =
             UpdateBaseThresholdCommit.builder()
                 .description("description")
                 .name("name")
                 .productId("product_id")
                 .build()
-        assertThat(updateBaseThresholdCommit).isNotNull
+
         assertThat(updateBaseThresholdCommit.description()).contains("description")
         assertThat(updateBaseThresholdCommit.name()).contains("name")
         assertThat(updateBaseThresholdCommit.productId()).contains("product_id")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val updateBaseThresholdCommit =
+            UpdateBaseThresholdCommit.builder()
+                .description("description")
+                .name("name")
+                .productId("product_id")
+                .build()
+
+        val roundtrippedUpdateBaseThresholdCommit =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(updateBaseThresholdCommit),
+                jacksonTypeRef<UpdateBaseThresholdCommit>(),
+            )
+
+        assertThat(roundtrippedUpdateBaseThresholdCommit).isEqualTo(updateBaseThresholdCommit)
     }
 }

@@ -20,50 +20,68 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.NoAutoDetect
+import com.metronome.api.core.allMaxBy
+import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.getOrThrow
-import com.metronome.api.core.immutableEmptyMap
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-@NoAutoDetect
 class CommitHierarchyConfiguration
-@JsonCreator
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    @JsonProperty("child_access")
-    @ExcludeMissing
-    private val childAccess: JsonField<ChildAccess> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val childAccess: JsonField<ChildAccess>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
+    @JsonCreator
+    private constructor(
+        @JsonProperty("child_access")
+        @ExcludeMissing
+        childAccess: JsonField<ChildAccess> = JsonMissing.of()
+    ) : this(childAccess, mutableMapOf())
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun childAccess(): ChildAccess = childAccess.getRequired("child_access")
 
+    /**
+     * Returns the raw JSON value of [childAccess].
+     *
+     * Unlike [childAccess], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("child_access")
     @ExcludeMissing
     fun _childAccess(): JsonField<ChildAccess> = childAccess
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): CommitHierarchyConfiguration = apply {
-        if (validated) {
-            return@apply
-        }
-
-        childAccess().validate()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
+        /**
+         * Returns a mutable builder for constructing an instance of [CommitHierarchyConfiguration].
+         *
+         * The following fields are required:
+         * ```java
+         * .childAccess()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -81,13 +99,28 @@ private constructor(
 
         fun childAccess(childAccess: ChildAccess) = childAccess(JsonField.of(childAccess))
 
+        /**
+         * Sets [Builder.childAccess] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.childAccess] with a well-typed [ChildAccess] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun childAccess(childAccess: JsonField<ChildAccess>) = apply {
             this.childAccess = childAccess
         }
 
+        /**
+         * Alias for calling [childAccess] with
+         * `ChildAccess.ofCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll)`.
+         */
         fun childAccess(commitHierarchyChildAccessAll: ChildAccess.CommitHierarchyChildAccessAll) =
             childAccess(ChildAccess.ofCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll))
 
+        /**
+         * Alias for calling [childAccess] with
+         * `ChildAccess.ofCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone)`.
+         */
         fun childAccess(
             commitHierarchyChildAccessNone: ChildAccess.CommitHierarchyChildAccessNone
         ) =
@@ -95,6 +128,10 @@ private constructor(
                 ChildAccess.ofCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone)
             )
 
+        /**
+         * Alias for calling [childAccess] with
+         * `ChildAccess.ofCommitHierarchyChildAccessContractIds(commitHierarchyChildAccessContractIds)`.
+         */
         fun childAccess(
             commitHierarchyChildAccessContractIds: ChildAccess.CommitHierarchyChildAccessContractIds
         ) =
@@ -123,12 +160,51 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [CommitHierarchyConfiguration].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .childAccess()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): CommitHierarchyConfiguration =
             CommitHierarchyConfiguration(
                 checkRequired("childAccess", childAccess),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): CommitHierarchyConfiguration = apply {
+        if (validated) {
+            return@apply
+        }
+
+        childAccess().validate()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: MetronomeInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int = (childAccess.asKnown().getOrNull()?.validity() ?: 0)
 
     @JsonDeserialize(using = ChildAccess.Deserializer::class)
     @JsonSerialize(using = ChildAccess.Serializer::class)
@@ -171,8 +247,8 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 commitHierarchyChildAccessAll != null ->
                     visitor.visitCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll)
                 commitHierarchyChildAccessNone != null ->
@@ -183,7 +259,6 @@ private constructor(
                     )
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -216,15 +291,57 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitCommitHierarchyChildAccessAll(
+                        commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll
+                    ) = commitHierarchyChildAccessAll.validity()
+
+                    override fun visitCommitHierarchyChildAccessNone(
+                        commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone
+                    ) = commitHierarchyChildAccessNone.validity()
+
+                    override fun visitCommitHierarchyChildAccessContractIds(
+                        commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds
+                    ) = commitHierarchyChildAccessContractIds.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is ChildAccess && commitHierarchyChildAccessAll == other.commitHierarchyChildAccessAll && commitHierarchyChildAccessNone == other.commitHierarchyChildAccessNone && commitHierarchyChildAccessContractIds == other.commitHierarchyChildAccessContractIds /* spotless:on */
+            return other is ChildAccess &&
+                commitHierarchyChildAccessAll == other.commitHierarchyChildAccessAll &&
+                commitHierarchyChildAccessNone == other.commitHierarchyChildAccessNone &&
+                commitHierarchyChildAccessContractIds == other.commitHierarchyChildAccessContractIds
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(commitHierarchyChildAccessAll, commitHierarchyChildAccessNone, commitHierarchyChildAccessContractIds) /* spotless:on */
+        override fun hashCode(): Int =
+            Objects.hash(
+                commitHierarchyChildAccessAll,
+                commitHierarchyChildAccessNone,
+                commitHierarchyChildAccessContractIds,
+            )
 
         override fun toString(): String =
             when {
@@ -297,26 +414,40 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): ChildAccess {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessAll>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return ChildAccess(commitHierarchyChildAccessAll = it, _json = json)
-                    }
-                tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessNone>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return ChildAccess(commitHierarchyChildAccessNone = it, _json = json)
-                    }
-                tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessContractIds>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return ChildAccess(commitHierarchyChildAccessContractIds = it, _json = json)
-                    }
-
-                return ChildAccess(_json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessAll>())
+                                ?.let {
+                                    ChildAccess(commitHierarchyChildAccessAll = it, _json = json)
+                                },
+                            tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessNone>())
+                                ?.let {
+                                    ChildAccess(commitHierarchyChildAccessNone = it, _json = json)
+                                },
+                            tryDeserialize(
+                                    node,
+                                    jacksonTypeRef<CommitHierarchyChildAccessContractIds>(),
+                                )
+                                ?.let {
+                                    ChildAccess(
+                                        commitHierarchyChildAccessContractIds = it,
+                                        _json = json,
+                                    )
+                                },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from boolean).
+                    0 -> ChildAccess(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                }
             }
         }
 
@@ -340,40 +471,55 @@ private constructor(
             }
         }
 
-        @NoAutoDetect
         class CommitHierarchyChildAccessAll
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @JsonProperty("type")
-            @ExcludeMissing
-            private val type: JsonField<Type> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val type: JsonField<Type>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
+            @JsonCreator
+            private constructor(
+                @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of()
+            ) : this(type, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun type(): Type = type.getRequired("type")
 
+            /**
+             * Returns the raw JSON value of [type].
+             *
+             * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): CommitHierarchyChildAccessAll = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                type()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [CommitHierarchyChildAccessAll].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .type()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -393,6 +539,13 @@ private constructor(
 
                 fun type(type: Type) = type(JsonField.of(type))
 
+                /**
+                 * Sets [Builder.type] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.type] with a well-typed [Type] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun type(type: JsonField<Type>) = apply { this.type = type }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -417,12 +570,52 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [CommitHierarchyChildAccessAll].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CommitHierarchyChildAccessAll =
                     CommitHierarchyChildAccessAll(
                         checkRequired("type", type),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CommitHierarchyChildAccessAll = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                type().validate()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int = (type.asKnown().getOrNull()?.validity() ?: 0)
 
             class Type @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
@@ -508,12 +701,39 @@ private constructor(
                         MetronomeInvalidDataException("Value is not a String")
                     }
 
+                private var validated: Boolean = false
+
+                fun validate(): Type = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+                    return other is Type && value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -526,12 +746,12 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CommitHierarchyChildAccessAll && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is CommitHierarchyChildAccessAll &&
+                    type == other.type &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(type, additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -539,40 +759,55 @@ private constructor(
                 "CommitHierarchyChildAccessAll{type=$type, additionalProperties=$additionalProperties}"
         }
 
-        @NoAutoDetect
         class CommitHierarchyChildAccessNone
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @JsonProperty("type")
-            @ExcludeMissing
-            private val type: JsonField<Type> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val type: JsonField<Type>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
+            @JsonCreator
+            private constructor(
+                @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of()
+            ) : this(type, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun type(): Type = type.getRequired("type")
 
+            /**
+             * Returns the raw JSON value of [type].
+             *
+             * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): CommitHierarchyChildAccessNone = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                type()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [CommitHierarchyChildAccessNone].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .type()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -592,6 +827,13 @@ private constructor(
 
                 fun type(type: Type) = type(JsonField.of(type))
 
+                /**
+                 * Sets [Builder.type] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.type] with a well-typed [Type] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun type(type: JsonField<Type>) = apply { this.type = type }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -616,12 +858,52 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [CommitHierarchyChildAccessNone].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CommitHierarchyChildAccessNone =
                     CommitHierarchyChildAccessNone(
                         checkRequired("type", type),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CommitHierarchyChildAccessNone = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                type().validate()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int = (type.asKnown().getOrNull()?.validity() ?: 0)
 
             class Type @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
@@ -707,12 +989,39 @@ private constructor(
                         MetronomeInvalidDataException("Value is not a String")
                     }
 
+                private var validated: Boolean = false
+
+                fun validate(): Type = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+                    return other is Type && value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -725,12 +1034,12 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CommitHierarchyChildAccessNone && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is CommitHierarchyChildAccessNone &&
+                    type == other.type &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
             private val hashCode: Int by lazy { Objects.hash(type, additionalProperties) }
-            /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
@@ -738,50 +1047,77 @@ private constructor(
                 "CommitHierarchyChildAccessNone{type=$type, additionalProperties=$additionalProperties}"
         }
 
-        @NoAutoDetect
         class CommitHierarchyChildAccessContractIds
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @JsonProperty("contract_ids")
-            @ExcludeMissing
-            private val contractIds: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("type")
-            @ExcludeMissing
-            private val type: JsonField<Type> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val contractIds: JsonField<List<String>>,
+            private val type: JsonField<Type>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
+            @JsonCreator
+            private constructor(
+                @JsonProperty("contract_ids")
+                @ExcludeMissing
+                contractIds: JsonField<List<String>> = JsonMissing.of(),
+                @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+            ) : this(contractIds, type, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun contractIds(): List<String> = contractIds.getRequired("contract_ids")
 
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun type(): Type = type.getRequired("type")
 
+            /**
+             * Returns the raw JSON value of [contractIds].
+             *
+             * Unlike [contractIds], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("contract_ids")
             @ExcludeMissing
             fun _contractIds(): JsonField<List<String>> = contractIds
 
+            /**
+             * Returns the raw JSON value of [type].
+             *
+             * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): CommitHierarchyChildAccessContractIds = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                contractIds()
-                type()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [CommitHierarchyChildAccessContractIds].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .contractIds()
+                 * .type()
+                 * ```
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
@@ -805,25 +1141,38 @@ private constructor(
 
                 fun contractIds(contractIds: List<String>) = contractIds(JsonField.of(contractIds))
 
+                /**
+                 * Sets [Builder.contractIds] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.contractIds] with a well-typed `List<String>`
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun contractIds(contractIds: JsonField<List<String>>) = apply {
                     this.contractIds = contractIds.map { it.toMutableList() }
                 }
 
+                /**
+                 * Adds a single [String] to [contractIds].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
                 fun addContractId(contractId: String) = apply {
                     contractIds =
-                        (contractIds ?: JsonField.of(mutableListOf())).apply {
-                            asKnown()
-                                .orElseThrow {
-                                    IllegalStateException(
-                                        "Field was set to non-list type: ${javaClass.simpleName}"
-                                    )
-                                }
-                                .add(contractId)
+                        (contractIds ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("contractIds", it).add(contractId)
                         }
                 }
 
                 fun type(type: Type) = type(JsonField.of(type))
 
+                /**
+                 * Sets [Builder.type] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.type] with a well-typed [Type] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun type(type: JsonField<Type>) = apply { this.type = type }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -848,13 +1197,57 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [CommitHierarchyChildAccessContractIds].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .contractIds()
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): CommitHierarchyChildAccessContractIds =
                     CommitHierarchyChildAccessContractIds(
                         checkRequired("contractIds", contractIds).map { it.toImmutable() },
                         checkRequired("type", type),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
+
+            private var validated: Boolean = false
+
+            fun validate(): CommitHierarchyChildAccessContractIds = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                contractIds()
+                type().validate()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (contractIds.asKnown().getOrNull()?.size ?: 0) +
+                    (type.asKnown().getOrNull()?.validity() ?: 0)
 
             class Type @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
@@ -940,12 +1333,39 @@ private constructor(
                         MetronomeInvalidDataException("Value is not a String")
                     }
 
+                private var validated: Boolean = false
+
+                fun validate(): Type = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
                         return true
                     }
 
-                    return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+                    return other is Type && value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -958,12 +1378,15 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is CommitHierarchyChildAccessContractIds && contractIds == other.contractIds && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is CommitHierarchyChildAccessContractIds &&
+                    contractIds == other.contractIds &&
+                    type == other.type &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(contractIds, type, additionalProperties) }
-            /* spotless:on */
+            private val hashCode: Int by lazy {
+                Objects.hash(contractIds, type, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
@@ -977,12 +1400,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CommitHierarchyConfiguration && childAccess == other.childAccess && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is CommitHierarchyConfiguration &&
+            childAccess == other.childAccess &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(childAccess, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

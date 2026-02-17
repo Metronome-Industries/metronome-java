@@ -4,14 +4,14 @@ package com.metronome.api.services.async.v1.customers
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
-import com.metronome.api.models.V1CustomerAlertListParams
-import com.metronome.api.models.V1CustomerAlertResetParams
-import com.metronome.api.models.V1CustomerAlertRetrieveParams
+import com.metronome.api.models.v1.customers.alerts.AlertListParams
+import com.metronome.api.models.v1.customers.alerts.AlertResetParams
+import com.metronome.api.models.v1.customers.alerts.AlertRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class AlertServiceAsyncTest {
+internal class AlertServiceAsyncTest {
 
     @Test
     fun retrieve() {
@@ -24,18 +24,15 @@ class AlertServiceAsyncTest {
 
         val alertFuture =
             alertServiceAsync.retrieve(
-                V1CustomerAlertRetrieveParams.builder()
+                AlertRetrieveParams.builder()
                     .alertId("8deed800-1b7a-495d-a207-6c52bac54dc9")
                     .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .addGroupValue(
-                        V1CustomerAlertRetrieveParams.GroupValue.builder()
-                            .key("key")
-                            .value("value")
-                            .build()
+                        AlertRetrieveParams.GroupValue.builder().key("key").value("value").build()
                     )
-                    .plansOrContracts(V1CustomerAlertRetrieveParams.PlansOrContracts.PLANS)
+                    .plansOrContracts(AlertRetrieveParams.PlansOrContracts.PLANS)
                     .seatFilter(
-                        V1CustomerAlertRetrieveParams.SeatFilter.builder()
+                        AlertRetrieveParams.SeatFilter.builder()
                             .seatGroupKey("seat_group_key")
                             .seatGroupValue("seat_group_value")
                             .build()
@@ -58,9 +55,7 @@ class AlertServiceAsyncTest {
 
         val pageFuture =
             alertServiceAsync.list(
-                V1CustomerAlertListParams.builder()
-                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
-                    .build()
+                AlertListParams.builder().customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1").build()
             )
 
         val page = pageFuture.get()
@@ -78,7 +73,7 @@ class AlertServiceAsyncTest {
 
         val future =
             alertServiceAsync.reset(
-                V1CustomerAlertResetParams.builder()
+                AlertResetParams.builder()
                     .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
                     .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
                     .build()
