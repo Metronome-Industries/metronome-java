@@ -2381,7 +2381,6 @@ class ContractTest {
                         .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
-                .priority(0.0)
                 .scheduledChargesOnUsageInvoices(Contract.ScheduledChargesOnUsageInvoices.ALL)
                 .spendThresholdConfiguration(
                     SpendThresholdConfiguration.builder()
@@ -4746,7 +4745,6 @@ class ContractTest {
                     .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
-        assertThat(contract.priority()).contains(0.0)
         assertThat(contract.scheduledChargesOnUsageInvoices())
             .contains(Contract.ScheduledChargesOnUsageInvoices.ALL)
         assertThat(contract.spendThresholdConfiguration())

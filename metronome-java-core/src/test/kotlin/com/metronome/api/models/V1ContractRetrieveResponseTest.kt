@@ -2760,7 +2760,6 @@ class V1ContractRetrieveResponseTest {
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
-                        .priority(0.0)
                         .scheduledChargesOnUsageInvoices(
                             Contract.ScheduledChargesOnUsageInvoices.ALL
                         )
@@ -5416,7 +5415,6 @@ class V1ContractRetrieveResponseTest {
                             .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
-                    .priority(0.0)
                     .scheduledChargesOnUsageInvoices(Contract.ScheduledChargesOnUsageInvoices.ALL)
                     .spendThresholdConfiguration(
                         SpendThresholdConfiguration.builder()

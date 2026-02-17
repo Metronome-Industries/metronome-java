@@ -522,7 +522,6 @@ class ServiceParamsTest {
                         .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
-                .priority(0.0)
                 .addProfessionalService(
                     V1ContractCreateParams.ProfessionalService.builder()
                         .maxAmount(0.0)

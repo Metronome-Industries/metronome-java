@@ -56,9 +56,6 @@ private constructor(
     private val prepaidBalanceThresholdConfiguration:
         JsonField<PrepaidBalanceThresholdConfiguration> =
         JsonMissing.of(),
-    @JsonProperty("priority")
-    @ExcludeMissing
-    private val priority: JsonField<Double> = JsonMissing.of(),
     @JsonProperty("scheduled_charges_on_usage_invoices")
     @ExcludeMissing
     private val scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices> =
@@ -114,9 +111,6 @@ private constructor(
                 "prepaid_balance_threshold_configuration"
             )
         )
-
-    /** Priority of the contract. */
-    fun priority(): Optional<Double> = Optional.ofNullable(priority.getNullable("priority"))
 
     /**
      * Determines which scheduled and commit charges to consolidate onto the Contract's usage
@@ -189,9 +183,6 @@ private constructor(
     fun _prepaidBalanceThresholdConfiguration(): JsonField<PrepaidBalanceThresholdConfiguration> =
         prepaidBalanceThresholdConfiguration
 
-    /** Priority of the contract. */
-    @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
-
     /**
      * Determines which scheduled and commit charges to consolidate onto the Contract's usage
      * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
@@ -243,7 +234,6 @@ private constructor(
         customerBillingProviderConfiguration().ifPresent { it.validate() }
         packageId()
         prepaidBalanceThresholdConfiguration().ifPresent { it.validate() }
-        priority()
         scheduledChargesOnUsageInvoices()
         spendThresholdConfiguration().ifPresent { it.validate() }
         subscriptions().ifPresent { it.forEach { it.validate() } }
@@ -275,7 +265,6 @@ private constructor(
         private var prepaidBalanceThresholdConfiguration:
             JsonField<PrepaidBalanceThresholdConfiguration> =
             JsonMissing.of()
-        private var priority: JsonField<Double> = JsonMissing.of()
         private var scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices> =
             JsonMissing.of()
         private var spendThresholdConfiguration: JsonField<SpendThresholdConfiguration> =
@@ -296,7 +285,6 @@ private constructor(
             customerBillingProviderConfiguration = contract.customerBillingProviderConfiguration
             packageId = contract.packageId
             prepaidBalanceThresholdConfiguration = contract.prepaidBalanceThresholdConfiguration
-            priority = contract.priority
             scheduledChargesOnUsageInvoices = contract.scheduledChargesOnUsageInvoices
             spendThresholdConfiguration = contract.spendThresholdConfiguration
             subscriptions = contract.subscriptions.map { it.toMutableList() }
@@ -392,12 +380,6 @@ private constructor(
         ) = apply {
             this.prepaidBalanceThresholdConfiguration = prepaidBalanceThresholdConfiguration
         }
-
-        /** Priority of the contract. */
-        fun priority(priority: Double) = priority(JsonField.of(priority))
-
-        /** Priority of the contract. */
-        fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
         /**
          * Determines which scheduled and commit charges to consolidate onto the Contract's usage
@@ -496,7 +478,6 @@ private constructor(
                 customerBillingProviderConfiguration,
                 packageId,
                 prepaidBalanceThresholdConfiguration,
-                priority,
                 scheduledChargesOnUsageInvoices,
                 spendThresholdConfiguration,
                 (subscriptions ?: JsonMissing.of()).map { it.toImmutable() },
@@ -2114,15 +2095,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Contract && id == other.id && amendments == other.amendments && current == other.current && customerId == other.customerId && initial == other.initial && archivedAt == other.archivedAt && customFields == other.customFields && customerBillingProviderConfiguration == other.customerBillingProviderConfiguration && packageId == other.packageId && prepaidBalanceThresholdConfiguration == other.prepaidBalanceThresholdConfiguration && priority == other.priority && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && spendThresholdConfiguration == other.spendThresholdConfiguration && subscriptions == other.subscriptions && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Contract && id == other.id && amendments == other.amendments && current == other.current && customerId == other.customerId && initial == other.initial && archivedAt == other.archivedAt && customFields == other.customFields && customerBillingProviderConfiguration == other.customerBillingProviderConfiguration && packageId == other.packageId && prepaidBalanceThresholdConfiguration == other.prepaidBalanceThresholdConfiguration && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && spendThresholdConfiguration == other.spendThresholdConfiguration && subscriptions == other.subscriptions && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, amendments, current, customerId, initial, archivedAt, customFields, customerBillingProviderConfiguration, packageId, prepaidBalanceThresholdConfiguration, priority, scheduledChargesOnUsageInvoices, spendThresholdConfiguration, subscriptions, uniquenessKey, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, amendments, current, customerId, initial, archivedAt, customFields, customerBillingProviderConfiguration, packageId, prepaidBalanceThresholdConfiguration, scheduledChargesOnUsageInvoices, spendThresholdConfiguration, subscriptions, uniquenessKey, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Contract{id=$id, amendments=$amendments, current=$current, customerId=$customerId, initial=$initial, archivedAt=$archivedAt, customFields=$customFields, customerBillingProviderConfiguration=$customerBillingProviderConfiguration, packageId=$packageId, prepaidBalanceThresholdConfiguration=$prepaidBalanceThresholdConfiguration, priority=$priority, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, spendThresholdConfiguration=$spendThresholdConfiguration, subscriptions=$subscriptions, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+        "Contract{id=$id, amendments=$amendments, current=$current, customerId=$customerId, initial=$initial, archivedAt=$archivedAt, customFields=$customFields, customerBillingProviderConfiguration=$customerBillingProviderConfiguration, packageId=$packageId, prepaidBalanceThresholdConfiguration=$prepaidBalanceThresholdConfiguration, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, spendThresholdConfiguration=$spendThresholdConfiguration, subscriptions=$subscriptions, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
 }

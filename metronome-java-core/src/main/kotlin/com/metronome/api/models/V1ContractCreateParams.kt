@@ -194,9 +194,6 @@ private constructor(
     fun prepaidBalanceThresholdConfiguration(): Optional<PrepaidBalanceThresholdConfiguration> =
         body.prepaidBalanceThresholdConfiguration()
 
-    /** Priority of the contract. */
-    fun priority(): Optional<Double> = body.priority()
-
     /** This field's availability is dependent on your client's configuration. */
     fun professionalServices(): Optional<List<ProfessionalService>> = body.professionalServices()
 
@@ -319,9 +316,6 @@ private constructor(
 
     fun _prepaidBalanceThresholdConfiguration(): JsonField<PrepaidBalanceThresholdConfiguration> =
         body._prepaidBalanceThresholdConfiguration()
-
-    /** Priority of the contract. */
-    fun _priority(): JsonField<Double> = body._priority()
 
     /** This field's availability is dependent on your client's configuration. */
     fun _professionalServices(): JsonField<List<ProfessionalService>> = body._professionalServices()
@@ -457,9 +451,6 @@ private constructor(
         private val prepaidBalanceThresholdConfiguration:
             JsonField<PrepaidBalanceThresholdConfiguration> =
             JsonMissing.of(),
-        @JsonProperty("priority")
-        @ExcludeMissing
-        private val priority: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("professional_services")
         @ExcludeMissing
         private val professionalServices: JsonField<List<ProfessionalService>> = JsonMissing.of(),
@@ -594,9 +585,6 @@ private constructor(
                     "prepaid_balance_threshold_configuration"
                 )
             )
-
-        /** Priority of the contract. */
-        fun priority(): Optional<Double> = Optional.ofNullable(priority.getNullable("priority"))
 
         /** This field's availability is dependent on your client's configuration. */
         fun professionalServices(): Optional<List<ProfessionalService>> =
@@ -767,9 +755,6 @@ private constructor(
         fun _prepaidBalanceThresholdConfiguration():
             JsonField<PrepaidBalanceThresholdConfiguration> = prepaidBalanceThresholdConfiguration
 
-        /** Priority of the contract. */
-        @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
-
         /** This field's availability is dependent on your client's configuration. */
         @JsonProperty("professional_services")
         @ExcludeMissing
@@ -894,7 +879,6 @@ private constructor(
             packageAlias()
             packageId()
             prepaidBalanceThresholdConfiguration().ifPresent { it.validate() }
-            priority()
             professionalServices().ifPresent { it.forEach { it.validate() } }
             rateCardAlias()
             rateCardId()
@@ -947,7 +931,6 @@ private constructor(
             private var prepaidBalanceThresholdConfiguration:
                 JsonField<PrepaidBalanceThresholdConfiguration> =
                 JsonMissing.of()
-            private var priority: JsonField<Double> = JsonMissing.of()
             private var professionalServices: JsonField<MutableList<ProfessionalService>>? = null
             private var rateCardAlias: JsonField<String> = JsonMissing.of()
             private var rateCardId: JsonField<String> = JsonMissing.of()
@@ -990,7 +973,6 @@ private constructor(
                 packageAlias = body.packageAlias
                 packageId = body.packageId
                 prepaidBalanceThresholdConfiguration = body.prepaidBalanceThresholdConfiguration
-                priority = body.priority
                 professionalServices = body.professionalServices.map { it.toMutableList() }
                 rateCardAlias = body.rateCardAlias
                 rateCardId = body.rateCardId
@@ -1224,12 +1206,6 @@ private constructor(
             ) = apply {
                 this.prepaidBalanceThresholdConfiguration = prepaidBalanceThresholdConfiguration
             }
-
-            /** Priority of the contract. */
-            fun priority(priority: Double) = priority(JsonField.of(priority))
-
-            /** Priority of the contract. */
-            fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
             /** This field's availability is dependent on your client's configuration. */
             fun professionalServices(professionalServices: List<ProfessionalService>) =
@@ -1526,7 +1502,6 @@ private constructor(
                     packageAlias,
                     packageId,
                     prepaidBalanceThresholdConfiguration,
-                    priority,
                     (professionalServices ?: JsonMissing.of()).map { it.toImmutable() },
                     rateCardAlias,
                     rateCardId,
@@ -1553,17 +1528,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && customerId == other.customerId && startingAt == other.startingAt && billingProviderConfiguration == other.billingProviderConfiguration && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && endingBefore == other.endingBefore && hierarchyConfiguration == other.hierarchyConfiguration && multiplierOverridePrioritization == other.multiplierOverridePrioritization && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && packageAlias == other.packageAlias && packageId == other.packageId && prepaidBalanceThresholdConfiguration == other.prepaidBalanceThresholdConfiguration && priority == other.priority && professionalServices == other.professionalServices && rateCardAlias == other.rateCardAlias && rateCardId == other.rateCardId && recurringCommits == other.recurringCommits && recurringCredits == other.recurringCredits && resellerRoyalties == other.resellerRoyalties && revenueSystemConfiguration == other.revenueSystemConfiguration && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && spendThresholdConfiguration == other.spendThresholdConfiguration && subscriptions == other.subscriptions && totalContractValue == other.totalContractValue && transition == other.transition && uniquenessKey == other.uniquenessKey && usageFilter == other.usageFilter && usageStatementSchedule == other.usageStatementSchedule && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && customerId == other.customerId && startingAt == other.startingAt && billingProviderConfiguration == other.billingProviderConfiguration && commits == other.commits && credits == other.credits && customFields == other.customFields && discounts == other.discounts && endingBefore == other.endingBefore && hierarchyConfiguration == other.hierarchyConfiguration && multiplierOverridePrioritization == other.multiplierOverridePrioritization && name == other.name && netPaymentTermsDays == other.netPaymentTermsDays && netsuiteSalesOrderId == other.netsuiteSalesOrderId && overrides == other.overrides && packageAlias == other.packageAlias && packageId == other.packageId && prepaidBalanceThresholdConfiguration == other.prepaidBalanceThresholdConfiguration && professionalServices == other.professionalServices && rateCardAlias == other.rateCardAlias && rateCardId == other.rateCardId && recurringCommits == other.recurringCommits && recurringCredits == other.recurringCredits && resellerRoyalties == other.resellerRoyalties && revenueSystemConfiguration == other.revenueSystemConfiguration && salesforceOpportunityId == other.salesforceOpportunityId && scheduledCharges == other.scheduledCharges && scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices && spendThresholdConfiguration == other.spendThresholdConfiguration && subscriptions == other.subscriptions && totalContractValue == other.totalContractValue && transition == other.transition && uniquenessKey == other.uniquenessKey && usageFilter == other.usageFilter && usageStatementSchedule == other.usageStatementSchedule && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(customerId, startingAt, billingProviderConfiguration, commits, credits, customFields, discounts, endingBefore, hierarchyConfiguration, multiplierOverridePrioritization, name, netPaymentTermsDays, netsuiteSalesOrderId, overrides, packageAlias, packageId, prepaidBalanceThresholdConfiguration, priority, professionalServices, rateCardAlias, rateCardId, recurringCommits, recurringCredits, resellerRoyalties, revenueSystemConfiguration, salesforceOpportunityId, scheduledCharges, scheduledChargesOnUsageInvoices, spendThresholdConfiguration, subscriptions, totalContractValue, transition, uniquenessKey, usageFilter, usageStatementSchedule, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(customerId, startingAt, billingProviderConfiguration, commits, credits, customFields, discounts, endingBefore, hierarchyConfiguration, multiplierOverridePrioritization, name, netPaymentTermsDays, netsuiteSalesOrderId, overrides, packageAlias, packageId, prepaidBalanceThresholdConfiguration, professionalServices, rateCardAlias, rateCardId, recurringCommits, recurringCredits, resellerRoyalties, revenueSystemConfiguration, salesforceOpportunityId, scheduledCharges, scheduledChargesOnUsageInvoices, spendThresholdConfiguration, subscriptions, totalContractValue, transition, uniquenessKey, usageFilter, usageStatementSchedule, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, packageAlias=$packageAlias, packageId=$packageId, prepaidBalanceThresholdConfiguration=$prepaidBalanceThresholdConfiguration, priority=$priority, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, recurringCommits=$recurringCommits, recurringCredits=$recurringCredits, resellerRoyalties=$resellerRoyalties, revenueSystemConfiguration=$revenueSystemConfiguration, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, spendThresholdConfiguration=$spendThresholdConfiguration, subscriptions=$subscriptions, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, startingAt=$startingAt, billingProviderConfiguration=$billingProviderConfiguration, commits=$commits, credits=$credits, customFields=$customFields, discounts=$discounts, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, overrides=$overrides, packageAlias=$packageAlias, packageId=$packageId, prepaidBalanceThresholdConfiguration=$prepaidBalanceThresholdConfiguration, professionalServices=$professionalServices, rateCardAlias=$rateCardAlias, rateCardId=$rateCardId, recurringCommits=$recurringCommits, recurringCredits=$recurringCredits, resellerRoyalties=$resellerRoyalties, revenueSystemConfiguration=$revenueSystemConfiguration, salesforceOpportunityId=$salesforceOpportunityId, scheduledCharges=$scheduledCharges, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, spendThresholdConfiguration=$spendThresholdConfiguration, subscriptions=$subscriptions, totalContractValue=$totalContractValue, transition=$transition, uniquenessKey=$uniquenessKey, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -1749,12 +1724,6 @@ private constructor(
         ) = apply {
             body.prepaidBalanceThresholdConfiguration(prepaidBalanceThresholdConfiguration)
         }
-
-        /** Priority of the contract. */
-        fun priority(priority: Double) = apply { body.priority(priority) }
-
-        /** Priority of the contract. */
-        fun priority(priority: JsonField<Double>) = apply { body.priority(priority) }
 
         /** This field's availability is dependent on your client's configuration. */
         fun professionalServices(professionalServices: List<ProfessionalService>) = apply {
