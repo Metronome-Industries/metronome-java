@@ -49,23 +49,21 @@ internal class UsageServiceAsyncTest {
 
         val future =
             usageServiceAsync.ingest(
-                UsageIngestParams.builder()
-                    .addUsage(
-                        UsageIngestParams.Usage.builder()
-                            .customerId("team@example.com")
-                            .eventType("heartbeat")
-                            .timestamp("2021-01-01T00:00:00Z")
-                            .transactionId("2021-01-01T00:00:00Z_cluster42")
-                            .properties(
-                                UsageIngestParams.Usage.Properties.builder()
-                                    .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
-                                    .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
-                                    .putAdditionalProperty("region", JsonValue.from("bar"))
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .build()
+                listOf(
+                    UsageIngestParams.Usage.builder()
+                        .customerId("team@example.com")
+                        .eventType("heartbeat")
+                        .timestamp("2021-01-01T00:00:00Z")
+                        .transactionId("2021-01-01T00:00:00Z_cluster42")
+                        .properties(
+                            UsageIngestParams.Usage.Properties.builder()
+                                .putAdditionalProperty("cluster_id", JsonValue.from("bar"))
+                                .putAdditionalProperty("cpu_seconds", JsonValue.from("bar"))
+                                .putAdditionalProperty("region", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .build()
+                )
             )
 
         val response = future.get()

@@ -47,24 +47,23 @@ import com.metronome.api.client.MetronomeClient;
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient;
 import com.metronome.api.core.JsonValue;
 import com.metronome.api.models.v1.usage.UsageIngestParams;
+import java.util.List;
 
 // Configures using the `metronome.bearerToken`, `metronome.webhookSecret` and `metronome.baseUrl` system properties
 // Or configures using the `METRONOME_BEARER_TOKEN`, `METRONOME_WEBHOOK_SECRET` and `METRONOME_BASE_URL` environment variables
 MetronomeClient client = MetronomeOkHttpClient.fromEnv();
 
-UsageIngestParams params = UsageIngestParams.builder()
-    .addUsage(UsageIngestParams.Usage.builder()
-        .transactionId("90e9401f-0f8c-4cd3-9a9f-d6beb56d8d72")
-        .customerId("team@example.com")
-        .eventType("heartbeat")
-        .timestamp("2024-01-01T00:00:00Z")
-        .properties(UsageIngestParams.Usage.Properties.builder()
-            .putAdditionalProperty("cluster_id", JsonValue.from("42"))
-            .putAdditionalProperty("cpu_seconds", JsonValue.from(60))
-            .putAdditionalProperty("region", JsonValue.from("Europe"))
-            .build())
+List<UsageIngestParams.Usage> params = List.of(UsageIngestParams.Usage.builder()
+    .transactionId("90e9401f-0f8c-4cd3-9a9f-d6beb56d8d72")
+    .customerId("team@example.com")
+    .eventType("heartbeat")
+    .timestamp("2024-01-01T00:00:00Z")
+    .properties(UsageIngestParams.Usage.Properties.builder()
+        .putAdditionalProperty("cluster_id", JsonValue.from("42"))
+        .putAdditionalProperty("cpu_seconds", JsonValue.from(60))
+        .putAdditionalProperty("region", JsonValue.from("Europe"))
         .build())
-    .build();
+    .build());
 client.v1().usage().ingest(params);
 ```
 
@@ -158,25 +157,24 @@ import com.metronome.api.client.MetronomeClient;
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient;
 import com.metronome.api.core.JsonValue;
 import com.metronome.api.models.v1.usage.UsageIngestParams;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `metronome.bearerToken`, `metronome.webhookSecret` and `metronome.baseUrl` system properties
 // Or configures using the `METRONOME_BEARER_TOKEN`, `METRONOME_WEBHOOK_SECRET` and `METRONOME_BASE_URL` environment variables
 MetronomeClient client = MetronomeOkHttpClient.fromEnv();
 
-UsageIngestParams params = UsageIngestParams.builder()
-    .addUsage(UsageIngestParams.Usage.builder()
-        .transactionId("90e9401f-0f8c-4cd3-9a9f-d6beb56d8d72")
-        .customerId("team@example.com")
-        .eventType("heartbeat")
-        .timestamp("2024-01-01T00:00:00Z")
-        .properties(UsageIngestParams.Usage.Properties.builder()
-            .putAdditionalProperty("cluster_id", JsonValue.from("42"))
-            .putAdditionalProperty("cpu_seconds", JsonValue.from(60))
-            .putAdditionalProperty("region", JsonValue.from("Europe"))
-            .build())
+List<UsageIngestParams.Usage> params = List.of(UsageIngestParams.Usage.builder()
+    .transactionId("90e9401f-0f8c-4cd3-9a9f-d6beb56d8d72")
+    .customerId("team@example.com")
+    .eventType("heartbeat")
+    .timestamp("2024-01-01T00:00:00Z")
+    .properties(UsageIngestParams.Usage.Properties.builder()
+        .putAdditionalProperty("cluster_id", JsonValue.from("42"))
+        .putAdditionalProperty("cpu_seconds", JsonValue.from(60))
+        .putAdditionalProperty("region", JsonValue.from("Europe"))
         .build())
-    .build();
+    .build());
 CompletableFuture<Void?> future = client.async().v1().usage().ingest(params);
 ```
 
@@ -187,25 +185,24 @@ import com.metronome.api.client.MetronomeClientAsync;
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync;
 import com.metronome.api.core.JsonValue;
 import com.metronome.api.models.v1.usage.UsageIngestParams;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `metronome.bearerToken`, `metronome.webhookSecret` and `metronome.baseUrl` system properties
 // Or configures using the `METRONOME_BEARER_TOKEN`, `METRONOME_WEBHOOK_SECRET` and `METRONOME_BASE_URL` environment variables
 MetronomeClientAsync client = MetronomeOkHttpClientAsync.fromEnv();
 
-UsageIngestParams params = UsageIngestParams.builder()
-    .addUsage(UsageIngestParams.Usage.builder()
-        .transactionId("90e9401f-0f8c-4cd3-9a9f-d6beb56d8d72")
-        .customerId("team@example.com")
-        .eventType("heartbeat")
-        .timestamp("2024-01-01T00:00:00Z")
-        .properties(UsageIngestParams.Usage.Properties.builder()
-            .putAdditionalProperty("cluster_id", JsonValue.from("42"))
-            .putAdditionalProperty("cpu_seconds", JsonValue.from(60))
-            .putAdditionalProperty("region", JsonValue.from("Europe"))
-            .build())
+List<UsageIngestParams.Usage> params = List.of(UsageIngestParams.Usage.builder()
+    .transactionId("90e9401f-0f8c-4cd3-9a9f-d6beb56d8d72")
+    .customerId("team@example.com")
+    .eventType("heartbeat")
+    .timestamp("2024-01-01T00:00:00Z")
+    .properties(UsageIngestParams.Usage.Properties.builder()
+        .putAdditionalProperty("cluster_id", JsonValue.from("42"))
+        .putAdditionalProperty("cpu_seconds", JsonValue.from(60))
+        .putAdditionalProperty("region", JsonValue.from("Europe"))
         .build())
-    .build();
+    .build());
 CompletableFuture<Void?> future = client.v1().usage().ingest(params);
 ```
 

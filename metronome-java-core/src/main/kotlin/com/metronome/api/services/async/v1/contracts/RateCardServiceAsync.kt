@@ -3,6 +3,7 @@
 package com.metronome.api.services.async.v1.contracts
 
 import com.metronome.api.core.ClientOptions
+import com.metronome.api.core.JsonValue
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.models.Id
@@ -179,6 +180,17 @@ interface RateCardServiceAsync {
     ): CompletableFuture<RateCardListPageAsync> = list(params, RequestOptions.none())
 
     /** @see list */
+    fun list(
+        body: JsonValue,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<RateCardListPageAsync> =
+        list(RateCardListParams.builder().body(body).build(), requestOptions)
+
+    /** @see list */
+    fun list(body: JsonValue): CompletableFuture<RateCardListPageAsync> =
+        list(body, RequestOptions.none())
+
+    /** @see list */
     fun list(requestOptions: RequestOptions): CompletableFuture<RateCardListPageAsync> =
         list(RateCardListParams.none(), requestOptions)
 
@@ -325,6 +337,17 @@ interface RateCardServiceAsync {
             params: RateCardListParams = RateCardListParams.none()
         ): CompletableFuture<HttpResponseFor<RateCardListPageAsync>> =
             list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            body: JsonValue,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateCardListPageAsync>> =
+            list(RateCardListParams.builder().body(body).build(), requestOptions)
+
+        /** @see list */
+        fun list(body: JsonValue): CompletableFuture<HttpResponseFor<RateCardListPageAsync>> =
+            list(body, RequestOptions.none())
 
         /** @see list */
         fun list(

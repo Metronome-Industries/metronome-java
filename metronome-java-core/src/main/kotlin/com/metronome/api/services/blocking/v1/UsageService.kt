@@ -151,6 +151,15 @@ interface UsageService {
         ingest(params, RequestOptions.none())
 
     /** @see ingest */
+    fun ingest(
+        usage: List<UsageIngestParams.Usage>,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = ingest(UsageIngestParams.builder().usage(usage).build(), requestOptions)
+
+    /** @see ingest */
+    fun ingest(usage: List<UsageIngestParams.Usage>) = ingest(usage, RequestOptions.none())
+
+    /** @see ingest */
     fun ingest(requestOptions: RequestOptions) = ingest(UsageIngestParams.none(), requestOptions)
 
     /**
@@ -271,6 +280,18 @@ interface UsageService {
         @MustBeClosed
         fun ingest(params: UsageIngestParams = UsageIngestParams.none()): HttpResponse =
             ingest(params, RequestOptions.none())
+
+        /** @see ingest */
+        @MustBeClosed
+        fun ingest(
+            usage: List<UsageIngestParams.Usage>,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = ingest(UsageIngestParams.builder().usage(usage).build(), requestOptions)
+
+        /** @see ingest */
+        @MustBeClosed
+        fun ingest(usage: List<UsageIngestParams.Usage>): HttpResponse =
+            ingest(usage, RequestOptions.none())
 
         /** @see ingest */
         @MustBeClosed

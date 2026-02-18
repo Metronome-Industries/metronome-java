@@ -152,6 +152,17 @@ interface UsageServiceAsync {
         ingest(params, RequestOptions.none())
 
     /** @see ingest */
+    fun ingest(
+        usage: List<UsageIngestParams.Usage>,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Void?> =
+        ingest(UsageIngestParams.builder().usage(usage).build(), requestOptions)
+
+    /** @see ingest */
+    fun ingest(usage: List<UsageIngestParams.Usage>): CompletableFuture<Void?> =
+        ingest(usage, RequestOptions.none())
+
+    /** @see ingest */
     fun ingest(requestOptions: RequestOptions): CompletableFuture<Void?> =
         ingest(UsageIngestParams.none(), requestOptions)
 
@@ -274,6 +285,17 @@ interface UsageServiceAsync {
         fun ingest(
             params: UsageIngestParams = UsageIngestParams.none()
         ): CompletableFuture<HttpResponse> = ingest(params, RequestOptions.none())
+
+        /** @see ingest */
+        fun ingest(
+            usage: List<UsageIngestParams.Usage>,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse> =
+            ingest(UsageIngestParams.builder().usage(usage).build(), requestOptions)
+
+        /** @see ingest */
+        fun ingest(usage: List<UsageIngestParams.Usage>): CompletableFuture<HttpResponse> =
+            ingest(usage, RequestOptions.none())
 
         /** @see ingest */
         fun ingest(requestOptions: RequestOptions): CompletableFuture<HttpResponse> =

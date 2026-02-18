@@ -4,6 +4,7 @@ package com.metronome.api.services.blocking.v1.contracts
 
 import com.google.errorprone.annotations.MustBeClosed
 import com.metronome.api.core.ClientOptions
+import com.metronome.api.core.JsonValue
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.models.Id
@@ -177,6 +178,15 @@ interface RateCardService {
         list(params, RequestOptions.none())
 
     /** @see list */
+    fun list(
+        body: JsonValue,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): RateCardListPage = list(RateCardListParams.builder().body(body).build(), requestOptions)
+
+    /** @see list */
+    fun list(body: JsonValue): RateCardListPage = list(body, RequestOptions.none())
+
+    /** @see list */
     fun list(requestOptions: RequestOptions): RateCardListPage =
         list(RateCardListParams.none(), requestOptions)
 
@@ -320,6 +330,19 @@ interface RateCardService {
         fun list(
             params: RateCardListParams = RateCardListParams.none()
         ): HttpResponseFor<RateCardListPage> = list(params, RequestOptions.none())
+
+        /** @see list */
+        @MustBeClosed
+        fun list(
+            body: JsonValue,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateCardListPage> =
+            list(RateCardListParams.builder().body(body).build(), requestOptions)
+
+        /** @see list */
+        @MustBeClosed
+        fun list(body: JsonValue): HttpResponseFor<RateCardListPage> =
+            list(body, RequestOptions.none())
 
         /** @see list */
         @MustBeClosed
