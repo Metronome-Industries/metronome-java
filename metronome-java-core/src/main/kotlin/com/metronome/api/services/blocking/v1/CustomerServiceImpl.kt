@@ -16,6 +16,8 @@ import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.core.http.json
 import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
+import com.metronome.api.models.v1.customers.CustomerArchiveBillingConfigurationsParams
+import com.metronome.api.models.v1.customers.CustomerArchiveBillingConfigurationsResponse
 import com.metronome.api.models.v1.customers.CustomerArchiveParams
 import com.metronome.api.models.v1.customers.CustomerArchiveResponse
 import com.metronome.api.models.v1.customers.CustomerCreateParams
@@ -87,18 +89,46 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CustomerService =
         CustomerServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * [Alerts](https://docs.metronome.com/connecting-metronome/alerts/) monitor customer spending,
+     * balances, and other billing factors. Use these endpoints to create, retrieve, and archive
+     * customer alerts. To view sample alert payloads by alert type, navigate
+     * [here.](https://docs.metronome.com/manage-product-access/create-manage-alerts/#webhook-notifications)
+     */
     override fun alerts(): AlertService = alerts
 
+    /**
+     * [Plans](https://docs.metronome.com/pricing-and-packaging/create-plans/) determine the base
+     * pricing for a customer. Use these endpoints to add a plan to a customer, end a customer plan,
+     * retrieve plans, and retrieve plan details. Create plans in the
+     * [Metronome app](https://app.metronome.com/plans).
+     */
     override fun plans(): PlanService = plans
 
+    /**
+     * [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent during a
+     * period, which is the basis for billing. Metronome automatically generates invoices based upon
+     * your pricing, packaging, and usage events. Use these endpoints to retrieve invoices.
+     */
     override fun invoices(): InvoiceService = invoices
 
+    /**
+     * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent
+     * your users for all billing and reporting. Use these endpoints to create, retrieve, update,
+     * and archive customers and their billing configuration.
+     */
     override fun billingConfig(): BillingConfigService = billingConfig
 
+    /** Credits and commits are used to manage customer balances. */
     override fun commits(): CommitService = commits
 
+    /** Credits and commits are used to manage customer balances. */
     override fun credits(): CreditService = credits
 
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     override fun namedSchedules(): NamedScheduleService = namedSchedules
 
     override fun create(
@@ -128,6 +158,13 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
     ): CustomerArchiveResponse =
         // post /v1/customers/archive
         withRawResponse().archive(params, requestOptions).parse()
+
+    override fun archiveBillingConfigurations(
+        params: CustomerArchiveBillingConfigurationsParams,
+        requestOptions: RequestOptions,
+    ): CustomerArchiveBillingConfigurationsResponse =
+        // post /v1/archiveCustomerBillingProviderConfigurations
+        withRawResponse().archiveBillingConfigurations(params, requestOptions).parse()
 
     override fun listBillableMetrics(
         params: CustomerListBillableMetricsParams,
@@ -225,18 +262,47 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * [Alerts](https://docs.metronome.com/connecting-metronome/alerts/) monitor customer
+         * spending, balances, and other billing factors. Use these endpoints to create, retrieve,
+         * and archive customer alerts. To view sample alert payloads by alert type, navigate
+         * [here.](https://docs.metronome.com/manage-product-access/create-manage-alerts/#webhook-notifications)
+         */
         override fun alerts(): AlertService.WithRawResponse = alerts
 
+        /**
+         * [Plans](https://docs.metronome.com/pricing-and-packaging/create-plans/) determine the
+         * base pricing for a customer. Use these endpoints to add a plan to a customer, end a
+         * customer plan, retrieve plans, and retrieve plan details. Create plans in the
+         * [Metronome app](https://app.metronome.com/plans).
+         */
         override fun plans(): PlanService.WithRawResponse = plans
 
+        /**
+         * [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent
+         * during a period, which is the basis for billing. Metronome automatically generates
+         * invoices based upon your pricing, packaging, and usage events. Use these endpoints to
+         * retrieve invoices.
+         */
         override fun invoices(): InvoiceService.WithRawResponse = invoices
 
+        /**
+         * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome
+         * represent your users for all billing and reporting. Use these endpoints to create,
+         * retrieve, update, and archive customers and their billing configuration.
+         */
         override fun billingConfig(): BillingConfigService.WithRawResponse = billingConfig
 
+        /** Credits and commits are used to manage customer balances. */
         override fun commits(): CommitService.WithRawResponse = commits
 
+        /** Credits and commits are used to manage customer balances. */
         override fun credits(): CreditService.WithRawResponse = credits
 
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         override fun namedSchedules(): NamedScheduleService.WithRawResponse = namedSchedules
 
         private val createHandler: Handler<CustomerCreateResponse> =
@@ -348,6 +414,35 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             return errorHandler.handle(response).parseable {
                 response
                     .use { archiveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val archiveBillingConfigurationsHandler:
+            Handler<CustomerArchiveBillingConfigurationsResponse> =
+            jsonHandler<CustomerArchiveBillingConfigurationsResponse>(clientOptions.jsonMapper)
+
+        override fun archiveBillingConfigurations(
+            params: CustomerArchiveBillingConfigurationsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerArchiveBillingConfigurationsResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "archiveCustomerBillingProviderConfigurations")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { archiveBillingConfigurationsHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

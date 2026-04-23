@@ -16,11 +16,13 @@ internal class BaseThresholdCommitTest {
                 .productId("product_id")
                 .description("description")
                 .name("name")
+                .priority(0.0)
                 .build()
 
         assertThat(baseThresholdCommit.productId()).isEqualTo("product_id")
         assertThat(baseThresholdCommit.description()).contains("description")
         assertThat(baseThresholdCommit.name()).contains("name")
+        assertThat(baseThresholdCommit.priority()).contains(0.0)
     }
 
     @Test
@@ -31,6 +33,7 @@ internal class BaseThresholdCommitTest {
                 .productId("product_id")
                 .description("description")
                 .name("name")
+                .priority(0.0)
                 .build()
 
         val roundtrippedBaseThresholdCommit =

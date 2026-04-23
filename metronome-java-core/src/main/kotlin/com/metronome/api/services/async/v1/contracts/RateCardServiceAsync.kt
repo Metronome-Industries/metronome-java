@@ -25,6 +25,7 @@ import com.metronome.api.services.async.v1.contracts.ratecards.RateServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Rate cards are used to define default pricing for products. */
 interface RateCardServiceAsync {
 
     /**
@@ -39,10 +40,16 @@ interface RateCardServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateCardServiceAsync
 
+    /** Rate cards are used to define default pricing for products. */
     fun productOrders(): ProductOrderServiceAsync
 
+    /** Rate cards are used to define default pricing for products. */
     fun rates(): RateServiceAsync
 
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     fun namedSchedules(): NamedScheduleServiceAsync
 
     /**
@@ -257,10 +264,16 @@ interface RateCardServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): RateCardServiceAsync.WithRawResponse
 
+        /** Rate cards are used to define default pricing for products. */
         fun productOrders(): ProductOrderServiceAsync.WithRawResponse
 
+        /** Rate cards are used to define default pricing for products. */
         fun rates(): RateServiceAsync.WithRawResponse
 
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         fun namedSchedules(): NamedScheduleServiceAsync.WithRawResponse
 
         /**

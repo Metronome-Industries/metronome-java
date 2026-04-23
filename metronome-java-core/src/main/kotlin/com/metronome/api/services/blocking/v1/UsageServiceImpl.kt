@@ -27,6 +27,11 @@ import com.metronome.api.models.v1.usage.UsageSearchParams
 import com.metronome.api.models.v1.usage.UsageSearchResponse
 import java.util.function.Consumer
 
+/**
+ * [Usage events](https://docs.metronome.com/connecting-metronome/send-usage-data/) are the basis
+ * for billable metrics. Use these endpoints to send usage events to Metronome and retrieve
+ * aggregated event data.
+ */
 class UsageServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     UsageService {
 

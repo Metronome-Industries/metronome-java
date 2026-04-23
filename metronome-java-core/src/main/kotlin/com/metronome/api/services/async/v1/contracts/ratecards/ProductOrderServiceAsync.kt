@@ -12,6 +12,7 @@ import com.metronome.api.models.v1.contracts.ratecards.productorders.ProductOrde
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Rate cards are used to define default pricing for products. */
 interface ProductOrderServiceAsync {
 
     /**

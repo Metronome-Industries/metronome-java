@@ -14,12 +14,14 @@ import com.metronome.api.errors.MetronomeInvalidDataException
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 class UpdateBaseThresholdCommit
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val description: JsonField<String>,
     private val name: JsonField<String>,
+    private val priority: JsonField<Double>,
     private val productId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -30,8 +32,9 @@ private constructor(
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("priority") @ExcludeMissing priority: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
-    ) : this(description, name, productId, mutableMapOf())
+    ) : this(description, name, priority, productId, mutableMapOf())
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -47,6 +50,16 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun name(): Optional<String> = name.getOptional("name")
+
+    /**
+     * The priority of the commit, used to determine drawdown order. Lower priority commits are
+     * consumed first. Defaults to 100 if not specified. On updates, set to null to clear a
+     * previously configured priority.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun priority(): Optional<Double> = priority.getOptional("priority")
 
     /**
      * The commit product that will be used to generate the line item for commit payment.
@@ -69,6 +82,13 @@ private constructor(
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
+     * Returns the raw JSON value of [priority].
+     *
+     * Unlike [priority], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
 
     /**
      * Returns the raw JSON value of [productId].
@@ -102,6 +122,7 @@ private constructor(
 
         private var description: JsonField<String> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
+        private var priority: JsonField<Double> = JsonMissing.of()
         private var productId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -109,6 +130,7 @@ private constructor(
         internal fun from(updateBaseThresholdCommit: UpdateBaseThresholdCommit) = apply {
             description = updateBaseThresholdCommit.description
             name = updateBaseThresholdCommit.name
+            priority = updateBaseThresholdCommit.priority
             productId = updateBaseThresholdCommit.productId
             additionalProperties = updateBaseThresholdCommit.additionalProperties.toMutableMap()
         }
@@ -137,6 +159,31 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /**
+         * The priority of the commit, used to determine drawdown order. Lower priority commits are
+         * consumed first. Defaults to 100 if not specified. On updates, set to null to clear a
+         * previously configured priority.
+         */
+        fun priority(priority: Double?) = priority(JsonField.ofNullable(priority))
+
+        /**
+         * Alias for [Builder.priority].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun priority(priority: Double) = priority(priority as Double?)
+
+        /** Alias for calling [Builder.priority] with `priority.orElse(null)`. */
+        fun priority(priority: Optional<Double>) = priority(priority.getOrNull())
+
+        /**
+         * Sets [Builder.priority] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.priority] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
         /** The commit product that will be used to generate the line item for commit payment. */
         fun productId(productId: String) = productId(JsonField.of(productId))
@@ -178,6 +225,7 @@ private constructor(
             UpdateBaseThresholdCommit(
                 description,
                 name,
+                priority,
                 productId,
                 additionalProperties.toMutableMap(),
             )
@@ -192,6 +240,7 @@ private constructor(
 
         description()
         name()
+        priority()
         productId()
         validated = true
     }
@@ -213,6 +262,7 @@ private constructor(
     internal fun validity(): Int =
         (if (description.asKnown().isPresent) 1 else 0) +
             (if (name.asKnown().isPresent) 1 else 0) +
+            (if (priority.asKnown().isPresent) 1 else 0) +
             (if (productId.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
@@ -223,16 +273,17 @@ private constructor(
         return other is UpdateBaseThresholdCommit &&
             description == other.description &&
             name == other.name &&
+            priority == other.priority &&
             productId == other.productId &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(description, name, productId, additionalProperties)
+        Objects.hash(description, name, priority, productId, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UpdateBaseThresholdCommit{description=$description, name=$name, productId=$productId, additionalProperties=$additionalProperties}"
+        "UpdateBaseThresholdCommit{description=$description, name=$name, priority=$priority, productId=$productId, additionalProperties=$additionalProperties}"
 }

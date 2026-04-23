@@ -19,6 +19,7 @@ internal class SpendThresholdConfigurationTest {
                         .productId("product_id")
                         .description("description")
                         .name("name")
+                        .priority(0.0)
                         .build()
                 )
                 .isEnabled(true)
@@ -45,6 +46,11 @@ internal class SpendThresholdConfigurationTest {
                         .build()
                 )
                 .thresholdAmount(0.0)
+                .discountConfiguration(
+                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                        .paymentFraction(0.0)
+                        .build()
+                )
                 .build()
 
         assertThat(spendThresholdConfiguration.commit())
@@ -53,6 +59,7 @@ internal class SpendThresholdConfigurationTest {
                     .productId("product_id")
                     .description("description")
                     .name("name")
+                    .priority(0.0)
                     .build()
             )
         assertThat(spendThresholdConfiguration.isEnabled()).isEqualTo(true)
@@ -80,6 +87,12 @@ internal class SpendThresholdConfigurationTest {
                     .build()
             )
         assertThat(spendThresholdConfiguration.thresholdAmount()).isEqualTo(0.0)
+        assertThat(spendThresholdConfiguration.discountConfiguration())
+            .contains(
+                SpendThresholdConfiguration.DiscountConfiguration.builder()
+                    .paymentFraction(0.0)
+                    .build()
+            )
     }
 
     @Test
@@ -92,6 +105,7 @@ internal class SpendThresholdConfigurationTest {
                         .productId("product_id")
                         .description("description")
                         .name("name")
+                        .priority(0.0)
                         .build()
                 )
                 .isEnabled(true)
@@ -118,6 +132,11 @@ internal class SpendThresholdConfigurationTest {
                         .build()
                 )
                 .thresholdAmount(0.0)
+                .discountConfiguration(
+                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                        .paymentFraction(0.0)
+                        .build()
+                )
                 .build()
 
         val roundtrippedSpendThresholdConfiguration =

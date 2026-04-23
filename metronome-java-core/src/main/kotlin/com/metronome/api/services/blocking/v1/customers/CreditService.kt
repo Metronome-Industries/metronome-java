@@ -14,6 +14,7 @@ import com.metronome.api.models.v1.customers.credits.CreditUpdateEndDateParams
 import com.metronome.api.models.v1.customers.credits.CreditUpdateEndDateResponse
 import java.util.function.Consumer
 
+/** Credits and commits are used to manage customer balances. */
 interface CreditService {
 
     /**

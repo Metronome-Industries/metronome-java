@@ -25,6 +25,7 @@ class Override
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
+    private val createdAt: JsonField<OffsetDateTime>,
     private val startingAt: JsonField<OffsetDateTime>,
     private val applicableProductTags: JsonField<List<String>>,
     private val creditType: JsonField<CreditTypeData>,
@@ -51,6 +52,9 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("starting_at")
         @ExcludeMissing
         startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -93,6 +97,7 @@ private constructor(
         @JsonProperty("value") @ExcludeMissing value: JsonField<Value> = JsonMissing.of(),
     ) : this(
         id,
+        createdAt,
         startingAt,
         applicableProductTags,
         creditType,
@@ -121,6 +126,12 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -261,6 +272,15 @@ private constructor(
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
     /**
      * Returns the raw JSON value of [startingAt].
@@ -441,6 +461,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
+         * .createdAt()
          * .startingAt()
          * ```
          */
@@ -451,6 +472,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
+        private var createdAt: JsonField<OffsetDateTime>? = null
         private var startingAt: JsonField<OffsetDateTime>? = null
         private var applicableProductTags: JsonField<MutableList<String>>? = null
         private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
@@ -476,6 +498,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(override: Override) = apply {
             id = override.id
+            createdAt = override.createdAt
             startingAt = override.startingAt
             applicableProductTags = override.applicableProductTags.map { it.toMutableList() }
             creditType = override.creditType
@@ -508,6 +531,17 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
@@ -828,6 +862,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
+         * .createdAt()
          * .startingAt()
          * ```
          *
@@ -836,6 +871,7 @@ private constructor(
         fun build(): Override =
             Override(
                 checkRequired("id", id),
+                checkRequired("createdAt", createdAt),
                 checkRequired("startingAt", startingAt),
                 (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                 creditType,
@@ -868,6 +904,7 @@ private constructor(
         }
 
         id()
+        createdAt()
         startingAt()
         applicableProductTags()
         creditType().ifPresent { it.validate() }
@@ -907,6 +944,7 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (if (id.asKnown().isPresent) 1 else 0) +
+            (if (createdAt.asKnown().isPresent) 1 else 0) +
             (if (startingAt.asKnown().isPresent) 1 else 0) +
             (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
             (creditType.asKnown().getOrNull()?.validity() ?: 0) +
@@ -938,7 +976,6 @@ private constructor(
         private val productId: JsonField<String>,
         private val productTags: JsonField<List<String>>,
         private val recurringCommitIds: JsonField<List<String>>,
-        private val recurringCreditIds: JsonField<List<String>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -965,9 +1002,6 @@ private constructor(
             @JsonProperty("recurring_commit_ids")
             @ExcludeMissing
             recurringCommitIds: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("recurring_credit_ids")
-            @ExcludeMissing
-            recurringCreditIds: JsonField<List<String>> = JsonMissing.of(),
         ) : this(
             billingFrequency,
             commitIds,
@@ -976,7 +1010,6 @@ private constructor(
             productId,
             productTags,
             recurringCommitIds,
-            recurringCreditIds,
             mutableMapOf(),
         )
 
@@ -1025,13 +1058,6 @@ private constructor(
          */
         fun recurringCommitIds(): Optional<List<String>> =
             recurringCommitIds.getOptional("recurring_commit_ids")
-
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun recurringCreditIds(): Optional<List<String>> =
-            recurringCreditIds.getOptional("recurring_credit_ids")
 
         /**
          * Returns the raw JSON value of [billingFrequency].
@@ -1098,16 +1124,6 @@ private constructor(
         @ExcludeMissing
         fun _recurringCommitIds(): JsonField<List<String>> = recurringCommitIds
 
-        /**
-         * Returns the raw JSON value of [recurringCreditIds].
-         *
-         * Unlike [recurringCreditIds], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("recurring_credit_ids")
-        @ExcludeMissing
-        fun _recurringCreditIds(): JsonField<List<String>> = recurringCreditIds
-
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -1137,7 +1153,6 @@ private constructor(
             private var productId: JsonField<String> = JsonMissing.of()
             private var productTags: JsonField<MutableList<String>>? = null
             private var recurringCommitIds: JsonField<MutableList<String>>? = null
-            private var recurringCreditIds: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1149,7 +1164,6 @@ private constructor(
                 productId = overrideSpecifier.productId
                 productTags = overrideSpecifier.productTags.map { it.toMutableList() }
                 recurringCommitIds = overrideSpecifier.recurringCommitIds.map { it.toMutableList() }
-                recurringCreditIds = overrideSpecifier.recurringCreditIds.map { it.toMutableList() }
                 additionalProperties = overrideSpecifier.additionalProperties.toMutableMap()
             }
 
@@ -1282,32 +1296,6 @@ private constructor(
                     }
             }
 
-            fun recurringCreditIds(recurringCreditIds: List<String>) =
-                recurringCreditIds(JsonField.of(recurringCreditIds))
-
-            /**
-             * Sets [Builder.recurringCreditIds] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.recurringCreditIds] with a well-typed `List<String>`
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun recurringCreditIds(recurringCreditIds: JsonField<List<String>>) = apply {
-                this.recurringCreditIds = recurringCreditIds.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [String] to [recurringCreditIds].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addRecurringCreditId(recurringCreditId: String) = apply {
-                recurringCreditIds =
-                    (recurringCreditIds ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("recurringCreditIds", it).add(recurringCreditId)
-                    }
-            }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -1341,7 +1329,6 @@ private constructor(
                     productId,
                     (productTags ?: JsonMissing.of()).map { it.toImmutable() },
                     (recurringCommitIds ?: JsonMissing.of()).map { it.toImmutable() },
-                    (recurringCreditIds ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -1360,7 +1347,6 @@ private constructor(
             productId()
             productTags()
             recurringCommitIds()
-            recurringCreditIds()
             validated = true
         }
 
@@ -1386,8 +1372,7 @@ private constructor(
                 (pricingGroupValues.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (productTags.asKnown().getOrNull()?.size ?: 0) +
-                (recurringCommitIds.asKnown().getOrNull()?.size ?: 0) +
-                (recurringCreditIds.asKnown().getOrNull()?.size ?: 0)
+                (recurringCommitIds.asKnown().getOrNull()?.size ?: 0)
 
         class BillingFrequency
         @JsonCreator
@@ -1763,7 +1748,6 @@ private constructor(
                 productId == other.productId &&
                 productTags == other.productTags &&
                 recurringCommitIds == other.recurringCommitIds &&
-                recurringCreditIds == other.recurringCreditIds &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -1776,7 +1760,6 @@ private constructor(
                 productId,
                 productTags,
                 recurringCommitIds,
-                recurringCreditIds,
                 additionalProperties,
             )
         }
@@ -1784,7 +1767,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "OverrideSpecifier{billingFrequency=$billingFrequency, commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, recurringCreditIds=$recurringCreditIds, additionalProperties=$additionalProperties}"
+            "OverrideSpecifier{billingFrequency=$billingFrequency, commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, additionalProperties=$additionalProperties}"
     }
 
     class Product
@@ -2496,6 +2479,7 @@ private constructor(
 
         return other is Override &&
             id == other.id &&
+            createdAt == other.createdAt &&
             startingAt == other.startingAt &&
             applicableProductTags == other.applicableProductTags &&
             creditType == other.creditType &&
@@ -2522,6 +2506,7 @@ private constructor(
     private val hashCode: Int by lazy {
         Objects.hash(
             id,
+            createdAt,
             startingAt,
             applicableProductTags,
             creditType,
@@ -2549,5 +2534,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Override{id=$id, startingAt=$startingAt, applicableProductTags=$applicableProductTags, creditType=$creditType, endingBefore=$endingBefore, entitled=$entitled, isCommitSpecific=$isCommitSpecific, isProrated=$isProrated, multiplier=$multiplier, overrideSpecifiers=$overrideSpecifiers, overrideTiers=$overrideTiers, overwriteRate=$overwriteRate, price=$price, priority=$priority, product=$product, quantity=$quantity, rateType=$rateType, target=$target, tiers=$tiers, type=$type, value=$value, additionalProperties=$additionalProperties}"
+        "Override{id=$id, createdAt=$createdAt, startingAt=$startingAt, applicableProductTags=$applicableProductTags, creditType=$creditType, endingBefore=$endingBefore, entitled=$entitled, isCommitSpecific=$isCommitSpecific, isProrated=$isProrated, multiplier=$multiplier, overrideSpecifiers=$overrideSpecifiers, overrideTiers=$overrideTiers, overwriteRate=$overwriteRate, price=$price, priority=$priority, product=$product, quantity=$quantity, rateType=$rateType, target=$target, tiers=$tiers, type=$type, value=$value, additionalProperties=$additionalProperties}"
 }

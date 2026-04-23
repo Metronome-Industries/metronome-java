@@ -11553,6 +11553,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
+        private val createdAt: JsonField<OffsetDateTime>,
         private val startingAt: JsonField<OffsetDateTime>,
         private val applicableProductTags: JsonField<List<String>>,
         private val endingBefore: JsonField<OffsetDateTime>,
@@ -11572,6 +11573,9 @@ private constructor(
         @JsonCreator
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("starting_at")
             @ExcludeMissing
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -11607,6 +11611,7 @@ private constructor(
             @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
         ) : this(
             id,
+            createdAt,
             startingAt,
             applicableProductTags,
             endingBefore,
@@ -11628,6 +11633,12 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun id(): String = id.getRequired("id")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -11717,6 +11728,15 @@ private constructor(
          * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [createdAt].
+         *
+         * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
         /**
          * Returns the raw JSON value of [startingAt].
@@ -11851,6 +11871,7 @@ private constructor(
              * The following fields are required:
              * ```java
              * .id()
+             * .createdAt()
              * .startingAt()
              * ```
              */
@@ -11861,6 +11882,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var id: JsonField<String>? = null
+            private var createdAt: JsonField<OffsetDateTime>? = null
             private var startingAt: JsonField<OffsetDateTime>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -11879,6 +11901,7 @@ private constructor(
             @JvmSynthetic
             internal fun from(override: Override) = apply {
                 id = override.id
+                createdAt = override.createdAt
                 startingAt = override.startingAt
                 applicableProductTags = override.applicableProductTags.map { it.toMutableList() }
                 endingBefore = override.endingBefore
@@ -11905,6 +11928,19 @@ private constructor(
              * value.
              */
             fun id(id: JsonField<String>) = apply { this.id = id }
+
+            fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+            /**
+             * Sets [Builder.createdAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                this.createdAt = createdAt
+            }
 
             fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
@@ -12132,6 +12168,7 @@ private constructor(
              * The following fields are required:
              * ```java
              * .id()
+             * .createdAt()
              * .startingAt()
              * ```
              *
@@ -12140,6 +12177,7 @@ private constructor(
             fun build(): Override =
                 Override(
                     checkRequired("id", id),
+                    checkRequired("createdAt", createdAt),
                     checkRequired("startingAt", startingAt),
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     endingBefore,
@@ -12165,6 +12203,7 @@ private constructor(
             }
 
             id()
+            createdAt()
             startingAt()
             applicableProductTags()
             endingBefore()
@@ -12198,6 +12237,7 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (id.asKnown().isPresent) 1 else 0) +
+                (if (createdAt.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (endingBefore.asKnown().isPresent) 1 else 0) +
@@ -12222,7 +12262,6 @@ private constructor(
             private val productId: JsonField<String>,
             private val productTags: JsonField<List<String>>,
             private val recurringCommitIds: JsonField<List<String>>,
-            private val recurringCreditIds: JsonField<List<String>>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -12249,9 +12288,6 @@ private constructor(
                 @JsonProperty("recurring_commit_ids")
                 @ExcludeMissing
                 recurringCommitIds: JsonField<List<String>> = JsonMissing.of(),
-                @JsonProperty("recurring_credit_ids")
-                @ExcludeMissing
-                recurringCreditIds: JsonField<List<String>> = JsonMissing.of(),
             ) : this(
                 billingFrequency,
                 commitIds,
@@ -12260,7 +12296,6 @@ private constructor(
                 productId,
                 productTags,
                 recurringCommitIds,
-                recurringCreditIds,
                 mutableMapOf(),
             )
 
@@ -12309,13 +12344,6 @@ private constructor(
              */
             fun recurringCommitIds(): Optional<List<String>> =
                 recurringCommitIds.getOptional("recurring_commit_ids")
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun recurringCreditIds(): Optional<List<String>> =
-                recurringCreditIds.getOptional("recurring_credit_ids")
 
             /**
              * Returns the raw JSON value of [billingFrequency].
@@ -12388,16 +12416,6 @@ private constructor(
             @ExcludeMissing
             fun _recurringCommitIds(): JsonField<List<String>> = recurringCommitIds
 
-            /**
-             * Returns the raw JSON value of [recurringCreditIds].
-             *
-             * Unlike [recurringCreditIds], this method doesn't throw if the JSON field has an
-             * unexpected type.
-             */
-            @JsonProperty("recurring_credit_ids")
-            @ExcludeMissing
-            fun _recurringCreditIds(): JsonField<List<String>> = recurringCreditIds
-
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -12429,7 +12447,6 @@ private constructor(
                 private var productId: JsonField<String> = JsonMissing.of()
                 private var productTags: JsonField<MutableList<String>>? = null
                 private var recurringCommitIds: JsonField<MutableList<String>>? = null
-                private var recurringCreditIds: JsonField<MutableList<String>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -12442,8 +12459,6 @@ private constructor(
                     productTags = overrideSpecifier.productTags.map { it.toMutableList() }
                     recurringCommitIds =
                         overrideSpecifier.recurringCommitIds.map { it.toMutableList() }
-                    recurringCreditIds =
-                        overrideSpecifier.recurringCreditIds.map { it.toMutableList() }
                     additionalProperties = overrideSpecifier.additionalProperties.toMutableMap()
                 }
 
@@ -12576,32 +12591,6 @@ private constructor(
                         }
                 }
 
-                fun recurringCreditIds(recurringCreditIds: List<String>) =
-                    recurringCreditIds(JsonField.of(recurringCreditIds))
-
-                /**
-                 * Sets [Builder.recurringCreditIds] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.recurringCreditIds] with a well-typed
-                 * `List<String>` value instead. This method is primarily for setting the field to
-                 * an undocumented or not yet supported value.
-                 */
-                fun recurringCreditIds(recurringCreditIds: JsonField<List<String>>) = apply {
-                    this.recurringCreditIds = recurringCreditIds.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [String] to [recurringCreditIds].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addRecurringCreditId(recurringCreditId: String) = apply {
-                    recurringCreditIds =
-                        (recurringCreditIds ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("recurringCreditIds", it).add(recurringCreditId)
-                        }
-                }
-
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
                     putAllAdditionalProperties(additionalProperties)
@@ -12638,7 +12627,6 @@ private constructor(
                         productId,
                         (productTags ?: JsonMissing.of()).map { it.toImmutable() },
                         (recurringCommitIds ?: JsonMissing.of()).map { it.toImmutable() },
-                        (recurringCreditIds ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -12657,7 +12645,6 @@ private constructor(
                 productId()
                 productTags()
                 recurringCommitIds()
-                recurringCreditIds()
                 validated = true
             }
 
@@ -12683,8 +12670,7 @@ private constructor(
                     (pricingGroupValues.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (productId.asKnown().isPresent) 1 else 0) +
                     (productTags.asKnown().getOrNull()?.size ?: 0) +
-                    (recurringCommitIds.asKnown().getOrNull()?.size ?: 0) +
-                    (recurringCreditIds.asKnown().getOrNull()?.size ?: 0)
+                    (recurringCommitIds.asKnown().getOrNull()?.size ?: 0)
 
             class BillingFrequency
             @JsonCreator
@@ -13068,7 +13054,6 @@ private constructor(
                     productId == other.productId &&
                     productTags == other.productTags &&
                     recurringCommitIds == other.recurringCommitIds &&
-                    recurringCreditIds == other.recurringCreditIds &&
                     additionalProperties == other.additionalProperties
             }
 
@@ -13081,7 +13066,6 @@ private constructor(
                     productId,
                     productTags,
                     recurringCommitIds,
-                    recurringCreditIds,
                     additionalProperties,
                 )
             }
@@ -13089,7 +13073,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "OverrideSpecifier{billingFrequency=$billingFrequency, commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, recurringCreditIds=$recurringCreditIds, additionalProperties=$additionalProperties}"
+                "OverrideSpecifier{billingFrequency=$billingFrequency, commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, additionalProperties=$additionalProperties}"
         }
 
         class OverwriteRate
@@ -14264,6 +14248,7 @@ private constructor(
 
             return other is Override &&
                 id == other.id &&
+                createdAt == other.createdAt &&
                 startingAt == other.startingAt &&
                 applicableProductTags == other.applicableProductTags &&
                 endingBefore == other.endingBefore &&
@@ -14283,6 +14268,7 @@ private constructor(
         private val hashCode: Int by lazy {
             Objects.hash(
                 id,
+                createdAt,
                 startingAt,
                 applicableProductTags,
                 endingBefore,
@@ -14303,7 +14289,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Override{id=$id, startingAt=$startingAt, applicableProductTags=$applicableProductTags, endingBefore=$endingBefore, entitled=$entitled, isCommitSpecific=$isCommitSpecific, multiplier=$multiplier, overrideSpecifiers=$overrideSpecifiers, overrideTiers=$overrideTiers, overwriteRate=$overwriteRate, priority=$priority, product=$product, target=$target, type=$type, additionalProperties=$additionalProperties}"
+            "Override{id=$id, createdAt=$createdAt, startingAt=$startingAt, applicableProductTags=$applicableProductTags, endingBefore=$endingBefore, entitled=$entitled, isCommitSpecific=$isCommitSpecific, multiplier=$multiplier, overrideSpecifiers=$overrideSpecifiers, overrideTiers=$overrideTiers, overwriteRate=$overwriteRate, priority=$priority, product=$product, target=$target, type=$type, additionalProperties=$additionalProperties}"
     }
 
     class Transition
@@ -15358,6 +15344,7 @@ private constructor(
         private val netsuiteSalesOrderId: JsonField<String>,
         private val priority: JsonField<Double>,
         private val recurringCreditId: JsonField<String>,
+        private val rolledOverFrom: JsonField<RolledOverFrom>,
         private val salesforceOpportunityId: JsonField<String>,
         private val specifiers: JsonField<List<CommitSpecifier>>,
         private val subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig>,
@@ -15410,6 +15397,9 @@ private constructor(
             @JsonProperty("recurring_credit_id")
             @ExcludeMissing
             recurringCreditId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("rolled_over_from")
+            @ExcludeMissing
+            rolledOverFrom: JsonField<RolledOverFrom> = JsonMissing.of(),
             @JsonProperty("salesforce_opportunity_id")
             @ExcludeMissing
             salesforceOpportunityId: JsonField<String> = JsonMissing.of(),
@@ -15438,6 +15428,7 @@ private constructor(
             netsuiteSalesOrderId,
             priority,
             recurringCreditId,
+            rolledOverFrom,
             salesforceOpportunityId,
             specifiers,
             subscriptionConfig,
@@ -15585,6 +15576,13 @@ private constructor(
          */
         fun recurringCreditId(): Optional<String> =
             recurringCreditId.getOptional("recurring_credit_id")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun rolledOverFrom(): Optional<RolledOverFrom> =
+            rolledOverFrom.getOptional("rolled_over_from")
 
         /**
          * This field's availability is dependent on your client's configuration.
@@ -15770,6 +15768,16 @@ private constructor(
         fun _recurringCreditId(): JsonField<String> = recurringCreditId
 
         /**
+         * Returns the raw JSON value of [rolledOverFrom].
+         *
+         * Unlike [rolledOverFrom], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("rolled_over_from")
+        @ExcludeMissing
+        fun _rolledOverFrom(): JsonField<RolledOverFrom> = rolledOverFrom
+
+        /**
          * Returns the raw JSON value of [salesforceOpportunityId].
          *
          * Unlike [salesforceOpportunityId], this method doesn't throw if the JSON field has an
@@ -15847,6 +15855,7 @@ private constructor(
             private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
             private var priority: JsonField<Double> = JsonMissing.of()
             private var recurringCreditId: JsonField<String> = JsonMissing.of()
+            private var rolledOverFrom: JsonField<RolledOverFrom> = JsonMissing.of()
             private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
             private var specifiers: JsonField<MutableList<CommitSpecifier>>? = null
             private var subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig> =
@@ -15873,6 +15882,7 @@ private constructor(
                 netsuiteSalesOrderId = credit.netsuiteSalesOrderId
                 priority = credit.priority
                 recurringCreditId = credit.recurringCreditId
+                rolledOverFrom = credit.rolledOverFrom
                 salesforceOpportunityId = credit.salesforceOpportunityId
                 specifiers = credit.specifiers.map { it.toMutableList() }
                 subscriptionConfig = credit.subscriptionConfig
@@ -16188,6 +16198,13 @@ private constructor(
                     )
                 )
 
+            /**
+             * Alias for calling [addLedger] with
+             * `Ledger.ofCreditRolloverLedgerEntry(creditRolloverLedgerEntry)`.
+             */
+            fun addLedger(creditRolloverLedgerEntry: Ledger.CreditRolloverLedgerEntry) =
+                addLedger(Ledger.ofCreditRolloverLedgerEntry(creditRolloverLedgerEntry))
+
             fun name(name: String) = name(JsonField.of(name))
 
             /**
@@ -16242,6 +16259,20 @@ private constructor(
              */
             fun recurringCreditId(recurringCreditId: JsonField<String>) = apply {
                 this.recurringCreditId = recurringCreditId
+            }
+
+            fun rolledOverFrom(rolledOverFrom: RolledOverFrom) =
+                rolledOverFrom(JsonField.of(rolledOverFrom))
+
+            /**
+             * Sets [Builder.rolledOverFrom] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.rolledOverFrom] with a well-typed [RolledOverFrom]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun rolledOverFrom(rolledOverFrom: JsonField<RolledOverFrom>) = apply {
+                this.rolledOverFrom = rolledOverFrom
             }
 
             /** This field's availability is dependent on your client's configuration. */
@@ -16357,6 +16388,7 @@ private constructor(
                     netsuiteSalesOrderId,
                     priority,
                     recurringCreditId,
+                    rolledOverFrom,
                     salesforceOpportunityId,
                     (specifiers ?: JsonMissing.of()).map { it.toImmutable() },
                     subscriptionConfig,
@@ -16389,6 +16421,7 @@ private constructor(
             netsuiteSalesOrderId()
             priority()
             recurringCreditId()
+            rolledOverFrom().ifPresent { it.validate() }
             salesforceOpportunityId()
             specifiers().ifPresent { it.forEach { it.validate() } }
             subscriptionConfig().ifPresent { it.validate() }
@@ -16429,6 +16462,7 @@ private constructor(
                 (if (netsuiteSalesOrderId.asKnown().isPresent) 1 else 0) +
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (if (recurringCreditId.asKnown().isPresent) 1 else 0) +
+                (rolledOverFrom.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (salesforceOpportunityId.asKnown().isPresent) 1 else 0) +
                 (specifiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (subscriptionConfig.asKnown().getOrNull()?.validity() ?: 0)
@@ -17024,6 +17058,7 @@ private constructor(
             private val creditSeatBasedAdjustmentLedgerEntry:
                 CreditSeatBasedAdjustmentLedgerEntry? =
                 null,
+            private val creditRolloverLedgerEntry: CreditRolloverLedgerEntry? = null,
             private val _json: JsonValue? = null,
         ) {
 
@@ -17050,6 +17085,9 @@ private constructor(
                 Optional<CreditSeatBasedAdjustmentLedgerEntry> =
                 Optional.ofNullable(creditSeatBasedAdjustmentLedgerEntry)
 
+            fun creditRolloverLedgerEntry(): Optional<CreditRolloverLedgerEntry> =
+                Optional.ofNullable(creditRolloverLedgerEntry)
+
             fun isCreditSegmentStartLedgerEntry(): Boolean = creditSegmentStartLedgerEntry != null
 
             fun isCreditAutomatedInvoiceDeductionLedgerEntry(): Boolean =
@@ -17065,6 +17103,8 @@ private constructor(
 
             fun isCreditSeatBasedAdjustmentLedgerEntry(): Boolean =
                 creditSeatBasedAdjustmentLedgerEntry != null
+
+            fun isCreditRolloverLedgerEntry(): Boolean = creditRolloverLedgerEntry != null
 
             fun asCreditSegmentStartLedgerEntry(): CreditSegmentStartLedgerEntry =
                 creditSegmentStartLedgerEntry.getOrThrow("creditSegmentStartLedgerEntry")
@@ -17092,6 +17132,9 @@ private constructor(
                     "creditSeatBasedAdjustmentLedgerEntry"
                 )
 
+            fun asCreditRolloverLedgerEntry(): CreditRolloverLedgerEntry =
+                creditRolloverLedgerEntry.getOrThrow("creditRolloverLedgerEntry")
+
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T =
@@ -17114,6 +17157,8 @@ private constructor(
                         visitor.visitCreditSeatBasedAdjustmentLedgerEntry(
                             creditSeatBasedAdjustmentLedgerEntry
                         )
+                    creditRolloverLedgerEntry != null ->
+                        visitor.visitCreditRolloverLedgerEntry(creditRolloverLedgerEntry)
                     else -> visitor.unknown(_json)
                 }
 
@@ -17169,6 +17214,12 @@ private constructor(
                         ) {
                             creditSeatBasedAdjustmentLedgerEntry.validate()
                         }
+
+                        override fun visitCreditRolloverLedgerEntry(
+                            creditRolloverLedgerEntry: CreditRolloverLedgerEntry
+                        ) {
+                            creditRolloverLedgerEntry.validate()
+                        }
                     }
                 )
                 validated = true
@@ -17222,6 +17273,10 @@ private constructor(
                                 CreditSeatBasedAdjustmentLedgerEntry
                         ) = creditSeatBasedAdjustmentLedgerEntry.validity()
 
+                        override fun visitCreditRolloverLedgerEntry(
+                            creditRolloverLedgerEntry: CreditRolloverLedgerEntry
+                        ) = creditRolloverLedgerEntry.validity()
+
                         override fun unknown(json: JsonValue?) = 0
                     }
                 )
@@ -17240,7 +17295,8 @@ private constructor(
                     creditCreditedLedgerEntry == other.creditCreditedLedgerEntry &&
                     creditManualLedgerEntry == other.creditManualLedgerEntry &&
                     creditSeatBasedAdjustmentLedgerEntry ==
-                        other.creditSeatBasedAdjustmentLedgerEntry
+                        other.creditSeatBasedAdjustmentLedgerEntry &&
+                    creditRolloverLedgerEntry == other.creditRolloverLedgerEntry
             }
 
             override fun hashCode(): Int =
@@ -17252,6 +17308,7 @@ private constructor(
                     creditCreditedLedgerEntry,
                     creditManualLedgerEntry,
                     creditSeatBasedAdjustmentLedgerEntry,
+                    creditRolloverLedgerEntry,
                 )
 
             override fun toString(): String =
@@ -17270,6 +17327,8 @@ private constructor(
                         "Ledger{creditManualLedgerEntry=$creditManualLedgerEntry}"
                     creditSeatBasedAdjustmentLedgerEntry != null ->
                         "Ledger{creditSeatBasedAdjustmentLedgerEntry=$creditSeatBasedAdjustmentLedgerEntry}"
+                    creditRolloverLedgerEntry != null ->
+                        "Ledger{creditRolloverLedgerEntry=$creditRolloverLedgerEntry}"
                     _json != null -> "Ledger{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid Ledger")
                 }
@@ -17317,6 +17376,11 @@ private constructor(
                     Ledger(
                         creditSeatBasedAdjustmentLedgerEntry = creditSeatBasedAdjustmentLedgerEntry
                     )
+
+                @JvmStatic
+                fun ofCreditRolloverLedgerEntry(
+                    creditRolloverLedgerEntry: CreditRolloverLedgerEntry
+                ) = Ledger(creditRolloverLedgerEntry = creditRolloverLedgerEntry)
             }
 
             /**
@@ -17351,6 +17415,10 @@ private constructor(
 
                 fun visitCreditSeatBasedAdjustmentLedgerEntry(
                     creditSeatBasedAdjustmentLedgerEntry: CreditSeatBasedAdjustmentLedgerEntry
+                ): T
+
+                fun visitCreditRolloverLedgerEntry(
+                    creditRolloverLedgerEntry: CreditRolloverLedgerEntry
                 ): T
 
                 /**
@@ -17412,6 +17480,8 @@ private constructor(
                                             _json = json,
                                         )
                                     },
+                                tryDeserialize(node, jacksonTypeRef<CreditRolloverLedgerEntry>())
+                                    ?.let { Ledger(creditRolloverLedgerEntry = it, _json = json) },
                             )
                             .filterNotNull()
                             .allMaxBy { it.validity() }
@@ -17451,6 +17521,8 @@ private constructor(
                             generator.writeObject(value.creditManualLedgerEntry)
                         value.creditSeatBasedAdjustmentLedgerEntry != null ->
                             generator.writeObject(value.creditSeatBasedAdjustmentLedgerEntry)
+                        value.creditRolloverLedgerEntry != null ->
+                            generator.writeObject(value.creditRolloverLedgerEntry)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid Ledger")
                     }
@@ -20648,6 +20720,682 @@ private constructor(
                 override fun toString() =
                     "CreditSeatBasedAdjustmentLedgerEntry{amount=$amount, segmentId=$segmentId, timestamp=$timestamp, type=$type, additionalProperties=$additionalProperties}"
             }
+
+            class CreditRolloverLedgerEntry
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val amount: JsonField<Double>,
+                private val newContractId: JsonField<String>,
+                private val segmentId: JsonField<String>,
+                private val timestamp: JsonField<OffsetDateTime>,
+                private val type: JsonField<Type>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("amount")
+                    @ExcludeMissing
+                    amount: JsonField<Double> = JsonMissing.of(),
+                    @JsonProperty("new_contract_id")
+                    @ExcludeMissing
+                    newContractId: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("segment_id")
+                    @ExcludeMissing
+                    segmentId: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("timestamp")
+                    @ExcludeMissing
+                    timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+                    @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+                ) : this(amount, newContractId, segmentId, timestamp, type, mutableMapOf())
+
+                /**
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun amount(): Double = amount.getRequired("amount")
+
+                /**
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun newContractId(): String = newContractId.getRequired("new_contract_id")
+
+                /**
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun segmentId(): String = segmentId.getRequired("segment_id")
+
+                /**
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
+
+                /**
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun type(): Type = type.getRequired("type")
+
+                /**
+                 * Returns the raw JSON value of [amount].
+                 *
+                 * Unlike [amount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+                /**
+                 * Returns the raw JSON value of [newContractId].
+                 *
+                 * Unlike [newContractId], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("new_contract_id")
+                @ExcludeMissing
+                fun _newContractId(): JsonField<String> = newContractId
+
+                /**
+                 * Returns the raw JSON value of [segmentId].
+                 *
+                 * Unlike [segmentId], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("segment_id")
+                @ExcludeMissing
+                fun _segmentId(): JsonField<String> = segmentId
+
+                /**
+                 * Returns the raw JSON value of [timestamp].
+                 *
+                 * Unlike [timestamp], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                fun _timestamp(): JsonField<OffsetDateTime> = timestamp
+
+                /**
+                 * Returns the raw JSON value of [type].
+                 *
+                 * Unlike [type], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [CreditRolloverLedgerEntry].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .amount()
+                     * .newContractId()
+                     * .segmentId()
+                     * .timestamp()
+                     * .type()
+                     * ```
+                     */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [CreditRolloverLedgerEntry]. */
+                class Builder internal constructor() {
+
+                    private var amount: JsonField<Double>? = null
+                    private var newContractId: JsonField<String>? = null
+                    private var segmentId: JsonField<String>? = null
+                    private var timestamp: JsonField<OffsetDateTime>? = null
+                    private var type: JsonField<Type>? = null
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(creditRolloverLedgerEntry: CreditRolloverLedgerEntry) =
+                        apply {
+                            amount = creditRolloverLedgerEntry.amount
+                            newContractId = creditRolloverLedgerEntry.newContractId
+                            segmentId = creditRolloverLedgerEntry.segmentId
+                            timestamp = creditRolloverLedgerEntry.timestamp
+                            type = creditRolloverLedgerEntry.type
+                            additionalProperties =
+                                creditRolloverLedgerEntry.additionalProperties.toMutableMap()
+                        }
+
+                    fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                    /**
+                     * Sets [Builder.amount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.amount] with a well-typed [Double] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                    fun newContractId(newContractId: String) =
+                        newContractId(JsonField.of(newContractId))
+
+                    /**
+                     * Sets [Builder.newContractId] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.newContractId] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun newContractId(newContractId: JsonField<String>) = apply {
+                        this.newContractId = newContractId
+                    }
+
+                    fun segmentId(segmentId: String) = segmentId(JsonField.of(segmentId))
+
+                    /**
+                     * Sets [Builder.segmentId] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.segmentId] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun segmentId(segmentId: JsonField<String>) = apply {
+                        this.segmentId = segmentId
+                    }
+
+                    fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
+
+                    /**
+                     * Sets [Builder.timestamp] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.timestamp] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
+                    fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                        this.timestamp = timestamp
+                    }
+
+                    fun type(type: Type) = type(JsonField.of(type))
+
+                    /**
+                     * Sets [Builder.type] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.type] with a well-typed [Type] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [CreditRolloverLedgerEntry].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .amount()
+                     * .newContractId()
+                     * .segmentId()
+                     * .timestamp()
+                     * .type()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): CreditRolloverLedgerEntry =
+                        CreditRolloverLedgerEntry(
+                            checkRequired("amount", amount),
+                            checkRequired("newContractId", newContractId),
+                            checkRequired("segmentId", segmentId),
+                            checkRequired("timestamp", timestamp),
+                            checkRequired("type", type),
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): CreditRolloverLedgerEntry = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    amount()
+                    newContractId()
+                    segmentId()
+                    timestamp()
+                    type().validate()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (if (amount.asKnown().isPresent) 1 else 0) +
+                        (if (newContractId.asKnown().isPresent) 1 else 0) +
+                        (if (segmentId.asKnown().isPresent) 1 else 0) +
+                        (if (timestamp.asKnown().isPresent) 1 else 0) +
+                        (type.asKnown().getOrNull()?.validity() ?: 0)
+
+                class Type @JsonCreator private constructor(private val value: JsonField<String>) :
+                    Enum {
+
+                    /**
+                     * Returns this class instance's raw value.
+                     *
+                     * This is usually only useful if this instance was deserialized from data that
+                     * doesn't match any known member, and you want to know that value. For example,
+                     * if the SDK is on an older version than the API, then the API may respond with
+                     * new members that the SDK is unaware of.
+                     */
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    fun _value(): JsonField<String> = value
+
+                    companion object {
+
+                        @JvmField val CREDIT_ROLLOVER = of("CREDIT_ROLLOVER")
+
+                        @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+                    }
+
+                    /** An enum containing [Type]'s known values. */
+                    enum class Known {
+                        CREDIT_ROLLOVER
+                    }
+
+                    /**
+                     * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+                     *
+                     * An instance of [Type] can contain an unknown value in a couple of cases:
+                     * - It was deserialized from data that doesn't match any known member. For
+                     *   example, if the SDK is on an older version than the API, then the API may
+                     *   respond with new members that the SDK is unaware of.
+                     * - It was constructed with an arbitrary value using the [of] method.
+                     */
+                    enum class Value {
+                        CREDIT_ROLLOVER,
+                        /**
+                         * An enum member indicating that [Type] was instantiated with an unknown
+                         * value.
+                         */
+                        _UNKNOWN,
+                    }
+
+                    /**
+                     * Returns an enum member corresponding to this class instance's value, or
+                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                     *
+                     * Use the [known] method instead if you're certain the value is always known or
+                     * if you want to throw for the unknown case.
+                     */
+                    fun value(): Value =
+                        when (this) {
+                            CREDIT_ROLLOVER -> Value.CREDIT_ROLLOVER
+                            else -> Value._UNKNOWN
+                        }
+
+                    /**
+                     * Returns an enum member corresponding to this class instance's value.
+                     *
+                     * Use the [value] method instead if you're uncertain the value is always known
+                     * and don't want to throw for the unknown case.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value is a not
+                     *   a known member.
+                     */
+                    fun known(): Known =
+                        when (this) {
+                            CREDIT_ROLLOVER -> Known.CREDIT_ROLLOVER
+                            else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+                        }
+
+                    /**
+                     * Returns this class instance's primitive wire representation.
+                     *
+                     * This differs from the [toString] method because that method is primarily for
+                     * debugging and generally doesn't throw.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value does not
+                     *   have the expected primitive type.
+                     */
+                    fun asString(): String =
+                        _value().asString().orElseThrow {
+                            MetronomeInvalidDataException("Value is not a String")
+                        }
+
+                    private var validated: Boolean = false
+
+                    fun validate(): Type = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        known()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: MetronomeInvalidDataException) {
+                            false
+                        }
+
+                    /**
+                     * Returns a score indicating how many valid values are contained in this object
+                     * recursively.
+                     *
+                     * Used for best match union deserialization.
+                     */
+                    @JvmSynthetic
+                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Type && value == other.value
+                    }
+
+                    override fun hashCode() = value.hashCode()
+
+                    override fun toString() = value.toString()
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is CreditRolloverLedgerEntry &&
+                        amount == other.amount &&
+                        newContractId == other.newContractId &&
+                        segmentId == other.segmentId &&
+                        timestamp == other.timestamp &&
+                        type == other.type &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(
+                        amount,
+                        newContractId,
+                        segmentId,
+                        timestamp,
+                        type,
+                        additionalProperties,
+                    )
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "CreditRolloverLedgerEntry{amount=$amount, newContractId=$newContractId, segmentId=$segmentId, timestamp=$timestamp, type=$type, additionalProperties=$additionalProperties}"
+            }
+        }
+
+        class RolledOverFrom
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val contractId: JsonField<String>,
+            private val creditId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("contract_id")
+                @ExcludeMissing
+                contractId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("credit_id")
+                @ExcludeMissing
+                creditId: JsonField<String> = JsonMissing.of(),
+            ) : this(contractId, creditId, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun contractId(): String = contractId.getRequired("contract_id")
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun creditId(): String = creditId.getRequired("credit_id")
+
+            /**
+             * Returns the raw JSON value of [contractId].
+             *
+             * Unlike [contractId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("contract_id")
+            @ExcludeMissing
+            fun _contractId(): JsonField<String> = contractId
+
+            /**
+             * Returns the raw JSON value of [creditId].
+             *
+             * Unlike [creditId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("credit_id") @ExcludeMissing fun _creditId(): JsonField<String> = creditId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [RolledOverFrom].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .contractId()
+                 * .creditId()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [RolledOverFrom]. */
+            class Builder internal constructor() {
+
+                private var contractId: JsonField<String>? = null
+                private var creditId: JsonField<String>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(rolledOverFrom: RolledOverFrom) = apply {
+                    contractId = rolledOverFrom.contractId
+                    creditId = rolledOverFrom.creditId
+                    additionalProperties = rolledOverFrom.additionalProperties.toMutableMap()
+                }
+
+                fun contractId(contractId: String) = contractId(JsonField.of(contractId))
+
+                /**
+                 * Sets [Builder.contractId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.contractId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun contractId(contractId: JsonField<String>) = apply {
+                    this.contractId = contractId
+                }
+
+                fun creditId(creditId: String) = creditId(JsonField.of(creditId))
+
+                /**
+                 * Sets [Builder.creditId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.creditId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun creditId(creditId: JsonField<String>) = apply { this.creditId = creditId }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [RolledOverFrom].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .contractId()
+                 * .creditId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): RolledOverFrom =
+                    RolledOverFrom(
+                        checkRequired("contractId", contractId),
+                        checkRequired("creditId", creditId),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): RolledOverFrom = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                contractId()
+                creditId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (contractId.asKnown().isPresent) 1 else 0) +
+                    (if (creditId.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is RolledOverFrom &&
+                    contractId == other.contractId &&
+                    creditId == other.creditId &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(contractId, creditId, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "RolledOverFrom{contractId=$contractId, creditId=$creditId, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -20674,6 +21422,7 @@ private constructor(
                 netsuiteSalesOrderId == other.netsuiteSalesOrderId &&
                 priority == other.priority &&
                 recurringCreditId == other.recurringCreditId &&
+                rolledOverFrom == other.rolledOverFrom &&
                 salesforceOpportunityId == other.salesforceOpportunityId &&
                 specifiers == other.specifiers &&
                 subscriptionConfig == other.subscriptionConfig &&
@@ -20700,6 +21449,7 @@ private constructor(
                 netsuiteSalesOrderId,
                 priority,
                 recurringCreditId,
+                rolledOverFrom,
                 salesforceOpportunityId,
                 specifiers,
                 subscriptionConfig,
@@ -20710,7 +21460,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, balance=$balance, contract=$contract, createdAt=$createdAt, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, recurringCreditId=$recurringCreditId, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
+            "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, balance=$balance, contract=$contract, createdAt=$createdAt, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, recurringCreditId=$recurringCreditId, rolledOverFrom=$rolledOverFrom, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
     }
 
     /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */

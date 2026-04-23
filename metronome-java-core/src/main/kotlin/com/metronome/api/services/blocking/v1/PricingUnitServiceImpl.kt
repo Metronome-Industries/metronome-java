@@ -19,6 +19,10 @@ import com.metronome.api.models.v1.pricingunits.PricingUnitListPageResponse
 import com.metronome.api.models.v1.pricingunits.PricingUnitListParams
 import java.util.function.Consumer
 
+/**
+ * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+ * behavior.
+ */
 class PricingUnitServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     PricingUnitService {
 

@@ -53,6 +53,9 @@ import kotlin.jvm.optionals.getOrNull
  * another filtering for PREPAID_COMMIT with custom field campaign: signup-promotion.
  *
  * ### Usage guidelines:
+ * - **Balance ledger details**: Use the
+ *   [listBalances](https://docs.metronome.com/api-reference/credits-and-commits/list-balances)
+ *   endpoint instead to understand detailed ledger drawdowns for each individual balance
  * - **Draft invoice handling**: Use `invoice_inclusion_mode` to control whether pending draft
  *   invoice deductions are included (`FINALIZED_AND_DRAFT`, the default) or excluded (`FINALIZED`)
  *   from the balance calculation

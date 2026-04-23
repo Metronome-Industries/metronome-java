@@ -19,6 +19,11 @@ import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlParams
 import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlResponse
 import java.util.function.Consumer
 
+/**
+ * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent
+ * your users for all billing and reporting. Use these endpoints to create, retrieve, update, and
+ * archive customers and their billing configuration.
+ */
 class DashboardServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     DashboardService {
 

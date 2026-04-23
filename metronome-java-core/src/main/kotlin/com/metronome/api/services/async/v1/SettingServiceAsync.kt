@@ -11,6 +11,10 @@ import com.metronome.api.services.async.v1.settings.BillingProviderServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+ * behavior.
+ */
 interface SettingServiceAsync {
 
     /**
@@ -25,6 +29,10 @@ interface SettingServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingServiceAsync
 
+    /**
+     * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+     * behavior.
+     */
     fun billingProviders(): BillingProviderServiceAsync
 
     /**
@@ -57,6 +65,10 @@ interface SettingServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): SettingServiceAsync.WithRawResponse
 
+        /**
+         * Use these endpoints to configure a billing API key, a webhook secret, or invoice
+         * finalization behavior.
+         */
         fun billingProviders(): BillingProviderServiceAsync.WithRawResponse
 
         /**

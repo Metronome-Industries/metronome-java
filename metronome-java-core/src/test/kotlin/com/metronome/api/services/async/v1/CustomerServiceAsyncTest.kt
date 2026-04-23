@@ -6,6 +6,7 @@ import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.Id
+import com.metronome.api.models.v1.customers.CustomerArchiveBillingConfigurationsParams
 import com.metronome.api.models.v1.customers.CustomerCreateParams
 import com.metronome.api.models.v1.customers.CustomerListBillableMetricsParams
 import com.metronome.api.models.v1.customers.CustomerListCostsParams
@@ -170,6 +171,32 @@ internal class CustomerServiceAsyncTest {
         val responseFuture =
             customerServiceAsync.archive(
                 Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
+            )
+
+        val response = responseFuture.get()
+        response.validate()
+    }
+
+    @Test
+    fun archiveBillingConfigurations() {
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val customerServiceAsync = client.v1().customers()
+
+        val responseFuture =
+            customerServiceAsync.archiveBillingConfigurations(
+                CustomerArchiveBillingConfigurationsParams.builder()
+                    .addCustomerBillingProviderConfigurationId(
+                        "4db51251-61de-4bfe-b9ce-495e244f3491"
+                    )
+                    .addCustomerBillingProviderConfigurationId(
+                        "4db51251-61de-4bfe-b9ce-495e244f3491"
+                    )
+                    .customerId("20a060d1-aa80-41d4-8bb2-4f3091b93903")
+                    .build()
             )
 
         val response = responseFuture.get()

@@ -25,6 +25,11 @@ import com.metronome.api.models.v1.customfields.CustomFieldRemoveKeyParams
 import com.metronome.api.models.v1.customfields.CustomFieldSetValuesParams
 import java.util.function.Consumer
 
+/**
+ * [Custom fields](https://docs.metronome.com/integrations/custom-fields/) enable adding additional
+ * data to Metronome entities. Use these endpoints to create, retrieve, update, and delete custom
+ * fields.
+ */
 class CustomFieldServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     CustomFieldService {
 

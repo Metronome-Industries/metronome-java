@@ -16,6 +16,11 @@ import com.metronome.api.models.v1.usage.UsageSearchParams
 import com.metronome.api.models.v1.usage.UsageSearchResponse
 import java.util.function.Consumer
 
+/**
+ * [Usage events](https://docs.metronome.com/connecting-metronome/send-usage-data/) are the basis
+ * for billable metrics. Use these endpoints to send usage events to Metronome and retrieve
+ * aggregated event data.
+ */
 interface UsageService {
 
     /**
@@ -173,22 +178,43 @@ interface UsageService {
      * - Build detailed usage dashboards with dimensional filtering
      * - Identify high-usage segments for optimization opportunities
      *
+     * ### Request parameters
+     * Use [`group_key`](#body-group-key) and [`group_filters`](#body-group-filters) to group by one
+     * or more dimensions. This is required for compound group keys and recommended for all new
+     * integrations:
+     * ```json
+     * {
+     *   "group_key": ["region", "team"],
+     *   "group_filters": {
+     *     "region": ["US-East", "US-West"]
+     *   }
+     * }
+     * ```
+     *
+     * Important: For compound group keys, you must pass the complete set of keys that make up the
+     * compound key. Partial key combinations are not supported. For example, if your billable
+     * metric has a compound group key [region, team, environment], you must pass all three keys in
+     * group_key—you cannot pass just `[region]` or `[region, team]`.
+     *
      * ### Key response fields:
      * An array of `PagedUsageAggregate` objects containing:
      * - `starting_on` and `ending_before`: Time window boundaries
-     * - `group_key`: The dimension being grouped by (e.g., "region")
-     * - `group_value`: The specific value for this group (e.g., "US-East")
+     * - `group`: Object mapping group keys to their values
+     *     - For simple groups, this will be a map with a single key-value pair (e.g., `{"region":
+     *       "US-East"}`)
+     *     - For compound groups, this will be a map with multiple key-value pairs (e.g.,
+     *       `{"region": "US-East", "team": "engineering"}`)
      * - `value`: Aggregated usage for this group and time window
      * - `next_page`: Pagination cursor for large datasets
      *
      * ### Usage guidelines:
      * - Required parameters: Must specify `customer_id`, `billable_metric_id`, and `window_size`
      * - Time windows: Set `window_size` to hour, day, or none for different granularities
-     * - Group filtering: Use `group_by` to specify:
-     *     - key: The dimension to group by (must be set on the billable metric as a group key)
-     *     - values: Optional array to filter to specific values only
+     * - Group filtering: Use `group_key` and `group_filters` to specify groups and group filters
+     * - Limits: When using compound group keys (2+ keys in `group_key`), the default and max limit
+     *   is 100
      * - Pagination: Use limit and `next_page` for large result sets
-     * - Null handling: `group_value` may be null for unmatched data
+     * - Null handling: Group values may be null for events missing the group key property
      */
     fun listWithGroups(params: UsageListWithGroupsParams): UsageListWithGroupsPage =
         listWithGroups(params, RequestOptions.none())

@@ -22,6 +22,10 @@ import com.metronome.api.services.async.v1.settings.BillingProviderServiceAsyncI
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+ * behavior.
+ */
 class SettingServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     SettingServiceAsync {
 
@@ -38,6 +42,10 @@ class SettingServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingServiceAsync =
         SettingServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+     * behavior.
+     */
     override fun billingProviders(): BillingProviderServiceAsync = billingProviders
 
     override fun upsertAvalaraCredentials(
@@ -64,6 +72,10 @@ class SettingServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Use these endpoints to configure a billing API key, a webhook secret, or invoice
+         * finalization behavior.
+         */
         override fun billingProviders(): BillingProviderServiceAsync.WithRawResponse =
             billingProviders
 

@@ -47,7 +47,8 @@ private constructor(
     fun rateType(): RateType = rateType.getRequired("rate_type")
 
     /**
-     * Commit rate price. For FLAT rate_type, this must be >=0.
+     * Commit rate price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this is a
+     * decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -135,7 +136,10 @@ private constructor(
          */
         fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
-        /** Commit rate price. For FLAT rate_type, this must be >=0. */
+        /**
+         * Commit rate price. For FLAT rate_type, this must be >=0. For PERCENTAGE rate_type, this
+         * is a decimal fraction, e.g. use 0.1 for 10%; this must be >=0 and <=1.
+         */
         fun price(price: Double) = price(JsonField.of(price))
 
         /**

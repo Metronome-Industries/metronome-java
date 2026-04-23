@@ -24,6 +24,7 @@ import com.metronome.api.models.v1.contracts.ratecards.rates.RateListPageRespons
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateListParams
 import java.util.function.Consumer
 
+/** Rate cards are used to define default pricing for products. */
 class RateServiceImpl internal constructor(private val clientOptions: ClientOptions) : RateService {
 
     private val withRawResponse: RateService.WithRawResponse by lazy {

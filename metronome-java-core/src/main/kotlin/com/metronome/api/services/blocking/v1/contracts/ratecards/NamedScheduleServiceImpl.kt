@@ -21,6 +21,10 @@ import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedSched
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleUpdateParams
 import java.util.function.Consumer
 
+/**
+ * Named schedules are used for storing custom data that can change over time. Named schedules are
+ * often used in custom pricing logic.
+ */
 class NamedScheduleServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     NamedScheduleService {
 

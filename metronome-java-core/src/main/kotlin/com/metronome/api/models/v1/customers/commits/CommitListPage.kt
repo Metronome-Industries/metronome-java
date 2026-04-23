@@ -24,7 +24,7 @@ private constructor(
      *
      * @see CommitListPageResponse.nextPage
      */
-    fun nextPage(): Optional<String> = response._nextPage().getOptional("next_page")
+    fun nextPageRaw(): Optional<String> = response._nextPage().getOptional("next_page")
 
     /**
      * Delegates to [CommitListPageResponse], but gracefully handles missing data.
@@ -35,11 +35,11 @@ private constructor(
 
     override fun items(): List<Commit> = data()
 
-    override fun hasNextPage(): Boolean = nextPage().isPresent
+    override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): CommitListParams {
         val nextCursor =
-            nextPage().getOrNull()
+            nextPageRaw().getOrNull()
                 ?: throw IllegalStateException("Cannot construct next page params")
         return params.toBuilder().nextPage(nextCursor).build()
     }

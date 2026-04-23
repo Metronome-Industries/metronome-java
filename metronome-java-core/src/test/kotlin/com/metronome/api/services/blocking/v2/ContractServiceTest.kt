@@ -5,6 +5,7 @@ package com.metronome.api.services.blocking.v2
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
+import com.metronome.api.models.BaseThresholdCommit
 import com.metronome.api.models.CommitHierarchyConfiguration
 import com.metronome.api.models.CommitSpecifierInput
 import com.metronome.api.models.PaymentGateConfigV2
@@ -327,6 +328,7 @@ internal class ContractServiceTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(0.0)
                             .rateType(ContractEditParams.AddCredit.RateType.COMMIT_RATE)
+                            .rolloverFraction(0.0)
                             .addSpecifier(
                                 CommitSpecifierInput.builder()
                                     .presentationGroupValues(
@@ -433,7 +435,6 @@ internal class ContractServiceTest {
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addProductTag("string")
                                     .addRecurringCommitId("string")
-                                    .addRecurringCreditId("string")
                                     .build()
                             )
                             .overwriteRate(
@@ -470,9 +471,10 @@ internal class ContractServiceTest {
                         PrepaidBalanceThresholdConfigurationV2.builder()
                             .commit(
                                 PrepaidBalanceThresholdConfigurationV2.Commit.builder()
+                                    .productId("product_id")
                                     .description("description")
                                     .name("name")
-                                    .productId("product_id")
+                                    .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
                                     .addSpecifier(
@@ -532,6 +534,12 @@ internal class ContractServiceTest {
                             .rechargeToAmount(0.0)
                             .thresholdAmount(0.0)
                             .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .discountConfiguration(
+                                PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration
+                                    .builder()
+                                    .paymentFraction(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .addAddProfessionalService(
@@ -846,10 +854,11 @@ internal class ContractServiceTest {
                     .addSpendThresholdConfiguration(
                         SpendThresholdConfigurationV2.builder()
                             .commit(
-                                UpdateBaseThresholdCommit.builder()
+                                BaseThresholdCommit.builder()
+                                    .productId("product_id")
                                     .description("description")
                                     .name("name")
-                                    .productId("product_id")
+                                    .priority(0.0)
                                     .build()
                             )
                             .isEnabled(true)
@@ -882,6 +891,11 @@ internal class ContractServiceTest {
                                     .build()
                             )
                             .thresholdAmount(0.0)
+                            .discountConfiguration(
+                                SpendThresholdConfigurationV2.DiscountConfiguration.builder()
+                                    .paymentFraction(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .addAddSubscription(
@@ -1124,6 +1138,7 @@ internal class ContractServiceTest {
                             .priority(0.0)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .rateType(ContractEditParams.UpdateCredit.RateType.LIST_RATE)
+                            .rolloverFraction(0.0)
                             .build()
                     )
                     .updateNetPaymentTermsDays(0.0)
@@ -1134,6 +1149,7 @@ internal class ContractServiceTest {
                                     .builder()
                                     .description("description")
                                     .name("name")
+                                    .priority(0.0)
                                     .productId("product_id")
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
@@ -1163,6 +1179,13 @@ internal class ContractServiceTest {
                                     .build()
                             )
                             .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .discountConfiguration(
+                                ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration
+                                    .DiscountConfiguration
+                                    .builder()
+                                    .paymentFraction(0.0)
+                                    .build()
+                            )
                             .isEnabled(true)
                             .paymentGateConfig(
                                 PaymentGateConfigV2.builder()
@@ -1276,7 +1299,15 @@ internal class ContractServiceTest {
                                 UpdateBaseThresholdCommit.builder()
                                     .description("description")
                                     .name("name")
+                                    .priority(0.0)
                                     .productId("product_id")
+                                    .build()
+                            )
+                            .discountConfiguration(
+                                ContractEditParams.UpdateSpendThresholdConfiguration
+                                    .DiscountConfiguration
+                                    .builder()
+                                    .paymentFraction(0.0)
                                     .build()
                             )
                             .isEnabled(true)

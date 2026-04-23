@@ -37,6 +37,7 @@ import com.metronome.api.services.async.v1.contracts.ratecards.RateServiceAsyncI
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Rate cards are used to define default pricing for products. */
 class RateCardServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     RateCardServiceAsync {
 
@@ -59,10 +60,16 @@ class RateCardServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateCardServiceAsync =
         RateCardServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Rate cards are used to define default pricing for products. */
     override fun productOrders(): ProductOrderServiceAsync = productOrders
 
+    /** Rate cards are used to define default pricing for products. */
     override fun rates(): RateServiceAsync = rates
 
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     override fun namedSchedules(): NamedScheduleServiceAsync = namedSchedules
 
     override fun create(
@@ -132,10 +139,16 @@ class RateCardServiceAsyncImpl internal constructor(private val clientOptions: C
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Rate cards are used to define default pricing for products. */
         override fun productOrders(): ProductOrderServiceAsync.WithRawResponse = productOrders
 
+        /** Rate cards are used to define default pricing for products. */
         override fun rates(): RateServiceAsync.WithRawResponse = rates
 
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         override fun namedSchedules(): NamedScheduleServiceAsync.WithRawResponse = namedSchedules
 
         private val createHandler: Handler<RateCardCreateResponse> =

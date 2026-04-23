@@ -267,6 +267,7 @@ internal class ContractServiceTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(0.0)
                             .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                            .rolloverFraction(0.0)
                             .addSpecifier(
                                 CommitSpecifierInput.builder()
                                     .presentationGroupValues(
@@ -409,7 +410,6 @@ internal class ContractServiceTest {
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addProductTag("string")
                                     .addRecurringCommitId("string")
-                                    .addRecurringCreditId("string")
                                     .build()
                             )
                             .overwriteRate(
@@ -451,6 +451,7 @@ internal class ContractServiceTest {
                                     .productId("product_id")
                                     .description("description")
                                     .name("name")
+                                    .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
                                     .addSpecifier(
@@ -510,6 +511,11 @@ internal class ContractServiceTest {
                             .rechargeToAmount(0.0)
                             .thresholdAmount(0.0)
                             .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .discountConfiguration(
+                                PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
+                                    .paymentFraction(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .addProfessionalService(
@@ -810,6 +816,7 @@ internal class ContractServiceTest {
                                     .productId("product_id")
                                     .description("description")
                                     .name("name")
+                                    .priority(0.0)
                                     .build()
                             )
                             .isEnabled(true)
@@ -842,6 +849,11 @@ internal class ContractServiceTest {
                                     .build()
                             )
                             .thresholdAmount(0.0)
+                            .discountConfiguration(
+                                SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                    .paymentFraction(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .addSubscription(
@@ -1223,6 +1235,7 @@ internal class ContractServiceTest {
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .priority(0.0)
                             .rateType(ContractAmendParams.Credit.RateType.COMMIT_RATE)
+                            .rolloverFraction(0.0)
                             .addSpecifier(
                                 CommitSpecifierInput.builder()
                                     .presentationGroupValues(
@@ -1334,7 +1347,6 @@ internal class ContractServiceTest {
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addProductTag("string")
                                     .addRecurringCommitId("string")
-                                    .addRecurringCreditId("string")
                                     .build()
                             )
                             .overwriteRate(

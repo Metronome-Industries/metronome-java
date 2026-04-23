@@ -7,6 +7,8 @@ import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.models.Id
+import com.metronome.api.models.v1.customers.CustomerArchiveBillingConfigurationsParams
+import com.metronome.api.models.v1.customers.CustomerArchiveBillingConfigurationsResponse
 import com.metronome.api.models.v1.customers.CustomerArchiveParams
 import com.metronome.api.models.v1.customers.CustomerArchiveResponse
 import com.metronome.api.models.v1.customers.CustomerCreateParams
@@ -53,18 +55,46 @@ interface CustomerServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): CustomerServiceAsync
 
+    /**
+     * [Alerts](https://docs.metronome.com/connecting-metronome/alerts/) monitor customer spending,
+     * balances, and other billing factors. Use these endpoints to create, retrieve, and archive
+     * customer alerts. To view sample alert payloads by alert type, navigate
+     * [here.](https://docs.metronome.com/manage-product-access/create-manage-alerts/#webhook-notifications)
+     */
     fun alerts(): AlertServiceAsync
 
+    /**
+     * [Plans](https://docs.metronome.com/pricing-and-packaging/create-plans/) determine the base
+     * pricing for a customer. Use these endpoints to add a plan to a customer, end a customer plan,
+     * retrieve plans, and retrieve plan details. Create plans in the
+     * [Metronome app](https://app.metronome.com/plans).
+     */
     fun plans(): PlanServiceAsync
 
+    /**
+     * [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent during a
+     * period, which is the basis for billing. Metronome automatically generates invoices based upon
+     * your pricing, packaging, and usage events. Use these endpoints to retrieve invoices.
+     */
     fun invoices(): InvoiceServiceAsync
 
+    /**
+     * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent
+     * your users for all billing and reporting. Use these endpoints to create, retrieve, update,
+     * and archive customers and their billing configuration.
+     */
     fun billingConfig(): BillingConfigServiceAsync
 
+    /** Credits and commits are used to manage customer balances. */
     fun commits(): CommitServiceAsync
 
+    /** Credits and commits are used to manage customer balances. */
     fun credits(): CreditServiceAsync
 
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     fun namedSchedules(): NamedScheduleServiceAsync
 
     /**
@@ -178,6 +208,43 @@ interface CustomerServiceAsync {
     /** @see archive */
     fun archive(id: Id): CompletableFuture<CustomerArchiveResponse> =
         archive(id, RequestOptions.none())
+
+    /**
+     * Deprecate an existing billing configuration for a customer to handle churn or billing and
+     * collection preference changes. Archiving a billing configuration takes effect immediately. If
+     * there are active contracts using the configuration, Metronome will archive the configuration
+     * on the contract and immediately stop metering to downstream systems.
+     *
+     * ### Use this endpoint to:
+     * - Remove billing provider customer data and configurations when no longer needed
+     * - Clean up test or deprecated billing provider configurations
+     * - Free up uniqueness keys for reuse with new billing provider configurations
+     * - Disable threshold recharge configurations associated with archived billing providers
+     *
+     * ### Key response fields:
+     * A successful response returns:
+     * - `success`: Boolean indicating the operation completed successfully
+     * - `error`: Null on success, error message on failure
+     *
+     * ### Usage guidelines:
+     * - Archiving a contract configuration during a grace period will result in the invoice not
+     *   being sent to the customer
+     * - Automatically disables both spend-based and credit-based threshold recharge configurations
+     *   for contracts using the archived billing provider
+     * - You can archive multiple configurations for a single customer in a single request, but any
+     *   validation failures for an individual configuration will prevent the entire operation from
+     *   succeeding
+     */
+    fun archiveBillingConfigurations(
+        params: CustomerArchiveBillingConfigurationsParams
+    ): CompletableFuture<CustomerArchiveBillingConfigurationsResponse> =
+        archiveBillingConfigurations(params, RequestOptions.none())
+
+    /** @see archiveBillingConfigurations */
+    fun archiveBillingConfigurations(
+        params: CustomerArchiveBillingConfigurationsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<CustomerArchiveBillingConfigurationsResponse>
 
     /**
      * Get all billable metrics available for a specific customer. Supports pagination and filtering
@@ -355,18 +422,47 @@ interface CustomerServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): CustomerServiceAsync.WithRawResponse
 
+        /**
+         * [Alerts](https://docs.metronome.com/connecting-metronome/alerts/) monitor customer
+         * spending, balances, and other billing factors. Use these endpoints to create, retrieve,
+         * and archive customer alerts. To view sample alert payloads by alert type, navigate
+         * [here.](https://docs.metronome.com/manage-product-access/create-manage-alerts/#webhook-notifications)
+         */
         fun alerts(): AlertServiceAsync.WithRawResponse
 
+        /**
+         * [Plans](https://docs.metronome.com/pricing-and-packaging/create-plans/) determine the
+         * base pricing for a customer. Use these endpoints to add a plan to a customer, end a
+         * customer plan, retrieve plans, and retrieve plan details. Create plans in the
+         * [Metronome app](https://app.metronome.com/plans).
+         */
         fun plans(): PlanServiceAsync.WithRawResponse
 
+        /**
+         * [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent
+         * during a period, which is the basis for billing. Metronome automatically generates
+         * invoices based upon your pricing, packaging, and usage events. Use these endpoints to
+         * retrieve invoices.
+         */
         fun invoices(): InvoiceServiceAsync.WithRawResponse
 
+        /**
+         * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome
+         * represent your users for all billing and reporting. Use these endpoints to create,
+         * retrieve, update, and archive customers and their billing configuration.
+         */
         fun billingConfig(): BillingConfigServiceAsync.WithRawResponse
 
+        /** Credits and commits are used to manage customer balances. */
         fun commits(): CommitServiceAsync.WithRawResponse
 
+        /** Credits and commits are used to manage customer balances. */
         fun credits(): CreditServiceAsync.WithRawResponse
 
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         fun namedSchedules(): NamedScheduleServiceAsync.WithRawResponse
 
         /**
@@ -449,6 +545,21 @@ interface CustomerServiceAsync {
         /** @see archive */
         fun archive(id: Id): CompletableFuture<HttpResponseFor<CustomerArchiveResponse>> =
             archive(id, RequestOptions.none())
+
+        /**
+         * Returns a raw HTTP response for `post /v1/archiveCustomerBillingProviderConfigurations`,
+         * but is otherwise the same as [CustomerServiceAsync.archiveBillingConfigurations].
+         */
+        fun archiveBillingConfigurations(
+            params: CustomerArchiveBillingConfigurationsParams
+        ): CompletableFuture<HttpResponseFor<CustomerArchiveBillingConfigurationsResponse>> =
+            archiveBillingConfigurations(params, RequestOptions.none())
+
+        /** @see archiveBillingConfigurations */
+        fun archiveBillingConfigurations(
+            params: CustomerArchiveBillingConfigurationsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<CustomerArchiveBillingConfigurationsResponse>>
 
         /**
          * Returns a raw HTTP response for `get /v1/customers/{customer_id}/billable-metrics`, but

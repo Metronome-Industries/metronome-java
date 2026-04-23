@@ -11,6 +11,10 @@ import com.metronome.api.models.v1.settings.SettingUpsertAvalaraCredentialsRespo
 import com.metronome.api.services.blocking.v1.settings.BillingProviderService
 import java.util.function.Consumer
 
+/**
+ * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+ * behavior.
+ */
 interface SettingService {
 
     /**
@@ -25,6 +29,10 @@ interface SettingService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingService
 
+    /**
+     * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+     * behavior.
+     */
     fun billingProviders(): BillingProviderService
 
     /**
@@ -53,6 +61,10 @@ interface SettingService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingService.WithRawResponse
 
+        /**
+         * Use these endpoints to configure a billing API key, a webhook secret, or invoice
+         * finalization behavior.
+         */
         fun billingProviders(): BillingProviderService.WithRawResponse
 
         /**

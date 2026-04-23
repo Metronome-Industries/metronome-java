@@ -29,6 +29,11 @@ import com.metronome.api.models.v1.customers.invoices.InvoiceRetrieveResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent during a
+ * period, which is the basis for billing. Metronome automatically generates invoices based upon
+ * your pricing, packaging, and usage events. Use these endpoints to retrieve invoices.
+ */
 class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     InvoiceServiceAsync {
 
@@ -254,6 +259,7 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
                         params._pathParam(1),
                         "pdf",
                     )
+                    .putHeader("Accept", "application/pdf")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

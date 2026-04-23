@@ -16,9 +16,10 @@ internal class PrepaidBalanceThresholdConfigurationV2Test {
             PrepaidBalanceThresholdConfigurationV2.builder()
                 .commit(
                     PrepaidBalanceThresholdConfigurationV2.Commit.builder()
+                        .productId("product_id")
                         .description("description")
                         .name("name")
-                        .productId("product_id")
+                        .priority(0.0)
                         .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductTag("string")
                         .addSpecifier(
@@ -65,14 +66,20 @@ internal class PrepaidBalanceThresholdConfigurationV2Test {
                 .rechargeToAmount(0.0)
                 .thresholdAmount(0.0)
                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .discountConfiguration(
+                    PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.builder()
+                        .paymentFraction(0.0)
+                        .build()
+                )
                 .build()
 
         assertThat(prepaidBalanceThresholdConfigurationV2.commit())
             .isEqualTo(
                 PrepaidBalanceThresholdConfigurationV2.Commit.builder()
+                    .productId("product_id")
                     .description("description")
                     .name("name")
-                    .productId("product_id")
+                    .priority(0.0)
                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addApplicableProductTag("string")
                     .addSpecifier(
@@ -121,6 +128,12 @@ internal class PrepaidBalanceThresholdConfigurationV2Test {
         assertThat(prepaidBalanceThresholdConfigurationV2.thresholdAmount()).isEqualTo(0.0)
         assertThat(prepaidBalanceThresholdConfigurationV2.customCreditTypeId())
             .contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(prepaidBalanceThresholdConfigurationV2.discountConfiguration())
+            .contains(
+                PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.builder()
+                    .paymentFraction(0.0)
+                    .build()
+            )
     }
 
     @Test
@@ -130,9 +143,10 @@ internal class PrepaidBalanceThresholdConfigurationV2Test {
             PrepaidBalanceThresholdConfigurationV2.builder()
                 .commit(
                     PrepaidBalanceThresholdConfigurationV2.Commit.builder()
+                        .productId("product_id")
                         .description("description")
                         .name("name")
-                        .productId("product_id")
+                        .priority(0.0)
                         .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductTag("string")
                         .addSpecifier(
@@ -179,6 +193,11 @@ internal class PrepaidBalanceThresholdConfigurationV2Test {
                 .rechargeToAmount(0.0)
                 .thresholdAmount(0.0)
                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .discountConfiguration(
+                    PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.builder()
+                        .paymentFraction(0.0)
+                        .build()
+                )
                 .build()
 
         val roundtrippedPrepaidBalanceThresholdConfigurationV2 =

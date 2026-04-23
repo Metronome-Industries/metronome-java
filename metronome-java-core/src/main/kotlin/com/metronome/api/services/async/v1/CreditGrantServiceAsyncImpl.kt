@@ -30,6 +30,11 @@ import com.metronome.api.models.v1.creditgrants.CreditGrantVoidResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * [Credit grants](https://docs.metronome.com/invoicing/how-billing-works/manage-credits/) adjust a
+ * customer balance for prepayments, reimbursements, promotions, and so on. Use these endpoints to
+ * create, retrieve, update, and delete credit grants.
+ */
 class CreditGrantServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CreditGrantServiceAsync {
 

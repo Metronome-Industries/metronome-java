@@ -26,6 +26,11 @@ import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveParams
 import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveResponse
 import java.util.function.Consumer
 
+/**
+ * [Billable
+ * metrics](https://docs.metronome.com/understanding-metronome/how-metronome-works#billable-metrics)
+ * in Metronome represent the various consumption components that Metronome meters and aggregates.
+ */
 class BillableMetricServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     BillableMetricService {
 

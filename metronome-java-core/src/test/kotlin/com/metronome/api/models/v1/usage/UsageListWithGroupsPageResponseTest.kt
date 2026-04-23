@@ -3,6 +3,7 @@
 package com.metronome.api.models.v1.usage
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.metronome.api.core.JsonValue
 import com.metronome.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -21,6 +22,11 @@ internal class UsageListWithGroupsPageResponseTest {
                         .groupValue("group_value")
                         .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .value(0.0)
+                        .group(
+                            UsageListWithGroupsResponse.Group.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .build()
                 )
                 .nextPage("next_page")
@@ -34,6 +40,11 @@ internal class UsageListWithGroupsPageResponseTest {
                     .groupValue("group_value")
                     .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .value(0.0)
+                    .group(
+                        UsageListWithGroupsResponse.Group.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .build()
             )
         assertThat(usageListWithGroupsPageResponse.nextPage()).contains("next_page")
@@ -51,6 +62,11 @@ internal class UsageListWithGroupsPageResponseTest {
                         .groupValue("group_value")
                         .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .value(0.0)
+                        .group(
+                            UsageListWithGroupsResponse.Group.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .build()
                 )
                 .nextPage("next_page")

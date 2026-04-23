@@ -35,22 +35,43 @@ import kotlin.jvm.optionals.getOrNull
  * - Build detailed usage dashboards with dimensional filtering
  * - Identify high-usage segments for optimization opportunities
  *
+ * ### Request parameters
+ * Use [`group_key`](#body-group-key) and [`group_filters`](#body-group-filters) to group by one or
+ * more dimensions. This is required for compound group keys and recommended for all new
+ * integrations:
+ * ```json
+ * {
+ *   "group_key": ["region", "team"],
+ *   "group_filters": {
+ *     "region": ["US-East", "US-West"]
+ *   }
+ * }
+ * ```
+ *
+ * Important: For compound group keys, you must pass the complete set of keys that make up the
+ * compound key. Partial key combinations are not supported. For example, if your billable metric
+ * has a compound group key [region, team, environment], you must pass all three keys in
+ * group_key—you cannot pass just `[region]` or `[region, team]`.
+ *
  * ### Key response fields:
  * An array of `PagedUsageAggregate` objects containing:
  * - `starting_on` and `ending_before`: Time window boundaries
- * - `group_key`: The dimension being grouped by (e.g., "region")
- * - `group_value`: The specific value for this group (e.g., "US-East")
+ * - `group`: Object mapping group keys to their values
+ *     - For simple groups, this will be a map with a single key-value pair (e.g., `{"region":
+ *       "US-East"}`)
+ *     - For compound groups, this will be a map with multiple key-value pairs (e.g., `{"region":
+ *       "US-East", "team": "engineering"}`)
  * - `value`: Aggregated usage for this group and time window
  * - `next_page`: Pagination cursor for large datasets
  *
  * ### Usage guidelines:
  * - Required parameters: Must specify `customer_id`, `billable_metric_id`, and `window_size`
  * - Time windows: Set `window_size` to hour, day, or none for different granularities
- * - Group filtering: Use `group_by` to specify:
- *     - key: The dimension to group by (must be set on the billable metric as a group key)
- *     - values: Optional array to filter to specific values only
+ * - Group filtering: Use `group_key` and `group_filters` to specify groups and group filters
+ * - Limits: When using compound group keys (2+ keys in `group_key`), the default and max limit is
+ *   100
  * - Pagination: Use limit and `next_page` for large result sets
- * - Null handling: `group_value` may be null for unmatched data
+ * - Null handling: Group values may be null for events missing the group key property
  */
 class UsageListWithGroupsParams
 private constructor(
@@ -106,10 +127,41 @@ private constructor(
     fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
 
     /**
+     * Use group_key and group_filters instead. Use a single group key to group by. Compound group
+     * keys are not supported.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun groupBy(): Optional<GroupBy> = body.groupBy()
+    @Deprecated("deprecated") fun groupBy(): Optional<GroupBy> = body.groupBy()
+
+    /**
+     * Object mapping group keys to arrays of values to filter on. Only usage matching these filter
+     * values will be returned. Keys must be present in group_key. Omit a key or use an empty array
+     * to include all values for that dimension.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun groupFilters(): Optional<GroupFilters> = body.groupFilters()
+
+    /**
+     * Group key to group usage by. Supports both simple (single key) and compound (multiple keys)
+     * group keys.
+     *
+     * For simple group keys, provide a single key e.g. `["region"]`. For compound group keys,
+     * provide multiple keys e.g. `["region", "team"]`.
+     *
+     * For streaming metrics, the keys must be defined as a simple or compound group key on the
+     * billable metric. For compound group keys, all keys must match an exact compound group key
+     * definition — partial matches are not allowed.
+     *
+     * Cannot be used together with `group_by`.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun groupKey(): Optional<List<String>> = body.groupKey()
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -158,7 +210,21 @@ private constructor(
      *
      * Unlike [groupBy], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _groupBy(): JsonField<GroupBy> = body._groupBy()
+    @Deprecated("deprecated") fun _groupBy(): JsonField<GroupBy> = body._groupBy()
+
+    /**
+     * Returns the raw JSON value of [groupFilters].
+     *
+     * Unlike [groupFilters], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _groupFilters(): JsonField<GroupFilters> = body._groupFilters()
+
+    /**
+     * Returns the raw JSON value of [groupKey].
+     *
+     * Unlike [groupKey], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _groupKey(): JsonField<List<String>> = body._groupKey()
 
     /**
      * Returns the raw JSON value of [startingOn].
@@ -316,7 +382,11 @@ private constructor(
             body.endingBefore(endingBefore)
         }
 
-        fun groupBy(groupBy: GroupBy) = apply { body.groupBy(groupBy) }
+        /**
+         * Use group_key and group_filters instead. Use a single group key to group by. Compound
+         * group keys are not supported.
+         */
+        @Deprecated("deprecated") fun groupBy(groupBy: GroupBy) = apply { body.groupBy(groupBy) }
 
         /**
          * Sets [Builder.groupBy] to an arbitrary JSON value.
@@ -324,7 +394,57 @@ private constructor(
          * You should usually call [Builder.groupBy] with a well-typed [GroupBy] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
+        @Deprecated("deprecated")
         fun groupBy(groupBy: JsonField<GroupBy>) = apply { body.groupBy(groupBy) }
+
+        /**
+         * Object mapping group keys to arrays of values to filter on. Only usage matching these
+         * filter values will be returned. Keys must be present in group_key. Omit a key or use an
+         * empty array to include all values for that dimension.
+         */
+        fun groupFilters(groupFilters: GroupFilters) = apply { body.groupFilters(groupFilters) }
+
+        /**
+         * Sets [Builder.groupFilters] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.groupFilters] with a well-typed [GroupFilters] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun groupFilters(groupFilters: JsonField<GroupFilters>) = apply {
+            body.groupFilters(groupFilters)
+        }
+
+        /**
+         * Group key to group usage by. Supports both simple (single key) and compound (multiple
+         * keys) group keys.
+         *
+         * For simple group keys, provide a single key e.g. `["region"]`. For compound group keys,
+         * provide multiple keys e.g. `["region", "team"]`.
+         *
+         * For streaming metrics, the keys must be defined as a simple or compound group key on the
+         * billable metric. For compound group keys, all keys must match an exact compound group key
+         * definition — partial matches are not allowed.
+         *
+         * Cannot be used together with `group_by`.
+         */
+        fun groupKey(groupKey: List<String>) = apply { body.groupKey(groupKey) }
+
+        /**
+         * Sets [Builder.groupKey] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.groupKey] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun groupKey(groupKey: JsonField<List<String>>) = apply { body.groupKey(groupKey) }
+
+        /**
+         * Adds a single [String] to [Builder.groupKey].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addGroupKey(groupKey: String) = apply { body.addGroupKey(groupKey) }
 
         fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
 
@@ -502,6 +622,8 @@ private constructor(
         private val currentPeriod: JsonField<Boolean>,
         private val endingBefore: JsonField<OffsetDateTime>,
         private val groupBy: JsonField<GroupBy>,
+        private val groupFilters: JsonField<GroupFilters>,
+        private val groupKey: JsonField<List<String>>,
         private val startingOn: JsonField<OffsetDateTime>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -526,6 +648,12 @@ private constructor(
             @JsonProperty("group_by")
             @ExcludeMissing
             groupBy: JsonField<GroupBy> = JsonMissing.of(),
+            @JsonProperty("group_filters")
+            @ExcludeMissing
+            groupFilters: JsonField<GroupFilters> = JsonMissing.of(),
+            @JsonProperty("group_key")
+            @ExcludeMissing
+            groupKey: JsonField<List<String>> = JsonMissing.of(),
             @JsonProperty("starting_on")
             @ExcludeMissing
             startingOn: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -536,6 +664,8 @@ private constructor(
             currentPeriod,
             endingBefore,
             groupBy,
+            groupFilters,
+            groupKey,
             startingOn,
             mutableMapOf(),
         )
@@ -579,10 +709,41 @@ private constructor(
         fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
 
         /**
+         * Use group_key and group_filters instead. Use a single group key to group by. Compound
+         * group keys are not supported.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
-        fun groupBy(): Optional<GroupBy> = groupBy.getOptional("group_by")
+        @Deprecated("deprecated") fun groupBy(): Optional<GroupBy> = groupBy.getOptional("group_by")
+
+        /**
+         * Object mapping group keys to arrays of values to filter on. Only usage matching these
+         * filter values will be returned. Keys must be present in group_key. Omit a key or use an
+         * empty array to include all values for that dimension.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun groupFilters(): Optional<GroupFilters> = groupFilters.getOptional("group_filters")
+
+        /**
+         * Group key to group usage by. Supports both simple (single key) and compound (multiple
+         * keys) group keys.
+         *
+         * For simple group keys, provide a single key e.g. `["region"]`. For compound group keys,
+         * provide multiple keys e.g. `["region", "team"]`.
+         *
+         * For streaming metrics, the keys must be defined as a simple or compound group key on the
+         * billable metric. For compound group keys, all keys must match an exact compound group key
+         * definition — partial matches are not allowed.
+         *
+         * Cannot be used together with `group_by`.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun groupKey(): Optional<List<String>> = groupKey.getOptional("group_key")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -643,7 +804,29 @@ private constructor(
          *
          * Unlike [groupBy], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("group_by") @ExcludeMissing fun _groupBy(): JsonField<GroupBy> = groupBy
+        @Deprecated("deprecated")
+        @JsonProperty("group_by")
+        @ExcludeMissing
+        fun _groupBy(): JsonField<GroupBy> = groupBy
+
+        /**
+         * Returns the raw JSON value of [groupFilters].
+         *
+         * Unlike [groupFilters], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("group_filters")
+        @ExcludeMissing
+        fun _groupFilters(): JsonField<GroupFilters> = groupFilters
+
+        /**
+         * Returns the raw JSON value of [groupKey].
+         *
+         * Unlike [groupKey], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("group_key")
+        @ExcludeMissing
+        fun _groupKey(): JsonField<List<String>> = groupKey
 
         /**
          * Returns the raw JSON value of [startingOn].
@@ -690,6 +873,8 @@ private constructor(
             private var currentPeriod: JsonField<Boolean> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var groupBy: JsonField<GroupBy> = JsonMissing.of()
+            private var groupFilters: JsonField<GroupFilters> = JsonMissing.of()
+            private var groupKey: JsonField<MutableList<String>>? = null
             private var startingOn: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -701,6 +886,8 @@ private constructor(
                 currentPeriod = body.currentPeriod
                 endingBefore = body.endingBefore
                 groupBy = body.groupBy
+                groupFilters = body.groupFilters
+                groupKey = body.groupKey.map { it.toMutableList() }
                 startingOn = body.startingOn
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -780,7 +967,11 @@ private constructor(
                 this.endingBefore = endingBefore
             }
 
-            fun groupBy(groupBy: GroupBy) = groupBy(JsonField.of(groupBy))
+            /**
+             * Use group_key and group_filters instead. Use a single group key to group by. Compound
+             * group keys are not supported.
+             */
+            @Deprecated("deprecated") fun groupBy(groupBy: GroupBy) = groupBy(JsonField.of(groupBy))
 
             /**
              * Sets [Builder.groupBy] to an arbitrary JSON value.
@@ -789,7 +980,64 @@ private constructor(
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
+            @Deprecated("deprecated")
             fun groupBy(groupBy: JsonField<GroupBy>) = apply { this.groupBy = groupBy }
+
+            /**
+             * Object mapping group keys to arrays of values to filter on. Only usage matching these
+             * filter values will be returned. Keys must be present in group_key. Omit a key or use
+             * an empty array to include all values for that dimension.
+             */
+            fun groupFilters(groupFilters: GroupFilters) = groupFilters(JsonField.of(groupFilters))
+
+            /**
+             * Sets [Builder.groupFilters] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.groupFilters] with a well-typed [GroupFilters] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun groupFilters(groupFilters: JsonField<GroupFilters>) = apply {
+                this.groupFilters = groupFilters
+            }
+
+            /**
+             * Group key to group usage by. Supports both simple (single key) and compound (multiple
+             * keys) group keys.
+             *
+             * For simple group keys, provide a single key e.g. `["region"]`. For compound group
+             * keys, provide multiple keys e.g. `["region", "team"]`.
+             *
+             * For streaming metrics, the keys must be defined as a simple or compound group key on
+             * the billable metric. For compound group keys, all keys must match an exact compound
+             * group key definition — partial matches are not allowed.
+             *
+             * Cannot be used together with `group_by`.
+             */
+            fun groupKey(groupKey: List<String>) = groupKey(JsonField.of(groupKey))
+
+            /**
+             * Sets [Builder.groupKey] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.groupKey] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun groupKey(groupKey: JsonField<List<String>>) = apply {
+                this.groupKey = groupKey.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [Builder.groupKey].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addGroupKey(groupKey: String) = apply {
+                this.groupKey =
+                    (this.groupKey ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("groupKey", it).add(groupKey)
+                    }
+            }
 
             fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
 
@@ -845,6 +1093,8 @@ private constructor(
                     currentPeriod,
                     endingBefore,
                     groupBy,
+                    groupFilters,
+                    (groupKey ?: JsonMissing.of()).map { it.toImmutable() },
                     startingOn,
                     additionalProperties.toMutableMap(),
                 )
@@ -863,6 +1113,8 @@ private constructor(
             currentPeriod()
             endingBefore()
             groupBy().ifPresent { it.validate() }
+            groupFilters().ifPresent { it.validate() }
+            groupKey()
             startingOn()
             validated = true
         }
@@ -889,6 +1141,8 @@ private constructor(
                 (if (currentPeriod.asKnown().isPresent) 1 else 0) +
                 (if (endingBefore.asKnown().isPresent) 1 else 0) +
                 (groupBy.asKnown().getOrNull()?.validity() ?: 0) +
+                (groupFilters.asKnown().getOrNull()?.validity() ?: 0) +
+                (groupKey.asKnown().getOrNull()?.size ?: 0) +
                 (if (startingOn.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
@@ -903,6 +1157,8 @@ private constructor(
                 currentPeriod == other.currentPeriod &&
                 endingBefore == other.endingBefore &&
                 groupBy == other.groupBy &&
+                groupFilters == other.groupFilters &&
+                groupKey == other.groupKey &&
                 startingOn == other.startingOn &&
                 additionalProperties == other.additionalProperties
         }
@@ -915,6 +1171,8 @@ private constructor(
                 currentPeriod,
                 endingBefore,
                 groupBy,
+                groupFilters,
+                groupKey,
                 startingOn,
                 additionalProperties,
             )
@@ -923,7 +1181,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, startingOn=$startingOn, additionalProperties=$additionalProperties}"
+            "Body{billableMetricId=$billableMetricId, customerId=$customerId, windowSize=$windowSize, currentPeriod=$currentPeriod, endingBefore=$endingBefore, groupBy=$groupBy, groupFilters=$groupFilters, groupKey=$groupKey, startingOn=$startingOn, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -1066,6 +1324,11 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /**
+     * Use group_key and group_filters instead. Use a single group key to group by. Compound group
+     * keys are not supported.
+     */
+    @Deprecated("deprecated")
     class GroupBy
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -1279,6 +1542,110 @@ private constructor(
 
         override fun toString() =
             "GroupBy{key=$key, values=$values, additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * Object mapping group keys to arrays of values to filter on. Only usage matching these filter
+     * values will be returned. Keys must be present in group_key. Omit a key or use an empty array
+     * to include all values for that dimension.
+     */
+    class GroupFilters
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [GroupFilters]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [GroupFilters]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(groupFilters: GroupFilters) = apply {
+                additionalProperties = groupFilters.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [GroupFilters].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): GroupFilters = GroupFilters(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): GroupFilters = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is GroupFilters && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "GroupFilters{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

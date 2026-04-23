@@ -19,6 +19,10 @@ import com.metronome.api.models.v1.services.ServiceListResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * [Security](https://docs.metronome.com/developer-resources/security/) endpoints allow you to
+ * retrieve security-related data.
+ */
 class ServiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ServiceServiceAsync {
 

@@ -14,6 +14,12 @@ import com.metronome.api.models.v1.customers.alerts.AlertRetrieveParams
 import com.metronome.api.models.v1.customers.alerts.AlertRetrieveResponse
 import java.util.function.Consumer
 
+/**
+ * [Alerts](https://docs.metronome.com/connecting-metronome/alerts/) monitor customer spending,
+ * balances, and other billing factors. Use these endpoints to create, retrieve, and archive
+ * customer alerts. To view sample alert payloads by alert type, navigate
+ * [here.](https://docs.metronome.com/manage-product-access/create-manage-alerts/#webhook-notifications)
+ */
 interface AlertService {
 
     /**

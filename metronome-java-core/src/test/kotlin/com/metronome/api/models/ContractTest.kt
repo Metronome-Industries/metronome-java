@@ -180,6 +180,7 @@ internal class ContractTest {
                         .addOverride(
                             Override.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addApplicableProductTag("string")
                                 .creditType(
@@ -219,7 +220,6 @@ internal class ContractTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .addOverrideTier(
@@ -387,6 +387,12 @@ internal class ContractTest {
                                 .priority(0.0)
                                 .rateType(Credit.RateType.COMMIT_RATE)
                                 .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .rolledOverFrom(
+                                    Credit.RolledOverFrom.builder()
+                                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
                                 .salesforceOpportunityId("salesforce_opportunity_id")
                                 .addSpecifier(
                                     CommitSpecifier.builder()
@@ -663,6 +669,7 @@ internal class ContractTest {
                         .addOverride(
                             Override.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addApplicableProductTag("string")
                                 .creditType(
@@ -702,7 +709,6 @@ internal class ContractTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .addOverrideTier(
@@ -886,6 +892,12 @@ internal class ContractTest {
                                 .priority(0.0)
                                 .rateType(Credit.RateType.COMMIT_RATE)
                                 .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .rolledOverFrom(
+                                    Credit.RolledOverFrom.builder()
+                                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
                                 .salesforceOpportunityId("salesforce_opportunity_id")
                                 .addSpecifier(
                                     CommitSpecifier.builder()
@@ -999,6 +1011,7 @@ internal class ContractTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -1062,6 +1075,12 @@ internal class ContractTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -1327,6 +1346,7 @@ internal class ContractTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -1360,6 +1380,11 @@ internal class ContractTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .totalContractValue(0.0)
@@ -1559,6 +1584,7 @@ internal class ContractTest {
                         .addOverride(
                             Override.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addApplicableProductTag("string")
                                 .creditType(
@@ -1598,7 +1624,6 @@ internal class ContractTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .addOverrideTier(
@@ -1782,6 +1807,12 @@ internal class ContractTest {
                                 .priority(0.0)
                                 .rateType(Credit.RateType.COMMIT_RATE)
                                 .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .rolledOverFrom(
+                                    Credit.RolledOverFrom.builder()
+                                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
                                 .salesforceOpportunityId("salesforce_opportunity_id")
                                 .addSpecifier(
                                     CommitSpecifier.builder()
@@ -1895,6 +1926,7 @@ internal class ContractTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -1958,6 +1990,12 @@ internal class ContractTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -2223,6 +2261,7 @@ internal class ContractTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -2256,6 +2295,11 @@ internal class ContractTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .totalContractValue(0.0)
@@ -2325,6 +2369,7 @@ internal class ContractTest {
                                 .productId("product_id")
                                 .description("description")
                                 .name("name")
+                                .priority(0.0)
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
                                 .addSpecifier(
@@ -2382,6 +2427,11 @@ internal class ContractTest {
                         .rechargeToAmount(0.0)
                         .thresholdAmount(0.0)
                         .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .discountConfiguration(
+                            PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
+                                .paymentFraction(0.0)
+                                .build()
+                        )
                         .build()
                 )
                 .scheduledChargesOnUsageInvoices(Contract.ScheduledChargesOnUsageInvoices.ALL)
@@ -2392,6 +2442,7 @@ internal class ContractTest {
                                 .productId("product_id")
                                 .description("description")
                                 .name("name")
+                                .priority(0.0)
                                 .build()
                         )
                         .isEnabled(true)
@@ -2423,6 +2474,11 @@ internal class ContractTest {
                                 .build()
                         )
                         .thresholdAmount(0.0)
+                        .discountConfiguration(
+                            SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                .paymentFraction(0.0)
+                                .build()
+                        )
                         .build()
                 )
                 .addSubscription(
@@ -2668,6 +2724,7 @@ internal class ContractTest {
                     .addOverride(
                         Override.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addApplicableProductTag("string")
                             .creditType(
@@ -2700,7 +2757,6 @@ internal class ContractTest {
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addProductTag("string")
                                     .addRecurringCommitId("string")
-                                    .addRecurringCreditId("string")
                                     .build()
                             )
                             .addOverrideTier(
@@ -2868,6 +2924,12 @@ internal class ContractTest {
                             .priority(0.0)
                             .rateType(Credit.RateType.COMMIT_RATE)
                             .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .rolledOverFrom(
+                                Credit.RolledOverFrom.builder()
+                                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .build()
+                            )
                             .salesforceOpportunityId("salesforce_opportunity_id")
                             .addSpecifier(
                                 CommitSpecifier.builder()
@@ -3131,6 +3193,7 @@ internal class ContractTest {
                     .addOverride(
                         Override.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addApplicableProductTag("string")
                             .creditType(
@@ -3163,7 +3226,6 @@ internal class ContractTest {
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addProductTag("string")
                                     .addRecurringCommitId("string")
-                                    .addRecurringCreditId("string")
                                     .build()
                             )
                             .addOverrideTier(
@@ -3346,6 +3408,12 @@ internal class ContractTest {
                             .priority(0.0)
                             .rateType(Credit.RateType.COMMIT_RATE)
                             .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .rolledOverFrom(
+                                Credit.RolledOverFrom.builder()
+                                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .build()
+                            )
                             .salesforceOpportunityId("salesforce_opportunity_id")
                             .addSpecifier(
                                 CommitSpecifier.builder()
@@ -3450,6 +3518,7 @@ internal class ContractTest {
                                     .productId("product_id")
                                     .description("description")
                                     .name("name")
+                                    .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
                                     .addSpecifier(
@@ -3509,6 +3578,11 @@ internal class ContractTest {
                             .rechargeToAmount(0.0)
                             .thresholdAmount(0.0)
                             .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .discountConfiguration(
+                                PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
+                                    .paymentFraction(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .addProfessionalService(
@@ -3757,6 +3831,7 @@ internal class ContractTest {
                                     .productId("product_id")
                                     .description("description")
                                     .name("name")
+                                    .priority(0.0)
                                     .build()
                             )
                             .isEnabled(true)
@@ -3789,6 +3864,11 @@ internal class ContractTest {
                                     .build()
                             )
                             .thresholdAmount(0.0)
+                            .discountConfiguration(
+                                SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                    .paymentFraction(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .totalContractValue(0.0)
@@ -3976,6 +4056,7 @@ internal class ContractTest {
                     .addOverride(
                         Override.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addApplicableProductTag("string")
                             .creditType(
@@ -4008,7 +4089,6 @@ internal class ContractTest {
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addProductTag("string")
                                     .addRecurringCommitId("string")
-                                    .addRecurringCreditId("string")
                                     .build()
                             )
                             .addOverrideTier(
@@ -4191,6 +4271,12 @@ internal class ContractTest {
                             .priority(0.0)
                             .rateType(Credit.RateType.COMMIT_RATE)
                             .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .rolledOverFrom(
+                                Credit.RolledOverFrom.builder()
+                                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .build()
+                            )
                             .salesforceOpportunityId("salesforce_opportunity_id")
                             .addSpecifier(
                                 CommitSpecifier.builder()
@@ -4295,6 +4381,7 @@ internal class ContractTest {
                                     .productId("product_id")
                                     .description("description")
                                     .name("name")
+                                    .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
                                     .addSpecifier(
@@ -4354,6 +4441,11 @@ internal class ContractTest {
                             .rechargeToAmount(0.0)
                             .thresholdAmount(0.0)
                             .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .discountConfiguration(
+                                PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
+                                    .paymentFraction(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .addProfessionalService(
@@ -4602,6 +4694,7 @@ internal class ContractTest {
                                     .productId("product_id")
                                     .description("description")
                                     .name("name")
+                                    .priority(0.0)
                                     .build()
                             )
                             .isEnabled(true)
@@ -4634,6 +4727,11 @@ internal class ContractTest {
                                     .build()
                             )
                             .thresholdAmount(0.0)
+                            .discountConfiguration(
+                                SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                    .paymentFraction(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .totalContractValue(0.0)
@@ -4700,6 +4798,7 @@ internal class ContractTest {
                             .productId("product_id")
                             .description("description")
                             .name("name")
+                            .priority(0.0)
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
                             .addSpecifier(
@@ -4746,6 +4845,11 @@ internal class ContractTest {
                     .rechargeToAmount(0.0)
                     .thresholdAmount(0.0)
                     .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .discountConfiguration(
+                        PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
+                            .paymentFraction(0.0)
+                            .build()
+                    )
                     .build()
             )
         assertThat(contract.scheduledChargesOnUsageInvoices())
@@ -4758,6 +4862,7 @@ internal class ContractTest {
                             .productId("product_id")
                             .description("description")
                             .name("name")
+                            .priority(0.0)
                             .build()
                     )
                     .isEnabled(true)
@@ -4784,6 +4889,11 @@ internal class ContractTest {
                             .build()
                     )
                     .thresholdAmount(0.0)
+                    .discountConfiguration(
+                        SpendThresholdConfiguration.DiscountConfiguration.builder()
+                            .paymentFraction(0.0)
+                            .build()
+                    )
                     .build()
             )
         assertThat(contract.subscriptions().getOrNull())
@@ -5029,6 +5139,7 @@ internal class ContractTest {
                         .addOverride(
                             Override.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addApplicableProductTag("string")
                                 .creditType(
@@ -5068,7 +5179,6 @@ internal class ContractTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .addOverrideTier(
@@ -5236,6 +5346,12 @@ internal class ContractTest {
                                 .priority(0.0)
                                 .rateType(Credit.RateType.COMMIT_RATE)
                                 .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .rolledOverFrom(
+                                    Credit.RolledOverFrom.builder()
+                                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
                                 .salesforceOpportunityId("salesforce_opportunity_id")
                                 .addSpecifier(
                                     CommitSpecifier.builder()
@@ -5512,6 +5628,7 @@ internal class ContractTest {
                         .addOverride(
                             Override.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addApplicableProductTag("string")
                                 .creditType(
@@ -5551,7 +5668,6 @@ internal class ContractTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .addOverrideTier(
@@ -5735,6 +5851,12 @@ internal class ContractTest {
                                 .priority(0.0)
                                 .rateType(Credit.RateType.COMMIT_RATE)
                                 .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .rolledOverFrom(
+                                    Credit.RolledOverFrom.builder()
+                                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
                                 .salesforceOpportunityId("salesforce_opportunity_id")
                                 .addSpecifier(
                                     CommitSpecifier.builder()
@@ -5848,6 +5970,7 @@ internal class ContractTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -5911,6 +6034,12 @@ internal class ContractTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -6176,6 +6305,7 @@ internal class ContractTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -6209,6 +6339,11 @@ internal class ContractTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .totalContractValue(0.0)
@@ -6408,6 +6543,7 @@ internal class ContractTest {
                         .addOverride(
                             Override.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addApplicableProductTag("string")
                                 .creditType(
@@ -6447,7 +6583,6 @@ internal class ContractTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .addOverrideTier(
@@ -6631,6 +6766,12 @@ internal class ContractTest {
                                 .priority(0.0)
                                 .rateType(Credit.RateType.COMMIT_RATE)
                                 .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .rolledOverFrom(
+                                    Credit.RolledOverFrom.builder()
+                                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
                                 .salesforceOpportunityId("salesforce_opportunity_id")
                                 .addSpecifier(
                                     CommitSpecifier.builder()
@@ -6744,6 +6885,7 @@ internal class ContractTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -6807,6 +6949,12 @@ internal class ContractTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -7072,6 +7220,7 @@ internal class ContractTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -7105,6 +7254,11 @@ internal class ContractTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .totalContractValue(0.0)
@@ -7174,6 +7328,7 @@ internal class ContractTest {
                                 .productId("product_id")
                                 .description("description")
                                 .name("name")
+                                .priority(0.0)
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
                                 .addSpecifier(
@@ -7231,6 +7386,11 @@ internal class ContractTest {
                         .rechargeToAmount(0.0)
                         .thresholdAmount(0.0)
                         .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .discountConfiguration(
+                            PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
+                                .paymentFraction(0.0)
+                                .build()
+                        )
                         .build()
                 )
                 .scheduledChargesOnUsageInvoices(Contract.ScheduledChargesOnUsageInvoices.ALL)
@@ -7241,6 +7401,7 @@ internal class ContractTest {
                                 .productId("product_id")
                                 .description("description")
                                 .name("name")
+                                .priority(0.0)
                                 .build()
                         )
                         .isEnabled(true)
@@ -7272,6 +7433,11 @@ internal class ContractTest {
                                 .build()
                         )
                         .thresholdAmount(0.0)
+                        .discountConfiguration(
+                            SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                .paymentFraction(0.0)
+                                .build()
+                        )
                         .build()
                 )
                 .addSubscription(

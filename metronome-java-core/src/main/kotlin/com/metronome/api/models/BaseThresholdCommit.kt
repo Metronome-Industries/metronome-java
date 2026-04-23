@@ -22,6 +22,7 @@ private constructor(
     private val productId: JsonField<String>,
     private val description: JsonField<String>,
     private val name: JsonField<String>,
+    private val priority: JsonField<Double>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -32,7 +33,8 @@ private constructor(
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-    ) : this(productId, description, name, mutableMapOf())
+        @JsonProperty("priority") @ExcludeMissing priority: JsonField<Double> = JsonMissing.of(),
+    ) : this(productId, description, name, priority, mutableMapOf())
 
     /**
      * The commit product that will be used to generate the line item for commit payment.
@@ -58,6 +60,15 @@ private constructor(
     fun name(): Optional<String> = name.getOptional("name")
 
     /**
+     * The priority of the commit, used to determine drawdown order. Lower priority commits are
+     * consumed first. Defaults to 100 if not specified.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun priority(): Optional<Double> = priority.getOptional("priority")
+
+    /**
      * Returns the raw JSON value of [productId].
      *
      * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
@@ -77,6 +88,13 @@ private constructor(
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
+     * Returns the raw JSON value of [priority].
+     *
+     * Unlike [priority], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -109,6 +127,7 @@ private constructor(
         private var productId: JsonField<String>? = null
         private var description: JsonField<String> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
+        private var priority: JsonField<Double> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -116,6 +135,7 @@ private constructor(
             productId = baseThresholdCommit.productId
             description = baseThresholdCommit.description
             name = baseThresholdCommit.name
+            priority = baseThresholdCommit.priority
             additionalProperties = baseThresholdCommit.additionalProperties.toMutableMap()
         }
 
@@ -156,6 +176,20 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /**
+         * The priority of the commit, used to determine drawdown order. Lower priority commits are
+         * consumed first. Defaults to 100 if not specified.
+         */
+        fun priority(priority: Double) = priority(JsonField.of(priority))
+
+        /**
+         * Sets [Builder.priority] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.priority] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -192,6 +226,7 @@ private constructor(
                 checkRequired("productId", productId),
                 description,
                 name,
+                priority,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -206,6 +241,7 @@ private constructor(
         productId()
         description()
         name()
+        priority()
         validated = true
     }
 
@@ -226,7 +262,8 @@ private constructor(
     internal fun validity(): Int =
         (if (productId.asKnown().isPresent) 1 else 0) +
             (if (description.asKnown().isPresent) 1 else 0) +
-            (if (name.asKnown().isPresent) 1 else 0)
+            (if (name.asKnown().isPresent) 1 else 0) +
+            (if (priority.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -237,15 +274,16 @@ private constructor(
             productId == other.productId &&
             description == other.description &&
             name == other.name &&
+            priority == other.priority &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(productId, description, name, additionalProperties)
+        Objects.hash(productId, description, name, priority, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BaseThresholdCommit{productId=$productId, description=$description, name=$name, additionalProperties=$additionalProperties}"
+        "BaseThresholdCommit{productId=$productId, description=$description, name=$name, priority=$priority, additionalProperties=$additionalProperties}"
 }

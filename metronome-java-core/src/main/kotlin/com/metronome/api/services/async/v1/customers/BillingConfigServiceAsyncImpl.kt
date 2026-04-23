@@ -23,6 +23,11 @@ import com.metronome.api.models.v1.customers.billingconfig.BillingConfigRetrieve
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent
+ * your users for all billing and reporting. Use these endpoints to create, retrieve, update, and
+ * archive customers and their billing configuration.
+ */
 class BillingConfigServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     BillingConfigServiceAsync {
 

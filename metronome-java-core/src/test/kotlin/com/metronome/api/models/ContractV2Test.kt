@@ -169,6 +169,7 @@ internal class ContractV2Test {
                 .addOverride(
                     ContractV2.Override.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addApplicableProductTag("string")
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -196,7 +197,6 @@ internal class ContractV2Test {
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addProductTag("string")
                                 .addRecurringCommitId("string")
-                                .addRecurringCreditId("string")
                                 .build()
                         )
                         .addOverrideTier(OverrideTier.builder().multiplier(0.0).size(0.0).build())
@@ -373,6 +373,12 @@ internal class ContractV2Test {
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .priority(0.0)
                         .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .rolledOverFrom(
+                            ContractV2.Credit.RolledOverFrom.builder()
+                                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
                         .salesforceOpportunityId("salesforce_opportunity_id")
                         .addSpecifier(
                             CommitSpecifier.builder()
@@ -496,9 +502,10 @@ internal class ContractV2Test {
                     PrepaidBalanceThresholdConfigurationV2.builder()
                         .commit(
                             PrepaidBalanceThresholdConfigurationV2.Commit.builder()
+                                .productId("product_id")
                                 .description("description")
                                 .name("name")
-                                .productId("product_id")
+                                .priority(0.0)
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
                                 .addSpecifier(
@@ -557,6 +564,11 @@ internal class ContractV2Test {
                         .rechargeToAmount(0.0)
                         .thresholdAmount(0.0)
                         .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .discountConfiguration(
+                            PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.builder()
+                                .paymentFraction(0.0)
+                                .build()
+                        )
                         .build()
                 )
                 .priority(0.0)
@@ -781,10 +793,11 @@ internal class ContractV2Test {
                 .spendThresholdConfiguration(
                     SpendThresholdConfigurationV2.builder()
                         .commit(
-                            UpdateBaseThresholdCommit.builder()
+                            BaseThresholdCommit.builder()
+                                .productId("product_id")
                                 .description("description")
                                 .name("name")
-                                .productId("product_id")
+                                .priority(0.0)
                                 .build()
                         )
                         .isEnabled(true)
@@ -817,6 +830,11 @@ internal class ContractV2Test {
                                 .build()
                         )
                         .thresholdAmount(0.0)
+                        .discountConfiguration(
+                            SpendThresholdConfigurationV2.DiscountConfiguration.builder()
+                                .paymentFraction(0.0)
+                                .build()
+                        )
                         .build()
                 )
                 .addSubscription(
@@ -1055,6 +1073,7 @@ internal class ContractV2Test {
             .containsExactly(
                 ContractV2.Override.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addApplicableProductTag("string")
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1081,7 +1100,6 @@ internal class ContractV2Test {
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addProductTag("string")
                             .addRecurringCommitId("string")
-                            .addRecurringCreditId("string")
                             .build()
                     )
                     .addOverrideTier(OverrideTier.builder().multiplier(0.0).size(0.0).build())
@@ -1261,6 +1279,12 @@ internal class ContractV2Test {
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .priority(0.0)
                     .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .rolledOverFrom(
+                        ContractV2.Credit.RolledOverFrom.builder()
+                            .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .build()
+                    )
                     .salesforceOpportunityId("salesforce_opportunity_id")
                     .addSpecifier(
                         CommitSpecifier.builder()
@@ -1391,9 +1415,10 @@ internal class ContractV2Test {
                 PrepaidBalanceThresholdConfigurationV2.builder()
                     .commit(
                         PrepaidBalanceThresholdConfigurationV2.Commit.builder()
+                            .productId("product_id")
                             .description("description")
                             .name("name")
-                            .productId("product_id")
+                            .priority(0.0)
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
                             .addSpecifier(
@@ -1442,6 +1467,11 @@ internal class ContractV2Test {
                     .rechargeToAmount(0.0)
                     .thresholdAmount(0.0)
                     .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .discountConfiguration(
+                        PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.builder()
+                            .paymentFraction(0.0)
+                            .build()
+                    )
                     .build()
             )
         assertThat(contractV2.priority()).contains(0.0)
@@ -1670,10 +1700,11 @@ internal class ContractV2Test {
             .contains(
                 SpendThresholdConfigurationV2.builder()
                     .commit(
-                        UpdateBaseThresholdCommit.builder()
+                        BaseThresholdCommit.builder()
+                            .productId("product_id")
                             .description("description")
                             .name("name")
-                            .productId("product_id")
+                            .priority(0.0)
                             .build()
                     )
                     .isEnabled(true)
@@ -1702,6 +1733,11 @@ internal class ContractV2Test {
                             .build()
                     )
                     .thresholdAmount(0.0)
+                    .discountConfiguration(
+                        SpendThresholdConfigurationV2.DiscountConfiguration.builder()
+                            .paymentFraction(0.0)
+                            .build()
+                    )
                     .build()
             )
         assertThat(contractV2.subscriptions().getOrNull())
@@ -1937,6 +1973,7 @@ internal class ContractV2Test {
                 .addOverride(
                     ContractV2.Override.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addApplicableProductTag("string")
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1964,7 +2001,6 @@ internal class ContractV2Test {
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addProductTag("string")
                                 .addRecurringCommitId("string")
-                                .addRecurringCreditId("string")
                                 .build()
                         )
                         .addOverrideTier(OverrideTier.builder().multiplier(0.0).size(0.0).build())
@@ -2141,6 +2177,12 @@ internal class ContractV2Test {
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .priority(0.0)
                         .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .rolledOverFrom(
+                            ContractV2.Credit.RolledOverFrom.builder()
+                                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
                         .salesforceOpportunityId("salesforce_opportunity_id")
                         .addSpecifier(
                             CommitSpecifier.builder()
@@ -2264,9 +2306,10 @@ internal class ContractV2Test {
                     PrepaidBalanceThresholdConfigurationV2.builder()
                         .commit(
                             PrepaidBalanceThresholdConfigurationV2.Commit.builder()
+                                .productId("product_id")
                                 .description("description")
                                 .name("name")
-                                .productId("product_id")
+                                .priority(0.0)
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
                                 .addSpecifier(
@@ -2325,6 +2368,11 @@ internal class ContractV2Test {
                         .rechargeToAmount(0.0)
                         .thresholdAmount(0.0)
                         .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .discountConfiguration(
+                            PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.builder()
+                                .paymentFraction(0.0)
+                                .build()
+                        )
                         .build()
                 )
                 .priority(0.0)
@@ -2549,10 +2597,11 @@ internal class ContractV2Test {
                 .spendThresholdConfiguration(
                     SpendThresholdConfigurationV2.builder()
                         .commit(
-                            UpdateBaseThresholdCommit.builder()
+                            BaseThresholdCommit.builder()
+                                .productId("product_id")
                                 .description("description")
                                 .name("name")
-                                .productId("product_id")
+                                .priority(0.0)
                                 .build()
                         )
                         .isEnabled(true)
@@ -2585,6 +2634,11 @@ internal class ContractV2Test {
                                 .build()
                         )
                         .thresholdAmount(0.0)
+                        .discountConfiguration(
+                            SpendThresholdConfigurationV2.DiscountConfiguration.builder()
+                                .paymentFraction(0.0)
+                                .build()
+                        )
                         .build()
                 )
                 .addSubscription(

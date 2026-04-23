@@ -6,6 +6,7 @@ import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.Id
+import com.metronome.api.models.v1.customers.CustomerArchiveBillingConfigurationsParams
 import com.metronome.api.models.v1.customers.CustomerCreateParams
 import com.metronome.api.models.v1.customers.CustomerListBillableMetricsParams
 import com.metronome.api.models.v1.customers.CustomerListCostsParams
@@ -166,6 +167,31 @@ internal class CustomerServiceTest {
 
         val response =
             customerService.archive(Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build())
+
+        response.validate()
+    }
+
+    @Test
+    fun archiveBillingConfigurations() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val customerService = client.v1().customers()
+
+        val response =
+            customerService.archiveBillingConfigurations(
+                CustomerArchiveBillingConfigurationsParams.builder()
+                    .addCustomerBillingProviderConfigurationId(
+                        "4db51251-61de-4bfe-b9ce-495e244f3491"
+                    )
+                    .addCustomerBillingProviderConfigurationId(
+                        "4db51251-61de-4bfe-b9ce-495e244f3491"
+                    )
+                    .customerId("20a060d1-aa80-41d4-8bb2-4f3091b93903")
+                    .build()
+            )
 
         response.validate()
     }

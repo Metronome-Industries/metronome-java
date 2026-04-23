@@ -72,10 +72,16 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ContractServiceAsync =
         ContractServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Products are the items that customers purchase. */
     override fun products(): ProductServiceAsync = products
 
+    /** Rate cards are used to define default pricing for products. */
     override fun rateCards(): RateCardServiceAsync = rateCards
 
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     override fun namedSchedules(): NamedScheduleServiceAsync = namedSchedules
 
     override fun create(
@@ -205,10 +211,16 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Products are the items that customers purchase. */
         override fun products(): ProductServiceAsync.WithRawResponse = products
 
+        /** Rate cards are used to define default pricing for products. */
         override fun rateCards(): RateCardServiceAsync.WithRawResponse = rateCards
 
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         override fun namedSchedules(): NamedScheduleServiceAsync.WithRawResponse = namedSchedules
 
         private val createHandler: Handler<ContractCreateResponse> =

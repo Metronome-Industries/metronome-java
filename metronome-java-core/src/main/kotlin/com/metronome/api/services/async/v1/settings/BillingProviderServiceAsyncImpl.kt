@@ -22,6 +22,10 @@ import com.metronome.api.models.v1.settings.billingproviders.BillingProviderList
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+ * behavior.
+ */
 class BillingProviderServiceAsyncImpl
 internal constructor(private val clientOptions: ClientOptions) : BillingProviderServiceAsync {
 

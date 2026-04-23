@@ -19,6 +19,7 @@ import com.metronome.api.models.v1.contracts.products.ProductUpdateParams
 import com.metronome.api.models.v1.contracts.products.ProductUpdateResponse
 import java.util.function.Consumer
 
+/** Products are the items that customers purchase. */
 interface ProductService {
 
     /**

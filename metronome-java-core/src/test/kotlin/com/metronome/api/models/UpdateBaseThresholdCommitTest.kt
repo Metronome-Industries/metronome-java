@@ -15,11 +15,13 @@ internal class UpdateBaseThresholdCommitTest {
             UpdateBaseThresholdCommit.builder()
                 .description("description")
                 .name("name")
+                .priority(0.0)
                 .productId("product_id")
                 .build()
 
         assertThat(updateBaseThresholdCommit.description()).contains("description")
         assertThat(updateBaseThresholdCommit.name()).contains("name")
+        assertThat(updateBaseThresholdCommit.priority()).contains(0.0)
         assertThat(updateBaseThresholdCommit.productId()).contains("product_id")
     }
 
@@ -30,6 +32,7 @@ internal class UpdateBaseThresholdCommitTest {
             UpdateBaseThresholdCommit.builder()
                 .description("description")
                 .name("name")
+                .priority(0.0)
                 .productId("product_id")
                 .build()
 

@@ -29,6 +29,7 @@ import com.metronome.api.models.v1.contracts.products.ProductUpdateResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Products are the items that customers purchase. */
 class ProductServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ProductServiceAsync {
 

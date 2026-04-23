@@ -8071,8 +8071,6 @@ private constructor(
 
                     @JvmField val ANROK = of("ANROK")
 
-                    @JvmField val AVALARA = of("AVALARA")
-
                     @JvmField val PRECALCULATED = of("PRECALCULATED")
 
                     @JvmStatic fun of(value: String) = TaxType(JsonField.of(value))
@@ -8083,7 +8081,6 @@ private constructor(
                     NONE,
                     STRIPE,
                     ANROK,
-                    AVALARA,
                     PRECALCULATED,
                 }
 
@@ -8100,7 +8097,6 @@ private constructor(
                     NONE,
                     STRIPE,
                     ANROK,
-                    AVALARA,
                     PRECALCULATED,
                     /**
                      * An enum member indicating that [TaxType] was instantiated with an unknown
@@ -8121,7 +8117,6 @@ private constructor(
                         NONE -> Value.NONE
                         STRIPE -> Value.STRIPE
                         ANROK -> Value.ANROK
-                        AVALARA -> Value.AVALARA
                         PRECALCULATED -> Value.PRECALCULATED
                         else -> Value._UNKNOWN
                     }
@@ -8140,7 +8135,6 @@ private constructor(
                         NONE -> Known.NONE
                         STRIPE -> Known.STRIPE
                         ANROK -> Known.ANROK
-                        AVALARA -> Known.AVALARA
                         PRECALCULATED -> Known.PRECALCULATED
                         else -> throw MetronomeInvalidDataException("Unknown TaxType: $value")
                     }
@@ -8429,6 +8423,7 @@ private constructor(
         private val netsuiteSalesOrderId: JsonField<String>,
         private val priority: JsonField<Double>,
         private val rateType: JsonField<RateType>,
+        private val rolloverFraction: JsonField<Double>,
         private val specifiers: JsonField<List<CommitSpecifierInput>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -8466,6 +8461,9 @@ private constructor(
             @JsonProperty("rate_type")
             @ExcludeMissing
             rateType: JsonField<RateType> = JsonMissing.of(),
+            @JsonProperty("rollover_fraction")
+            @ExcludeMissing
+            rolloverFraction: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("specifiers")
             @ExcludeMissing
             specifiers: JsonField<List<CommitSpecifierInput>> = JsonMissing.of(),
@@ -8481,6 +8479,7 @@ private constructor(
             netsuiteSalesOrderId,
             priority,
             rateType,
+            rolloverFraction,
             specifiers,
             mutableMapOf(),
         )
@@ -8574,6 +8573,14 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun rateType(): Optional<RateType> = rateType.getOptional("rate_type")
+
+        /**
+         * Fraction of unused segments that will be rolled over. Must be between 0 and 1.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun rolloverFraction(): Optional<Double> = rolloverFraction.getOptional("rollover_fraction")
 
         /**
          * List of filters that determine what kind of customer usage draws down a commit or credit.
@@ -8686,6 +8693,16 @@ private constructor(
         @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
 
         /**
+         * Returns the raw JSON value of [rolloverFraction].
+         *
+         * Unlike [rolloverFraction], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("rollover_fraction")
+        @ExcludeMissing
+        fun _rolloverFraction(): JsonField<Double> = rolloverFraction
+
+        /**
          * Returns the raw JSON value of [specifiers].
          *
          * Unlike [specifiers], this method doesn't throw if the JSON field has an unexpected type.
@@ -8735,6 +8752,7 @@ private constructor(
             private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
             private var priority: JsonField<Double> = JsonMissing.of()
             private var rateType: JsonField<RateType> = JsonMissing.of()
+            private var rolloverFraction: JsonField<Double> = JsonMissing.of()
             private var specifiers: JsonField<MutableList<CommitSpecifierInput>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -8751,6 +8769,7 @@ private constructor(
                 netsuiteSalesOrderId = credit.netsuiteSalesOrderId
                 priority = credit.priority
                 rateType = credit.rateType
+                rolloverFraction = credit.rolloverFraction
                 specifiers = credit.specifiers.map { it.toMutableList() }
                 additionalProperties = credit.additionalProperties.toMutableMap()
             }
@@ -8936,6 +8955,21 @@ private constructor(
              */
             fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
+            /** Fraction of unused segments that will be rolled over. Must be between 0 and 1. */
+            fun rolloverFraction(rolloverFraction: Double) =
+                rolloverFraction(JsonField.of(rolloverFraction))
+
+            /**
+             * Sets [Builder.rolloverFraction] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.rolloverFraction] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun rolloverFraction(rolloverFraction: JsonField<Double>) = apply {
+                this.rolloverFraction = rolloverFraction
+            }
+
             /**
              * List of filters that determine what kind of customer usage draws down a commit or
              * credit. A customer's usage needs to meet the condition of at least one of the
@@ -9013,6 +9047,7 @@ private constructor(
                     netsuiteSalesOrderId,
                     priority,
                     rateType,
+                    rolloverFraction,
                     (specifiers ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
                 )
@@ -9036,6 +9071,7 @@ private constructor(
             netsuiteSalesOrderId()
             priority()
             rateType().ifPresent { it.validate() }
+            rolloverFraction()
             specifiers().ifPresent { it.forEach { it.validate() } }
             validated = true
         }
@@ -9067,6 +9103,7 @@ private constructor(
                 (if (netsuiteSalesOrderId.asKnown().isPresent) 1 else 0) +
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (rateType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (rolloverFraction.asKnown().isPresent) 1 else 0) +
                 (specifiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
         /** Schedule for distributing the credit to the customer. */
@@ -9805,6 +9842,7 @@ private constructor(
                 netsuiteSalesOrderId == other.netsuiteSalesOrderId &&
                 priority == other.priority &&
                 rateType == other.rateType &&
+                rolloverFraction == other.rolloverFraction &&
                 specifiers == other.specifiers &&
                 additionalProperties == other.additionalProperties
         }
@@ -9822,6 +9860,7 @@ private constructor(
                 netsuiteSalesOrderId,
                 priority,
                 rateType,
+                rolloverFraction,
                 specifiers,
                 additionalProperties,
             )
@@ -9830,7 +9869,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Credit{accessSchedule=$accessSchedule, productId=$productId, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, specifiers=$specifiers, additionalProperties=$additionalProperties}"
+            "Credit{accessSchedule=$accessSchedule, productId=$productId, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, rolloverFraction=$rolloverFraction, specifiers=$specifiers, additionalProperties=$additionalProperties}"
     }
 
     /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
@@ -13712,7 +13751,6 @@ private constructor(
             private val productId: JsonField<String>,
             private val productTags: JsonField<List<String>>,
             private val recurringCommitIds: JsonField<List<String>>,
-            private val recurringCreditIds: JsonField<List<String>>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -13739,9 +13777,6 @@ private constructor(
                 @JsonProperty("recurring_commit_ids")
                 @ExcludeMissing
                 recurringCommitIds: JsonField<List<String>> = JsonMissing.of(),
-                @JsonProperty("recurring_credit_ids")
-                @ExcludeMissing
-                recurringCreditIds: JsonField<List<String>> = JsonMissing.of(),
             ) : this(
                 billingFrequency,
                 commitIds,
@@ -13750,7 +13785,6 @@ private constructor(
                 productId,
                 productTags,
                 recurringCommitIds,
-                recurringCreditIds,
                 mutableMapOf(),
             )
 
@@ -13819,18 +13853,6 @@ private constructor(
              */
             fun recurringCommitIds(): Optional<List<String>> =
                 recurringCommitIds.getOptional("recurring_commit_ids")
-
-            /**
-             * Can only be used for commit specific overrides. Must be used in conjunction with one
-             * of `product_id`, `product_tags`, `pricing_group_values`, or
-             * `presentation_group_values`. If provided, the override will only apply to credits
-             * created by the specified recurring credit ids.
-             *
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun recurringCreditIds(): Optional<List<String>> =
-                recurringCreditIds.getOptional("recurring_credit_ids")
 
             /**
              * Returns the raw JSON value of [billingFrequency].
@@ -13903,16 +13925,6 @@ private constructor(
             @ExcludeMissing
             fun _recurringCommitIds(): JsonField<List<String>> = recurringCommitIds
 
-            /**
-             * Returns the raw JSON value of [recurringCreditIds].
-             *
-             * Unlike [recurringCreditIds], this method doesn't throw if the JSON field has an
-             * unexpected type.
-             */
-            @JsonProperty("recurring_credit_ids")
-            @ExcludeMissing
-            fun _recurringCreditIds(): JsonField<List<String>> = recurringCreditIds
-
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -13944,7 +13956,6 @@ private constructor(
                 private var productId: JsonField<String> = JsonMissing.of()
                 private var productTags: JsonField<MutableList<String>>? = null
                 private var recurringCommitIds: JsonField<MutableList<String>>? = null
-                private var recurringCreditIds: JsonField<MutableList<String>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -13957,8 +13968,6 @@ private constructor(
                     productTags = overrideSpecifier.productTags.map { it.toMutableList() }
                     recurringCommitIds =
                         overrideSpecifier.recurringCommitIds.map { it.toMutableList() }
-                    recurringCreditIds =
-                        overrideSpecifier.recurringCreditIds.map { it.toMutableList() }
                     additionalProperties = overrideSpecifier.additionalProperties.toMutableMap()
                 }
 
@@ -14118,38 +14127,6 @@ private constructor(
                         }
                 }
 
-                /**
-                 * Can only be used for commit specific overrides. Must be used in conjunction with
-                 * one of `product_id`, `product_tags`, `pricing_group_values`, or
-                 * `presentation_group_values`. If provided, the override will only apply to credits
-                 * created by the specified recurring credit ids.
-                 */
-                fun recurringCreditIds(recurringCreditIds: List<String>) =
-                    recurringCreditIds(JsonField.of(recurringCreditIds))
-
-                /**
-                 * Sets [Builder.recurringCreditIds] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.recurringCreditIds] with a well-typed
-                 * `List<String>` value instead. This method is primarily for setting the field to
-                 * an undocumented or not yet supported value.
-                 */
-                fun recurringCreditIds(recurringCreditIds: JsonField<List<String>>) = apply {
-                    this.recurringCreditIds = recurringCreditIds.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [String] to [recurringCreditIds].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addRecurringCreditId(recurringCreditId: String) = apply {
-                    recurringCreditIds =
-                        (recurringCreditIds ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("recurringCreditIds", it).add(recurringCreditId)
-                        }
-                }
-
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
                     putAllAdditionalProperties(additionalProperties)
@@ -14186,7 +14163,6 @@ private constructor(
                         productId,
                         (productTags ?: JsonMissing.of()).map { it.toImmutable() },
                         (recurringCommitIds ?: JsonMissing.of()).map { it.toImmutable() },
-                        (recurringCreditIds ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -14205,7 +14181,6 @@ private constructor(
                 productId()
                 productTags()
                 recurringCommitIds()
-                recurringCreditIds()
                 validated = true
             }
 
@@ -14231,8 +14206,7 @@ private constructor(
                     (pricingGroupValues.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (productId.asKnown().isPresent) 1 else 0) +
                     (productTags.asKnown().getOrNull()?.size ?: 0) +
-                    (recurringCommitIds.asKnown().getOrNull()?.size ?: 0) +
-                    (recurringCreditIds.asKnown().getOrNull()?.size ?: 0)
+                    (recurringCommitIds.asKnown().getOrNull()?.size ?: 0)
 
             class BillingFrequency
             @JsonCreator
@@ -14624,7 +14598,6 @@ private constructor(
                     productId == other.productId &&
                     productTags == other.productTags &&
                     recurringCommitIds == other.recurringCommitIds &&
-                    recurringCreditIds == other.recurringCreditIds &&
                     additionalProperties == other.additionalProperties
             }
 
@@ -14637,7 +14610,6 @@ private constructor(
                     productId,
                     productTags,
                     recurringCommitIds,
-                    recurringCreditIds,
                     additionalProperties,
                 )
             }
@@ -14645,7 +14617,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "OverrideSpecifier{billingFrequency=$billingFrequency, commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, recurringCreditIds=$recurringCreditIds, additionalProperties=$additionalProperties}"
+                "OverrideSpecifier{billingFrequency=$billingFrequency, commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, additionalProperties=$additionalProperties}"
         }
 
         /** Required for OVERWRITE type. */

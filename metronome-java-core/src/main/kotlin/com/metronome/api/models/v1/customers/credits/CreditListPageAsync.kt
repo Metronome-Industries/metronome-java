@@ -27,7 +27,7 @@ private constructor(
      *
      * @see CreditListPageResponse.nextPage
      */
-    fun nextPage(): Optional<String> = response._nextPage().getOptional("next_page")
+    fun nextPageRaw(): Optional<String> = response._nextPage().getOptional("next_page")
 
     /**
      * Delegates to [CreditListPageResponse], but gracefully handles missing data.
@@ -38,11 +38,11 @@ private constructor(
 
     override fun items(): List<Credit> = data()
 
-    override fun hasNextPage(): Boolean = nextPage().isPresent
+    override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): CreditListParams {
         val nextCursor =
-            nextPage().getOrNull()
+            nextPageRaw().getOrNull()
                 ?: throw IllegalStateException("Cannot construct next page params")
         return params.toBuilder().nextPage(nextCursor).build()
     }

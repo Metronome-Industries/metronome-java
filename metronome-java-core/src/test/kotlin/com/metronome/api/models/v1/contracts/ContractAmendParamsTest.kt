@@ -193,6 +193,7 @@ internal class ContractAmendParamsTest {
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .priority(0.0)
                     .rateType(ContractAmendParams.Credit.RateType.COMMIT_RATE)
+                    .rolloverFraction(0.0)
                     .addSpecifier(
                         CommitSpecifierInput.builder()
                             .presentationGroupValues(
@@ -293,7 +294,6 @@ internal class ContractAmendParamsTest {
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addProductTag("string")
                             .addRecurringCommitId("string")
-                            .addRecurringCreditId("string")
                             .build()
                     )
                     .overwriteRate(
@@ -620,6 +620,7 @@ internal class ContractAmendParamsTest {
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .priority(0.0)
                         .rateType(ContractAmendParams.Credit.RateType.COMMIT_RATE)
+                        .rolloverFraction(0.0)
                         .addSpecifier(
                             CommitSpecifierInput.builder()
                                 .presentationGroupValues(
@@ -726,7 +727,6 @@ internal class ContractAmendParamsTest {
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addProductTag("string")
                                 .addRecurringCommitId("string")
-                                .addRecurringCreditId("string")
                                 .build()
                         )
                         .overwriteRate(
@@ -1034,6 +1034,7 @@ internal class ContractAmendParamsTest {
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .priority(0.0)
                     .rateType(ContractAmendParams.Credit.RateType.COMMIT_RATE)
+                    .rolloverFraction(0.0)
                     .addSpecifier(
                         CommitSpecifierInput.builder()
                             .presentationGroupValues(
@@ -1137,7 +1138,6 @@ internal class ContractAmendParamsTest {
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addProductTag("string")
                             .addRecurringCommitId("string")
-                            .addRecurringCreditId("string")
                             .build()
                     )
                     .overwriteRate(

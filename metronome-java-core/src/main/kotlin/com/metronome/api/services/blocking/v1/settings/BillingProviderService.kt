@@ -12,6 +12,10 @@ import com.metronome.api.models.v1.settings.billingproviders.BillingProviderList
 import com.metronome.api.models.v1.settings.billingproviders.BillingProviderListResponse
 import java.util.function.Consumer
 
+/**
+ * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+ * behavior.
+ */
 interface BillingProviderService {
 
     /**

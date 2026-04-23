@@ -10,6 +10,10 @@ import com.metronome.api.models.v1.pricingunits.PricingUnitListParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/**
+ * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+ * behavior.
+ */
 interface PricingUnitServiceAsync {
 
     /**

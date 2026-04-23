@@ -312,6 +312,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -469,7 +470,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -512,6 +512,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -575,6 +576,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -893,6 +900,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -926,6 +934,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -1267,6 +1280,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -1424,7 +1438,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -1467,6 +1480,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -1530,6 +1544,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -1848,6 +1868,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -1881,6 +1902,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -2222,6 +2248,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -2379,7 +2406,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -2422,6 +2448,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -2485,6 +2512,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -2803,6 +2836,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -2836,6 +2870,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -3177,6 +3216,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -3334,7 +3374,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -3377,6 +3416,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -3440,6 +3480,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -3758,6 +3804,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -3791,6 +3838,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -4132,6 +4184,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -4289,7 +4342,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -4332,6 +4384,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -4395,6 +4448,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -4713,6 +4772,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -4746,6 +4806,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -5087,6 +5152,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -5244,7 +5310,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -5287,6 +5352,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -5350,6 +5416,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -5668,6 +5740,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -5701,6 +5774,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -6042,6 +6120,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -6199,7 +6278,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -6242,6 +6320,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -6305,6 +6384,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -6623,6 +6708,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -6656,6 +6742,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -6997,6 +7088,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -7154,7 +7246,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -7197,6 +7288,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -7260,6 +7352,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -7578,6 +7676,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -7611,6 +7710,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -7952,6 +8056,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -8109,7 +8214,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -8152,6 +8256,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -8215,6 +8320,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -8533,6 +8644,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -8566,6 +8678,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -8907,6 +9024,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -9064,7 +9182,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -9107,6 +9224,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -9170,6 +9288,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -9488,6 +9612,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -9521,6 +9646,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -9862,6 +9992,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -10019,7 +10150,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -10062,6 +10192,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -10125,6 +10256,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -10443,6 +10580,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -10476,6 +10614,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -10817,6 +10960,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -10974,7 +11118,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -11017,6 +11160,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -11080,6 +11224,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -11398,6 +11548,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -11431,6 +11582,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -11772,6 +11928,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -11929,7 +12086,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -11972,6 +12128,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -12035,6 +12192,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -12353,6 +12516,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -12386,6 +12550,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -12727,6 +12896,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -12884,7 +13054,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -12927,6 +13096,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -12990,6 +13160,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -13308,6 +13484,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -13341,6 +13518,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -13682,6 +13864,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -13839,7 +14022,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -13882,6 +14064,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -13945,6 +14128,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -14263,6 +14452,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -14296,6 +14486,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -14637,6 +14832,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -14794,7 +14990,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -14837,6 +15032,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -14900,6 +15096,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -15218,6 +15420,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -15251,6 +15454,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(
@@ -15590,6 +15798,7 @@ internal class ErrorHandlingTest {
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .priority(0.0)
                                 .rateType(ContractCreateParams.Credit.RateType.COMMIT_RATE)
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -15747,7 +15956,6 @@ internal class ErrorHandlingTest {
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .addProductTag("string")
                                         .addRecurringCommitId("string")
-                                        .addRecurringCreditId("string")
                                         .build()
                                 )
                                 .overwriteRate(
@@ -15790,6 +15998,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .addApplicableProductId(
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
@@ -15853,6 +16062,12 @@ internal class ErrorHandlingTest {
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
                                 .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .discountConfiguration(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                        .builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -16171,6 +16386,7 @@ internal class ErrorHandlingTest {
                                         .productId("product_id")
                                         .description("description")
                                         .name("name")
+                                        .priority(0.0)
                                         .build()
                                 )
                                 .isEnabled(true)
@@ -16204,6 +16420,11 @@ internal class ErrorHandlingTest {
                                         .build()
                                 )
                                 .thresholdAmount(0.0)
+                                .discountConfiguration(
+                                    SpendThresholdConfiguration.DiscountConfiguration.builder()
+                                        .paymentFraction(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .addSubscription(

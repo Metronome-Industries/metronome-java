@@ -12,6 +12,10 @@ import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleRetriev
 import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleUpdateParams
 import java.util.function.Consumer
 
+/**
+ * Named schedules are used for storing custom data that can change over time. Named schedules are
+ * often used in custom pricing logic.
+ */
 interface NamedScheduleService {
 
     /**

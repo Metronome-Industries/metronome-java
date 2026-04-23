@@ -52,10 +52,16 @@ interface ContractServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ContractServiceAsync
 
+    /** Products are the items that customers purchase. */
     fun products(): ProductServiceAsync
 
+    /** Rate cards are used to define default pricing for products. */
     fun rateCards(): RateCardServiceAsync
 
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     fun namedSchedules(): NamedScheduleServiceAsync
 
     /**
@@ -318,6 +324,9 @@ interface ContractServiceAsync {
      * signup-promotion.
      *
      * ### Usage guidelines:
+     * - **Balance ledger details**: Use the
+     *   [listBalances](https://docs.metronome.com/api-reference/credits-and-commits/list-balances)
+     *   endpoint instead to understand detailed ledger drawdowns for each individual balance
      * - **Draft invoice handling**: Use `invoice_inclusion_mode` to control whether pending draft
      *   invoice deductions are included (`FINALIZED_AND_DRAFT`, the default) or excluded
      *   (`FINALIZED`) from the balance calculation
@@ -360,6 +369,9 @@ interface ContractServiceAsync {
      * - Custom fields: Any additional metadata attached to balances
      *
      * ### Usage guidelines:
+     * - Use the
+     *   [getNetBalance](https://docs.metronome.com/api-reference/credits-and-commits/get-the-net-balance-of-a-customer)
+     *   endpoint to retrieve a single combined current balance
      * - Date filtering: Use `effective_before` to include only balances with access before a
      *   specific date (exclusive)
      * - Set `include_balance=true` for calculated balance amounts on each commit or credit
@@ -495,10 +507,16 @@ interface ContractServiceAsync {
             modifier: Consumer<ClientOptions.Builder>
         ): ContractServiceAsync.WithRawResponse
 
+        /** Products are the items that customers purchase. */
         fun products(): ProductServiceAsync.WithRawResponse
 
+        /** Rate cards are used to define default pricing for products. */
         fun rateCards(): RateCardServiceAsync.WithRawResponse
 
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         fun namedSchedules(): NamedScheduleServiceAsync.WithRawResponse
 
         /**

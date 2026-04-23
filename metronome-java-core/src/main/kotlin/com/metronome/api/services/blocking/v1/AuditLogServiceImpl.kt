@@ -19,6 +19,10 @@ import com.metronome.api.models.v1.auditlogs.AuditLogListPageResponse
 import com.metronome.api.models.v1.auditlogs.AuditLogListParams
 import java.util.function.Consumer
 
+/**
+ * [Security](https://docs.metronome.com/developer-resources/security/) endpoints allow you to
+ * retrieve security-related data.
+ */
 class AuditLogServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AuditLogService {
 

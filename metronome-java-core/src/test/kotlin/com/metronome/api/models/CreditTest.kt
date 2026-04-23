@@ -83,6 +83,12 @@ internal class CreditTest {
                 .priority(0.0)
                 .rateType(Credit.RateType.COMMIT_RATE)
                 .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rolledOverFrom(
+                    Credit.RolledOverFrom.builder()
+                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .addSpecifier(
                     CommitSpecifier.builder()
@@ -189,6 +195,13 @@ internal class CreditTest {
         assertThat(credit.priority()).contains(0.0)
         assertThat(credit.rateType()).contains(Credit.RateType.COMMIT_RATE)
         assertThat(credit.recurringCreditId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(credit.rolledOverFrom())
+            .contains(
+                Credit.RolledOverFrom.builder()
+                    .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .build()
+            )
         assertThat(credit.salesforceOpportunityId()).contains("salesforce_opportunity_id")
         assertThat(credit.specifiers().getOrNull())
             .containsExactly(
@@ -294,6 +307,12 @@ internal class CreditTest {
                 .priority(0.0)
                 .rateType(Credit.RateType.COMMIT_RATE)
                 .recurringCreditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .rolledOverFrom(
+                    Credit.RolledOverFrom.builder()
+                        .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .creditId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
                 .salesforceOpportunityId("salesforce_opportunity_id")
                 .addSpecifier(
                     CommitSpecifier.builder()

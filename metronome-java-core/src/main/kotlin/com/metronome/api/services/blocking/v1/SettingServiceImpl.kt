@@ -21,6 +21,10 @@ import com.metronome.api.services.blocking.v1.settings.BillingProviderService
 import com.metronome.api.services.blocking.v1.settings.BillingProviderServiceImpl
 import java.util.function.Consumer
 
+/**
+ * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+ * behavior.
+ */
 class SettingServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     SettingService {
 
@@ -37,6 +41,10 @@ class SettingServiceImpl internal constructor(private val clientOptions: ClientO
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingService =
         SettingServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+     * behavior.
+     */
     override fun billingProviders(): BillingProviderService = billingProviders
 
     override fun upsertAvalaraCredentials(
@@ -63,6 +71,10 @@ class SettingServiceImpl internal constructor(private val clientOptions: ClientO
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * Use these endpoints to configure a billing API key, a webhook secret, or invoice
+         * finalization behavior.
+         */
         override fun billingProviders(): BillingProviderService.WithRawResponse = billingProviders
 
         private val upsertAvalaraCredentialsHandler:

@@ -1126,8 +1126,6 @@ private constructor(
 
             @JvmField val ANROK = of("ANROK")
 
-            @JvmField val AVALARA = of("AVALARA")
-
             @JvmField val PRECALCULATED = of("PRECALCULATED")
 
             @JvmStatic fun of(value: String) = TaxType(JsonField.of(value))
@@ -1138,7 +1136,6 @@ private constructor(
             NONE,
             STRIPE,
             ANROK,
-            AVALARA,
             PRECALCULATED,
         }
 
@@ -1155,7 +1152,6 @@ private constructor(
             NONE,
             STRIPE,
             ANROK,
-            AVALARA,
             PRECALCULATED,
             /** An enum member indicating that [TaxType] was instantiated with an unknown value. */
             _UNKNOWN,
@@ -1173,7 +1169,6 @@ private constructor(
                 NONE -> Value.NONE
                 STRIPE -> Value.STRIPE
                 ANROK -> Value.ANROK
-                AVALARA -> Value.AVALARA
                 PRECALCULATED -> Value.PRECALCULATED
                 else -> Value._UNKNOWN
             }
@@ -1192,7 +1187,6 @@ private constructor(
                 NONE -> Known.NONE
                 STRIPE -> Known.STRIPE
                 ANROK -> Known.ANROK
-                AVALARA -> Known.AVALARA
                 PRECALCULATED -> Known.PRECALCULATED
                 else -> throw MetronomeInvalidDataException("Unknown TaxType: $value")
             }

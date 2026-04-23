@@ -3,6 +3,7 @@
 package com.metronome.api.models.v1.usage
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.metronome.api.core.JsonValue
 import com.metronome.api.core.jsonMapper
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -19,6 +20,11 @@ internal class UsageListWithGroupsResponseTest {
                 .groupValue("group_value")
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .value(0.0)
+                .group(
+                    UsageListWithGroupsResponse.Group.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .build()
 
         assertThat(usageListWithGroupsResponse.endingBefore())
@@ -28,6 +34,12 @@ internal class UsageListWithGroupsResponseTest {
         assertThat(usageListWithGroupsResponse.startingOn())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(usageListWithGroupsResponse.value()).contains(0.0)
+        assertThat(usageListWithGroupsResponse.group())
+            .contains(
+                UsageListWithGroupsResponse.Group.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
     }
 
     @Test
@@ -40,6 +52,11 @@ internal class UsageListWithGroupsResponseTest {
                 .groupValue("group_value")
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .value(0.0)
+                .group(
+                    UsageListWithGroupsResponse.Group.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .build()
 
         val roundtrippedUsageListWithGroupsResponse =

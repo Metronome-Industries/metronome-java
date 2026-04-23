@@ -36,6 +36,7 @@ import com.metronome.api.services.blocking.v1.contracts.ratecards.RateService
 import com.metronome.api.services.blocking.v1.contracts.ratecards.RateServiceImpl
 import java.util.function.Consumer
 
+/** Rate cards are used to define default pricing for products. */
 class RateCardServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     RateCardService {
 
@@ -58,10 +59,16 @@ class RateCardServiceImpl internal constructor(private val clientOptions: Client
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateCardService =
         RateCardServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Rate cards are used to define default pricing for products. */
     override fun productOrders(): ProductOrderService = productOrders
 
+    /** Rate cards are used to define default pricing for products. */
     override fun rates(): RateService = rates
 
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     override fun namedSchedules(): NamedScheduleService = namedSchedules
 
     override fun create(
@@ -131,10 +138,16 @@ class RateCardServiceImpl internal constructor(private val clientOptions: Client
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Rate cards are used to define default pricing for products. */
         override fun productOrders(): ProductOrderService.WithRawResponse = productOrders
 
+        /** Rate cards are used to define default pricing for products. */
         override fun rates(): RateService.WithRawResponse = rates
 
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         override fun namedSchedules(): NamedScheduleService.WithRawResponse = namedSchedules
 
         private val createHandler: Handler<RateCardCreateResponse> =

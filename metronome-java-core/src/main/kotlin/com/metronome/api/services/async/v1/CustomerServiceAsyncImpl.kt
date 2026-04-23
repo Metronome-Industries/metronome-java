@@ -16,6 +16,8 @@ import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.core.http.json
 import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepareAsync
+import com.metronome.api.models.v1.customers.CustomerArchiveBillingConfigurationsParams
+import com.metronome.api.models.v1.customers.CustomerArchiveBillingConfigurationsResponse
 import com.metronome.api.models.v1.customers.CustomerArchiveParams
 import com.metronome.api.models.v1.customers.CustomerArchiveResponse
 import com.metronome.api.models.v1.customers.CustomerCreateParams
@@ -88,18 +90,46 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CustomerServiceAsync =
         CustomerServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /**
+     * [Alerts](https://docs.metronome.com/connecting-metronome/alerts/) monitor customer spending,
+     * balances, and other billing factors. Use these endpoints to create, retrieve, and archive
+     * customer alerts. To view sample alert payloads by alert type, navigate
+     * [here.](https://docs.metronome.com/manage-product-access/create-manage-alerts/#webhook-notifications)
+     */
     override fun alerts(): AlertServiceAsync = alerts
 
+    /**
+     * [Plans](https://docs.metronome.com/pricing-and-packaging/create-plans/) determine the base
+     * pricing for a customer. Use these endpoints to add a plan to a customer, end a customer plan,
+     * retrieve plans, and retrieve plan details. Create plans in the
+     * [Metronome app](https://app.metronome.com/plans).
+     */
     override fun plans(): PlanServiceAsync = plans
 
+    /**
+     * [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent during a
+     * period, which is the basis for billing. Metronome automatically generates invoices based upon
+     * your pricing, packaging, and usage events. Use these endpoints to retrieve invoices.
+     */
     override fun invoices(): InvoiceServiceAsync = invoices
 
+    /**
+     * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent
+     * your users for all billing and reporting. Use these endpoints to create, retrieve, update,
+     * and archive customers and their billing configuration.
+     */
     override fun billingConfig(): BillingConfigServiceAsync = billingConfig
 
+    /** Credits and commits are used to manage customer balances. */
     override fun commits(): CommitServiceAsync = commits
 
+    /** Credits and commits are used to manage customer balances. */
     override fun credits(): CreditServiceAsync = credits
 
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     override fun namedSchedules(): NamedScheduleServiceAsync = namedSchedules
 
     override fun create(
@@ -129,6 +159,15 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
     ): CompletableFuture<CustomerArchiveResponse> =
         // post /v1/customers/archive
         withRawResponse().archive(params, requestOptions).thenApply { it.parse() }
+
+    override fun archiveBillingConfigurations(
+        params: CustomerArchiveBillingConfigurationsParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<CustomerArchiveBillingConfigurationsResponse> =
+        // post /v1/archiveCustomerBillingProviderConfigurations
+        withRawResponse().archiveBillingConfigurations(params, requestOptions).thenApply {
+            it.parse()
+        }
 
     override fun listBillableMetrics(
         params: CustomerListBillableMetricsParams,
@@ -229,18 +268,47 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /**
+         * [Alerts](https://docs.metronome.com/connecting-metronome/alerts/) monitor customer
+         * spending, balances, and other billing factors. Use these endpoints to create, retrieve,
+         * and archive customer alerts. To view sample alert payloads by alert type, navigate
+         * [here.](https://docs.metronome.com/manage-product-access/create-manage-alerts/#webhook-notifications)
+         */
         override fun alerts(): AlertServiceAsync.WithRawResponse = alerts
 
+        /**
+         * [Plans](https://docs.metronome.com/pricing-and-packaging/create-plans/) determine the
+         * base pricing for a customer. Use these endpoints to add a plan to a customer, end a
+         * customer plan, retrieve plans, and retrieve plan details. Create plans in the
+         * [Metronome app](https://app.metronome.com/plans).
+         */
         override fun plans(): PlanServiceAsync.WithRawResponse = plans
 
+        /**
+         * [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent
+         * during a period, which is the basis for billing. Metronome automatically generates
+         * invoices based upon your pricing, packaging, and usage events. Use these endpoints to
+         * retrieve invoices.
+         */
         override fun invoices(): InvoiceServiceAsync.WithRawResponse = invoices
 
+        /**
+         * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome
+         * represent your users for all billing and reporting. Use these endpoints to create,
+         * retrieve, update, and archive customers and their billing configuration.
+         */
         override fun billingConfig(): BillingConfigServiceAsync.WithRawResponse = billingConfig
 
+        /** Credits and commits are used to manage customer balances. */
         override fun commits(): CommitServiceAsync.WithRawResponse = commits
 
+        /** Credits and commits are used to manage customer balances. */
         override fun credits(): CreditServiceAsync.WithRawResponse = credits
 
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         override fun namedSchedules(): NamedScheduleServiceAsync.WithRawResponse = namedSchedules
 
         private val createHandler: Handler<CustomerCreateResponse> =
@@ -364,6 +432,38 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
                     errorHandler.handle(response).parseable {
                         response
                             .use { archiveHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val archiveBillingConfigurationsHandler:
+            Handler<CustomerArchiveBillingConfigurationsResponse> =
+            jsonHandler<CustomerArchiveBillingConfigurationsResponse>(clientOptions.jsonMapper)
+
+        override fun archiveBillingConfigurations(
+            params: CustomerArchiveBillingConfigurationsParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<CustomerArchiveBillingConfigurationsResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "archiveCustomerBillingProviderConfigurations")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { archiveBillingConfigurationsHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

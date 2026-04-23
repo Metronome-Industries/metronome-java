@@ -13,6 +13,11 @@ import com.metronome.api.models.v1.customers.billingconfig.BillingConfigRetrieve
 import com.metronome.api.models.v1.customers.billingconfig.BillingConfigRetrieveResponse
 import java.util.function.Consumer
 
+/**
+ * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent
+ * your users for all billing and reporting. Use these endpoints to create, retrieve, update, and
+ * archive customers and their billing configuration.
+ */
 interface BillingConfigService {
 
     /**

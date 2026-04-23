@@ -15,10 +15,11 @@ internal class SpendThresholdConfigurationV2Test {
         val spendThresholdConfigurationV2 =
             SpendThresholdConfigurationV2.builder()
                 .commit(
-                    UpdateBaseThresholdCommit.builder()
+                    BaseThresholdCommit.builder()
+                        .productId("product_id")
                         .description("description")
                         .name("name")
-                        .productId("product_id")
+                        .priority(0.0)
                         .build()
                 )
                 .isEnabled(true)
@@ -45,14 +46,20 @@ internal class SpendThresholdConfigurationV2Test {
                         .build()
                 )
                 .thresholdAmount(0.0)
+                .discountConfiguration(
+                    SpendThresholdConfigurationV2.DiscountConfiguration.builder()
+                        .paymentFraction(0.0)
+                        .build()
+                )
                 .build()
 
         assertThat(spendThresholdConfigurationV2.commit())
             .isEqualTo(
-                UpdateBaseThresholdCommit.builder()
+                BaseThresholdCommit.builder()
+                    .productId("product_id")
                     .description("description")
                     .name("name")
-                    .productId("product_id")
+                    .priority(0.0)
                     .build()
             )
         assertThat(spendThresholdConfigurationV2.isEnabled()).isEqualTo(true)
@@ -80,6 +87,12 @@ internal class SpendThresholdConfigurationV2Test {
                     .build()
             )
         assertThat(spendThresholdConfigurationV2.thresholdAmount()).isEqualTo(0.0)
+        assertThat(spendThresholdConfigurationV2.discountConfiguration())
+            .contains(
+                SpendThresholdConfigurationV2.DiscountConfiguration.builder()
+                    .paymentFraction(0.0)
+                    .build()
+            )
     }
 
     @Test
@@ -88,10 +101,11 @@ internal class SpendThresholdConfigurationV2Test {
         val spendThresholdConfigurationV2 =
             SpendThresholdConfigurationV2.builder()
                 .commit(
-                    UpdateBaseThresholdCommit.builder()
+                    BaseThresholdCommit.builder()
+                        .productId("product_id")
                         .description("description")
                         .name("name")
-                        .productId("product_id")
+                        .priority(0.0)
                         .build()
                 )
                 .isEnabled(true)
@@ -118,6 +132,11 @@ internal class SpendThresholdConfigurationV2Test {
                         .build()
                 )
                 .thresholdAmount(0.0)
+                .discountConfiguration(
+                    SpendThresholdConfigurationV2.DiscountConfiguration.builder()
+                        .paymentFraction(0.0)
+                        .build()
+                )
                 .build()
 
         val roundtrippedSpendThresholdConfigurationV2 =

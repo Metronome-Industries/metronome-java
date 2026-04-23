@@ -17,6 +17,7 @@ internal class OverrideTest {
         val override =
             Override.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addApplicableProductTag("string")
                 .creditType(
@@ -47,7 +48,6 @@ internal class OverrideTest {
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addProductTag("string")
                         .addRecurringCommitId("string")
-                        .addRecurringCreditId("string")
                         .build()
                 )
                 .addOverrideTier(OverrideTier.builder().multiplier(0.0).size(0.0).build())
@@ -92,6 +92,7 @@ internal class OverrideTest {
                 .build()
 
         assertThat(override.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(override.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(override.startingAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(override.applicableProductTags().getOrNull()).containsExactly("string")
@@ -126,7 +127,6 @@ internal class OverrideTest {
                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addProductTag("string")
                     .addRecurringCommitId("string")
-                    .addRecurringCreditId("string")
                     .build()
             )
         assertThat(override.overrideTiers().getOrNull())
@@ -179,6 +179,7 @@ internal class OverrideTest {
         val override =
             Override.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addApplicableProductTag("string")
                 .creditType(
@@ -209,7 +210,6 @@ internal class OverrideTest {
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addProductTag("string")
                         .addRecurringCommitId("string")
-                        .addRecurringCreditId("string")
                         .build()
                 )
                 .addOverrideTier(OverrideTier.builder().multiplier(0.0).size(0.0).build())
