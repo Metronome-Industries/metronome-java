@@ -53,6 +53,7 @@ import kotlin.jvm.optionals.getOrNull
 class InvoiceListParams
 private constructor(
     private val customerId: String,
+    private val contractId: String?,
     private val creditTypeId: String?,
     private val endingBefore: OffsetDateTime?,
     private val limit: Long?,
@@ -66,6 +67,9 @@ private constructor(
 ) : Params {
 
     fun customerId(): String = customerId
+
+    /** Only return invoices for the specified contract */
+    fun contractId(): Optional<String> = Optional.ofNullable(contractId)
 
     /** Only return invoices for the specified credit type */
     fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
@@ -122,6 +126,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var customerId: String? = null
+        private var contractId: String? = null
         private var creditTypeId: String? = null
         private var endingBefore: OffsetDateTime? = null
         private var limit: Long? = null
@@ -136,6 +141,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(invoiceListParams: InvoiceListParams) = apply {
             customerId = invoiceListParams.customerId
+            contractId = invoiceListParams.contractId
             creditTypeId = invoiceListParams.creditTypeId
             endingBefore = invoiceListParams.endingBefore
             limit = invoiceListParams.limit
@@ -149,6 +155,12 @@ private constructor(
         }
 
         fun customerId(customerId: String) = apply { this.customerId = customerId }
+
+        /** Only return invoices for the specified contract */
+        fun contractId(contractId: String?) = apply { this.contractId = contractId }
+
+        /** Alias for calling [Builder.contractId] with `contractId.orElse(null)`. */
+        fun contractId(contractId: Optional<String>) = contractId(contractId.getOrNull())
 
         /** Only return invoices for the specified credit type */
         fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
@@ -339,6 +351,7 @@ private constructor(
         fun build(): InvoiceListParams =
             InvoiceListParams(
                 checkRequired("customerId", customerId),
+                contractId,
                 creditTypeId,
                 endingBefore,
                 limit,
@@ -363,6 +376,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                contractId?.let { put("contract_id", it) }
                 creditTypeId?.let { put("credit_type_id", it) }
                 endingBefore?.let {
                     put("ending_before", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
@@ -514,6 +528,7 @@ private constructor(
 
         return other is InvoiceListParams &&
             customerId == other.customerId &&
+            contractId == other.contractId &&
             creditTypeId == other.creditTypeId &&
             endingBefore == other.endingBefore &&
             limit == other.limit &&
@@ -529,6 +544,7 @@ private constructor(
     override fun hashCode(): Int =
         Objects.hash(
             customerId,
+            contractId,
             creditTypeId,
             endingBefore,
             limit,
@@ -542,5 +558,5 @@ private constructor(
         )
 
     override fun toString() =
-        "InvoiceListParams{customerId=$customerId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvoiceListParams{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

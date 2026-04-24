@@ -13,6 +13,7 @@ internal class InvoiceListParamsTest {
     fun create() {
         InvoiceListParams.builder()
             .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .creditTypeId("credit_type_id")
             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .limit(1L)
@@ -39,6 +40,7 @@ internal class InvoiceListParamsTest {
         val params =
             InvoiceListParams.builder()
                 .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .contractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .creditTypeId("credit_type_id")
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .limit(1L)
@@ -54,6 +56,7 @@ internal class InvoiceListParamsTest {
         assertThat(queryParams)
             .isEqualTo(
                 QueryParams.builder()
+                    .put("contract_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .put("credit_type_id", "credit_type_id")
                     .put("ending_before", "2019-12-27T18:11:19.117Z")
                     .put("limit", "1")
