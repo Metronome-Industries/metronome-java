@@ -62,6 +62,7 @@ private constructor(
     private val sort: Sort?,
     private val startingOn: OffsetDateTime?,
     private val status: String?,
+    private val type: Type?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -101,6 +102,9 @@ private constructor(
     /** Invoice status, e.g. DRAFT, FINALIZED, or VOID */
     fun status(): Optional<String> = Optional.ofNullable(status)
 
+    /** Filter invoices by type. Defaults to returning all invoice types. */
+    fun type(): Optional<Type> = Optional.ofNullable(type)
+
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -135,6 +139,7 @@ private constructor(
         private var sort: Sort? = null
         private var startingOn: OffsetDateTime? = null
         private var status: String? = null
+        private var type: Type? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -150,6 +155,7 @@ private constructor(
             sort = invoiceListParams.sort
             startingOn = invoiceListParams.startingOn
             status = invoiceListParams.status
+            type = invoiceListParams.type
             additionalHeaders = invoiceListParams.additionalHeaders.toBuilder()
             additionalQueryParams = invoiceListParams.additionalQueryParams.toBuilder()
         }
@@ -237,6 +243,12 @@ private constructor(
 
         /** Alias for calling [Builder.status] with `status.orElse(null)`. */
         fun status(status: Optional<String>) = status(status.getOrNull())
+
+        /** Filter invoices by type. Defaults to returning all invoice types. */
+        fun type(type: Type?) = apply { this.type = type }
+
+        /** Alias for calling [Builder.type] with `type.orElse(null)`. */
+        fun type(type: Optional<Type>) = type(type.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -360,6 +372,7 @@ private constructor(
                 sort,
                 startingOn,
                 status,
+                type,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -389,6 +402,7 @@ private constructor(
                     put("starting_on", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
                 }
                 status?.let { put("status", it) }
+                type?.let { put("type", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -521,6 +535,140 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Filter invoices by type. Defaults to returning all invoice types. */
+    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val USAGE = of("USAGE")
+
+            @JvmField val USAGE_CONSOLIDATED = of("USAGE_CONSOLIDATED")
+
+            @JvmField val SCHEDULED = of("SCHEDULED")
+
+            @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+        }
+
+        /** An enum containing [Type]'s known values. */
+        enum class Known {
+            USAGE,
+            USAGE_CONSOLIDATED,
+            SCHEDULED,
+        }
+
+        /**
+         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Type] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            USAGE,
+            USAGE_CONSOLIDATED,
+            SCHEDULED,
+            /** An enum member indicating that [Type] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                USAGE -> Value.USAGE
+                USAGE_CONSOLIDATED -> Value.USAGE_CONSOLIDATED
+                SCHEDULED -> Value.SCHEDULED
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                USAGE -> Known.USAGE
+                USAGE_CONSOLIDATED -> Known.USAGE_CONSOLIDATED
+                SCHEDULED -> Known.SCHEDULED
+                else -> throw MetronomeInvalidDataException("Unknown Type: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
+
+        private var validated: Boolean = false
+
+        fun validate(): Type = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Type && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -537,6 +685,7 @@ private constructor(
             sort == other.sort &&
             startingOn == other.startingOn &&
             status == other.status &&
+            type == other.type &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
@@ -553,10 +702,11 @@ private constructor(
             sort,
             startingOn,
             status,
+            type,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "InvoiceListParams{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvoiceListParams{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, type=$type, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

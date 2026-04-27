@@ -22,6 +22,7 @@ internal class InvoiceListParamsTest {
             .sort(InvoiceListParams.Sort.DATE_ASC)
             .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .status("status")
+            .type(InvoiceListParams.Type.USAGE)
             .build()
     }
 
@@ -49,6 +50,7 @@ internal class InvoiceListParamsTest {
                 .sort(InvoiceListParams.Sort.DATE_ASC)
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .status("status")
+                .type(InvoiceListParams.Type.USAGE)
                 .build()
 
         val queryParams = params._queryParams()
@@ -65,6 +67,7 @@ internal class InvoiceListParamsTest {
                     .put("sort", "date_asc")
                     .put("starting_on", "2019-12-27T18:11:19.117Z")
                     .put("status", "status")
+                    .put("type", "USAGE")
                     .build()
             )
     }
