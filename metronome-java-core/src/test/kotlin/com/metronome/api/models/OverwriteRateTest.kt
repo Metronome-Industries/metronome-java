@@ -30,7 +30,7 @@ internal class OverwriteRateTest {
                 .isProrated(true)
                 .price(0.0)
                 .quantity(0.0)
-                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                .addTier(OverwriteRate.Tier.builder().price(0.0).size(0.0).build())
                 .build()
 
         assertThat(overwriteRate.rateType()).isEqualTo(OverwriteRate.RateType.FLAT)
@@ -51,7 +51,7 @@ internal class OverwriteRateTest {
         assertThat(overwriteRate.price()).contains(0.0)
         assertThat(overwriteRate.quantity()).contains(0.0)
         assertThat(overwriteRate.tiers().getOrNull())
-            .containsExactly(Tier.builder().price(0.0).size(0.0).build())
+            .containsExactly(OverwriteRate.Tier.builder().price(0.0).size(0.0).build())
     }
 
     @Test
@@ -74,7 +74,7 @@ internal class OverwriteRateTest {
                 .isProrated(true)
                 .price(0.0)
                 .quantity(0.0)
-                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                .addTier(OverwriteRate.Tier.builder().price(0.0).size(0.0).build())
                 .build()
 
         val roundtrippedOverwriteRate =

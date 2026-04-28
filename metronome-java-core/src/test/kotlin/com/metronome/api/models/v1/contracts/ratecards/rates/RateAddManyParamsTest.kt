@@ -4,7 +4,6 @@ package com.metronome.api.models.v1.contracts.ratecards.rates
 
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CommitRate
-import com.metronome.api.models.Tier
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -26,7 +25,7 @@ internal class RateAddManyParamsTest {
                         CommitRate.builder()
                             .rateType(CommitRate.RateType.FLAT)
                             .price(0.0)
-                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -45,7 +44,7 @@ internal class RateAddManyParamsTest {
                             .build()
                     )
                     .quantity(0.0)
-                    .addTier(Tier.builder().price(0.0).size(0.0).build())
+                    .addTier(RateAddManyParams.Rate.Tier.builder().price(0.0).size(0.0).build())
                     .build()
             )
             .addRate(
@@ -59,7 +58,7 @@ internal class RateAddManyParamsTest {
                         CommitRate.builder()
                             .rateType(CommitRate.RateType.FLAT)
                             .price(0.0)
-                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -78,7 +77,7 @@ internal class RateAddManyParamsTest {
                             .build()
                     )
                     .quantity(0.0)
-                    .addTier(Tier.builder().price(0.0).size(0.0).build())
+                    .addTier(RateAddManyParams.Rate.Tier.builder().price(0.0).size(0.0).build())
                     .build()
             )
             .build()
@@ -100,7 +99,7 @@ internal class RateAddManyParamsTest {
                             CommitRate.builder()
                                 .rateType(CommitRate.RateType.FLAT)
                                 .price(0.0)
-                                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -119,7 +118,7 @@ internal class RateAddManyParamsTest {
                                 .build()
                         )
                         .quantity(0.0)
-                        .addTier(Tier.builder().price(0.0).size(0.0).build())
+                        .addTier(RateAddManyParams.Rate.Tier.builder().price(0.0).size(0.0).build())
                         .build()
                 )
                 .addRate(
@@ -133,7 +132,7 @@ internal class RateAddManyParamsTest {
                             CommitRate.builder()
                                 .rateType(CommitRate.RateType.FLAT)
                                 .price(0.0)
-                                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -152,7 +151,7 @@ internal class RateAddManyParamsTest {
                                 .build()
                         )
                         .quantity(0.0)
-                        .addTier(Tier.builder().price(0.0).size(0.0).build())
+                        .addTier(RateAddManyParams.Rate.Tier.builder().price(0.0).size(0.0).build())
                         .build()
                 )
                 .build()
@@ -172,7 +171,7 @@ internal class RateAddManyParamsTest {
                         CommitRate.builder()
                             .rateType(CommitRate.RateType.FLAT)
                             .price(0.0)
-                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -191,7 +190,7 @@ internal class RateAddManyParamsTest {
                             .build()
                     )
                     .quantity(0.0)
-                    .addTier(Tier.builder().price(0.0).size(0.0).build())
+                    .addTier(RateAddManyParams.Rate.Tier.builder().price(0.0).size(0.0).build())
                     .build(),
                 RateAddManyParams.Rate.builder()
                     .entitled(true)
@@ -203,7 +202,7 @@ internal class RateAddManyParamsTest {
                         CommitRate.builder()
                             .rateType(CommitRate.RateType.FLAT)
                             .price(0.0)
-                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -222,7 +221,7 @@ internal class RateAddManyParamsTest {
                             .build()
                     )
                     .quantity(0.0)
-                    .addTier(Tier.builder().price(0.0).size(0.0).build())
+                    .addTier(RateAddManyParams.Rate.Tier.builder().price(0.0).size(0.0).build())
                     .build(),
             )
     }
