@@ -7,7 +7,6 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.CommitRate
 import com.metronome.api.models.CreditTypeData
-import com.metronome.api.models.Tier
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -24,7 +23,7 @@ internal class RateAddResponseTest {
                             CommitRate.builder()
                                 .rateType(CommitRate.RateType.FLAT)
                                 .price(0.0)
-                                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .creditType(
@@ -46,7 +45,7 @@ internal class RateAddResponseTest {
                                 .build()
                         )
                         .quantity(0.0)
-                        .addTier(Tier.builder().price(0.0).size(0.0).build())
+                        .addTier(RateAddResponse.Data.Tier.builder().price(0.0).size(0.0).build())
                         .build()
                 )
                 .build()
@@ -59,7 +58,7 @@ internal class RateAddResponseTest {
                         CommitRate.builder()
                             .rateType(CommitRate.RateType.FLAT)
                             .price(0.0)
-                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .creditType(
@@ -81,7 +80,7 @@ internal class RateAddResponseTest {
                             .build()
                     )
                     .quantity(0.0)
-                    .addTier(Tier.builder().price(0.0).size(0.0).build())
+                    .addTier(RateAddResponse.Data.Tier.builder().price(0.0).size(0.0).build())
                     .build()
             )
     }
@@ -98,7 +97,7 @@ internal class RateAddResponseTest {
                             CommitRate.builder()
                                 .rateType(CommitRate.RateType.FLAT)
                                 .price(0.0)
-                                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .creditType(
@@ -120,7 +119,7 @@ internal class RateAddResponseTest {
                                 .build()
                         )
                         .quantity(0.0)
-                        .addTier(Tier.builder().price(0.0).size(0.0).build())
+                        .addTier(RateAddResponse.Data.Tier.builder().price(0.0).size(0.0).build())
                         .build()
                 )
                 .build()

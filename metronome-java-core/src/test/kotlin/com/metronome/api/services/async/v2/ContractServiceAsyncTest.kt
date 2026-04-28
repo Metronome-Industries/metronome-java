@@ -11,7 +11,6 @@ import com.metronome.api.models.CommitSpecifierInput
 import com.metronome.api.models.PaymentGateConfigV2
 import com.metronome.api.models.PrepaidBalanceThresholdConfigurationV2
 import com.metronome.api.models.SpendThresholdConfigurationV2
-import com.metronome.api.models.Tier
 import com.metronome.api.models.UpdateBaseThresholdCommit
 import com.metronome.api.models.v2.contracts.ContractEditCommitParams
 import com.metronome.api.models.v2.contracts.ContractEditCreditParams
@@ -454,7 +453,12 @@ internal class ContractServiceAsyncTest {
                                     .isProrated(true)
                                     .price(0.0)
                                     .quantity(0.0)
-                                    .addTier(Tier.builder().price(0.0).size(0.0).build())
+                                    .addTier(
+                                        ContractEditParams.AddOverride.OverwriteRate.Tier.builder()
+                                            .price(0.0)
+                                            .size(0.0)
+                                            .build()
+                                    )
                                     .build()
                             )
                             .priority(100.0)

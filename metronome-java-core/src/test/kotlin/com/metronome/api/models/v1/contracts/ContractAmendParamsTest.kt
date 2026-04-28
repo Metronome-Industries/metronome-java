@@ -5,7 +5,6 @@ package com.metronome.api.models.v1.contracts
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CommitHierarchyConfiguration
 import com.metronome.api.models.CommitSpecifierInput
-import com.metronome.api.models.Tier
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
@@ -308,7 +307,12 @@ internal class ContractAmendParamsTest {
                             .isProrated(true)
                             .price(0.0)
                             .quantity(0.0)
-                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(
+                                ContractAmendParams.Override.OverwriteRate.Tier.builder()
+                                    .price(0.0)
+                                    .size(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .priority(0.0)
@@ -741,7 +745,12 @@ internal class ContractAmendParamsTest {
                                 .isProrated(true)
                                 .price(0.0)
                                 .quantity(0.0)
-                                .addTier(Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(
+                                    ContractAmendParams.Override.OverwriteRate.Tier.builder()
+                                        .price(0.0)
+                                        .size(0.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .priority(0.0)
@@ -1152,7 +1161,12 @@ internal class ContractAmendParamsTest {
                             .isProrated(true)
                             .price(0.0)
                             .quantity(0.0)
-                            .addTier(Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(
+                                ContractAmendParams.Override.OverwriteRate.Tier.builder()
+                                    .price(0.0)
+                                    .size(0.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .priority(0.0)
