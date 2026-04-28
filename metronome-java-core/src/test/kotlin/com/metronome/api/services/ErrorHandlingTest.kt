@@ -29,6 +29,7 @@ import com.metronome.api.models.CommitSpecifierInput
 import com.metronome.api.models.PaymentGateConfig
 import com.metronome.api.models.PrepaidBalanceThresholdConfiguration
 import com.metronome.api.models.SpendThresholdConfiguration
+import com.metronome.api.models.Tier
 import com.metronome.api.models.v1.contracts.ContractCreateParams
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -487,13 +488,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -1461,13 +1456,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -2435,13 +2424,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -3409,13 +3392,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -4383,13 +4360,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -5357,13 +5328,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -6331,13 +6296,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -7305,13 +7264,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -8279,13 +8232,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -9253,13 +9200,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -10227,13 +10168,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -11201,13 +11136,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -12175,13 +12104,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -13149,13 +13072,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -14123,13 +14040,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -15097,13 +15008,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -16069,13 +15974,7 @@ internal class ErrorHandlingTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractCreateParams.Override.OverwriteRate.Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)

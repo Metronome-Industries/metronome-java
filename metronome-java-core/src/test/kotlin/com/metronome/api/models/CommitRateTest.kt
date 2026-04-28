@@ -16,13 +16,13 @@ internal class CommitRateTest {
             CommitRate.builder()
                 .rateType(CommitRate.RateType.FLAT)
                 .price(0.0)
-                .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
+                .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .build()
 
         assertThat(commitRate.rateType()).isEqualTo(CommitRate.RateType.FLAT)
         assertThat(commitRate.price()).contains(0.0)
         assertThat(commitRate.tiers().getOrNull())
-            .containsExactly(CommitRate.Tier.builder().price(0.0).size(0.0).build())
+            .containsExactly(Tier.builder().price(0.0).size(0.0).build())
     }
 
     @Test
@@ -32,7 +32,7 @@ internal class CommitRateTest {
             CommitRate.builder()
                 .rateType(CommitRate.RateType.FLAT)
                 .price(0.0)
-                .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
+                .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .build()
 
         val roundtrippedCommitRate =

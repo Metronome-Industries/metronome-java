@@ -14,6 +14,7 @@ import com.metronome.api.models.OverwriteRate
 import com.metronome.api.models.PaymentGateConfig
 import com.metronome.api.models.PrepaidBalanceThresholdConfiguration
 import com.metronome.api.models.SpendThresholdConfiguration
+import com.metronome.api.models.Tier
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -243,12 +244,7 @@ internal class PackageRetrieveResponseTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            OverwriteRate.Tier.builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -1104,9 +1100,7 @@ internal class PackageRetrieveResponseTest {
                                     .isProrated(true)
                                     .price(0.0)
                                     .quantity(0.0)
-                                    .addTier(
-                                        OverwriteRate.Tier.builder().price(0.0).size(0.0).build()
-                                    )
+                                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                                     .build()
                             )
                             .priority(0.0)
@@ -1931,12 +1925,7 @@ internal class PackageRetrieveResponseTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            OverwriteRate.Tier.builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)

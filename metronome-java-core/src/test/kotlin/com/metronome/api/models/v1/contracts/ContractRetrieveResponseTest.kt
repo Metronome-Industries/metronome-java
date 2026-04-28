@@ -29,6 +29,7 @@ import com.metronome.api.models.SchedulePointInTime
 import com.metronome.api.models.ScheduledCharge
 import com.metronome.api.models.SpendThresholdConfiguration
 import com.metronome.api.models.Subscription
+import com.metronome.api.models.Tier
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -306,10 +307,7 @@ internal class ContractRetrieveResponseTest {
                                                 .price(0.0)
                                                 .quantity(0.0)
                                                 .addTier(
-                                                    OverwriteRate.Tier.builder()
-                                                        .price(0.0)
-                                                        .size(0.0)
-                                                        .build()
+                                                    Tier.builder().price(0.0).size(0.0).build()
                                                 )
                                                 .build()
                                         )
@@ -324,9 +322,7 @@ internal class ContractRetrieveResponseTest {
                                         .quantity(0.0)
                                         .rateType(Override.RateType.FLAT)
                                         .target(Override.Target.COMMIT_RATE)
-                                        .addTier(
-                                            Override.Tier.builder().price(0.0).size(0.0).build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .type(Override.Type.OVERWRITE)
                                         .value(
                                             Override.Value.builder()
@@ -884,10 +880,7 @@ internal class ContractRetrieveResponseTest {
                                                 .price(0.0)
                                                 .quantity(0.0)
                                                 .addTier(
-                                                    OverwriteRate.Tier.builder()
-                                                        .price(0.0)
-                                                        .size(0.0)
-                                                        .build()
+                                                    Tier.builder().price(0.0).size(0.0).build()
                                                 )
                                                 .build()
                                         )
@@ -902,9 +895,7 @@ internal class ContractRetrieveResponseTest {
                                         .quantity(0.0)
                                         .rateType(Override.RateType.FLAT)
                                         .target(Override.Target.COMMIT_RATE)
-                                        .addTier(
-                                            Override.Tier.builder().price(0.0).size(0.0).build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .type(Override.Type.OVERWRITE)
                                         .value(
                                             Override.Value.builder()
@@ -1949,10 +1940,7 @@ internal class ContractRetrieveResponseTest {
                                                 .price(0.0)
                                                 .quantity(0.0)
                                                 .addTier(
-                                                    OverwriteRate.Tier.builder()
-                                                        .price(0.0)
-                                                        .size(0.0)
-                                                        .build()
+                                                    Tier.builder().price(0.0).size(0.0).build()
                                                 )
                                                 .build()
                                         )
@@ -1967,9 +1955,7 @@ internal class ContractRetrieveResponseTest {
                                         .quantity(0.0)
                                         .rateType(Override.RateType.FLAT)
                                         .target(Override.Target.COMMIT_RATE)
-                                        .addTier(
-                                            Override.Tier.builder().price(0.0).size(0.0).build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .type(Override.Type.OVERWRITE)
                                         .value(
                                             Override.Value.builder()
@@ -3248,12 +3234,7 @@ internal class ContractRetrieveResponseTest {
                                             .isProrated(true)
                                             .price(0.0)
                                             .quantity(0.0)
-                                            .addTier(
-                                                OverwriteRate.Tier.builder()
-                                                    .price(0.0)
-                                                    .size(0.0)
-                                                    .build()
-                                            )
+                                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                                             .build()
                                     )
                                     .price(0.0)
@@ -3267,7 +3248,7 @@ internal class ContractRetrieveResponseTest {
                                     .quantity(0.0)
                                     .rateType(Override.RateType.FLAT)
                                     .target(Override.Target.COMMIT_RATE)
-                                    .addTier(Override.Tier.builder().price(0.0).size(0.0).build())
+                                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                                     .type(Override.Type.OVERWRITE)
                                     .value(
                                         Override.Value.builder()
@@ -3777,12 +3758,7 @@ internal class ContractRetrieveResponseTest {
                                             .isProrated(true)
                                             .price(0.0)
                                             .quantity(0.0)
-                                            .addTier(
-                                                OverwriteRate.Tier.builder()
-                                                    .price(0.0)
-                                                    .size(0.0)
-                                                    .build()
-                                            )
+                                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                                             .build()
                                     )
                                     .price(0.0)
@@ -3796,7 +3772,7 @@ internal class ContractRetrieveResponseTest {
                                     .quantity(0.0)
                                     .rateType(Override.RateType.FLAT)
                                     .target(Override.Target.COMMIT_RATE)
-                                    .addTier(Override.Tier.builder().price(0.0).size(0.0).build())
+                                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                                     .type(Override.Type.OVERWRITE)
                                     .value(
                                         Override.Value.builder()
@@ -4750,12 +4726,7 @@ internal class ContractRetrieveResponseTest {
                                             .isProrated(true)
                                             .price(0.0)
                                             .quantity(0.0)
-                                            .addTier(
-                                                OverwriteRate.Tier.builder()
-                                                    .price(0.0)
-                                                    .size(0.0)
-                                                    .build()
-                                            )
+                                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                                             .build()
                                     )
                                     .price(0.0)
@@ -4769,7 +4740,7 @@ internal class ContractRetrieveResponseTest {
                                     .quantity(0.0)
                                     .rateType(Override.RateType.FLAT)
                                     .target(Override.Target.COMMIT_RATE)
-                                    .addTier(Override.Tier.builder().price(0.0).size(0.0).build())
+                                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                                     .type(Override.Type.OVERWRITE)
                                     .value(
                                         Override.Value.builder()
@@ -5991,10 +5962,7 @@ internal class ContractRetrieveResponseTest {
                                                 .price(0.0)
                                                 .quantity(0.0)
                                                 .addTier(
-                                                    OverwriteRate.Tier.builder()
-                                                        .price(0.0)
-                                                        .size(0.0)
-                                                        .build()
+                                                    Tier.builder().price(0.0).size(0.0).build()
                                                 )
                                                 .build()
                                         )
@@ -6009,9 +5977,7 @@ internal class ContractRetrieveResponseTest {
                                         .quantity(0.0)
                                         .rateType(Override.RateType.FLAT)
                                         .target(Override.Target.COMMIT_RATE)
-                                        .addTier(
-                                            Override.Tier.builder().price(0.0).size(0.0).build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .type(Override.Type.OVERWRITE)
                                         .value(
                                             Override.Value.builder()
@@ -6569,10 +6535,7 @@ internal class ContractRetrieveResponseTest {
                                                 .price(0.0)
                                                 .quantity(0.0)
                                                 .addTier(
-                                                    OverwriteRate.Tier.builder()
-                                                        .price(0.0)
-                                                        .size(0.0)
-                                                        .build()
+                                                    Tier.builder().price(0.0).size(0.0).build()
                                                 )
                                                 .build()
                                         )
@@ -6587,9 +6550,7 @@ internal class ContractRetrieveResponseTest {
                                         .quantity(0.0)
                                         .rateType(Override.RateType.FLAT)
                                         .target(Override.Target.COMMIT_RATE)
-                                        .addTier(
-                                            Override.Tier.builder().price(0.0).size(0.0).build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .type(Override.Type.OVERWRITE)
                                         .value(
                                             Override.Value.builder()
@@ -7634,10 +7595,7 @@ internal class ContractRetrieveResponseTest {
                                                 .price(0.0)
                                                 .quantity(0.0)
                                                 .addTier(
-                                                    OverwriteRate.Tier.builder()
-                                                        .price(0.0)
-                                                        .size(0.0)
-                                                        .build()
+                                                    Tier.builder().price(0.0).size(0.0).build()
                                                 )
                                                 .build()
                                         )
@@ -7652,9 +7610,7 @@ internal class ContractRetrieveResponseTest {
                                         .quantity(0.0)
                                         .rateType(Override.RateType.FLAT)
                                         .target(Override.Target.COMMIT_RATE)
-                                        .addTier(
-                                            Override.Tier.builder().price(0.0).size(0.0).build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .type(Override.Type.OVERWRITE)
                                         .value(
                                             Override.Value.builder()

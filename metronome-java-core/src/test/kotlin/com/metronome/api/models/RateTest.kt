@@ -35,7 +35,7 @@ internal class RateTest {
                         .build()
                 )
                 .quantity(0.0)
-                .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .build()
 
         assertThat(rate.rateType()).isEqualTo(Rate.RateType.FLAT)
@@ -62,7 +62,7 @@ internal class RateTest {
             )
         assertThat(rate.quantity()).contains(0.0)
         assertThat(rate.tiers().getOrNull())
-            .containsExactly(Rate.Tier.builder().price(0.0).size(0.0).build())
+            .containsExactly(Tier.builder().price(0.0).size(0.0).build())
     }
 
     @Test
@@ -90,7 +90,7 @@ internal class RateTest {
                         .build()
                 )
                 .quantity(0.0)
-                .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .build()
 
         val roundtrippedRate =

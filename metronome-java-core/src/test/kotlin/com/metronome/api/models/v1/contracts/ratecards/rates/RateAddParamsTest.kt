@@ -4,6 +4,7 @@ package com.metronome.api.models.v1.contracts.ratecards.rates
 
 import com.metronome.api.core.JsonValue
 import com.metronome.api.models.CommitRate
+import com.metronome.api.models.Tier
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
@@ -24,7 +25,7 @@ internal class RateAddParamsTest {
                 CommitRate.builder()
                     .rateType(CommitRate.RateType.FLAT)
                     .price(0.0)
-                    .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
+                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                     .build()
             )
             .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -42,7 +43,7 @@ internal class RateAddParamsTest {
                     .build()
             )
             .quantity(0.0)
-            .addTier(RateAddParams.Tier.builder().price(0.0).size(0.0).build())
+            .addTier(Tier.builder().price(0.0).size(0.0).build())
             .build()
     }
 
@@ -60,7 +61,7 @@ internal class RateAddParamsTest {
                     CommitRate.builder()
                         .rateType(CommitRate.RateType.FLAT)
                         .price(0.0)
-                        .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
+                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                         .build()
                 )
                 .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -78,7 +79,7 @@ internal class RateAddParamsTest {
                         .build()
                 )
                 .quantity(0.0)
-                .addTier(RateAddParams.Tier.builder().price(0.0).size(0.0).build())
+                .addTier(Tier.builder().price(0.0).size(0.0).build())
                 .build()
 
         val body = params._body()
@@ -94,7 +95,7 @@ internal class RateAddParamsTest {
                 CommitRate.builder()
                     .rateType(CommitRate.RateType.FLAT)
                     .price(0.0)
-                    .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
+                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                     .build()
             )
         assertThat(body.creditTypeId()).contains("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -115,7 +116,7 @@ internal class RateAddParamsTest {
             )
         assertThat(body.quantity()).contains(0.0)
         assertThat(body.tiers().getOrNull())
-            .containsExactly(RateAddParams.Tier.builder().price(0.0).size(0.0).build())
+            .containsExactly(Tier.builder().price(0.0).size(0.0).build())
     }
 
     @Test

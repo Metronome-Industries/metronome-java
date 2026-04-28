@@ -7,6 +7,7 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.CreditTypeData
 import com.metronome.api.models.Rate
+import com.metronome.api.models.Tier
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -94,7 +95,7 @@ internal class InvoiceListBreakdownsPageResponseTest {
                                                 .build()
                                         )
                                         .quantity(0.0)
-                                        .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .metadata("metadata")
@@ -445,7 +446,7 @@ internal class InvoiceListBreakdownsPageResponseTest {
                                             .build()
                                     )
                                     .quantity(0.0)
-                                    .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                                     .build()
                             )
                             .metadata("metadata")
@@ -798,7 +799,7 @@ internal class InvoiceListBreakdownsPageResponseTest {
                                                 .build()
                                         )
                                         .quantity(0.0)
-                                        .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .metadata("metadata")

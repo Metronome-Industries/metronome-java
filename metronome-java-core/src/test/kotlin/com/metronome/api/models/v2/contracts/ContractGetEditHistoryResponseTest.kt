@@ -20,6 +20,7 @@ import com.metronome.api.models.ScheduleDuration
 import com.metronome.api.models.SchedulePointInTime
 import com.metronome.api.models.SpendThresholdConfigurationV2
 import com.metronome.api.models.Subscription
+import com.metronome.api.models.Tier
 import com.metronome.api.models.UpdateBaseThresholdCommit
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -347,15 +348,7 @@ internal class ContractGetEditHistoryResponseTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractGetEditHistoryResponse.Data.AddOverride
-                                                .OverwriteRate
-                                                .Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)
@@ -1844,15 +1837,7 @@ internal class ContractGetEditHistoryResponseTest {
                                     .isProrated(true)
                                     .price(0.0)
                                     .quantity(0.0)
-                                    .addTier(
-                                        ContractGetEditHistoryResponse.Data.AddOverride
-                                            .OverwriteRate
-                                            .Tier
-                                            .builder()
-                                            .price(0.0)
-                                            .size(0.0)
-                                            .build()
-                                    )
+                                    .addTier(Tier.builder().price(0.0).size(0.0).build())
                                     .build()
                             )
                             .priority(0.0)
@@ -3303,15 +3288,7 @@ internal class ContractGetEditHistoryResponseTest {
                                         .isProrated(true)
                                         .price(0.0)
                                         .quantity(0.0)
-                                        .addTier(
-                                            ContractGetEditHistoryResponse.Data.AddOverride
-                                                .OverwriteRate
-                                                .Tier
-                                                .builder()
-                                                .price(0.0)
-                                                .size(0.0)
-                                                .build()
-                                        )
+                                        .addTier(Tier.builder().price(0.0).size(0.0).build())
                                         .build()
                                 )
                                 .priority(0.0)

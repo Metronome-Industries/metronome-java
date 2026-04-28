@@ -8,6 +8,7 @@ import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.CommitRate
 import com.metronome.api.models.CreditTypeData
 import com.metronome.api.models.Rate
+import com.metronome.api.models.Tier
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -43,7 +44,7 @@ internal class ContractRetrieveRateScheduleResponseTest {
                                         .build()
                                 )
                                 .quantity(0.0)
-                                .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .productCustomFields(
@@ -63,7 +64,7 @@ internal class ContractRetrieveRateScheduleResponseTest {
                             CommitRate.builder()
                                 .rateType(CommitRate.RateType.FLAT)
                                 .price(0.0)
-                                .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -89,7 +90,7 @@ internal class ContractRetrieveRateScheduleResponseTest {
                                         .build()
                                 )
                                 .quantity(0.0)
-                                .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .pricingGroupValues(
@@ -128,7 +129,7 @@ internal class ContractRetrieveRateScheduleResponseTest {
                                     .build()
                             )
                             .quantity(0.0)
-                            .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .productCustomFields(
@@ -148,7 +149,7 @@ internal class ContractRetrieveRateScheduleResponseTest {
                         CommitRate.builder()
                             .rateType(CommitRate.RateType.FLAT)
                             .price(0.0)
-                            .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -174,7 +175,7 @@ internal class ContractRetrieveRateScheduleResponseTest {
                                     .build()
                             )
                             .quantity(0.0)
-                            .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .pricingGroupValues(
@@ -217,7 +218,7 @@ internal class ContractRetrieveRateScheduleResponseTest {
                                         .build()
                                 )
                                 .quantity(0.0)
-                                .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .productCustomFields(
@@ -237,7 +238,7 @@ internal class ContractRetrieveRateScheduleResponseTest {
                             CommitRate.builder()
                                 .rateType(CommitRate.RateType.FLAT)
                                 .price(0.0)
-                                .addTier(CommitRate.Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -263,7 +264,7 @@ internal class ContractRetrieveRateScheduleResponseTest {
                                         .build()
                                 )
                                 .quantity(0.0)
-                                .addTier(Rate.Tier.builder().price(0.0).size(0.0).build())
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .pricingGroupValues(

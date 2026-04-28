@@ -9,6 +9,7 @@ import com.metronome.api.models.CommitSpecifierInput
 import com.metronome.api.models.PaymentGateConfigV2
 import com.metronome.api.models.PrepaidBalanceThresholdConfigurationV2
 import com.metronome.api.models.SpendThresholdConfigurationV2
+import com.metronome.api.models.Tier
 import com.metronome.api.models.UpdateBaseThresholdCommit
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
@@ -341,12 +342,7 @@ internal class ContractEditParamsTest {
                             .isProrated(true)
                             .price(0.0)
                             .quantity(0.0)
-                            .addTier(
-                                ContractEditParams.AddOverride.OverwriteRate.Tier.builder()
-                                    .price(0.0)
-                                    .size(0.0)
-                                    .build()
-                            )
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .priority(100.0)
@@ -1580,12 +1576,7 @@ internal class ContractEditParamsTest {
                                 .isProrated(true)
                                 .price(0.0)
                                 .quantity(0.0)
-                                .addTier(
-                                    ContractEditParams.AddOverride.OverwriteRate.Tier.builder()
-                                        .price(0.0)
-                                        .size(0.0)
-                                        .build()
-                                )
+                                .addTier(Tier.builder().price(0.0).size(0.0).build())
                                 .build()
                         )
                         .priority(100.0)
@@ -2861,12 +2852,7 @@ internal class ContractEditParamsTest {
                             .isProrated(true)
                             .price(0.0)
                             .quantity(0.0)
-                            .addTier(
-                                ContractEditParams.AddOverride.OverwriteRate.Tier.builder()
-                                    .price(0.0)
-                                    .size(0.0)
-                                    .build()
-                            )
+                            .addTier(Tier.builder().price(0.0).size(0.0).build())
                             .build()
                     )
                     .priority(100.0)
