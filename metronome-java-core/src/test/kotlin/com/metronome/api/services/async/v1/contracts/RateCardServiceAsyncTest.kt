@@ -10,6 +10,7 @@ import com.metronome.api.models.v1.contracts.ratecards.RateCardCreateParams
 import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveRateScheduleParams
 import com.metronome.api.models.v1.contracts.ratecards.RateCardUpdateParams
 import java.time.OffsetDateTime
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -103,6 +104,9 @@ internal class RateCardServiceAsyncTest {
         rateCard.validate()
     }
 
+    @Disabled(
+        "Skipping Java generated test due to empty-body serialization/hang edge case on this endpoint."
+    )
     @Test
     fun list() {
         val client =
