@@ -1,0 +1,55 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.metronome.api.models.v2.contracts
+
+import java.time.OffsetDateTime
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+internal class ContractRetrieveParamsTest {
+
+    @Test
+    fun create() {
+        ContractRetrieveParams.builder()
+            .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+            .asOfDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .includeBalance(true)
+            .includeLedgers(true)
+            .build()
+    }
+
+    @Test
+    fun body() {
+        val params =
+            ContractRetrieveParams.builder()
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .asOfDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .includeBalance(true)
+                .includeLedgers(true)
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.asOfDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.includeBalance()).contains(true)
+        assertThat(body.includeLedgers()).contains(true)
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params =
+            ContractRetrieveParams.builder()
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+    }
+}
