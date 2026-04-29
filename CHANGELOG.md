@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.0 (2026-04-29)
+
+Full Changelog: [v0.1.0-alpha.2...v0.1.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.1.0-alpha.2...v0.1.0)
+
 ## 0.1.0-alpha.2 (2026-04-29)
 
 Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/Metronome-Industries/metronome-java/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
