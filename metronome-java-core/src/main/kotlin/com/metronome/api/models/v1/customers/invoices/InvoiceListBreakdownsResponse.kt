@@ -50,6 +50,7 @@ private constructor(
     private val planCustomFields: JsonField<Invoice.PlanCustomFields>,
     private val planId: JsonField<String>,
     private val planName: JsonField<String>,
+    private val regeneratedFromInvoiceId: JsonField<String>,
     private val resellerRoyalty: JsonField<Invoice.ResellerRoyalty>,
     private val revenueSystemInvoices: JsonField<List<Invoice.RevenueSystemInvoice>>,
     private val salesforceOpportunityId: JsonField<String>,
@@ -126,6 +127,9 @@ private constructor(
         planCustomFields: JsonField<Invoice.PlanCustomFields> = JsonMissing.of(),
         @JsonProperty("plan_id") @ExcludeMissing planId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("plan_name") @ExcludeMissing planName: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("regenerated_from_invoice_id")
+        @ExcludeMissing
+        regeneratedFromInvoiceId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("reseller_royalty")
         @ExcludeMissing
         resellerRoyalty: JsonField<Invoice.ResellerRoyalty> = JsonMissing.of(),
@@ -172,6 +176,7 @@ private constructor(
         planCustomFields,
         planId,
         planName,
+        regeneratedFromInvoiceId,
         resellerRoyalty,
         revenueSystemInvoices,
         salesforceOpportunityId,
@@ -210,6 +215,7 @@ private constructor(
             .planCustomFields(planCustomFields)
             .planId(planId)
             .planName(planName)
+            .regeneratedFromInvoiceId(regeneratedFromInvoiceId)
             .resellerRoyalty(resellerRoyalty)
             .revenueSystemInvoices(revenueSystemInvoices)
             .salesforceOpportunityId(salesforceOpportunityId)
@@ -407,6 +413,13 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun planName(): Optional<String> = planName.getOptional("plan_name")
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun regeneratedFromInvoiceId(): Optional<String> =
+        regeneratedFromInvoiceId.getOptional("regenerated_from_invoice_id")
 
     /**
      * Only present for contract invoices with reseller royalties.
@@ -675,6 +688,16 @@ private constructor(
     @JsonProperty("plan_name") @ExcludeMissing fun _planName(): JsonField<String> = planName
 
     /**
+     * Returns the raw JSON value of [regeneratedFromInvoiceId].
+     *
+     * Unlike [regeneratedFromInvoiceId], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    @JsonProperty("regenerated_from_invoice_id")
+    @ExcludeMissing
+    fun _regeneratedFromInvoiceId(): JsonField<String> = regeneratedFromInvoiceId
+
+    /**
      * Returns the raw JSON value of [resellerRoyalty].
      *
      * Unlike [resellerRoyalty], this method doesn't throw if the JSON field has an unexpected type.
@@ -803,6 +826,7 @@ private constructor(
         private var planCustomFields: JsonField<Invoice.PlanCustomFields> = JsonMissing.of()
         private var planId: JsonField<String> = JsonMissing.of()
         private var planName: JsonField<String> = JsonMissing.of()
+        private var regeneratedFromInvoiceId: JsonField<String> = JsonMissing.of()
         private var resellerRoyalty: JsonField<Invoice.ResellerRoyalty> = JsonMissing.of()
         private var revenueSystemInvoices: JsonField<MutableList<Invoice.RevenueSystemInvoice>>? =
             null
@@ -843,6 +867,7 @@ private constructor(
             planCustomFields = invoiceListBreakdownsResponse.planCustomFields
             planId = invoiceListBreakdownsResponse.planId
             planName = invoiceListBreakdownsResponse.planName
+            regeneratedFromInvoiceId = invoiceListBreakdownsResponse.regeneratedFromInvoiceId
             resellerRoyalty = invoiceListBreakdownsResponse.resellerRoyalty
             revenueSystemInvoices =
                 invoiceListBreakdownsResponse.revenueSystemInvoices.map { it.toMutableList() }
@@ -1225,6 +1250,20 @@ private constructor(
          */
         fun planName(planName: JsonField<String>) = apply { this.planName = planName }
 
+        fun regeneratedFromInvoiceId(regeneratedFromInvoiceId: String) =
+            regeneratedFromInvoiceId(JsonField.of(regeneratedFromInvoiceId))
+
+        /**
+         * Sets [Builder.regeneratedFromInvoiceId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.regeneratedFromInvoiceId] with a well-typed [String]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun regeneratedFromInvoiceId(regeneratedFromInvoiceId: JsonField<String>) = apply {
+            this.regeneratedFromInvoiceId = regeneratedFromInvoiceId
+        }
+
         /** Only present for contract invoices with reseller royalties. */
         fun resellerRoyalty(resellerRoyalty: Invoice.ResellerRoyalty) =
             resellerRoyalty(JsonField.of(resellerRoyalty))
@@ -1409,6 +1448,7 @@ private constructor(
                 planCustomFields,
                 planId,
                 planName,
+                regeneratedFromInvoiceId,
                 resellerRoyalty,
                 (revenueSystemInvoices ?: JsonMissing.of()).map { it.toImmutable() },
                 salesforceOpportunityId,
@@ -1452,6 +1492,7 @@ private constructor(
         planCustomFields().ifPresent { it.validate() }
         planId()
         planName()
+        regeneratedFromInvoiceId()
         resellerRoyalty().ifPresent { it.validate() }
         revenueSystemInvoices().ifPresent { it.forEach { it.validate() } }
         salesforceOpportunityId()
@@ -1502,6 +1543,7 @@ private constructor(
             (planCustomFields.asKnown().getOrNull()?.validity() ?: 0) +
             (if (planId.asKnown().isPresent) 1 else 0) +
             (if (planName.asKnown().isPresent) 1 else 0) +
+            (if (regeneratedFromInvoiceId.asKnown().isPresent) 1 else 0) +
             (resellerRoyalty.asKnown().getOrNull()?.validity() ?: 0) +
             (revenueSystemInvoices.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (salesforceOpportunityId.asKnown().isPresent) 1 else 0) +
@@ -1542,6 +1584,7 @@ private constructor(
             planCustomFields == other.planCustomFields &&
             planId == other.planId &&
             planName == other.planName &&
+            regeneratedFromInvoiceId == other.regeneratedFromInvoiceId &&
             resellerRoyalty == other.resellerRoyalty &&
             revenueSystemInvoices == other.revenueSystemInvoices &&
             salesforceOpportunityId == other.salesforceOpportunityId &&
@@ -1580,6 +1623,7 @@ private constructor(
             planCustomFields,
             planId,
             planName,
+            regeneratedFromInvoiceId,
             resellerRoyalty,
             revenueSystemInvoices,
             salesforceOpportunityId,
@@ -1594,5 +1638,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "InvoiceListBreakdownsResponse{id=$id, creditType=$creditType, customerId=$customerId, lineItems=$lineItems, status=$status, total=$total, type=$type, amendmentId=$amendmentId, billableStatus=$billableStatus, constituentInvoices=$constituentInvoices, contractCustomFields=$contractCustomFields, contractId=$contractId, correctionRecord=$correctionRecord, createdAt=$createdAt, customFields=$customFields, customerCustomFields=$customerCustomFields, endTimestamp=$endTimestamp, externalInvoice=$externalInvoice, invoiceAdjustments=$invoiceAdjustments, issuedAt=$issuedAt, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, payer=$payer, planCustomFields=$planCustomFields, planId=$planId, planName=$planName, resellerRoyalty=$resellerRoyalty, revenueSystemInvoices=$revenueSystemInvoices, salesforceOpportunityId=$salesforceOpportunityId, startTimestamp=$startTimestamp, subtotal=$subtotal, breakdownEndTimestamp=$breakdownEndTimestamp, breakdownStartTimestamp=$breakdownStartTimestamp, additionalProperties=$additionalProperties}"
+        "InvoiceListBreakdownsResponse{id=$id, creditType=$creditType, customerId=$customerId, lineItems=$lineItems, status=$status, total=$total, type=$type, amendmentId=$amendmentId, billableStatus=$billableStatus, constituentInvoices=$constituentInvoices, contractCustomFields=$contractCustomFields, contractId=$contractId, correctionRecord=$correctionRecord, createdAt=$createdAt, customFields=$customFields, customerCustomFields=$customerCustomFields, endTimestamp=$endTimestamp, externalInvoice=$externalInvoice, invoiceAdjustments=$invoiceAdjustments, issuedAt=$issuedAt, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, payer=$payer, planCustomFields=$planCustomFields, planId=$planId, planName=$planName, regeneratedFromInvoiceId=$regeneratedFromInvoiceId, resellerRoyalty=$resellerRoyalty, revenueSystemInvoices=$revenueSystemInvoices, salesforceOpportunityId=$salesforceOpportunityId, startTimestamp=$startTimestamp, subtotal=$subtotal, breakdownEndTimestamp=$breakdownEndTimestamp, breakdownStartTimestamp=$breakdownStartTimestamp, additionalProperties=$additionalProperties}"
 }
