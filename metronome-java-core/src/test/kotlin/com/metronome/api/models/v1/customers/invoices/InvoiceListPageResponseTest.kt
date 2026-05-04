@@ -329,6 +329,7 @@ internal class InvoiceListPageResponseTest {
                         )
                         .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .planName("plan_name")
+                        .regeneratedFromInvoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .resellerRoyalty(
                             Invoice.ResellerRoyalty.builder()
                                 .fraction("fraction")
@@ -675,6 +676,7 @@ internal class InvoiceListPageResponseTest {
                     )
                     .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .planName("plan_name")
+                    .regeneratedFromInvoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .resellerRoyalty(
                         Invoice.ResellerRoyalty.builder()
                             .fraction("fraction")
@@ -1029,6 +1031,7 @@ internal class InvoiceListPageResponseTest {
                         )
                         .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .planName("plan_name")
+                        .regeneratedFromInvoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .resellerRoyalty(
                             Invoice.ResellerRoyalty.builder()
                                 .fraction("fraction")

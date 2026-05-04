@@ -316,6 +316,7 @@ internal class InvoiceTest {
                 )
                 .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .planName("plan_name")
+                .regeneratedFromInvoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .resellerRoyalty(
                     Invoice.ResellerRoyalty.builder()
                         .fraction("fraction")
@@ -654,6 +655,8 @@ internal class InvoiceTest {
             )
         assertThat(invoice.planId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(invoice.planName()).contains("plan_name")
+        assertThat(invoice.regeneratedFromInvoiceId())
+            .contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(invoice.resellerRoyalty())
             .contains(
                 Invoice.ResellerRoyalty.builder()
@@ -994,6 +997,7 @@ internal class InvoiceTest {
                 )
                 .planId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .planName("plan_name")
+                .regeneratedFromInvoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .resellerRoyalty(
                     Invoice.ResellerRoyalty.builder()
                         .fraction("fraction")
