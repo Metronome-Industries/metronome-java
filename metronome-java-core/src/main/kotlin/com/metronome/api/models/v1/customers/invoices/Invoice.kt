@@ -1334,6 +1334,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
     fun validate(): Invoice = apply {
         if (validated) {
             return@apply
@@ -3275,6 +3283,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): LineItem = apply {
             if (validated) {
                 return@apply
@@ -3540,6 +3557,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): AppliedCommitOrCredit = apply {
                 if (validated) {
                     return@apply
@@ -3667,6 +3694,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): Type = apply {
                     if (validated) {
                         return@apply
@@ -3789,6 +3826,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): CommitCustomFields = apply {
                 if (validated) {
                     return@apply
@@ -3894,6 +3941,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): CustomFields = apply {
                 if (validated) {
                     return@apply
@@ -4000,6 +4057,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): DiscountCustomFields = apply {
                 if (validated) {
                     return@apply
@@ -4286,6 +4353,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): Origin = apply {
                 if (validated) {
                     return@apply
@@ -4457,6 +4534,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): PostpaidCommit = apply {
                 if (validated) {
                     return@apply
@@ -4570,6 +4657,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): PresentationGroupValues = apply {
                 if (validated) {
                     return@apply
@@ -4681,6 +4778,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): PricingGroupValues = apply {
                 if (validated) {
                     return@apply
@@ -4789,6 +4896,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): ProductCustomFields = apply {
                 if (validated) {
                     return@apply
@@ -4901,6 +5018,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): ProfessionalServiceCustomFields = apply {
                 if (validated) {
                     return@apply
@@ -5049,6 +5176,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): ResellerType = apply {
                 if (validated) {
                     return@apply
@@ -5155,6 +5292,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): ScheduledChargeCustomFields = apply {
                 if (validated) {
                     return@apply
@@ -5705,6 +5852,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): SubLineItem = apply {
                 if (validated) {
                     return@apply
@@ -5814,6 +5971,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): CustomFields = apply {
                     if (validated) {
                         return@apply
@@ -6022,6 +6189,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): TierPeriod = apply {
                     if (validated) {
                         return@apply
@@ -6308,6 +6485,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): Tier = apply {
                     if (validated) {
                         return@apply
@@ -6474,6 +6661,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): SubscriptionCustomFields = apply {
                 if (validated) {
                     return@apply
@@ -6706,6 +6903,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): Tier = apply {
                 if (validated) {
                     return@apply
@@ -7051,6 +7258,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): ConstituentInvoice = apply {
             if (validated) {
                 return@apply
@@ -7164,6 +7380,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): ContractCustomFields = apply {
             if (validated) {
                 return@apply
@@ -7429,6 +7654,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): CorrectionRecord = apply {
             if (validated) {
                 return@apply
@@ -7942,6 +8176,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): CorrectedExternalInvoice = apply {
                 if (validated) {
                     return@apply
@@ -8128,6 +8372,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): BillingProviderType = apply {
                     if (validated) {
                         return@apply
@@ -8323,6 +8577,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): ExternalStatus = apply {
                     if (validated) {
                         return@apply
@@ -8557,6 +8821,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): Tax = apply {
                     if (validated) {
                         return@apply
@@ -8743,6 +9017,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): CustomFields = apply {
             if (validated) {
                 return@apply
@@ -8844,6 +9127,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): CustomerCustomFields = apply {
             if (validated) {
                 return@apply
@@ -9353,6 +9645,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): ExternalInvoice = apply {
             if (validated) {
                 return@apply
@@ -9537,6 +9838,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): BillingProviderType = apply {
                 if (validated) {
                     return@apply
@@ -9729,6 +10040,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): ExternalStatus = apply {
                 if (validated) {
                     return@apply
@@ -9962,6 +10283,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): Tax = apply {
                 if (validated) {
                     return@apply
@@ -10320,6 +10651,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): InvoiceAdjustment = apply {
             if (validated) {
                 return@apply
@@ -10422,6 +10762,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): CreditGrantCustomFields = apply {
                 if (validated) {
                     return@apply
@@ -10652,6 +11002,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Payer = apply {
             if (validated) {
                 return@apply
@@ -10761,6 +11120,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): PlanCustomFields = apply {
             if (validated) {
                 return@apply
@@ -11065,6 +11433,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): ResellerRoyalty = apply {
             if (validated) {
                 return@apply
@@ -11205,6 +11582,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): ResellerType = apply {
                 if (validated) {
                     return@apply
@@ -11428,6 +11815,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): AwsOptions = apply {
                 if (validated) {
                     return@apply
@@ -11627,6 +12024,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): GcpOptions = apply {
                 if (validated) {
                     return@apply
@@ -11994,6 +12401,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): RevenueSystemInvoice = apply {
             if (validated) {
                 return@apply
