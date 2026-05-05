@@ -536,6 +536,21 @@ MetronomeClient client = MetronomeOkHttpClient.builder()
     .build();
 ```
 
+If the proxy responds with `407 Proxy Authentication Required`, supply credentials by also configuring `proxyAuthenticator`:
+
+```java
+import com.metronome.api.client.MetronomeClient;
+import com.metronome.api.client.okhttp.MetronomeOkHttpClient;
+import com.metronome.api.core.http.ProxyAuthenticator;
+
+MetronomeClient client = MetronomeOkHttpClient.builder()
+    .fromEnv()
+    .proxy(...)
+    // Or a custom implementation of `ProxyAuthenticator`.
+    .proxyAuthenticator(ProxyAuthenticator.basic("username", "password"))
+    .build();
+```
+
 ### Connection pooling
 
 To customize the underlying OkHttp connection pool, configure the client using the `maxIdleConnections` and `keepAliveDuration` methods:
