@@ -1675,6 +1675,8 @@ private constructor(
 
                     @JvmField val CONTRACT_CREDIT = of("ContractCredit")
 
+                    @JvmField val CONTRACT_CREDIT_OR_COMMIT = of("ContractCreditOrCommit")
+
                     @JvmStatic fun of(value: String) = Entity(JsonField.of(value))
                 }
 
@@ -1683,6 +1685,7 @@ private constructor(
                     CONTRACT,
                     COMMIT,
                     CONTRACT_CREDIT,
+                    CONTRACT_CREDIT_OR_COMMIT,
                 }
 
                 /**
@@ -1698,6 +1701,7 @@ private constructor(
                     CONTRACT,
                     COMMIT,
                     CONTRACT_CREDIT,
+                    CONTRACT_CREDIT_OR_COMMIT,
                     /**
                      * An enum member indicating that [Entity] was instantiated with an unknown
                      * value.
@@ -1717,6 +1721,7 @@ private constructor(
                         CONTRACT -> Value.CONTRACT
                         COMMIT -> Value.COMMIT
                         CONTRACT_CREDIT -> Value.CONTRACT_CREDIT
+                        CONTRACT_CREDIT_OR_COMMIT -> Value.CONTRACT_CREDIT_OR_COMMIT
                         else -> Value._UNKNOWN
                     }
 
@@ -1734,6 +1739,7 @@ private constructor(
                         CONTRACT -> Known.CONTRACT
                         COMMIT -> Known.COMMIT
                         CONTRACT_CREDIT -> Known.CONTRACT_CREDIT
+                        CONTRACT_CREDIT_OR_COMMIT -> Known.CONTRACT_CREDIT_OR_COMMIT
                         else -> throw MetronomeInvalidDataException("Unknown Entity: $value")
                     }
 
