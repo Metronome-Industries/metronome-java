@@ -430,8 +430,6 @@ while (true) {
 
 ## Logging
 
-The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
-
 Enable logging by setting the `METRONOME_LOG` environment variable to `info`:
 
 ```sh
@@ -442,6 +440,19 @@ Or to `debug` for more verbose logging:
 
 ```sh
 export METRONOME_LOG=debug
+```
+
+Or configure the client manually using the `logLevel` method:
+
+```java
+import com.metronome.api.client.MetronomeClient;
+import com.metronome.api.client.okhttp.MetronomeOkHttpClient;
+import com.metronome.api.core.LogLevel;
+
+MetronomeClient client = MetronomeOkHttpClient.builder()
+    .fromEnv()
+    .logLevel(LogLevel.INFO)
+    .build();
 ```
 
 ## ProGuard and R8
