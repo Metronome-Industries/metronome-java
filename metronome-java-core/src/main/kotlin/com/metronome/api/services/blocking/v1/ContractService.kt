@@ -22,6 +22,8 @@ import com.metronome.api.models.v1.contracts.ContractListBalancesPage
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListParams
 import com.metronome.api.models.v1.contracts.ContractListResponse
+import com.metronome.api.models.v1.contracts.ContractListSeatBalancesParams
+import com.metronome.api.models.v1.contracts.ContractListSeatBalancesResponse
 import com.metronome.api.models.v1.contracts.ContractRetrieveParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveRateScheduleParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveRateScheduleResponse
@@ -386,6 +388,34 @@ interface ContractService {
     ): ContractListBalancesPage
 
     /**
+     * Retrieve detailed balance for seat-based credits and commits from the contract's
+     * subscriptions, broken down by individual seats.
+     *
+     * ### Use this endpoint to:
+     * - Display per-seat balance information in customer dashboards
+     * - Filter balance data by subscription or specific seats
+     *
+     * ### Key response fields:
+     * An array of seat balance objects containing:
+     * - Seat id
+     * - Balance: current total balance across all commits and credits
+     *
+     * ### Usage guidelines:
+     * - Date filtering: use `covering_date` OR `starting_at`/`ending_before` to filter balance data
+     *   by time range
+     * - Set `include_credits_and_commits=true` for detailed commits and credits breakdown per seat
+     * - Set `include_ledgers=true` for detailed transaction history per commit/credit per seat
+     */
+    fun listSeatBalances(params: ContractListSeatBalancesParams): ContractListSeatBalancesResponse =
+        listSeatBalances(params, RequestOptions.none())
+
+    /** @see listSeatBalances */
+    fun listSeatBalances(
+        params: ContractListSeatBalancesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractListSeatBalancesResponse
+
+    /**
      * For a specific customer and contract, get the rates at a specific point in time. This
      * endpoint takes the contract's rate card into consideration, including scheduled changes. It
      * also takes into account overrides on the contract.
@@ -645,6 +675,23 @@ interface ContractService {
             params: ContractListBalancesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ContractListBalancesPage>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/seatBalances/list`, but is otherwise
+         * the same as [ContractService.listSeatBalances].
+         */
+        @MustBeClosed
+        fun listSeatBalances(
+            params: ContractListSeatBalancesParams
+        ): HttpResponseFor<ContractListSeatBalancesResponse> =
+            listSeatBalances(params, RequestOptions.none())
+
+        /** @see listSeatBalances */
+        @MustBeClosed
+        fun listSeatBalances(
+            params: ContractListSeatBalancesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractListSeatBalancesResponse>
 
         /**
          * Returns a raw HTTP response for `post /v1/contracts/getContractRateSchedule`, but is
