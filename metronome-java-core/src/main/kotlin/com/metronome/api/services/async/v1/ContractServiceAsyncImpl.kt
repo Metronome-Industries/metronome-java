@@ -32,6 +32,8 @@ import com.metronome.api.models.v1.contracts.ContractListBalancesPageResponse
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListParams
 import com.metronome.api.models.v1.contracts.ContractListResponse
+import com.metronome.api.models.v1.contracts.ContractListSeatBalancesParams
+import com.metronome.api.models.v1.contracts.ContractListSeatBalancesResponse
 import com.metronome.api.models.v1.contracts.ContractRetrieveParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveRateScheduleParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveRateScheduleResponse
@@ -146,6 +148,13 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
     ): CompletableFuture<ContractListBalancesPageAsync> =
         // post /v1/contracts/customerBalances/list
         withRawResponse().listBalances(params, requestOptions).thenApply { it.parse() }
+
+    override fun listSeatBalances(
+        params: ContractListSeatBalancesParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<ContractListSeatBalancesResponse> =
+        // post /v1/contracts/seatBalances/list
+        withRawResponse().listSeatBalances(params, requestOptions).thenApply { it.parse() }
 
     override fun retrieveRateSchedule(
         params: ContractRetrieveRateScheduleParams,
@@ -499,6 +508,37 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
                                     .params(params)
                                     .response(it)
                                     .build()
+                            }
+                    }
+                }
+        }
+
+        private val listSeatBalancesHandler: Handler<ContractListSeatBalancesResponse> =
+            jsonHandler<ContractListSeatBalancesResponse>(clientOptions.jsonMapper)
+
+        override fun listSeatBalances(
+            params: ContractListSeatBalancesParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<ContractListSeatBalancesResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contracts", "seatBalances", "list")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listSeatBalancesHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
                             }
                     }
                 }

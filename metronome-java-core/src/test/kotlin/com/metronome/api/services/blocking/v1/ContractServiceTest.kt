@@ -21,6 +21,7 @@ import com.metronome.api.models.v1.contracts.ContractCreateParams
 import com.metronome.api.models.v1.contracts.ContractGetNetBalanceParams
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListParams
+import com.metronome.api.models.v1.contracts.ContractListSeatBalancesParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveRateScheduleParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveSubscriptionQuantityHistoryParams
@@ -1662,6 +1663,35 @@ internal class ContractServiceTest {
             )
 
         page.response().validate()
+    }
+
+    @Test
+    fun listSeatBalances() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val contractService = client.v1().contracts()
+
+        val response =
+            contractService.listSeatBalances(
+                ContractListSeatBalancesParams.builder()
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .coveringDate(OffsetDateTime.parse("2024-03-01T00:00:00.000Z"))
+                    .cursor("cursor")
+                    .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .includeCreditsAndCommits(true)
+                    .includeLedgers(true)
+                    .limit(25L)
+                    .addSeatId("string")
+                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .addSubscriptionId("8deed800-1b7a-495d-a207-6c52bac54dc9")
+                    .build()
+            )
+
+        response.validate()
     }
 
     @Test
