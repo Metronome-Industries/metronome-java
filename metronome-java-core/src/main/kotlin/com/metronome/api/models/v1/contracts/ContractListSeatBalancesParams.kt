@@ -122,7 +122,7 @@ private constructor(
     fun limit(): Optional<Long> = body.limit()
 
     /**
-     * Optional filter to only include specific seats
+     * Optional filter to only include specific seats.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -400,7 +400,7 @@ private constructor(
          */
         fun limit(limit: JsonField<Long>) = apply { body.limit(limit) }
 
-        /** Optional filter to only include specific seats */
+        /** Optional filter to only include specific seats. */
         fun seatIds(seatIds: List<String>) = apply { body.seatIds(seatIds) }
 
         /**
@@ -746,7 +746,7 @@ private constructor(
         fun limit(): Optional<Long> = limit.getOptional("limit")
 
         /**
-         * Optional filter to only include specific seats
+         * Optional filter to only include specific seats.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -1052,7 +1052,7 @@ private constructor(
              */
             fun limit(limit: JsonField<Long>) = apply { this.limit = limit }
 
-            /** Optional filter to only include specific seats */
+            /** Optional filter to only include specific seats. */
             fun seatIds(seatIds: List<String>) = seatIds(JsonField.of(seatIds))
 
             /**
