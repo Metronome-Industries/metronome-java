@@ -113,38 +113,6 @@ internal class ContractCreateParamsTest {
                     )
                     .name("x")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
-                    .paymentGateConfig(
-                        ContractCreateParams.Commit.PaymentGateConfig.builder()
-                            .paymentGateType(
-                                ContractCreateParams.Commit.PaymentGateConfig.PaymentGateType.NONE
-                            )
-                            .precalculatedTaxConfig(
-                                ContractCreateParams.Commit.PaymentGateConfig.PrecalculatedTaxConfig
-                                    .builder()
-                                    .taxAmount(0.0)
-                                    .taxName("tax_name")
-                                    .build()
-                            )
-                            .stripeConfig(
-                                ContractCreateParams.Commit.PaymentGateConfig.StripeConfig.builder()
-                                    .paymentType(
-                                        ContractCreateParams.Commit.PaymentGateConfig.StripeConfig
-                                            .PaymentType
-                                            .INVOICE
-                                    )
-                                    .invoiceMetadata(
-                                        ContractCreateParams.Commit.PaymentGateConfig.StripeConfig
-                                            .InvoiceMetadata
-                                            .builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("string"))
-                                            .build()
-                                    )
-                                    .onSessionPayment(true)
-                                    .build()
-                            )
-                            .taxType(ContractCreateParams.Commit.PaymentGateConfig.TaxType.NONE)
-                            .build()
-                    )
                     .priority(0.0)
                     .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                     .rolloverFraction(0.0)
@@ -938,46 +906,6 @@ internal class ContractCreateParamsTest {
                         )
                         .name("x")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
-                        .paymentGateConfig(
-                            ContractCreateParams.Commit.PaymentGateConfig.builder()
-                                .paymentGateType(
-                                    ContractCreateParams.Commit.PaymentGateConfig.PaymentGateType
-                                        .NONE
-                                )
-                                .precalculatedTaxConfig(
-                                    ContractCreateParams.Commit.PaymentGateConfig
-                                        .PrecalculatedTaxConfig
-                                        .builder()
-                                        .taxAmount(0.0)
-                                        .taxName("tax_name")
-                                        .build()
-                                )
-                                .stripeConfig(
-                                    ContractCreateParams.Commit.PaymentGateConfig.StripeConfig
-                                        .builder()
-                                        .paymentType(
-                                            ContractCreateParams.Commit.PaymentGateConfig
-                                                .StripeConfig
-                                                .PaymentType
-                                                .INVOICE
-                                        )
-                                        .invoiceMetadata(
-                                            ContractCreateParams.Commit.PaymentGateConfig
-                                                .StripeConfig
-                                                .InvoiceMetadata
-                                                .builder()
-                                                .putAdditionalProperty(
-                                                    "foo",
-                                                    JsonValue.from("string"),
-                                                )
-                                                .build()
-                                        )
-                                        .onSessionPayment(true)
-                                        .build()
-                                )
-                                .taxType(ContractCreateParams.Commit.PaymentGateConfig.TaxType.NONE)
-                                .build()
-                        )
                         .priority(0.0)
                         .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                         .rolloverFraction(0.0)
@@ -1802,38 +1730,6 @@ internal class ContractCreateParamsTest {
                     )
                     .name("x")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
-                    .paymentGateConfig(
-                        ContractCreateParams.Commit.PaymentGateConfig.builder()
-                            .paymentGateType(
-                                ContractCreateParams.Commit.PaymentGateConfig.PaymentGateType.NONE
-                            )
-                            .precalculatedTaxConfig(
-                                ContractCreateParams.Commit.PaymentGateConfig.PrecalculatedTaxConfig
-                                    .builder()
-                                    .taxAmount(0.0)
-                                    .taxName("tax_name")
-                                    .build()
-                            )
-                            .stripeConfig(
-                                ContractCreateParams.Commit.PaymentGateConfig.StripeConfig.builder()
-                                    .paymentType(
-                                        ContractCreateParams.Commit.PaymentGateConfig.StripeConfig
-                                            .PaymentType
-                                            .INVOICE
-                                    )
-                                    .invoiceMetadata(
-                                        ContractCreateParams.Commit.PaymentGateConfig.StripeConfig
-                                            .InvoiceMetadata
-                                            .builder()
-                                            .putAdditionalProperty("foo", JsonValue.from("string"))
-                                            .build()
-                                    )
-                                    .onSessionPayment(true)
-                                    .build()
-                            )
-                            .taxType(ContractCreateParams.Commit.PaymentGateConfig.TaxType.NONE)
-                            .build()
-                    )
                     .priority(0.0)
                     .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                     .rolloverFraction(0.0)
