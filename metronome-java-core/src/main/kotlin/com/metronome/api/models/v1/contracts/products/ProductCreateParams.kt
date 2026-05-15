@@ -160,6 +160,19 @@ private constructor(
     fun quantityRounding(): Optional<QuantityRounding> = body.quantityRounding()
 
     /**
+     * Defines the breakdown behavior when calculating usage from SQL Billable Metrics. If set to
+     * 'service_period' (default), the usage will be evaluated once for all events the invoice
+     * service period and the usage will be applied at the last instant of the invoice. If set to
+     * 'hour', it will be broken down and evaluated for each hour. For most use cases, 'hour' is
+     * recommended. The setting has no effect for Streaming Billable Metrics.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun sqlBreakdownGranularity(): Optional<SqlBreakdownGranularity> =
+        body.sqlBreakdownGranularity()
+
+    /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -270,6 +283,15 @@ private constructor(
      * type.
      */
     fun _quantityRounding(): JsonField<QuantityRounding> = body._quantityRounding()
+
+    /**
+     * Returns the raw JSON value of [sqlBreakdownGranularity].
+     *
+     * Unlike [sqlBreakdownGranularity], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _sqlBreakdownGranularity(): JsonField<SqlBreakdownGranularity> =
+        body._sqlBreakdownGranularity()
 
     /**
      * Returns the raw JSON value of [tags].
@@ -606,6 +628,29 @@ private constructor(
             body.quantityRounding(quantityRounding)
         }
 
+        /**
+         * Defines the breakdown behavior when calculating usage from SQL Billable Metrics. If set
+         * to 'service_period' (default), the usage will be evaluated once for all events the
+         * invoice service period and the usage will be applied at the last instant of the invoice.
+         * If set to 'hour', it will be broken down and evaluated for each hour. For most use cases,
+         * 'hour' is recommended. The setting has no effect for Streaming Billable Metrics.
+         */
+        fun sqlBreakdownGranularity(sqlBreakdownGranularity: SqlBreakdownGranularity) = apply {
+            body.sqlBreakdownGranularity(sqlBreakdownGranularity)
+        }
+
+        /**
+         * Sets [Builder.sqlBreakdownGranularity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.sqlBreakdownGranularity] with a well-typed
+         * [SqlBreakdownGranularity] value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
+        fun sqlBreakdownGranularity(sqlBreakdownGranularity: JsonField<SqlBreakdownGranularity>) =
+            apply {
+                body.sqlBreakdownGranularity(sqlBreakdownGranularity)
+            }
+
         fun tags(tags: List<String>) = apply { body.tags(tags) }
 
         /**
@@ -785,6 +830,7 @@ private constructor(
         private val pricingGroupKey: JsonField<List<String>>,
         private val quantityConversion: JsonField<QuantityConversion>,
         private val quantityRounding: JsonField<QuantityRounding>,
+        private val sqlBreakdownGranularity: JsonField<SqlBreakdownGranularity>,
         private val tags: JsonField<List<String>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -829,6 +875,9 @@ private constructor(
             @JsonProperty("quantity_rounding")
             @ExcludeMissing
             quantityRounding: JsonField<QuantityRounding> = JsonMissing.of(),
+            @JsonProperty("sql_breakdown_granularity")
+            @ExcludeMissing
+            sqlBreakdownGranularity: JsonField<SqlBreakdownGranularity> = JsonMissing.of(),
             @JsonProperty("tags") @ExcludeMissing tags: JsonField<List<String>> = JsonMissing.of(),
         ) : this(
             name,
@@ -845,6 +894,7 @@ private constructor(
             pricingGroupKey,
             quantityConversion,
             quantityRounding,
+            sqlBreakdownGranularity,
             tags,
             mutableMapOf(),
         )
@@ -980,6 +1030,19 @@ private constructor(
          */
         fun quantityRounding(): Optional<QuantityRounding> =
             quantityRounding.getOptional("quantity_rounding")
+
+        /**
+         * Defines the breakdown behavior when calculating usage from SQL Billable Metrics. If set
+         * to 'service_period' (default), the usage will be evaluated once for all events the
+         * invoice service period and the usage will be applied at the last instant of the invoice.
+         * If set to 'hour', it will be broken down and evaluated for each hour. For most use cases,
+         * 'hour' is recommended. The setting has no effect for Streaming Billable Metrics.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun sqlBreakdownGranularity(): Optional<SqlBreakdownGranularity> =
+            sqlBreakdownGranularity.getOptional("sql_breakdown_granularity")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -1122,6 +1185,16 @@ private constructor(
         fun _quantityRounding(): JsonField<QuantityRounding> = quantityRounding
 
         /**
+         * Returns the raw JSON value of [sqlBreakdownGranularity].
+         *
+         * Unlike [sqlBreakdownGranularity], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("sql_breakdown_granularity")
+        @ExcludeMissing
+        fun _sqlBreakdownGranularity(): JsonField<SqlBreakdownGranularity> = sqlBreakdownGranularity
+
+        /**
          * Returns the raw JSON value of [tags].
          *
          * Unlike [tags], this method doesn't throw if the JSON field has an unexpected type.
@@ -1171,6 +1244,8 @@ private constructor(
             private var pricingGroupKey: JsonField<MutableList<String>>? = null
             private var quantityConversion: JsonField<QuantityConversion> = JsonMissing.of()
             private var quantityRounding: JsonField<QuantityRounding> = JsonMissing.of()
+            private var sqlBreakdownGranularity: JsonField<SqlBreakdownGranularity> =
+                JsonMissing.of()
             private var tags: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1190,6 +1265,7 @@ private constructor(
                 pricingGroupKey = body.pricingGroupKey.map { it.toMutableList() }
                 quantityConversion = body.quantityConversion
                 quantityRounding = body.quantityRounding
+                sqlBreakdownGranularity = body.sqlBreakdownGranularity
                 tags = body.tags.map { it.toMutableList() }
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -1483,6 +1559,28 @@ private constructor(
                 this.quantityRounding = quantityRounding
             }
 
+            /**
+             * Defines the breakdown behavior when calculating usage from SQL Billable Metrics. If
+             * set to 'service_period' (default), the usage will be evaluated once for all events
+             * the invoice service period and the usage will be applied at the last instant of the
+             * invoice. If set to 'hour', it will be broken down and evaluated for each hour. For
+             * most use cases, 'hour' is recommended. The setting has no effect for Streaming
+             * Billable Metrics.
+             */
+            fun sqlBreakdownGranularity(sqlBreakdownGranularity: SqlBreakdownGranularity) =
+                sqlBreakdownGranularity(JsonField.of(sqlBreakdownGranularity))
+
+            /**
+             * Sets [Builder.sqlBreakdownGranularity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.sqlBreakdownGranularity] with a well-typed
+             * [SqlBreakdownGranularity] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun sqlBreakdownGranularity(
+                sqlBreakdownGranularity: JsonField<SqlBreakdownGranularity>
+            ) = apply { this.sqlBreakdownGranularity = sqlBreakdownGranularity }
+
             fun tags(tags: List<String>) = tags(JsonField.of(tags))
 
             /**
@@ -1554,6 +1652,7 @@ private constructor(
                     (pricingGroupKey ?: JsonMissing.of()).map { it.toImmutable() },
                     quantityConversion,
                     quantityRounding,
+                    sqlBreakdownGranularity,
                     (tags ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
                 )
@@ -1589,6 +1688,7 @@ private constructor(
             pricingGroupKey()
             quantityConversion().ifPresent { it.validate() }
             quantityRounding().ifPresent { it.validate() }
+            sqlBreakdownGranularity().ifPresent { it.validate() }
             tags()
             validated = true
         }
@@ -1623,6 +1723,7 @@ private constructor(
                 (pricingGroupKey.asKnown().getOrNull()?.size ?: 0) +
                 (quantityConversion.asKnown().getOrNull()?.validity() ?: 0) +
                 (quantityRounding.asKnown().getOrNull()?.validity() ?: 0) +
+                (sqlBreakdownGranularity.asKnown().getOrNull()?.validity() ?: 0) +
                 (tags.asKnown().getOrNull()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
@@ -1645,6 +1746,7 @@ private constructor(
                 pricingGroupKey == other.pricingGroupKey &&
                 quantityConversion == other.quantityConversion &&
                 quantityRounding == other.quantityRounding &&
+                sqlBreakdownGranularity == other.sqlBreakdownGranularity &&
                 tags == other.tags &&
                 additionalProperties == other.additionalProperties
         }
@@ -1665,6 +1767,7 @@ private constructor(
                 pricingGroupKey,
                 quantityConversion,
                 quantityRounding,
+                sqlBreakdownGranularity,
                 tags,
                 additionalProperties,
             )
@@ -1673,7 +1776,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, customFields=$customFields, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, tags=$tags, additionalProperties=$additionalProperties}"
+            "Body{name=$name, type=$type, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, customFields=$customFields, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, sqlBreakdownGranularity=$sqlBreakdownGranularity, tags=$tags, additionalProperties=$additionalProperties}"
     }
 
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -1943,6 +2046,157 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * Defines the breakdown behavior when calculating usage from SQL Billable Metrics. If set to
+     * 'service_period' (default), the usage will be evaluated once for all events the invoice
+     * service period and the usage will be applied at the last instant of the invoice. If set to
+     * 'hour', it will be broken down and evaluated for each hour. For most use cases, 'hour' is
+     * recommended. The setting has no effect for Streaming Billable Metrics.
+     */
+    class SqlBreakdownGranularity
+    @JsonCreator
+    private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val HOUR = of("HOUR")
+
+            @JvmField val SERVICE_PERIOD = of("SERVICE_PERIOD")
+
+            @JvmStatic fun of(value: String) = SqlBreakdownGranularity(JsonField.of(value))
+        }
+
+        /** An enum containing [SqlBreakdownGranularity]'s known values. */
+        enum class Known {
+            HOUR,
+            SERVICE_PERIOD,
+        }
+
+        /**
+         * An enum containing [SqlBreakdownGranularity]'s known values, as well as an [_UNKNOWN]
+         * member.
+         *
+         * An instance of [SqlBreakdownGranularity] can contain an unknown value in a couple of
+         * cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            HOUR,
+            SERVICE_PERIOD,
+            /**
+             * An enum member indicating that [SqlBreakdownGranularity] was instantiated with an
+             * unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                HOUR -> Value.HOUR
+                SERVICE_PERIOD -> Value.SERVICE_PERIOD
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                HOUR -> Known.HOUR
+                SERVICE_PERIOD -> Known.SERVICE_PERIOD
+                else ->
+                    throw MetronomeInvalidDataException("Unknown SqlBreakdownGranularity: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): SqlBreakdownGranularity = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is SqlBreakdownGranularity && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
     }
 
     override fun equals(other: Any?): Boolean {
