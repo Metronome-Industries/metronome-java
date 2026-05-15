@@ -19,7 +19,6 @@ import com.metronome.api.models.RecurringCommitSubscriptionConfig
 import com.metronome.api.models.ScheduleDuration
 import com.metronome.api.models.SchedulePointInTime
 import com.metronome.api.models.SpendThresholdConfigurationV2
-import com.metronome.api.models.Subscription
 import com.metronome.api.models.UpdateBaseThresholdCommit
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -816,11 +815,16 @@ internal class ContractGetEditHistoryResponseTest {
                                 .build()
                         )
                         .addAddSubscription(
-                            Subscription.builder()
+                            ContractGetEditHistoryResponse.Data.AddSubscription.builder()
                                 .billingPeriods(
-                                    Subscription.BillingPeriods.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .BillingPeriods
+                                        .builder()
                                         .current(
-                                            Subscription.BillingPeriods.Current.builder()
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .BillingPeriods
+                                                .Current
+                                                .builder()
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -830,7 +834,10 @@ internal class ContractGetEditHistoryResponseTest {
                                                 .build()
                                         )
                                         .next(
-                                            Subscription.BillingPeriods.Next.builder()
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .BillingPeriods
+                                                .Next
+                                                .builder()
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -840,7 +847,10 @@ internal class ContractGetEditHistoryResponseTest {
                                                 .build()
                                         )
                                         .previous(
-                                            Subscription.BillingPeriods.Previous.builder()
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .BillingPeriods
+                                                .Previous
+                                                .builder()
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -851,20 +861,32 @@ internal class ContractGetEditHistoryResponseTest {
                                         )
                                         .build()
                                 )
-                                .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                                .collectionSchedule(
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .CollectionSchedule
+                                        .ADVANCE
+                                )
                                 .proration(
-                                    Subscription.Proration.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription.Proration
+                                        .builder()
                                         .invoiceBehavior(
-                                            Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .Proration
+                                                .InvoiceBehavior
+                                                .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
                                         .build()
                                 )
                                 .quantityManagementMode(
-                                    Subscription.QuantityManagementMode.SEAT_BASED
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .QuantityManagementMode
+                                        .SEAT_BASED
                                 )
                                 .addQuantitySchedule(
-                                    Subscription.QuantitySchedule.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .QuantitySchedule
+                                        .builder()
                                         .quantity(0.0)
                                         .startingAt(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -876,12 +898,20 @@ internal class ContractGetEditHistoryResponseTest {
                                 )
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .subscriptionRate(
-                                    Subscription.SubscriptionRate.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .SubscriptionRate
+                                        .builder()
                                         .billingFrequency(
-                                            Subscription.SubscriptionRate.BillingFrequency.MONTHLY
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .SubscriptionRate
+                                                .BillingFrequency
+                                                .MONTHLY
                                         )
                                         .product(
-                                            Subscription.SubscriptionRate.Product.builder()
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .SubscriptionRate
+                                                .Product
+                                                .builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .name("name")
                                                 .build()
@@ -890,7 +920,8 @@ internal class ContractGetEditHistoryResponseTest {
                                 )
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customFields(
-                                    Subscription.CustomFields.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription.CustomFields
+                                        .builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -899,7 +930,8 @@ internal class ContractGetEditHistoryResponseTest {
                                 .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .name("name")
                                 .seatConfig(
-                                    Subscription.SeatConfig.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription.SeatConfig
+                                        .builder()
                                         .seatGroupKey("seat_group_key")
                                         .build()
                                 )
@@ -2286,11 +2318,15 @@ internal class ContractGetEditHistoryResponseTest {
                             .build()
                     )
                     .addAddSubscription(
-                        Subscription.builder()
+                        ContractGetEditHistoryResponse.Data.AddSubscription.builder()
                             .billingPeriods(
-                                Subscription.BillingPeriods.builder()
+                                ContractGetEditHistoryResponse.Data.AddSubscription.BillingPeriods
+                                    .builder()
                                     .current(
-                                        Subscription.BillingPeriods.Current.builder()
+                                        ContractGetEditHistoryResponse.Data.AddSubscription
+                                            .BillingPeriods
+                                            .Current
+                                            .builder()
                                             .endingBefore(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
@@ -2300,7 +2336,10 @@ internal class ContractGetEditHistoryResponseTest {
                                             .build()
                                     )
                                     .next(
-                                        Subscription.BillingPeriods.Next.builder()
+                                        ContractGetEditHistoryResponse.Data.AddSubscription
+                                            .BillingPeriods
+                                            .Next
+                                            .builder()
                                             .endingBefore(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
@@ -2310,7 +2349,10 @@ internal class ContractGetEditHistoryResponseTest {
                                             .build()
                                     )
                                     .previous(
-                                        Subscription.BillingPeriods.Previous.builder()
+                                        ContractGetEditHistoryResponse.Data.AddSubscription
+                                            .BillingPeriods
+                                            .Previous
+                                            .builder()
                                             .endingBefore(
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
@@ -2321,18 +2363,31 @@ internal class ContractGetEditHistoryResponseTest {
                                     )
                                     .build()
                             )
-                            .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                            .collectionSchedule(
+                                ContractGetEditHistoryResponse.Data.AddSubscription
+                                    .CollectionSchedule
+                                    .ADVANCE
+                            )
                             .proration(
-                                Subscription.Proration.builder()
+                                ContractGetEditHistoryResponse.Data.AddSubscription.Proration
+                                    .builder()
                                     .invoiceBehavior(
-                                        Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY
+                                        ContractGetEditHistoryResponse.Data.AddSubscription
+                                            .Proration
+                                            .InvoiceBehavior
+                                            .BILL_IMMEDIATELY
                                     )
                                     .isProrated(true)
                                     .build()
                             )
-                            .quantityManagementMode(Subscription.QuantityManagementMode.SEAT_BASED)
+                            .quantityManagementMode(
+                                ContractGetEditHistoryResponse.Data.AddSubscription
+                                    .QuantityManagementMode
+                                    .SEAT_BASED
+                            )
                             .addQuantitySchedule(
-                                Subscription.QuantitySchedule.builder()
+                                ContractGetEditHistoryResponse.Data.AddSubscription.QuantitySchedule
+                                    .builder()
                                     .quantity(0.0)
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2340,12 +2395,19 @@ internal class ContractGetEditHistoryResponseTest {
                             )
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .subscriptionRate(
-                                Subscription.SubscriptionRate.builder()
+                                ContractGetEditHistoryResponse.Data.AddSubscription.SubscriptionRate
+                                    .builder()
                                     .billingFrequency(
-                                        Subscription.SubscriptionRate.BillingFrequency.MONTHLY
+                                        ContractGetEditHistoryResponse.Data.AddSubscription
+                                            .SubscriptionRate
+                                            .BillingFrequency
+                                            .MONTHLY
                                     )
                                     .product(
-                                        Subscription.SubscriptionRate.Product.builder()
+                                        ContractGetEditHistoryResponse.Data.AddSubscription
+                                            .SubscriptionRate
+                                            .Product
+                                            .builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .name("name")
                                             .build()
@@ -2354,7 +2416,8 @@ internal class ContractGetEditHistoryResponseTest {
                             )
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .customFields(
-                                Subscription.CustomFields.builder()
+                                ContractGetEditHistoryResponse.Data.AddSubscription.CustomFields
+                                    .builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -2363,7 +2426,8 @@ internal class ContractGetEditHistoryResponseTest {
                             .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .name("name")
                             .seatConfig(
-                                Subscription.SeatConfig.builder()
+                                ContractGetEditHistoryResponse.Data.AddSubscription.SeatConfig
+                                    .builder()
                                     .seatGroupKey("seat_group_key")
                                     .build()
                             )
@@ -3772,11 +3836,16 @@ internal class ContractGetEditHistoryResponseTest {
                                 .build()
                         )
                         .addAddSubscription(
-                            Subscription.builder()
+                            ContractGetEditHistoryResponse.Data.AddSubscription.builder()
                                 .billingPeriods(
-                                    Subscription.BillingPeriods.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .BillingPeriods
+                                        .builder()
                                         .current(
-                                            Subscription.BillingPeriods.Current.builder()
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .BillingPeriods
+                                                .Current
+                                                .builder()
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -3786,7 +3855,10 @@ internal class ContractGetEditHistoryResponseTest {
                                                 .build()
                                         )
                                         .next(
-                                            Subscription.BillingPeriods.Next.builder()
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .BillingPeriods
+                                                .Next
+                                                .builder()
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -3796,7 +3868,10 @@ internal class ContractGetEditHistoryResponseTest {
                                                 .build()
                                         )
                                         .previous(
-                                            Subscription.BillingPeriods.Previous.builder()
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .BillingPeriods
+                                                .Previous
+                                                .builder()
                                                 .endingBefore(
                                                     OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                                 )
@@ -3807,20 +3882,32 @@ internal class ContractGetEditHistoryResponseTest {
                                         )
                                         .build()
                                 )
-                                .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                                .collectionSchedule(
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .CollectionSchedule
+                                        .ADVANCE
+                                )
                                 .proration(
-                                    Subscription.Proration.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription.Proration
+                                        .builder()
                                         .invoiceBehavior(
-                                            Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .Proration
+                                                .InvoiceBehavior
+                                                .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
                                         .build()
                                 )
                                 .quantityManagementMode(
-                                    Subscription.QuantityManagementMode.SEAT_BASED
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .QuantityManagementMode
+                                        .SEAT_BASED
                                 )
                                 .addQuantitySchedule(
-                                    Subscription.QuantitySchedule.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .QuantitySchedule
+                                        .builder()
                                         .quantity(0.0)
                                         .startingAt(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
@@ -3832,12 +3919,20 @@ internal class ContractGetEditHistoryResponseTest {
                                 )
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .subscriptionRate(
-                                    Subscription.SubscriptionRate.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .SubscriptionRate
+                                        .builder()
                                         .billingFrequency(
-                                            Subscription.SubscriptionRate.BillingFrequency.MONTHLY
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .SubscriptionRate
+                                                .BillingFrequency
+                                                .MONTHLY
                                         )
                                         .product(
-                                            Subscription.SubscriptionRate.Product.builder()
+                                            ContractGetEditHistoryResponse.Data.AddSubscription
+                                                .SubscriptionRate
+                                                .Product
+                                                .builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .name("name")
                                                 .build()
@@ -3846,7 +3941,8 @@ internal class ContractGetEditHistoryResponseTest {
                                 )
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customFields(
-                                    Subscription.CustomFields.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription.CustomFields
+                                        .builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -3855,7 +3951,8 @@ internal class ContractGetEditHistoryResponseTest {
                                 .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .name("name")
                                 .seatConfig(
-                                    Subscription.SeatConfig.builder()
+                                    ContractGetEditHistoryResponse.Data.AddSubscription.SeatConfig
+                                        .builder()
                                         .seatGroupKey("seat_group_key")
                                         .build()
                                 )
