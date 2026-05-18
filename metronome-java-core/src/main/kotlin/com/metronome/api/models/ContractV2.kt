@@ -16106,6 +16106,7 @@ private constructor(
         private val applicableContractIds: JsonField<List<String>>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
+        private val archivedAt: JsonField<OffsetDateTime>,
         private val balance: JsonField<Double>,
         private val contract: JsonField<Contract>,
         private val createdAt: JsonField<OffsetDateTime>,
@@ -16141,6 +16142,9 @@ private constructor(
             @JsonProperty("applicable_product_tags")
             @ExcludeMissing
             applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("archived_at")
+            @ExcludeMissing
+            archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("balance") @ExcludeMissing balance: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("contract")
             @ExcludeMissing
@@ -16190,6 +16194,7 @@ private constructor(
             applicableContractIds,
             applicableProductIds,
             applicableProductTags,
+            archivedAt,
             balance,
             contract,
             createdAt,
@@ -16255,6 +16260,12 @@ private constructor(
          */
         fun applicableProductTags(): Optional<List<String>> =
             applicableProductTags.getOptional("applicable_product_tags")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun archivedAt(): Optional<OffsetDateTime> = archivedAt.getOptional("archived_at")
 
         /**
          * The current balance of the credit or commit. This balance reflects the amount of credit
@@ -16447,6 +16458,15 @@ private constructor(
         fun _applicableProductTags(): JsonField<List<String>> = applicableProductTags
 
         /**
+         * Returns the raw JSON value of [archivedAt].
+         *
+         * Unlike [archivedAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("archived_at")
+        @ExcludeMissing
+        fun _archivedAt(): JsonField<OffsetDateTime> = archivedAt
+
+        /**
          * Returns the raw JSON value of [balance].
          *
          * Unlike [balance], this method doesn't throw if the JSON field has an unexpected type.
@@ -16616,6 +16636,7 @@ private constructor(
             private var applicableContractIds: JsonField<MutableList<String>>? = null
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
+            private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var balance: JsonField<Double> = JsonMissing.of()
             private var contract: JsonField<Contract> = JsonMissing.of()
             private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -16644,6 +16665,7 @@ private constructor(
                 applicableContractIds = credit.applicableContractIds.map { it.toMutableList() }
                 applicableProductIds = credit.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags = credit.applicableProductTags.map { it.toMutableList() }
+                archivedAt = credit.archivedAt
                 balance = credit.balance
                 contract = credit.contract
                 createdAt = credit.createdAt
@@ -16786,6 +16808,19 @@ private constructor(
                     (applicableProductTags ?: JsonField.of(mutableListOf())).also {
                         checkKnown("applicableProductTags", it).add(applicableProductTag)
                     }
+            }
+
+            fun archivedAt(archivedAt: OffsetDateTime) = archivedAt(JsonField.of(archivedAt))
+
+            /**
+             * Sets [Builder.archivedAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.archivedAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
+                this.archivedAt = archivedAt
             }
 
             /**
@@ -17150,6 +17185,7 @@ private constructor(
                     (applicableContractIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
+                    archivedAt,
                     balance,
                     contract,
                     createdAt,
@@ -17192,6 +17228,7 @@ private constructor(
             applicableContractIds()
             applicableProductIds()
             applicableProductTags()
+            archivedAt()
             balance()
             contract().ifPresent { it.validate() }
             createdAt()
@@ -17233,6 +17270,7 @@ private constructor(
                 (applicableContractIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
+                (if (archivedAt.asKnown().isPresent) 1 else 0) +
                 (if (balance.asKnown().isPresent) 1 else 0) +
                 (contract.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (createdAt.asKnown().isPresent) 1 else 0) +
@@ -22443,6 +22481,7 @@ private constructor(
                 applicableContractIds == other.applicableContractIds &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
+                archivedAt == other.archivedAt &&
                 balance == other.balance &&
                 contract == other.contract &&
                 createdAt == other.createdAt &&
@@ -22470,6 +22509,7 @@ private constructor(
                 applicableContractIds,
                 applicableProductIds,
                 applicableProductTags,
+                archivedAt,
                 balance,
                 contract,
                 createdAt,
@@ -22492,7 +22532,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, balance=$balance, contract=$contract, createdAt=$createdAt, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, recurringCreditId=$recurringCreditId, rolledOverFrom=$rolledOverFrom, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
+            "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, archivedAt=$archivedAt, balance=$balance, contract=$contract, createdAt=$createdAt, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, recurringCreditId=$recurringCreditId, rolledOverFrom=$rolledOverFrom, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
     }
 
     /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */

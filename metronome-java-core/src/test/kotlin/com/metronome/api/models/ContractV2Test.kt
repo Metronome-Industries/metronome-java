@@ -334,6 +334,7 @@ internal class ContractV2Test {
                         .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductTag("string")
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .balance(0.0)
                         .contract(
                             ContractV2.Credit.Contract.builder()
@@ -1251,6 +1252,7 @@ internal class ContractV2Test {
                     .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addApplicableProductTag("string")
+                    .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .balance(0.0)
                     .contract(
                         ContractV2.Credit.Contract.builder()
@@ -2158,6 +2160,7 @@ internal class ContractV2Test {
                         .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductTag("string")
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .balance(0.0)
                         .contract(
                             ContractV2.Credit.Contract.builder()
