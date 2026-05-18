@@ -222,6 +222,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
     fun validate(): CustomerAlert = apply {
         if (validated) {
             return@apply
@@ -960,6 +968,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): Alert = apply {
             if (validated) {
                 return@apply
@@ -1111,6 +1128,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): Status = apply {
                 if (validated) {
                     return@apply
@@ -1355,6 +1382,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): Type = apply {
                 if (validated) {
                     return@apply
@@ -1576,6 +1613,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): CustomFieldFilter = apply {
                 if (validated) {
                     return@apply
@@ -1628,6 +1675,8 @@ private constructor(
 
                     @JvmField val CONTRACT_CREDIT = of("ContractCredit")
 
+                    @JvmField val CONTRACT_CREDIT_OR_COMMIT = of("ContractCreditOrCommit")
+
                     @JvmStatic fun of(value: String) = Entity(JsonField.of(value))
                 }
 
@@ -1636,6 +1685,7 @@ private constructor(
                     CONTRACT,
                     COMMIT,
                     CONTRACT_CREDIT,
+                    CONTRACT_CREDIT_OR_COMMIT,
                 }
 
                 /**
@@ -1651,6 +1701,7 @@ private constructor(
                     CONTRACT,
                     COMMIT,
                     CONTRACT_CREDIT,
+                    CONTRACT_CREDIT_OR_COMMIT,
                     /**
                      * An enum member indicating that [Entity] was instantiated with an unknown
                      * value.
@@ -1670,6 +1721,7 @@ private constructor(
                         CONTRACT -> Value.CONTRACT
                         COMMIT -> Value.COMMIT
                         CONTRACT_CREDIT -> Value.CONTRACT_CREDIT
+                        CONTRACT_CREDIT_OR_COMMIT -> Value.CONTRACT_CREDIT_OR_COMMIT
                         else -> Value._UNKNOWN
                     }
 
@@ -1687,6 +1739,7 @@ private constructor(
                         CONTRACT -> Known.CONTRACT
                         COMMIT -> Known.COMMIT
                         CONTRACT_CREDIT -> Known.CONTRACT_CREDIT
+                        CONTRACT_CREDIT_OR_COMMIT -> Known.CONTRACT_CREDIT_OR_COMMIT
                         else -> throw MetronomeInvalidDataException("Unknown Entity: $value")
                     }
 
@@ -1706,6 +1759,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): Entity = apply {
                     if (validated) {
                         return@apply
@@ -1919,6 +1982,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): GroupKeyFilter = apply {
                 if (validated) {
                     return@apply
@@ -2112,6 +2185,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): GroupValue = apply {
                 if (validated) {
                     return@apply
@@ -2330,6 +2413,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
             fun validate(): SeatFilter = apply {
                 if (validated) {
                     return@apply
@@ -2532,6 +2625,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
         fun validate(): CustomerStatus = apply {
             if (validated) {
                 return@apply

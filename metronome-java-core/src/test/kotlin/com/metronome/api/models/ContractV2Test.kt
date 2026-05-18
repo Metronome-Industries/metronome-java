@@ -334,6 +334,7 @@ internal class ContractV2Test {
                         .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductTag("string")
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .balance(0.0)
                         .contract(
                             ContractV2.Credit.Contract.builder()
@@ -843,11 +844,11 @@ internal class ContractV2Test {
                         .build()
                 )
                 .addSubscription(
-                    Subscription.builder()
+                    ContractV2.Subscription.builder()
                         .billingPeriods(
-                            Subscription.BillingPeriods.builder()
+                            ContractV2.Subscription.BillingPeriods.builder()
                                 .current(
-                                    Subscription.BillingPeriods.Current.builder()
+                                    ContractV2.Subscription.BillingPeriods.Current.builder()
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -857,7 +858,7 @@ internal class ContractV2Test {
                                         .build()
                                 )
                                 .next(
-                                    Subscription.BillingPeriods.Next.builder()
+                                    ContractV2.Subscription.BillingPeriods.Next.builder()
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -867,7 +868,7 @@ internal class ContractV2Test {
                                         .build()
                                 )
                                 .previous(
-                                    Subscription.BillingPeriods.Previous.builder()
+                                    ContractV2.Subscription.BillingPeriods.Previous.builder()
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -878,18 +879,21 @@ internal class ContractV2Test {
                                 )
                                 .build()
                         )
-                        .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                        .collectionSchedule(ContractV2.Subscription.CollectionSchedule.ADVANCE)
                         .proration(
-                            Subscription.Proration.builder()
+                            ContractV2.Subscription.Proration.builder()
                                 .invoiceBehavior(
-                                    Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY
+                                    ContractV2.Subscription.Proration.InvoiceBehavior
+                                        .BILL_IMMEDIATELY
                                 )
                                 .isProrated(true)
                                 .build()
                         )
-                        .quantityManagementMode(Subscription.QuantityManagementMode.SEAT_BASED)
+                        .quantityManagementMode(
+                            ContractV2.Subscription.QuantityManagementMode.SEAT_BASED
+                        )
                         .addQuantitySchedule(
-                            Subscription.QuantitySchedule.builder()
+                            ContractV2.Subscription.QuantitySchedule.builder()
                                 .quantity(0.0)
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -897,12 +901,13 @@ internal class ContractV2Test {
                         )
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .subscriptionRate(
-                            Subscription.SubscriptionRate.builder()
+                            ContractV2.Subscription.SubscriptionRate.builder()
                                 .billingFrequency(
-                                    Subscription.SubscriptionRate.BillingFrequency.MONTHLY
+                                    ContractV2.Subscription.SubscriptionRate.BillingFrequency
+                                        .MONTHLY
                                 )
                                 .product(
-                                    Subscription.SubscriptionRate.Product.builder()
+                                    ContractV2.Subscription.SubscriptionRate.Product.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .name("name")
                                         .build()
@@ -911,7 +916,7 @@ internal class ContractV2Test {
                         )
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .customFields(
-                            Subscription.CustomFields.builder()
+                            ContractV2.Subscription.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -920,7 +925,9 @@ internal class ContractV2Test {
                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .name("name")
                         .seatConfig(
-                            Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build()
+                            ContractV2.Subscription.SeatConfig.builder()
+                                .seatGroupKey("seat_group_key")
+                                .build()
                         )
                         .build()
                 )
@@ -1245,6 +1252,7 @@ internal class ContractV2Test {
                     .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addApplicableProductTag("string")
+                    .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .balance(0.0)
                     .contract(
                         ContractV2.Credit.Contract.builder()
@@ -1752,41 +1760,43 @@ internal class ContractV2Test {
             )
         assertThat(contractV2.subscriptions().getOrNull())
             .containsExactly(
-                Subscription.builder()
+                ContractV2.Subscription.builder()
                     .billingPeriods(
-                        Subscription.BillingPeriods.builder()
+                        ContractV2.Subscription.BillingPeriods.builder()
                             .current(
-                                Subscription.BillingPeriods.Current.builder()
+                                ContractV2.Subscription.BillingPeriods.Current.builder()
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
                             .next(
-                                Subscription.BillingPeriods.Next.builder()
+                                ContractV2.Subscription.BillingPeriods.Next.builder()
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
                             .previous(
-                                Subscription.BillingPeriods.Previous.builder()
+                                ContractV2.Subscription.BillingPeriods.Previous.builder()
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
                             .build()
                     )
-                    .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                    .collectionSchedule(ContractV2.Subscription.CollectionSchedule.ADVANCE)
                     .proration(
-                        Subscription.Proration.builder()
+                        ContractV2.Subscription.Proration.builder()
                             .invoiceBehavior(
-                                Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY
+                                ContractV2.Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY
                             )
                             .isProrated(true)
                             .build()
                     )
-                    .quantityManagementMode(Subscription.QuantityManagementMode.SEAT_BASED)
+                    .quantityManagementMode(
+                        ContractV2.Subscription.QuantityManagementMode.SEAT_BASED
+                    )
                     .addQuantitySchedule(
-                        Subscription.QuantitySchedule.builder()
+                        ContractV2.Subscription.QuantitySchedule.builder()
                             .quantity(0.0)
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1794,12 +1804,12 @@ internal class ContractV2Test {
                     )
                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .subscriptionRate(
-                        Subscription.SubscriptionRate.builder()
+                        ContractV2.Subscription.SubscriptionRate.builder()
                             .billingFrequency(
-                                Subscription.SubscriptionRate.BillingFrequency.MONTHLY
+                                ContractV2.Subscription.SubscriptionRate.BillingFrequency.MONTHLY
                             )
                             .product(
-                                Subscription.SubscriptionRate.Product.builder()
+                                ContractV2.Subscription.SubscriptionRate.Product.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .name("name")
                                     .build()
@@ -1808,7 +1818,7 @@ internal class ContractV2Test {
                     )
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .customFields(
-                        Subscription.CustomFields.builder()
+                        ContractV2.Subscription.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -1817,7 +1827,9 @@ internal class ContractV2Test {
                     .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .name("name")
                     .seatConfig(
-                        Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build()
+                        ContractV2.Subscription.SeatConfig.builder()
+                            .seatGroupKey("seat_group_key")
+                            .build()
                     )
                     .build()
             )
@@ -2148,6 +2160,7 @@ internal class ContractV2Test {
                         .addApplicableContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addApplicableProductTag("string")
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .balance(0.0)
                         .contract(
                             ContractV2.Credit.Contract.builder()
@@ -2657,11 +2670,11 @@ internal class ContractV2Test {
                         .build()
                 )
                 .addSubscription(
-                    Subscription.builder()
+                    ContractV2.Subscription.builder()
                         .billingPeriods(
-                            Subscription.BillingPeriods.builder()
+                            ContractV2.Subscription.BillingPeriods.builder()
                                 .current(
-                                    Subscription.BillingPeriods.Current.builder()
+                                    ContractV2.Subscription.BillingPeriods.Current.builder()
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -2671,7 +2684,7 @@ internal class ContractV2Test {
                                         .build()
                                 )
                                 .next(
-                                    Subscription.BillingPeriods.Next.builder()
+                                    ContractV2.Subscription.BillingPeriods.Next.builder()
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -2681,7 +2694,7 @@ internal class ContractV2Test {
                                         .build()
                                 )
                                 .previous(
-                                    Subscription.BillingPeriods.Previous.builder()
+                                    ContractV2.Subscription.BillingPeriods.Previous.builder()
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
@@ -2692,18 +2705,21 @@ internal class ContractV2Test {
                                 )
                                 .build()
                         )
-                        .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                        .collectionSchedule(ContractV2.Subscription.CollectionSchedule.ADVANCE)
                         .proration(
-                            Subscription.Proration.builder()
+                            ContractV2.Subscription.Proration.builder()
                                 .invoiceBehavior(
-                                    Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY
+                                    ContractV2.Subscription.Proration.InvoiceBehavior
+                                        .BILL_IMMEDIATELY
                                 )
                                 .isProrated(true)
                                 .build()
                         )
-                        .quantityManagementMode(Subscription.QuantityManagementMode.SEAT_BASED)
+                        .quantityManagementMode(
+                            ContractV2.Subscription.QuantityManagementMode.SEAT_BASED
+                        )
                         .addQuantitySchedule(
-                            Subscription.QuantitySchedule.builder()
+                            ContractV2.Subscription.QuantitySchedule.builder()
                                 .quantity(0.0)
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2711,12 +2727,13 @@ internal class ContractV2Test {
                         )
                         .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .subscriptionRate(
-                            Subscription.SubscriptionRate.builder()
+                            ContractV2.Subscription.SubscriptionRate.builder()
                                 .billingFrequency(
-                                    Subscription.SubscriptionRate.BillingFrequency.MONTHLY
+                                    ContractV2.Subscription.SubscriptionRate.BillingFrequency
+                                        .MONTHLY
                                 )
                                 .product(
-                                    Subscription.SubscriptionRate.Product.builder()
+                                    ContractV2.Subscription.SubscriptionRate.Product.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .name("name")
                                         .build()
@@ -2725,7 +2742,7 @@ internal class ContractV2Test {
                         )
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .customFields(
-                            Subscription.CustomFields.builder()
+                            ContractV2.Subscription.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -2734,7 +2751,9 @@ internal class ContractV2Test {
                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .name("name")
                         .seatConfig(
-                            Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build()
+                            ContractV2.Subscription.SeatConfig.builder()
+                                .seatGroupKey("seat_group_key")
+                                .build()
                         )
                         .build()
                 )

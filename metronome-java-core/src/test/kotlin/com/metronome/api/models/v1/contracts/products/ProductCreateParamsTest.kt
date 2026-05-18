@@ -41,6 +41,7 @@ internal class ProductCreateParamsTest {
                     .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
                     .build()
             )
+            .sqlBreakdownGranularity(ProductCreateParams.SqlBreakdownGranularity.HOUR)
             .addTag("string")
             .build()
     }
@@ -78,6 +79,7 @@ internal class ProductCreateParamsTest {
                         .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
                         .build()
                 )
+                .sqlBreakdownGranularity(ProductCreateParams.SqlBreakdownGranularity.HOUR)
                 .addTag("string")
                 .build()
 
@@ -116,6 +118,8 @@ internal class ProductCreateParamsTest {
                     .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
                     .build()
             )
+        assertThat(body.sqlBreakdownGranularity())
+            .contains(ProductCreateParams.SqlBreakdownGranularity.HOUR)
         assertThat(body.tags().getOrNull()).containsExactly("string")
     }
 

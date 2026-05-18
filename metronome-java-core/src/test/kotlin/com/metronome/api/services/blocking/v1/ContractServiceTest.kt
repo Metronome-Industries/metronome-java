@@ -21,6 +21,7 @@ import com.metronome.api.models.v1.contracts.ContractCreateParams
 import com.metronome.api.models.v1.contracts.ContractGetNetBalanceParams
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListParams
+import com.metronome.api.models.v1.contracts.ContractListSeatBalancesParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveRateScheduleParams
 import com.metronome.api.models.v1.contracts.ContractRetrieveSubscriptionQuantityHistoryParams
@@ -153,49 +154,6 @@ internal class ContractServiceTest {
                             )
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .paymentGateConfig(
-                                ContractCreateParams.Commit.PaymentGateConfig.builder()
-                                    .paymentGateType(
-                                        ContractCreateParams.Commit.PaymentGateConfig
-                                            .PaymentGateType
-                                            .NONE
-                                    )
-                                    .precalculatedTaxConfig(
-                                        ContractCreateParams.Commit.PaymentGateConfig
-                                            .PrecalculatedTaxConfig
-                                            .builder()
-                                            .taxAmount(0.0)
-                                            .taxName("tax_name")
-                                            .build()
-                                    )
-                                    .stripeConfig(
-                                        ContractCreateParams.Commit.PaymentGateConfig.StripeConfig
-                                            .builder()
-                                            .paymentType(
-                                                ContractCreateParams.Commit.PaymentGateConfig
-                                                    .StripeConfig
-                                                    .PaymentType
-                                                    .INVOICE
-                                            )
-                                            .invoiceMetadata(
-                                                ContractCreateParams.Commit.PaymentGateConfig
-                                                    .StripeConfig
-                                                    .InvoiceMetadata
-                                                    .builder()
-                                                    .putAdditionalProperty(
-                                                        "foo",
-                                                        JsonValue.from("string"),
-                                                    )
-                                                    .build()
-                                            )
-                                            .onSessionPayment(true)
-                                            .build()
-                                    )
-                                    .taxType(
-                                        ContractCreateParams.Commit.PaymentGateConfig.TaxType.NONE
-                                    )
-                                    .build()
-                            )
                             .priority(0.0)
                             .rateType(ContractCreateParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(0.0)
@@ -1127,48 +1085,6 @@ internal class ContractServiceTest {
                             )
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
-                            .paymentGateConfig(
-                                ContractAmendParams.Commit.PaymentGateConfig.builder()
-                                    .paymentGateType(
-                                        ContractAmendParams.Commit.PaymentGateConfig.PaymentGateType
-                                            .NONE
-                                    )
-                                    .precalculatedTaxConfig(
-                                        ContractAmendParams.Commit.PaymentGateConfig
-                                            .PrecalculatedTaxConfig
-                                            .builder()
-                                            .taxAmount(0.0)
-                                            .taxName("tax_name")
-                                            .build()
-                                    )
-                                    .stripeConfig(
-                                        ContractAmendParams.Commit.PaymentGateConfig.StripeConfig
-                                            .builder()
-                                            .paymentType(
-                                                ContractAmendParams.Commit.PaymentGateConfig
-                                                    .StripeConfig
-                                                    .PaymentType
-                                                    .INVOICE
-                                            )
-                                            .invoiceMetadata(
-                                                ContractAmendParams.Commit.PaymentGateConfig
-                                                    .StripeConfig
-                                                    .InvoiceMetadata
-                                                    .builder()
-                                                    .putAdditionalProperty(
-                                                        "foo",
-                                                        JsonValue.from("string"),
-                                                    )
-                                                    .build()
-                                            )
-                                            .onSessionPayment(true)
-                                            .build()
-                                    )
-                                    .taxType(
-                                        ContractAmendParams.Commit.PaymentGateConfig.TaxType.NONE
-                                    )
-                                    .build()
-                            )
                             .priority(0.0)
                             .rateType(ContractAmendParams.Commit.RateType.COMMIT_RATE)
                             .rolloverFraction(0.0)
@@ -1662,6 +1578,35 @@ internal class ContractServiceTest {
             )
 
         page.response().validate()
+    }
+
+    @Test
+    fun listSeatBalances() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val contractService = client.v1().contracts()
+
+        val response =
+            contractService.listSeatBalances(
+                ContractListSeatBalancesParams.builder()
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .coveringDate(OffsetDateTime.parse("2024-03-01T00:00:00.000Z"))
+                    .cursor("cursor")
+                    .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .includeCreditsAndCommits(true)
+                    .includeLedgers(true)
+                    .limit(25L)
+                    .addSeatId("string")
+                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .addSubscriptionId("8deed800-1b7a-495d-a207-6c52bac54dc9")
+                    .build()
+            )
+
+        response.validate()
     }
 
     @Test

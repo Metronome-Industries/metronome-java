@@ -5,6 +5,7 @@ package com.metronome.api.errors
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
+import com.metronome.api.core.jsonMapper
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
@@ -14,7 +15,11 @@ private constructor(
     private val headers: Headers,
     private val body: JsonValue,
     cause: Throwable?,
-) : MetronomeServiceException("$statusCode: $body", cause) {
+) :
+    MetronomeServiceException(
+        "$statusCode: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}",
+        cause,
+    ) {
 
     override fun statusCode(): Int = statusCode
 
