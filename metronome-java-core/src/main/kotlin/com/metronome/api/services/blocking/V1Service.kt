@@ -13,7 +13,6 @@ import com.metronome.api.services.blocking.v1.CustomerService
 import com.metronome.api.services.blocking.v1.DashboardService
 import com.metronome.api.services.blocking.v1.InvoiceService
 import com.metronome.api.services.blocking.v1.PackageService
-import com.metronome.api.services.blocking.v1.PaymentService
 import com.metronome.api.services.blocking.v1.PlanService
 import com.metronome.api.services.blocking.v1.PricingUnitService
 import com.metronome.api.services.blocking.v1.ServiceService
@@ -118,8 +117,6 @@ interface V1Service {
 
     fun packages(): PackageService
 
-    fun payments(): PaymentService
-
     /**
      * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
      * behavior.
@@ -219,8 +216,6 @@ interface V1Service {
         fun contracts(): ContractService.WithRawResponse
 
         fun packages(): PackageService.WithRawResponse
-
-        fun payments(): PaymentService.WithRawResponse
 
         /**
          * Use these endpoints to configure a billing API key, a webhook secret, or invoice

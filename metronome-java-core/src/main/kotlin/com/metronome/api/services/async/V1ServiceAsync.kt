@@ -13,7 +13,6 @@ import com.metronome.api.services.async.v1.CustomerServiceAsync
 import com.metronome.api.services.async.v1.DashboardServiceAsync
 import com.metronome.api.services.async.v1.InvoiceServiceAsync
 import com.metronome.api.services.async.v1.PackageServiceAsync
-import com.metronome.api.services.async.v1.PaymentServiceAsync
 import com.metronome.api.services.async.v1.PlanServiceAsync
 import com.metronome.api.services.async.v1.PricingUnitServiceAsync
 import com.metronome.api.services.async.v1.ServiceServiceAsync
@@ -118,8 +117,6 @@ interface V1ServiceAsync {
 
     fun packages(): PackageServiceAsync
 
-    fun payments(): PaymentServiceAsync
-
     /**
      * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
      * behavior.
@@ -219,8 +216,6 @@ interface V1ServiceAsync {
         fun contracts(): ContractServiceAsync.WithRawResponse
 
         fun packages(): PackageServiceAsync.WithRawResponse
-
-        fun payments(): PaymentServiceAsync.WithRawResponse
 
         /**
          * Use these endpoints to configure a billing API key, a webhook secret, or invoice
