@@ -15,7 +15,6 @@ import com.metronome.api.models.ScheduleDuration
 import com.metronome.api.models.SchedulePointInTime
 import com.metronome.api.models.v1.contracts.ContractCreateResponse
 import com.metronome.api.models.v1.contracts.ContractListBalancesResponse
-import com.metronome.api.models.v1.payments.PaymentStatus
 import java.time.OffsetDateTime
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -231,19 +230,5 @@ internal class ProGuardCompatibilityTest {
             )
 
         assertThat(roundtrippedContractListBalancesResponse).isEqualTo(contractListBalancesResponse)
-    }
-
-    @Test
-    fun paymentStatusRoundtrip() {
-        val jsonMapper = jsonMapper()
-        val paymentStatus = PaymentStatus.PENDING
-
-        val roundtrippedPaymentStatus =
-            jsonMapper.readValue(
-                jsonMapper.writeValueAsString(paymentStatus),
-                jacksonTypeRef<PaymentStatus>(),
-            )
-
-        assertThat(roundtrippedPaymentStatus).isEqualTo(paymentStatus)
     }
 }
