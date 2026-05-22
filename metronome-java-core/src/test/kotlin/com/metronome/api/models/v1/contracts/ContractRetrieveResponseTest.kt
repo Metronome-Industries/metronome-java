@@ -208,6 +208,11 @@ internal class ContractRetrieveResponseTest {
                                                 .addProductTag("string")
                                                 .build()
                                         )
+                                        .spendTrackerAttributes(
+                                            Commit.SpendTrackerAttributes.builder()
+                                                .countsAsDiscounted(true)
+                                                .build()
+                                        )
                                         .subscriptionConfig(
                                             Commit.SubscriptionConfig.builder()
                                                 .allocation(
@@ -786,6 +791,11 @@ internal class ContractRetrieveResponseTest {
                                                 .addProductTag("string")
                                                 .build()
                                         )
+                                        .spendTrackerAttributes(
+                                            Commit.SpendTrackerAttributes.builder()
+                                                .countsAsDiscounted(true)
+                                                .build()
+                                        )
                                         .subscriptionConfig(
                                             Commit.SubscriptionConfig.builder()
                                                 .allocation(
@@ -1287,6 +1297,15 @@ internal class ContractRetrieveResponseTest {
                                                 .DiscountConfiguration
                                                 .builder()
                                                 .paymentFraction(0.0)
+                                                .cap(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .DiscountConfiguration
+                                                        .Cap
+                                                        .builder()
+                                                        .amount(0.0)
+                                                        .spendTrackerAlias("spend_tracker_alias")
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                         .build()
@@ -1647,6 +1666,61 @@ internal class ContractRetrieveResponseTest {
                                             SpendThresholdConfiguration.DiscountConfiguration
                                                 .builder()
                                                 .paymentFraction(0.0)
+                                                .cap(
+                                                    SpendThresholdConfiguration
+                                                        .DiscountConfiguration
+                                                        .Cap
+                                                        .builder()
+                                                        .amount(0.0)
+                                                        .spendTrackerAlias("spend_tracker_alias")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .addSpendTracker(
+                                    ContractWithoutAmendments.SpendTracker.builder()
+                                        .alias("alias")
+                                        .addApplicableSpendSpecifier(
+                                            ContractWithoutAmendments.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .builder()
+                                                .addSource(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .Source
+                                                        .THRESHOLD_RECHARGE
+                                                )
+                                                .spendType(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .SpendType
+                                                        .COMMIT_PURCHASE
+                                                )
+                                                .discounted(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .Discounted
+                                                        .ANY
+                                                )
+                                                .build()
+                                        )
+                                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .resetFrequency(
+                                            ContractWithoutAmendments.SpendTracker.ResetFrequency
+                                                .BILLING_PERIOD
+                                        )
+                                        .accumulatedSpend(
+                                            ContractWithoutAmendments.SpendTracker.AccumulatedSpend
+                                                .builder()
+                                                .amount(0.0)
+                                                .periodEndingBefore(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
+                                                .periodStartingAt(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
                                                 .build()
                                         )
                                         .build()
@@ -1851,6 +1925,11 @@ internal class ContractRetrieveResponseTest {
                                                 .addProductTag("string")
                                                 .build()
                                         )
+                                        .spendTrackerAttributes(
+                                            Commit.SpendTrackerAttributes.builder()
+                                                .countsAsDiscounted(true)
+                                                .build()
+                                        )
                                         .subscriptionConfig(
                                             Commit.SubscriptionConfig.builder()
                                                 .allocation(
@@ -2352,6 +2431,15 @@ internal class ContractRetrieveResponseTest {
                                                 .DiscountConfiguration
                                                 .builder()
                                                 .paymentFraction(0.0)
+                                                .cap(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .DiscountConfiguration
+                                                        .Cap
+                                                        .builder()
+                                                        .amount(0.0)
+                                                        .spendTrackerAlias("spend_tracker_alias")
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                         .build()
@@ -2712,6 +2800,61 @@ internal class ContractRetrieveResponseTest {
                                             SpendThresholdConfiguration.DiscountConfiguration
                                                 .builder()
                                                 .paymentFraction(0.0)
+                                                .cap(
+                                                    SpendThresholdConfiguration
+                                                        .DiscountConfiguration
+                                                        .Cap
+                                                        .builder()
+                                                        .amount(0.0)
+                                                        .spendTrackerAlias("spend_tracker_alias")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .addSpendTracker(
+                                    ContractWithoutAmendments.SpendTracker.builder()
+                                        .alias("alias")
+                                        .addApplicableSpendSpecifier(
+                                            ContractWithoutAmendments.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .builder()
+                                                .addSource(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .Source
+                                                        .THRESHOLD_RECHARGE
+                                                )
+                                                .spendType(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .SpendType
+                                                        .COMMIT_PURCHASE
+                                                )
+                                                .discounted(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .Discounted
+                                                        .ANY
+                                                )
+                                                .build()
+                                        )
+                                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .resetFrequency(
+                                            ContractWithoutAmendments.SpendTracker.ResetFrequency
+                                                .BILLING_PERIOD
+                                        )
+                                        .accumulatedSpend(
+                                            ContractWithoutAmendments.SpendTracker.AccumulatedSpend
+                                                .builder()
+                                                .amount(0.0)
+                                                .periodEndingBefore(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
+                                                .periodStartingAt(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
                                                 .build()
                                         )
                                         .build()
@@ -2852,6 +2995,15 @@ internal class ContractRetrieveResponseTest {
                                     PrepaidBalanceThresholdConfiguration.DiscountConfiguration
                                         .builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -2903,6 +3055,48 @@ internal class ContractRetrieveResponseTest {
                                 .discountConfiguration(
                                     SpendThresholdConfiguration.DiscountConfiguration.builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            SpendThresholdConfiguration.DiscountConfiguration.Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addSpendTracker(
+                            Contract.SpendTracker.builder()
+                                .alias("alias")
+                                .addApplicableSpendSpecifier(
+                                    Contract.SpendTracker.ApplicableSpendSpecifier.builder()
+                                        .addSource(
+                                            Contract.SpendTracker.ApplicableSpendSpecifier.Source
+                                                .THRESHOLD_RECHARGE
+                                        )
+                                        .spendType(
+                                            Contract.SpendTracker.ApplicableSpendSpecifier.SpendType
+                                                .COMMIT_PURCHASE
+                                        )
+                                        .discounted(
+                                            Contract.SpendTracker.ApplicableSpendSpecifier
+                                                .Discounted
+                                                .ANY
+                                        )
+                                        .build()
+                                )
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .resetFrequency(Contract.SpendTracker.ResetFrequency.BILLING_PERIOD)
+                                .accumulatedSpend(
+                                    Contract.SpendTracker.AccumulatedSpend.builder()
+                                        .amount(0.0)
+                                        .periodEndingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .periodStartingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -3158,6 +3352,11 @@ internal class ContractRetrieveResponseTest {
                                             )
                                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .addProductTag("string")
+                                            .build()
+                                    )
+                                    .spendTrackerAttributes(
+                                        Commit.SpendTrackerAttributes.builder()
+                                            .countsAsDiscounted(true)
                                             .build()
                                     )
                                     .subscriptionConfig(
@@ -3689,6 +3888,11 @@ internal class ContractRetrieveResponseTest {
                                             .addProductTag("string")
                                             .build()
                                     )
+                                    .spendTrackerAttributes(
+                                        Commit.SpendTrackerAttributes.builder()
+                                            .countsAsDiscounted(true)
+                                            .build()
+                                    )
                                     .subscriptionConfig(
                                         Commit.SubscriptionConfig.builder()
                                             .allocation(
@@ -4151,6 +4355,15 @@ internal class ContractRetrieveResponseTest {
                                         PrepaidBalanceThresholdConfiguration.DiscountConfiguration
                                             .builder()
                                             .paymentFraction(0.0)
+                                            .cap(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .DiscountConfiguration
+                                                    .Cap
+                                                    .builder()
+                                                    .amount(0.0)
+                                                    .spendTrackerAlias("spend_tracker_alias")
+                                                    .build()
+                                            )
                                             .build()
                                     )
                                     .build()
@@ -4470,6 +4683,60 @@ internal class ContractRetrieveResponseTest {
                                     .discountConfiguration(
                                         SpendThresholdConfiguration.DiscountConfiguration.builder()
                                             .paymentFraction(0.0)
+                                            .cap(
+                                                SpendThresholdConfiguration.DiscountConfiguration
+                                                    .Cap
+                                                    .builder()
+                                                    .amount(0.0)
+                                                    .spendTrackerAlias("spend_tracker_alias")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .addSpendTracker(
+                                ContractWithoutAmendments.SpendTracker.builder()
+                                    .alias("alias")
+                                    .addApplicableSpendSpecifier(
+                                        ContractWithoutAmendments.SpendTracker
+                                            .ApplicableSpendSpecifier
+                                            .builder()
+                                            .addSource(
+                                                ContractWithoutAmendments.SpendTracker
+                                                    .ApplicableSpendSpecifier
+                                                    .Source
+                                                    .THRESHOLD_RECHARGE
+                                            )
+                                            .spendType(
+                                                ContractWithoutAmendments.SpendTracker
+                                                    .ApplicableSpendSpecifier
+                                                    .SpendType
+                                                    .COMMIT_PURCHASE
+                                            )
+                                            .discounted(
+                                                ContractWithoutAmendments.SpendTracker
+                                                    .ApplicableSpendSpecifier
+                                                    .Discounted
+                                                    .ANY
+                                            )
+                                            .build()
+                                    )
+                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .resetFrequency(
+                                        ContractWithoutAmendments.SpendTracker.ResetFrequency
+                                            .BILLING_PERIOD
+                                    )
+                                    .accumulatedSpend(
+                                        ContractWithoutAmendments.SpendTracker.AccumulatedSpend
+                                            .builder()
+                                            .amount(0.0)
+                                            .periodEndingBefore(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
+                                            .periodStartingAt(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
                                             .build()
                                     )
                                     .build()
@@ -4662,6 +4929,11 @@ internal class ContractRetrieveResponseTest {
                                             .addProductTag("string")
                                             .build()
                                     )
+                                    .spendTrackerAttributes(
+                                        Commit.SpendTrackerAttributes.builder()
+                                            .countsAsDiscounted(true)
+                                            .build()
+                                    )
                                     .subscriptionConfig(
                                         Commit.SubscriptionConfig.builder()
                                             .allocation(
@@ -5124,6 +5396,15 @@ internal class ContractRetrieveResponseTest {
                                         PrepaidBalanceThresholdConfiguration.DiscountConfiguration
                                             .builder()
                                             .paymentFraction(0.0)
+                                            .cap(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .DiscountConfiguration
+                                                    .Cap
+                                                    .builder()
+                                                    .amount(0.0)
+                                                    .spendTrackerAlias("spend_tracker_alias")
+                                                    .build()
+                                            )
                                             .build()
                                     )
                                     .build()
@@ -5443,6 +5724,60 @@ internal class ContractRetrieveResponseTest {
                                     .discountConfiguration(
                                         SpendThresholdConfiguration.DiscountConfiguration.builder()
                                             .paymentFraction(0.0)
+                                            .cap(
+                                                SpendThresholdConfiguration.DiscountConfiguration
+                                                    .Cap
+                                                    .builder()
+                                                    .amount(0.0)
+                                                    .spendTrackerAlias("spend_tracker_alias")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .addSpendTracker(
+                                ContractWithoutAmendments.SpendTracker.builder()
+                                    .alias("alias")
+                                    .addApplicableSpendSpecifier(
+                                        ContractWithoutAmendments.SpendTracker
+                                            .ApplicableSpendSpecifier
+                                            .builder()
+                                            .addSource(
+                                                ContractWithoutAmendments.SpendTracker
+                                                    .ApplicableSpendSpecifier
+                                                    .Source
+                                                    .THRESHOLD_RECHARGE
+                                            )
+                                            .spendType(
+                                                ContractWithoutAmendments.SpendTracker
+                                                    .ApplicableSpendSpecifier
+                                                    .SpendType
+                                                    .COMMIT_PURCHASE
+                                            )
+                                            .discounted(
+                                                ContractWithoutAmendments.SpendTracker
+                                                    .ApplicableSpendSpecifier
+                                                    .Discounted
+                                                    .ANY
+                                            )
+                                            .build()
+                                    )
+                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .resetFrequency(
+                                        ContractWithoutAmendments.SpendTracker.ResetFrequency
+                                            .BILLING_PERIOD
+                                    )
+                                    .accumulatedSpend(
+                                        ContractWithoutAmendments.SpendTracker.AccumulatedSpend
+                                            .builder()
+                                            .amount(0.0)
+                                            .periodEndingBefore(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
+                                            .periodStartingAt(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
                                             .build()
                                     )
                                     .build()
@@ -5578,6 +5913,14 @@ internal class ContractRetrieveResponseTest {
                             .discountConfiguration(
                                 PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                                     .paymentFraction(0.0)
+                                    .cap(
+                                        PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                            .Cap
+                                            .builder()
+                                            .amount(0.0)
+                                            .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .build()
@@ -5626,6 +5969,47 @@ internal class ContractRetrieveResponseTest {
                             .discountConfiguration(
                                 SpendThresholdConfiguration.DiscountConfiguration.builder()
                                     .paymentFraction(0.0)
+                                    .cap(
+                                        SpendThresholdConfiguration.DiscountConfiguration.Cap
+                                            .builder()
+                                            .amount(0.0)
+                                            .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .addSpendTracker(
+                        Contract.SpendTracker.builder()
+                            .alias("alias")
+                            .addApplicableSpendSpecifier(
+                                Contract.SpendTracker.ApplicableSpendSpecifier.builder()
+                                    .addSource(
+                                        Contract.SpendTracker.ApplicableSpendSpecifier.Source
+                                            .THRESHOLD_RECHARGE
+                                    )
+                                    .spendType(
+                                        Contract.SpendTracker.ApplicableSpendSpecifier.SpendType
+                                            .COMMIT_PURCHASE
+                                    )
+                                    .discounted(
+                                        Contract.SpendTracker.ApplicableSpendSpecifier.Discounted
+                                            .ANY
+                                    )
+                                    .build()
+                            )
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .resetFrequency(Contract.SpendTracker.ResetFrequency.BILLING_PERIOD)
+                            .accumulatedSpend(
+                                Contract.SpendTracker.AccumulatedSpend.builder()
+                                    .amount(0.0)
+                                    .periodEndingBefore(
+                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                    )
+                                    .periodStartingAt(
+                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                    )
                                     .build()
                             )
                             .build()
@@ -5891,6 +6275,11 @@ internal class ContractRetrieveResponseTest {
                                                 )
                                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .addProductTag("string")
+                                                .build()
+                                        )
+                                        .spendTrackerAttributes(
+                                            Commit.SpendTrackerAttributes.builder()
+                                                .countsAsDiscounted(true)
                                                 .build()
                                         )
                                         .subscriptionConfig(
@@ -6471,6 +6860,11 @@ internal class ContractRetrieveResponseTest {
                                                 .addProductTag("string")
                                                 .build()
                                         )
+                                        .spendTrackerAttributes(
+                                            Commit.SpendTrackerAttributes.builder()
+                                                .countsAsDiscounted(true)
+                                                .build()
+                                        )
                                         .subscriptionConfig(
                                             Commit.SubscriptionConfig.builder()
                                                 .allocation(
@@ -6972,6 +7366,15 @@ internal class ContractRetrieveResponseTest {
                                                 .DiscountConfiguration
                                                 .builder()
                                                 .paymentFraction(0.0)
+                                                .cap(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .DiscountConfiguration
+                                                        .Cap
+                                                        .builder()
+                                                        .amount(0.0)
+                                                        .spendTrackerAlias("spend_tracker_alias")
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                         .build()
@@ -7332,6 +7735,61 @@ internal class ContractRetrieveResponseTest {
                                             SpendThresholdConfiguration.DiscountConfiguration
                                                 .builder()
                                                 .paymentFraction(0.0)
+                                                .cap(
+                                                    SpendThresholdConfiguration
+                                                        .DiscountConfiguration
+                                                        .Cap
+                                                        .builder()
+                                                        .amount(0.0)
+                                                        .spendTrackerAlias("spend_tracker_alias")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .addSpendTracker(
+                                    ContractWithoutAmendments.SpendTracker.builder()
+                                        .alias("alias")
+                                        .addApplicableSpendSpecifier(
+                                            ContractWithoutAmendments.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .builder()
+                                                .addSource(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .Source
+                                                        .THRESHOLD_RECHARGE
+                                                )
+                                                .spendType(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .SpendType
+                                                        .COMMIT_PURCHASE
+                                                )
+                                                .discounted(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .Discounted
+                                                        .ANY
+                                                )
+                                                .build()
+                                        )
+                                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .resetFrequency(
+                                            ContractWithoutAmendments.SpendTracker.ResetFrequency
+                                                .BILLING_PERIOD
+                                        )
+                                        .accumulatedSpend(
+                                            ContractWithoutAmendments.SpendTracker.AccumulatedSpend
+                                                .builder()
+                                                .amount(0.0)
+                                                .periodEndingBefore(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
+                                                .periodStartingAt(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
                                                 .build()
                                         )
                                         .build()
@@ -7536,6 +7994,11 @@ internal class ContractRetrieveResponseTest {
                                                 .addProductTag("string")
                                                 .build()
                                         )
+                                        .spendTrackerAttributes(
+                                            Commit.SpendTrackerAttributes.builder()
+                                                .countsAsDiscounted(true)
+                                                .build()
+                                        )
                                         .subscriptionConfig(
                                             Commit.SubscriptionConfig.builder()
                                                 .allocation(
@@ -8037,6 +8500,15 @@ internal class ContractRetrieveResponseTest {
                                                 .DiscountConfiguration
                                                 .builder()
                                                 .paymentFraction(0.0)
+                                                .cap(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .DiscountConfiguration
+                                                        .Cap
+                                                        .builder()
+                                                        .amount(0.0)
+                                                        .spendTrackerAlias("spend_tracker_alias")
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                         .build()
@@ -8397,6 +8869,61 @@ internal class ContractRetrieveResponseTest {
                                             SpendThresholdConfiguration.DiscountConfiguration
                                                 .builder()
                                                 .paymentFraction(0.0)
+                                                .cap(
+                                                    SpendThresholdConfiguration
+                                                        .DiscountConfiguration
+                                                        .Cap
+                                                        .builder()
+                                                        .amount(0.0)
+                                                        .spendTrackerAlias("spend_tracker_alias")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .addSpendTracker(
+                                    ContractWithoutAmendments.SpendTracker.builder()
+                                        .alias("alias")
+                                        .addApplicableSpendSpecifier(
+                                            ContractWithoutAmendments.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .builder()
+                                                .addSource(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .Source
+                                                        .THRESHOLD_RECHARGE
+                                                )
+                                                .spendType(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .SpendType
+                                                        .COMMIT_PURCHASE
+                                                )
+                                                .discounted(
+                                                    ContractWithoutAmendments.SpendTracker
+                                                        .ApplicableSpendSpecifier
+                                                        .Discounted
+                                                        .ANY
+                                                )
+                                                .build()
+                                        )
+                                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .resetFrequency(
+                                            ContractWithoutAmendments.SpendTracker.ResetFrequency
+                                                .BILLING_PERIOD
+                                        )
+                                        .accumulatedSpend(
+                                            ContractWithoutAmendments.SpendTracker.AccumulatedSpend
+                                                .builder()
+                                                .amount(0.0)
+                                                .periodEndingBefore(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
+                                                .periodStartingAt(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
                                                 .build()
                                         )
                                         .build()
@@ -8537,6 +9064,15 @@ internal class ContractRetrieveResponseTest {
                                     PrepaidBalanceThresholdConfiguration.DiscountConfiguration
                                         .builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -8588,6 +9124,48 @@ internal class ContractRetrieveResponseTest {
                                 .discountConfiguration(
                                     SpendThresholdConfiguration.DiscountConfiguration.builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            SpendThresholdConfiguration.DiscountConfiguration.Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addSpendTracker(
+                            Contract.SpendTracker.builder()
+                                .alias("alias")
+                                .addApplicableSpendSpecifier(
+                                    Contract.SpendTracker.ApplicableSpendSpecifier.builder()
+                                        .addSource(
+                                            Contract.SpendTracker.ApplicableSpendSpecifier.Source
+                                                .THRESHOLD_RECHARGE
+                                        )
+                                        .spendType(
+                                            Contract.SpendTracker.ApplicableSpendSpecifier.SpendType
+                                                .COMMIT_PURCHASE
+                                        )
+                                        .discounted(
+                                            Contract.SpendTracker.ApplicableSpendSpecifier
+                                                .Discounted
+                                                .ANY
+                                        )
+                                        .build()
+                                )
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .resetFrequency(Contract.SpendTracker.ResetFrequency.BILLING_PERIOD)
+                                .accumulatedSpend(
+                                    Contract.SpendTracker.AccumulatedSpend.builder()
+                                        .amount(0.0)
+                                        .periodEndingBefore(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .periodStartingAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
                                         .build()
                                 )
                                 .build()

@@ -208,6 +208,9 @@ internal class ProGuardCompatibilityTest {
                             .addProductTag("string")
                             .build()
                     )
+                    .spendTrackerAttributes(
+                        Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build()
+                    )
                     .subscriptionConfig(
                         Commit.SubscriptionConfig.builder()
                             .allocation(Commit.SubscriptionConfig.Allocation.INDIVIDUAL)

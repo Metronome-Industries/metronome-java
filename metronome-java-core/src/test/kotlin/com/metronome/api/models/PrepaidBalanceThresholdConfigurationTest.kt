@@ -69,6 +69,12 @@ internal class PrepaidBalanceThresholdConfigurationTest {
                 .discountConfiguration(
                     PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                         .paymentFraction(0.0)
+                        .cap(
+                            PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                .amount(0.0)
+                                .spendTrackerAlias("spend_tracker_alias")
+                                .build()
+                        )
                         .build()
                 )
                 .build()
@@ -132,6 +138,12 @@ internal class PrepaidBalanceThresholdConfigurationTest {
             .contains(
                 PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                     .paymentFraction(0.0)
+                    .cap(
+                        PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                            .amount(0.0)
+                            .spendTrackerAlias("spend_tracker_alias")
+                            .build()
+                    )
                     .build()
             )
     }
@@ -196,6 +208,12 @@ internal class PrepaidBalanceThresholdConfigurationTest {
                 .discountConfiguration(
                     PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                         .paymentFraction(0.0)
+                        .cap(
+                            PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                .amount(0.0)
+                                .spendTrackerAlias("spend_tracker_alias")
+                                .build()
+                        )
                         .build()
                 )
                 .build()

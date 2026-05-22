@@ -49,6 +49,12 @@ internal class SpendThresholdConfigurationV2Test {
                 .discountConfiguration(
                     SpendThresholdConfigurationV2.DiscountConfiguration.builder()
                         .paymentFraction(0.0)
+                        .cap(
+                            SpendThresholdConfigurationV2.DiscountConfiguration.Cap.builder()
+                                .amount(0.0)
+                                .spendTrackerAlias("spend_tracker_alias")
+                                .build()
+                        )
                         .build()
                 )
                 .build()
@@ -91,6 +97,12 @@ internal class SpendThresholdConfigurationV2Test {
             .contains(
                 SpendThresholdConfigurationV2.DiscountConfiguration.builder()
                     .paymentFraction(0.0)
+                    .cap(
+                        SpendThresholdConfigurationV2.DiscountConfiguration.Cap.builder()
+                            .amount(0.0)
+                            .spendTrackerAlias("spend_tracker_alias")
+                            .build()
+                    )
                     .build()
             )
     }
@@ -135,6 +147,12 @@ internal class SpendThresholdConfigurationV2Test {
                 .discountConfiguration(
                     SpendThresholdConfigurationV2.DiscountConfiguration.builder()
                         .paymentFraction(0.0)
+                        .cap(
+                            SpendThresholdConfigurationV2.DiscountConfiguration.Cap.builder()
+                                .amount(0.0)
+                                .spendTrackerAlias("spend_tracker_alias")
+                                .build()
+                        )
                         .build()
                 )
                 .build()

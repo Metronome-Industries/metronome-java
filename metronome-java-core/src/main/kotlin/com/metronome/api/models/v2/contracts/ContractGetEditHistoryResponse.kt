@@ -27899,16 +27899,26 @@ private constructor(
             class DiscountConfiguration
             @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
+                private val cap: JsonField<Cap>,
                 private val paymentFraction: JsonField<Double>,
                 private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
 
                 @JsonCreator
                 private constructor(
+                    @JsonProperty("cap") @ExcludeMissing cap: JsonField<Cap> = JsonMissing.of(),
                     @JsonProperty("payment_fraction")
                     @ExcludeMissing
-                    paymentFraction: JsonField<Double> = JsonMissing.of()
-                ) : this(paymentFraction, mutableMapOf())
+                    paymentFraction: JsonField<Double> = JsonMissing.of(),
+                ) : this(cap, paymentFraction, mutableMapOf())
+
+                /**
+                 * Update the discount cap. Set to null to remove an existing cap.
+                 *
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun cap(): Optional<Cap> = cap.getOptional("cap")
 
                 /**
                  * The fraction of the original amount that the customer pays after applying the
@@ -27920,6 +27930,13 @@ private constructor(
                  */
                 fun paymentFraction(): Optional<Double> =
                     paymentFraction.getOptional("payment_fraction")
+
+                /**
+                 * Returns the raw JSON value of [cap].
+                 *
+                 * Unlike [cap], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("cap") @ExcludeMissing fun _cap(): JsonField<Cap> = cap
 
                 /**
                  * Returns the raw JSON value of [paymentFraction].
@@ -27955,15 +27972,32 @@ private constructor(
                 /** A builder for [DiscountConfiguration]. */
                 class Builder internal constructor() {
 
+                    private var cap: JsonField<Cap> = JsonMissing.of()
                     private var paymentFraction: JsonField<Double> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discountConfiguration: DiscountConfiguration) = apply {
+                        cap = discountConfiguration.cap
                         paymentFraction = discountConfiguration.paymentFraction
                         additionalProperties =
                             discountConfiguration.additionalProperties.toMutableMap()
                     }
+
+                    /** Update the discount cap. Set to null to remove an existing cap. */
+                    fun cap(cap: Cap?) = cap(JsonField.ofNullable(cap))
+
+                    /** Alias for calling [Builder.cap] with `cap.orElse(null)`. */
+                    fun cap(cap: Optional<Cap>) = cap(cap.getOrNull())
+
+                    /**
+                     * Sets [Builder.cap] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.cap] with a well-typed [Cap] value instead.
+                     * This method is primarily for setting the field to an undocumented or not yet
+                     * supported value.
+                     */
+                    fun cap(cap: JsonField<Cap>) = apply { this.cap = cap }
 
                     /**
                      * The fraction of the original amount that the customer pays after applying the
@@ -28027,7 +28061,11 @@ private constructor(
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
                     fun build(): DiscountConfiguration =
-                        DiscountConfiguration(paymentFraction, additionalProperties.toMutableMap())
+                        DiscountConfiguration(
+                            cap,
+                            paymentFraction,
+                            additionalProperties.toMutableMap(),
+                        )
                 }
 
                 private var validated: Boolean = false
@@ -28047,6 +28085,7 @@ private constructor(
                         return@apply
                     }
 
+                    cap().ifPresent { it.validate() }
                     paymentFraction()
                     validated = true
                 }
@@ -28066,7 +28105,240 @@ private constructor(
                  * Used for best match union deserialization.
                  */
                 @JvmSynthetic
-                internal fun validity(): Int = (if (paymentFraction.asKnown().isPresent) 1 else 0)
+                internal fun validity(): Int =
+                    (cap.asKnown().getOrNull()?.validity() ?: 0) +
+                        (if (paymentFraction.asKnown().isPresent) 1 else 0)
+
+                /** Update the discount cap. Set to null to remove an existing cap. */
+                class Cap
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val amount: JsonField<Double>,
+                    private val spendTrackerAlias: JsonField<String>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("amount")
+                        @ExcludeMissing
+                        amount: JsonField<Double> = JsonMissing.of(),
+                        @JsonProperty("spend_tracker_alias")
+                        @ExcludeMissing
+                        spendTrackerAlias: JsonField<String> = JsonMissing.of(),
+                    ) : this(amount, spendTrackerAlias, mutableMapOf())
+
+                    /**
+                     * Accumulated spend ceiling above which the discount stops applying.
+                     *
+                     * @throws MetronomeInvalidDataException if the JSON field has an unexpected
+                     *   type or is unexpectedly missing or null (e.g. if the server responded with
+                     *   an unexpected value).
+                     */
+                    fun amount(): Double = amount.getRequired("amount")
+
+                    /**
+                     * Alias of the spend tracker this cap is measured against.
+                     *
+                     * @throws MetronomeInvalidDataException if the JSON field has an unexpected
+                     *   type or is unexpectedly missing or null (e.g. if the server responded with
+                     *   an unexpected value).
+                     */
+                    fun spendTrackerAlias(): String =
+                        spendTrackerAlias.getRequired("spend_tracker_alias")
+
+                    /**
+                     * Returns the raw JSON value of [amount].
+                     *
+                     * Unlike [amount], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
+                    @JsonProperty("amount")
+                    @ExcludeMissing
+                    fun _amount(): JsonField<Double> = amount
+
+                    /**
+                     * Returns the raw JSON value of [spendTrackerAlias].
+                     *
+                     * Unlike [spendTrackerAlias], this method doesn't throw if the JSON field has
+                     * an unexpected type.
+                     */
+                    @JsonProperty("spend_tracker_alias")
+                    @ExcludeMissing
+                    fun _spendTrackerAlias(): JsonField<String> = spendTrackerAlias
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /**
+                         * Returns a mutable builder for constructing an instance of [Cap].
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .amount()
+                         * .spendTrackerAlias()
+                         * ```
+                         */
+                        @JvmStatic fun builder() = Builder()
+                    }
+
+                    /** A builder for [Cap]. */
+                    class Builder internal constructor() {
+
+                        private var amount: JsonField<Double>? = null
+                        private var spendTrackerAlias: JsonField<String>? = null
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        @JvmSynthetic
+                        internal fun from(cap: Cap) = apply {
+                            amount = cap.amount
+                            spendTrackerAlias = cap.spendTrackerAlias
+                            additionalProperties = cap.additionalProperties.toMutableMap()
+                        }
+
+                        /** Accumulated spend ceiling above which the discount stops applying. */
+                        fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                        /**
+                         * Sets [Builder.amount] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.amount] with a well-typed [Double] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
+                        fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                        /** Alias of the spend tracker this cap is measured against. */
+                        fun spendTrackerAlias(spendTrackerAlias: String) =
+                            spendTrackerAlias(JsonField.of(spendTrackerAlias))
+
+                        /**
+                         * Sets [Builder.spendTrackerAlias] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.spendTrackerAlias] with a well-typed
+                         * [String] value instead. This method is primarily for setting the field to
+                         * an undocumented or not yet supported value.
+                         */
+                        fun spendTrackerAlias(spendTrackerAlias: JsonField<String>) = apply {
+                            this.spendTrackerAlias = spendTrackerAlias
+                        }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Cap].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .amount()
+                         * .spendTrackerAlias()
+                         * ```
+                         *
+                         * @throws IllegalStateException if any required field is unset.
+                         */
+                        fun build(): Cap =
+                            Cap(
+                                checkRequired("amount", amount),
+                                checkRequired("spendTrackerAlias", spendTrackerAlias),
+                                additionalProperties.toMutableMap(),
+                            )
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws MetronomeInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Cap = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        amount()
+                        spendTrackerAlias()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: MetronomeInvalidDataException) {
+                            false
+                        }
+
+                    /**
+                     * Returns a score indicating how many valid values are contained in this object
+                     * recursively.
+                     *
+                     * Used for best match union deserialization.
+                     */
+                    @JvmSynthetic
+                    internal fun validity(): Int =
+                        (if (amount.asKnown().isPresent) 1 else 0) +
+                            (if (spendTrackerAlias.asKnown().isPresent) 1 else 0)
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Cap &&
+                            amount == other.amount &&
+                            spendTrackerAlias == other.spendTrackerAlias &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(amount, spendTrackerAlias, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Cap{amount=$amount, spendTrackerAlias=$spendTrackerAlias, additionalProperties=$additionalProperties}"
+                }
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -28074,18 +28346,19 @@ private constructor(
                     }
 
                     return other is DiscountConfiguration &&
+                        cap == other.cap &&
                         paymentFraction == other.paymentFraction &&
                         additionalProperties == other.additionalProperties
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(paymentFraction, additionalProperties)
+                    Objects.hash(cap, paymentFraction, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "DiscountConfiguration{paymentFraction=$paymentFraction, additionalProperties=$additionalProperties}"
+                    "DiscountConfiguration{cap=$cap, paymentFraction=$paymentFraction, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -31613,16 +31886,26 @@ private constructor(
             class DiscountConfiguration
             @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
+                private val cap: JsonField<Cap>,
                 private val paymentFraction: JsonField<Double>,
                 private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
 
                 @JsonCreator
                 private constructor(
+                    @JsonProperty("cap") @ExcludeMissing cap: JsonField<Cap> = JsonMissing.of(),
                     @JsonProperty("payment_fraction")
                     @ExcludeMissing
-                    paymentFraction: JsonField<Double> = JsonMissing.of()
-                ) : this(paymentFraction, mutableMapOf())
+                    paymentFraction: JsonField<Double> = JsonMissing.of(),
+                ) : this(cap, paymentFraction, mutableMapOf())
+
+                /**
+                 * Update the discount cap. Set to null to remove an existing cap.
+                 *
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun cap(): Optional<Cap> = cap.getOptional("cap")
 
                 /**
                  * The fraction of the original amount that the customer pays after applying the
@@ -31634,6 +31917,13 @@ private constructor(
                  */
                 fun paymentFraction(): Optional<Double> =
                     paymentFraction.getOptional("payment_fraction")
+
+                /**
+                 * Returns the raw JSON value of [cap].
+                 *
+                 * Unlike [cap], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("cap") @ExcludeMissing fun _cap(): JsonField<Cap> = cap
 
                 /**
                  * Returns the raw JSON value of [paymentFraction].
@@ -31669,15 +31959,32 @@ private constructor(
                 /** A builder for [DiscountConfiguration]. */
                 class Builder internal constructor() {
 
+                    private var cap: JsonField<Cap> = JsonMissing.of()
                     private var paymentFraction: JsonField<Double> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
                     internal fun from(discountConfiguration: DiscountConfiguration) = apply {
+                        cap = discountConfiguration.cap
                         paymentFraction = discountConfiguration.paymentFraction
                         additionalProperties =
                             discountConfiguration.additionalProperties.toMutableMap()
                     }
+
+                    /** Update the discount cap. Set to null to remove an existing cap. */
+                    fun cap(cap: Cap?) = cap(JsonField.ofNullable(cap))
+
+                    /** Alias for calling [Builder.cap] with `cap.orElse(null)`. */
+                    fun cap(cap: Optional<Cap>) = cap(cap.getOrNull())
+
+                    /**
+                     * Sets [Builder.cap] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.cap] with a well-typed [Cap] value instead.
+                     * This method is primarily for setting the field to an undocumented or not yet
+                     * supported value.
+                     */
+                    fun cap(cap: JsonField<Cap>) = apply { this.cap = cap }
 
                     /**
                      * The fraction of the original amount that the customer pays after applying the
@@ -31741,7 +32048,11 @@ private constructor(
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
                     fun build(): DiscountConfiguration =
-                        DiscountConfiguration(paymentFraction, additionalProperties.toMutableMap())
+                        DiscountConfiguration(
+                            cap,
+                            paymentFraction,
+                            additionalProperties.toMutableMap(),
+                        )
                 }
 
                 private var validated: Boolean = false
@@ -31761,6 +32072,7 @@ private constructor(
                         return@apply
                     }
 
+                    cap().ifPresent { it.validate() }
                     paymentFraction()
                     validated = true
                 }
@@ -31780,7 +32092,240 @@ private constructor(
                  * Used for best match union deserialization.
                  */
                 @JvmSynthetic
-                internal fun validity(): Int = (if (paymentFraction.asKnown().isPresent) 1 else 0)
+                internal fun validity(): Int =
+                    (cap.asKnown().getOrNull()?.validity() ?: 0) +
+                        (if (paymentFraction.asKnown().isPresent) 1 else 0)
+
+                /** Update the discount cap. Set to null to remove an existing cap. */
+                class Cap
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val amount: JsonField<Double>,
+                    private val spendTrackerAlias: JsonField<String>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("amount")
+                        @ExcludeMissing
+                        amount: JsonField<Double> = JsonMissing.of(),
+                        @JsonProperty("spend_tracker_alias")
+                        @ExcludeMissing
+                        spendTrackerAlias: JsonField<String> = JsonMissing.of(),
+                    ) : this(amount, spendTrackerAlias, mutableMapOf())
+
+                    /**
+                     * Accumulated spend ceiling above which the discount stops applying.
+                     *
+                     * @throws MetronomeInvalidDataException if the JSON field has an unexpected
+                     *   type or is unexpectedly missing or null (e.g. if the server responded with
+                     *   an unexpected value).
+                     */
+                    fun amount(): Double = amount.getRequired("amount")
+
+                    /**
+                     * Alias of the spend tracker this cap is measured against.
+                     *
+                     * @throws MetronomeInvalidDataException if the JSON field has an unexpected
+                     *   type or is unexpectedly missing or null (e.g. if the server responded with
+                     *   an unexpected value).
+                     */
+                    fun spendTrackerAlias(): String =
+                        spendTrackerAlias.getRequired("spend_tracker_alias")
+
+                    /**
+                     * Returns the raw JSON value of [amount].
+                     *
+                     * Unlike [amount], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
+                    @JsonProperty("amount")
+                    @ExcludeMissing
+                    fun _amount(): JsonField<Double> = amount
+
+                    /**
+                     * Returns the raw JSON value of [spendTrackerAlias].
+                     *
+                     * Unlike [spendTrackerAlias], this method doesn't throw if the JSON field has
+                     * an unexpected type.
+                     */
+                    @JsonProperty("spend_tracker_alias")
+                    @ExcludeMissing
+                    fun _spendTrackerAlias(): JsonField<String> = spendTrackerAlias
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /**
+                         * Returns a mutable builder for constructing an instance of [Cap].
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .amount()
+                         * .spendTrackerAlias()
+                         * ```
+                         */
+                        @JvmStatic fun builder() = Builder()
+                    }
+
+                    /** A builder for [Cap]. */
+                    class Builder internal constructor() {
+
+                        private var amount: JsonField<Double>? = null
+                        private var spendTrackerAlias: JsonField<String>? = null
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        @JvmSynthetic
+                        internal fun from(cap: Cap) = apply {
+                            amount = cap.amount
+                            spendTrackerAlias = cap.spendTrackerAlias
+                            additionalProperties = cap.additionalProperties.toMutableMap()
+                        }
+
+                        /** Accumulated spend ceiling above which the discount stops applying. */
+                        fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                        /**
+                         * Sets [Builder.amount] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.amount] with a well-typed [Double] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
+                        fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                        /** Alias of the spend tracker this cap is measured against. */
+                        fun spendTrackerAlias(spendTrackerAlias: String) =
+                            spendTrackerAlias(JsonField.of(spendTrackerAlias))
+
+                        /**
+                         * Sets [Builder.spendTrackerAlias] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.spendTrackerAlias] with a well-typed
+                         * [String] value instead. This method is primarily for setting the field to
+                         * an undocumented or not yet supported value.
+                         */
+                        fun spendTrackerAlias(spendTrackerAlias: JsonField<String>) = apply {
+                            this.spendTrackerAlias = spendTrackerAlias
+                        }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [Cap].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .amount()
+                         * .spendTrackerAlias()
+                         * ```
+                         *
+                         * @throws IllegalStateException if any required field is unset.
+                         */
+                        fun build(): Cap =
+                            Cap(
+                                checkRequired("amount", amount),
+                                checkRequired("spendTrackerAlias", spendTrackerAlias),
+                                additionalProperties.toMutableMap(),
+                            )
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws MetronomeInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Cap = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        amount()
+                        spendTrackerAlias()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: MetronomeInvalidDataException) {
+                            false
+                        }
+
+                    /**
+                     * Returns a score indicating how many valid values are contained in this object
+                     * recursively.
+                     *
+                     * Used for best match union deserialization.
+                     */
+                    @JvmSynthetic
+                    internal fun validity(): Int =
+                        (if (amount.asKnown().isPresent) 1 else 0) +
+                            (if (spendTrackerAlias.asKnown().isPresent) 1 else 0)
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Cap &&
+                            amount == other.amount &&
+                            spendTrackerAlias == other.spendTrackerAlias &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(amount, spendTrackerAlias, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "Cap{amount=$amount, spendTrackerAlias=$spendTrackerAlias, additionalProperties=$additionalProperties}"
+                }
 
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
@@ -31788,18 +32333,19 @@ private constructor(
                     }
 
                     return other is DiscountConfiguration &&
+                        cap == other.cap &&
                         paymentFraction == other.paymentFraction &&
                         additionalProperties == other.additionalProperties
                 }
 
                 private val hashCode: Int by lazy {
-                    Objects.hash(paymentFraction, additionalProperties)
+                    Objects.hash(cap, paymentFraction, additionalProperties)
                 }
 
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "DiscountConfiguration{paymentFraction=$paymentFraction, additionalProperties=$additionalProperties}"
+                    "DiscountConfiguration{cap=$cap, paymentFraction=$paymentFraction, additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
