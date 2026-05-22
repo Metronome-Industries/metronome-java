@@ -139,6 +139,9 @@ internal class CommitTest {
                         .addProductTag("string")
                         .build()
                 )
+                .spendTrackerAttributes(
+                    Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build()
+                )
                 .subscriptionConfig(
                     Commit.SubscriptionConfig.builder()
                         .allocation(Commit.SubscriptionConfig.Allocation.INDIVIDUAL)
@@ -286,6 +289,8 @@ internal class CommitTest {
                     .addProductTag("string")
                     .build()
             )
+        assertThat(commit.spendTrackerAttributes())
+            .contains(Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build())
         assertThat(commit.subscriptionConfig())
             .contains(
                 Commit.SubscriptionConfig.builder()
@@ -428,6 +433,9 @@ internal class CommitTest {
                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addProductTag("string")
                         .build()
+                )
+                .spendTrackerAttributes(
+                    Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build()
                 )
                 .subscriptionConfig(
                     Commit.SubscriptionConfig.builder()

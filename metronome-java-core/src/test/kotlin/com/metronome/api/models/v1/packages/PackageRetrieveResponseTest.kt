@@ -528,6 +528,15 @@ internal class PackageRetrieveResponseTest {
                                     PrepaidBalanceThresholdConfiguration.DiscountConfiguration
                                         .builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -816,7 +825,48 @@ internal class PackageRetrieveResponseTest {
                                 .discountConfiguration(
                                     SpendThresholdConfiguration.DiscountConfiguration.builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            SpendThresholdConfiguration.DiscountConfiguration.Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
+                                )
+                                .build()
+                        )
+                        .addSpendTracker(
+                            PackageRetrieveResponse.Data.SpendTracker.builder()
+                                .alias("alias")
+                                .addApplicableSpendSpecifier(
+                                    PackageRetrieveResponse.Data.SpendTracker
+                                        .ApplicableSpendSpecifier
+                                        .builder()
+                                        .addSource(
+                                            PackageRetrieveResponse.Data.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .Source
+                                                .THRESHOLD_RECHARGE
+                                        )
+                                        .spendType(
+                                            PackageRetrieveResponse.Data.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .SpendType
+                                                .COMMIT_PURCHASE
+                                        )
+                                        .discounted(
+                                            PackageRetrieveResponse.Data.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .Discounted
+                                                .ANY
+                                        )
+                                        .build()
+                                )
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .resetFrequency(
+                                    PackageRetrieveResponse.Data.SpendTracker.ResetFrequency
+                                        .BILLING_PERIOD
                                 )
                                 .build()
                         )
@@ -1369,6 +1419,14 @@ internal class PackageRetrieveResponseTest {
                             .discountConfiguration(
                                 PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                                     .paymentFraction(0.0)
+                                    .cap(
+                                        PrepaidBalanceThresholdConfiguration.DiscountConfiguration
+                                            .Cap
+                                            .builder()
+                                            .amount(0.0)
+                                            .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .build()
@@ -1627,7 +1685,47 @@ internal class PackageRetrieveResponseTest {
                             .discountConfiguration(
                                 SpendThresholdConfiguration.DiscountConfiguration.builder()
                                     .paymentFraction(0.0)
+                                    .cap(
+                                        SpendThresholdConfiguration.DiscountConfiguration.Cap
+                                            .builder()
+                                            .amount(0.0)
+                                            .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
                                     .build()
+                            )
+                            .build()
+                    )
+                    .addSpendTracker(
+                        PackageRetrieveResponse.Data.SpendTracker.builder()
+                            .alias("alias")
+                            .addApplicableSpendSpecifier(
+                                PackageRetrieveResponse.Data.SpendTracker.ApplicableSpendSpecifier
+                                    .builder()
+                                    .addSource(
+                                        PackageRetrieveResponse.Data.SpendTracker
+                                            .ApplicableSpendSpecifier
+                                            .Source
+                                            .THRESHOLD_RECHARGE
+                                    )
+                                    .spendType(
+                                        PackageRetrieveResponse.Data.SpendTracker
+                                            .ApplicableSpendSpecifier
+                                            .SpendType
+                                            .COMMIT_PURCHASE
+                                    )
+                                    .discounted(
+                                        PackageRetrieveResponse.Data.SpendTracker
+                                            .ApplicableSpendSpecifier
+                                            .Discounted
+                                            .ANY
+                                    )
+                                    .build()
+                            )
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .resetFrequency(
+                                PackageRetrieveResponse.Data.SpendTracker.ResetFrequency
+                                    .BILLING_PERIOD
                             )
                             .build()
                     )
@@ -2216,6 +2314,15 @@ internal class PackageRetrieveResponseTest {
                                     PrepaidBalanceThresholdConfiguration.DiscountConfiguration
                                         .builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -2504,7 +2611,48 @@ internal class PackageRetrieveResponseTest {
                                 .discountConfiguration(
                                     SpendThresholdConfiguration.DiscountConfiguration.builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            SpendThresholdConfiguration.DiscountConfiguration.Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
+                                )
+                                .build()
+                        )
+                        .addSpendTracker(
+                            PackageRetrieveResponse.Data.SpendTracker.builder()
+                                .alias("alias")
+                                .addApplicableSpendSpecifier(
+                                    PackageRetrieveResponse.Data.SpendTracker
+                                        .ApplicableSpendSpecifier
+                                        .builder()
+                                        .addSource(
+                                            PackageRetrieveResponse.Data.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .Source
+                                                .THRESHOLD_RECHARGE
+                                        )
+                                        .spendType(
+                                            PackageRetrieveResponse.Data.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .SpendType
+                                                .COMMIT_PURCHASE
+                                        )
+                                        .discounted(
+                                            PackageRetrieveResponse.Data.SpendTracker
+                                                .ApplicableSpendSpecifier
+                                                .Discounted
+                                                .ANY
+                                        )
+                                        .build()
+                                )
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .resetFrequency(
+                                    PackageRetrieveResponse.Data.SpendTracker.ResetFrequency
+                                        .BILLING_PERIOD
                                 )
                                 .build()
                         )

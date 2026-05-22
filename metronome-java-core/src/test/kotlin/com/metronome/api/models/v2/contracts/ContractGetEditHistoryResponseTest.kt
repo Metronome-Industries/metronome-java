@@ -449,6 +449,15 @@ internal class ContractGetEditHistoryResponseTest {
                                     PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration
                                         .builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            PrepaidBalanceThresholdConfigurationV2
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -810,6 +819,13 @@ internal class ContractGetEditHistoryResponseTest {
                                 .discountConfiguration(
                                     SpendThresholdConfigurationV2.DiscountConfiguration.builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            SpendThresholdConfigurationV2.DiscountConfiguration.Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -1317,6 +1333,16 @@ internal class ContractGetEditHistoryResponseTest {
                                         .UpdatePrepaidBalanceThresholdConfiguration
                                         .DiscountConfiguration
                                         .builder()
+                                        .cap(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .paymentFraction(0.0)
                                         .build()
                                 )
@@ -1473,6 +1499,16 @@ internal class ContractGetEditHistoryResponseTest {
                                         .UpdateSpendThresholdConfiguration
                                         .DiscountConfiguration
                                         .builder()
+                                        .cap(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdateSpendThresholdConfiguration
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .paymentFraction(0.0)
                                         .build()
                                 )
@@ -1971,6 +2007,14 @@ internal class ContractGetEditHistoryResponseTest {
                                 PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration
                                     .builder()
                                     .paymentFraction(0.0)
+                                    .cap(
+                                        PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration
+                                            .Cap
+                                            .builder()
+                                            .amount(0.0)
+                                            .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .build()
@@ -2313,6 +2357,13 @@ internal class ContractGetEditHistoryResponseTest {
                             .discountConfiguration(
                                 SpendThresholdConfigurationV2.DiscountConfiguration.builder()
                                     .paymentFraction(0.0)
+                                    .cap(
+                                        SpendThresholdConfigurationV2.DiscountConfiguration.Cap
+                                            .builder()
+                                            .amount(0.0)
+                                            .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .build()
@@ -2793,6 +2844,16 @@ internal class ContractGetEditHistoryResponseTest {
                                     .UpdatePrepaidBalanceThresholdConfiguration
                                     .DiscountConfiguration
                                     .builder()
+                                    .cap(
+                                        ContractGetEditHistoryResponse.Data
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .DiscountConfiguration
+                                            .Cap
+                                            .builder()
+                                            .amount(0.0)
+                                            .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
                                     .paymentFraction(0.0)
                                     .build()
                             )
@@ -2943,6 +3004,16 @@ internal class ContractGetEditHistoryResponseTest {
                                     .UpdateSpendThresholdConfiguration
                                     .DiscountConfiguration
                                     .builder()
+                                    .cap(
+                                        ContractGetEditHistoryResponse.Data
+                                            .UpdateSpendThresholdConfiguration
+                                            .DiscountConfiguration
+                                            .Cap
+                                            .builder()
+                                            .amount(0.0)
+                                            .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
                                     .paymentFraction(0.0)
                                     .build()
                             )
@@ -3470,6 +3541,15 @@ internal class ContractGetEditHistoryResponseTest {
                                     PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration
                                         .builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            PrepaidBalanceThresholdConfigurationV2
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -3831,6 +3911,13 @@ internal class ContractGetEditHistoryResponseTest {
                                 .discountConfiguration(
                                     SpendThresholdConfigurationV2.DiscountConfiguration.builder()
                                         .paymentFraction(0.0)
+                                        .cap(
+                                            SpendThresholdConfigurationV2.DiscountConfiguration.Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -4338,6 +4425,16 @@ internal class ContractGetEditHistoryResponseTest {
                                         .UpdatePrepaidBalanceThresholdConfiguration
                                         .DiscountConfiguration
                                         .builder()
+                                        .cap(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .paymentFraction(0.0)
                                         .build()
                                 )
@@ -4494,6 +4591,16 @@ internal class ContractGetEditHistoryResponseTest {
                                         .UpdateSpendThresholdConfiguration
                                         .DiscountConfiguration
                                         .builder()
+                                        .cap(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdateSpendThresholdConfiguration
+                                                .DiscountConfiguration
+                                                .Cap
+                                                .builder()
+                                                .amount(0.0)
+                                                .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
                                         .paymentFraction(0.0)
                                         .build()
                                 )

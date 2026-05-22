@@ -153,6 +153,9 @@ internal class CommitListPageResponseTest {
                                 .addProductTag("string")
                                 .build()
                         )
+                        .spendTrackerAttributes(
+                            Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build()
+                        )
                         .subscriptionConfig(
                             Commit.SubscriptionConfig.builder()
                                 .allocation(Commit.SubscriptionConfig.Allocation.INDIVIDUAL)
@@ -296,6 +299,9 @@ internal class CommitListPageResponseTest {
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addProductTag("string")
                             .build()
+                    )
+                    .spendTrackerAttributes(
+                        Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build()
                     )
                     .subscriptionConfig(
                         Commit.SubscriptionConfig.builder()
@@ -450,6 +456,9 @@ internal class CommitListPageResponseTest {
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addProductTag("string")
                                 .build()
+                        )
+                        .spendTrackerAttributes(
+                            Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build()
                         )
                         .subscriptionConfig(
                             Commit.SubscriptionConfig.builder()

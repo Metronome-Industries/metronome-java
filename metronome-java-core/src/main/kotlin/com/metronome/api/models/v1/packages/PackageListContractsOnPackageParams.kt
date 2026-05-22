@@ -32,9 +32,9 @@ import kotlin.jvm.optionals.getOrNull
  *   new package, call this endpoint, end contracts, and provision customers on a new package.
  *
  * ### **Usage guidelines:**
- * Use the **`starting_at`**, **`covering_date`**, and **`include_archived`** parameters to filter
- * the list of returned contracts. For example, to list only currently active contracts,
- * pass **`covering_date`** equal to the current time.
+ * Use the **`starting_at`**, **`covering_date`**, and **`include_archived`** parameters to filter
+ * the list of returned contracts. For example, to list only currently active contracts, pass
+ * **`covering_date`** equal to the current time.
  */
 class PackageListContractsOnPackageParams
 private constructor(
