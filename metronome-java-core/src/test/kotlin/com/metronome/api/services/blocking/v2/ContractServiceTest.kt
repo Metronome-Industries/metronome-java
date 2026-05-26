@@ -557,6 +557,36 @@ internal class ContractServiceTest {
                                     )
                                     .build()
                             )
+                            .addThresholdBalanceSpecifier(
+                                PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                    .builder()
+                                    .addExclude(
+                                        PrepaidBalanceThresholdConfigurationV2
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .builder()
+                                            .addCustomFieldFilter(
+                                                PrepaidBalanceThresholdConfigurationV2
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .builder()
+                                                    .entity(
+                                                        PrepaidBalanceThresholdConfigurationV2
+                                                            .ThresholdBalanceSpecifier
+                                                            .Exclude
+                                                            .CustomFieldFilter
+                                                            .Entity
+                                                            .COMMIT
+                                                    )
+                                                    .key("key")
+                                                    .value("value")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .addAddProfessionalService(
@@ -1281,6 +1311,40 @@ internal class ContractServiceTest {
                             )
                             .rechargeToAmount(0.0)
                             .thresholdAmount(0.0)
+                            .addThresholdBalanceSpecifier(
+                                ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration
+                                    .ThresholdBalanceSpecifier
+                                    .builder()
+                                    .addExclude(
+                                        ContractEditParams
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .builder()
+                                            .addCustomFieldFilter(
+                                                ContractEditParams
+                                                    .UpdatePrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .builder()
+                                                    .entity(
+                                                        ContractEditParams
+                                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                                            .ThresholdBalanceSpecifier
+                                                            .Exclude
+                                                            .CustomFieldFilter
+                                                            .Entity
+                                                            .COMMIT
+                                                    )
+                                                    .key("key")
+                                                    .value("value")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .addUpdateRecurringCommit(

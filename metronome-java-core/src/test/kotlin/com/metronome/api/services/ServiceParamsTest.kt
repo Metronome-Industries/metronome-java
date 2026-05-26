@@ -479,6 +479,34 @@ internal class ServiceParamsTest {
                                 )
                                 .build()
                         )
+                        .addThresholdBalanceSpecifier(
+                            PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                                .addExclude(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .builder()
+                                        .addCustomFieldFilter(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .COMMIT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .build()
                 )
                 .addProfessionalService(
