@@ -1110,6 +1110,36 @@ internal class ContractTest {
                                         )
                                         .build()
                                 )
+                                .addThresholdBalanceSpecifier(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            PrepaidBalanceThresholdConfiguration
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -2096,6 +2126,36 @@ internal class ContractTest {
                                         )
                                         .build()
                                 )
+                                .addThresholdBalanceSpecifier(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            PrepaidBalanceThresholdConfiguration
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -2587,6 +2647,34 @@ internal class ContractTest {
                                         .builder()
                                         .amount(0.0)
                                         .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addThresholdBalanceSpecifier(
+                            PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                                .addExclude(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .builder()
+                                        .addCustomFieldFilter(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .COMMIT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -3801,6 +3889,36 @@ internal class ContractTest {
                                     )
                                     .build()
                             )
+                            .addThresholdBalanceSpecifier(
+                                PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                    .builder()
+                                    .addExclude(
+                                        PrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .builder()
+                                            .addCustomFieldFilter(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .builder()
+                                                    .entity(
+                                                        PrepaidBalanceThresholdConfiguration
+                                                            .ThresholdBalanceSpecifier
+                                                            .Exclude
+                                                            .CustomFieldFilter
+                                                            .Entity
+                                                            .COMMIT
+                                                    )
+                                                    .key("key")
+                                                    .value("value")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .addProfessionalService(
@@ -4729,6 +4847,36 @@ internal class ContractTest {
                                     )
                                     .build()
                             )
+                            .addThresholdBalanceSpecifier(
+                                PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                    .builder()
+                                    .addExclude(
+                                        PrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .builder()
+                                            .addCustomFieldFilter(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .builder()
+                                                    .entity(
+                                                        PrepaidBalanceThresholdConfiguration
+                                                            .ThresholdBalanceSpecifier
+                                                            .Exclude
+                                                            .CustomFieldFilter
+                                                            .Entity
+                                                            .COMMIT
+                                                    )
+                                                    .key("key")
+                                                    .value("value")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .addProfessionalService(
@@ -5186,6 +5334,34 @@ internal class ContractTest {
                                     .builder()
                                     .amount(0.0)
                                     .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .addThresholdBalanceSpecifier(
+                        PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                            .addExclude(
+                                PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        PrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .build()
@@ -6445,6 +6621,36 @@ internal class ContractTest {
                                         )
                                         .build()
                                 )
+                                .addThresholdBalanceSpecifier(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            PrepaidBalanceThresholdConfiguration
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -7431,6 +7637,36 @@ internal class ContractTest {
                                         )
                                         .build()
                                 )
+                                .addThresholdBalanceSpecifier(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            PrepaidBalanceThresholdConfiguration
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .addProfessionalService(
@@ -7922,6 +8158,34 @@ internal class ContractTest {
                                         .builder()
                                         .amount(0.0)
                                         .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addThresholdBalanceSpecifier(
+                            PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                                .addExclude(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .builder()
+                                        .addCustomFieldFilter(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .COMMIT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()

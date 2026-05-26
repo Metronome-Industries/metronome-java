@@ -434,6 +434,34 @@ internal class ContractEditParamsTest {
                             )
                             .build()
                     )
+                    .addThresholdBalanceSpecifier(
+                        PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier.builder()
+                            .addExclude(
+                                PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        PrepaidBalanceThresholdConfigurationV2
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                PrepaidBalanceThresholdConfigurationV2
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .build()
             )
             .addAddProfessionalService(
@@ -1090,6 +1118,39 @@ internal class ContractEditParamsTest {
                     )
                     .rechargeToAmount(0.0)
                     .thresholdAmount(0.0)
+                    .addThresholdBalanceSpecifier(
+                        ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration
+                            .ThresholdBalanceSpecifier
+                            .builder()
+                            .addExclude(
+                                ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration
+                                    .ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        ContractEditParams
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                ContractEditParams
+                                                    .UpdatePrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .build()
             )
             .addUpdateRecurringCommit(
@@ -1743,6 +1804,35 @@ internal class ContractEditParamsTest {
                                         .builder()
                                         .amount(0.0)
                                         .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addThresholdBalanceSpecifier(
+                            PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                .builder()
+                                .addExclude(
+                                    PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .builder()
+                                        .addCustomFieldFilter(
+                                            PrepaidBalanceThresholdConfigurationV2
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    PrepaidBalanceThresholdConfigurationV2
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .COMMIT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .build()
@@ -2457,6 +2547,39 @@ internal class ContractEditParamsTest {
                         )
                         .rechargeToAmount(0.0)
                         .thresholdAmount(0.0)
+                        .addThresholdBalanceSpecifier(
+                            ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration
+                                .ThresholdBalanceSpecifier
+                                .builder()
+                                .addExclude(
+                                    ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration
+                                        .ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .builder()
+                                        .addCustomFieldFilter(
+                                            ContractEditParams
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    ContractEditParams
+                                                        .UpdatePrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .COMMIT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .build()
                 )
                 .addUpdateRecurringCommit(
@@ -3081,6 +3204,34 @@ internal class ContractEditParamsTest {
                                     .builder()
                                     .amount(0.0)
                                     .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .addThresholdBalanceSpecifier(
+                        PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier.builder()
+                            .addExclude(
+                                PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        PrepaidBalanceThresholdConfigurationV2
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                PrepaidBalanceThresholdConfigurationV2
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .build()
@@ -3758,6 +3909,39 @@ internal class ContractEditParamsTest {
                     )
                     .rechargeToAmount(0.0)
                     .thresholdAmount(0.0)
+                    .addThresholdBalanceSpecifier(
+                        ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration
+                            .ThresholdBalanceSpecifier
+                            .builder()
+                            .addExclude(
+                                ContractEditParams.UpdatePrepaidBalanceThresholdConfiguration
+                                    .ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        ContractEditParams
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                ContractEditParams
+                                                    .UpdatePrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .build()
             )
         assertThat(body.updateRecurringCommits().getOrNull())

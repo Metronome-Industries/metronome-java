@@ -460,6 +460,36 @@ internal class ContractGetEditHistoryResponseTest {
                                         )
                                         .build()
                                 )
+                                .addThresholdBalanceSpecifier(
+                                    PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            PrepaidBalanceThresholdConfigurationV2
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    PrepaidBalanceThresholdConfigurationV2
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            PrepaidBalanceThresholdConfigurationV2
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .addAddProService(
@@ -1378,6 +1408,41 @@ internal class ContractGetEditHistoryResponseTest {
                                 )
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
+                                .addThresholdBalanceSpecifier(
+                                    ContractGetEditHistoryResponse.Data
+                                        .UpdatePrepaidBalanceThresholdConfiguration
+                                        .ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    ContractGetEditHistoryResponse.Data
+                                                        .UpdatePrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            ContractGetEditHistoryResponse.Data
+                                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .addUpdateRecurringCommit(
@@ -2013,6 +2078,36 @@ internal class ContractGetEditHistoryResponseTest {
                                             .builder()
                                             .amount(0.0)
                                             .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .addThresholdBalanceSpecifier(
+                                PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                    .builder()
+                                    .addExclude(
+                                        PrepaidBalanceThresholdConfigurationV2
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .builder()
+                                            .addCustomFieldFilter(
+                                                PrepaidBalanceThresholdConfigurationV2
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .builder()
+                                                    .entity(
+                                                        PrepaidBalanceThresholdConfigurationV2
+                                                            .ThresholdBalanceSpecifier
+                                                            .Exclude
+                                                            .CustomFieldFilter
+                                                            .Entity
+                                                            .COMMIT
+                                                    )
+                                                    .key("key")
+                                                    .value("value")
+                                                    .build()
+                                            )
                                             .build()
                                     )
                                     .build()
@@ -2888,6 +2983,41 @@ internal class ContractGetEditHistoryResponseTest {
                             )
                             .rechargeToAmount(0.0)
                             .thresholdAmount(0.0)
+                            .addThresholdBalanceSpecifier(
+                                ContractGetEditHistoryResponse.Data
+                                    .UpdatePrepaidBalanceThresholdConfiguration
+                                    .ThresholdBalanceSpecifier
+                                    .builder()
+                                    .addExclude(
+                                        ContractGetEditHistoryResponse.Data
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .builder()
+                                            .addCustomFieldFilter(
+                                                ContractGetEditHistoryResponse.Data
+                                                    .UpdatePrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .builder()
+                                                    .entity(
+                                                        ContractGetEditHistoryResponse.Data
+                                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                                            .ThresholdBalanceSpecifier
+                                                            .Exclude
+                                                            .CustomFieldFilter
+                                                            .Entity
+                                                            .COMMIT
+                                                    )
+                                                    .key("key")
+                                                    .value("value")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .addUpdateRecurringCommit(
@@ -3548,6 +3678,36 @@ internal class ContractGetEditHistoryResponseTest {
                                                 .builder()
                                                 .amount(0.0)
                                                 .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .addThresholdBalanceSpecifier(
+                                    PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            PrepaidBalanceThresholdConfigurationV2
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    PrepaidBalanceThresholdConfigurationV2
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            PrepaidBalanceThresholdConfigurationV2
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                         .build()
@@ -4470,6 +4630,41 @@ internal class ContractGetEditHistoryResponseTest {
                                 )
                                 .rechargeToAmount(0.0)
                                 .thresholdAmount(0.0)
+                                .addThresholdBalanceSpecifier(
+                                    ContractGetEditHistoryResponse.Data
+                                        .UpdatePrepaidBalanceThresholdConfiguration
+                                        .ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    ContractGetEditHistoryResponse.Data
+                                                        .UpdatePrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            ContractGetEditHistoryResponse.Data
+                                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .addUpdateRecurringCommit(

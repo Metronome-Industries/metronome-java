@@ -516,6 +516,36 @@ internal class PackageListPageResponseTest {
                                         )
                                         .build()
                                 )
+                                .addThresholdBalanceSpecifier(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            PrepaidBalanceThresholdConfiguration
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .rateCardId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1333,6 +1363,36 @@ internal class PackageListPageResponseTest {
                                             .builder()
                                             .amount(0.0)
                                             .spendTrackerAlias("spend_tracker_alias")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .addThresholdBalanceSpecifier(
+                                PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                    .builder()
+                                    .addExclude(
+                                        PrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .builder()
+                                            .addCustomFieldFilter(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .builder()
+                                                    .entity(
+                                                        PrepaidBalanceThresholdConfiguration
+                                                            .ThresholdBalanceSpecifier
+                                                            .Exclude
+                                                            .CustomFieldFilter
+                                                            .Entity
+                                                            .COMMIT
+                                                    )
+                                                    .key("key")
+                                                    .value("value")
+                                                    .build()
+                                            )
                                             .build()
                                     )
                                     .build()
@@ -2167,6 +2227,36 @@ internal class PackageListPageResponseTest {
                                                 .builder()
                                                 .amount(0.0)
                                                 .spendTrackerAlias("spend_tracker_alias")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .addThresholdBalanceSpecifier(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .builder()
+                                        .addExclude(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .builder()
+                                                .addCustomFieldFilter(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .builder()
+                                                        .entity(
+                                                            PrepaidBalanceThresholdConfiguration
+                                                                .ThresholdBalanceSpecifier
+                                                                .Exclude
+                                                                .CustomFieldFilter
+                                                                .Entity
+                                                                .COMMIT
+                                                        )
+                                                        .key("key")
+                                                        .value("value")
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                         .build()
