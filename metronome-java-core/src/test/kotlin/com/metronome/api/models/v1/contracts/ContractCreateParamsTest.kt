@@ -132,6 +132,11 @@ internal class ContractCreateParamsTest {
                             .addProductTag("string")
                             .build()
                     )
+                    .spendTrackerAttributes(
+                        ContractCreateParams.Commit.SpendTrackerAttributes.builder()
+                            .countsAsDiscounted(true)
+                            .build()
+                    )
                     .temporaryId("temporary_id")
                     .build()
             )
@@ -402,6 +407,41 @@ internal class ContractCreateParamsTest {
                     .discountConfiguration(
                         PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap
+                                    .builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .addThresholdBalanceSpecifier(
+                        PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                            .addExclude(
+                                PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        PrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .build()
@@ -716,8 +756,38 @@ internal class ContractCreateParamsTest {
                     .discountConfiguration(
                         SpendThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                SpendThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
                             .build()
                     )
+                    .build()
+            )
+            .addSpendTracker(
+                ContractCreateParams.SpendTracker.builder()
+                    .alias("alias")
+                    .addApplicableSpendSpecifier(
+                        ContractCreateParams.SpendTracker.ApplicableSpendSpecifier.builder()
+                            .addSource(
+                                ContractCreateParams.SpendTracker.ApplicableSpendSpecifier.Source
+                                    .THRESHOLD_RECHARGE
+                            )
+                            .spendType(
+                                ContractCreateParams.SpendTracker.ApplicableSpendSpecifier.SpendType
+                                    .COMMIT_PURCHASE
+                            )
+                            .discounted(
+                                ContractCreateParams.SpendTracker.ApplicableSpendSpecifier
+                                    .Discounted
+                                    .ANY
+                            )
+                            .build()
+                    )
+                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .resetFrequency(ContractCreateParams.SpendTracker.ResetFrequency.BILLING_PERIOD)
                     .build()
             )
             .addSubscription(
@@ -923,6 +993,11 @@ internal class ContractCreateParamsTest {
                                 )
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addProductTag("string")
+                                .build()
+                        )
+                        .spendTrackerAttributes(
+                            ContractCreateParams.Commit.SpendTrackerAttributes.builder()
+                                .countsAsDiscounted(true)
                                 .build()
                         )
                         .temporaryId("temporary_id")
@@ -1217,6 +1292,41 @@ internal class ContractCreateParamsTest {
                         .discountConfiguration(
                             PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                                 .paymentFraction(0.0)
+                                .cap(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap
+                                        .builder()
+                                        .amount(0.0)
+                                        .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addThresholdBalanceSpecifier(
+                            PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                                .addExclude(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .builder()
+                                        .addCustomFieldFilter(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .COMMIT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .build()
@@ -1547,7 +1657,41 @@ internal class ContractCreateParamsTest {
                         .discountConfiguration(
                             SpendThresholdConfiguration.DiscountConfiguration.builder()
                                 .paymentFraction(0.0)
+                                .cap(
+                                    SpendThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                        .amount(0.0)
+                                        .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
                                 .build()
+                        )
+                        .build()
+                )
+                .addSpendTracker(
+                    ContractCreateParams.SpendTracker.builder()
+                        .alias("alias")
+                        .addApplicableSpendSpecifier(
+                            ContractCreateParams.SpendTracker.ApplicableSpendSpecifier.builder()
+                                .addSource(
+                                    ContractCreateParams.SpendTracker.ApplicableSpendSpecifier
+                                        .Source
+                                        .THRESHOLD_RECHARGE
+                                )
+                                .spendType(
+                                    ContractCreateParams.SpendTracker.ApplicableSpendSpecifier
+                                        .SpendType
+                                        .COMMIT_PURCHASE
+                                )
+                                .discounted(
+                                    ContractCreateParams.SpendTracker.ApplicableSpendSpecifier
+                                        .Discounted
+                                        .ANY
+                                )
+                                .build()
+                        )
+                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .resetFrequency(
+                            ContractCreateParams.SpendTracker.ResetFrequency.BILLING_PERIOD
                         )
                         .build()
                 )
@@ -1747,6 +1891,11 @@ internal class ContractCreateParamsTest {
                             )
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addProductTag("string")
+                            .build()
+                    )
+                    .spendTrackerAttributes(
+                        ContractCreateParams.Commit.SpendTrackerAttributes.builder()
+                            .countsAsDiscounted(true)
                             .build()
                     )
                     .temporaryId("temporary_id")
@@ -2024,6 +2173,41 @@ internal class ContractCreateParamsTest {
                     .discountConfiguration(
                         PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap
+                                    .builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .addThresholdBalanceSpecifier(
+                        PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                            .addExclude(
+                                PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        PrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .build()
@@ -2344,8 +2528,39 @@ internal class ContractCreateParamsTest {
                     .discountConfiguration(
                         SpendThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                SpendThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
                             .build()
                     )
+                    .build()
+            )
+        assertThat(body.spendTrackers().getOrNull())
+            .containsExactly(
+                ContractCreateParams.SpendTracker.builder()
+                    .alias("alias")
+                    .addApplicableSpendSpecifier(
+                        ContractCreateParams.SpendTracker.ApplicableSpendSpecifier.builder()
+                            .addSource(
+                                ContractCreateParams.SpendTracker.ApplicableSpendSpecifier.Source
+                                    .THRESHOLD_RECHARGE
+                            )
+                            .spendType(
+                                ContractCreateParams.SpendTracker.ApplicableSpendSpecifier.SpendType
+                                    .COMMIT_PURCHASE
+                            )
+                            .discounted(
+                                ContractCreateParams.SpendTracker.ApplicableSpendSpecifier
+                                    .Discounted
+                                    .ANY
+                            )
+                            .build()
+                    )
+                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .resetFrequency(ContractCreateParams.SpendTracker.ResetFrequency.BILLING_PERIOD)
                     .build()
             )
         assertThat(body.subscriptions().getOrNull())

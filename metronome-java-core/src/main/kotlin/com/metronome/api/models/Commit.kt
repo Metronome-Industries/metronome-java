@@ -62,6 +62,7 @@ private constructor(
     private val rolloverFraction: JsonField<Double>,
     private val salesforceOpportunityId: JsonField<String>,
     private val specifiers: JsonField<List<CommitSpecifier>>,
+    private val spendTrackerAttributes: JsonField<SpendTrackerAttributes>,
     private val subscriptionConfig: JsonField<SubscriptionConfig>,
     private val uniquenessKey: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -130,6 +131,9 @@ private constructor(
         @JsonProperty("specifiers")
         @ExcludeMissing
         specifiers: JsonField<List<CommitSpecifier>> = JsonMissing.of(),
+        @JsonProperty("spend_tracker_attributes")
+        @ExcludeMissing
+        spendTrackerAttributes: JsonField<SpendTrackerAttributes> = JsonMissing.of(),
         @JsonProperty("subscription_config")
         @ExcludeMissing
         subscriptionConfig: JsonField<SubscriptionConfig> = JsonMissing.of(),
@@ -164,6 +168,7 @@ private constructor(
         rolloverFraction,
         salesforceOpportunityId,
         specifiers,
+        spendTrackerAttributes,
         subscriptionConfig,
         uniquenessKey,
         mutableMapOf(),
@@ -381,6 +386,15 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun specifiers(): Optional<List<CommitSpecifier>> = specifiers.getOptional("specifiers")
+
+    /**
+     * Optional attributes controlling how this commit interacts with spend trackers.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun spendTrackerAttributes(): Optional<SpendTrackerAttributes> =
+        spendTrackerAttributes.getOptional("spend_tracker_attributes")
 
     /**
      * The subscription configuration for this commit, if it was generated from a recurring commit
@@ -632,6 +646,16 @@ private constructor(
     fun _specifiers(): JsonField<List<CommitSpecifier>> = specifiers
 
     /**
+     * Returns the raw JSON value of [spendTrackerAttributes].
+     *
+     * Unlike [spendTrackerAttributes], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    @JsonProperty("spend_tracker_attributes")
+    @ExcludeMissing
+    fun _spendTrackerAttributes(): JsonField<SpendTrackerAttributes> = spendTrackerAttributes
+
+    /**
      * Returns the raw JSON value of [subscriptionConfig].
      *
      * Unlike [subscriptionConfig], this method doesn't throw if the JSON field has an unexpected
@@ -709,6 +733,7 @@ private constructor(
         private var rolloverFraction: JsonField<Double> = JsonMissing.of()
         private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
         private var specifiers: JsonField<MutableList<CommitSpecifier>>? = null
+        private var spendTrackerAttributes: JsonField<SpendTrackerAttributes> = JsonMissing.of()
         private var subscriptionConfig: JsonField<SubscriptionConfig> = JsonMissing.of()
         private var uniquenessKey: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -742,6 +767,7 @@ private constructor(
             rolloverFraction = commit.rolloverFraction
             salesforceOpportunityId = commit.salesforceOpportunityId
             specifiers = commit.specifiers.map { it.toMutableList() }
+            spendTrackerAttributes = commit.spendTrackerAttributes
             subscriptionConfig = commit.subscriptionConfig
             uniquenessKey = commit.uniquenessKey
             additionalProperties = commit.additionalProperties.toMutableMap()
@@ -1320,6 +1346,22 @@ private constructor(
                 }
         }
 
+        /** Optional attributes controlling how this commit interacts with spend trackers. */
+        fun spendTrackerAttributes(spendTrackerAttributes: SpendTrackerAttributes) =
+            spendTrackerAttributes(JsonField.of(spendTrackerAttributes))
+
+        /**
+         * Sets [Builder.spendTrackerAttributes] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.spendTrackerAttributes] with a well-typed
+         * [SpendTrackerAttributes] value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
+         */
+        fun spendTrackerAttributes(spendTrackerAttributes: JsonField<SpendTrackerAttributes>) =
+            apply {
+                this.spendTrackerAttributes = spendTrackerAttributes
+            }
+
         /**
          * The subscription configuration for this commit, if it was generated from a recurring
          * commit with a subscription attached.
@@ -1419,6 +1461,7 @@ private constructor(
                 rolloverFraction,
                 salesforceOpportunityId,
                 (specifiers ?: JsonMissing.of()).map { it.toImmutable() },
+                spendTrackerAttributes,
                 subscriptionConfig,
                 uniquenessKey,
                 additionalProperties.toMutableMap(),
@@ -1467,6 +1510,7 @@ private constructor(
         rolloverFraction()
         salesforceOpportunityId()
         specifiers().ifPresent { it.forEach { it.validate() } }
+        spendTrackerAttributes().ifPresent { it.validate() }
         subscriptionConfig().ifPresent { it.validate() }
         uniquenessKey()
         validated = true
@@ -1514,6 +1558,7 @@ private constructor(
             (if (rolloverFraction.asKnown().isPresent) 1 else 0) +
             (if (salesforceOpportunityId.asKnown().isPresent) 1 else 0) +
             (specifiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (spendTrackerAttributes.asKnown().getOrNull()?.validity() ?: 0) +
             (subscriptionConfig.asKnown().getOrNull()?.validity() ?: 0) +
             (if (uniquenessKey.asKnown().isPresent) 1 else 0)
 
@@ -9937,6 +9982,187 @@ private constructor(
             "RolledOverFrom{commitId=$commitId, contractId=$contractId, additionalProperties=$additionalProperties}"
     }
 
+    /** Optional attributes controlling how this commit interacts with spend trackers. */
+    class SpendTrackerAttributes
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val countsAsDiscounted: JsonField<Boolean>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("counts_as_discounted")
+            @ExcludeMissing
+            countsAsDiscounted: JsonField<Boolean> = JsonMissing.of()
+        ) : this(countsAsDiscounted, mutableMapOf())
+
+        /**
+         * If true, this commit is included in spend trackers with discounted set to DISCOUNTED_ONLY
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun countsAsDiscounted(): Boolean = countsAsDiscounted.getRequired("counts_as_discounted")
+
+        /**
+         * Returns the raw JSON value of [countsAsDiscounted].
+         *
+         * Unlike [countsAsDiscounted], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("counts_as_discounted")
+        @ExcludeMissing
+        fun _countsAsDiscounted(): JsonField<Boolean> = countsAsDiscounted
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [SpendTrackerAttributes].
+             *
+             * The following fields are required:
+             * ```java
+             * .countsAsDiscounted()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [SpendTrackerAttributes]. */
+        class Builder internal constructor() {
+
+            private var countsAsDiscounted: JsonField<Boolean>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(spendTrackerAttributes: SpendTrackerAttributes) = apply {
+                countsAsDiscounted = spendTrackerAttributes.countsAsDiscounted
+                additionalProperties = spendTrackerAttributes.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * If true, this commit is included in spend trackers with discounted set to
+             * DISCOUNTED_ONLY
+             */
+            fun countsAsDiscounted(countsAsDiscounted: Boolean) =
+                countsAsDiscounted(JsonField.of(countsAsDiscounted))
+
+            /**
+             * Sets [Builder.countsAsDiscounted] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.countsAsDiscounted] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun countsAsDiscounted(countsAsDiscounted: JsonField<Boolean>) = apply {
+                this.countsAsDiscounted = countsAsDiscounted
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [SpendTrackerAttributes].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .countsAsDiscounted()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): SpendTrackerAttributes =
+                SpendTrackerAttributes(
+                    checkRequired("countsAsDiscounted", countsAsDiscounted),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): SpendTrackerAttributes = apply {
+            if (validated) {
+                return@apply
+            }
+
+            countsAsDiscounted()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int = (if (countsAsDiscounted.asKnown().isPresent) 1 else 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is SpendTrackerAttributes &&
+                countsAsDiscounted == other.countsAsDiscounted &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(countsAsDiscounted, additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "SpendTrackerAttributes{countsAsDiscounted=$countsAsDiscounted, additionalProperties=$additionalProperties}"
+    }
+
     /**
      * The subscription configuration for this commit, if it was generated from a recurring commit
      * with a subscription attached.
@@ -10541,6 +10767,7 @@ private constructor(
             rolloverFraction == other.rolloverFraction &&
             salesforceOpportunityId == other.salesforceOpportunityId &&
             specifiers == other.specifiers &&
+            spendTrackerAttributes == other.spendTrackerAttributes &&
             subscriptionConfig == other.subscriptionConfig &&
             uniquenessKey == other.uniquenessKey &&
             additionalProperties == other.additionalProperties
@@ -10575,6 +10802,7 @@ private constructor(
             rolloverFraction,
             salesforceOpportunityId,
             specifiers,
+            spendTrackerAttributes,
             subscriptionConfig,
             uniquenessKey,
             additionalProperties,
@@ -10584,5 +10812,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Commit{id=$id, createdAt=$createdAt, product=$product, type=$type, accessSchedule=$accessSchedule, amount=$amount, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, archivedAt=$archivedAt, balance=$balance, contract=$contract, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContract=$invoiceContract, invoiceSchedule=$invoiceSchedule, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCommitId=$recurringCommitId, rolledOverFrom=$rolledOverFrom, rolloverFraction=$rolloverFraction, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+        "Commit{id=$id, createdAt=$createdAt, product=$product, type=$type, accessSchedule=$accessSchedule, amount=$amount, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, archivedAt=$archivedAt, balance=$balance, contract=$contract, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContract=$invoiceContract, invoiceSchedule=$invoiceSchedule, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCommitId=$recurringCommitId, rolledOverFrom=$rolledOverFrom, rolloverFraction=$rolloverFraction, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, spendTrackerAttributes=$spendTrackerAttributes, subscriptionConfig=$subscriptionConfig, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
 }

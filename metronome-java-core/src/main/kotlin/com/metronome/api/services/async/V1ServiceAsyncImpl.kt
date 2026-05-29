@@ -23,8 +23,6 @@ import com.metronome.api.services.async.v1.InvoiceServiceAsync
 import com.metronome.api.services.async.v1.InvoiceServiceAsyncImpl
 import com.metronome.api.services.async.v1.PackageServiceAsync
 import com.metronome.api.services.async.v1.PackageServiceAsyncImpl
-import com.metronome.api.services.async.v1.PaymentServiceAsync
-import com.metronome.api.services.async.v1.PaymentServiceAsyncImpl
 import com.metronome.api.services.async.v1.PlanServiceAsync
 import com.metronome.api.services.async.v1.PlanServiceAsyncImpl
 import com.metronome.api.services.async.v1.PricingUnitServiceAsync
@@ -81,8 +79,6 @@ class V1ServiceAsyncImpl internal constructor(private val clientOptions: ClientO
     private val contracts: ContractServiceAsync by lazy { ContractServiceAsyncImpl(clientOptions) }
 
     private val packages: PackageServiceAsync by lazy { PackageServiceAsyncImpl(clientOptions) }
-
-    private val payments: PaymentServiceAsync by lazy { PaymentServiceAsyncImpl(clientOptions) }
 
     private val settings: SettingServiceAsync by lazy { SettingServiceAsyncImpl(clientOptions) }
 
@@ -174,8 +170,6 @@ class V1ServiceAsyncImpl internal constructor(private val clientOptions: ClientO
 
     override fun packages(): PackageServiceAsync = packages
 
-    override fun payments(): PaymentServiceAsync = payments
-
     /**
      * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
      * behavior.
@@ -239,10 +233,6 @@ class V1ServiceAsyncImpl internal constructor(private val clientOptions: ClientO
 
         private val packages: PackageServiceAsync.WithRawResponse by lazy {
             PackageServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
-        private val payments: PaymentServiceAsync.WithRawResponse by lazy {
-            PaymentServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val settings: SettingServiceAsync.WithRawResponse by lazy {
@@ -339,8 +329,6 @@ class V1ServiceAsyncImpl internal constructor(private val clientOptions: ClientO
         override fun contracts(): ContractServiceAsync.WithRawResponse = contracts
 
         override fun packages(): PackageServiceAsync.WithRawResponse = packages
-
-        override fun payments(): PaymentServiceAsync.WithRawResponse = payments
 
         /**
          * Use these endpoints to configure a billing API key, a webhook secret, or invoice

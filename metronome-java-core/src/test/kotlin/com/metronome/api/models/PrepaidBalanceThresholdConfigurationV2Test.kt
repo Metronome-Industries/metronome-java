@@ -5,6 +5,7 @@ package com.metronome.api.models
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.jsonMapper
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -69,6 +70,39 @@ internal class PrepaidBalanceThresholdConfigurationV2Test {
                 .discountConfiguration(
                     PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.builder()
                         .paymentFraction(0.0)
+                        .cap(
+                            PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.Cap
+                                .builder()
+                                .amount(0.0)
+                                .spendTrackerAlias("spend_tracker_alias")
+                                .build()
+                        )
+                        .build()
+                )
+                .addThresholdBalanceSpecifier(
+                    PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier.builder()
+                        .addExclude(
+                            PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier.Exclude
+                                .builder()
+                                .addCustomFieldFilter(
+                                    PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .CustomFieldFilter
+                                        .builder()
+                                        .entity(
+                                            PrepaidBalanceThresholdConfigurationV2
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .Entity
+                                                .COMMIT
+                                        )
+                                        .key("key")
+                                        .value("value")
+                                        .build()
+                                )
+                                .build()
+                        )
                         .build()
                 )
                 .build()
@@ -132,6 +166,39 @@ internal class PrepaidBalanceThresholdConfigurationV2Test {
             .contains(
                 PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.builder()
                     .paymentFraction(0.0)
+                    .cap(
+                        PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.Cap.builder()
+                            .amount(0.0)
+                            .spendTrackerAlias("spend_tracker_alias")
+                            .build()
+                    )
+                    .build()
+            )
+        assertThat(prepaidBalanceThresholdConfigurationV2.thresholdBalanceSpecifiers().getOrNull())
+            .containsExactly(
+                PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier.builder()
+                    .addExclude(
+                        PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier.Exclude
+                            .builder()
+                            .addCustomFieldFilter(
+                                PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .CustomFieldFilter
+                                    .builder()
+                                    .entity(
+                                        PrepaidBalanceThresholdConfigurationV2
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .Entity
+                                            .COMMIT
+                                    )
+                                    .key("key")
+                                    .value("value")
+                                    .build()
+                            )
+                            .build()
+                    )
                     .build()
             )
     }
@@ -196,6 +263,39 @@ internal class PrepaidBalanceThresholdConfigurationV2Test {
                 .discountConfiguration(
                     PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.builder()
                         .paymentFraction(0.0)
+                        .cap(
+                            PrepaidBalanceThresholdConfigurationV2.DiscountConfiguration.Cap
+                                .builder()
+                                .amount(0.0)
+                                .spendTrackerAlias("spend_tracker_alias")
+                                .build()
+                        )
+                        .build()
+                )
+                .addThresholdBalanceSpecifier(
+                    PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier.builder()
+                        .addExclude(
+                            PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier.Exclude
+                                .builder()
+                                .addCustomFieldFilter(
+                                    PrepaidBalanceThresholdConfigurationV2.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .CustomFieldFilter
+                                        .builder()
+                                        .entity(
+                                            PrepaidBalanceThresholdConfigurationV2
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .Entity
+                                                .COMMIT
+                                        )
+                                        .key("key")
+                                        .value("value")
+                                        .build()
+                                )
+                                .build()
+                        )
                         .build()
                 )
                 .build()

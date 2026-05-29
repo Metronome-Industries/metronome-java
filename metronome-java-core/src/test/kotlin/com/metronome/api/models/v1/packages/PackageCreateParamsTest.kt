@@ -338,6 +338,41 @@ internal class PackageCreateParamsTest {
                     .discountConfiguration(
                         PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap
+                                    .builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .addThresholdBalanceSpecifier(
+                        PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                            .addExclude(
+                                PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        PrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .build()
@@ -575,8 +610,37 @@ internal class PackageCreateParamsTest {
                     .discountConfiguration(
                         SpendThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                SpendThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
                             .build()
                     )
+                    .build()
+            )
+            .addSpendTracker(
+                PackageCreateParams.SpendTracker.builder()
+                    .alias("alias")
+                    .addApplicableSpendSpecifier(
+                        PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.builder()
+                            .addSource(
+                                PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.Source
+                                    .THRESHOLD_RECHARGE
+                            )
+                            .spendType(
+                                PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.SpendType
+                                    .COMMIT_PURCHASE
+                            )
+                            .discounted(
+                                PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.Discounted
+                                    .ANY
+                            )
+                            .build()
+                    )
+                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .resetFrequency(PackageCreateParams.SpendTracker.ResetFrequency.BILLING_PERIOD)
                     .build()
             )
             .addSubscription(
@@ -991,6 +1055,41 @@ internal class PackageCreateParamsTest {
                         .discountConfiguration(
                             PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                                 .paymentFraction(0.0)
+                                .cap(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap
+                                        .builder()
+                                        .amount(0.0)
+                                        .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addThresholdBalanceSpecifier(
+                            PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                                .addExclude(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .builder()
+                                        .addCustomFieldFilter(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .COMMIT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .build()
@@ -1245,7 +1344,40 @@ internal class PackageCreateParamsTest {
                         .discountConfiguration(
                             SpendThresholdConfiguration.DiscountConfiguration.builder()
                                 .paymentFraction(0.0)
+                                .cap(
+                                    SpendThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                        .amount(0.0)
+                                        .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
                                 .build()
+                        )
+                        .build()
+                )
+                .addSpendTracker(
+                    PackageCreateParams.SpendTracker.builder()
+                        .alias("alias")
+                        .addApplicableSpendSpecifier(
+                            PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.builder()
+                                .addSource(
+                                    PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.Source
+                                        .THRESHOLD_RECHARGE
+                                )
+                                .spendType(
+                                    PackageCreateParams.SpendTracker.ApplicableSpendSpecifier
+                                        .SpendType
+                                        .COMMIT_PURCHASE
+                                )
+                                .discounted(
+                                    PackageCreateParams.SpendTracker.ApplicableSpendSpecifier
+                                        .Discounted
+                                        .ANY
+                                )
+                                .build()
+                        )
+                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .resetFrequency(
+                            PackageCreateParams.SpendTracker.ResetFrequency.BILLING_PERIOD
                         )
                         .build()
                 )
@@ -1655,6 +1787,41 @@ internal class PackageCreateParamsTest {
                     .discountConfiguration(
                         PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap
+                                    .builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .addThresholdBalanceSpecifier(
+                        PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                            .addExclude(
+                                PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        PrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .build()
@@ -1895,8 +2062,38 @@ internal class PackageCreateParamsTest {
                     .discountConfiguration(
                         SpendThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                SpendThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
                             .build()
                     )
+                    .build()
+            )
+        assertThat(body.spendTrackers().getOrNull())
+            .containsExactly(
+                PackageCreateParams.SpendTracker.builder()
+                    .alias("alias")
+                    .addApplicableSpendSpecifier(
+                        PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.builder()
+                            .addSource(
+                                PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.Source
+                                    .THRESHOLD_RECHARGE
+                            )
+                            .spendType(
+                                PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.SpendType
+                                    .COMMIT_PURCHASE
+                            )
+                            .discounted(
+                                PackageCreateParams.SpendTracker.ApplicableSpendSpecifier.Discounted
+                                    .ANY
+                            )
+                            .build()
+                    )
+                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .resetFrequency(PackageCreateParams.SpendTracker.ResetFrequency.BILLING_PERIOD)
                     .build()
             )
         assertThat(body.subscriptions().getOrNull())

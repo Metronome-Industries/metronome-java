@@ -148,6 +148,9 @@ internal class ContractWithoutAmendmentsTest {
                                 .addProductTag("string")
                                 .build()
                         )
+                        .spendTrackerAttributes(
+                            Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build()
+                        )
                         .subscriptionConfig(
                             Commit.SubscriptionConfig.builder()
                                 .allocation(Commit.SubscriptionConfig.Allocation.INDIVIDUAL)
@@ -547,6 +550,41 @@ internal class ContractWithoutAmendmentsTest {
                         .discountConfiguration(
                             PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                                 .paymentFraction(0.0)
+                                .cap(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap
+                                        .builder()
+                                        .amount(0.0)
+                                        .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addThresholdBalanceSpecifier(
+                            PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                                .addExclude(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .builder()
+                                        .addCustomFieldFilter(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .COMMIT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .build()
@@ -818,6 +856,50 @@ internal class ContractWithoutAmendmentsTest {
                         .discountConfiguration(
                             SpendThresholdConfiguration.DiscountConfiguration.builder()
                                 .paymentFraction(0.0)
+                                .cap(
+                                    SpendThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                        .amount(0.0)
+                                        .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build()
+                )
+                .addSpendTracker(
+                    ContractWithoutAmendments.SpendTracker.builder()
+                        .alias("alias")
+                        .addApplicableSpendSpecifier(
+                            ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                .builder()
+                                .addSource(
+                                    ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                        .Source
+                                        .THRESHOLD_RECHARGE
+                                )
+                                .spendType(
+                                    ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                        .SpendType
+                                        .COMMIT_PURCHASE
+                                )
+                                .discounted(
+                                    ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                        .Discounted
+                                        .ANY
+                                )
+                                .build()
+                        )
+                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .resetFrequency(
+                            ContractWithoutAmendments.SpendTracker.ResetFrequency.BILLING_PERIOD
+                        )
+                        .accumulatedSpend(
+                            ContractWithoutAmendments.SpendTracker.AccumulatedSpend.builder()
+                                .amount(0.0)
+                                .periodEndingBefore(
+                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                )
+                                .periodStartingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
                         )
                         .build()
@@ -976,6 +1058,9 @@ internal class ContractWithoutAmendmentsTest {
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addProductTag("string")
                             .build()
+                    )
+                    .spendTrackerAttributes(
+                        Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build()
                     )
                     .subscriptionConfig(
                         Commit.SubscriptionConfig.builder()
@@ -1369,6 +1454,41 @@ internal class ContractWithoutAmendmentsTest {
                     .discountConfiguration(
                         PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap
+                                    .builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .addThresholdBalanceSpecifier(
+                        PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                            .addExclude(
+                                PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                    .Exclude
+                                    .builder()
+                                    .addCustomFieldFilter(
+                                        PrepaidBalanceThresholdConfiguration
+                                            .ThresholdBalanceSpecifier
+                                            .Exclude
+                                            .CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                PrepaidBalanceThresholdConfiguration
+                                                    .ThresholdBalanceSpecifier
+                                                    .Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .COMMIT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .build()
@@ -1639,6 +1759,48 @@ internal class ContractWithoutAmendmentsTest {
                     .discountConfiguration(
                         SpendThresholdConfiguration.DiscountConfiguration.builder()
                             .paymentFraction(0.0)
+                            .cap(
+                                SpendThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                    .amount(0.0)
+                                    .spendTrackerAlias("spend_tracker_alias")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .build()
+            )
+        assertThat(contractWithoutAmendments.spendTrackers().getOrNull())
+            .containsExactly(
+                ContractWithoutAmendments.SpendTracker.builder()
+                    .alias("alias")
+                    .addApplicableSpendSpecifier(
+                        ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier.builder()
+                            .addSource(
+                                ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                    .Source
+                                    .THRESHOLD_RECHARGE
+                            )
+                            .spendType(
+                                ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                    .SpendType
+                                    .COMMIT_PURCHASE
+                            )
+                            .discounted(
+                                ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                    .Discounted
+                                    .ANY
+                            )
+                            .build()
+                    )
+                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .resetFrequency(
+                        ContractWithoutAmendments.SpendTracker.ResetFrequency.BILLING_PERIOD
+                    )
+                    .accumulatedSpend(
+                        ContractWithoutAmendments.SpendTracker.AccumulatedSpend.builder()
+                            .amount(0.0)
+                            .periodEndingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .periodStartingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )
                     .build()
@@ -1808,6 +1970,9 @@ internal class ContractWithoutAmendmentsTest {
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addProductTag("string")
                                 .build()
+                        )
+                        .spendTrackerAttributes(
+                            Commit.SpendTrackerAttributes.builder().countsAsDiscounted(true).build()
                         )
                         .subscriptionConfig(
                             Commit.SubscriptionConfig.builder()
@@ -2208,6 +2373,41 @@ internal class ContractWithoutAmendmentsTest {
                         .discountConfiguration(
                             PrepaidBalanceThresholdConfiguration.DiscountConfiguration.builder()
                                 .paymentFraction(0.0)
+                                .cap(
+                                    PrepaidBalanceThresholdConfiguration.DiscountConfiguration.Cap
+                                        .builder()
+                                        .amount(0.0)
+                                        .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addThresholdBalanceSpecifier(
+                            PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier.builder()
+                                .addExclude(
+                                    PrepaidBalanceThresholdConfiguration.ThresholdBalanceSpecifier
+                                        .Exclude
+                                        .builder()
+                                        .addCustomFieldFilter(
+                                            PrepaidBalanceThresholdConfiguration
+                                                .ThresholdBalanceSpecifier
+                                                .Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    PrepaidBalanceThresholdConfiguration
+                                                        .ThresholdBalanceSpecifier
+                                                        .Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .COMMIT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .build()
@@ -2479,6 +2679,50 @@ internal class ContractWithoutAmendmentsTest {
                         .discountConfiguration(
                             SpendThresholdConfiguration.DiscountConfiguration.builder()
                                 .paymentFraction(0.0)
+                                .cap(
+                                    SpendThresholdConfiguration.DiscountConfiguration.Cap.builder()
+                                        .amount(0.0)
+                                        .spendTrackerAlias("spend_tracker_alias")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build()
+                )
+                .addSpendTracker(
+                    ContractWithoutAmendments.SpendTracker.builder()
+                        .alias("alias")
+                        .addApplicableSpendSpecifier(
+                            ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                .builder()
+                                .addSource(
+                                    ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                        .Source
+                                        .THRESHOLD_RECHARGE
+                                )
+                                .spendType(
+                                    ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                        .SpendType
+                                        .COMMIT_PURCHASE
+                                )
+                                .discounted(
+                                    ContractWithoutAmendments.SpendTracker.ApplicableSpendSpecifier
+                                        .Discounted
+                                        .ANY
+                                )
+                                .build()
+                        )
+                        .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .resetFrequency(
+                            ContractWithoutAmendments.SpendTracker.ResetFrequency.BILLING_PERIOD
+                        )
+                        .accumulatedSpend(
+                            ContractWithoutAmendments.SpendTracker.AccumulatedSpend.builder()
+                                .amount(0.0)
+                                .periodEndingBefore(
+                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                )
+                                .periodStartingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
                         )
                         .build()

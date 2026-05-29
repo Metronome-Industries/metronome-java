@@ -1544,6 +1544,7 @@ private constructor(
         private val rateType: JsonField<RateType>,
         private val rolloverFraction: JsonField<Double>,
         private val specifiers: JsonField<List<CommitSpecifierInput>>,
+        private val spendTrackerAttributes: JsonField<SpendTrackerAttributes>,
         private val temporaryId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -1592,6 +1593,9 @@ private constructor(
             @JsonProperty("specifiers")
             @ExcludeMissing
             specifiers: JsonField<List<CommitSpecifierInput>> = JsonMissing.of(),
+            @JsonProperty("spend_tracker_attributes")
+            @ExcludeMissing
+            spendTrackerAttributes: JsonField<SpendTrackerAttributes> = JsonMissing.of(),
             @JsonProperty("temporary_id")
             @ExcludeMissing
             temporaryId: JsonField<String> = JsonMissing.of(),
@@ -1612,6 +1616,7 @@ private constructor(
             rateType,
             rolloverFraction,
             specifiers,
+            spendTrackerAttributes,
             temporaryId,
             mutableMapOf(),
         )
@@ -1753,6 +1758,15 @@ private constructor(
          */
         fun specifiers(): Optional<List<CommitSpecifierInput>> =
             specifiers.getOptional("specifiers")
+
+        /**
+         * Optional attributes for spend tracker integration. Immutable after creation.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun spendTrackerAttributes(): Optional<SpendTrackerAttributes> =
+            spendTrackerAttributes.getOptional("spend_tracker_attributes")
 
         /**
          * A temporary ID for the commit that can be used to reference the commit for commit
@@ -1905,6 +1919,16 @@ private constructor(
         fun _specifiers(): JsonField<List<CommitSpecifierInput>> = specifiers
 
         /**
+         * Returns the raw JSON value of [spendTrackerAttributes].
+         *
+         * Unlike [spendTrackerAttributes], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("spend_tracker_attributes")
+        @ExcludeMissing
+        fun _spendTrackerAttributes(): JsonField<SpendTrackerAttributes> = spendTrackerAttributes
+
+        /**
          * Returns the raw JSON value of [temporaryId].
          *
          * Unlike [temporaryId], this method doesn't throw if the JSON field has an unexpected type.
@@ -1959,6 +1983,7 @@ private constructor(
             private var rateType: JsonField<RateType> = JsonMissing.of()
             private var rolloverFraction: JsonField<Double> = JsonMissing.of()
             private var specifiers: JsonField<MutableList<CommitSpecifierInput>>? = null
+            private var spendTrackerAttributes: JsonField<SpendTrackerAttributes> = JsonMissing.of()
             private var temporaryId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1980,6 +2005,7 @@ private constructor(
                 rateType = commit.rateType
                 rolloverFraction = commit.rolloverFraction
                 specifiers = commit.specifiers.map { it.toMutableList() }
+                spendTrackerAttributes = commit.spendTrackerAttributes
                 temporaryId = commit.temporaryId
                 additionalProperties = commit.additionalProperties.toMutableMap()
             }
@@ -2260,6 +2286,22 @@ private constructor(
                     }
             }
 
+            /** Optional attributes for spend tracker integration. Immutable after creation. */
+            fun spendTrackerAttributes(spendTrackerAttributes: SpendTrackerAttributes) =
+                spendTrackerAttributes(JsonField.of(spendTrackerAttributes))
+
+            /**
+             * Sets [Builder.spendTrackerAttributes] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.spendTrackerAttributes] with a well-typed
+             * [SpendTrackerAttributes] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun spendTrackerAttributes(spendTrackerAttributes: JsonField<SpendTrackerAttributes>) =
+                apply {
+                    this.spendTrackerAttributes = spendTrackerAttributes
+                }
+
             /**
              * A temporary ID for the commit that can be used to reference the commit for commit
              * specific overrides.
@@ -2327,6 +2369,7 @@ private constructor(
                     rateType,
                     rolloverFraction,
                     (specifiers ?: JsonMissing.of()).map { it.toImmutable() },
+                    spendTrackerAttributes,
                     temporaryId,
                     additionalProperties.toMutableMap(),
                 )
@@ -2364,6 +2407,7 @@ private constructor(
             rateType().ifPresent { it.validate() }
             rolloverFraction()
             specifiers().ifPresent { it.forEach { it.validate() } }
+            spendTrackerAttributes().ifPresent { it.validate() }
             temporaryId()
             validated = true
         }
@@ -2400,6 +2444,7 @@ private constructor(
                 (rateType.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (rolloverFraction.asKnown().isPresent) 1 else 0) +
                 (specifiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (spendTrackerAttributes.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (temporaryId.asKnown().isPresent) 1 else 0)
 
         class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -4744,6 +4789,198 @@ private constructor(
             override fun toString() = value.toString()
         }
 
+        /** Optional attributes for spend tracker integration. Immutable after creation. */
+        class SpendTrackerAttributes
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val countsAsDiscounted: JsonField<Boolean>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("counts_as_discounted")
+                @ExcludeMissing
+                countsAsDiscounted: JsonField<Boolean> = JsonMissing.of()
+            ) : this(countsAsDiscounted, mutableMapOf())
+
+            /**
+             * If true, this commit will be included in spend trackers with discounted set to
+             * DISCOUNTED_ONLY
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun countsAsDiscounted(): Boolean =
+                countsAsDiscounted.getRequired("counts_as_discounted")
+
+            /**
+             * Returns the raw JSON value of [countsAsDiscounted].
+             *
+             * Unlike [countsAsDiscounted], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("counts_as_discounted")
+            @ExcludeMissing
+            fun _countsAsDiscounted(): JsonField<Boolean> = countsAsDiscounted
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [SpendTrackerAttributes].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .countsAsDiscounted()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [SpendTrackerAttributes]. */
+            class Builder internal constructor() {
+
+                private var countsAsDiscounted: JsonField<Boolean>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(spendTrackerAttributes: SpendTrackerAttributes) = apply {
+                    countsAsDiscounted = spendTrackerAttributes.countsAsDiscounted
+                    additionalProperties =
+                        spendTrackerAttributes.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * If true, this commit will be included in spend trackers with discounted set to
+                 * DISCOUNTED_ONLY
+                 */
+                fun countsAsDiscounted(countsAsDiscounted: Boolean) =
+                    countsAsDiscounted(JsonField.of(countsAsDiscounted))
+
+                /**
+                 * Sets [Builder.countsAsDiscounted] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.countsAsDiscounted] with a well-typed [Boolean]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun countsAsDiscounted(countsAsDiscounted: JsonField<Boolean>) = apply {
+                    this.countsAsDiscounted = countsAsDiscounted
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [SpendTrackerAttributes].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .countsAsDiscounted()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): SpendTrackerAttributes =
+                    SpendTrackerAttributes(
+                        checkRequired("countsAsDiscounted", countsAsDiscounted),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): SpendTrackerAttributes = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                countsAsDiscounted()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int = (if (countsAsDiscounted.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is SpendTrackerAttributes &&
+                    countsAsDiscounted == other.countsAsDiscounted &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(countsAsDiscounted, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "SpendTrackerAttributes{countsAsDiscounted=$countsAsDiscounted, additionalProperties=$additionalProperties}"
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -4766,6 +5003,7 @@ private constructor(
                 rateType == other.rateType &&
                 rolloverFraction == other.rolloverFraction &&
                 specifiers == other.specifiers &&
+                spendTrackerAttributes == other.spendTrackerAttributes &&
                 temporaryId == other.temporaryId &&
                 additionalProperties == other.additionalProperties
         }
@@ -4788,6 +5026,7 @@ private constructor(
                 rateType,
                 rolloverFraction,
                 specifiers,
+                spendTrackerAttributes,
                 temporaryId,
                 additionalProperties,
             )
@@ -4796,7 +5035,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Commit{productId=$productId, type=$type, accessSchedule=$accessSchedule, amount=$amount, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, rolloverFraction=$rolloverFraction, specifiers=$specifiers, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "Commit{productId=$productId, type=$type, accessSchedule=$accessSchedule, amount=$amount, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceSchedule=$invoiceSchedule, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, rolloverFraction=$rolloverFraction, specifiers=$specifiers, spendTrackerAttributes=$spendTrackerAttributes, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class Credit

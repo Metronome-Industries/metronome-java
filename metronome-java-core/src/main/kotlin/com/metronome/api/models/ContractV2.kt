@@ -70,6 +70,7 @@ private constructor(
     private val salesforceOpportunityId: JsonField<String>,
     private val scheduledChargesOnUsageInvoices: JsonField<ScheduledChargesOnUsageInvoices>,
     private val spendThresholdConfiguration: JsonField<SpendThresholdConfigurationV2>,
+    private val spendTrackers: JsonField<List<SpendTracker>>,
     private val subscriptions: JsonField<List<Subscription>>,
     private val totalContractValue: JsonField<Double>,
     private val uniquenessKey: JsonField<String>,
@@ -171,6 +172,9 @@ private constructor(
         @JsonProperty("spend_threshold_configuration")
         @ExcludeMissing
         spendThresholdConfiguration: JsonField<SpendThresholdConfigurationV2> = JsonMissing.of(),
+        @JsonProperty("spend_trackers")
+        @ExcludeMissing
+        spendTrackers: JsonField<List<SpendTracker>> = JsonMissing.of(),
         @JsonProperty("subscriptions")
         @ExcludeMissing
         subscriptions: JsonField<List<Subscription>> = JsonMissing.of(),
@@ -214,6 +218,7 @@ private constructor(
         salesforceOpportunityId,
         scheduledChargesOnUsageInvoices,
         spendThresholdConfiguration,
+        spendTrackers,
         subscriptions,
         totalContractValue,
         uniquenessKey,
@@ -463,6 +468,14 @@ private constructor(
      */
     fun spendThresholdConfiguration(): Optional<SpendThresholdConfigurationV2> =
         spendThresholdConfiguration.getOptional("spend_threshold_configuration")
+
+    /**
+     * Spend trackers attached to this contract.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun spendTrackers(): Optional<List<SpendTracker>> = spendTrackers.getOptional("spend_trackers")
 
     /**
      * List of subscriptions on the contract.
@@ -787,6 +800,15 @@ private constructor(
         spendThresholdConfiguration
 
     /**
+     * Returns the raw JSON value of [spendTrackers].
+     *
+     * Unlike [spendTrackers], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("spend_trackers")
+    @ExcludeMissing
+    fun _spendTrackers(): JsonField<List<SpendTracker>> = spendTrackers
+
+    /**
      * Returns the raw JSON value of [subscriptions].
      *
      * Unlike [subscriptions], this method doesn't throw if the JSON field has an unexpected type.
@@ -892,6 +914,7 @@ private constructor(
             JsonMissing.of()
         private var spendThresholdConfiguration: JsonField<SpendThresholdConfigurationV2> =
             JsonMissing.of()
+        private var spendTrackers: JsonField<MutableList<SpendTracker>>? = null
         private var subscriptions: JsonField<MutableList<Subscription>>? = null
         private var totalContractValue: JsonField<Double> = JsonMissing.of()
         private var uniquenessKey: JsonField<String> = JsonMissing.of()
@@ -932,6 +955,7 @@ private constructor(
             salesforceOpportunityId = contractV2.salesforceOpportunityId
             scheduledChargesOnUsageInvoices = contractV2.scheduledChargesOnUsageInvoices
             spendThresholdConfiguration = contractV2.spendThresholdConfiguration
+            spendTrackers = contractV2.spendTrackers.map { it.toMutableList() }
             subscriptions = contractV2.subscriptions.map { it.toMutableList() }
             totalContractValue = contractV2.totalContractValue
             uniquenessKey = contractV2.uniquenessKey
@@ -1552,6 +1576,33 @@ private constructor(
             spendThresholdConfiguration: JsonField<SpendThresholdConfigurationV2>
         ) = apply { this.spendThresholdConfiguration = spendThresholdConfiguration }
 
+        /** Spend trackers attached to this contract. */
+        fun spendTrackers(spendTrackers: List<SpendTracker>) =
+            spendTrackers(JsonField.of(spendTrackers))
+
+        /**
+         * Sets [Builder.spendTrackers] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.spendTrackers] with a well-typed `List<SpendTracker>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun spendTrackers(spendTrackers: JsonField<List<SpendTracker>>) = apply {
+            this.spendTrackers = spendTrackers.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [SpendTracker] to [spendTrackers].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addSpendTracker(spendTracker: SpendTracker) = apply {
+            spendTrackers =
+                (spendTrackers ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("spendTrackers", it).add(spendTracker)
+                }
+        }
+
         /** List of subscriptions on the contract. */
         fun subscriptions(subscriptions: List<Subscription>) =
             subscriptions(JsonField.of(subscriptions))
@@ -1683,6 +1734,7 @@ private constructor(
                 salesforceOpportunityId,
                 scheduledChargesOnUsageInvoices,
                 spendThresholdConfiguration,
+                (spendTrackers ?: JsonMissing.of()).map { it.toImmutable() },
                 (subscriptions ?: JsonMissing.of()).map { it.toImmutable() },
                 totalContractValue,
                 uniquenessKey,
@@ -1738,6 +1790,7 @@ private constructor(
         salesforceOpportunityId()
         scheduledChargesOnUsageInvoices().ifPresent { it.validate() }
         spendThresholdConfiguration().ifPresent { it.validate() }
+        spendTrackers().ifPresent { it.forEach { it.validate() } }
         subscriptions().ifPresent { it.forEach { it.validate() } }
         totalContractValue()
         uniquenessKey()
@@ -1792,6 +1845,7 @@ private constructor(
             (if (salesforceOpportunityId.asKnown().isPresent) 1 else 0) +
             (scheduledChargesOnUsageInvoices.asKnown().getOrNull()?.validity() ?: 0) +
             (spendThresholdConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
+            (spendTrackers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (subscriptions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (totalContractValue.asKnown().isPresent) 1 else 0) +
             (if (uniquenessKey.asKnown().isPresent) 1 else 0)
@@ -1825,6 +1879,7 @@ private constructor(
         private val rolloverFraction: JsonField<Double>,
         private val salesforceOpportunityId: JsonField<String>,
         private val specifiers: JsonField<List<CommitSpecifier>>,
+        private val spendTrackerAttributes: JsonField<SpendTrackerAttributes>,
         private val subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -1899,6 +1954,9 @@ private constructor(
             @JsonProperty("specifiers")
             @ExcludeMissing
             specifiers: JsonField<List<CommitSpecifier>> = JsonMissing.of(),
+            @JsonProperty("spend_tracker_attributes")
+            @ExcludeMissing
+            spendTrackerAttributes: JsonField<SpendTrackerAttributes> = JsonMissing.of(),
             @JsonProperty("subscription_config")
             @ExcludeMissing
             subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig> = JsonMissing.of(),
@@ -1929,6 +1987,7 @@ private constructor(
             rolloverFraction,
             salesforceOpportunityId,
             specifiers,
+            spendTrackerAttributes,
             subscriptionConfig,
             mutableMapOf(),
         )
@@ -2137,6 +2196,15 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun specifiers(): Optional<List<CommitSpecifier>> = specifiers.getOptional("specifiers")
+
+        /**
+         * Optional attributes controlling how this commit interacts with spend trackers.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun spendTrackerAttributes(): Optional<SpendTrackerAttributes> =
+            spendTrackerAttributes.getOptional("spend_tracker_attributes")
 
         /**
          * Attach a subscription to the recurring commit/credit.
@@ -2378,6 +2446,16 @@ private constructor(
         fun _specifiers(): JsonField<List<CommitSpecifier>> = specifiers
 
         /**
+         * Returns the raw JSON value of [spendTrackerAttributes].
+         *
+         * Unlike [spendTrackerAttributes], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("spend_tracker_attributes")
+        @ExcludeMissing
+        fun _spendTrackerAttributes(): JsonField<SpendTrackerAttributes> = spendTrackerAttributes
+
+        /**
          * Returns the raw JSON value of [subscriptionConfig].
          *
          * Unlike [subscriptionConfig], this method doesn't throw if the JSON field has an
@@ -2445,6 +2523,7 @@ private constructor(
             private var rolloverFraction: JsonField<Double> = JsonMissing.of()
             private var salesforceOpportunityId: JsonField<String> = JsonMissing.of()
             private var specifiers: JsonField<MutableList<CommitSpecifier>>? = null
+            private var spendTrackerAttributes: JsonField<SpendTrackerAttributes> = JsonMissing.of()
             private var subscriptionConfig: JsonField<RecurringCommitSubscriptionConfig> =
                 JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -2477,6 +2556,7 @@ private constructor(
                 rolloverFraction = commit.rolloverFraction
                 salesforceOpportunityId = commit.salesforceOpportunityId
                 specifiers = commit.specifiers.map { it.toMutableList() }
+                spendTrackerAttributes = commit.spendTrackerAttributes
                 subscriptionConfig = commit.subscriptionConfig
                 additionalProperties = commit.additionalProperties.toMutableMap()
             }
@@ -3073,6 +3153,22 @@ private constructor(
                     }
             }
 
+            /** Optional attributes controlling how this commit interacts with spend trackers. */
+            fun spendTrackerAttributes(spendTrackerAttributes: SpendTrackerAttributes) =
+                spendTrackerAttributes(JsonField.of(spendTrackerAttributes))
+
+            /**
+             * Sets [Builder.spendTrackerAttributes] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.spendTrackerAttributes] with a well-typed
+             * [SpendTrackerAttributes] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun spendTrackerAttributes(spendTrackerAttributes: JsonField<SpendTrackerAttributes>) =
+                apply {
+                    this.spendTrackerAttributes = spendTrackerAttributes
+                }
+
             /** Attach a subscription to the recurring commit/credit. */
             fun subscriptionConfig(subscriptionConfig: RecurringCommitSubscriptionConfig) =
                 subscriptionConfig(JsonField.of(subscriptionConfig))
@@ -3150,6 +3246,7 @@ private constructor(
                     rolloverFraction,
                     salesforceOpportunityId,
                     (specifiers ?: JsonMissing.of()).map { it.toImmutable() },
+                    spendTrackerAttributes,
                     subscriptionConfig,
                     additionalProperties.toMutableMap(),
                 )
@@ -3197,6 +3294,7 @@ private constructor(
             rolloverFraction()
             salesforceOpportunityId()
             specifiers().ifPresent { it.forEach { it.validate() } }
+            spendTrackerAttributes().ifPresent { it.validate() }
             subscriptionConfig().ifPresent { it.validate() }
             validated = true
         }
@@ -3243,6 +3341,7 @@ private constructor(
                 (if (rolloverFraction.asKnown().isPresent) 1 else 0) +
                 (if (salesforceOpportunityId.asKnown().isPresent) 1 else 0) +
                 (specifiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (spendTrackerAttributes.asKnown().getOrNull()?.validity() ?: 0) +
                 (subscriptionConfig.asKnown().getOrNull()?.validity() ?: 0)
 
         class Product
@@ -11881,6 +11980,198 @@ private constructor(
                 "RolledOverFrom{commitId=$commitId, contractId=$contractId, additionalProperties=$additionalProperties}"
         }
 
+        /** Optional attributes controlling how this commit interacts with spend trackers. */
+        class SpendTrackerAttributes
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val countsAsDiscounted: JsonField<Boolean>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("counts_as_discounted")
+                @ExcludeMissing
+                countsAsDiscounted: JsonField<Boolean> = JsonMissing.of()
+            ) : this(countsAsDiscounted, mutableMapOf())
+
+            /**
+             * If true, this commit is included in spend trackers with discounted set to
+             * DISCOUNTED_ONLY
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun countsAsDiscounted(): Boolean =
+                countsAsDiscounted.getRequired("counts_as_discounted")
+
+            /**
+             * Returns the raw JSON value of [countsAsDiscounted].
+             *
+             * Unlike [countsAsDiscounted], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("counts_as_discounted")
+            @ExcludeMissing
+            fun _countsAsDiscounted(): JsonField<Boolean> = countsAsDiscounted
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [SpendTrackerAttributes].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .countsAsDiscounted()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [SpendTrackerAttributes]. */
+            class Builder internal constructor() {
+
+                private var countsAsDiscounted: JsonField<Boolean>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(spendTrackerAttributes: SpendTrackerAttributes) = apply {
+                    countsAsDiscounted = spendTrackerAttributes.countsAsDiscounted
+                    additionalProperties =
+                        spendTrackerAttributes.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * If true, this commit is included in spend trackers with discounted set to
+                 * DISCOUNTED_ONLY
+                 */
+                fun countsAsDiscounted(countsAsDiscounted: Boolean) =
+                    countsAsDiscounted(JsonField.of(countsAsDiscounted))
+
+                /**
+                 * Sets [Builder.countsAsDiscounted] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.countsAsDiscounted] with a well-typed [Boolean]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun countsAsDiscounted(countsAsDiscounted: JsonField<Boolean>) = apply {
+                    this.countsAsDiscounted = countsAsDiscounted
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [SpendTrackerAttributes].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .countsAsDiscounted()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): SpendTrackerAttributes =
+                    SpendTrackerAttributes(
+                        checkRequired("countsAsDiscounted", countsAsDiscounted),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): SpendTrackerAttributes = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                countsAsDiscounted()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int = (if (countsAsDiscounted.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is SpendTrackerAttributes &&
+                    countsAsDiscounted == other.countsAsDiscounted &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(countsAsDiscounted, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "SpendTrackerAttributes{countsAsDiscounted=$countsAsDiscounted, additionalProperties=$additionalProperties}"
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -11913,6 +12204,7 @@ private constructor(
                 rolloverFraction == other.rolloverFraction &&
                 salesforceOpportunityId == other.salesforceOpportunityId &&
                 specifiers == other.specifiers &&
+                spendTrackerAttributes == other.spendTrackerAttributes &&
                 subscriptionConfig == other.subscriptionConfig &&
                 additionalProperties == other.additionalProperties
         }
@@ -11945,6 +12237,7 @@ private constructor(
                 rolloverFraction,
                 salesforceOpportunityId,
                 specifiers,
+                spendTrackerAttributes,
                 subscriptionConfig,
                 additionalProperties,
             )
@@ -11953,7 +12246,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Commit{id=$id, createdAt=$createdAt, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, archivedAt=$archivedAt, balance=$balance, contract=$contract, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContract=$invoiceContract, invoiceSchedule=$invoiceSchedule, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCommitId=$recurringCommitId, rolledOverFrom=$rolledOverFrom, rolloverFraction=$rolloverFraction, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
+            "Commit{id=$id, createdAt=$createdAt, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, archivedAt=$archivedAt, balance=$balance, contract=$contract, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContract=$invoiceContract, invoiceSchedule=$invoiceSchedule, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCommitId=$recurringCommitId, rolledOverFrom=$rolledOverFrom, rolloverFraction=$rolloverFraction, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, spendTrackerAttributes=$spendTrackerAttributes, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
     }
 
     class Override
@@ -32168,6 +32461,1483 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    class SpendTracker
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val alias: JsonField<String>,
+        private val applicableSpendSpecifiers: JsonField<List<ApplicableSpendSpecifier>>,
+        private val creditTypeId: JsonField<String>,
+        private val resetFrequency: JsonField<ResetFrequency>,
+        private val accumulatedSpend: JsonField<AccumulatedSpend>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("alias") @ExcludeMissing alias: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("applicable_spend_specifiers")
+            @ExcludeMissing
+            applicableSpendSpecifiers: JsonField<List<ApplicableSpendSpecifier>> = JsonMissing.of(),
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            creditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("reset_frequency")
+            @ExcludeMissing
+            resetFrequency: JsonField<ResetFrequency> = JsonMissing.of(),
+            @JsonProperty("accumulated_spend")
+            @ExcludeMissing
+            accumulatedSpend: JsonField<AccumulatedSpend> = JsonMissing.of(),
+        ) : this(
+            alias,
+            applicableSpendSpecifiers,
+            creditTypeId,
+            resetFrequency,
+            accumulatedSpend,
+            mutableMapOf(),
+        )
+
+        /**
+         * Human-readable identifier, unique per contract.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun alias(): String = alias.getRequired("alias")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun applicableSpendSpecifiers(): List<ApplicableSpendSpecifier> =
+            applicableSpendSpecifiers.getRequired("applicable_spend_specifiers")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun resetFrequency(): ResetFrequency = resetFrequency.getRequired("reset_frequency")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun accumulatedSpend(): Optional<AccumulatedSpend> =
+            accumulatedSpend.getOptional("accumulated_spend")
+
+        /**
+         * Returns the raw JSON value of [alias].
+         *
+         * Unlike [alias], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("alias") @ExcludeMissing fun _alias(): JsonField<String> = alias
+
+        /**
+         * Returns the raw JSON value of [applicableSpendSpecifiers].
+         *
+         * Unlike [applicableSpendSpecifiers], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("applicable_spend_specifiers")
+        @ExcludeMissing
+        fun _applicableSpendSpecifiers(): JsonField<List<ApplicableSpendSpecifier>> =
+            applicableSpendSpecifiers
+
+        /**
+         * Returns the raw JSON value of [creditTypeId].
+         *
+         * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("credit_type_id")
+        @ExcludeMissing
+        fun _creditTypeId(): JsonField<String> = creditTypeId
+
+        /**
+         * Returns the raw JSON value of [resetFrequency].
+         *
+         * Unlike [resetFrequency], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("reset_frequency")
+        @ExcludeMissing
+        fun _resetFrequency(): JsonField<ResetFrequency> = resetFrequency
+
+        /**
+         * Returns the raw JSON value of [accumulatedSpend].
+         *
+         * Unlike [accumulatedSpend], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("accumulated_spend")
+        @ExcludeMissing
+        fun _accumulatedSpend(): JsonField<AccumulatedSpend> = accumulatedSpend
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [SpendTracker].
+             *
+             * The following fields are required:
+             * ```java
+             * .alias()
+             * .applicableSpendSpecifiers()
+             * .creditTypeId()
+             * .resetFrequency()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [SpendTracker]. */
+        class Builder internal constructor() {
+
+            private var alias: JsonField<String>? = null
+            private var applicableSpendSpecifiers:
+                JsonField<MutableList<ApplicableSpendSpecifier>>? =
+                null
+            private var creditTypeId: JsonField<String>? = null
+            private var resetFrequency: JsonField<ResetFrequency>? = null
+            private var accumulatedSpend: JsonField<AccumulatedSpend> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(spendTracker: SpendTracker) = apply {
+                alias = spendTracker.alias
+                applicableSpendSpecifiers =
+                    spendTracker.applicableSpendSpecifiers.map { it.toMutableList() }
+                creditTypeId = spendTracker.creditTypeId
+                resetFrequency = spendTracker.resetFrequency
+                accumulatedSpend = spendTracker.accumulatedSpend
+                additionalProperties = spendTracker.additionalProperties.toMutableMap()
+            }
+
+            /** Human-readable identifier, unique per contract. */
+            fun alias(alias: String) = alias(JsonField.of(alias))
+
+            /**
+             * Sets [Builder.alias] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.alias] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun alias(alias: JsonField<String>) = apply { this.alias = alias }
+
+            fun applicableSpendSpecifiers(
+                applicableSpendSpecifiers: List<ApplicableSpendSpecifier>
+            ) = applicableSpendSpecifiers(JsonField.of(applicableSpendSpecifiers))
+
+            /**
+             * Sets [Builder.applicableSpendSpecifiers] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.applicableSpendSpecifiers] with a well-typed
+             * `List<ApplicableSpendSpecifier>` value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
+             */
+            fun applicableSpendSpecifiers(
+                applicableSpendSpecifiers: JsonField<List<ApplicableSpendSpecifier>>
+            ) = apply {
+                this.applicableSpendSpecifiers =
+                    applicableSpendSpecifiers.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [ApplicableSpendSpecifier] to [applicableSpendSpecifiers].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addApplicableSpendSpecifier(applicableSpendSpecifier: ApplicableSpendSpecifier) =
+                apply {
+                    applicableSpendSpecifiers =
+                        (applicableSpendSpecifiers ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("applicableSpendSpecifiers", it)
+                                .add(applicableSpendSpecifier)
+                        }
+                }
+
+            fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+            /**
+             * Sets [Builder.creditTypeId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditTypeId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                this.creditTypeId = creditTypeId
+            }
+
+            fun resetFrequency(resetFrequency: ResetFrequency) =
+                resetFrequency(JsonField.of(resetFrequency))
+
+            /**
+             * Sets [Builder.resetFrequency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.resetFrequency] with a well-typed [ResetFrequency]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun resetFrequency(resetFrequency: JsonField<ResetFrequency>) = apply {
+                this.resetFrequency = resetFrequency
+            }
+
+            fun accumulatedSpend(accumulatedSpend: AccumulatedSpend) =
+                accumulatedSpend(JsonField.of(accumulatedSpend))
+
+            /**
+             * Sets [Builder.accumulatedSpend] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.accumulatedSpend] with a well-typed
+             * [AccumulatedSpend] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
+            fun accumulatedSpend(accumulatedSpend: JsonField<AccumulatedSpend>) = apply {
+                this.accumulatedSpend = accumulatedSpend
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [SpendTracker].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .alias()
+             * .applicableSpendSpecifiers()
+             * .creditTypeId()
+             * .resetFrequency()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): SpendTracker =
+                SpendTracker(
+                    checkRequired("alias", alias),
+                    checkRequired("applicableSpendSpecifiers", applicableSpendSpecifiers).map {
+                        it.toImmutable()
+                    },
+                    checkRequired("creditTypeId", creditTypeId),
+                    checkRequired("resetFrequency", resetFrequency),
+                    accumulatedSpend,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): SpendTracker = apply {
+            if (validated) {
+                return@apply
+            }
+
+            alias()
+            applicableSpendSpecifiers().forEach { it.validate() }
+            creditTypeId()
+            resetFrequency().validate()
+            accumulatedSpend().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (alias.asKnown().isPresent) 1 else 0) +
+                (applicableSpendSpecifiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
+                (if (creditTypeId.asKnown().isPresent) 1 else 0) +
+                (resetFrequency.asKnown().getOrNull()?.validity() ?: 0) +
+                (accumulatedSpend.asKnown().getOrNull()?.validity() ?: 0)
+
+        class ApplicableSpendSpecifier
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val sources: JsonField<List<Source>>,
+            private val spendType: JsonField<SpendType>,
+            private val discounted: JsonField<Discounted>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("sources")
+                @ExcludeMissing
+                sources: JsonField<List<Source>> = JsonMissing.of(),
+                @JsonProperty("spend_type")
+                @ExcludeMissing
+                spendType: JsonField<SpendType> = JsonMissing.of(),
+                @JsonProperty("discounted")
+                @ExcludeMissing
+                discounted: JsonField<Discounted> = JsonMissing.of(),
+            ) : this(sources, spendType, discounted, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun sources(): List<Source> = sources.getRequired("sources")
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun spendType(): SpendType = spendType.getRequired("spend_type")
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun discounted(): Optional<Discounted> = discounted.getOptional("discounted")
+
+            /**
+             * Returns the raw JSON value of [sources].
+             *
+             * Unlike [sources], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("sources")
+            @ExcludeMissing
+            fun _sources(): JsonField<List<Source>> = sources
+
+            /**
+             * Returns the raw JSON value of [spendType].
+             *
+             * Unlike [spendType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("spend_type")
+            @ExcludeMissing
+            fun _spendType(): JsonField<SpendType> = spendType
+
+            /**
+             * Returns the raw JSON value of [discounted].
+             *
+             * Unlike [discounted], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("discounted")
+            @ExcludeMissing
+            fun _discounted(): JsonField<Discounted> = discounted
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [ApplicableSpendSpecifier].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .sources()
+                 * .spendType()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [ApplicableSpendSpecifier]. */
+            class Builder internal constructor() {
+
+                private var sources: JsonField<MutableList<Source>>? = null
+                private var spendType: JsonField<SpendType>? = null
+                private var discounted: JsonField<Discounted> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(applicableSpendSpecifier: ApplicableSpendSpecifier) = apply {
+                    sources = applicableSpendSpecifier.sources.map { it.toMutableList() }
+                    spendType = applicableSpendSpecifier.spendType
+                    discounted = applicableSpendSpecifier.discounted
+                    additionalProperties =
+                        applicableSpendSpecifier.additionalProperties.toMutableMap()
+                }
+
+                fun sources(sources: List<Source>) = sources(JsonField.of(sources))
+
+                /**
+                 * Sets [Builder.sources] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.sources] with a well-typed `List<Source>` value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun sources(sources: JsonField<List<Source>>) = apply {
+                    this.sources = sources.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Source] to [sources].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addSource(source: Source) = apply {
+                    sources =
+                        (sources ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("sources", it).add(source)
+                        }
+                }
+
+                fun spendType(spendType: SpendType) = spendType(JsonField.of(spendType))
+
+                /**
+                 * Sets [Builder.spendType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.spendType] with a well-typed [SpendType] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun spendType(spendType: JsonField<SpendType>) = apply {
+                    this.spendType = spendType
+                }
+
+                fun discounted(discounted: Discounted) = discounted(JsonField.of(discounted))
+
+                /**
+                 * Sets [Builder.discounted] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.discounted] with a well-typed [Discounted] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun discounted(discounted: JsonField<Discounted>) = apply {
+                    this.discounted = discounted
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [ApplicableSpendSpecifier].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .sources()
+                 * .spendType()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): ApplicableSpendSpecifier =
+                    ApplicableSpendSpecifier(
+                        checkRequired("sources", sources).map { it.toImmutable() },
+                        checkRequired("spendType", spendType),
+                        discounted,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): ApplicableSpendSpecifier = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                sources().forEach { it.validate() }
+                spendType().validate()
+                discounted().ifPresent { it.validate() }
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (sources.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (spendType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (discounted.asKnown().getOrNull()?.validity() ?: 0)
+
+            class Source @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val THRESHOLD_RECHARGE = of("THRESHOLD_RECHARGE")
+
+                    @JvmField val MANUAL = of("MANUAL")
+
+                    @JvmStatic fun of(value: String) = Source(JsonField.of(value))
+                }
+
+                /** An enum containing [Source]'s known values. */
+                enum class Known {
+                    THRESHOLD_RECHARGE,
+                    MANUAL,
+                }
+
+                /**
+                 * An enum containing [Source]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [Source] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    THRESHOLD_RECHARGE,
+                    MANUAL,
+                    /**
+                     * An enum member indicating that [Source] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        THRESHOLD_RECHARGE -> Value.THRESHOLD_RECHARGE
+                        MANUAL -> Value.MANUAL
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        THRESHOLD_RECHARGE -> Known.THRESHOLD_RECHARGE
+                        MANUAL -> Known.MANUAL
+                        else -> throw MetronomeInvalidDataException("Unknown Source: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): Source = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Source && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            class SpendType @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val COMMIT_PURCHASE = of("COMMIT_PURCHASE")
+
+                    @JvmStatic fun of(value: String) = SpendType(JsonField.of(value))
+                }
+
+                /** An enum containing [SpendType]'s known values. */
+                enum class Known {
+                    COMMIT_PURCHASE
+                }
+
+                /**
+                 * An enum containing [SpendType]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [SpendType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    COMMIT_PURCHASE,
+                    /**
+                     * An enum member indicating that [SpendType] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        COMMIT_PURCHASE -> Value.COMMIT_PURCHASE
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        COMMIT_PURCHASE -> Known.COMMIT_PURCHASE
+                        else -> throw MetronomeInvalidDataException("Unknown SpendType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): SpendType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is SpendType && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            class Discounted
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val ANY = of("ANY")
+
+                    @JvmField val DISCOUNTED_ONLY = of("DISCOUNTED_ONLY")
+
+                    @JvmField val UNDISCOUNTED_ONLY = of("UNDISCOUNTED_ONLY")
+
+                    @JvmStatic fun of(value: String) = Discounted(JsonField.of(value))
+                }
+
+                /** An enum containing [Discounted]'s known values. */
+                enum class Known {
+                    ANY,
+                    DISCOUNTED_ONLY,
+                    UNDISCOUNTED_ONLY,
+                }
+
+                /**
+                 * An enum containing [Discounted]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [Discounted] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    ANY,
+                    DISCOUNTED_ONLY,
+                    UNDISCOUNTED_ONLY,
+                    /**
+                     * An enum member indicating that [Discounted] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        ANY -> Value.ANY
+                        DISCOUNTED_ONLY -> Value.DISCOUNTED_ONLY
+                        UNDISCOUNTED_ONLY -> Value.UNDISCOUNTED_ONLY
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        ANY -> Known.ANY
+                        DISCOUNTED_ONLY -> Known.DISCOUNTED_ONLY
+                        UNDISCOUNTED_ONLY -> Known.UNDISCOUNTED_ONLY
+                        else -> throw MetronomeInvalidDataException("Unknown Discounted: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): Discounted = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Discounted && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is ApplicableSpendSpecifier &&
+                    sources == other.sources &&
+                    spendType == other.spendType &&
+                    discounted == other.discounted &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(sources, spendType, discounted, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "ApplicableSpendSpecifier{sources=$sources, spendType=$spendType, discounted=$discounted, additionalProperties=$additionalProperties}"
+        }
+
+        class ResetFrequency
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val BILLING_PERIOD = of("BILLING_PERIOD")
+
+                @JvmStatic fun of(value: String) = ResetFrequency(JsonField.of(value))
+            }
+
+            /** An enum containing [ResetFrequency]'s known values. */
+            enum class Known {
+                BILLING_PERIOD
+            }
+
+            /**
+             * An enum containing [ResetFrequency]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [ResetFrequency] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                BILLING_PERIOD,
+                /**
+                 * An enum member indicating that [ResetFrequency] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    BILLING_PERIOD -> Value.BILLING_PERIOD
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    BILLING_PERIOD -> Known.BILLING_PERIOD
+                    else -> throw MetronomeInvalidDataException("Unknown ResetFrequency: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): ResetFrequency = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is ResetFrequency && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
+
+        class AccumulatedSpend
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val amount: JsonField<Double>,
+            private val periodEndingBefore: JsonField<OffsetDateTime>,
+            private val periodStartingAt: JsonField<OffsetDateTime>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("amount")
+                @ExcludeMissing
+                amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("period_ending_before")
+                @ExcludeMissing
+                periodEndingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("period_starting_at")
+                @ExcludeMissing
+                periodStartingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            ) : this(amount, periodEndingBefore, periodStartingAt, mutableMapOf())
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun amount(): Double = amount.getRequired("amount")
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun periodEndingBefore(): OffsetDateTime =
+                periodEndingBefore.getRequired("period_ending_before")
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun periodStartingAt(): OffsetDateTime =
+                periodStartingAt.getRequired("period_starting_at")
+
+            /**
+             * Returns the raw JSON value of [amount].
+             *
+             * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+
+            /**
+             * Returns the raw JSON value of [periodEndingBefore].
+             *
+             * Unlike [periodEndingBefore], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("period_ending_before")
+            @ExcludeMissing
+            fun _periodEndingBefore(): JsonField<OffsetDateTime> = periodEndingBefore
+
+            /**
+             * Returns the raw JSON value of [periodStartingAt].
+             *
+             * Unlike [periodStartingAt], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("period_starting_at")
+            @ExcludeMissing
+            fun _periodStartingAt(): JsonField<OffsetDateTime> = periodStartingAt
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [AccumulatedSpend].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .periodEndingBefore()
+                 * .periodStartingAt()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [AccumulatedSpend]. */
+            class Builder internal constructor() {
+
+                private var amount: JsonField<Double>? = null
+                private var periodEndingBefore: JsonField<OffsetDateTime>? = null
+                private var periodStartingAt: JsonField<OffsetDateTime>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(accumulatedSpend: AccumulatedSpend) = apply {
+                    amount = accumulatedSpend.amount
+                    periodEndingBefore = accumulatedSpend.periodEndingBefore
+                    periodStartingAt = accumulatedSpend.periodStartingAt
+                    additionalProperties = accumulatedSpend.additionalProperties.toMutableMap()
+                }
+
+                fun amount(amount: Double) = amount(JsonField.of(amount))
+
+                /**
+                 * Sets [Builder.amount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.amount] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+
+                fun periodEndingBefore(periodEndingBefore: OffsetDateTime) =
+                    periodEndingBefore(JsonField.of(periodEndingBefore))
+
+                /**
+                 * Sets [Builder.periodEndingBefore] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.periodEndingBefore] with a well-typed
+                 * [OffsetDateTime] value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
+                fun periodEndingBefore(periodEndingBefore: JsonField<OffsetDateTime>) = apply {
+                    this.periodEndingBefore = periodEndingBefore
+                }
+
+                fun periodStartingAt(periodStartingAt: OffsetDateTime) =
+                    periodStartingAt(JsonField.of(periodStartingAt))
+
+                /**
+                 * Sets [Builder.periodStartingAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.periodStartingAt] with a well-typed
+                 * [OffsetDateTime] value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
+                fun periodStartingAt(periodStartingAt: JsonField<OffsetDateTime>) = apply {
+                    this.periodStartingAt = periodStartingAt
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [AccumulatedSpend].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .amount()
+                 * .periodEndingBefore()
+                 * .periodStartingAt()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): AccumulatedSpend =
+                    AccumulatedSpend(
+                        checkRequired("amount", amount),
+                        checkRequired("periodEndingBefore", periodEndingBefore),
+                        checkRequired("periodStartingAt", periodStartingAt),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): AccumulatedSpend = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                amount()
+                periodEndingBefore()
+                periodStartingAt()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                    (if (periodEndingBefore.asKnown().isPresent) 1 else 0) +
+                    (if (periodStartingAt.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is AccumulatedSpend &&
+                    amount == other.amount &&
+                    periodEndingBefore == other.periodEndingBefore &&
+                    periodStartingAt == other.periodStartingAt &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(amount, periodEndingBefore, periodStartingAt, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "AccumulatedSpend{amount=$amount, periodEndingBefore=$periodEndingBefore, periodStartingAt=$periodStartingAt, additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is SpendTracker &&
+                alias == other.alias &&
+                applicableSpendSpecifiers == other.applicableSpendSpecifiers &&
+                creditTypeId == other.creditTypeId &&
+                resetFrequency == other.resetFrequency &&
+                accumulatedSpend == other.accumulatedSpend &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                alias,
+                applicableSpendSpecifiers,
+                creditTypeId,
+                resetFrequency,
+                accumulatedSpend,
+                additionalProperties,
+            )
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "SpendTracker{alias=$alias, applicableSpendSpecifiers=$applicableSpendSpecifiers, creditTypeId=$creditTypeId, resetFrequency=$resetFrequency, accumulatedSpend=$accumulatedSpend, additionalProperties=$additionalProperties}"
+    }
+
     class Subscription
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -35690,6 +37460,7 @@ private constructor(
             salesforceOpportunityId == other.salesforceOpportunityId &&
             scheduledChargesOnUsageInvoices == other.scheduledChargesOnUsageInvoices &&
             spendThresholdConfiguration == other.spendThresholdConfiguration &&
+            spendTrackers == other.spendTrackers &&
             subscriptions == other.subscriptions &&
             totalContractValue == other.totalContractValue &&
             uniquenessKey == other.uniquenessKey &&
@@ -35731,6 +37502,7 @@ private constructor(
             salesforceOpportunityId,
             scheduledChargesOnUsageInvoices,
             spendThresholdConfiguration,
+            spendTrackers,
             subscriptions,
             totalContractValue,
             uniquenessKey,
@@ -35741,5 +37513,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContractV2{id=$id, commits=$commits, createdAt=$createdAt, createdBy=$createdBy, customerId=$customerId, overrides=$overrides, scheduledCharges=$scheduledCharges, startingAt=$startingAt, transitions=$transitions, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, archivedAt=$archivedAt, credits=$credits, customFields=$customFields, customerBillingProviderConfiguration=$customerBillingProviderConfiguration, discounts=$discounts, endingBefore=$endingBefore, hasMore=$hasMore, hierarchyConfiguration=$hierarchyConfiguration, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, prepaidBalanceThresholdConfiguration=$prepaidBalanceThresholdConfiguration, priority=$priority, professionalServices=$professionalServices, rateCardId=$rateCardId, recurringCommits=$recurringCommits, recurringCredits=$recurringCredits, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, spendThresholdConfiguration=$spendThresholdConfiguration, subscriptions=$subscriptions, totalContractValue=$totalContractValue, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+        "ContractV2{id=$id, commits=$commits, createdAt=$createdAt, createdBy=$createdBy, customerId=$customerId, overrides=$overrides, scheduledCharges=$scheduledCharges, startingAt=$startingAt, transitions=$transitions, usageFilter=$usageFilter, usageStatementSchedule=$usageStatementSchedule, archivedAt=$archivedAt, credits=$credits, customFields=$customFields, customerBillingProviderConfiguration=$customerBillingProviderConfiguration, discounts=$discounts, endingBefore=$endingBefore, hasMore=$hasMore, hierarchyConfiguration=$hierarchyConfiguration, multiplierOverridePrioritization=$multiplierOverridePrioritization, name=$name, netPaymentTermsDays=$netPaymentTermsDays, netsuiteSalesOrderId=$netsuiteSalesOrderId, prepaidBalanceThresholdConfiguration=$prepaidBalanceThresholdConfiguration, priority=$priority, professionalServices=$professionalServices, rateCardId=$rateCardId, recurringCommits=$recurringCommits, recurringCredits=$recurringCredits, resellerRoyalties=$resellerRoyalties, salesforceOpportunityId=$salesforceOpportunityId, scheduledChargesOnUsageInvoices=$scheduledChargesOnUsageInvoices, spendThresholdConfiguration=$spendThresholdConfiguration, spendTrackers=$spendTrackers, subscriptions=$subscriptions, totalContractValue=$totalContractValue, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
 }
