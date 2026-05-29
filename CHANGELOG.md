@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.3.0 (2026-05-29)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* [LAUNCH-2814] editContract returns full edit in the response ([8e77b8c](https://github.com/Metronome-Industries/metronome-java/commit/8e77b8c306f03efae58232e5f5c212ad42e2a0ae))
+* [orch-1860] remove all deprecated `/payments/*` endpoints from API ([d1ab06d](https://github.com/Metronome-Industries/metronome-java/commit/d1ab06d44d2a14a933564b1ea19953f66193ea50))
+* create contract returns contract data ([ed539ea](https://github.com/Metronome-Industries/metronome-java/commit/ed539ea6b6ae83b498b5669e86d67145e81b89fe))
+* nikku-orch-1723-update-create-contract ([c088c2a](https://github.com/Metronome-Industries/metronome-java/commit/c088c2afcc46740dc0b472722797006c135f8e80))
+
+
+### Chores
+
+* (internal) Add threshold balance specifier to contract create & edit, package create and both contract and package retrievals ([0f7d65f](https://github.com/Metronome-Industries/metronome-java/commit/0f7d65f597e64b05400557623bc7b90832639d3f))
+
 ## 0.2.0 (2026-05-18)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.1.0...v0.2.0)
