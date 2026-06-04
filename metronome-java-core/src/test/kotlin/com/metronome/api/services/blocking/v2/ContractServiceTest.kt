@@ -655,38 +655,6 @@ internal class ContractServiceTest {
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .proration(ContractEditParams.AddRecurringCommit.Proration.NONE)
-                            .prorationRounding(
-                                ContractEditParams.AddRecurringCommit.ProrationRounding.builder()
-                                    .access(
-                                        ContractEditParams.AddRecurringCommit.ProrationRounding
-                                            .Access
-                                            .builder()
-                                            .decimalPlaces(-5.0)
-                                            .roundingMethod(
-                                                ContractEditParams.AddRecurringCommit
-                                                    .ProrationRounding
-                                                    .Access
-                                                    .RoundingMethod
-                                                    .HALF_UP
-                                            )
-                                            .build()
-                                    )
-                                    .invoice(
-                                        ContractEditParams.AddRecurringCommit.ProrationRounding
-                                            .Invoice
-                                            .builder()
-                                            .decimalPlaces(-5.0)
-                                            .roundingMethod(
-                                                ContractEditParams.AddRecurringCommit
-                                                    .ProrationRounding
-                                                    .Invoice
-                                                    .RoundingMethod
-                                                    .HALF_UP
-                                            )
-                                            .build()
-                                    )
-                                    .build()
-                            )
                             .rateType(ContractEditParams.AddRecurringCommit.RateType.COMMIT_RATE)
                             .recurrenceFrequency(
                                 ContractEditParams.AddRecurringCommit.RecurrenceFrequency.MONTHLY
@@ -772,24 +740,6 @@ internal class ContractServiceTest {
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .proration(ContractEditParams.AddRecurringCredit.Proration.NONE)
-                            .prorationRounding(
-                                ContractEditParams.AddRecurringCredit.ProrationRounding.builder()
-                                    .access(
-                                        ContractEditParams.AddRecurringCredit.ProrationRounding
-                                            .Access
-                                            .builder()
-                                            .decimalPlaces(-5.0)
-                                            .roundingMethod(
-                                                ContractEditParams.AddRecurringCredit
-                                                    .ProrationRounding
-                                                    .Access
-                                                    .RoundingMethod
-                                                    .HALF_UP
-                                            )
-                                            .build()
-                                    )
-                                    .build()
-                            )
                             .rateType(ContractEditParams.AddRecurringCredit.RateType.COMMIT_RATE)
                             .recurrenceFrequency(
                                 ContractEditParams.AddRecurringCredit.RecurrenceFrequency.MONTHLY
@@ -1043,18 +993,6 @@ internal class ContractServiceTest {
                                             .BILL_IMMEDIATELY
                                     )
                                     .isProrated(true)
-                                    .rounding(
-                                        ContractEditParams.AddSubscription.Proration.Rounding
-                                            .builder()
-                                            .decimalPlaces(-5.0)
-                                            .roundingMethod(
-                                                ContractEditParams.AddSubscription.Proration
-                                                    .Rounding
-                                                    .RoundingMethod
-                                                    .HALF_UP
-                                            )
-                                            .build()
-                                    )
                                     .build()
                             )
                             .subscriptionRate(
@@ -1065,16 +1003,6 @@ internal class ContractServiceTest {
                                             .MONTHLY
                                     )
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .build()
-                            )
-                            .billingCycleConfig(
-                                ContractEditParams.AddSubscription.BillingCycleConfig.builder()
-                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .invoicePlacement(
-                                        ContractEditParams.AddSubscription.BillingCycleConfig
-                                            .InvoicePlacement
-                                            .ON_SCHEDULED_INVOICE
-                                    )
                                     .build()
                             )
                             .customFields(
@@ -1435,38 +1363,6 @@ internal class ContractServiceTest {
                                     .unitPrice(0.0)
                                     .build()
                             )
-                            .prorationRounding(
-                                ContractEditParams.UpdateRecurringCommit.ProrationRounding.builder()
-                                    .access(
-                                        ContractEditParams.UpdateRecurringCommit.ProrationRounding
-                                            .Access
-                                            .builder()
-                                            .decimalPlaces(-5.0)
-                                            .roundingMethod(
-                                                ContractEditParams.UpdateRecurringCommit
-                                                    .ProrationRounding
-                                                    .Access
-                                                    .RoundingMethod
-                                                    .HALF_UP
-                                            )
-                                            .build()
-                                    )
-                                    .invoice(
-                                        ContractEditParams.UpdateRecurringCommit.ProrationRounding
-                                            .Invoice
-                                            .builder()
-                                            .decimalPlaces(-5.0)
-                                            .roundingMethod(
-                                                ContractEditParams.UpdateRecurringCommit
-                                                    .ProrationRounding
-                                                    .Invoice
-                                                    .RoundingMethod
-                                                    .HALF_UP
-                                            )
-                                            .build()
-                                    )
-                                    .build()
-                            )
                             .rateType(ContractEditParams.UpdateRecurringCommit.RateType.LIST_RATE)
                             .build()
                     )
@@ -1480,24 +1376,6 @@ internal class ContractServiceTest {
                                     .build()
                             )
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .prorationRounding(
-                                ContractEditParams.UpdateRecurringCredit.ProrationRounding.builder()
-                                    .access(
-                                        ContractEditParams.UpdateRecurringCredit.ProrationRounding
-                                            .Access
-                                            .builder()
-                                            .decimalPlaces(-5.0)
-                                            .roundingMethod(
-                                                ContractEditParams.UpdateRecurringCredit
-                                                    .ProrationRounding
-                                                    .Access
-                                                    .RoundingMethod
-                                                    .HALF_UP
-                                            )
-                                            .build()
-                                    )
-                                    .build()
-                            )
                             .rateType(ContractEditParams.UpdateRecurringCredit.RateType.LIST_RATE)
                             .build()
                     )
@@ -1605,16 +1483,6 @@ internal class ContractServiceTest {
                         ContractEditParams.UpdateSubscription.builder()
                             .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .prorationRounding(
-                                ContractEditParams.UpdateSubscription.ProrationRounding.builder()
-                                    .decimalPlaces(-5.0)
-                                    .roundingMethod(
-                                        ContractEditParams.UpdateSubscription.ProrationRounding
-                                            .RoundingMethod
-                                            .HALF_UP
-                                    )
-                                    .build()
-                            )
                             .quantityManagementModeUpdate(
                                 ContractEditParams.UpdateSubscription.QuantityManagementModeUpdate
                                     .builder()
