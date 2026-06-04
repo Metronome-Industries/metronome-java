@@ -42,14 +42,6 @@ internal class SubscriptionTest {
                     Subscription.Proration.builder()
                         .invoiceBehavior(Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY)
                         .isProrated(true)
-                        .rounding(
-                            Subscription.Proration.Rounding.builder()
-                                .decimalPlaces(-5.0)
-                                .roundingMethod(
-                                    Subscription.Proration.Rounding.RoundingMethod.HALF_UP
-                                )
-                                .build()
-                        )
                         .build()
                 )
                 .quantityManagementMode(Subscription.QuantityManagementMode.SEAT_BASED)
@@ -73,14 +65,6 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .billingCycleConfig(
-                    Subscription.BillingCycleConfig.builder()
-                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .invoicePlacement(
-                            Subscription.BillingCycleConfig.InvoicePlacement.ON_SCHEDULED_INVOICE
-                        )
-                        .build()
-                )
                 .customFields(
                     Subscription.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -125,12 +109,6 @@ internal class SubscriptionTest {
                 Subscription.Proration.builder()
                     .invoiceBehavior(Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY)
                     .isProrated(true)
-                    .rounding(
-                        Subscription.Proration.Rounding.builder()
-                            .decimalPlaces(-5.0)
-                            .roundingMethod(Subscription.Proration.Rounding.RoundingMethod.HALF_UP)
-                            .build()
-                    )
                     .build()
             )
         assertThat(subscription.quantityManagementMode())
@@ -158,15 +136,6 @@ internal class SubscriptionTest {
                     .build()
             )
         assertThat(subscription.id()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(subscription.billingCycleConfig())
-            .contains(
-                Subscription.BillingCycleConfig.builder()
-                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .invoicePlacement(
-                        Subscription.BillingCycleConfig.InvoicePlacement.ON_SCHEDULED_INVOICE
-                    )
-                    .build()
-            )
         assertThat(subscription.customFields())
             .contains(
                 Subscription.CustomFields.builder()
@@ -214,14 +183,6 @@ internal class SubscriptionTest {
                     Subscription.Proration.builder()
                         .invoiceBehavior(Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY)
                         .isProrated(true)
-                        .rounding(
-                            Subscription.Proration.Rounding.builder()
-                                .decimalPlaces(-5.0)
-                                .roundingMethod(
-                                    Subscription.Proration.Rounding.RoundingMethod.HALF_UP
-                                )
-                                .build()
-                        )
                         .build()
                 )
                 .quantityManagementMode(Subscription.QuantityManagementMode.SEAT_BASED)
@@ -245,14 +206,6 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .billingCycleConfig(
-                    Subscription.BillingCycleConfig.builder()
-                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .invoicePlacement(
-                            Subscription.BillingCycleConfig.InvoicePlacement.ON_SCHEDULED_INVOICE
-                        )
-                        .build()
-                )
                 .customFields(
                     Subscription.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

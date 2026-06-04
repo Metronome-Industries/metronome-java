@@ -17024,7 +17024,6 @@ private constructor(
         private val name: JsonField<String>,
         private val netsuiteSalesOrderId: JsonField<String>,
         private val proration: JsonField<Proration>,
-        private val prorationRounding: JsonField<ProrationRounding>,
         private val rateType: JsonField<RateType>,
         private val recurrenceFrequency: JsonField<RecurrenceFrequency>,
         private val rolloverFraction: JsonField<Double>,
@@ -17076,9 +17075,6 @@ private constructor(
             @JsonProperty("proration")
             @ExcludeMissing
             proration: JsonField<Proration> = JsonMissing.of(),
-            @JsonProperty("proration_rounding")
-            @ExcludeMissing
-            prorationRounding: JsonField<ProrationRounding> = JsonMissing.of(),
             @JsonProperty("rate_type")
             @ExcludeMissing
             rateType: JsonField<RateType> = JsonMissing.of(),
@@ -17112,7 +17108,6 @@ private constructor(
             name,
             netsuiteSalesOrderId,
             proration,
-            prorationRounding,
             rateType,
             recurrenceFrequency,
             rolloverFraction,
@@ -17238,15 +17233,6 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun proration(): Optional<Proration> = proration.getOptional("proration")
-
-        /**
-         * Optional rounding configuration for prorated recurring commit amounts.
-         *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun prorationRounding(): Optional<ProrationRounding> =
-            prorationRounding.getOptional("proration_rounding")
 
         /**
          * Whether the created commits will use the commit rate or list rate
@@ -17438,16 +17424,6 @@ private constructor(
         fun _proration(): JsonField<Proration> = proration
 
         /**
-         * Returns the raw JSON value of [prorationRounding].
-         *
-         * Unlike [prorationRounding], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("proration_rounding")
-        @ExcludeMissing
-        fun _prorationRounding(): JsonField<ProrationRounding> = prorationRounding
-
-        /**
          * Returns the raw JSON value of [rateType].
          *
          * Unlike [rateType], this method doesn't throw if the JSON field has an unexpected type.
@@ -17549,7 +17525,6 @@ private constructor(
             private var name: JsonField<String> = JsonMissing.of()
             private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
             private var proration: JsonField<Proration> = JsonMissing.of()
-            private var prorationRounding: JsonField<ProrationRounding> = JsonMissing.of()
             private var rateType: JsonField<RateType> = JsonMissing.of()
             private var recurrenceFrequency: JsonField<RecurrenceFrequency> = JsonMissing.of()
             private var rolloverFraction: JsonField<Double> = JsonMissing.of()
@@ -17576,7 +17551,6 @@ private constructor(
                 name = addRecurringCommit.name
                 netsuiteSalesOrderId = addRecurringCommit.netsuiteSalesOrderId
                 proration = addRecurringCommit.proration
-                prorationRounding = addRecurringCommit.prorationRounding
                 rateType = addRecurringCommit.rateType
                 recurrenceFrequency = addRecurringCommit.recurrenceFrequency
                 rolloverFraction = addRecurringCommit.rolloverFraction
@@ -17811,21 +17785,6 @@ private constructor(
              */
             fun proration(proration: JsonField<Proration>) = apply { this.proration = proration }
 
-            /** Optional rounding configuration for prorated recurring commit amounts. */
-            fun prorationRounding(prorationRounding: ProrationRounding) =
-                prorationRounding(JsonField.of(prorationRounding))
-
-            /**
-             * Sets [Builder.prorationRounding] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.prorationRounding] with a well-typed
-             * [ProrationRounding] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun prorationRounding(prorationRounding: JsonField<ProrationRounding>) = apply {
-                this.prorationRounding = prorationRounding
-            }
-
             /** Whether the created commits will use the commit rate or list rate */
             fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
@@ -17994,7 +17953,6 @@ private constructor(
                     name,
                     netsuiteSalesOrderId,
                     proration,
-                    prorationRounding,
                     rateType,
                     recurrenceFrequency,
                     rolloverFraction,
@@ -18035,7 +17993,6 @@ private constructor(
             name()
             netsuiteSalesOrderId()
             proration().ifPresent { it.validate() }
-            prorationRounding().ifPresent { it.validate() }
             rateType().ifPresent { it.validate() }
             recurrenceFrequency().ifPresent { it.validate() }
             rolloverFraction()
@@ -18075,7 +18032,6 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (netsuiteSalesOrderId.asKnown().isPresent) 1 else 0) +
                 (proration.asKnown().getOrNull()?.validity() ?: 0) +
-                (prorationRounding.asKnown().getOrNull()?.validity() ?: 0) +
                 (rateType.asKnown().getOrNull()?.validity() ?: 0) +
                 (recurrenceFrequency.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (rolloverFraction.asKnown().isPresent) 1 else 0) +
@@ -19106,978 +19062,6 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        /** Optional rounding configuration for prorated recurring commit amounts. */
-        class ProrationRounding
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val access: JsonField<Access>,
-            private val invoice: JsonField<Invoice>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("access")
-                @ExcludeMissing
-                access: JsonField<Access> = JsonMissing.of(),
-                @JsonProperty("invoice")
-                @ExcludeMissing
-                invoice: JsonField<Invoice> = JsonMissing.of(),
-            ) : this(access, invoice, mutableMapOf())
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun access(): Optional<Access> = access.getOptional("access")
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun invoice(): Optional<Invoice> = invoice.getOptional("invoice")
-
-            /**
-             * Returns the raw JSON value of [access].
-             *
-             * Unlike [access], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("access") @ExcludeMissing fun _access(): JsonField<Access> = access
-
-            /**
-             * Returns the raw JSON value of [invoice].
-             *
-             * Unlike [invoice], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("invoice") @ExcludeMissing fun _invoice(): JsonField<Invoice> = invoice
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [ProrationRounding].
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [ProrationRounding]. */
-            class Builder internal constructor() {
-
-                private var access: JsonField<Access> = JsonMissing.of()
-                private var invoice: JsonField<Invoice> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(prorationRounding: ProrationRounding) = apply {
-                    access = prorationRounding.access
-                    invoice = prorationRounding.invoice
-                    additionalProperties = prorationRounding.additionalProperties.toMutableMap()
-                }
-
-                fun access(access: Access) = access(JsonField.of(access))
-
-                /**
-                 * Sets [Builder.access] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.access] with a well-typed [Access] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun access(access: JsonField<Access>) = apply { this.access = access }
-
-                fun invoice(invoice: Invoice) = invoice(JsonField.of(invoice))
-
-                /**
-                 * Sets [Builder.invoice] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.invoice] with a well-typed [Invoice] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun invoice(invoice: JsonField<Invoice>) = apply { this.invoice = invoice }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [ProrationRounding].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): ProrationRounding =
-                    ProrationRounding(access, invoice, additionalProperties.toMutableMap())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
-             */
-            fun validate(): ProrationRounding = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                access().ifPresent { it.validate() }
-                invoice().ifPresent { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: MetronomeInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (access.asKnown().getOrNull()?.validity() ?: 0) +
-                    (invoice.asKnown().getOrNull()?.validity() ?: 0)
-
-            class Access
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val decimalPlaces: JsonField<Double>,
-                private val roundingMethod: JsonField<RoundingMethod>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("decimal_places")
-                    @ExcludeMissing
-                    decimalPlaces: JsonField<Double> = JsonMissing.of(),
-                    @JsonProperty("rounding_method")
-                    @ExcludeMissing
-                    roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
-                ) : this(decimalPlaces, roundingMethod, mutableMapOf())
-
-                /**
-                 * Number of decimal places to round to. Applied directly to the stored monetary
-                 * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest
-                 * 100 in the stored unit).
-                 *
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
-
-                /**
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
-
-                /**
-                 * Returns the raw JSON value of [decimalPlaces].
-                 *
-                 * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("decimal_places")
-                @ExcludeMissing
-                fun _decimalPlaces(): JsonField<Double> = decimalPlaces
-
-                /**
-                 * Returns the raw JSON value of [roundingMethod].
-                 *
-                 * Unlike [roundingMethod], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("rounding_method")
-                @ExcludeMissing
-                fun _roundingMethod(): JsonField<RoundingMethod> = roundingMethod
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /**
-                     * Returns a mutable builder for constructing an instance of [Access].
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     */
-                    @JvmStatic fun builder() = Builder()
-                }
-
-                /** A builder for [Access]. */
-                class Builder internal constructor() {
-
-                    private var decimalPlaces: JsonField<Double>? = null
-                    private var roundingMethod: JsonField<RoundingMethod>? = null
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    @JvmSynthetic
-                    internal fun from(access: Access) = apply {
-                        decimalPlaces = access.decimalPlaces
-                        roundingMethod = access.roundingMethod
-                        additionalProperties = access.additionalProperties.toMutableMap()
-                    }
-
-                    /**
-                     * Number of decimal places to round to. Applied directly to the stored monetary
-                     * representation. Negative values round to powers of 10 (e.g., -2 rounds to
-                     * nearest 100 in the stored unit).
-                     */
-                    fun decimalPlaces(decimalPlaces: Double) =
-                        decimalPlaces(JsonField.of(decimalPlaces))
-
-                    /**
-                     * Sets [Builder.decimalPlaces] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.decimalPlaces] with a well-typed [Double]
-                     * value instead. This method is primarily for setting the field to an
-                     * undocumented or not yet supported value.
-                     */
-                    fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-                        this.decimalPlaces = decimalPlaces
-                    }
-
-                    fun roundingMethod(roundingMethod: RoundingMethod) =
-                        roundingMethod(JsonField.of(roundingMethod))
-
-                    /**
-                     * Sets [Builder.roundingMethod] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.roundingMethod] with a well-typed
-                     * [RoundingMethod] value instead. This method is primarily for setting the
-                     * field to an undocumented or not yet supported value.
-                     */
-                    fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
-                        this.roundingMethod = roundingMethod
-                    }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Access].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     *
-                     * @throws IllegalStateException if any required field is unset.
-                     */
-                    fun build(): Access =
-                        Access(
-                            checkRequired("decimalPlaces", decimalPlaces),
-                            checkRequired("roundingMethod", roundingMethod),
-                            additionalProperties.toMutableMap(),
-                        )
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): Access = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    decimalPlaces()
-                    roundingMethod().validate()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: MetronomeInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic
-                internal fun validity(): Int =
-                    (if (decimalPlaces.asKnown().isPresent) 1 else 0) +
-                        (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
-
-                class RoundingMethod
-                @JsonCreator
-                private constructor(private val value: JsonField<String>) : Enum {
-
-                    /**
-                     * Returns this class instance's raw value.
-                     *
-                     * This is usually only useful if this instance was deserialized from data that
-                     * doesn't match any known member, and you want to know that value. For example,
-                     * if the SDK is on an older version than the API, then the API may respond with
-                     * new members that the SDK is unaware of.
-                     */
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    fun _value(): JsonField<String> = value
-
-                    companion object {
-
-                        @JvmField val HALF_UP = of("HALF_UP")
-
-                        @JvmField val FLOOR = of("FLOOR")
-
-                        @JvmField val CEILING = of("CEILING")
-
-                        @JvmStatic fun of(value: String) = RoundingMethod(JsonField.of(value))
-                    }
-
-                    /** An enum containing [RoundingMethod]'s known values. */
-                    enum class Known {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                    }
-
-                    /**
-                     * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN]
-                     * member.
-                     *
-                     * An instance of [RoundingMethod] can contain an unknown value in a couple of
-                     * cases:
-                     * - It was deserialized from data that doesn't match any known member. For
-                     *   example, if the SDK is on an older version than the API, then the API may
-                     *   respond with new members that the SDK is unaware of.
-                     * - It was constructed with an arbitrary value using the [of] method.
-                     */
-                    enum class Value {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                        /**
-                         * An enum member indicating that [RoundingMethod] was instantiated with an
-                         * unknown value.
-                         */
-                        _UNKNOWN,
-                    }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value, or
-                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                     *
-                     * Use the [known] method instead if you're certain the value is always known or
-                     * if you want to throw for the unknown case.
-                     */
-                    fun value(): Value =
-                        when (this) {
-                            HALF_UP -> Value.HALF_UP
-                            FLOOR -> Value.FLOOR
-                            CEILING -> Value.CEILING
-                            else -> Value._UNKNOWN
-                        }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value.
-                     *
-                     * Use the [value] method instead if you're uncertain the value is always known
-                     * and don't want to throw for the unknown case.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value is a not
-                     *   a known member.
-                     */
-                    fun known(): Known =
-                        when (this) {
-                            HALF_UP -> Known.HALF_UP
-                            FLOOR -> Known.FLOOR
-                            CEILING -> Known.CEILING
-                            else ->
-                                throw MetronomeInvalidDataException(
-                                    "Unknown RoundingMethod: $value"
-                                )
-                        }
-
-                    /**
-                     * Returns this class instance's primitive wire representation.
-                     *
-                     * This differs from the [toString] method because that method is primarily for
-                     * debugging and generally doesn't throw.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value does not
-                     *   have the expected primitive type.
-                     */
-                    fun asString(): String =
-                        _value().asString().orElseThrow {
-                            MetronomeInvalidDataException("Value is not a String")
-                        }
-
-                    private var validated: Boolean = false
-
-                    /**
-                     * Validates that the types of all values in this object match their expected
-                     * types recursively.
-                     *
-                     * This method is _not_ forwards compatible with new types from the API for
-                     * existing fields.
-                     *
-                     * @throws MetronomeInvalidDataException if any value type in this object
-                     *   doesn't match its expected type.
-                     */
-                    fun validate(): RoundingMethod = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        known()
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: MetronomeInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is RoundingMethod && value == other.value
-                    }
-
-                    override fun hashCode() = value.hashCode()
-
-                    override fun toString() = value.toString()
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Access &&
-                        decimalPlaces == other.decimalPlaces &&
-                        roundingMethod == other.roundingMethod &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(decimalPlaces, roundingMethod, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "Access{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
-            }
-
-            class Invoice
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val decimalPlaces: JsonField<Double>,
-                private val roundingMethod: JsonField<RoundingMethod>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("decimal_places")
-                    @ExcludeMissing
-                    decimalPlaces: JsonField<Double> = JsonMissing.of(),
-                    @JsonProperty("rounding_method")
-                    @ExcludeMissing
-                    roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
-                ) : this(decimalPlaces, roundingMethod, mutableMapOf())
-
-                /**
-                 * Number of decimal places to round to. Applied directly to the stored monetary
-                 * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest
-                 * 100 in the stored unit).
-                 *
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
-
-                /**
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
-
-                /**
-                 * Returns the raw JSON value of [decimalPlaces].
-                 *
-                 * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("decimal_places")
-                @ExcludeMissing
-                fun _decimalPlaces(): JsonField<Double> = decimalPlaces
-
-                /**
-                 * Returns the raw JSON value of [roundingMethod].
-                 *
-                 * Unlike [roundingMethod], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("rounding_method")
-                @ExcludeMissing
-                fun _roundingMethod(): JsonField<RoundingMethod> = roundingMethod
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /**
-                     * Returns a mutable builder for constructing an instance of [Invoice].
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     */
-                    @JvmStatic fun builder() = Builder()
-                }
-
-                /** A builder for [Invoice]. */
-                class Builder internal constructor() {
-
-                    private var decimalPlaces: JsonField<Double>? = null
-                    private var roundingMethod: JsonField<RoundingMethod>? = null
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    @JvmSynthetic
-                    internal fun from(invoice: Invoice) = apply {
-                        decimalPlaces = invoice.decimalPlaces
-                        roundingMethod = invoice.roundingMethod
-                        additionalProperties = invoice.additionalProperties.toMutableMap()
-                    }
-
-                    /**
-                     * Number of decimal places to round to. Applied directly to the stored monetary
-                     * representation. Negative values round to powers of 10 (e.g., -2 rounds to
-                     * nearest 100 in the stored unit).
-                     */
-                    fun decimalPlaces(decimalPlaces: Double) =
-                        decimalPlaces(JsonField.of(decimalPlaces))
-
-                    /**
-                     * Sets [Builder.decimalPlaces] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.decimalPlaces] with a well-typed [Double]
-                     * value instead. This method is primarily for setting the field to an
-                     * undocumented or not yet supported value.
-                     */
-                    fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-                        this.decimalPlaces = decimalPlaces
-                    }
-
-                    fun roundingMethod(roundingMethod: RoundingMethod) =
-                        roundingMethod(JsonField.of(roundingMethod))
-
-                    /**
-                     * Sets [Builder.roundingMethod] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.roundingMethod] with a well-typed
-                     * [RoundingMethod] value instead. This method is primarily for setting the
-                     * field to an undocumented or not yet supported value.
-                     */
-                    fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
-                        this.roundingMethod = roundingMethod
-                    }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Invoice].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     *
-                     * @throws IllegalStateException if any required field is unset.
-                     */
-                    fun build(): Invoice =
-                        Invoice(
-                            checkRequired("decimalPlaces", decimalPlaces),
-                            checkRequired("roundingMethod", roundingMethod),
-                            additionalProperties.toMutableMap(),
-                        )
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): Invoice = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    decimalPlaces()
-                    roundingMethod().validate()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: MetronomeInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic
-                internal fun validity(): Int =
-                    (if (decimalPlaces.asKnown().isPresent) 1 else 0) +
-                        (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
-
-                class RoundingMethod
-                @JsonCreator
-                private constructor(private val value: JsonField<String>) : Enum {
-
-                    /**
-                     * Returns this class instance's raw value.
-                     *
-                     * This is usually only useful if this instance was deserialized from data that
-                     * doesn't match any known member, and you want to know that value. For example,
-                     * if the SDK is on an older version than the API, then the API may respond with
-                     * new members that the SDK is unaware of.
-                     */
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    fun _value(): JsonField<String> = value
-
-                    companion object {
-
-                        @JvmField val HALF_UP = of("HALF_UP")
-
-                        @JvmField val FLOOR = of("FLOOR")
-
-                        @JvmField val CEILING = of("CEILING")
-
-                        @JvmStatic fun of(value: String) = RoundingMethod(JsonField.of(value))
-                    }
-
-                    /** An enum containing [RoundingMethod]'s known values. */
-                    enum class Known {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                    }
-
-                    /**
-                     * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN]
-                     * member.
-                     *
-                     * An instance of [RoundingMethod] can contain an unknown value in a couple of
-                     * cases:
-                     * - It was deserialized from data that doesn't match any known member. For
-                     *   example, if the SDK is on an older version than the API, then the API may
-                     *   respond with new members that the SDK is unaware of.
-                     * - It was constructed with an arbitrary value using the [of] method.
-                     */
-                    enum class Value {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                        /**
-                         * An enum member indicating that [RoundingMethod] was instantiated with an
-                         * unknown value.
-                         */
-                        _UNKNOWN,
-                    }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value, or
-                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                     *
-                     * Use the [known] method instead if you're certain the value is always known or
-                     * if you want to throw for the unknown case.
-                     */
-                    fun value(): Value =
-                        when (this) {
-                            HALF_UP -> Value.HALF_UP
-                            FLOOR -> Value.FLOOR
-                            CEILING -> Value.CEILING
-                            else -> Value._UNKNOWN
-                        }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value.
-                     *
-                     * Use the [value] method instead if you're uncertain the value is always known
-                     * and don't want to throw for the unknown case.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value is a not
-                     *   a known member.
-                     */
-                    fun known(): Known =
-                        when (this) {
-                            HALF_UP -> Known.HALF_UP
-                            FLOOR -> Known.FLOOR
-                            CEILING -> Known.CEILING
-                            else ->
-                                throw MetronomeInvalidDataException(
-                                    "Unknown RoundingMethod: $value"
-                                )
-                        }
-
-                    /**
-                     * Returns this class instance's primitive wire representation.
-                     *
-                     * This differs from the [toString] method because that method is primarily for
-                     * debugging and generally doesn't throw.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value does not
-                     *   have the expected primitive type.
-                     */
-                    fun asString(): String =
-                        _value().asString().orElseThrow {
-                            MetronomeInvalidDataException("Value is not a String")
-                        }
-
-                    private var validated: Boolean = false
-
-                    /**
-                     * Validates that the types of all values in this object match their expected
-                     * types recursively.
-                     *
-                     * This method is _not_ forwards compatible with new types from the API for
-                     * existing fields.
-                     *
-                     * @throws MetronomeInvalidDataException if any value type in this object
-                     *   doesn't match its expected type.
-                     */
-                    fun validate(): RoundingMethod = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        known()
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: MetronomeInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is RoundingMethod && value == other.value
-                    }
-
-                    override fun hashCode() = value.hashCode()
-
-                    override fun toString() = value.toString()
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Invoice &&
-                        decimalPlaces == other.decimalPlaces &&
-                        roundingMethod == other.roundingMethod &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(decimalPlaces, roundingMethod, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "Invoice{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ProrationRounding &&
-                    access == other.access &&
-                    invoice == other.invoice &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(access, invoice, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "ProrationRounding{access=$access, invoice=$invoice, additionalProperties=$additionalProperties}"
-        }
-
         /** Whether the created commits will use the commit rate or list rate */
         class RateType @JsonCreator private constructor(private val value: JsonField<String>) :
             Enum {
@@ -21013,7 +19997,6 @@ private constructor(
                 name == other.name &&
                 netsuiteSalesOrderId == other.netsuiteSalesOrderId &&
                 proration == other.proration &&
-                prorationRounding == other.prorationRounding &&
                 rateType == other.rateType &&
                 recurrenceFrequency == other.recurrenceFrequency &&
                 rolloverFraction == other.rolloverFraction &&
@@ -21039,7 +20022,6 @@ private constructor(
                 name,
                 netsuiteSalesOrderId,
                 proration,
-                prorationRounding,
                 rateType,
                 recurrenceFrequency,
                 rolloverFraction,
@@ -21053,7 +20035,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AddRecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "AddRecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class AddRecurringCredit
@@ -21072,7 +20054,6 @@ private constructor(
         private val name: JsonField<String>,
         private val netsuiteSalesOrderId: JsonField<String>,
         private val proration: JsonField<Proration>,
-        private val prorationRounding: JsonField<ProrationRounding>,
         private val rateType: JsonField<RateType>,
         private val recurrenceFrequency: JsonField<RecurrenceFrequency>,
         private val rolloverFraction: JsonField<Double>,
@@ -21121,9 +20102,6 @@ private constructor(
             @JsonProperty("proration")
             @ExcludeMissing
             proration: JsonField<Proration> = JsonMissing.of(),
-            @JsonProperty("proration_rounding")
-            @ExcludeMissing
-            prorationRounding: JsonField<ProrationRounding> = JsonMissing.of(),
             @JsonProperty("rate_type")
             @ExcludeMissing
             rateType: JsonField<RateType> = JsonMissing.of(),
@@ -21156,7 +20134,6 @@ private constructor(
             name,
             netsuiteSalesOrderId,
             proration,
-            prorationRounding,
             rateType,
             recurrenceFrequency,
             rolloverFraction,
@@ -21274,15 +20251,6 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun proration(): Optional<Proration> = proration.getOptional("proration")
-
-        /**
-         * Optional rounding configuration for prorated recurring credit amounts.
-         *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun prorationRounding(): Optional<ProrationRounding> =
-            prorationRounding.getOptional("proration_rounding")
 
         /**
          * Whether the created commits will use the commit rate or list rate
@@ -21464,16 +20432,6 @@ private constructor(
         fun _proration(): JsonField<Proration> = proration
 
         /**
-         * Returns the raw JSON value of [prorationRounding].
-         *
-         * Unlike [prorationRounding], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("proration_rounding")
-        @ExcludeMissing
-        fun _prorationRounding(): JsonField<ProrationRounding> = prorationRounding
-
-        /**
          * Returns the raw JSON value of [rateType].
          *
          * Unlike [rateType], this method doesn't throw if the JSON field has an unexpected type.
@@ -21574,7 +20532,6 @@ private constructor(
             private var name: JsonField<String> = JsonMissing.of()
             private var netsuiteSalesOrderId: JsonField<String> = JsonMissing.of()
             private var proration: JsonField<Proration> = JsonMissing.of()
-            private var prorationRounding: JsonField<ProrationRounding> = JsonMissing.of()
             private var rateType: JsonField<RateType> = JsonMissing.of()
             private var recurrenceFrequency: JsonField<RecurrenceFrequency> = JsonMissing.of()
             private var rolloverFraction: JsonField<Double> = JsonMissing.of()
@@ -21600,7 +20557,6 @@ private constructor(
                 name = addRecurringCredit.name
                 netsuiteSalesOrderId = addRecurringCredit.netsuiteSalesOrderId
                 proration = addRecurringCredit.proration
-                prorationRounding = addRecurringCredit.prorationRounding
                 rateType = addRecurringCredit.rateType
                 recurrenceFrequency = addRecurringCredit.recurrenceFrequency
                 rolloverFraction = addRecurringCredit.rolloverFraction
@@ -21820,21 +20776,6 @@ private constructor(
              */
             fun proration(proration: JsonField<Proration>) = apply { this.proration = proration }
 
-            /** Optional rounding configuration for prorated recurring credit amounts. */
-            fun prorationRounding(prorationRounding: ProrationRounding) =
-                prorationRounding(JsonField.of(prorationRounding))
-
-            /**
-             * Sets [Builder.prorationRounding] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.prorationRounding] with a well-typed
-             * [ProrationRounding] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun prorationRounding(prorationRounding: JsonField<ProrationRounding>) = apply {
-                this.prorationRounding = prorationRounding
-            }
-
             /** Whether the created commits will use the commit rate or list rate */
             fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
@@ -22002,7 +20943,6 @@ private constructor(
                     name,
                     netsuiteSalesOrderId,
                     proration,
-                    prorationRounding,
                     rateType,
                     recurrenceFrequency,
                     rolloverFraction,
@@ -22042,7 +20982,6 @@ private constructor(
             name()
             netsuiteSalesOrderId()
             proration().ifPresent { it.validate() }
-            prorationRounding().ifPresent { it.validate() }
             rateType().ifPresent { it.validate() }
             recurrenceFrequency().ifPresent { it.validate() }
             rolloverFraction()
@@ -22081,7 +21020,6 @@ private constructor(
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (netsuiteSalesOrderId.asKnown().isPresent) 1 else 0) +
                 (proration.asKnown().getOrNull()?.validity() ?: 0) +
-                (prorationRounding.asKnown().getOrNull()?.validity() ?: 0) +
                 (rateType.asKnown().getOrNull()?.validity() ?: 0) +
                 (recurrenceFrequency.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (rolloverFraction.asKnown().isPresent) 1 else 0) +
@@ -22850,551 +21788,6 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
-        }
-
-        /** Optional rounding configuration for prorated recurring credit amounts. */
-        class ProrationRounding
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val access: JsonField<Access>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("access") @ExcludeMissing access: JsonField<Access> = JsonMissing.of()
-            ) : this(access, mutableMapOf())
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun access(): Optional<Access> = access.getOptional("access")
-
-            /**
-             * Returns the raw JSON value of [access].
-             *
-             * Unlike [access], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("access") @ExcludeMissing fun _access(): JsonField<Access> = access
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [ProrationRounding].
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [ProrationRounding]. */
-            class Builder internal constructor() {
-
-                private var access: JsonField<Access> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(prorationRounding: ProrationRounding) = apply {
-                    access = prorationRounding.access
-                    additionalProperties = prorationRounding.additionalProperties.toMutableMap()
-                }
-
-                fun access(access: Access) = access(JsonField.of(access))
-
-                /**
-                 * Sets [Builder.access] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.access] with a well-typed [Access] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun access(access: JsonField<Access>) = apply { this.access = access }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [ProrationRounding].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): ProrationRounding =
-                    ProrationRounding(access, additionalProperties.toMutableMap())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
-             */
-            fun validate(): ProrationRounding = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                access().ifPresent { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: MetronomeInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int = (access.asKnown().getOrNull()?.validity() ?: 0)
-
-            class Access
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val decimalPlaces: JsonField<Double>,
-                private val roundingMethod: JsonField<RoundingMethod>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("decimal_places")
-                    @ExcludeMissing
-                    decimalPlaces: JsonField<Double> = JsonMissing.of(),
-                    @JsonProperty("rounding_method")
-                    @ExcludeMissing
-                    roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
-                ) : this(decimalPlaces, roundingMethod, mutableMapOf())
-
-                /**
-                 * Number of decimal places to round to. Applied directly to the stored monetary
-                 * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest
-                 * 100 in the stored unit).
-                 *
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
-
-                /**
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
-
-                /**
-                 * Returns the raw JSON value of [decimalPlaces].
-                 *
-                 * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("decimal_places")
-                @ExcludeMissing
-                fun _decimalPlaces(): JsonField<Double> = decimalPlaces
-
-                /**
-                 * Returns the raw JSON value of [roundingMethod].
-                 *
-                 * Unlike [roundingMethod], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("rounding_method")
-                @ExcludeMissing
-                fun _roundingMethod(): JsonField<RoundingMethod> = roundingMethod
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /**
-                     * Returns a mutable builder for constructing an instance of [Access].
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     */
-                    @JvmStatic fun builder() = Builder()
-                }
-
-                /** A builder for [Access]. */
-                class Builder internal constructor() {
-
-                    private var decimalPlaces: JsonField<Double>? = null
-                    private var roundingMethod: JsonField<RoundingMethod>? = null
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    @JvmSynthetic
-                    internal fun from(access: Access) = apply {
-                        decimalPlaces = access.decimalPlaces
-                        roundingMethod = access.roundingMethod
-                        additionalProperties = access.additionalProperties.toMutableMap()
-                    }
-
-                    /**
-                     * Number of decimal places to round to. Applied directly to the stored monetary
-                     * representation. Negative values round to powers of 10 (e.g., -2 rounds to
-                     * nearest 100 in the stored unit).
-                     */
-                    fun decimalPlaces(decimalPlaces: Double) =
-                        decimalPlaces(JsonField.of(decimalPlaces))
-
-                    /**
-                     * Sets [Builder.decimalPlaces] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.decimalPlaces] with a well-typed [Double]
-                     * value instead. This method is primarily for setting the field to an
-                     * undocumented or not yet supported value.
-                     */
-                    fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-                        this.decimalPlaces = decimalPlaces
-                    }
-
-                    fun roundingMethod(roundingMethod: RoundingMethod) =
-                        roundingMethod(JsonField.of(roundingMethod))
-
-                    /**
-                     * Sets [Builder.roundingMethod] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.roundingMethod] with a well-typed
-                     * [RoundingMethod] value instead. This method is primarily for setting the
-                     * field to an undocumented or not yet supported value.
-                     */
-                    fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
-                        this.roundingMethod = roundingMethod
-                    }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Access].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     *
-                     * @throws IllegalStateException if any required field is unset.
-                     */
-                    fun build(): Access =
-                        Access(
-                            checkRequired("decimalPlaces", decimalPlaces),
-                            checkRequired("roundingMethod", roundingMethod),
-                            additionalProperties.toMutableMap(),
-                        )
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): Access = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    decimalPlaces()
-                    roundingMethod().validate()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: MetronomeInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic
-                internal fun validity(): Int =
-                    (if (decimalPlaces.asKnown().isPresent) 1 else 0) +
-                        (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
-
-                class RoundingMethod
-                @JsonCreator
-                private constructor(private val value: JsonField<String>) : Enum {
-
-                    /**
-                     * Returns this class instance's raw value.
-                     *
-                     * This is usually only useful if this instance was deserialized from data that
-                     * doesn't match any known member, and you want to know that value. For example,
-                     * if the SDK is on an older version than the API, then the API may respond with
-                     * new members that the SDK is unaware of.
-                     */
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    fun _value(): JsonField<String> = value
-
-                    companion object {
-
-                        @JvmField val HALF_UP = of("HALF_UP")
-
-                        @JvmField val FLOOR = of("FLOOR")
-
-                        @JvmField val CEILING = of("CEILING")
-
-                        @JvmStatic fun of(value: String) = RoundingMethod(JsonField.of(value))
-                    }
-
-                    /** An enum containing [RoundingMethod]'s known values. */
-                    enum class Known {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                    }
-
-                    /**
-                     * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN]
-                     * member.
-                     *
-                     * An instance of [RoundingMethod] can contain an unknown value in a couple of
-                     * cases:
-                     * - It was deserialized from data that doesn't match any known member. For
-                     *   example, if the SDK is on an older version than the API, then the API may
-                     *   respond with new members that the SDK is unaware of.
-                     * - It was constructed with an arbitrary value using the [of] method.
-                     */
-                    enum class Value {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                        /**
-                         * An enum member indicating that [RoundingMethod] was instantiated with an
-                         * unknown value.
-                         */
-                        _UNKNOWN,
-                    }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value, or
-                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                     *
-                     * Use the [known] method instead if you're certain the value is always known or
-                     * if you want to throw for the unknown case.
-                     */
-                    fun value(): Value =
-                        when (this) {
-                            HALF_UP -> Value.HALF_UP
-                            FLOOR -> Value.FLOOR
-                            CEILING -> Value.CEILING
-                            else -> Value._UNKNOWN
-                        }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value.
-                     *
-                     * Use the [value] method instead if you're uncertain the value is always known
-                     * and don't want to throw for the unknown case.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value is a not
-                     *   a known member.
-                     */
-                    fun known(): Known =
-                        when (this) {
-                            HALF_UP -> Known.HALF_UP
-                            FLOOR -> Known.FLOOR
-                            CEILING -> Known.CEILING
-                            else ->
-                                throw MetronomeInvalidDataException(
-                                    "Unknown RoundingMethod: $value"
-                                )
-                        }
-
-                    /**
-                     * Returns this class instance's primitive wire representation.
-                     *
-                     * This differs from the [toString] method because that method is primarily for
-                     * debugging and generally doesn't throw.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value does not
-                     *   have the expected primitive type.
-                     */
-                    fun asString(): String =
-                        _value().asString().orElseThrow {
-                            MetronomeInvalidDataException("Value is not a String")
-                        }
-
-                    private var validated: Boolean = false
-
-                    /**
-                     * Validates that the types of all values in this object match their expected
-                     * types recursively.
-                     *
-                     * This method is _not_ forwards compatible with new types from the API for
-                     * existing fields.
-                     *
-                     * @throws MetronomeInvalidDataException if any value type in this object
-                     *   doesn't match its expected type.
-                     */
-                    fun validate(): RoundingMethod = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        known()
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: MetronomeInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is RoundingMethod && value == other.value
-                    }
-
-                    override fun hashCode() = value.hashCode()
-
-                    override fun toString() = value.toString()
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Access &&
-                        decimalPlaces == other.decimalPlaces &&
-                        roundingMethod == other.roundingMethod &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(decimalPlaces, roundingMethod, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "Access{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ProrationRounding &&
-                    access == other.access &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(access, additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "ProrationRounding{access=$access, additionalProperties=$additionalProperties}"
         }
 
         /** Whether the created commits will use the commit rate or list rate */
@@ -24331,7 +22724,6 @@ private constructor(
                 name == other.name &&
                 netsuiteSalesOrderId == other.netsuiteSalesOrderId &&
                 proration == other.proration &&
-                prorationRounding == other.prorationRounding &&
                 rateType == other.rateType &&
                 recurrenceFrequency == other.recurrenceFrequency &&
                 rolloverFraction == other.rolloverFraction &&
@@ -24356,7 +22748,6 @@ private constructor(
                 name,
                 netsuiteSalesOrderId,
                 proration,
-                prorationRounding,
                 rateType,
                 recurrenceFrequency,
                 rolloverFraction,
@@ -24370,7 +22761,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AddRecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "AddRecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class AddResellerRoyalty
@@ -29735,7 +28126,6 @@ private constructor(
         private val collectionSchedule: JsonField<CollectionSchedule>,
         private val proration: JsonField<Proration>,
         private val subscriptionRate: JsonField<SubscriptionRate>,
-        private val billingCycleConfig: JsonField<BillingCycleConfig>,
         private val customFields: JsonField<CustomFields>,
         private val description: JsonField<String>,
         private val endingBefore: JsonField<OffsetDateTime>,
@@ -29759,9 +28149,6 @@ private constructor(
             @JsonProperty("subscription_rate")
             @ExcludeMissing
             subscriptionRate: JsonField<SubscriptionRate> = JsonMissing.of(),
-            @JsonProperty("billing_cycle_config")
-            @ExcludeMissing
-            billingCycleConfig: JsonField<BillingCycleConfig> = JsonMissing.of(),
             @JsonProperty("custom_fields")
             @ExcludeMissing
             customFields: JsonField<CustomFields> = JsonMissing.of(),
@@ -29791,7 +28178,6 @@ private constructor(
             collectionSchedule,
             proration,
             subscriptionRate,
-            billingCycleConfig,
             customFields,
             description,
             endingBefore,
@@ -29822,13 +28208,6 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun subscriptionRate(): SubscriptionRate = subscriptionRate.getRequired("subscription_rate")
-
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun billingCycleConfig(): Optional<BillingCycleConfig> =
-            billingCycleConfig.getOptional("billing_cycle_config")
 
         /**
          * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
@@ -29936,16 +28315,6 @@ private constructor(
         @JsonProperty("subscription_rate")
         @ExcludeMissing
         fun _subscriptionRate(): JsonField<SubscriptionRate> = subscriptionRate
-
-        /**
-         * Returns the raw JSON value of [billingCycleConfig].
-         *
-         * Unlike [billingCycleConfig], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("billing_cycle_config")
-        @ExcludeMissing
-        fun _billingCycleConfig(): JsonField<BillingCycleConfig> = billingCycleConfig
 
         /**
          * Returns the raw JSON value of [customFields].
@@ -30063,7 +28432,6 @@ private constructor(
             private var collectionSchedule: JsonField<CollectionSchedule>? = null
             private var proration: JsonField<Proration>? = null
             private var subscriptionRate: JsonField<SubscriptionRate>? = null
-            private var billingCycleConfig: JsonField<BillingCycleConfig> = JsonMissing.of()
             private var customFields: JsonField<CustomFields> = JsonMissing.of()
             private var description: JsonField<String> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -30080,7 +28448,6 @@ private constructor(
                 collectionSchedule = addSubscription.collectionSchedule
                 proration = addSubscription.proration
                 subscriptionRate = addSubscription.subscriptionRate
-                billingCycleConfig = addSubscription.billingCycleConfig
                 customFields = addSubscription.customFields
                 description = addSubscription.description
                 endingBefore = addSubscription.endingBefore
@@ -30130,20 +28497,6 @@ private constructor(
              */
             fun subscriptionRate(subscriptionRate: JsonField<SubscriptionRate>) = apply {
                 this.subscriptionRate = subscriptionRate
-            }
-
-            fun billingCycleConfig(billingCycleConfig: BillingCycleConfig) =
-                billingCycleConfig(JsonField.of(billingCycleConfig))
-
-            /**
-             * Sets [Builder.billingCycleConfig] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.billingCycleConfig] with a well-typed
-             * [BillingCycleConfig] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun billingCycleConfig(billingCycleConfig: JsonField<BillingCycleConfig>) = apply {
-                this.billingCycleConfig = billingCycleConfig
             }
 
             /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
@@ -30330,7 +28683,6 @@ private constructor(
                     checkRequired("collectionSchedule", collectionSchedule),
                     checkRequired("proration", proration),
                     checkRequired("subscriptionRate", subscriptionRate),
-                    billingCycleConfig,
                     customFields,
                     description,
                     endingBefore,
@@ -30363,7 +28715,6 @@ private constructor(
             collectionSchedule().validate()
             proration().validate()
             subscriptionRate().validate()
-            billingCycleConfig().ifPresent { it.validate() }
             customFields().ifPresent { it.validate() }
             description()
             endingBefore()
@@ -30395,7 +28746,6 @@ private constructor(
             (collectionSchedule.asKnown().getOrNull()?.validity() ?: 0) +
                 (proration.asKnown().getOrNull()?.validity() ?: 0) +
                 (subscriptionRate.asKnown().getOrNull()?.validity() ?: 0) +
-                (billingCycleConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (customFields.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
                 (if (endingBefore.asKnown().isPresent) 1 else 0) +
@@ -30556,7 +28906,6 @@ private constructor(
         private constructor(
             private val invoiceBehavior: JsonField<InvoiceBehavior>,
             private val isProrated: JsonField<Boolean>,
-            private val rounding: JsonField<Rounding>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -30568,10 +28917,7 @@ private constructor(
                 @JsonProperty("is_prorated")
                 @ExcludeMissing
                 isProrated: JsonField<Boolean> = JsonMissing.of(),
-                @JsonProperty("rounding")
-                @ExcludeMissing
-                rounding: JsonField<Rounding> = JsonMissing.of(),
-            ) : this(invoiceBehavior, isProrated, rounding, mutableMapOf())
+            ) : this(invoiceBehavior, isProrated, mutableMapOf())
 
             /**
              * Indicates how mid-period quantity adjustments are invoiced. **BILL_IMMEDIATELY**:
@@ -30594,12 +28940,6 @@ private constructor(
             fun isProrated(): Optional<Boolean> = isProrated.getOptional("is_prorated")
 
             /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun rounding(): Optional<Rounding> = rounding.getOptional("rounding")
-
-            /**
              * Returns the raw JSON value of [invoiceBehavior].
              *
              * Unlike [invoiceBehavior], this method doesn't throw if the JSON field has an
@@ -30618,16 +28958,6 @@ private constructor(
             @JsonProperty("is_prorated")
             @ExcludeMissing
             fun _isProrated(): JsonField<Boolean> = isProrated
-
-            /**
-             * Returns the raw JSON value of [rounding].
-             *
-             * Unlike [rounding], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("rounding")
-            @ExcludeMissing
-            fun _rounding(): JsonField<Rounding> = rounding
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -30652,14 +28982,12 @@ private constructor(
 
                 private var invoiceBehavior: JsonField<InvoiceBehavior> = JsonMissing.of()
                 private var isProrated: JsonField<Boolean> = JsonMissing.of()
-                private var rounding: JsonField<Rounding> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(proration: Proration) = apply {
                     invoiceBehavior = proration.invoiceBehavior
                     isProrated = proration.isProrated
-                    rounding = proration.rounding
                     additionalProperties = proration.additionalProperties.toMutableMap()
                 }
 
@@ -30697,17 +29025,6 @@ private constructor(
                     this.isProrated = isProrated
                 }
 
-                fun rounding(rounding: Rounding) = rounding(JsonField.of(rounding))
-
-                /**
-                 * Sets [Builder.rounding] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.rounding] with a well-typed [Rounding] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun rounding(rounding: JsonField<Rounding>) = apply { this.rounding = rounding }
-
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
                     putAllAdditionalProperties(additionalProperties)
@@ -30736,12 +29053,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
                 fun build(): Proration =
-                    Proration(
-                        invoiceBehavior,
-                        isProrated,
-                        rounding,
-                        additionalProperties.toMutableMap(),
-                    )
+                    Proration(invoiceBehavior, isProrated, additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
@@ -30763,7 +29075,6 @@ private constructor(
 
                 invoiceBehavior().ifPresent { it.validate() }
                 isProrated()
-                rounding().ifPresent { it.validate() }
                 validated = true
             }
 
@@ -30784,8 +29095,7 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (invoiceBehavior.asKnown().getOrNull()?.validity() ?: 0) +
-                    (if (isProrated.asKnown().isPresent) 1 else 0) +
-                    (rounding.asKnown().getOrNull()?.validity() ?: 0)
+                    (if (isProrated.asKnown().isPresent) 1 else 0)
 
             /**
              * Indicates how mid-period quantity adjustments are invoiced. **BILL_IMMEDIATELY**:
@@ -30938,395 +29248,6 @@ private constructor(
                 override fun toString() = value.toString()
             }
 
-            class Rounding
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val decimalPlaces: JsonField<Double>,
-                private val roundingMethod: JsonField<RoundingMethod>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("decimal_places")
-                    @ExcludeMissing
-                    decimalPlaces: JsonField<Double> = JsonMissing.of(),
-                    @JsonProperty("rounding_method")
-                    @ExcludeMissing
-                    roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
-                ) : this(decimalPlaces, roundingMethod, mutableMapOf())
-
-                /**
-                 * Number of decimal places to round to. Applied directly to the stored monetary
-                 * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest
-                 * 100 in the stored unit).
-                 *
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
-
-                /**
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
-
-                /**
-                 * Returns the raw JSON value of [decimalPlaces].
-                 *
-                 * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("decimal_places")
-                @ExcludeMissing
-                fun _decimalPlaces(): JsonField<Double> = decimalPlaces
-
-                /**
-                 * Returns the raw JSON value of [roundingMethod].
-                 *
-                 * Unlike [roundingMethod], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("rounding_method")
-                @ExcludeMissing
-                fun _roundingMethod(): JsonField<RoundingMethod> = roundingMethod
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /**
-                     * Returns a mutable builder for constructing an instance of [Rounding].
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     */
-                    @JvmStatic fun builder() = Builder()
-                }
-
-                /** A builder for [Rounding]. */
-                class Builder internal constructor() {
-
-                    private var decimalPlaces: JsonField<Double>? = null
-                    private var roundingMethod: JsonField<RoundingMethod>? = null
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    @JvmSynthetic
-                    internal fun from(rounding: Rounding) = apply {
-                        decimalPlaces = rounding.decimalPlaces
-                        roundingMethod = rounding.roundingMethod
-                        additionalProperties = rounding.additionalProperties.toMutableMap()
-                    }
-
-                    /**
-                     * Number of decimal places to round to. Applied directly to the stored monetary
-                     * representation. Negative values round to powers of 10 (e.g., -2 rounds to
-                     * nearest 100 in the stored unit).
-                     */
-                    fun decimalPlaces(decimalPlaces: Double) =
-                        decimalPlaces(JsonField.of(decimalPlaces))
-
-                    /**
-                     * Sets [Builder.decimalPlaces] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.decimalPlaces] with a well-typed [Double]
-                     * value instead. This method is primarily for setting the field to an
-                     * undocumented or not yet supported value.
-                     */
-                    fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-                        this.decimalPlaces = decimalPlaces
-                    }
-
-                    fun roundingMethod(roundingMethod: RoundingMethod) =
-                        roundingMethod(JsonField.of(roundingMethod))
-
-                    /**
-                     * Sets [Builder.roundingMethod] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.roundingMethod] with a well-typed
-                     * [RoundingMethod] value instead. This method is primarily for setting the
-                     * field to an undocumented or not yet supported value.
-                     */
-                    fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
-                        this.roundingMethod = roundingMethod
-                    }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Rounding].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     *
-                     * @throws IllegalStateException if any required field is unset.
-                     */
-                    fun build(): Rounding =
-                        Rounding(
-                            checkRequired("decimalPlaces", decimalPlaces),
-                            checkRequired("roundingMethod", roundingMethod),
-                            additionalProperties.toMutableMap(),
-                        )
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): Rounding = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    decimalPlaces()
-                    roundingMethod().validate()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: MetronomeInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic
-                internal fun validity(): Int =
-                    (if (decimalPlaces.asKnown().isPresent) 1 else 0) +
-                        (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
-
-                class RoundingMethod
-                @JsonCreator
-                private constructor(private val value: JsonField<String>) : Enum {
-
-                    /**
-                     * Returns this class instance's raw value.
-                     *
-                     * This is usually only useful if this instance was deserialized from data that
-                     * doesn't match any known member, and you want to know that value. For example,
-                     * if the SDK is on an older version than the API, then the API may respond with
-                     * new members that the SDK is unaware of.
-                     */
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    fun _value(): JsonField<String> = value
-
-                    companion object {
-
-                        @JvmField val HALF_UP = of("HALF_UP")
-
-                        @JvmField val FLOOR = of("FLOOR")
-
-                        @JvmField val CEILING = of("CEILING")
-
-                        @JvmStatic fun of(value: String) = RoundingMethod(JsonField.of(value))
-                    }
-
-                    /** An enum containing [RoundingMethod]'s known values. */
-                    enum class Known {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                    }
-
-                    /**
-                     * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN]
-                     * member.
-                     *
-                     * An instance of [RoundingMethod] can contain an unknown value in a couple of
-                     * cases:
-                     * - It was deserialized from data that doesn't match any known member. For
-                     *   example, if the SDK is on an older version than the API, then the API may
-                     *   respond with new members that the SDK is unaware of.
-                     * - It was constructed with an arbitrary value using the [of] method.
-                     */
-                    enum class Value {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                        /**
-                         * An enum member indicating that [RoundingMethod] was instantiated with an
-                         * unknown value.
-                         */
-                        _UNKNOWN,
-                    }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value, or
-                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                     *
-                     * Use the [known] method instead if you're certain the value is always known or
-                     * if you want to throw for the unknown case.
-                     */
-                    fun value(): Value =
-                        when (this) {
-                            HALF_UP -> Value.HALF_UP
-                            FLOOR -> Value.FLOOR
-                            CEILING -> Value.CEILING
-                            else -> Value._UNKNOWN
-                        }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value.
-                     *
-                     * Use the [value] method instead if you're uncertain the value is always known
-                     * and don't want to throw for the unknown case.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value is a not
-                     *   a known member.
-                     */
-                    fun known(): Known =
-                        when (this) {
-                            HALF_UP -> Known.HALF_UP
-                            FLOOR -> Known.FLOOR
-                            CEILING -> Known.CEILING
-                            else ->
-                                throw MetronomeInvalidDataException(
-                                    "Unknown RoundingMethod: $value"
-                                )
-                        }
-
-                    /**
-                     * Returns this class instance's primitive wire representation.
-                     *
-                     * This differs from the [toString] method because that method is primarily for
-                     * debugging and generally doesn't throw.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value does not
-                     *   have the expected primitive type.
-                     */
-                    fun asString(): String =
-                        _value().asString().orElseThrow {
-                            MetronomeInvalidDataException("Value is not a String")
-                        }
-
-                    private var validated: Boolean = false
-
-                    /**
-                     * Validates that the types of all values in this object match their expected
-                     * types recursively.
-                     *
-                     * This method is _not_ forwards compatible with new types from the API for
-                     * existing fields.
-                     *
-                     * @throws MetronomeInvalidDataException if any value type in this object
-                     *   doesn't match its expected type.
-                     */
-                    fun validate(): RoundingMethod = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        known()
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: MetronomeInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is RoundingMethod && value == other.value
-                    }
-
-                    override fun hashCode() = value.hashCode()
-
-                    override fun toString() = value.toString()
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Rounding &&
-                        decimalPlaces == other.decimalPlaces &&
-                        roundingMethod == other.roundingMethod &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(decimalPlaces, roundingMethod, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "Rounding{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
-            }
-
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
@@ -31335,18 +29256,17 @@ private constructor(
                 return other is Proration &&
                     invoiceBehavior == other.invoiceBehavior &&
                     isProrated == other.isProrated &&
-                    rounding == other.rounding &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(invoiceBehavior, isProrated, rounding, additionalProperties)
+                Objects.hash(invoiceBehavior, isProrated, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Proration{invoiceBehavior=$invoiceBehavior, isProrated=$isProrated, rounding=$rounding, additionalProperties=$additionalProperties}"
+                "Proration{invoiceBehavior=$invoiceBehavior, isProrated=$isProrated, additionalProperties=$additionalProperties}"
         }
 
         class SubscriptionRate
@@ -31741,378 +29661,6 @@ private constructor(
 
             override fun toString() =
                 "SubscriptionRate{billingFrequency=$billingFrequency, productId=$productId, additionalProperties=$additionalProperties}"
-        }
-
-        class BillingCycleConfig
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val anchorDate: JsonField<OffsetDateTime>,
-            private val invoicePlacement: JsonField<InvoicePlacement>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("anchor_date")
-                @ExcludeMissing
-                anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
-                @JsonProperty("invoice_placement")
-                @ExcludeMissing
-                invoicePlacement: JsonField<InvoicePlacement> = JsonMissing.of(),
-            ) : this(anchorDate, invoicePlacement, mutableMapOf())
-
-            /**
-             * The date to anchor the billing cycle to. If omitted, defaults to the contract's usage
-             * invoice billing cycle anchor date.
-             *
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun anchorDate(): Optional<OffsetDateTime> = anchorDate.getOptional("anchor_date")
-
-            /**
-             * Controls whether this subscription consolidates onto usage invoices or gets its own
-             * scheduled invoice. Defaults to ON_USAGE_INVOICE if omitted.
-             *
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun invoicePlacement(): Optional<InvoicePlacement> =
-                invoicePlacement.getOptional("invoice_placement")
-
-            /**
-             * Returns the raw JSON value of [anchorDate].
-             *
-             * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("anchor_date")
-            @ExcludeMissing
-            fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
-
-            /**
-             * Returns the raw JSON value of [invoicePlacement].
-             *
-             * Unlike [invoicePlacement], this method doesn't throw if the JSON field has an
-             * unexpected type.
-             */
-            @JsonProperty("invoice_placement")
-            @ExcludeMissing
-            fun _invoicePlacement(): JsonField<InvoicePlacement> = invoicePlacement
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [BillingCycleConfig].
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [BillingCycleConfig]. */
-            class Builder internal constructor() {
-
-                private var anchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var invoicePlacement: JsonField<InvoicePlacement> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(billingCycleConfig: BillingCycleConfig) = apply {
-                    anchorDate = billingCycleConfig.anchorDate
-                    invoicePlacement = billingCycleConfig.invoicePlacement
-                    additionalProperties = billingCycleConfig.additionalProperties.toMutableMap()
-                }
-
-                /**
-                 * The date to anchor the billing cycle to. If omitted, defaults to the contract's
-                 * usage invoice billing cycle anchor date.
-                 */
-                fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
-
-                /**
-                 * Sets [Builder.anchorDate] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
-                fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
-                    this.anchorDate = anchorDate
-                }
-
-                /**
-                 * Controls whether this subscription consolidates onto usage invoices or gets its
-                 * own scheduled invoice. Defaults to ON_USAGE_INVOICE if omitted.
-                 */
-                fun invoicePlacement(invoicePlacement: InvoicePlacement) =
-                    invoicePlacement(JsonField.of(invoicePlacement))
-
-                /**
-                 * Sets [Builder.invoicePlacement] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.invoicePlacement] with a well-typed
-                 * [InvoicePlacement] value instead. This method is primarily for setting the field
-                 * to an undocumented or not yet supported value.
-                 */
-                fun invoicePlacement(invoicePlacement: JsonField<InvoicePlacement>) = apply {
-                    this.invoicePlacement = invoicePlacement
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [BillingCycleConfig].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): BillingCycleConfig =
-                    BillingCycleConfig(
-                        anchorDate,
-                        invoicePlacement,
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
-             */
-            fun validate(): BillingCycleConfig = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                anchorDate()
-                invoicePlacement().ifPresent { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: MetronomeInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (if (anchorDate.asKnown().isPresent) 1 else 0) +
-                    (invoicePlacement.asKnown().getOrNull()?.validity() ?: 0)
-
-            /**
-             * Controls whether this subscription consolidates onto usage invoices or gets its own
-             * scheduled invoice. Defaults to ON_USAGE_INVOICE if omitted.
-             */
-            class InvoicePlacement
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val ON_SCHEDULED_INVOICE = of("ON_SCHEDULED_INVOICE")
-
-                    @JvmField val ON_USAGE_INVOICE = of("ON_USAGE_INVOICE")
-
-                    @JvmStatic fun of(value: String) = InvoicePlacement(JsonField.of(value))
-                }
-
-                /** An enum containing [InvoicePlacement]'s known values. */
-                enum class Known {
-                    ON_SCHEDULED_INVOICE,
-                    ON_USAGE_INVOICE,
-                }
-
-                /**
-                 * An enum containing [InvoicePlacement]'s known values, as well as an [_UNKNOWN]
-                 * member.
-                 *
-                 * An instance of [InvoicePlacement] can contain an unknown value in a couple of
-                 * cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    ON_SCHEDULED_INVOICE,
-                    ON_USAGE_INVOICE,
-                    /**
-                     * An enum member indicating that [InvoicePlacement] was instantiated with an
-                     * unknown value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        ON_SCHEDULED_INVOICE -> Value.ON_SCHEDULED_INVOICE
-                        ON_USAGE_INVOICE -> Value.ON_USAGE_INVOICE
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
-                 *   known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        ON_SCHEDULED_INVOICE -> Known.ON_SCHEDULED_INVOICE
-                        ON_USAGE_INVOICE -> Known.ON_USAGE_INVOICE
-                        else ->
-                            throw MetronomeInvalidDataException("Unknown InvoicePlacement: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws MetronomeInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        MetronomeInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): InvoicePlacement = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: MetronomeInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is InvoicePlacement && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is BillingCycleConfig &&
-                    anchorDate == other.anchorDate &&
-                    invoicePlacement == other.invoicePlacement &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(anchorDate, invoicePlacement, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "BillingCycleConfig{anchorDate=$anchorDate, invoicePlacement=$invoicePlacement, additionalProperties=$additionalProperties}"
         }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
@@ -32695,7 +30243,6 @@ private constructor(
                 collectionSchedule == other.collectionSchedule &&
                 proration == other.proration &&
                 subscriptionRate == other.subscriptionRate &&
-                billingCycleConfig == other.billingCycleConfig &&
                 customFields == other.customFields &&
                 description == other.description &&
                 endingBefore == other.endingBefore &&
@@ -32713,7 +30260,6 @@ private constructor(
                 collectionSchedule,
                 proration,
                 subscriptionRate,
-                billingCycleConfig,
                 customFields,
                 description,
                 endingBefore,
@@ -32730,7 +30276,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AddSubscription{collectionSchedule=$collectionSchedule, proration=$proration, subscriptionRate=$subscriptionRate, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, endingBefore=$endingBefore, initialQuantity=$initialQuantity, name=$name, quantityManagementMode=$quantityManagementMode, seatConfig=$seatConfig, startingAt=$startingAt, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "AddSubscription{collectionSchedule=$collectionSchedule, proration=$proration, subscriptionRate=$subscriptionRate, customFields=$customFields, description=$description, endingBefore=$endingBefore, initialQuantity=$initialQuantity, name=$name, quantityManagementMode=$quantityManagementMode, seatConfig=$seatConfig, startingAt=$startingAt, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class ArchiveCommit
@@ -40613,7 +38159,6 @@ private constructor(
         private val accessAmount: JsonField<AccessAmount>,
         private val endingBefore: JsonField<OffsetDateTime>,
         private val invoiceAmount: JsonField<InvoiceAmount>,
-        private val prorationRounding: JsonField<ProrationRounding>,
         private val rateType: JsonField<RateType>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -40632,9 +38177,6 @@ private constructor(
             @JsonProperty("invoice_amount")
             @ExcludeMissing
             invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of(),
-            @JsonProperty("proration_rounding")
-            @ExcludeMissing
-            prorationRounding: JsonField<ProrationRounding> = JsonMissing.of(),
             @JsonProperty("rate_type")
             @ExcludeMissing
             rateType: JsonField<RateType> = JsonMissing.of(),
@@ -40643,7 +38185,6 @@ private constructor(
             accessAmount,
             endingBefore,
             invoiceAmount,
-            prorationRounding,
             rateType,
             mutableMapOf(),
         )
@@ -40671,16 +38212,6 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun invoiceAmount(): Optional<InvoiceAmount> = invoiceAmount.getOptional("invoice_amount")
-
-        /**
-         * If provided, updates the rounding config on the recurring commit. Set to null to clear
-         * rounding. Omit to leave unchanged.
-         *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun prorationRounding(): Optional<ProrationRounding> =
-            prorationRounding.getOptional("proration_rounding")
 
         /**
          * If provided, updates the recurring commit to use the specified rate type when generating
@@ -40732,16 +38263,6 @@ private constructor(
         fun _invoiceAmount(): JsonField<InvoiceAmount> = invoiceAmount
 
         /**
-         * Returns the raw JSON value of [prorationRounding].
-         *
-         * Unlike [prorationRounding], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("proration_rounding")
-        @ExcludeMissing
-        fun _prorationRounding(): JsonField<ProrationRounding> = prorationRounding
-
-        /**
          * Returns the raw JSON value of [rateType].
          *
          * Unlike [rateType], this method doesn't throw if the JSON field has an unexpected type.
@@ -40780,7 +38301,6 @@ private constructor(
             private var accessAmount: JsonField<AccessAmount> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var invoiceAmount: JsonField<InvoiceAmount> = JsonMissing.of()
-            private var prorationRounding: JsonField<ProrationRounding> = JsonMissing.of()
             private var rateType: JsonField<RateType> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -40790,7 +38310,6 @@ private constructor(
                 accessAmount = updateRecurringCommit.accessAmount
                 endingBefore = updateRecurringCommit.endingBefore
                 invoiceAmount = updateRecurringCommit.invoiceAmount
-                prorationRounding = updateRecurringCommit.prorationRounding
                 rateType = updateRecurringCommit.rateType
                 additionalProperties = updateRecurringCommit.additionalProperties.toMutableMap()
             }
@@ -40855,30 +38374,6 @@ private constructor(
             }
 
             /**
-             * If provided, updates the rounding config on the recurring commit. Set to null to
-             * clear rounding. Omit to leave unchanged.
-             */
-            fun prorationRounding(prorationRounding: ProrationRounding?) =
-                prorationRounding(JsonField.ofNullable(prorationRounding))
-
-            /**
-             * Alias for calling [Builder.prorationRounding] with `prorationRounding.orElse(null)`.
-             */
-            fun prorationRounding(prorationRounding: Optional<ProrationRounding>) =
-                prorationRounding(prorationRounding.getOrNull())
-
-            /**
-             * Sets [Builder.prorationRounding] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.prorationRounding] with a well-typed
-             * [ProrationRounding] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun prorationRounding(prorationRounding: JsonField<ProrationRounding>) = apply {
-                this.prorationRounding = prorationRounding
-            }
-
-            /**
              * If provided, updates the recurring commit to use the specified rate type when
              * generating future commits.
              */
@@ -40930,7 +38425,6 @@ private constructor(
                     accessAmount,
                     endingBefore,
                     invoiceAmount,
-                    prorationRounding,
                     rateType,
                     additionalProperties.toMutableMap(),
                 )
@@ -40956,7 +38450,6 @@ private constructor(
             accessAmount().ifPresent { it.validate() }
             endingBefore()
             invoiceAmount().ifPresent { it.validate() }
-            prorationRounding().ifPresent { it.validate() }
             rateType().ifPresent { it.validate() }
             validated = true
         }
@@ -40981,7 +38474,6 @@ private constructor(
                 (accessAmount.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (endingBefore.asKnown().isPresent) 1 else 0) +
                 (invoiceAmount.asKnown().getOrNull()?.validity() ?: 0) +
-                (prorationRounding.asKnown().getOrNull()?.validity() ?: 0) +
                 (rateType.asKnown().getOrNull()?.validity() ?: 0)
 
         class AccessAmount
@@ -41375,987 +38867,6 @@ private constructor(
         }
 
         /**
-         * If provided, updates the rounding config on the recurring commit. Set to null to clear
-         * rounding. Omit to leave unchanged.
-         */
-        class ProrationRounding
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val access: JsonField<Access>,
-            private val invoice: JsonField<Invoice>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("access")
-                @ExcludeMissing
-                access: JsonField<Access> = JsonMissing.of(),
-                @JsonProperty("invoice")
-                @ExcludeMissing
-                invoice: JsonField<Invoice> = JsonMissing.of(),
-            ) : this(access, invoice, mutableMapOf())
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun access(): Optional<Access> = access.getOptional("access")
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun invoice(): Optional<Invoice> = invoice.getOptional("invoice")
-
-            /**
-             * Returns the raw JSON value of [access].
-             *
-             * Unlike [access], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("access") @ExcludeMissing fun _access(): JsonField<Access> = access
-
-            /**
-             * Returns the raw JSON value of [invoice].
-             *
-             * Unlike [invoice], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("invoice") @ExcludeMissing fun _invoice(): JsonField<Invoice> = invoice
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [ProrationRounding].
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [ProrationRounding]. */
-            class Builder internal constructor() {
-
-                private var access: JsonField<Access> = JsonMissing.of()
-                private var invoice: JsonField<Invoice> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(prorationRounding: ProrationRounding) = apply {
-                    access = prorationRounding.access
-                    invoice = prorationRounding.invoice
-                    additionalProperties = prorationRounding.additionalProperties.toMutableMap()
-                }
-
-                fun access(access: Access?) = access(JsonField.ofNullable(access))
-
-                /** Alias for calling [Builder.access] with `access.orElse(null)`. */
-                fun access(access: Optional<Access>) = access(access.getOrNull())
-
-                /**
-                 * Sets [Builder.access] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.access] with a well-typed [Access] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun access(access: JsonField<Access>) = apply { this.access = access }
-
-                fun invoice(invoice: Invoice?) = invoice(JsonField.ofNullable(invoice))
-
-                /** Alias for calling [Builder.invoice] with `invoice.orElse(null)`. */
-                fun invoice(invoice: Optional<Invoice>) = invoice(invoice.getOrNull())
-
-                /**
-                 * Sets [Builder.invoice] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.invoice] with a well-typed [Invoice] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun invoice(invoice: JsonField<Invoice>) = apply { this.invoice = invoice }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [ProrationRounding].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): ProrationRounding =
-                    ProrationRounding(access, invoice, additionalProperties.toMutableMap())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
-             */
-            fun validate(): ProrationRounding = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                access().ifPresent { it.validate() }
-                invoice().ifPresent { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: MetronomeInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (access.asKnown().getOrNull()?.validity() ?: 0) +
-                    (invoice.asKnown().getOrNull()?.validity() ?: 0)
-
-            class Access
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val decimalPlaces: JsonField<Double>,
-                private val roundingMethod: JsonField<RoundingMethod>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("decimal_places")
-                    @ExcludeMissing
-                    decimalPlaces: JsonField<Double> = JsonMissing.of(),
-                    @JsonProperty("rounding_method")
-                    @ExcludeMissing
-                    roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
-                ) : this(decimalPlaces, roundingMethod, mutableMapOf())
-
-                /**
-                 * Number of decimal places to round to. Applied directly to the stored monetary
-                 * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest
-                 * 100 in the stored unit).
-                 *
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
-
-                /**
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
-
-                /**
-                 * Returns the raw JSON value of [decimalPlaces].
-                 *
-                 * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("decimal_places")
-                @ExcludeMissing
-                fun _decimalPlaces(): JsonField<Double> = decimalPlaces
-
-                /**
-                 * Returns the raw JSON value of [roundingMethod].
-                 *
-                 * Unlike [roundingMethod], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("rounding_method")
-                @ExcludeMissing
-                fun _roundingMethod(): JsonField<RoundingMethod> = roundingMethod
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /**
-                     * Returns a mutable builder for constructing an instance of [Access].
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     */
-                    @JvmStatic fun builder() = Builder()
-                }
-
-                /** A builder for [Access]. */
-                class Builder internal constructor() {
-
-                    private var decimalPlaces: JsonField<Double>? = null
-                    private var roundingMethod: JsonField<RoundingMethod>? = null
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    @JvmSynthetic
-                    internal fun from(access: Access) = apply {
-                        decimalPlaces = access.decimalPlaces
-                        roundingMethod = access.roundingMethod
-                        additionalProperties = access.additionalProperties.toMutableMap()
-                    }
-
-                    /**
-                     * Number of decimal places to round to. Applied directly to the stored monetary
-                     * representation. Negative values round to powers of 10 (e.g., -2 rounds to
-                     * nearest 100 in the stored unit).
-                     */
-                    fun decimalPlaces(decimalPlaces: Double) =
-                        decimalPlaces(JsonField.of(decimalPlaces))
-
-                    /**
-                     * Sets [Builder.decimalPlaces] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.decimalPlaces] with a well-typed [Double]
-                     * value instead. This method is primarily for setting the field to an
-                     * undocumented or not yet supported value.
-                     */
-                    fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-                        this.decimalPlaces = decimalPlaces
-                    }
-
-                    fun roundingMethod(roundingMethod: RoundingMethod) =
-                        roundingMethod(JsonField.of(roundingMethod))
-
-                    /**
-                     * Sets [Builder.roundingMethod] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.roundingMethod] with a well-typed
-                     * [RoundingMethod] value instead. This method is primarily for setting the
-                     * field to an undocumented or not yet supported value.
-                     */
-                    fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
-                        this.roundingMethod = roundingMethod
-                    }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Access].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     *
-                     * @throws IllegalStateException if any required field is unset.
-                     */
-                    fun build(): Access =
-                        Access(
-                            checkRequired("decimalPlaces", decimalPlaces),
-                            checkRequired("roundingMethod", roundingMethod),
-                            additionalProperties.toMutableMap(),
-                        )
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): Access = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    decimalPlaces()
-                    roundingMethod().validate()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: MetronomeInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic
-                internal fun validity(): Int =
-                    (if (decimalPlaces.asKnown().isPresent) 1 else 0) +
-                        (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
-
-                class RoundingMethod
-                @JsonCreator
-                private constructor(private val value: JsonField<String>) : Enum {
-
-                    /**
-                     * Returns this class instance's raw value.
-                     *
-                     * This is usually only useful if this instance was deserialized from data that
-                     * doesn't match any known member, and you want to know that value. For example,
-                     * if the SDK is on an older version than the API, then the API may respond with
-                     * new members that the SDK is unaware of.
-                     */
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    fun _value(): JsonField<String> = value
-
-                    companion object {
-
-                        @JvmField val HALF_UP = of("HALF_UP")
-
-                        @JvmField val FLOOR = of("FLOOR")
-
-                        @JvmField val CEILING = of("CEILING")
-
-                        @JvmStatic fun of(value: String) = RoundingMethod(JsonField.of(value))
-                    }
-
-                    /** An enum containing [RoundingMethod]'s known values. */
-                    enum class Known {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                    }
-
-                    /**
-                     * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN]
-                     * member.
-                     *
-                     * An instance of [RoundingMethod] can contain an unknown value in a couple of
-                     * cases:
-                     * - It was deserialized from data that doesn't match any known member. For
-                     *   example, if the SDK is on an older version than the API, then the API may
-                     *   respond with new members that the SDK is unaware of.
-                     * - It was constructed with an arbitrary value using the [of] method.
-                     */
-                    enum class Value {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                        /**
-                         * An enum member indicating that [RoundingMethod] was instantiated with an
-                         * unknown value.
-                         */
-                        _UNKNOWN,
-                    }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value, or
-                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                     *
-                     * Use the [known] method instead if you're certain the value is always known or
-                     * if you want to throw for the unknown case.
-                     */
-                    fun value(): Value =
-                        when (this) {
-                            HALF_UP -> Value.HALF_UP
-                            FLOOR -> Value.FLOOR
-                            CEILING -> Value.CEILING
-                            else -> Value._UNKNOWN
-                        }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value.
-                     *
-                     * Use the [value] method instead if you're uncertain the value is always known
-                     * and don't want to throw for the unknown case.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value is a not
-                     *   a known member.
-                     */
-                    fun known(): Known =
-                        when (this) {
-                            HALF_UP -> Known.HALF_UP
-                            FLOOR -> Known.FLOOR
-                            CEILING -> Known.CEILING
-                            else ->
-                                throw MetronomeInvalidDataException(
-                                    "Unknown RoundingMethod: $value"
-                                )
-                        }
-
-                    /**
-                     * Returns this class instance's primitive wire representation.
-                     *
-                     * This differs from the [toString] method because that method is primarily for
-                     * debugging and generally doesn't throw.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value does not
-                     *   have the expected primitive type.
-                     */
-                    fun asString(): String =
-                        _value().asString().orElseThrow {
-                            MetronomeInvalidDataException("Value is not a String")
-                        }
-
-                    private var validated: Boolean = false
-
-                    /**
-                     * Validates that the types of all values in this object match their expected
-                     * types recursively.
-                     *
-                     * This method is _not_ forwards compatible with new types from the API for
-                     * existing fields.
-                     *
-                     * @throws MetronomeInvalidDataException if any value type in this object
-                     *   doesn't match its expected type.
-                     */
-                    fun validate(): RoundingMethod = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        known()
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: MetronomeInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is RoundingMethod && value == other.value
-                    }
-
-                    override fun hashCode() = value.hashCode()
-
-                    override fun toString() = value.toString()
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Access &&
-                        decimalPlaces == other.decimalPlaces &&
-                        roundingMethod == other.roundingMethod &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(decimalPlaces, roundingMethod, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "Access{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
-            }
-
-            class Invoice
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val decimalPlaces: JsonField<Double>,
-                private val roundingMethod: JsonField<RoundingMethod>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("decimal_places")
-                    @ExcludeMissing
-                    decimalPlaces: JsonField<Double> = JsonMissing.of(),
-                    @JsonProperty("rounding_method")
-                    @ExcludeMissing
-                    roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
-                ) : this(decimalPlaces, roundingMethod, mutableMapOf())
-
-                /**
-                 * Number of decimal places to round to. Applied directly to the stored monetary
-                 * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest
-                 * 100 in the stored unit).
-                 *
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
-
-                /**
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
-
-                /**
-                 * Returns the raw JSON value of [decimalPlaces].
-                 *
-                 * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("decimal_places")
-                @ExcludeMissing
-                fun _decimalPlaces(): JsonField<Double> = decimalPlaces
-
-                /**
-                 * Returns the raw JSON value of [roundingMethod].
-                 *
-                 * Unlike [roundingMethod], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("rounding_method")
-                @ExcludeMissing
-                fun _roundingMethod(): JsonField<RoundingMethod> = roundingMethod
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /**
-                     * Returns a mutable builder for constructing an instance of [Invoice].
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     */
-                    @JvmStatic fun builder() = Builder()
-                }
-
-                /** A builder for [Invoice]. */
-                class Builder internal constructor() {
-
-                    private var decimalPlaces: JsonField<Double>? = null
-                    private var roundingMethod: JsonField<RoundingMethod>? = null
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    @JvmSynthetic
-                    internal fun from(invoice: Invoice) = apply {
-                        decimalPlaces = invoice.decimalPlaces
-                        roundingMethod = invoice.roundingMethod
-                        additionalProperties = invoice.additionalProperties.toMutableMap()
-                    }
-
-                    /**
-                     * Number of decimal places to round to. Applied directly to the stored monetary
-                     * representation. Negative values round to powers of 10 (e.g., -2 rounds to
-                     * nearest 100 in the stored unit).
-                     */
-                    fun decimalPlaces(decimalPlaces: Double) =
-                        decimalPlaces(JsonField.of(decimalPlaces))
-
-                    /**
-                     * Sets [Builder.decimalPlaces] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.decimalPlaces] with a well-typed [Double]
-                     * value instead. This method is primarily for setting the field to an
-                     * undocumented or not yet supported value.
-                     */
-                    fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-                        this.decimalPlaces = decimalPlaces
-                    }
-
-                    fun roundingMethod(roundingMethod: RoundingMethod) =
-                        roundingMethod(JsonField.of(roundingMethod))
-
-                    /**
-                     * Sets [Builder.roundingMethod] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.roundingMethod] with a well-typed
-                     * [RoundingMethod] value instead. This method is primarily for setting the
-                     * field to an undocumented or not yet supported value.
-                     */
-                    fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
-                        this.roundingMethod = roundingMethod
-                    }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Invoice].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     *
-                     * @throws IllegalStateException if any required field is unset.
-                     */
-                    fun build(): Invoice =
-                        Invoice(
-                            checkRequired("decimalPlaces", decimalPlaces),
-                            checkRequired("roundingMethod", roundingMethod),
-                            additionalProperties.toMutableMap(),
-                        )
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): Invoice = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    decimalPlaces()
-                    roundingMethod().validate()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: MetronomeInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic
-                internal fun validity(): Int =
-                    (if (decimalPlaces.asKnown().isPresent) 1 else 0) +
-                        (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
-
-                class RoundingMethod
-                @JsonCreator
-                private constructor(private val value: JsonField<String>) : Enum {
-
-                    /**
-                     * Returns this class instance's raw value.
-                     *
-                     * This is usually only useful if this instance was deserialized from data that
-                     * doesn't match any known member, and you want to know that value. For example,
-                     * if the SDK is on an older version than the API, then the API may respond with
-                     * new members that the SDK is unaware of.
-                     */
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    fun _value(): JsonField<String> = value
-
-                    companion object {
-
-                        @JvmField val HALF_UP = of("HALF_UP")
-
-                        @JvmField val FLOOR = of("FLOOR")
-
-                        @JvmField val CEILING = of("CEILING")
-
-                        @JvmStatic fun of(value: String) = RoundingMethod(JsonField.of(value))
-                    }
-
-                    /** An enum containing [RoundingMethod]'s known values. */
-                    enum class Known {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                    }
-
-                    /**
-                     * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN]
-                     * member.
-                     *
-                     * An instance of [RoundingMethod] can contain an unknown value in a couple of
-                     * cases:
-                     * - It was deserialized from data that doesn't match any known member. For
-                     *   example, if the SDK is on an older version than the API, then the API may
-                     *   respond with new members that the SDK is unaware of.
-                     * - It was constructed with an arbitrary value using the [of] method.
-                     */
-                    enum class Value {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                        /**
-                         * An enum member indicating that [RoundingMethod] was instantiated with an
-                         * unknown value.
-                         */
-                        _UNKNOWN,
-                    }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value, or
-                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                     *
-                     * Use the [known] method instead if you're certain the value is always known or
-                     * if you want to throw for the unknown case.
-                     */
-                    fun value(): Value =
-                        when (this) {
-                            HALF_UP -> Value.HALF_UP
-                            FLOOR -> Value.FLOOR
-                            CEILING -> Value.CEILING
-                            else -> Value._UNKNOWN
-                        }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value.
-                     *
-                     * Use the [value] method instead if you're uncertain the value is always known
-                     * and don't want to throw for the unknown case.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value is a not
-                     *   a known member.
-                     */
-                    fun known(): Known =
-                        when (this) {
-                            HALF_UP -> Known.HALF_UP
-                            FLOOR -> Known.FLOOR
-                            CEILING -> Known.CEILING
-                            else ->
-                                throw MetronomeInvalidDataException(
-                                    "Unknown RoundingMethod: $value"
-                                )
-                        }
-
-                    /**
-                     * Returns this class instance's primitive wire representation.
-                     *
-                     * This differs from the [toString] method because that method is primarily for
-                     * debugging and generally doesn't throw.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value does not
-                     *   have the expected primitive type.
-                     */
-                    fun asString(): String =
-                        _value().asString().orElseThrow {
-                            MetronomeInvalidDataException("Value is not a String")
-                        }
-
-                    private var validated: Boolean = false
-
-                    /**
-                     * Validates that the types of all values in this object match their expected
-                     * types recursively.
-                     *
-                     * This method is _not_ forwards compatible with new types from the API for
-                     * existing fields.
-                     *
-                     * @throws MetronomeInvalidDataException if any value type in this object
-                     *   doesn't match its expected type.
-                     */
-                    fun validate(): RoundingMethod = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        known()
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: MetronomeInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is RoundingMethod && value == other.value
-                    }
-
-                    override fun hashCode() = value.hashCode()
-
-                    override fun toString() = value.toString()
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Invoice &&
-                        decimalPlaces == other.decimalPlaces &&
-                        roundingMethod == other.roundingMethod &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(decimalPlaces, roundingMethod, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "Invoice{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ProrationRounding &&
-                    access == other.access &&
-                    invoice == other.invoice &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(access, invoice, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "ProrationRounding{access=$access, invoice=$invoice, additionalProperties=$additionalProperties}"
-        }
-
-        /**
          * If provided, updates the recurring commit to use the specified rate type when generating
          * future commits.
          */
@@ -42509,7 +39020,6 @@ private constructor(
                 accessAmount == other.accessAmount &&
                 endingBefore == other.endingBefore &&
                 invoiceAmount == other.invoiceAmount &&
-                prorationRounding == other.prorationRounding &&
                 rateType == other.rateType &&
                 additionalProperties == other.additionalProperties
         }
@@ -42520,7 +39030,6 @@ private constructor(
                 accessAmount,
                 endingBefore,
                 invoiceAmount,
-                prorationRounding,
                 rateType,
                 additionalProperties,
             )
@@ -42529,7 +39038,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UpdateRecurringCommit{recurringCommitId=$recurringCommitId, accessAmount=$accessAmount, endingBefore=$endingBefore, invoiceAmount=$invoiceAmount, prorationRounding=$prorationRounding, rateType=$rateType, additionalProperties=$additionalProperties}"
+            "UpdateRecurringCommit{recurringCommitId=$recurringCommitId, accessAmount=$accessAmount, endingBefore=$endingBefore, invoiceAmount=$invoiceAmount, rateType=$rateType, additionalProperties=$additionalProperties}"
     }
 
     class UpdateRecurringCredit
@@ -42538,7 +39047,6 @@ private constructor(
         private val recurringCreditId: JsonField<String>,
         private val accessAmount: JsonField<AccessAmount>,
         private val endingBefore: JsonField<OffsetDateTime>,
-        private val prorationRounding: JsonField<ProrationRounding>,
         private val rateType: JsonField<RateType>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -42554,20 +39062,10 @@ private constructor(
             @JsonProperty("ending_before")
             @ExcludeMissing
             endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("proration_rounding")
-            @ExcludeMissing
-            prorationRounding: JsonField<ProrationRounding> = JsonMissing.of(),
             @JsonProperty("rate_type")
             @ExcludeMissing
             rateType: JsonField<RateType> = JsonMissing.of(),
-        ) : this(
-            recurringCreditId,
-            accessAmount,
-            endingBefore,
-            prorationRounding,
-            rateType,
-            mutableMapOf(),
-        )
+        ) : this(recurringCreditId, accessAmount, endingBefore, rateType, mutableMapOf())
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -42586,16 +39084,6 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
-
-        /**
-         * If provided, updates the rounding config on the recurring credit. Set to null to clear
-         * rounding. Omit to leave unchanged.
-         *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun prorationRounding(): Optional<ProrationRounding> =
-            prorationRounding.getOptional("proration_rounding")
 
         /**
          * If provided, updates the recurring credit to use the specified rate type when generating
@@ -42637,16 +39125,6 @@ private constructor(
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
         /**
-         * Returns the raw JSON value of [prorationRounding].
-         *
-         * Unlike [prorationRounding], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("proration_rounding")
-        @ExcludeMissing
-        fun _prorationRounding(): JsonField<ProrationRounding> = prorationRounding
-
-        /**
          * Returns the raw JSON value of [rateType].
          *
          * Unlike [rateType], this method doesn't throw if the JSON field has an unexpected type.
@@ -42684,7 +39162,6 @@ private constructor(
             private var recurringCreditId: JsonField<String>? = null
             private var accessAmount: JsonField<AccessAmount> = JsonMissing.of()
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var prorationRounding: JsonField<ProrationRounding> = JsonMissing.of()
             private var rateType: JsonField<RateType> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -42693,7 +39170,6 @@ private constructor(
                 recurringCreditId = updateRecurringCredit.recurringCreditId
                 accessAmount = updateRecurringCredit.accessAmount
                 endingBefore = updateRecurringCredit.endingBefore
-                prorationRounding = updateRecurringCredit.prorationRounding
                 rateType = updateRecurringCredit.rateType
                 additionalProperties = updateRecurringCredit.additionalProperties.toMutableMap()
             }
@@ -42741,30 +39217,6 @@ private constructor(
              */
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
-            }
-
-            /**
-             * If provided, updates the rounding config on the recurring credit. Set to null to
-             * clear rounding. Omit to leave unchanged.
-             */
-            fun prorationRounding(prorationRounding: ProrationRounding?) =
-                prorationRounding(JsonField.ofNullable(prorationRounding))
-
-            /**
-             * Alias for calling [Builder.prorationRounding] with `prorationRounding.orElse(null)`.
-             */
-            fun prorationRounding(prorationRounding: Optional<ProrationRounding>) =
-                prorationRounding(prorationRounding.getOrNull())
-
-            /**
-             * Sets [Builder.prorationRounding] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.prorationRounding] with a well-typed
-             * [ProrationRounding] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun prorationRounding(prorationRounding: JsonField<ProrationRounding>) = apply {
-                this.prorationRounding = prorationRounding
             }
 
             /**
@@ -42818,7 +39270,6 @@ private constructor(
                     checkRequired("recurringCreditId", recurringCreditId),
                     accessAmount,
                     endingBefore,
-                    prorationRounding,
                     rateType,
                     additionalProperties.toMutableMap(),
                 )
@@ -42843,7 +39294,6 @@ private constructor(
             recurringCreditId()
             accessAmount().ifPresent { it.validate() }
             endingBefore()
-            prorationRounding().ifPresent { it.validate() }
             rateType().ifPresent { it.validate() }
             validated = true
         }
@@ -42867,7 +39317,6 @@ private constructor(
             (if (recurringCreditId.asKnown().isPresent) 1 else 0) +
                 (accessAmount.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (endingBefore.asKnown().isPresent) 1 else 0) +
-                (prorationRounding.asKnown().getOrNull()?.validity() ?: 0) +
                 (rateType.asKnown().getOrNull()?.validity() ?: 0)
 
         class AccessAmount
@@ -43066,557 +39515,6 @@ private constructor(
         }
 
         /**
-         * If provided, updates the rounding config on the recurring credit. Set to null to clear
-         * rounding. Omit to leave unchanged.
-         */
-        class ProrationRounding
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val access: JsonField<Access>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("access") @ExcludeMissing access: JsonField<Access> = JsonMissing.of()
-            ) : this(access, mutableMapOf())
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
-             *   if the server responded with an unexpected value).
-             */
-            fun access(): Optional<Access> = access.getOptional("access")
-
-            /**
-             * Returns the raw JSON value of [access].
-             *
-             * Unlike [access], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("access") @ExcludeMissing fun _access(): JsonField<Access> = access
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [ProrationRounding].
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [ProrationRounding]. */
-            class Builder internal constructor() {
-
-                private var access: JsonField<Access> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(prorationRounding: ProrationRounding) = apply {
-                    access = prorationRounding.access
-                    additionalProperties = prorationRounding.additionalProperties.toMutableMap()
-                }
-
-                fun access(access: Access?) = access(JsonField.ofNullable(access))
-
-                /** Alias for calling [Builder.access] with `access.orElse(null)`. */
-                fun access(access: Optional<Access>) = access(access.getOrNull())
-
-                /**
-                 * Sets [Builder.access] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.access] with a well-typed [Access] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun access(access: JsonField<Access>) = apply { this.access = access }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [ProrationRounding].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): ProrationRounding =
-                    ProrationRounding(access, additionalProperties.toMutableMap())
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
-             */
-            fun validate(): ProrationRounding = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                access().ifPresent { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: MetronomeInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int = (access.asKnown().getOrNull()?.validity() ?: 0)
-
-            class Access
-            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-            private constructor(
-                private val decimalPlaces: JsonField<Double>,
-                private val roundingMethod: JsonField<RoundingMethod>,
-                private val additionalProperties: MutableMap<String, JsonValue>,
-            ) {
-
-                @JsonCreator
-                private constructor(
-                    @JsonProperty("decimal_places")
-                    @ExcludeMissing
-                    decimalPlaces: JsonField<Double> = JsonMissing.of(),
-                    @JsonProperty("rounding_method")
-                    @ExcludeMissing
-                    roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
-                ) : this(decimalPlaces, roundingMethod, mutableMapOf())
-
-                /**
-                 * Number of decimal places to round to. Applied directly to the stored monetary
-                 * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest
-                 * 100 in the stored unit).
-                 *
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
-
-                /**
-                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
-                 *   is unexpectedly missing or null (e.g. if the server responded with an
-                 *   unexpected value).
-                 */
-                fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
-
-                /**
-                 * Returns the raw JSON value of [decimalPlaces].
-                 *
-                 * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("decimal_places")
-                @ExcludeMissing
-                fun _decimalPlaces(): JsonField<Double> = decimalPlaces
-
-                /**
-                 * Returns the raw JSON value of [roundingMethod].
-                 *
-                 * Unlike [roundingMethod], this method doesn't throw if the JSON field has an
-                 * unexpected type.
-                 */
-                @JsonProperty("rounding_method")
-                @ExcludeMissing
-                fun _roundingMethod(): JsonField<RoundingMethod> = roundingMethod
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
-
-                @JsonAnyGetter
-                @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
-
-                fun toBuilder() = Builder().from(this)
-
-                companion object {
-
-                    /**
-                     * Returns a mutable builder for constructing an instance of [Access].
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     */
-                    @JvmStatic fun builder() = Builder()
-                }
-
-                /** A builder for [Access]. */
-                class Builder internal constructor() {
-
-                    private var decimalPlaces: JsonField<Double>? = null
-                    private var roundingMethod: JsonField<RoundingMethod>? = null
-                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                    @JvmSynthetic
-                    internal fun from(access: Access) = apply {
-                        decimalPlaces = access.decimalPlaces
-                        roundingMethod = access.roundingMethod
-                        additionalProperties = access.additionalProperties.toMutableMap()
-                    }
-
-                    /**
-                     * Number of decimal places to round to. Applied directly to the stored monetary
-                     * representation. Negative values round to powers of 10 (e.g., -2 rounds to
-                     * nearest 100 in the stored unit).
-                     */
-                    fun decimalPlaces(decimalPlaces: Double) =
-                        decimalPlaces(JsonField.of(decimalPlaces))
-
-                    /**
-                     * Sets [Builder.decimalPlaces] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.decimalPlaces] with a well-typed [Double]
-                     * value instead. This method is primarily for setting the field to an
-                     * undocumented or not yet supported value.
-                     */
-                    fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-                        this.decimalPlaces = decimalPlaces
-                    }
-
-                    fun roundingMethod(roundingMethod: RoundingMethod) =
-                        roundingMethod(JsonField.of(roundingMethod))
-
-                    /**
-                     * Sets [Builder.roundingMethod] to an arbitrary JSON value.
-                     *
-                     * You should usually call [Builder.roundingMethod] with a well-typed
-                     * [RoundingMethod] value instead. This method is primarily for setting the
-                     * field to an undocumented or not yet supported value.
-                     */
-                    fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
-                        this.roundingMethod = roundingMethod
-                    }
-
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
-
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
-
-                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                        apply {
-                            this.additionalProperties.putAll(additionalProperties)
-                        }
-
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
-
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
-
-                    /**
-                     * Returns an immutable instance of [Access].
-                     *
-                     * Further updates to this [Builder] will not mutate the returned instance.
-                     *
-                     * The following fields are required:
-                     * ```java
-                     * .decimalPlaces()
-                     * .roundingMethod()
-                     * ```
-                     *
-                     * @throws IllegalStateException if any required field is unset.
-                     */
-                    fun build(): Access =
-                        Access(
-                            checkRequired("decimalPlaces", decimalPlaces),
-                            checkRequired("roundingMethod", roundingMethod),
-                            additionalProperties.toMutableMap(),
-                        )
-                }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): Access = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    decimalPlaces()
-                    roundingMethod().validate()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: MetronomeInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic
-                internal fun validity(): Int =
-                    (if (decimalPlaces.asKnown().isPresent) 1 else 0) +
-                        (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
-
-                class RoundingMethod
-                @JsonCreator
-                private constructor(private val value: JsonField<String>) : Enum {
-
-                    /**
-                     * Returns this class instance's raw value.
-                     *
-                     * This is usually only useful if this instance was deserialized from data that
-                     * doesn't match any known member, and you want to know that value. For example,
-                     * if the SDK is on an older version than the API, then the API may respond with
-                     * new members that the SDK is unaware of.
-                     */
-                    @com.fasterxml.jackson.annotation.JsonValue
-                    fun _value(): JsonField<String> = value
-
-                    companion object {
-
-                        @JvmField val HALF_UP = of("HALF_UP")
-
-                        @JvmField val FLOOR = of("FLOOR")
-
-                        @JvmField val CEILING = of("CEILING")
-
-                        @JvmStatic fun of(value: String) = RoundingMethod(JsonField.of(value))
-                    }
-
-                    /** An enum containing [RoundingMethod]'s known values. */
-                    enum class Known {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                    }
-
-                    /**
-                     * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN]
-                     * member.
-                     *
-                     * An instance of [RoundingMethod] can contain an unknown value in a couple of
-                     * cases:
-                     * - It was deserialized from data that doesn't match any known member. For
-                     *   example, if the SDK is on an older version than the API, then the API may
-                     *   respond with new members that the SDK is unaware of.
-                     * - It was constructed with an arbitrary value using the [of] method.
-                     */
-                    enum class Value {
-                        HALF_UP,
-                        FLOOR,
-                        CEILING,
-                        /**
-                         * An enum member indicating that [RoundingMethod] was instantiated with an
-                         * unknown value.
-                         */
-                        _UNKNOWN,
-                    }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value, or
-                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                     *
-                     * Use the [known] method instead if you're certain the value is always known or
-                     * if you want to throw for the unknown case.
-                     */
-                    fun value(): Value =
-                        when (this) {
-                            HALF_UP -> Value.HALF_UP
-                            FLOOR -> Value.FLOOR
-                            CEILING -> Value.CEILING
-                            else -> Value._UNKNOWN
-                        }
-
-                    /**
-                     * Returns an enum member corresponding to this class instance's value.
-                     *
-                     * Use the [value] method instead if you're uncertain the value is always known
-                     * and don't want to throw for the unknown case.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value is a not
-                     *   a known member.
-                     */
-                    fun known(): Known =
-                        when (this) {
-                            HALF_UP -> Known.HALF_UP
-                            FLOOR -> Known.FLOOR
-                            CEILING -> Known.CEILING
-                            else ->
-                                throw MetronomeInvalidDataException(
-                                    "Unknown RoundingMethod: $value"
-                                )
-                        }
-
-                    /**
-                     * Returns this class instance's primitive wire representation.
-                     *
-                     * This differs from the [toString] method because that method is primarily for
-                     * debugging and generally doesn't throw.
-                     *
-                     * @throws MetronomeInvalidDataException if this class instance's value does not
-                     *   have the expected primitive type.
-                     */
-                    fun asString(): String =
-                        _value().asString().orElseThrow {
-                            MetronomeInvalidDataException("Value is not a String")
-                        }
-
-                    private var validated: Boolean = false
-
-                    /**
-                     * Validates that the types of all values in this object match their expected
-                     * types recursively.
-                     *
-                     * This method is _not_ forwards compatible with new types from the API for
-                     * existing fields.
-                     *
-                     * @throws MetronomeInvalidDataException if any value type in this object
-                     *   doesn't match its expected type.
-                     */
-                    fun validate(): RoundingMethod = apply {
-                        if (validated) {
-                            return@apply
-                        }
-
-                        known()
-                        validated = true
-                    }
-
-                    fun isValid(): Boolean =
-                        try {
-                            validate()
-                            true
-                        } catch (e: MetronomeInvalidDataException) {
-                            false
-                        }
-
-                    /**
-                     * Returns a score indicating how many valid values are contained in this object
-                     * recursively.
-                     *
-                     * Used for best match union deserialization.
-                     */
-                    @JvmSynthetic
-                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                    override fun equals(other: Any?): Boolean {
-                        if (this === other) {
-                            return true
-                        }
-
-                        return other is RoundingMethod && value == other.value
-                    }
-
-                    override fun hashCode() = value.hashCode()
-
-                    override fun toString() = value.toString()
-                }
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Access &&
-                        decimalPlaces == other.decimalPlaces &&
-                        roundingMethod == other.roundingMethod &&
-                        additionalProperties == other.additionalProperties
-                }
-
-                private val hashCode: Int by lazy {
-                    Objects.hash(decimalPlaces, roundingMethod, additionalProperties)
-                }
-
-                override fun hashCode(): Int = hashCode
-
-                override fun toString() =
-                    "Access{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ProrationRounding &&
-                    access == other.access &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy { Objects.hash(access, additionalProperties) }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "ProrationRounding{access=$access, additionalProperties=$additionalProperties}"
-        }
-
-        /**
          * If provided, updates the recurring credit to use the specified rate type when generating
          * future credits.
          */
@@ -43769,7 +39667,6 @@ private constructor(
                 recurringCreditId == other.recurringCreditId &&
                 accessAmount == other.accessAmount &&
                 endingBefore == other.endingBefore &&
-                prorationRounding == other.prorationRounding &&
                 rateType == other.rateType &&
                 additionalProperties == other.additionalProperties
         }
@@ -43779,7 +39676,6 @@ private constructor(
                 recurringCreditId,
                 accessAmount,
                 endingBefore,
-                prorationRounding,
                 rateType,
                 additionalProperties,
             )
@@ -43788,7 +39684,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UpdateRecurringCredit{recurringCreditId=$recurringCreditId, accessAmount=$accessAmount, endingBefore=$endingBefore, prorationRounding=$prorationRounding, rateType=$rateType, additionalProperties=$additionalProperties}"
+            "UpdateRecurringCredit{recurringCreditId=$recurringCreditId, accessAmount=$accessAmount, endingBefore=$endingBefore, rateType=$rateType, additionalProperties=$additionalProperties}"
     }
 
     class UpdateScheduledCharge
@@ -45969,7 +41865,6 @@ private constructor(
     private constructor(
         private val subscriptionId: JsonField<String>,
         private val endingBefore: JsonField<OffsetDateTime>,
-        private val prorationRounding: JsonField<ProrationRounding>,
         private val quantityManagementModeUpdate: JsonField<QuantityManagementModeUpdate>,
         private val quantityUpdates: JsonField<List<QuantityUpdate>>,
         private val seatUpdates: JsonField<SeatUpdates>,
@@ -45984,9 +41879,6 @@ private constructor(
             @JsonProperty("ending_before")
             @ExcludeMissing
             endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("proration_rounding")
-            @ExcludeMissing
-            prorationRounding: JsonField<ProrationRounding> = JsonMissing.of(),
             @JsonProperty("quantity_management_mode_update")
             @ExcludeMissing
             quantityManagementModeUpdate: JsonField<QuantityManagementModeUpdate> =
@@ -46000,7 +41892,6 @@ private constructor(
         ) : this(
             subscriptionId,
             endingBefore,
-            prorationRounding,
             quantityManagementModeUpdate,
             quantityUpdates,
             seatUpdates,
@@ -46018,13 +41909,6 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
-
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
-        fun prorationRounding(): Optional<ProrationRounding> =
-            prorationRounding.getOptional("proration_rounding")
 
         /**
          * Update the subscription's quantity management mode from QUANTITY_ONLY to SEAT_BASED with
@@ -46072,16 +41956,6 @@ private constructor(
         @JsonProperty("ending_before")
         @ExcludeMissing
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
-
-        /**
-         * Returns the raw JSON value of [prorationRounding].
-         *
-         * Unlike [prorationRounding], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("proration_rounding")
-        @ExcludeMissing
-        fun _prorationRounding(): JsonField<ProrationRounding> = prorationRounding
 
         /**
          * Returns the raw JSON value of [quantityManagementModeUpdate].
@@ -46143,7 +42017,6 @@ private constructor(
 
             private var subscriptionId: JsonField<String>? = null
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var prorationRounding: JsonField<ProrationRounding> = JsonMissing.of()
             private var quantityManagementModeUpdate: JsonField<QuantityManagementModeUpdate> =
                 JsonMissing.of()
             private var quantityUpdates: JsonField<MutableList<QuantityUpdate>>? = null
@@ -46154,7 +42027,6 @@ private constructor(
             internal fun from(updateSubscription: UpdateSubscription) = apply {
                 subscriptionId = updateSubscription.subscriptionId
                 endingBefore = updateSubscription.endingBefore
-                prorationRounding = updateSubscription.prorationRounding
                 quantityManagementModeUpdate = updateSubscription.quantityManagementModeUpdate
                 quantityUpdates = updateSubscription.quantityUpdates.map { it.toMutableList() }
                 seatUpdates = updateSubscription.seatUpdates
@@ -46191,26 +42063,6 @@ private constructor(
              */
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
-            }
-
-            fun prorationRounding(prorationRounding: ProrationRounding?) =
-                prorationRounding(JsonField.ofNullable(prorationRounding))
-
-            /**
-             * Alias for calling [Builder.prorationRounding] with `prorationRounding.orElse(null)`.
-             */
-            fun prorationRounding(prorationRounding: Optional<ProrationRounding>) =
-                prorationRounding(prorationRounding.getOrNull())
-
-            /**
-             * Sets [Builder.prorationRounding] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.prorationRounding] with a well-typed
-             * [ProrationRounding] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun prorationRounding(prorationRounding: JsonField<ProrationRounding>) = apply {
-                this.prorationRounding = prorationRounding
             }
 
             /**
@@ -46311,7 +42163,6 @@ private constructor(
                 UpdateSubscription(
                     checkRequired("subscriptionId", subscriptionId),
                     endingBefore,
-                    prorationRounding,
                     quantityManagementModeUpdate,
                     (quantityUpdates ?: JsonMissing.of()).map { it.toImmutable() },
                     seatUpdates,
@@ -46337,7 +42188,6 @@ private constructor(
 
             subscriptionId()
             endingBefore()
-            prorationRounding().ifPresent { it.validate() }
             quantityManagementModeUpdate().ifPresent { it.validate() }
             quantityUpdates().ifPresent { it.forEach { it.validate() } }
             seatUpdates().ifPresent { it.validate() }
@@ -46362,395 +42212,9 @@ private constructor(
         internal fun validity(): Int =
             (if (subscriptionId.asKnown().isPresent) 1 else 0) +
                 (if (endingBefore.asKnown().isPresent) 1 else 0) +
-                (prorationRounding.asKnown().getOrNull()?.validity() ?: 0) +
                 (quantityManagementModeUpdate.asKnown().getOrNull()?.validity() ?: 0) +
                 (quantityUpdates.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (seatUpdates.asKnown().getOrNull()?.validity() ?: 0)
-
-        class ProrationRounding
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
-            private val decimalPlaces: JsonField<Double>,
-            private val roundingMethod: JsonField<RoundingMethod>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("decimal_places")
-                @ExcludeMissing
-                decimalPlaces: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("rounding_method")
-                @ExcludeMissing
-                roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
-            ) : this(decimalPlaces, roundingMethod, mutableMapOf())
-
-            /**
-             * Number of decimal places to round to. Applied directly to the stored monetary
-             * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest 100
-             * in the stored unit).
-             *
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
-
-            /**
-             * Returns the raw JSON value of [decimalPlaces].
-             *
-             * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("decimal_places")
-            @ExcludeMissing
-            fun _decimalPlaces(): JsonField<Double> = decimalPlaces
-
-            /**
-             * Returns the raw JSON value of [roundingMethod].
-             *
-             * Unlike [roundingMethod], this method doesn't throw if the JSON field has an
-             * unexpected type.
-             */
-            @JsonProperty("rounding_method")
-            @ExcludeMissing
-            fun _roundingMethod(): JsonField<RoundingMethod> = roundingMethod
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [ProrationRounding].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .decimalPlaces()
-                 * .roundingMethod()
-                 * ```
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [ProrationRounding]. */
-            class Builder internal constructor() {
-
-                private var decimalPlaces: JsonField<Double>? = null
-                private var roundingMethod: JsonField<RoundingMethod>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(prorationRounding: ProrationRounding) = apply {
-                    decimalPlaces = prorationRounding.decimalPlaces
-                    roundingMethod = prorationRounding.roundingMethod
-                    additionalProperties = prorationRounding.additionalProperties.toMutableMap()
-                }
-
-                /**
-                 * Number of decimal places to round to. Applied directly to the stored monetary
-                 * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest
-                 * 100 in the stored unit).
-                 */
-                fun decimalPlaces(decimalPlaces: Double) =
-                    decimalPlaces(JsonField.of(decimalPlaces))
-
-                /**
-                 * Sets [Builder.decimalPlaces] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.decimalPlaces] with a well-typed [Double] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-                    this.decimalPlaces = decimalPlaces
-                }
-
-                fun roundingMethod(roundingMethod: RoundingMethod) =
-                    roundingMethod(JsonField.of(roundingMethod))
-
-                /**
-                 * Sets [Builder.roundingMethod] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.roundingMethod] with a well-typed
-                 * [RoundingMethod] value instead. This method is primarily for setting the field to
-                 * an undocumented or not yet supported value.
-                 */
-                fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
-                    this.roundingMethod = roundingMethod
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [ProrationRounding].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .decimalPlaces()
-                 * .roundingMethod()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): ProrationRounding =
-                    ProrationRounding(
-                        checkRequired("decimalPlaces", decimalPlaces),
-                        checkRequired("roundingMethod", roundingMethod),
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
-             *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
-             *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
-             */
-            fun validate(): ProrationRounding = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                decimalPlaces()
-                roundingMethod().validate()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: MetronomeInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (if (decimalPlaces.asKnown().isPresent) 1 else 0) +
-                    (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
-
-            class RoundingMethod
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    @JvmField val HALF_UP = of("HALF_UP")
-
-                    @JvmField val FLOOR = of("FLOOR")
-
-                    @JvmField val CEILING = of("CEILING")
-
-                    @JvmStatic fun of(value: String) = RoundingMethod(JsonField.of(value))
-                }
-
-                /** An enum containing [RoundingMethod]'s known values. */
-                enum class Known {
-                    HALF_UP,
-                    FLOOR,
-                    CEILING,
-                }
-
-                /**
-                 * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN]
-                 * member.
-                 *
-                 * An instance of [RoundingMethod] can contain an unknown value in a couple of
-                 * cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    HALF_UP,
-                    FLOOR,
-                    CEILING,
-                    /**
-                     * An enum member indicating that [RoundingMethod] was instantiated with an
-                     * unknown value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        HALF_UP -> Value.HALF_UP
-                        FLOOR -> Value.FLOOR
-                        CEILING -> Value.CEILING
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
-                 *   known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        HALF_UP -> Known.HALF_UP
-                        FLOOR -> Known.FLOOR
-                        CEILING -> Known.CEILING
-                        else ->
-                            throw MetronomeInvalidDataException("Unknown RoundingMethod: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws MetronomeInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        MetronomeInvalidDataException("Value is not a String")
-                    }
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): RoundingMethod = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: MetronomeInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is RoundingMethod && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ProrationRounding &&
-                    decimalPlaces == other.decimalPlaces &&
-                    roundingMethod == other.roundingMethod &&
-                    additionalProperties == other.additionalProperties
-            }
-
-            private val hashCode: Int by lazy {
-                Objects.hash(decimalPlaces, roundingMethod, additionalProperties)
-            }
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "ProrationRounding{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
-        }
 
         /**
          * Update the subscription's quantity management mode from QUANTITY_ONLY to SEAT_BASED with
@@ -48923,7 +44387,6 @@ private constructor(
             return other is UpdateSubscription &&
                 subscriptionId == other.subscriptionId &&
                 endingBefore == other.endingBefore &&
-                prorationRounding == other.prorationRounding &&
                 quantityManagementModeUpdate == other.quantityManagementModeUpdate &&
                 quantityUpdates == other.quantityUpdates &&
                 seatUpdates == other.seatUpdates &&
@@ -48934,7 +44397,6 @@ private constructor(
             Objects.hash(
                 subscriptionId,
                 endingBefore,
-                prorationRounding,
                 quantityManagementModeUpdate,
                 quantityUpdates,
                 seatUpdates,
@@ -48945,7 +44407,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UpdateSubscription{subscriptionId=$subscriptionId, endingBefore=$endingBefore, prorationRounding=$prorationRounding, quantityManagementModeUpdate=$quantityManagementModeUpdate, quantityUpdates=$quantityUpdates, seatUpdates=$seatUpdates, additionalProperties=$additionalProperties}"
+            "UpdateSubscription{subscriptionId=$subscriptionId, endingBefore=$endingBefore, quantityManagementModeUpdate=$quantityManagementModeUpdate, quantityUpdates=$quantityUpdates, seatUpdates=$seatUpdates, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

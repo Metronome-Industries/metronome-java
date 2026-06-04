@@ -655,46 +655,6 @@ internal class ContractEditResponseTest {
                                                 .Proration
                                                 .NONE
                                         )
-                                        .prorationRounding(
-                                            ContractEditResponse.Data.Edit.AddRecurringCommit
-                                                .ProrationRounding
-                                                .builder()
-                                                .access(
-                                                    ContractEditResponse.Data.Edit
-                                                        .AddRecurringCommit
-                                                        .ProrationRounding
-                                                        .Access
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .AddRecurringCommit
-                                                                .ProrationRounding
-                                                                .Access
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .invoice(
-                                                    ContractEditResponse.Data.Edit
-                                                        .AddRecurringCommit
-                                                        .ProrationRounding
-                                                        .Invoice
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .AddRecurringCommit
-                                                                .ProrationRounding
-                                                                .Invoice
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
                                         .recurrenceFrequency(
                                             ContractEditResponse.Data.Edit.AddRecurringCommit
                                                 .RecurrenceFrequency
@@ -826,29 +786,6 @@ internal class ContractEditResponseTest {
                                             ContractEditResponse.Data.Edit.AddRecurringCredit
                                                 .Proration
                                                 .NONE
-                                        )
-                                        .prorationRounding(
-                                            ContractEditResponse.Data.Edit.AddRecurringCredit
-                                                .ProrationRounding
-                                                .builder()
-                                                .access(
-                                                    ContractEditResponse.Data.Edit
-                                                        .AddRecurringCredit
-                                                        .ProrationRounding
-                                                        .Access
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .AddRecurringCredit
-                                                                .ProrationRounding
-                                                                .Access
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
                                         )
                                         .recurrenceFrequency(
                                             ContractEditResponse.Data.Edit.AddRecurringCredit
@@ -1103,22 +1040,6 @@ internal class ContractEditResponseTest {
                                                         .BILL_IMMEDIATELY
                                                 )
                                                 .isProrated(true)
-                                                .rounding(
-                                                    ContractEditResponse.Data.Edit.AddSubscription
-                                                        .Proration
-                                                        .Rounding
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .AddSubscription
-                                                                .Proration
-                                                                .Rounding
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
                                                 .build()
                                         )
                                         .quantityManagementMode(
@@ -1164,21 +1085,6 @@ internal class ContractEditResponseTest {
                                                 .build()
                                         )
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .billingCycleConfig(
-                                            ContractEditResponse.Data.Edit.AddSubscription
-                                                .BillingCycleConfig
-                                                .builder()
-                                                .anchorDate(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .invoicePlacement(
-                                                    ContractEditResponse.Data.Edit.AddSubscription
-                                                        .BillingCycleConfig
-                                                        .InvoicePlacement
-                                                        .ON_SCHEDULED_INVOICE
-                                                )
-                                                .build()
-                                        )
                                         .customFields(
                                             ContractEditResponse.Data.Edit.AddSubscription
                                                 .CustomFields
@@ -1745,46 +1651,6 @@ internal class ContractEditResponseTest {
                                                 .unitPrice(0.0)
                                                 .build()
                                         )
-                                        .prorationRounding(
-                                            ContractEditResponse.Data.Edit.UpdateRecurringCommit
-                                                .ProrationRounding
-                                                .builder()
-                                                .access(
-                                                    ContractEditResponse.Data.Edit
-                                                        .UpdateRecurringCommit
-                                                        .ProrationRounding
-                                                        .Access
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .UpdateRecurringCommit
-                                                                .ProrationRounding
-                                                                .Access
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .invoice(
-                                                    ContractEditResponse.Data.Edit
-                                                        .UpdateRecurringCommit
-                                                        .ProrationRounding
-                                                        .Invoice
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .UpdateRecurringCommit
-                                                                .ProrationRounding
-                                                                .Invoice
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
                                         .rateType(
                                             ContractEditResponse.Data.Edit.UpdateRecurringCommit
                                                 .RateType
@@ -1805,29 +1671,6 @@ internal class ContractEditResponseTest {
                                         )
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                        )
-                                        .prorationRounding(
-                                            ContractEditResponse.Data.Edit.UpdateRecurringCredit
-                                                .ProrationRounding
-                                                .builder()
-                                                .access(
-                                                    ContractEditResponse.Data.Edit
-                                                        .UpdateRecurringCredit
-                                                        .ProrationRounding
-                                                        .Access
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .UpdateRecurringCredit
-                                                                .ProrationRounding
-                                                                .Access
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
                                         )
                                         .rateType(
                                             ContractEditResponse.Data.Edit.UpdateRecurringCredit
@@ -2635,44 +2478,6 @@ internal class ContractEditResponseTest {
                                         ContractEditResponse.Data.Edit.AddRecurringCommit.Proration
                                             .NONE
                                     )
-                                    .prorationRounding(
-                                        ContractEditResponse.Data.Edit.AddRecurringCommit
-                                            .ProrationRounding
-                                            .builder()
-                                            .access(
-                                                ContractEditResponse.Data.Edit.AddRecurringCommit
-                                                    .ProrationRounding
-                                                    .Access
-                                                    .builder()
-                                                    .decimalPlaces(-5.0)
-                                                    .roundingMethod(
-                                                        ContractEditResponse.Data.Edit
-                                                            .AddRecurringCommit
-                                                            .ProrationRounding
-                                                            .Access
-                                                            .RoundingMethod
-                                                            .HALF_UP
-                                                    )
-                                                    .build()
-                                            )
-                                            .invoice(
-                                                ContractEditResponse.Data.Edit.AddRecurringCommit
-                                                    .ProrationRounding
-                                                    .Invoice
-                                                    .builder()
-                                                    .decimalPlaces(-5.0)
-                                                    .roundingMethod(
-                                                        ContractEditResponse.Data.Edit
-                                                            .AddRecurringCommit
-                                                            .ProrationRounding
-                                                            .Invoice
-                                                            .RoundingMethod
-                                                            .HALF_UP
-                                                    )
-                                                    .build()
-                                            )
-                                            .build()
-                                    )
                                     .recurrenceFrequency(
                                         ContractEditResponse.Data.Edit.AddRecurringCommit
                                             .RecurrenceFrequency
@@ -2788,28 +2593,6 @@ internal class ContractEditResponseTest {
                                     .proration(
                                         ContractEditResponse.Data.Edit.AddRecurringCredit.Proration
                                             .NONE
-                                    )
-                                    .prorationRounding(
-                                        ContractEditResponse.Data.Edit.AddRecurringCredit
-                                            .ProrationRounding
-                                            .builder()
-                                            .access(
-                                                ContractEditResponse.Data.Edit.AddRecurringCredit
-                                                    .ProrationRounding
-                                                    .Access
-                                                    .builder()
-                                                    .decimalPlaces(-5.0)
-                                                    .roundingMethod(
-                                                        ContractEditResponse.Data.Edit
-                                                            .AddRecurringCredit
-                                                            .ProrationRounding
-                                                            .Access
-                                                            .RoundingMethod
-                                                            .HALF_UP
-                                                    )
-                                                    .build()
-                                            )
-                                            .build()
                                     )
                                     .recurrenceFrequency(
                                         ContractEditResponse.Data.Edit.AddRecurringCredit
@@ -3053,22 +2836,6 @@ internal class ContractEditResponseTest {
                                                     .BILL_IMMEDIATELY
                                             )
                                             .isProrated(true)
-                                            .rounding(
-                                                ContractEditResponse.Data.Edit.AddSubscription
-                                                    .Proration
-                                                    .Rounding
-                                                    .builder()
-                                                    .decimalPlaces(-5.0)
-                                                    .roundingMethod(
-                                                        ContractEditResponse.Data.Edit
-                                                            .AddSubscription
-                                                            .Proration
-                                                            .Rounding
-                                                            .RoundingMethod
-                                                            .HALF_UP
-                                                    )
-                                                    .build()
-                                            )
                                             .build()
                                     )
                                     .quantityManagementMode(
@@ -3112,21 +2879,6 @@ internal class ContractEditResponseTest {
                                             .build()
                                     )
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                    .billingCycleConfig(
-                                        ContractEditResponse.Data.Edit.AddSubscription
-                                            .BillingCycleConfig
-                                            .builder()
-                                            .anchorDate(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .invoicePlacement(
-                                                ContractEditResponse.Data.Edit.AddSubscription
-                                                    .BillingCycleConfig
-                                                    .InvoicePlacement
-                                                    .ON_SCHEDULED_INVOICE
-                                            )
-                                            .build()
-                                    )
                                     .customFields(
                                         ContractEditResponse.Data.Edit.AddSubscription.CustomFields
                                             .builder()
@@ -3660,44 +3412,6 @@ internal class ContractEditResponseTest {
                                             .unitPrice(0.0)
                                             .build()
                                     )
-                                    .prorationRounding(
-                                        ContractEditResponse.Data.Edit.UpdateRecurringCommit
-                                            .ProrationRounding
-                                            .builder()
-                                            .access(
-                                                ContractEditResponse.Data.Edit.UpdateRecurringCommit
-                                                    .ProrationRounding
-                                                    .Access
-                                                    .builder()
-                                                    .decimalPlaces(-5.0)
-                                                    .roundingMethod(
-                                                        ContractEditResponse.Data.Edit
-                                                            .UpdateRecurringCommit
-                                                            .ProrationRounding
-                                                            .Access
-                                                            .RoundingMethod
-                                                            .HALF_UP
-                                                    )
-                                                    .build()
-                                            )
-                                            .invoice(
-                                                ContractEditResponse.Data.Edit.UpdateRecurringCommit
-                                                    .ProrationRounding
-                                                    .Invoice
-                                                    .builder()
-                                                    .decimalPlaces(-5.0)
-                                                    .roundingMethod(
-                                                        ContractEditResponse.Data.Edit
-                                                            .UpdateRecurringCommit
-                                                            .ProrationRounding
-                                                            .Invoice
-                                                            .RoundingMethod
-                                                            .HALF_UP
-                                                    )
-                                                    .build()
-                                            )
-                                            .build()
-                                    )
                                     .rateType(
                                         ContractEditResponse.Data.Edit.UpdateRecurringCommit
                                             .RateType
@@ -3717,28 +3431,6 @@ internal class ContractEditResponseTest {
                                             .build()
                                     )
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                    .prorationRounding(
-                                        ContractEditResponse.Data.Edit.UpdateRecurringCredit
-                                            .ProrationRounding
-                                            .builder()
-                                            .access(
-                                                ContractEditResponse.Data.Edit.UpdateRecurringCredit
-                                                    .ProrationRounding
-                                                    .Access
-                                                    .builder()
-                                                    .decimalPlaces(-5.0)
-                                                    .roundingMethod(
-                                                        ContractEditResponse.Data.Edit
-                                                            .UpdateRecurringCredit
-                                                            .ProrationRounding
-                                                            .Access
-                                                            .RoundingMethod
-                                                            .HALF_UP
-                                                    )
-                                                    .build()
-                                            )
-                                            .build()
-                                    )
                                     .rateType(
                                         ContractEditResponse.Data.Edit.UpdateRecurringCredit
                                             .RateType
@@ -4580,46 +4272,6 @@ internal class ContractEditResponseTest {
                                                 .Proration
                                                 .NONE
                                         )
-                                        .prorationRounding(
-                                            ContractEditResponse.Data.Edit.AddRecurringCommit
-                                                .ProrationRounding
-                                                .builder()
-                                                .access(
-                                                    ContractEditResponse.Data.Edit
-                                                        .AddRecurringCommit
-                                                        .ProrationRounding
-                                                        .Access
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .AddRecurringCommit
-                                                                .ProrationRounding
-                                                                .Access
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .invoice(
-                                                    ContractEditResponse.Data.Edit
-                                                        .AddRecurringCommit
-                                                        .ProrationRounding
-                                                        .Invoice
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .AddRecurringCommit
-                                                                .ProrationRounding
-                                                                .Invoice
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
                                         .recurrenceFrequency(
                                             ContractEditResponse.Data.Edit.AddRecurringCommit
                                                 .RecurrenceFrequency
@@ -4751,29 +4403,6 @@ internal class ContractEditResponseTest {
                                             ContractEditResponse.Data.Edit.AddRecurringCredit
                                                 .Proration
                                                 .NONE
-                                        )
-                                        .prorationRounding(
-                                            ContractEditResponse.Data.Edit.AddRecurringCredit
-                                                .ProrationRounding
-                                                .builder()
-                                                .access(
-                                                    ContractEditResponse.Data.Edit
-                                                        .AddRecurringCredit
-                                                        .ProrationRounding
-                                                        .Access
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .AddRecurringCredit
-                                                                .ProrationRounding
-                                                                .Access
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
                                         )
                                         .recurrenceFrequency(
                                             ContractEditResponse.Data.Edit.AddRecurringCredit
@@ -5028,22 +4657,6 @@ internal class ContractEditResponseTest {
                                                         .BILL_IMMEDIATELY
                                                 )
                                                 .isProrated(true)
-                                                .rounding(
-                                                    ContractEditResponse.Data.Edit.AddSubscription
-                                                        .Proration
-                                                        .Rounding
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .AddSubscription
-                                                                .Proration
-                                                                .Rounding
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
                                                 .build()
                                         )
                                         .quantityManagementMode(
@@ -5089,21 +4702,6 @@ internal class ContractEditResponseTest {
                                                 .build()
                                         )
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                        .billingCycleConfig(
-                                            ContractEditResponse.Data.Edit.AddSubscription
-                                                .BillingCycleConfig
-                                                .builder()
-                                                .anchorDate(
-                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                                )
-                                                .invoicePlacement(
-                                                    ContractEditResponse.Data.Edit.AddSubscription
-                                                        .BillingCycleConfig
-                                                        .InvoicePlacement
-                                                        .ON_SCHEDULED_INVOICE
-                                                )
-                                                .build()
-                                        )
                                         .customFields(
                                             ContractEditResponse.Data.Edit.AddSubscription
                                                 .CustomFields
@@ -5670,46 +5268,6 @@ internal class ContractEditResponseTest {
                                                 .unitPrice(0.0)
                                                 .build()
                                         )
-                                        .prorationRounding(
-                                            ContractEditResponse.Data.Edit.UpdateRecurringCommit
-                                                .ProrationRounding
-                                                .builder()
-                                                .access(
-                                                    ContractEditResponse.Data.Edit
-                                                        .UpdateRecurringCommit
-                                                        .ProrationRounding
-                                                        .Access
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .UpdateRecurringCommit
-                                                                .ProrationRounding
-                                                                .Access
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .invoice(
-                                                    ContractEditResponse.Data.Edit
-                                                        .UpdateRecurringCommit
-                                                        .ProrationRounding
-                                                        .Invoice
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .UpdateRecurringCommit
-                                                                .ProrationRounding
-                                                                .Invoice
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
                                         .rateType(
                                             ContractEditResponse.Data.Edit.UpdateRecurringCommit
                                                 .RateType
@@ -5730,29 +5288,6 @@ internal class ContractEditResponseTest {
                                         )
                                         .endingBefore(
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                        )
-                                        .prorationRounding(
-                                            ContractEditResponse.Data.Edit.UpdateRecurringCredit
-                                                .ProrationRounding
-                                                .builder()
-                                                .access(
-                                                    ContractEditResponse.Data.Edit
-                                                        .UpdateRecurringCredit
-                                                        .ProrationRounding
-                                                        .Access
-                                                        .builder()
-                                                        .decimalPlaces(-5.0)
-                                                        .roundingMethod(
-                                                            ContractEditResponse.Data.Edit
-                                                                .UpdateRecurringCredit
-                                                                .ProrationRounding
-                                                                .Access
-                                                                .RoundingMethod
-                                                                .HALF_UP
-                                                        )
-                                                        .build()
-                                                )
-                                                .build()
                                         )
                                         .rateType(
                                             ContractEditResponse.Data.Edit.UpdateRecurringCredit
