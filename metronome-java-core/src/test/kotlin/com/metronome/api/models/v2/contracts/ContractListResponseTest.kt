@@ -763,6 +763,34 @@ internal class ContractListResponseTest {
                                 .name("name")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractV2.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractV2.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractV2.RecurringCommit.ProrationRounding.Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractV2.RecurringCommit.ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractV2.RecurringCommit.ProrationRounding.Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractV2.RecurringCommit.ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .recurrenceFrequency(
                                     ContractV2.RecurringCommit.RecurrenceFrequency.MONTHLY
                                 )
@@ -861,6 +889,22 @@ internal class ContractListResponseTest {
                                 .name("name")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractV2.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractV2.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractV2.RecurringCredit.ProrationRounding.Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractV2.RecurringCredit.ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .recurrenceFrequency(
                                     ContractV2.RecurringCredit.RecurrenceFrequency.MONTHLY
                                 )
@@ -1076,6 +1120,16 @@ internal class ContractListResponseTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractV2.Subscription.Proration.Rounding.builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractV2.Subscription.Proration.Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .quantityManagementMode(
@@ -1110,6 +1164,18 @@ internal class ContractListResponseTest {
                                         .build()
                                 )
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .billingCycleConfig(
+                                    ContractV2.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractV2.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
+                                        .build()
+                                )
                                 .customFields(
                                     ContractV2.Subscription.CustomFields.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1836,6 +1902,32 @@ internal class ContractListResponseTest {
                             .name("name")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .proration(ContractV2.RecurringCommit.Proration.NONE)
+                            .prorationRounding(
+                                ContractV2.RecurringCommit.ProrationRounding.builder()
+                                    .access(
+                                        ContractV2.RecurringCommit.ProrationRounding.Access
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                ContractV2.RecurringCommit.ProrationRounding.Access
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
+                                    .invoice(
+                                        ContractV2.RecurringCommit.ProrationRounding.Invoice
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                ContractV2.RecurringCommit.ProrationRounding.Invoice
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .recurrenceFrequency(
                                 ContractV2.RecurringCommit.RecurrenceFrequency.MONTHLY
                             )
@@ -1925,6 +2017,21 @@ internal class ContractListResponseTest {
                             .name("name")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .proration(ContractV2.RecurringCredit.Proration.NONE)
+                            .prorationRounding(
+                                ContractV2.RecurringCredit.ProrationRounding.builder()
+                                    .access(
+                                        ContractV2.RecurringCredit.ProrationRounding.Access
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                ContractV2.RecurringCredit.ProrationRounding.Access
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .recurrenceFrequency(
                                 ContractV2.RecurringCredit.RecurrenceFrequency.MONTHLY
                             )
@@ -2119,6 +2226,16 @@ internal class ContractListResponseTest {
                                             .BILL_IMMEDIATELY
                                     )
                                     .isProrated(true)
+                                    .rounding(
+                                        ContractV2.Subscription.Proration.Rounding.builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                ContractV2.Subscription.Proration.Rounding
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
                                     .build()
                             )
                             .quantityManagementMode(
@@ -2147,6 +2264,15 @@ internal class ContractListResponseTest {
                                     .build()
                             )
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .billingCycleConfig(
+                                ContractV2.Subscription.BillingCycleConfig.builder()
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .invoicePlacement(
+                                        ContractV2.Subscription.BillingCycleConfig.InvoicePlacement
+                                            .ON_SCHEDULED_INVOICE
+                                    )
+                                    .build()
+                            )
                             .customFields(
                                 ContractV2.Subscription.CustomFields.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -2906,6 +3032,34 @@ internal class ContractListResponseTest {
                                 .name("name")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractV2.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractV2.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractV2.RecurringCommit.ProrationRounding.Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractV2.RecurringCommit.ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractV2.RecurringCommit.ProrationRounding.Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractV2.RecurringCommit.ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .recurrenceFrequency(
                                     ContractV2.RecurringCommit.RecurrenceFrequency.MONTHLY
                                 )
@@ -3004,6 +3158,22 @@ internal class ContractListResponseTest {
                                 .name("name")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractV2.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractV2.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractV2.RecurringCredit.ProrationRounding.Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractV2.RecurringCredit.ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .recurrenceFrequency(
                                     ContractV2.RecurringCredit.RecurrenceFrequency.MONTHLY
                                 )
@@ -3219,6 +3389,16 @@ internal class ContractListResponseTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractV2.Subscription.Proration.Rounding.builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractV2.Subscription.Proration.Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .quantityManagementMode(
@@ -3253,6 +3433,18 @@ internal class ContractListResponseTest {
                                         .build()
                                 )
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .billingCycleConfig(
+                                    ContractV2.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractV2.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
+                                        .build()
+                                )
                                 .customFields(
                                     ContractV2.Subscription.CustomFields.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
