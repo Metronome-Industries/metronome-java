@@ -5557,6 +5557,7 @@ private constructor(
         class OverrideSpecifier
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
+            private val anyCommitOrCreditTemplateIds: JsonField<List<String>>,
             private val billingFrequency: JsonField<BillingFrequency>,
             private val commitTemplateIds: JsonField<List<String>>,
             private val presentationGroupValues: JsonField<PresentationGroupValues>,
@@ -5569,6 +5570,9 @@ private constructor(
 
             @JsonCreator
             private constructor(
+                @JsonProperty("any_commit_or_credit_template_ids")
+                @ExcludeMissing
+                anyCommitOrCreditTemplateIds: JsonField<List<String>> = JsonMissing.of(),
                 @JsonProperty("billing_frequency")
                 @ExcludeMissing
                 billingFrequency: JsonField<BillingFrequency> = JsonMissing.of(),
@@ -5591,6 +5595,7 @@ private constructor(
                 @ExcludeMissing
                 recurringCommitTemplateIds: JsonField<List<String>> = JsonMissing.of(),
             ) : this(
+                anyCommitOrCreditTemplateIds,
                 billingFrequency,
                 commitTemplateIds,
                 presentationGroupValues,
@@ -5600,6 +5605,13 @@ private constructor(
                 recurringCommitTemplateIds,
                 mutableMapOf(),
             )
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun anyCommitOrCreditTemplateIds(): Optional<List<String>> =
+                anyCommitOrCreditTemplateIds.getOptional("any_commit_or_credit_template_ids")
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -5647,6 +5659,17 @@ private constructor(
              */
             fun recurringCommitTemplateIds(): Optional<List<String>> =
                 recurringCommitTemplateIds.getOptional("recurring_commit_template_ids")
+
+            /**
+             * Returns the raw JSON value of [anyCommitOrCreditTemplateIds].
+             *
+             * Unlike [anyCommitOrCreditTemplateIds], this method doesn't throw if the JSON field
+             * has an unexpected type.
+             */
+            @JsonProperty("any_commit_or_credit_template_ids")
+            @ExcludeMissing
+            fun _anyCommitOrCreditTemplateIds(): JsonField<List<String>> =
+                anyCommitOrCreditTemplateIds
 
             /**
              * Returns the raw JSON value of [billingFrequency].
@@ -5742,6 +5765,7 @@ private constructor(
             /** A builder for [OverrideSpecifier]. */
             class Builder internal constructor() {
 
+                private var anyCommitOrCreditTemplateIds: JsonField<MutableList<String>>? = null
                 private var billingFrequency: JsonField<BillingFrequency> = JsonMissing.of()
                 private var commitTemplateIds: JsonField<MutableList<String>>? = null
                 private var presentationGroupValues: JsonField<PresentationGroupValues> =
@@ -5754,6 +5778,8 @@ private constructor(
 
                 @JvmSynthetic
                 internal fun from(overrideSpecifier: OverrideSpecifier) = apply {
+                    anyCommitOrCreditTemplateIds =
+                        overrideSpecifier.anyCommitOrCreditTemplateIds.map { it.toMutableList() }
                     billingFrequency = overrideSpecifier.billingFrequency
                     commitTemplateIds =
                         overrideSpecifier.commitTemplateIds.map { it.toMutableList() }
@@ -5764,6 +5790,36 @@ private constructor(
                     recurringCommitTemplateIds =
                         overrideSpecifier.recurringCommitTemplateIds.map { it.toMutableList() }
                     additionalProperties = overrideSpecifier.additionalProperties.toMutableMap()
+                }
+
+                fun anyCommitOrCreditTemplateIds(anyCommitOrCreditTemplateIds: List<String>) =
+                    anyCommitOrCreditTemplateIds(JsonField.of(anyCommitOrCreditTemplateIds))
+
+                /**
+                 * Sets [Builder.anyCommitOrCreditTemplateIds] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.anyCommitOrCreditTemplateIds] with a well-typed
+                 * `List<String>` value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
+                fun anyCommitOrCreditTemplateIds(
+                    anyCommitOrCreditTemplateIds: JsonField<List<String>>
+                ) = apply {
+                    this.anyCommitOrCreditTemplateIds =
+                        anyCommitOrCreditTemplateIds.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [String] to [anyCommitOrCreditTemplateIds].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addAnyCommitOrCreditTemplateId(anyCommitOrCreditTemplateId: String) = apply {
+                    anyCommitOrCreditTemplateIds =
+                        (anyCommitOrCreditTemplateIds ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("anyCommitOrCreditTemplateIds", it)
+                                .add(anyCommitOrCreditTemplateId)
+                        }
                 }
 
                 fun billingFrequency(billingFrequency: BillingFrequency) =
@@ -5929,6 +5985,7 @@ private constructor(
                  */
                 fun build(): OverrideSpecifier =
                     OverrideSpecifier(
+                        (anyCommitOrCreditTemplateIds ?: JsonMissing.of()).map { it.toImmutable() },
                         billingFrequency,
                         (commitTemplateIds ?: JsonMissing.of()).map { it.toImmutable() },
                         presentationGroupValues,
@@ -5957,6 +6014,7 @@ private constructor(
                     return@apply
                 }
 
+                anyCommitOrCreditTemplateIds()
                 billingFrequency().ifPresent { it.validate() }
                 commitTemplateIds()
                 presentationGroupValues().ifPresent { it.validate() }
@@ -5983,7 +6041,8 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                (billingFrequency.asKnown().getOrNull()?.validity() ?: 0) +
+                (anyCommitOrCreditTemplateIds.asKnown().getOrNull()?.size ?: 0) +
+                    (billingFrequency.asKnown().getOrNull()?.validity() ?: 0) +
                     (commitTemplateIds.asKnown().getOrNull()?.size ?: 0) +
                     (presentationGroupValues.asKnown().getOrNull()?.validity() ?: 0) +
                     (pricingGroupValues.asKnown().getOrNull()?.validity() ?: 0) +
@@ -6396,6 +6455,7 @@ private constructor(
                 }
 
                 return other is OverrideSpecifier &&
+                    anyCommitOrCreditTemplateIds == other.anyCommitOrCreditTemplateIds &&
                     billingFrequency == other.billingFrequency &&
                     commitTemplateIds == other.commitTemplateIds &&
                     presentationGroupValues == other.presentationGroupValues &&
@@ -6408,6 +6468,7 @@ private constructor(
 
             private val hashCode: Int by lazy {
                 Objects.hash(
+                    anyCommitOrCreditTemplateIds,
                     billingFrequency,
                     commitTemplateIds,
                     presentationGroupValues,
@@ -6422,7 +6483,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "OverrideSpecifier{billingFrequency=$billingFrequency, commitTemplateIds=$commitTemplateIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitTemplateIds=$recurringCommitTemplateIds, additionalProperties=$additionalProperties}"
+                "OverrideSpecifier{anyCommitOrCreditTemplateIds=$anyCommitOrCreditTemplateIds, billingFrequency=$billingFrequency, commitTemplateIds=$commitTemplateIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitTemplateIds=$recurringCommitTemplateIds, additionalProperties=$additionalProperties}"
         }
 
         class StartingAtOffset

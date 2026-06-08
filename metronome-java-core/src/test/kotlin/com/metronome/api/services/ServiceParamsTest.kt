@@ -344,6 +344,7 @@ internal class ServiceParamsTest {
                         .multiplier(0.0)
                         .addOverrideSpecifier(
                             ContractCreateParams.Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     ContractCreateParams.Override.OverrideSpecifier.BillingFrequency
                                         .MONTHLY

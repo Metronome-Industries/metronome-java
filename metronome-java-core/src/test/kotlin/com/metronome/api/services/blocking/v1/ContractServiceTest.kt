@@ -349,6 +349,7 @@ internal class ContractServiceTest {
                             .multiplier(0.0)
                             .addOverrideSpecifier(
                                 ContractCreateParams.Override.OverrideSpecifier.builder()
+                                    .addAnyCommitOrCreditId("string")
                                     .billingFrequency(
                                         ContractCreateParams.Override.OverrideSpecifier
                                             .BillingFrequency
@@ -1398,6 +1399,7 @@ internal class ContractServiceTest {
                             .multiplier(0.0)
                             .addOverrideSpecifier(
                                 ContractAmendParams.Override.OverrideSpecifier.builder()
+                                    .addAnyCommitOrCreditId("string")
                                     .billingFrequency(
                                         ContractAmendParams.Override.OverrideSpecifier
                                             .BillingFrequency

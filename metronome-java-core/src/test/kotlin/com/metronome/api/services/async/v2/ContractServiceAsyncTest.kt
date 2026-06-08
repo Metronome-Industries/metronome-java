@@ -418,6 +418,7 @@ internal class ContractServiceAsyncTest {
                             .multiplier(2.0)
                             .addOverrideSpecifier(
                                 ContractEditParams.AddOverride.OverrideSpecifier.builder()
+                                    .addAnyCommitOrCreditId("string")
                                     .billingFrequency(
                                         ContractEditParams.AddOverride.OverrideSpecifier
                                             .BillingFrequency

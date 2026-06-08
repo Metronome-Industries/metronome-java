@@ -170,6 +170,7 @@ internal class PackageRetrieveResponseTest {
                                 .addOverrideSpecifier(
                                     PackageRetrieveResponse.Data.Override.OverrideSpecifier
                                         .builder()
+                                        .addAnyCommitOrCreditTemplateId("string")
                                         .billingFrequency(
                                             PackageRetrieveResponse.Data.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -1200,6 +1201,7 @@ internal class PackageRetrieveResponseTest {
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addOverrideSpecifier(
                                 PackageRetrieveResponse.Data.Override.OverrideSpecifier.builder()
+                                    .addAnyCommitOrCreditTemplateId("string")
                                     .billingFrequency(
                                         PackageRetrieveResponse.Data.Override.OverrideSpecifier
                                             .BillingFrequency
@@ -2173,6 +2175,7 @@ internal class PackageRetrieveResponseTest {
                                 .addOverrideSpecifier(
                                     PackageRetrieveResponse.Data.Override.OverrideSpecifier
                                         .builder()
+                                        .addAnyCommitOrCreditTemplateId("string")
                                         .billingFrequency(
                                             PackageRetrieveResponse.Data.Override.OverrideSpecifier
                                                 .BillingFrequency

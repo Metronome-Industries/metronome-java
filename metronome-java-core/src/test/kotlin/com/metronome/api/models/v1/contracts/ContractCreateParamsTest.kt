@@ -293,6 +293,7 @@ internal class ContractCreateParamsTest {
                     .multiplier(0.0)
                     .addOverrideSpecifier(
                         ContractCreateParams.Override.OverrideSpecifier.builder()
+                            .addAnyCommitOrCreditId("string")
                             .billingFrequency(
                                 ContractCreateParams.Override.OverrideSpecifier.BillingFrequency
                                     .MONTHLY
@@ -1230,6 +1231,7 @@ internal class ContractCreateParamsTest {
                         .multiplier(0.0)
                         .addOverrideSpecifier(
                             ContractCreateParams.Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     ContractCreateParams.Override.OverrideSpecifier.BillingFrequency
                                         .MONTHLY
@@ -2186,6 +2188,7 @@ internal class ContractCreateParamsTest {
                     .multiplier(0.0)
                     .addOverrideSpecifier(
                         ContractCreateParams.Override.OverrideSpecifier.builder()
+                            .addAnyCommitOrCreditId("string")
                             .billingFrequency(
                                 ContractCreateParams.Override.OverrideSpecifier.BillingFrequency
                                     .MONTHLY

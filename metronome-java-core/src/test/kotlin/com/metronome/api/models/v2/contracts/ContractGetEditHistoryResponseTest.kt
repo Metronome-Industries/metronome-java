@@ -283,6 +283,7 @@ internal class ContractGetEditHistoryResponseTest {
                                     ContractGetEditHistoryResponse.Data.AddOverride
                                         .OverrideSpecifier
                                         .builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractGetEditHistoryResponse.Data.AddOverride
                                                 .OverrideSpecifier
@@ -2074,6 +2075,7 @@ internal class ContractGetEditHistoryResponseTest {
                             .addOverrideSpecifier(
                                 ContractGetEditHistoryResponse.Data.AddOverride.OverrideSpecifier
                                     .builder()
+                                    .addAnyCommitOrCreditId("string")
                                     .billingFrequency(
                                         ContractGetEditHistoryResponse.Data.AddOverride
                                             .OverrideSpecifier
@@ -3807,6 +3809,7 @@ internal class ContractGetEditHistoryResponseTest {
                                     ContractGetEditHistoryResponse.Data.AddOverride
                                         .OverrideSpecifier
                                         .builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractGetEditHistoryResponse.Data.AddOverride
                                                 .OverrideSpecifier

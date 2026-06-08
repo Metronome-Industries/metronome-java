@@ -212,6 +212,7 @@ internal class PackageCreateParamsTest {
                 PackageCreateParams.Override.builder()
                     .addOverrideSpecifier(
                         PackageCreateParams.Override.OverrideSpecifier.builder()
+                            .addAnyCommitOrCreditId("string")
                             .billingFrequency(
                                 PackageCreateParams.Override.OverrideSpecifier.BillingFrequency
                                     .MONTHLY
@@ -977,6 +978,7 @@ internal class PackageCreateParamsTest {
                     PackageCreateParams.Override.builder()
                         .addOverrideSpecifier(
                             PackageCreateParams.Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     PackageCreateParams.Override.OverrideSpecifier.BillingFrequency
                                         .MONTHLY
@@ -1783,6 +1785,7 @@ internal class PackageCreateParamsTest {
                 PackageCreateParams.Override.builder()
                     .addOverrideSpecifier(
                         PackageCreateParams.Override.OverrideSpecifier.builder()
+                            .addAnyCommitOrCreditId("string")
                             .billingFrequency(
                                 PackageCreateParams.Override.OverrideSpecifier.BillingFrequency
                                     .MONTHLY
