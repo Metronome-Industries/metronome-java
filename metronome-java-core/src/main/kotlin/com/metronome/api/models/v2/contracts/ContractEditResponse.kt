@@ -6340,6 +6340,7 @@ private constructor(
                 class OverrideSpecifier
                 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
+                    private val anyCommitOrCreditIds: JsonField<List<String>>,
                     private val billingFrequency: JsonField<BillingFrequency>,
                     private val commitIds: JsonField<List<String>>,
                     private val presentationGroupValues: JsonField<PresentationGroupValues>,
@@ -6352,6 +6353,9 @@ private constructor(
 
                     @JsonCreator
                     private constructor(
+                        @JsonProperty("any_commit_or_credit_ids")
+                        @ExcludeMissing
+                        anyCommitOrCreditIds: JsonField<List<String>> = JsonMissing.of(),
                         @JsonProperty("billing_frequency")
                         @ExcludeMissing
                         billingFrequency: JsonField<BillingFrequency> = JsonMissing.of(),
@@ -6375,6 +6379,7 @@ private constructor(
                         @ExcludeMissing
                         recurringCommitIds: JsonField<List<String>> = JsonMissing.of(),
                     ) : this(
+                        anyCommitOrCreditIds,
                         billingFrequency,
                         commitIds,
                         presentationGroupValues,
@@ -6384,6 +6389,13 @@ private constructor(
                         recurringCommitIds,
                         mutableMapOf(),
                     )
+
+                    /**
+                     * @throws MetronomeInvalidDataException if the JSON field has an unexpected
+                     *   type (e.g. if the server responded with an unexpected value).
+                     */
+                    fun anyCommitOrCreditIds(): Optional<List<String>> =
+                        anyCommitOrCreditIds.getOptional("any_commit_or_credit_ids")
 
                     /**
                      * @throws MetronomeInvalidDataException if the JSON field has an unexpected
@@ -6431,6 +6443,16 @@ private constructor(
                      */
                     fun recurringCommitIds(): Optional<List<String>> =
                         recurringCommitIds.getOptional("recurring_commit_ids")
+
+                    /**
+                     * Returns the raw JSON value of [anyCommitOrCreditIds].
+                     *
+                     * Unlike [anyCommitOrCreditIds], this method doesn't throw if the JSON field
+                     * has an unexpected type.
+                     */
+                    @JsonProperty("any_commit_or_credit_ids")
+                    @ExcludeMissing
+                    fun _anyCommitOrCreditIds(): JsonField<List<String>> = anyCommitOrCreditIds
 
                     /**
                      * Returns the raw JSON value of [billingFrequency].
@@ -6527,6 +6549,7 @@ private constructor(
                     /** A builder for [OverrideSpecifier]. */
                     class Builder internal constructor() {
 
+                        private var anyCommitOrCreditIds: JsonField<MutableList<String>>? = null
                         private var billingFrequency: JsonField<BillingFrequency> = JsonMissing.of()
                         private var commitIds: JsonField<MutableList<String>>? = null
                         private var presentationGroupValues: JsonField<PresentationGroupValues> =
@@ -6541,6 +6564,8 @@ private constructor(
 
                         @JvmSynthetic
                         internal fun from(overrideSpecifier: OverrideSpecifier) = apply {
+                            anyCommitOrCreditIds =
+                                overrideSpecifier.anyCommitOrCreditIds.map { it.toMutableList() }
                             billingFrequency = overrideSpecifier.billingFrequency
                             commitIds = overrideSpecifier.commitIds.map { it.toMutableList() }
                             presentationGroupValues = overrideSpecifier.presentationGroupValues
@@ -6551,6 +6576,35 @@ private constructor(
                                 overrideSpecifier.recurringCommitIds.map { it.toMutableList() }
                             additionalProperties =
                                 overrideSpecifier.additionalProperties.toMutableMap()
+                        }
+
+                        fun anyCommitOrCreditIds(anyCommitOrCreditIds: List<String>) =
+                            anyCommitOrCreditIds(JsonField.of(anyCommitOrCreditIds))
+
+                        /**
+                         * Sets [Builder.anyCommitOrCreditIds] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.anyCommitOrCreditIds] with a well-typed
+                         * `List<String>` value instead. This method is primarily for setting the
+                         * field to an undocumented or not yet supported value.
+                         */
+                        fun anyCommitOrCreditIds(anyCommitOrCreditIds: JsonField<List<String>>) =
+                            apply {
+                                this.anyCommitOrCreditIds =
+                                    anyCommitOrCreditIds.map { it.toMutableList() }
+                            }
+
+                        /**
+                         * Adds a single [String] to [anyCommitOrCreditIds].
+                         *
+                         * @throws IllegalStateException if the field was previously set to a
+                         *   non-list.
+                         */
+                        fun addAnyCommitOrCreditId(anyCommitOrCreditId: String) = apply {
+                            anyCommitOrCreditIds =
+                                (anyCommitOrCreditIds ?: JsonField.of(mutableListOf())).also {
+                                    checkKnown("anyCommitOrCreditIds", it).add(anyCommitOrCreditId)
+                                }
                         }
 
                         fun billingFrequency(billingFrequency: BillingFrequency) =
@@ -6723,6 +6777,7 @@ private constructor(
                          */
                         fun build(): OverrideSpecifier =
                             OverrideSpecifier(
+                                (anyCommitOrCreditIds ?: JsonMissing.of()).map { it.toImmutable() },
                                 billingFrequency,
                                 (commitIds ?: JsonMissing.of()).map { it.toImmutable() },
                                 presentationGroupValues,
@@ -6751,6 +6806,7 @@ private constructor(
                             return@apply
                         }
 
+                        anyCommitOrCreditIds()
                         billingFrequency().ifPresent { it.validate() }
                         commitIds()
                         presentationGroupValues().ifPresent { it.validate() }
@@ -6777,7 +6833,8 @@ private constructor(
                      */
                     @JvmSynthetic
                     internal fun validity(): Int =
-                        (billingFrequency.asKnown().getOrNull()?.validity() ?: 0) +
+                        (anyCommitOrCreditIds.asKnown().getOrNull()?.size ?: 0) +
+                            (billingFrequency.asKnown().getOrNull()?.validity() ?: 0) +
                             (commitIds.asKnown().getOrNull()?.size ?: 0) +
                             (presentationGroupValues.asKnown().getOrNull()?.validity() ?: 0) +
                             (pricingGroupValues.asKnown().getOrNull()?.validity() ?: 0) +
@@ -7199,6 +7256,7 @@ private constructor(
                         }
 
                         return other is OverrideSpecifier &&
+                            anyCommitOrCreditIds == other.anyCommitOrCreditIds &&
                             billingFrequency == other.billingFrequency &&
                             commitIds == other.commitIds &&
                             presentationGroupValues == other.presentationGroupValues &&
@@ -7211,6 +7269,7 @@ private constructor(
 
                     private val hashCode: Int by lazy {
                         Objects.hash(
+                            anyCommitOrCreditIds,
                             billingFrequency,
                             commitIds,
                             presentationGroupValues,
@@ -7225,7 +7284,7 @@ private constructor(
                     override fun hashCode(): Int = hashCode
 
                     override fun toString() =
-                        "OverrideSpecifier{billingFrequency=$billingFrequency, commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, additionalProperties=$additionalProperties}"
+                        "OverrideSpecifier{anyCommitOrCreditIds=$anyCommitOrCreditIds, billingFrequency=$billingFrequency, commitIds=$commitIds, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productId=$productId, productTags=$productTags, recurringCommitIds=$recurringCommitIds, additionalProperties=$additionalProperties}"
                 }
 
                 class OverwriteRate

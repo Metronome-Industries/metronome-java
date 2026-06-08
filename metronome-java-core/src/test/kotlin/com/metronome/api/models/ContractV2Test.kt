@@ -183,6 +183,7 @@ internal class ContractV2Test {
                         .multiplier(0.0)
                         .addOverrideSpecifier(
                             ContractV2.Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     ContractV2.Override.OverrideSpecifier.BillingFrequency.MONTHLY
                                 )
@@ -1235,6 +1236,7 @@ internal class ContractV2Test {
                     .multiplier(0.0)
                     .addOverrideSpecifier(
                         ContractV2.Override.OverrideSpecifier.builder()
+                            .addAnyCommitOrCreditId("string")
                             .billingFrequency(
                                 ContractV2.Override.OverrideSpecifier.BillingFrequency.MONTHLY
                             )
@@ -2277,6 +2279,7 @@ internal class ContractV2Test {
                         .multiplier(0.0)
                         .addOverrideSpecifier(
                             ContractV2.Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     ContractV2.Override.OverrideSpecifier.BillingFrequency.MONTHLY
                                 )

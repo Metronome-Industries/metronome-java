@@ -186,6 +186,7 @@ internal class ContractWithoutAmendmentsTest {
                         .multiplier(0.0)
                         .addOverrideSpecifier(
                             Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     Override.OverrideSpecifier.BillingFrequency.MONTHLY
                                 )
@@ -1149,6 +1150,7 @@ internal class ContractWithoutAmendmentsTest {
                     .multiplier(0.0)
                     .addOverrideSpecifier(
                         Override.OverrideSpecifier.builder()
+                            .addAnyCommitOrCreditId("string")
                             .billingFrequency(Override.OverrideSpecifier.BillingFrequency.MONTHLY)
                             .addCommitId("string")
                             .presentationGroupValues(
@@ -2103,6 +2105,7 @@ internal class ContractWithoutAmendmentsTest {
                         .multiplier(0.0)
                         .addOverrideSpecifier(
                             Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     Override.OverrideSpecifier.BillingFrequency.MONTHLY
                                 )

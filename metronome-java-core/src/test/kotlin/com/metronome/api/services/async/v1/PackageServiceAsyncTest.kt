@@ -235,6 +235,7 @@ internal class PackageServiceAsyncTest {
                         PackageCreateParams.Override.builder()
                             .addOverrideSpecifier(
                                 PackageCreateParams.Override.OverrideSpecifier.builder()
+                                    .addAnyCommitOrCreditId("string")
                                     .billingFrequency(
                                         PackageCreateParams.Override.OverrideSpecifier
                                             .BillingFrequency

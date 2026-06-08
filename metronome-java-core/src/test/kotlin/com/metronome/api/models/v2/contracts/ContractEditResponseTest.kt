@@ -319,6 +319,7 @@ internal class ContractEditResponseTest {
                                             ContractEditResponse.Data.Edit.AddOverride
                                                 .OverrideSpecifier
                                                 .builder()
+                                                .addAnyCommitOrCreditId("string")
                                                 .billingFrequency(
                                                     ContractEditResponse.Data.Edit.AddOverride
                                                         .OverrideSpecifier
@@ -2325,6 +2326,7 @@ internal class ContractEditResponseTest {
                                     .addOverrideSpecifier(
                                         ContractEditResponse.Data.Edit.AddOverride.OverrideSpecifier
                                             .builder()
+                                            .addAnyCommitOrCreditId("string")
                                             .billingFrequency(
                                                 ContractEditResponse.Data.Edit.AddOverride
                                                     .OverrideSpecifier
@@ -4244,6 +4246,7 @@ internal class ContractEditResponseTest {
                                             ContractEditResponse.Data.Edit.AddOverride
                                                 .OverrideSpecifier
                                                 .builder()
+                                                .addAnyCommitOrCreditId("string")
                                                 .billingFrequency(
                                                     ContractEditResponse.Data.Edit.AddOverride
                                                         .OverrideSpecifier

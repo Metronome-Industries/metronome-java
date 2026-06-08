@@ -164,6 +164,7 @@ internal class PackageListPageResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addOverrideSpecifier(
                                     PackageListResponse.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditTemplateId("string")
                                         .billingFrequency(
                                             PackageListResponse.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -1117,6 +1118,7 @@ internal class PackageListPageResponseTest {
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addOverrideSpecifier(
                                 PackageListResponse.Override.OverrideSpecifier.builder()
+                                    .addAnyCommitOrCreditTemplateId("string")
                                     .billingFrequency(
                                         PackageListResponse.Override.OverrideSpecifier
                                             .BillingFrequency
@@ -2018,6 +2020,7 @@ internal class PackageListPageResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addOverrideSpecifier(
                                     PackageListResponse.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditTemplateId("string")
                                         .billingFrequency(
                                             PackageListResponse.Override.OverrideSpecifier
                                                 .BillingFrequency
