@@ -19,6 +19,7 @@ import com.metronome.api.models.v1.contracts.ContractArchiveParams
 import com.metronome.api.models.v1.contracts.ContractCreateHistoricalInvoicesParams
 import com.metronome.api.models.v1.contracts.ContractCreateParams
 import com.metronome.api.models.v1.contracts.ContractGetNetBalanceParams
+import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistoryParams
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListParams
 import com.metronome.api.models.v1.contracts.ContractListSeatBalancesParams
@@ -1711,6 +1712,32 @@ internal class ContractServiceTest {
                     .invoiceInclusionMode(
                         ContractGetNetBalanceParams.InvoiceInclusionMode.FINALIZED
                     )
+                    .build()
+            )
+
+        response.validate()
+    }
+
+    @Test
+    fun getSubscriptionSeatsHistory() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val contractService = client.v1().contracts()
+
+        val response =
+            contractService.getSubscriptionSeatsHistory(
+                ContractGetSubscriptionSeatsHistoryParams.builder()
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .subscriptionId("1a824d53-bde6-4d82-96d7-6347ff227d5c")
+                    .coveringDate(OffsetDateTime.parse("2024-01-15T00:00:00.000Z"))
+                    .cursor("cursor")
+                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .limit(10L)
+                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
 

@@ -27,6 +27,8 @@ import com.metronome.api.models.v1.contracts.ContractCreateParams
 import com.metronome.api.models.v1.contracts.ContractCreateResponse
 import com.metronome.api.models.v1.contracts.ContractGetNetBalanceParams
 import com.metronome.api.models.v1.contracts.ContractGetNetBalanceResponse
+import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistoryParams
+import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistoryResponse
 import com.metronome.api.models.v1.contracts.ContractListBalancesPageAsync
 import com.metronome.api.models.v1.contracts.ContractListBalancesPageResponse
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
@@ -141,6 +143,15 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
     ): CompletableFuture<ContractGetNetBalanceResponse> =
         // post /v1/contracts/customerBalances/getNetBalance
         withRawResponse().getNetBalance(params, requestOptions).thenApply { it.parse() }
+
+    override fun getSubscriptionSeatsHistory(
+        params: ContractGetSubscriptionSeatsHistoryParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<ContractGetSubscriptionSeatsHistoryResponse> =
+        // post /v1/contracts/getSubscriptionSeatsHistory
+        withRawResponse().getSubscriptionSeatsHistory(params, requestOptions).thenApply {
+            it.parse()
+        }
 
     override fun listBalances(
         params: ContractListBalancesParams,
@@ -465,6 +476,38 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
                     errorHandler.handle(response).parseable {
                         response
                             .use { getNetBalanceHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val getSubscriptionSeatsHistoryHandler:
+            Handler<ContractGetSubscriptionSeatsHistoryResponse> =
+            jsonHandler<ContractGetSubscriptionSeatsHistoryResponse>(clientOptions.jsonMapper)
+
+        override fun getSubscriptionSeatsHistory(
+            params: ContractGetSubscriptionSeatsHistoryParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<ContractGetSubscriptionSeatsHistoryResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contracts", "getSubscriptionSeatsHistory")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { getSubscriptionSeatsHistoryHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
