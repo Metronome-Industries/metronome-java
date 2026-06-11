@@ -18,6 +18,8 @@ import com.metronome.api.models.v1.contracts.ContractCreateParams
 import com.metronome.api.models.v1.contracts.ContractCreateResponse
 import com.metronome.api.models.v1.contracts.ContractGetNetBalanceParams
 import com.metronome.api.models.v1.contracts.ContractGetNetBalanceResponse
+import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistoryParams
+import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistoryResponse
 import com.metronome.api.models.v1.contracts.ContractListBalancesPage
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListParams
@@ -347,6 +349,40 @@ interface ContractService {
     ): ContractGetNetBalanceResponse
 
     /**
+     * Get the history of subscription seats schedule over time for a given `subscription_id`. This
+     * endpoint provides information about seat assignments and total quantities for different time
+     * periods, allowing you to track how seat assignments have changed over time.
+     *
+     * ### Use this endpoint to:
+     * - Track changes to seat assignments over time
+     * - Get seat schedule for a specific date using the `covering_date` parameter
+     * - Get seat schedule history with optional date range filtering using `starting_at` and
+     *   `ending_before`
+     *
+     * ### Key response fields:
+     * - data: array of seat schedule entries with time periods, quantity, and assignments
+     * - next_page: cursor for pagination to retrieve additional results
+     *
+     * ### Usage guidelines:
+     * - Use `covering_date` to get the active seats for a specific point in time. `covering_date`
+     *   cannot be used with `starting_at` or `ending_before`.
+     * - Use `starting_at` and `ending_before` to filter results by time range. `starting_at` and
+     *   `ending_before` cannot be used with `covering_date`.
+     * - Maximum limit is 10 seat schedule entries per request
+     * - Results are ordered by `starting_at` timestamp
+     */
+    fun getSubscriptionSeatsHistory(
+        params: ContractGetSubscriptionSeatsHistoryParams
+    ): ContractGetSubscriptionSeatsHistoryResponse =
+        getSubscriptionSeatsHistory(params, RequestOptions.none())
+
+    /** @see getSubscriptionSeatsHistory */
+    fun getSubscriptionSeatsHistory(
+        params: ContractGetSubscriptionSeatsHistoryParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractGetSubscriptionSeatsHistoryResponse
+
+    /**
      * Retrieve a comprehensive view of all available balances (commits and credits) for a customer.
      * This endpoint provides real-time visibility into prepaid funds, postpaid commitments,
      * promotional credits, and other balance types that can offset usage charges, helping you build
@@ -659,6 +695,23 @@ interface ContractService {
             params: ContractGetNetBalanceParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ContractGetNetBalanceResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/getSubscriptionSeatsHistory`, but is
+         * otherwise the same as [ContractService.getSubscriptionSeatsHistory].
+         */
+        @MustBeClosed
+        fun getSubscriptionSeatsHistory(
+            params: ContractGetSubscriptionSeatsHistoryParams
+        ): HttpResponseFor<ContractGetSubscriptionSeatsHistoryResponse> =
+            getSubscriptionSeatsHistory(params, RequestOptions.none())
+
+        /** @see getSubscriptionSeatsHistory */
+        @MustBeClosed
+        fun getSubscriptionSeatsHistory(
+            params: ContractGetSubscriptionSeatsHistoryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractGetSubscriptionSeatsHistoryResponse>
 
         /**
          * Returns a raw HTTP response for `post /v1/contracts/customerBalances/list`, but is
