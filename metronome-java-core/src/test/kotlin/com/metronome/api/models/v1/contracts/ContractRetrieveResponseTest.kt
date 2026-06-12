@@ -99,6 +99,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -442,6 +443,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -683,6 +685,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -1045,6 +1048,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -1909,6 +1913,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -2271,6 +2276,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -3486,6 +3492,7 @@ internal class ContractRetrieveResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdBy("created_by")
                                     .customFields(
                                         Commit.CustomFields.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -3803,6 +3810,7 @@ internal class ContractRetrieveResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -4021,6 +4029,7 @@ internal class ContractRetrieveResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdBy("created_by")
                                     .customFields(
                                         Commit.CustomFields.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -4356,6 +4365,7 @@ internal class ContractRetrieveResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -5149,6 +5159,7 @@ internal class ContractRetrieveResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdBy("created_by")
                                     .customFields(
                                         Commit.CustomFields.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -5484,6 +5495,7 @@ internal class ContractRetrieveResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -6626,6 +6638,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -6969,6 +6982,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -7210,6 +7224,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -7572,6 +7587,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -8436,6 +8452,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -8798,6 +8815,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
