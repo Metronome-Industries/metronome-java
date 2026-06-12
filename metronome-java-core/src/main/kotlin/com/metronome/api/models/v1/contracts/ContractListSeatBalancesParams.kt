@@ -130,6 +130,15 @@ private constructor(
     fun seatIds(): Optional<List<String>> = body.seatIds()
 
     /**
+     * When true, any seat_ids not found in contract subscriptions will be silently omitted from the
+     * response instead of returning a 400 error.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun skipMissingSeatIds(): Optional<Boolean> = body.skipMissingSeatIds()
+
+    /**
      * Include only commits or credits with access effective on or after this date (cannot be used
      * with covering_date).
      *
@@ -210,6 +219,14 @@ private constructor(
      * Unlike [seatIds], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _seatIds(): JsonField<List<String>> = body._seatIds()
+
+    /**
+     * Returns the raw JSON value of [skipMissingSeatIds].
+     *
+     * Unlike [skipMissingSeatIds], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _skipMissingSeatIds(): JsonField<Boolean> = body._skipMissingSeatIds()
 
     /**
      * Returns the raw JSON value of [startingAt].
@@ -420,6 +437,25 @@ private constructor(
         fun addSeatId(seatId: String) = apply { body.addSeatId(seatId) }
 
         /**
+         * When true, any seat_ids not found in contract subscriptions will be silently omitted from
+         * the response instead of returning a 400 error.
+         */
+        fun skipMissingSeatIds(skipMissingSeatIds: Boolean) = apply {
+            body.skipMissingSeatIds(skipMissingSeatIds)
+        }
+
+        /**
+         * Sets [Builder.skipMissingSeatIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.skipMissingSeatIds] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun skipMissingSeatIds(skipMissingSeatIds: JsonField<Boolean>) = apply {
+            body.skipMissingSeatIds(skipMissingSeatIds)
+        }
+
+        /**
          * Include only commits or credits with access effective on or after this date (cannot be
          * used with covering_date).
          */
@@ -620,6 +656,7 @@ private constructor(
         private val includeLedgers: JsonField<Boolean>,
         private val limit: JsonField<Long>,
         private val seatIds: JsonField<List<String>>,
+        private val skipMissingSeatIds: JsonField<Boolean>,
         private val startingAt: JsonField<OffsetDateTime>,
         private val subscriptionIds: JsonField<List<String>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -650,6 +687,9 @@ private constructor(
             @JsonProperty("seat_ids")
             @ExcludeMissing
             seatIds: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("skip_missing_seat_ids")
+            @ExcludeMissing
+            skipMissingSeatIds: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("starting_at")
             @ExcludeMissing
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -666,6 +706,7 @@ private constructor(
             includeLedgers,
             limit,
             seatIds,
+            skipMissingSeatIds,
             startingAt,
             subscriptionIds,
             mutableMapOf(),
@@ -752,6 +793,16 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun seatIds(): Optional<List<String>> = seatIds.getOptional("seat_ids")
+
+        /**
+         * When true, any seat_ids not found in contract subscriptions will be silently omitted from
+         * the response instead of returning a 400 error.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun skipMissingSeatIds(): Optional<Boolean> =
+            skipMissingSeatIds.getOptional("skip_missing_seat_ids")
 
         /**
          * Include only commits or credits with access effective on or after this date (cannot be
@@ -852,6 +903,16 @@ private constructor(
         @JsonProperty("seat_ids") @ExcludeMissing fun _seatIds(): JsonField<List<String>> = seatIds
 
         /**
+         * Returns the raw JSON value of [skipMissingSeatIds].
+         *
+         * Unlike [skipMissingSeatIds], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("skip_missing_seat_ids")
+        @ExcludeMissing
+        fun _skipMissingSeatIds(): JsonField<Boolean> = skipMissingSeatIds
+
+        /**
          * Returns the raw JSON value of [startingAt].
          *
          * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected type.
@@ -908,6 +969,7 @@ private constructor(
             private var includeLedgers: JsonField<Boolean> = JsonMissing.of()
             private var limit: JsonField<Long> = JsonMissing.of()
             private var seatIds: JsonField<MutableList<String>>? = null
+            private var skipMissingSeatIds: JsonField<Boolean> = JsonMissing.of()
             private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var subscriptionIds: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -923,6 +985,7 @@ private constructor(
                 includeLedgers = body.includeLedgers
                 limit = body.limit
                 seatIds = body.seatIds.map { it.toMutableList() }
+                skipMissingSeatIds = body.skipMissingSeatIds
                 startingAt = body.startingAt
                 subscriptionIds = body.subscriptionIds.map { it.toMutableList() }
                 additionalProperties = body.additionalProperties.toMutableMap()
@@ -1079,6 +1142,24 @@ private constructor(
             }
 
             /**
+             * When true, any seat_ids not found in contract subscriptions will be silently omitted
+             * from the response instead of returning a 400 error.
+             */
+            fun skipMissingSeatIds(skipMissingSeatIds: Boolean) =
+                skipMissingSeatIds(JsonField.of(skipMissingSeatIds))
+
+            /**
+             * Sets [Builder.skipMissingSeatIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.skipMissingSeatIds] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun skipMissingSeatIds(skipMissingSeatIds: JsonField<Boolean>) = apply {
+                this.skipMissingSeatIds = skipMissingSeatIds
+            }
+
+            /**
              * Include only commits or credits with access effective on or after this date (cannot
              * be used with covering_date).
              */
@@ -1168,6 +1249,7 @@ private constructor(
                     includeLedgers,
                     limit,
                     (seatIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    skipMissingSeatIds,
                     startingAt,
                     (subscriptionIds ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
@@ -1199,6 +1281,7 @@ private constructor(
             includeLedgers()
             limit()
             seatIds()
+            skipMissingSeatIds()
             startingAt()
             subscriptionIds()
             validated = true
@@ -1229,6 +1312,7 @@ private constructor(
                 (if (includeLedgers.asKnown().isPresent) 1 else 0) +
                 (if (limit.asKnown().isPresent) 1 else 0) +
                 (seatIds.asKnown().getOrNull()?.size ?: 0) +
+                (if (skipMissingSeatIds.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0) +
                 (subscriptionIds.asKnown().getOrNull()?.size ?: 0)
 
@@ -1247,6 +1331,7 @@ private constructor(
                 includeLedgers == other.includeLedgers &&
                 limit == other.limit &&
                 seatIds == other.seatIds &&
+                skipMissingSeatIds == other.skipMissingSeatIds &&
                 startingAt == other.startingAt &&
                 subscriptionIds == other.subscriptionIds &&
                 additionalProperties == other.additionalProperties
@@ -1263,6 +1348,7 @@ private constructor(
                 includeLedgers,
                 limit,
                 seatIds,
+                skipMissingSeatIds,
                 startingAt,
                 subscriptionIds,
                 additionalProperties,
@@ -1272,7 +1358,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{contractId=$contractId, customerId=$customerId, coveringDate=$coveringDate, cursor=$cursor, effectiveBefore=$effectiveBefore, includeCreditsAndCommits=$includeCreditsAndCommits, includeLedgers=$includeLedgers, limit=$limit, seatIds=$seatIds, startingAt=$startingAt, subscriptionIds=$subscriptionIds, additionalProperties=$additionalProperties}"
+            "Body{contractId=$contractId, customerId=$customerId, coveringDate=$coveringDate, cursor=$cursor, effectiveBefore=$effectiveBefore, includeCreditsAndCommits=$includeCreditsAndCommits, includeLedgers=$includeLedgers, limit=$limit, seatIds=$seatIds, skipMissingSeatIds=$skipMissingSeatIds, startingAt=$startingAt, subscriptionIds=$subscriptionIds, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
