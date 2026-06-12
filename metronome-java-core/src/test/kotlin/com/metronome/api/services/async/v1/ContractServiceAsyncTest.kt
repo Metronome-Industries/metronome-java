@@ -1796,6 +1796,7 @@ internal class ContractServiceAsyncTest {
                     .includeLedgers(true)
                     .limit(25L)
                     .addSeatId("string")
+                    .skipMissingSeatIds(true)
                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addSubscriptionId("8deed800-1b7a-495d-a207-6c52bac54dc9")
                     .build()
