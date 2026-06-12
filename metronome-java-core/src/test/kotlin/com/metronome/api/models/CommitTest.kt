@@ -52,6 +52,7 @@ internal class CommitTest {
                 .contract(
                     Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                 )
+                .createdBy("created_by")
                 .customFields(
                     Commit.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -195,6 +196,7 @@ internal class CommitTest {
         assertThat(commit.balance()).contains(0.0)
         assertThat(commit.contract())
             .contains(Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+        assertThat(commit.createdBy()).contains("created_by")
         assertThat(commit.customFields())
             .contains(
                 Commit.CustomFields.builder()
@@ -347,6 +349,7 @@ internal class CommitTest {
                 .contract(
                     Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                 )
+                .createdBy("created_by")
                 .customFields(
                     Commit.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
