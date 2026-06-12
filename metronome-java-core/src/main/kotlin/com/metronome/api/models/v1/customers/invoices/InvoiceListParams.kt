@@ -63,6 +63,7 @@ private constructor(
     private val startingOn: OffsetDateTime?,
     private val status: String?,
     private val type: Type?,
+    private val webhookNotificationId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -105,6 +106,11 @@ private constructor(
     /** Filter invoices by type. Defaults to returning all invoice types. */
     fun type(): Optional<Type> = Optional.ofNullable(type)
 
+    /**
+     * Indicates that this API request was triggered by a webhook notification with the provided ID.
+     */
+    fun webhookNotificationId(): Optional<String> = Optional.ofNullable(webhookNotificationId)
+
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -140,6 +146,7 @@ private constructor(
         private var startingOn: OffsetDateTime? = null
         private var status: String? = null
         private var type: Type? = null
+        private var webhookNotificationId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -156,6 +163,7 @@ private constructor(
             startingOn = invoiceListParams.startingOn
             status = invoiceListParams.status
             type = invoiceListParams.type
+            webhookNotificationId = invoiceListParams.webhookNotificationId
             additionalHeaders = invoiceListParams.additionalHeaders.toBuilder()
             additionalQueryParams = invoiceListParams.additionalQueryParams.toBuilder()
         }
@@ -249,6 +257,21 @@ private constructor(
 
         /** Alias for calling [Builder.type] with `type.orElse(null)`. */
         fun type(type: Optional<Type>) = type(type.getOrNull())
+
+        /**
+         * Indicates that this API request was triggered by a webhook notification with the provided
+         * ID.
+         */
+        fun webhookNotificationId(webhookNotificationId: String?) = apply {
+            this.webhookNotificationId = webhookNotificationId
+        }
+
+        /**
+         * Alias for calling [Builder.webhookNotificationId] with
+         * `webhookNotificationId.orElse(null)`.
+         */
+        fun webhookNotificationId(webhookNotificationId: Optional<String>) =
+            webhookNotificationId(webhookNotificationId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -373,6 +396,7 @@ private constructor(
                 startingOn,
                 status,
                 type,
+                webhookNotificationId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -403,6 +427,7 @@ private constructor(
                 }
                 status?.let { put("status", it) }
                 type?.let { put("type", it.toString()) }
+                webhookNotificationId?.let { put("webhook_notification_id", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -704,6 +729,7 @@ private constructor(
             startingOn == other.startingOn &&
             status == other.status &&
             type == other.type &&
+            webhookNotificationId == other.webhookNotificationId &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
@@ -721,10 +747,11 @@ private constructor(
             startingOn,
             status,
             type,
+            webhookNotificationId,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "InvoiceListParams{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, type=$type, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvoiceListParams{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, type=$type, webhookNotificationId=$webhookNotificationId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
