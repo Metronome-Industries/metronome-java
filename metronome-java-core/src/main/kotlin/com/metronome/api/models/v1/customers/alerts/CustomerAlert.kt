@@ -375,7 +375,7 @@ private constructor(
         fun type(): Type = type.getRequired("type")
 
         /**
-         * Timestamp for when the threshold notification was last updated
+         * Timestamp for when the threshold notification's customer status was last updated
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -705,7 +705,7 @@ private constructor(
              */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
-            /** Timestamp for when the threshold notification was last updated */
+            /** Timestamp for when the threshold notification's customer status was last updated */
             fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
             /**
