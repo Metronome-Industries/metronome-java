@@ -212,7 +212,8 @@ private constructor(
     fun contract(): Optional<Contract> = contract.getOptional("contract")
 
     /**
-     * The actor who created this credit.
+     * The actor who created this credit. Omitted for system-generated credits such as recurring
+     * credits.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -775,7 +776,10 @@ private constructor(
          */
         fun contract(contract: JsonField<Contract>) = apply { this.contract = contract }
 
-        /** The actor who created this credit. */
+        /**
+         * The actor who created this credit. Omitted for system-generated credits such as recurring
+         * credits.
+         */
         fun createdBy(createdBy: String) = createdBy(JsonField.of(createdBy))
 
         /**
