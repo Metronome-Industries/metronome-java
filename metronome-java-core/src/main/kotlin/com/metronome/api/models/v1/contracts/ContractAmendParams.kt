@@ -8653,9 +8653,10 @@ private constructor(
 
         /**
          * Indicates whether the override should only apply to commits. Defaults to `false`. If
-         * `true`, you can specify relevant commits in `override_specifiers` by passing
-         * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
-         * consuming any prepaid or postpaid commit.
+         * `true` you can specify relevant commits in `override_specifiers` by passing `commit_ids`,
+         * `recurring_commit_ids`, or `any_commit_or_credit_ids`. If you do not specify any of these
+         * fields, the override will apply when consuming any prepaid commit, postpaid commit, or
+         * credit
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -8976,9 +8977,10 @@ private constructor(
 
             /**
              * Indicates whether the override should only apply to commits. Defaults to `false`. If
-             * `true`, you can specify relevant commits in `override_specifiers` by passing
-             * `commit_ids`. if you do not specify `commit_ids`, then the override will apply when
-             * consuming any prepaid or postpaid commit.
+             * `true` you can specify relevant commits in `override_specifiers` by passing
+             * `commit_ids`, `recurring_commit_ids`, or `any_commit_or_credit_ids`. If you do not
+             * specify any of these fields, the override will apply when consuming any prepaid
+             * commit, postpaid commit, or credit
              */
             fun isCommitSpecific(isCommitSpecific: Boolean) =
                 isCommitSpecific(JsonField.of(isCommitSpecific))
