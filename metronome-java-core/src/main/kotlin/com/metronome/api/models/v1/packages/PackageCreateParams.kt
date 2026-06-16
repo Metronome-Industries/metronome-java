@@ -16568,6 +16568,8 @@ private constructor(
 
                 @JvmField val WEEKLY = of("WEEKLY")
 
+                @JvmField val DAILY = of("DAILY")
+
                 @JvmStatic fun of(value: String) = RecurrenceFrequency(JsonField.of(value))
             }
 
@@ -16577,6 +16579,7 @@ private constructor(
                 QUARTERLY,
                 ANNUAL,
                 WEEKLY,
+                DAILY,
             }
 
             /**
@@ -16595,6 +16598,7 @@ private constructor(
                 QUARTERLY,
                 ANNUAL,
                 WEEKLY,
+                DAILY,
                 /**
                  * An enum member indicating that [RecurrenceFrequency] was instantiated with an
                  * unknown value.
@@ -16615,6 +16619,7 @@ private constructor(
                     QUARTERLY -> Value.QUARTERLY
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
+                    DAILY -> Value.DAILY
                     else -> Value._UNKNOWN
                 }
 
@@ -16633,6 +16638,7 @@ private constructor(
                     QUARTERLY -> Known.QUARTERLY
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
+                    DAILY -> Known.DAILY
                     else ->
                         throw MetronomeInvalidDataException("Unknown RecurrenceFrequency: $value")
                 }
@@ -20522,6 +20528,8 @@ private constructor(
 
                 @JvmField val WEEKLY = of("WEEKLY")
 
+                @JvmField val DAILY = of("DAILY")
+
                 @JvmStatic fun of(value: String) = RecurrenceFrequency(JsonField.of(value))
             }
 
@@ -20531,6 +20539,7 @@ private constructor(
                 QUARTERLY,
                 ANNUAL,
                 WEEKLY,
+                DAILY,
             }
 
             /**
@@ -20549,6 +20558,7 @@ private constructor(
                 QUARTERLY,
                 ANNUAL,
                 WEEKLY,
+                DAILY,
                 /**
                  * An enum member indicating that [RecurrenceFrequency] was instantiated with an
                  * unknown value.
@@ -20569,6 +20579,7 @@ private constructor(
                     QUARTERLY -> Value.QUARTERLY
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
+                    DAILY -> Value.DAILY
                     else -> Value._UNKNOWN
                 }
 
@@ -20587,6 +20598,7 @@ private constructor(
                     QUARTERLY -> Known.QUARTERLY
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
+                    DAILY -> Known.DAILY
                     else ->
                         throw MetronomeInvalidDataException("Unknown RecurrenceFrequency: $value")
                 }
