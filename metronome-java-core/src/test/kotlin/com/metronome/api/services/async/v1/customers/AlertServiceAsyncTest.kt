@@ -27,6 +27,37 @@ internal class AlertServiceAsyncTest {
                 AlertRetrieveParams.builder()
                     .alertId("8deed800-1b7a-495d-a207-6c52bac54dc9")
                     .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+                    .addAlertSpecifier(
+                        AlertRetrieveParams.AlertSpecifier.builder()
+                            .addCustomFieldFilter(
+                                AlertRetrieveParams.AlertSpecifier.CustomFieldFilter.builder()
+                                    .entity(
+                                        AlertRetrieveParams.AlertSpecifier.CustomFieldFilter.Entity
+                                            .CONTRACT
+                                    )
+                                    .key("key")
+                                    .value("value")
+                                    .build()
+                            )
+                            .addExclude(
+                                AlertRetrieveParams.AlertSpecifier.Exclude.builder()
+                                    .addCustomFieldFilter(
+                                        AlertRetrieveParams.AlertSpecifier.Exclude.CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                AlertRetrieveParams.AlertSpecifier.Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .CONTRACT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .addGroupValue(
                         AlertRetrieveParams.GroupValue.builder().key("key").value("value").build()
                     )

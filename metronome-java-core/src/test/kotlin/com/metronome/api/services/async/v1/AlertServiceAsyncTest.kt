@@ -27,6 +27,37 @@ internal class AlertServiceAsyncTest {
                     .alertType(AlertCreateParams.AlertType.SPEND_THRESHOLD_REACHED)
                     .name("\$100 spend threshold reached")
                     .threshold(10000.0)
+                    .addAlertSpecifier(
+                        AlertCreateParams.AlertSpecifier.builder()
+                            .addCustomFieldFilter(
+                                AlertCreateParams.AlertSpecifier.CustomFieldFilter.builder()
+                                    .entity(
+                                        AlertCreateParams.AlertSpecifier.CustomFieldFilter.Entity
+                                            .CONTRACT
+                                    )
+                                    .key("key")
+                                    .value("value")
+                                    .build()
+                            )
+                            .addExclude(
+                                AlertCreateParams.AlertSpecifier.Exclude.builder()
+                                    .addCustomFieldFilter(
+                                        AlertCreateParams.AlertSpecifier.Exclude.CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                AlertCreateParams.AlertSpecifier.Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .CONTRACT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addCreditGrantTypeFilter("enterprise")
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
