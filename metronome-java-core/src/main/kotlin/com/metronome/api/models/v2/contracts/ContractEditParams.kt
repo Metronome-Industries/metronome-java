@@ -38469,6 +38469,9 @@ private constructor(
         fun thresholdAmount(): Optional<Double> = thresholdAmount.getOptional("threshold_amount")
 
         /**
+         * Determines which balances are excluded from remaining balance calculation for threshold
+         * billing.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
@@ -38727,6 +38730,10 @@ private constructor(
                 this.thresholdAmount = thresholdAmount
             }
 
+            /**
+             * Determines which balances are excluded from remaining balance calculation for
+             * threshold billing.
+             */
             fun thresholdBalanceSpecifiers(
                 thresholdBalanceSpecifiers: List<ThresholdBalanceSpecifier>?
             ) = thresholdBalanceSpecifiers(JsonField.ofNullable(thresholdBalanceSpecifiers))

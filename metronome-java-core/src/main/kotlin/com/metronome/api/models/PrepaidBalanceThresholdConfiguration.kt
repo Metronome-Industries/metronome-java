@@ -127,6 +127,9 @@ private constructor(
         discountConfiguration.getOptional("discount_configuration")
 
     /**
+     * Determines which balances are excluded from remaining balance calculation for threshold
+     * billing.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -374,6 +377,10 @@ private constructor(
             this.discountConfiguration = discountConfiguration
         }
 
+        /**
+         * Determines which balances are excluded from remaining balance calculation for threshold
+         * billing.
+         */
         fun thresholdBalanceSpecifiers(
             thresholdBalanceSpecifiers: List<ThresholdBalanceSpecifier>
         ) = thresholdBalanceSpecifiers(JsonField.of(thresholdBalanceSpecifiers))
@@ -1478,6 +1485,9 @@ private constructor(
         ) : this(exclude, mutableMapOf())
 
         /**
+         * If any of the exclude specifier is met, the balance is not considered when evaluating
+         * threshold billing
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -1528,6 +1538,10 @@ private constructor(
                 additionalProperties = thresholdBalanceSpecifier.additionalProperties.toMutableMap()
             }
 
+            /**
+             * If any of the exclude specifier is met, the balance is not considered when evaluating
+             * threshold billing
+             */
             fun exclude(exclude: List<Exclude>) = exclude(JsonField.of(exclude))
 
             /**
