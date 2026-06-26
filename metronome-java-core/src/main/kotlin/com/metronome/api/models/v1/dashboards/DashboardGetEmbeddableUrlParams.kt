@@ -1595,6 +1595,10 @@ private constructor(
 
                 @JvmField val PROGRESS_BAR_BACKGROUND = of("Progress_bar_background")
 
+                @JvmField val ACTION = of("Action")
+
+                @JvmField val ACTION_HOVER = of("Action_hover")
+
                 @JvmStatic fun of(value: String) = Name(JsonField.of(value))
             }
 
@@ -1621,6 +1625,8 @@ private constructor(
                 PRIMARY_RED,
                 PROGRESS_BAR,
                 PROGRESS_BAR_BACKGROUND,
+                ACTION,
+                ACTION_HOVER,
             }
 
             /**
@@ -1654,6 +1660,8 @@ private constructor(
                 PRIMARY_RED,
                 PROGRESS_BAR,
                 PROGRESS_BAR_BACKGROUND,
+                ACTION,
+                ACTION_HOVER,
                 /** An enum member indicating that [Name] was instantiated with an unknown value. */
                 _UNKNOWN,
             }
@@ -1688,6 +1696,8 @@ private constructor(
                     PRIMARY_RED -> Value.PRIMARY_RED
                     PROGRESS_BAR -> Value.PROGRESS_BAR
                     PROGRESS_BAR_BACKGROUND -> Value.PROGRESS_BAR_BACKGROUND
+                    ACTION -> Value.ACTION
+                    ACTION_HOVER -> Value.ACTION_HOVER
                     else -> Value._UNKNOWN
                 }
 
@@ -1723,6 +1733,8 @@ private constructor(
                     PRIMARY_RED -> Known.PRIMARY_RED
                     PROGRESS_BAR -> Known.PROGRESS_BAR
                     PROGRESS_BAR_BACKGROUND -> Known.PROGRESS_BAR_BACKGROUND
+                    ACTION -> Known.ACTION
+                    ACTION_HOVER -> Known.ACTION_HOVER
                     else -> throw MetronomeInvalidDataException("Unknown Name: $value")
                 }
 
