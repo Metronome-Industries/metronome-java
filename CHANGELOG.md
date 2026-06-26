@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.4.0 (2026-06-26)
+
+Full Changelog: [v0.3.0...v0.4.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.3.0...v0.4.0)
+
+### Features
+
+* [🪿] Remove `allow-subscriptions-custom-billing-anchor` feature flag ([397ef78](https://github.com/Metronome-Industries/metronome-java/commit/397ef78e3dabd3606699d9cff3d182aa543c1159))
+* Add `Action` and `Action_hover` theme color options to embeddable dashboard ([dc1ad88](https://github.com/Metronome-Industries/metronome-java/commit/dc1ad882049469599560fdac0ec400dbf4fd1a49))
+* Add alert specifiers to  for `low_remaining_contract_credit_and_commit_balance_reached` threshold notification creation payload ([39cbc8b](https://github.com/Metronome-Industries/metronome-java/commit/39cbc8b5794429e286a361a639681e6e40c3390b))
+* Add any_commit_and_credit_ids to override specifier fields ([46e9238](https://github.com/Metronome-Industries/metronome-java/commit/46e923808fc09864121bd3d81bbc45fd9bc67aad))
+* add getSubscriptionSeatsHistory to Node SDK ([0abdb68](https://github.com/Metronome-Industries/metronome-java/commit/0abdb689b432de9ad25b410f9ef590ef513b67a8))
+* Add notification_metadata to four API endpoints (Anthropic-only) ([9d6f8cc](https://github.com/Metronome-Industries/metronome-java/commit/9d6f8cc2505b368e02391165a8be7f364d806182))
+* added created by to commits ([c930b59](https://github.com/Metronome-Industries/metronome-java/commit/c930b592310e556dbf3b24dafc054390e2b237d2))
+* **CONN-980:** add contract_id, invoice_type, show_unbillable_invoices to embeddable dashboard API ([5702ec8](https://github.com/Metronome-Industries/metronome-java/commit/5702ec8ef122ad4dd464ace193026c97d24a0096))
+* createdBy description specifies excluding system created commits ([f5ca585](https://github.com/Metronome-Industries/metronome-java/commit/f5ca585c93854409cc2c2ea9fcb96399ecfec82a))
+* daily recurrence frequency for recurring commits ([a59d59b](https://github.com/Metronome-Industries/metronome-java/commit/a59d59b8948dcf884b7e61362674aba565f53e56))
+* Docs: Update v1.yml ([47fbf41](https://github.com/Metronome-Industries/metronome-java/commit/47fbf416e9dbf1a3ca4164b5dcfb84ca830cadd5))
+* Revert "[pgs] Remove `allow-subscriptions-custom-billing-anchor` and proration rounding feature flags" ([d03dec2](https://github.com/Metronome-Industries/metronome-java/commit/d03dec261d259798d7e487304ef7ea0fcf9c1c91))
+* Revert "Revert "[pgs] Remove `allow-subscriptions-custom-billing-anchor` and proration rounding feature flags"" ([f943c66](https://github.com/Metronome-Industries/metronome-java/commit/f943c6600f55b3116242045dc853debd40498cfd))
+* skip seat IDs from balances ([940923e](https://github.com/Metronome-Industries/metronome-java/commit/940923e3267160004a17410cf9ddf4fc59b7b240))
+* Update copy ([29736d9](https://github.com/Metronome-Industries/metronome-java/commit/29736d9b3ae735221ae6b9e9a42728bf48b37eb4))
+
+
+### Chores
+
+* (internal) Add description for threshold balance specifiers fields ([c62a15d](https://github.com/Metronome-Industries/metronome-java/commit/c62a15dc3f07b0bf5a930119c5b29e410476104f))
+
+
+### Documentation
+
+* add RPS limit and batch recommendation to addRate endpoint ([a1b6cdb](https://github.com/Metronome-Industries/metronome-java/commit/a1b6cdb286db1ad27be80929f228a82ac5e2c3ba))
+
 ## 0.3.0 (2026-05-29)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.2.0...v0.3.0)
