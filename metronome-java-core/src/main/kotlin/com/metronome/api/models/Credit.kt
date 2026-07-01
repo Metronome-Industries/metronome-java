@@ -44,6 +44,7 @@ private constructor(
     private val applicableProductTags: JsonField<List<String>>,
     private val balance: JsonField<Double>,
     private val contract: JsonField<Contract>,
+    private val createdBy: JsonField<String>,
     private val customFields: JsonField<CustomFields>,
     private val description: JsonField<String>,
     private val hierarchyConfiguration: JsonField<CommitHierarchyConfiguration>,
@@ -80,6 +81,7 @@ private constructor(
         applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
         @JsonProperty("balance") @ExcludeMissing balance: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("contract") @ExcludeMissing contract: JsonField<Contract> = JsonMissing.of(),
+        @JsonProperty("created_by") @ExcludeMissing createdBy: JsonField<String> = JsonMissing.of(),
         @JsonProperty("custom_fields")
         @ExcludeMissing
         customFields: JsonField<CustomFields> = JsonMissing.of(),
@@ -124,6 +126,7 @@ private constructor(
         applicableProductTags,
         balance,
         contract,
+        createdBy,
         customFields,
         description,
         hierarchyConfiguration,
@@ -207,6 +210,15 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun contract(): Optional<Contract> = contract.getOptional("contract")
+
+    /**
+     * The actor who created this credit. Omitted for system-generated credits such as recurring
+     * credits.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun createdBy(): Optional<String> = createdBy.getOptional("created_by")
 
     /**
      * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
@@ -398,6 +410,13 @@ private constructor(
     @JsonProperty("contract") @ExcludeMissing fun _contract(): JsonField<Contract> = contract
 
     /**
+     * Returns the raw JSON value of [createdBy].
+     *
+     * Unlike [createdBy], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created_by") @ExcludeMissing fun _createdBy(): JsonField<String> = createdBy
+
+    /**
      * Returns the raw JSON value of [customFields].
      *
      * Unlike [customFields], this method doesn't throw if the JSON field has an unexpected type.
@@ -557,6 +576,7 @@ private constructor(
         private var applicableProductTags: JsonField<MutableList<String>>? = null
         private var balance: JsonField<Double> = JsonMissing.of()
         private var contract: JsonField<Contract> = JsonMissing.of()
+        private var createdBy: JsonField<String> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
         private var hierarchyConfiguration: JsonField<CommitHierarchyConfiguration> =
@@ -585,6 +605,7 @@ private constructor(
             applicableProductTags = credit.applicableProductTags.map { it.toMutableList() }
             balance = credit.balance
             contract = credit.contract
+            createdBy = credit.createdBy
             customFields = credit.customFields
             description = credit.description
             hierarchyConfiguration = credit.hierarchyConfiguration
@@ -754,6 +775,21 @@ private constructor(
          * value.
          */
         fun contract(contract: JsonField<Contract>) = apply { this.contract = contract }
+
+        /**
+         * The actor who created this credit. Omitted for system-generated credits such as recurring
+         * credits.
+         */
+        fun createdBy(createdBy: String) = createdBy(JsonField.of(createdBy))
+
+        /**
+         * Sets [Builder.createdBy] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdBy] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun createdBy(createdBy: JsonField<String>) = apply { this.createdBy = createdBy }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
@@ -1095,6 +1131,7 @@ private constructor(
                 (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                 balance,
                 contract,
+                createdBy,
                 customFields,
                 description,
                 hierarchyConfiguration,
@@ -1137,6 +1174,7 @@ private constructor(
         applicableProductTags()
         balance()
         contract().ifPresent { it.validate() }
+        createdBy()
         customFields().ifPresent { it.validate() }
         description()
         hierarchyConfiguration().ifPresent { it.validate() }
@@ -1178,6 +1216,7 @@ private constructor(
             (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
             (if (balance.asKnown().isPresent) 1 else 0) +
             (contract.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (createdBy.asKnown().isPresent) 1 else 0) +
             (customFields.asKnown().getOrNull()?.validity() ?: 0) +
             (if (description.asKnown().isPresent) 1 else 0) +
             (hierarchyConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
@@ -6979,6 +7018,7 @@ private constructor(
             applicableProductTags == other.applicableProductTags &&
             balance == other.balance &&
             contract == other.contract &&
+            createdBy == other.createdBy &&
             customFields == other.customFields &&
             description == other.description &&
             hierarchyConfiguration == other.hierarchyConfiguration &&
@@ -7007,6 +7047,7 @@ private constructor(
             applicableProductTags,
             balance,
             contract,
+            createdBy,
             customFields,
             description,
             hierarchyConfiguration,
@@ -7028,5 +7069,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, balance=$balance, contract=$contract, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCreditId=$recurringCreditId, rolledOverFrom=$rolledOverFrom, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+        "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, balance=$balance, contract=$contract, createdBy=$createdBy, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCreditId=$recurringCreditId, rolledOverFrom=$rolledOverFrom, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
 }

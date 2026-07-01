@@ -212,6 +212,7 @@ internal class PackageCreateParamsTest {
                 PackageCreateParams.Override.builder()
                     .addOverrideSpecifier(
                         PackageCreateParams.Override.OverrideSpecifier.builder()
+                            .addAnyCommitOrCreditId("string")
                             .billingFrequency(
                                 PackageCreateParams.Override.OverrideSpecifier.BillingFrequency
                                     .MONTHLY
@@ -420,6 +421,33 @@ internal class PackageCreateParamsTest {
                     )
                     .name("x")
                     .proration(PackageCreateParams.RecurringCommit.Proration.NONE)
+                    .prorationRounding(
+                        PackageCreateParams.RecurringCommit.ProrationRounding.builder()
+                            .access(
+                                PackageCreateParams.RecurringCommit.ProrationRounding.Access
+                                    .builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        PackageCreateParams.RecurringCommit.ProrationRounding.Access
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
+                            .invoice(
+                                PackageCreateParams.RecurringCommit.ProrationRounding.Invoice
+                                    .builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        PackageCreateParams.RecurringCommit.ProrationRounding
+                                            .Invoice
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .rateType(PackageCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                     .recurrenceFrequency(
                         PackageCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -494,6 +522,21 @@ internal class PackageCreateParamsTest {
                     )
                     .name("x")
                     .proration(PackageCreateParams.RecurringCredit.Proration.NONE)
+                    .prorationRounding(
+                        PackageCreateParams.RecurringCredit.ProrationRounding.builder()
+                            .access(
+                                PackageCreateParams.RecurringCredit.ProrationRounding.Access
+                                    .builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        PackageCreateParams.RecurringCredit.ProrationRounding.Access
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .rateType(PackageCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                     .recurrenceFrequency(
                         PackageCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -653,6 +696,16 @@ internal class PackageCreateParamsTest {
                                     .BILL_IMMEDIATELY
                             )
                             .isProrated(true)
+                            .rounding(
+                                PackageCreateParams.Subscription.Proration.Rounding.builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        PackageCreateParams.Subscription.Proration.Rounding
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .subscriptionRate(
@@ -662,6 +715,14 @@ internal class PackageCreateParamsTest {
                                     .MONTHLY
                             )
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .build()
+                    )
+                    .billingCycleConfig(
+                        PackageCreateParams.Subscription.BillingCycleConfig.builder()
+                            .invoicePlacement(
+                                PackageCreateParams.Subscription.BillingCycleConfig.InvoicePlacement
+                                    .ON_SCHEDULED_INVOICE
+                            )
                             .build()
                     )
                     .customFields(
@@ -917,6 +978,7 @@ internal class PackageCreateParamsTest {
                     PackageCreateParams.Override.builder()
                         .addOverrideSpecifier(
                             PackageCreateParams.Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     PackageCreateParams.Override.OverrideSpecifier.BillingFrequency
                                         .MONTHLY
@@ -1141,6 +1203,34 @@ internal class PackageCreateParamsTest {
                         )
                         .name("x")
                         .proration(PackageCreateParams.RecurringCommit.Proration.NONE)
+                        .prorationRounding(
+                            PackageCreateParams.RecurringCommit.ProrationRounding.builder()
+                                .access(
+                                    PackageCreateParams.RecurringCommit.ProrationRounding.Access
+                                        .builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            PackageCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
+                                .invoice(
+                                    PackageCreateParams.RecurringCommit.ProrationRounding.Invoice
+                                        .builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            PackageCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .rateType(PackageCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                         .recurrenceFrequency(
                             PackageCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -1220,6 +1310,22 @@ internal class PackageCreateParamsTest {
                         )
                         .name("x")
                         .proration(PackageCreateParams.RecurringCredit.Proration.NONE)
+                        .prorationRounding(
+                            PackageCreateParams.RecurringCredit.ProrationRounding.builder()
+                                .access(
+                                    PackageCreateParams.RecurringCredit.ProrationRounding.Access
+                                        .builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            PackageCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .rateType(PackageCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                         .recurrenceFrequency(
                             PackageCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -1393,6 +1499,16 @@ internal class PackageCreateParamsTest {
                                         .BILL_IMMEDIATELY
                                 )
                                 .isProrated(true)
+                                .rounding(
+                                    PackageCreateParams.Subscription.Proration.Rounding.builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            PackageCreateParams.Subscription.Proration.Rounding
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .subscriptionRate(
@@ -1403,6 +1519,15 @@ internal class PackageCreateParamsTest {
                                         .MONTHLY
                                 )
                                 .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .billingCycleConfig(
+                            PackageCreateParams.Subscription.BillingCycleConfig.builder()
+                                .invoicePlacement(
+                                    PackageCreateParams.Subscription.BillingCycleConfig
+                                        .InvoicePlacement
+                                        .ON_SCHEDULED_INVOICE
+                                )
                                 .build()
                         )
                         .customFields(
@@ -1660,6 +1785,7 @@ internal class PackageCreateParamsTest {
                 PackageCreateParams.Override.builder()
                     .addOverrideSpecifier(
                         PackageCreateParams.Override.OverrideSpecifier.builder()
+                            .addAnyCommitOrCreditId("string")
                             .billingFrequency(
                                 PackageCreateParams.Override.OverrideSpecifier.BillingFrequency
                                     .MONTHLY
@@ -1870,6 +1996,33 @@ internal class PackageCreateParamsTest {
                     )
                     .name("x")
                     .proration(PackageCreateParams.RecurringCommit.Proration.NONE)
+                    .prorationRounding(
+                        PackageCreateParams.RecurringCommit.ProrationRounding.builder()
+                            .access(
+                                PackageCreateParams.RecurringCommit.ProrationRounding.Access
+                                    .builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        PackageCreateParams.RecurringCommit.ProrationRounding.Access
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
+                            .invoice(
+                                PackageCreateParams.RecurringCommit.ProrationRounding.Invoice
+                                    .builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        PackageCreateParams.RecurringCommit.ProrationRounding
+                                            .Invoice
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .rateType(PackageCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                     .recurrenceFrequency(
                         PackageCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -1945,6 +2098,21 @@ internal class PackageCreateParamsTest {
                     )
                     .name("x")
                     .proration(PackageCreateParams.RecurringCredit.Proration.NONE)
+                    .prorationRounding(
+                        PackageCreateParams.RecurringCredit.ProrationRounding.builder()
+                            .access(
+                                PackageCreateParams.RecurringCredit.ProrationRounding.Access
+                                    .builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        PackageCreateParams.RecurringCredit.ProrationRounding.Access
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .rateType(PackageCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                     .recurrenceFrequency(
                         PackageCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -2107,6 +2275,16 @@ internal class PackageCreateParamsTest {
                                     .BILL_IMMEDIATELY
                             )
                             .isProrated(true)
+                            .rounding(
+                                PackageCreateParams.Subscription.Proration.Rounding.builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        PackageCreateParams.Subscription.Proration.Rounding
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .subscriptionRate(
@@ -2116,6 +2294,14 @@ internal class PackageCreateParamsTest {
                                     .MONTHLY
                             )
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .build()
+                    )
+                    .billingCycleConfig(
+                        PackageCreateParams.Subscription.BillingCycleConfig.builder()
+                            .invoicePlacement(
+                                PackageCreateParams.Subscription.BillingCycleConfig.InvoicePlacement
+                                    .ON_SCHEDULED_INVOICE
+                            )
                             .build()
                     )
                     .customFields(

@@ -60,6 +60,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
+                        .createdBy("created_by")
                         .customFields(
                             Commit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -186,6 +187,7 @@ internal class ContractWithoutAmendmentsTest {
                         .multiplier(0.0)
                         .addOverrideSpecifier(
                             Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     Override.OverrideSpecifier.BillingFrequency.MONTHLY
                                 )
@@ -343,6 +345,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
+                        .createdBy("created_by")
                         .customFields(
                             Credit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -669,6 +672,38 @@ internal class ContractWithoutAmendmentsTest {
                         .name("name")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .proration(ContractWithoutAmendments.RecurringCommit.Proration.NONE)
+                        .prorationRounding(
+                            ContractWithoutAmendments.RecurringCommit.ProrationRounding.builder()
+                                .access(
+                                    ContractWithoutAmendments.RecurringCommit.ProrationRounding
+                                        .Access
+                                        .builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            ContractWithoutAmendments.RecurringCommit
+                                                .ProrationRounding
+                                                .Access
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
+                                .invoice(
+                                    ContractWithoutAmendments.RecurringCommit.ProrationRounding
+                                        .Invoice
+                                        .builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            ContractWithoutAmendments.RecurringCommit
+                                                .ProrationRounding
+                                                .Invoice
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .recurrenceFrequency(
                             ContractWithoutAmendments.RecurringCommit.RecurrenceFrequency.MONTHLY
                         )
@@ -759,6 +794,24 @@ internal class ContractWithoutAmendmentsTest {
                         .name("name")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .proration(ContractWithoutAmendments.RecurringCredit.Proration.NONE)
+                        .prorationRounding(
+                            ContractWithoutAmendments.RecurringCredit.ProrationRounding.builder()
+                                .access(
+                                    ContractWithoutAmendments.RecurringCredit.ProrationRounding
+                                        .Access
+                                        .builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            ContractWithoutAmendments.RecurringCredit
+                                                .ProrationRounding
+                                                .Access
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .recurrenceFrequency(
                             ContractWithoutAmendments.RecurringCredit.RecurrenceFrequency.MONTHLY
                         )
@@ -971,6 +1024,7 @@ internal class ContractWithoutAmendmentsTest {
                     .contract(
                         Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                     )
+                    .createdBy("created_by")
                     .customFields(
                         Commit.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1099,6 +1153,7 @@ internal class ContractWithoutAmendmentsTest {
                     .multiplier(0.0)
                     .addOverrideSpecifier(
                         Override.OverrideSpecifier.builder()
+                            .addAnyCommitOrCreditId("string")
                             .billingFrequency(Override.OverrideSpecifier.BillingFrequency.MONTHLY)
                             .addCommitId("string")
                             .presentationGroupValues(
@@ -1251,6 +1306,7 @@ internal class ContractWithoutAmendmentsTest {
                     .contract(
                         Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                     )
+                    .createdBy("created_by")
                     .customFields(
                         Credit.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1576,6 +1632,34 @@ internal class ContractWithoutAmendmentsTest {
                     .name("name")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .proration(ContractWithoutAmendments.RecurringCommit.Proration.NONE)
+                    .prorationRounding(
+                        ContractWithoutAmendments.RecurringCommit.ProrationRounding.builder()
+                            .access(
+                                ContractWithoutAmendments.RecurringCommit.ProrationRounding.Access
+                                    .builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        ContractWithoutAmendments.RecurringCommit.ProrationRounding
+                                            .Access
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
+                            .invoice(
+                                ContractWithoutAmendments.RecurringCommit.ProrationRounding.Invoice
+                                    .builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        ContractWithoutAmendments.RecurringCommit.ProrationRounding
+                                            .Invoice
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .recurrenceFrequency(
                         ContractWithoutAmendments.RecurringCommit.RecurrenceFrequency.MONTHLY
                     )
@@ -1666,6 +1750,22 @@ internal class ContractWithoutAmendmentsTest {
                     .name("name")
                     .netsuiteSalesOrderId("netsuite_sales_order_id")
                     .proration(ContractWithoutAmendments.RecurringCredit.Proration.NONE)
+                    .prorationRounding(
+                        ContractWithoutAmendments.RecurringCredit.ProrationRounding.builder()
+                            .access(
+                                ContractWithoutAmendments.RecurringCredit.ProrationRounding.Access
+                                    .builder()
+                                    .decimalPlaces(-5.0)
+                                    .roundingMethod(
+                                        ContractWithoutAmendments.RecurringCredit.ProrationRounding
+                                            .Access
+                                            .RoundingMethod
+                                            .HALF_UP
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .recurrenceFrequency(
                         ContractWithoutAmendments.RecurringCredit.RecurrenceFrequency.MONTHLY
                     )
@@ -1883,6 +1983,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
+                        .createdBy("created_by")
                         .customFields(
                             Commit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -2009,6 +2110,7 @@ internal class ContractWithoutAmendmentsTest {
                         .multiplier(0.0)
                         .addOverrideSpecifier(
                             Override.OverrideSpecifier.builder()
+                                .addAnyCommitOrCreditId("string")
                                 .billingFrequency(
                                     Override.OverrideSpecifier.BillingFrequency.MONTHLY
                                 )
@@ -2166,6 +2268,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
+                        .createdBy("created_by")
                         .customFields(
                             Credit.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -2492,6 +2595,38 @@ internal class ContractWithoutAmendmentsTest {
                         .name("name")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .proration(ContractWithoutAmendments.RecurringCommit.Proration.NONE)
+                        .prorationRounding(
+                            ContractWithoutAmendments.RecurringCommit.ProrationRounding.builder()
+                                .access(
+                                    ContractWithoutAmendments.RecurringCommit.ProrationRounding
+                                        .Access
+                                        .builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            ContractWithoutAmendments.RecurringCommit
+                                                .ProrationRounding
+                                                .Access
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
+                                .invoice(
+                                    ContractWithoutAmendments.RecurringCommit.ProrationRounding
+                                        .Invoice
+                                        .builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            ContractWithoutAmendments.RecurringCommit
+                                                .ProrationRounding
+                                                .Invoice
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .recurrenceFrequency(
                             ContractWithoutAmendments.RecurringCommit.RecurrenceFrequency.MONTHLY
                         )
@@ -2582,6 +2717,24 @@ internal class ContractWithoutAmendmentsTest {
                         .name("name")
                         .netsuiteSalesOrderId("netsuite_sales_order_id")
                         .proration(ContractWithoutAmendments.RecurringCredit.Proration.NONE)
+                        .prorationRounding(
+                            ContractWithoutAmendments.RecurringCredit.ProrationRounding.builder()
+                                .access(
+                                    ContractWithoutAmendments.RecurringCredit.ProrationRounding
+                                        .Access
+                                        .builder()
+                                        .decimalPlaces(-5.0)
+                                        .roundingMethod(
+                                            ContractWithoutAmendments.RecurringCredit
+                                                .ProrationRounding
+                                                .Access
+                                                .RoundingMethod
+                                                .HALF_UP
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .recurrenceFrequency(
                             ContractWithoutAmendments.RecurringCredit.RecurrenceFrequency.MONTHLY
                         )

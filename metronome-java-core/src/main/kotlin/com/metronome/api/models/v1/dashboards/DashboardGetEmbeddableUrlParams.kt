@@ -42,7 +42,12 @@ import kotlin.jvm.optionals.getOrNull
  * ### Usage guidelines:
  * - Dashboard types: Choose from `invoices`, `usage`, or `commits_and_credits`
  * - Customization options:
- *     - `dashboard_options`: Configure whether you want invoices to show zero usage line items
+ *     - `dashboard_options`: Configure dashboard behavior. For the invoices dashboard, supported
+ *       keys include: `show_zero_usage_line_items` ("true"/"false"), `hide_voided_invoices`
+ *       ("true"/"false"), `contract_id` (UUID, filters invoices by contract), `invoice_type`
+ *       ("USAGE" or "SCHEDULED", filters by invoice type), `invoice_status_filter` ("VOID",
+ *       "FINALIZED", "DRAFT", "FINALIZED_AND_DRAFT", or "ALL"), and `billable_status_filter`
+ *       ("BILLABLE", "UNBILLABLE", or "ALL")
  *     - `color_overrides`: Match your brand's color palette
  *     - `bm_group_key_overrides`: Customize how dimensions are displayed (for the usage embeddable
  *       dashboard)
@@ -1590,6 +1595,10 @@ private constructor(
 
                 @JvmField val PROGRESS_BAR_BACKGROUND = of("Progress_bar_background")
 
+                @JvmField val ACTION = of("Action")
+
+                @JvmField val ACTION_HOVER = of("Action_hover")
+
                 @JvmStatic fun of(value: String) = Name(JsonField.of(value))
             }
 
@@ -1616,6 +1625,8 @@ private constructor(
                 PRIMARY_RED,
                 PROGRESS_BAR,
                 PROGRESS_BAR_BACKGROUND,
+                ACTION,
+                ACTION_HOVER,
             }
 
             /**
@@ -1649,6 +1660,8 @@ private constructor(
                 PRIMARY_RED,
                 PROGRESS_BAR,
                 PROGRESS_BAR_BACKGROUND,
+                ACTION,
+                ACTION_HOVER,
                 /** An enum member indicating that [Name] was instantiated with an unknown value. */
                 _UNKNOWN,
             }
@@ -1683,6 +1696,8 @@ private constructor(
                     PRIMARY_RED -> Value.PRIMARY_RED
                     PROGRESS_BAR -> Value.PROGRESS_BAR
                     PROGRESS_BAR_BACKGROUND -> Value.PROGRESS_BAR_BACKGROUND
+                    ACTION -> Value.ACTION
+                    ACTION_HOVER -> Value.ACTION_HOVER
                     else -> Value._UNKNOWN
                 }
 
@@ -1718,6 +1733,8 @@ private constructor(
                     PRIMARY_RED -> Known.PRIMARY_RED
                     PROGRESS_BAR -> Known.PROGRESS_BAR
                     PROGRESS_BAR_BACKGROUND -> Known.PROGRESS_BAR_BACKGROUND
+                    ACTION -> Known.ACTION
+                    ACTION_HOVER -> Known.ACTION_HOVER
                     else -> throw MetronomeInvalidDataException("Unknown Name: $value")
                 }
 

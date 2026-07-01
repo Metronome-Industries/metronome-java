@@ -33,6 +33,7 @@ internal class OverrideTest {
                 .multiplier(0.0)
                 .addOverrideSpecifier(
                     Override.OverrideSpecifier.builder()
+                        .addAnyCommitOrCreditId("string")
                         .billingFrequency(Override.OverrideSpecifier.BillingFrequency.MONTHLY)
                         .addCommitId("string")
                         .presentationGroupValues(
@@ -112,6 +113,7 @@ internal class OverrideTest {
         assertThat(override.overrideSpecifiers().getOrNull())
             .containsExactly(
                 Override.OverrideSpecifier.builder()
+                    .addAnyCommitOrCreditId("string")
                     .billingFrequency(Override.OverrideSpecifier.BillingFrequency.MONTHLY)
                     .addCommitId("string")
                     .presentationGroupValues(
@@ -195,6 +197,7 @@ internal class OverrideTest {
                 .multiplier(0.0)
                 .addOverrideSpecifier(
                     Override.OverrideSpecifier.builder()
+                        .addAnyCommitOrCreditId("string")
                         .billingFrequency(Override.OverrideSpecifier.BillingFrequency.MONTHLY)
                         .addCommitId("string")
                         .presentationGroupValues(

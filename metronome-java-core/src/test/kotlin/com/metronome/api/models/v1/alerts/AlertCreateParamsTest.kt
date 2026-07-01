@@ -14,6 +14,34 @@ internal class AlertCreateParamsTest {
             .alertType(AlertCreateParams.AlertType.SPEND_THRESHOLD_REACHED)
             .name("\$100 spend threshold reached")
             .threshold(10000.0)
+            .addAlertSpecifier(
+                AlertCreateParams.AlertSpecifier.builder()
+                    .addCustomFieldFilter(
+                        AlertCreateParams.AlertSpecifier.CustomFieldFilter.builder()
+                            .entity(
+                                AlertCreateParams.AlertSpecifier.CustomFieldFilter.Entity.CONTRACT
+                            )
+                            .key("key")
+                            .value("value")
+                            .build()
+                    )
+                    .addExclude(
+                        AlertCreateParams.AlertSpecifier.Exclude.builder()
+                            .addCustomFieldFilter(
+                                AlertCreateParams.AlertSpecifier.Exclude.CustomFieldFilter.builder()
+                                    .entity(
+                                        AlertCreateParams.AlertSpecifier.Exclude.CustomFieldFilter
+                                            .Entity
+                                            .CONTRACT
+                                    )
+                                    .key("key")
+                                    .value("value")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .build()
+            )
             .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .addCreditGrantTypeFilter("enterprise")
             .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -46,6 +74,37 @@ internal class AlertCreateParamsTest {
                 .alertType(AlertCreateParams.AlertType.SPEND_THRESHOLD_REACHED)
                 .name("\$100 spend threshold reached")
                 .threshold(10000.0)
+                .addAlertSpecifier(
+                    AlertCreateParams.AlertSpecifier.builder()
+                        .addCustomFieldFilter(
+                            AlertCreateParams.AlertSpecifier.CustomFieldFilter.builder()
+                                .entity(
+                                    AlertCreateParams.AlertSpecifier.CustomFieldFilter.Entity
+                                        .CONTRACT
+                                )
+                                .key("key")
+                                .value("value")
+                                .build()
+                        )
+                        .addExclude(
+                            AlertCreateParams.AlertSpecifier.Exclude.builder()
+                                .addCustomFieldFilter(
+                                    AlertCreateParams.AlertSpecifier.Exclude.CustomFieldFilter
+                                        .builder()
+                                        .entity(
+                                            AlertCreateParams.AlertSpecifier.Exclude
+                                                .CustomFieldFilter
+                                                .Entity
+                                                .CONTRACT
+                                        )
+                                        .key("key")
+                                        .value("value")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build()
+                )
                 .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .addCreditGrantTypeFilter("enterprise")
                 .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
@@ -77,6 +136,35 @@ internal class AlertCreateParamsTest {
         assertThat(body.alertType()).isEqualTo(AlertCreateParams.AlertType.SPEND_THRESHOLD_REACHED)
         assertThat(body.name()).isEqualTo("\$100 spend threshold reached")
         assertThat(body.threshold()).isEqualTo(10000.0)
+        assertThat(body.alertSpecifiers().getOrNull())
+            .containsExactly(
+                AlertCreateParams.AlertSpecifier.builder()
+                    .addCustomFieldFilter(
+                        AlertCreateParams.AlertSpecifier.CustomFieldFilter.builder()
+                            .entity(
+                                AlertCreateParams.AlertSpecifier.CustomFieldFilter.Entity.CONTRACT
+                            )
+                            .key("key")
+                            .value("value")
+                            .build()
+                    )
+                    .addExclude(
+                        AlertCreateParams.AlertSpecifier.Exclude.builder()
+                            .addCustomFieldFilter(
+                                AlertCreateParams.AlertSpecifier.Exclude.CustomFieldFilter.builder()
+                                    .entity(
+                                        AlertCreateParams.AlertSpecifier.Exclude.CustomFieldFilter
+                                            .Entity
+                                            .CONTRACT
+                                    )
+                                    .key("key")
+                                    .value("value")
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .build()
+            )
         assertThat(body.billableMetricId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.creditGrantTypeFilters().getOrNull()).containsExactly("enterprise")
         assertThat(body.creditTypeId()).contains("2714e483-4ff1-48e4-9e25-ac732e8f24f2")

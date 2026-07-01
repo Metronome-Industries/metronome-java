@@ -164,6 +164,7 @@ internal class PackageListPageResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addOverrideSpecifier(
                                     PackageListResponse.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditTemplateId("string")
                                         .billingFrequency(
                                             PackageListResponse.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -606,6 +607,38 @@ internal class PackageListPageResponseTest {
                                 )
                                 .name("name")
                                 .proration(PackageListResponse.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    PackageListResponse.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            PackageListResponse.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    PackageListResponse.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            PackageListResponse.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    PackageListResponse.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .recurrenceFrequency(
                                     PackageListResponse.RecurringCommit.RecurrenceFrequency.MONTHLY
                                 )
@@ -703,6 +736,24 @@ internal class PackageListPageResponseTest {
                                 )
                                 .name("name")
                                 .proration(PackageListResponse.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    PackageListResponse.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            PackageListResponse.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    PackageListResponse.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .recurrenceFrequency(
                                     PackageListResponse.RecurringCredit.RecurrenceFrequency.MONTHLY
                                 )
@@ -853,6 +904,18 @@ internal class PackageListPageResponseTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            PackageListResponse.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    PackageListResponse.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -873,6 +936,15 @@ internal class PackageListPageResponseTest {
                                         .build()
                                 )
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .billingCycleConfig(
+                                    PackageListResponse.Subscription.BillingCycleConfig.builder()
+                                        .invoicePlacement(
+                                            PackageListResponse.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
+                                        .build()
+                                )
                                 .customFields(
                                     PackageListResponse.Subscription.CustomFields.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1046,6 +1118,7 @@ internal class PackageListPageResponseTest {
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addOverrideSpecifier(
                                 PackageListResponse.Override.OverrideSpecifier.builder()
+                                    .addAnyCommitOrCreditTemplateId("string")
                                     .billingFrequency(
                                         PackageListResponse.Override.OverrideSpecifier
                                             .BillingFrequency
@@ -1454,6 +1527,37 @@ internal class PackageListPageResponseTest {
                             )
                             .name("name")
                             .proration(PackageListResponse.RecurringCommit.Proration.NONE)
+                            .prorationRounding(
+                                PackageListResponse.RecurringCommit.ProrationRounding.builder()
+                                    .access(
+                                        PackageListResponse.RecurringCommit.ProrationRounding.Access
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                PackageListResponse.RecurringCommit
+                                                    .ProrationRounding
+                                                    .Access
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
+                                    .invoice(
+                                        PackageListResponse.RecurringCommit.ProrationRounding
+                                            .Invoice
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                PackageListResponse.RecurringCommit
+                                                    .ProrationRounding
+                                                    .Invoice
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .recurrenceFrequency(
                                 PackageListResponse.RecurringCommit.RecurrenceFrequency.MONTHLY
                             )
@@ -1540,6 +1644,23 @@ internal class PackageListPageResponseTest {
                             )
                             .name("name")
                             .proration(PackageListResponse.RecurringCredit.Proration.NONE)
+                            .prorationRounding(
+                                PackageListResponse.RecurringCredit.ProrationRounding.builder()
+                                    .access(
+                                        PackageListResponse.RecurringCredit.ProrationRounding.Access
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                PackageListResponse.RecurringCredit
+                                                    .ProrationRounding
+                                                    .Access
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .recurrenceFrequency(
                                 PackageListResponse.RecurringCredit.RecurrenceFrequency.MONTHLY
                             )
@@ -1676,6 +1797,17 @@ internal class PackageListPageResponseTest {
                                             .BILL_IMMEDIATELY
                                     )
                                     .isProrated(true)
+                                    .rounding(
+                                        PackageListResponse.Subscription.Proration.Rounding
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                PackageListResponse.Subscription.Proration.Rounding
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
                                     .build()
                             )
                             .subscriptionRate(
@@ -1695,6 +1827,15 @@ internal class PackageListPageResponseTest {
                                     .build()
                             )
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .billingCycleConfig(
+                                PackageListResponse.Subscription.BillingCycleConfig.builder()
+                                    .invoicePlacement(
+                                        PackageListResponse.Subscription.BillingCycleConfig
+                                            .InvoicePlacement
+                                            .ON_SCHEDULED_INVOICE
+                                    )
+                                    .build()
+                            )
                             .customFields(
                                 PackageListResponse.Subscription.CustomFields.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1879,6 +2020,7 @@ internal class PackageListPageResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addOverrideSpecifier(
                                     PackageListResponse.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditTemplateId("string")
                                         .billingFrequency(
                                             PackageListResponse.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -2321,6 +2463,38 @@ internal class PackageListPageResponseTest {
                                 )
                                 .name("name")
                                 .proration(PackageListResponse.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    PackageListResponse.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            PackageListResponse.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    PackageListResponse.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            PackageListResponse.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    PackageListResponse.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .recurrenceFrequency(
                                     PackageListResponse.RecurringCommit.RecurrenceFrequency.MONTHLY
                                 )
@@ -2418,6 +2592,24 @@ internal class PackageListPageResponseTest {
                                 )
                                 .name("name")
                                 .proration(PackageListResponse.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    PackageListResponse.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            PackageListResponse.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    PackageListResponse.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .recurrenceFrequency(
                                     PackageListResponse.RecurringCredit.RecurrenceFrequency.MONTHLY
                                 )
@@ -2568,6 +2760,18 @@ internal class PackageListPageResponseTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            PackageListResponse.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    PackageListResponse.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -2588,6 +2792,15 @@ internal class PackageListPageResponseTest {
                                         .build()
                                 )
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .billingCycleConfig(
+                                    PackageListResponse.Subscription.BillingCycleConfig.builder()
+                                        .invoicePlacement(
+                                            PackageListResponse.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
+                                        .build()
+                                )
                                 .customFields(
                                     PackageListResponse.Subscription.CustomFields.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))

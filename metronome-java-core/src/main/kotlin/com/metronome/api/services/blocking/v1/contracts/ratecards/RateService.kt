@@ -46,7 +46,13 @@ interface RateService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): RateListPage
 
-    /** Add a new rate */
+    /**
+     * Add a new rate
+     *
+     * This endpoint is heavily rate limited. For adding multiple rates, using the
+     * [addRates](https://docs.metronome.com/api-reference/rate-cards/add-rates) endpoint is
+     * strongly encouraged.
+     */
     fun add(params: RateAddParams): RateAddResponse = add(params, RequestOptions.none())
 
     /** @see add */

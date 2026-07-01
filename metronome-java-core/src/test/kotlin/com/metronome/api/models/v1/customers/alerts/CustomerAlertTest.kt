@@ -23,6 +23,39 @@ internal class CustomerAlertTest {
                         .threshold(0.0)
                         .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addAlertSpecifier(
+                            CustomerAlert.Alert.AlertSpecifier.builder()
+                                .addCustomFieldFilter(
+                                    CustomerAlert.Alert.AlertSpecifier.CustomFieldFilter.builder()
+                                        .entity(
+                                            CustomerAlert.Alert.AlertSpecifier.CustomFieldFilter
+                                                .Entity
+                                                .CONTRACT
+                                        )
+                                        .key("key")
+                                        .value("value")
+                                        .build()
+                                )
+                                .addExclude(
+                                    CustomerAlert.Alert.AlertSpecifier.Exclude.builder()
+                                        .addCustomFieldFilter(
+                                            CustomerAlert.Alert.AlertSpecifier.Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    CustomerAlert.Alert.AlertSpecifier.Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .CONTRACT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .addCreditGrantTypeFilter("string")
                         .creditType(
                             CreditTypeData.builder()
@@ -72,6 +105,37 @@ internal class CustomerAlertTest {
                     .threshold(0.0)
                     .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .addAlertSpecifier(
+                        CustomerAlert.Alert.AlertSpecifier.builder()
+                            .addCustomFieldFilter(
+                                CustomerAlert.Alert.AlertSpecifier.CustomFieldFilter.builder()
+                                    .entity(
+                                        CustomerAlert.Alert.AlertSpecifier.CustomFieldFilter.Entity
+                                            .CONTRACT
+                                    )
+                                    .key("key")
+                                    .value("value")
+                                    .build()
+                            )
+                            .addExclude(
+                                CustomerAlert.Alert.AlertSpecifier.Exclude.builder()
+                                    .addCustomFieldFilter(
+                                        CustomerAlert.Alert.AlertSpecifier.Exclude.CustomFieldFilter
+                                            .builder()
+                                            .entity(
+                                                CustomerAlert.Alert.AlertSpecifier.Exclude
+                                                    .CustomFieldFilter
+                                                    .Entity
+                                                    .CONTRACT
+                                            )
+                                            .key("key")
+                                            .value("value")
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
                     .addCreditGrantTypeFilter("string")
                     .creditType(
                         CreditTypeData.builder()
@@ -122,6 +186,39 @@ internal class CustomerAlertTest {
                         .threshold(0.0)
                         .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addAlertSpecifier(
+                            CustomerAlert.Alert.AlertSpecifier.builder()
+                                .addCustomFieldFilter(
+                                    CustomerAlert.Alert.AlertSpecifier.CustomFieldFilter.builder()
+                                        .entity(
+                                            CustomerAlert.Alert.AlertSpecifier.CustomFieldFilter
+                                                .Entity
+                                                .CONTRACT
+                                        )
+                                        .key("key")
+                                        .value("value")
+                                        .build()
+                                )
+                                .addExclude(
+                                    CustomerAlert.Alert.AlertSpecifier.Exclude.builder()
+                                        .addCustomFieldFilter(
+                                            CustomerAlert.Alert.AlertSpecifier.Exclude
+                                                .CustomFieldFilter
+                                                .builder()
+                                                .entity(
+                                                    CustomerAlert.Alert.AlertSpecifier.Exclude
+                                                        .CustomFieldFilter
+                                                        .Entity
+                                                        .CONTRACT
+                                                )
+                                                .key("key")
+                                                .value("value")
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .build()
+                        )
                         .addCreditGrantTypeFilter("string")
                         .creditType(
                             CreditTypeData.builder()

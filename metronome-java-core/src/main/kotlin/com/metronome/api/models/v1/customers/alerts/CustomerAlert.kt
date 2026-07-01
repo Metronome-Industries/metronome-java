@@ -269,6 +269,7 @@ private constructor(
         private val threshold: JsonField<Double>,
         private val type: JsonField<Type>,
         private val updatedAt: JsonField<OffsetDateTime>,
+        private val alertSpecifiers: JsonField<List<AlertSpecifier>>,
         private val creditGrantTypeFilters: JsonField<List<String>>,
         private val creditType: JsonField<CreditTypeData>,
         private val customFieldFilters: JsonField<List<CustomFieldFilter>>,
@@ -292,6 +293,9 @@ private constructor(
             @JsonProperty("updated_at")
             @ExcludeMissing
             updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("alert_specifiers")
+            @ExcludeMissing
+            alertSpecifiers: JsonField<List<AlertSpecifier>> = JsonMissing.of(),
             @JsonProperty("credit_grant_type_filters")
             @ExcludeMissing
             creditGrantTypeFilters: JsonField<List<String>> = JsonMissing.of(),
@@ -323,6 +327,7 @@ private constructor(
             threshold,
             type,
             updatedAt,
+            alertSpecifiers,
             creditGrantTypeFilters,
             creditType,
             customFieldFilters,
@@ -375,12 +380,22 @@ private constructor(
         fun type(): Type = type.getRequired("type")
 
         /**
-         * Timestamp for when the threshold notification was last updated
+         * Timestamp for when the threshold notification's customer status was last updated
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
+
+        /**
+         * Present for `low_remaining_contract_credit_and_commit_balance_reached` notifications. The
+         * filters that define the balances that are considered when evaluating the alert.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun alertSpecifiers(): Optional<List<AlertSpecifier>> =
+            alertSpecifiers.getOptional("alert_specifiers")
 
         /**
          * An array of strings, representing a way to filter the credit grant this threshold
@@ -501,6 +516,16 @@ private constructor(
         fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
         /**
+         * Returns the raw JSON value of [alertSpecifiers].
+         *
+         * Unlike [alertSpecifiers], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("alert_specifiers")
+        @ExcludeMissing
+        fun _alertSpecifiers(): JsonField<List<AlertSpecifier>> = alertSpecifiers
+
+        /**
          * Returns the raw JSON value of [creditGrantTypeFilters].
          *
          * Unlike [creditGrantTypeFilters], this method doesn't throw if the JSON field has an
@@ -616,6 +641,7 @@ private constructor(
             private var threshold: JsonField<Double>? = null
             private var type: JsonField<Type>? = null
             private var updatedAt: JsonField<OffsetDateTime>? = null
+            private var alertSpecifiers: JsonField<MutableList<AlertSpecifier>>? = null
             private var creditGrantTypeFilters: JsonField<MutableList<String>>? = null
             private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
             private var customFieldFilters: JsonField<MutableList<CustomFieldFilter>>? = null
@@ -634,6 +660,7 @@ private constructor(
                 threshold = alert.threshold
                 type = alert.type
                 updatedAt = alert.updatedAt
+                alertSpecifiers = alert.alertSpecifiers.map { it.toMutableList() }
                 creditGrantTypeFilters = alert.creditGrantTypeFilters.map { it.toMutableList() }
                 creditType = alert.creditType
                 customFieldFilters = alert.customFieldFilters.map { it.toMutableList() }
@@ -705,7 +732,7 @@ private constructor(
              */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
-            /** Timestamp for when the threshold notification was last updated */
+            /** Timestamp for when the threshold notification's customer status was last updated */
             fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
             /**
@@ -717,6 +744,36 @@ private constructor(
              */
             fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply {
                 this.updatedAt = updatedAt
+            }
+
+            /**
+             * Present for `low_remaining_contract_credit_and_commit_balance_reached` notifications.
+             * The filters that define the balances that are considered when evaluating the alert.
+             */
+            fun alertSpecifiers(alertSpecifiers: List<AlertSpecifier>) =
+                alertSpecifiers(JsonField.of(alertSpecifiers))
+
+            /**
+             * Sets [Builder.alertSpecifiers] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.alertSpecifiers] with a well-typed
+             * `List<AlertSpecifier>` value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
+             */
+            fun alertSpecifiers(alertSpecifiers: JsonField<List<AlertSpecifier>>) = apply {
+                this.alertSpecifiers = alertSpecifiers.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [AlertSpecifier] to [alertSpecifiers].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addAlertSpecifier(alertSpecifier: AlertSpecifier) = apply {
+                alertSpecifiers =
+                    (alertSpecifiers ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("alertSpecifiers", it).add(alertSpecifier)
+                    }
             }
 
             /**
@@ -954,6 +1011,7 @@ private constructor(
                     checkRequired("threshold", threshold),
                     checkRequired("type", type),
                     checkRequired("updatedAt", updatedAt),
+                    (alertSpecifiers ?: JsonMissing.of()).map { it.toImmutable() },
                     (creditGrantTypeFilters ?: JsonMissing.of()).map { it.toImmutable() },
                     creditType,
                     (customFieldFilters ?: JsonMissing.of()).map { it.toImmutable() },
@@ -988,6 +1046,7 @@ private constructor(
             threshold()
             type().validate()
             updatedAt()
+            alertSpecifiers().ifPresent { it.forEach { it.validate() } }
             creditGrantTypeFilters()
             creditType().ifPresent { it.validate() }
             customFieldFilters().ifPresent { it.forEach { it.validate() } }
@@ -1021,6 +1080,7 @@ private constructor(
                 (if (threshold.asKnown().isPresent) 1 else 0) +
                 (type.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (updatedAt.asKnown().isPresent) 1 else 0) +
+                (alertSpecifiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (creditGrantTypeFilters.asKnown().getOrNull()?.size ?: 0) +
                 (creditType.asKnown().getOrNull()?.validity() ?: 0) +
                 (customFieldFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
@@ -1428,6 +1488,1261 @@ private constructor(
             override fun hashCode() = value.hashCode()
 
             override fun toString() = value.toString()
+        }
+
+        class AlertSpecifier
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val customFieldFilters: JsonField<List<CustomFieldFilter>>,
+            private val exclude: JsonField<List<Exclude>>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("custom_field_filters")
+                @ExcludeMissing
+                customFieldFilters: JsonField<List<CustomFieldFilter>> = JsonMissing.of(),
+                @JsonProperty("exclude")
+                @ExcludeMissing
+                exclude: JsonField<List<Exclude>> = JsonMissing.of(),
+            ) : this(customFieldFilters, exclude, mutableMapOf())
+
+            /**
+             * A list of custom field filters for notification types that support advanced filtering
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
+                customFieldFilters.getOptional("custom_field_filters")
+
+            /**
+             * If provided, the specifier will not apply to balances that matches the inclusion
+             * criteria and any of the excluding values.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun exclude(): Optional<List<Exclude>> = exclude.getOptional("exclude")
+
+            /**
+             * Returns the raw JSON value of [customFieldFilters].
+             *
+             * Unlike [customFieldFilters], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("custom_field_filters")
+            @ExcludeMissing
+            fun _customFieldFilters(): JsonField<List<CustomFieldFilter>> = customFieldFilters
+
+            /**
+             * Returns the raw JSON value of [exclude].
+             *
+             * Unlike [exclude], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("exclude")
+            @ExcludeMissing
+            fun _exclude(): JsonField<List<Exclude>> = exclude
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [AlertSpecifier]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [AlertSpecifier]. */
+            class Builder internal constructor() {
+
+                private var customFieldFilters: JsonField<MutableList<CustomFieldFilter>>? = null
+                private var exclude: JsonField<MutableList<Exclude>>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(alertSpecifier: AlertSpecifier) = apply {
+                    customFieldFilters =
+                        alertSpecifier.customFieldFilters.map { it.toMutableList() }
+                    exclude = alertSpecifier.exclude.map { it.toMutableList() }
+                    additionalProperties = alertSpecifier.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * A list of custom field filters for notification types that support advanced
+                 * filtering
+                 */
+                fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) =
+                    customFieldFilters(JsonField.of(customFieldFilters))
+
+                /**
+                 * Sets [Builder.customFieldFilters] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.customFieldFilters] with a well-typed
+                 * `List<CustomFieldFilter>` value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun customFieldFilters(customFieldFilters: JsonField<List<CustomFieldFilter>>) =
+                    apply {
+                        this.customFieldFilters = customFieldFilters.map { it.toMutableList() }
+                    }
+
+                /**
+                 * Adds a single [CustomFieldFilter] to [customFieldFilters].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addCustomFieldFilter(customFieldFilter: CustomFieldFilter) = apply {
+                    customFieldFilters =
+                        (customFieldFilters ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("customFieldFilters", it).add(customFieldFilter)
+                        }
+                }
+
+                /**
+                 * If provided, the specifier will not apply to balances that matches the inclusion
+                 * criteria and any of the excluding values.
+                 */
+                fun exclude(exclude: List<Exclude>) = exclude(JsonField.of(exclude))
+
+                /**
+                 * Sets [Builder.exclude] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.exclude] with a well-typed `List<Exclude>` value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun exclude(exclude: JsonField<List<Exclude>>) = apply {
+                    this.exclude = exclude.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Exclude] to [Builder.exclude].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addExclude(exclude: Exclude) = apply {
+                    this.exclude =
+                        (this.exclude ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("exclude", it).add(exclude)
+                        }
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [AlertSpecifier].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): AlertSpecifier =
+                    AlertSpecifier(
+                        (customFieldFilters ?: JsonMissing.of()).map { it.toImmutable() },
+                        (exclude ?: JsonMissing.of()).map { it.toImmutable() },
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): AlertSpecifier = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                customFieldFilters().ifPresent { it.forEach { it.validate() } }
+                exclude().ifPresent { it.forEach { it.validate() } }
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (customFieldFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (exclude.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
+            class CustomFieldFilter
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val entity: JsonField<Entity>,
+                private val key: JsonField<String>,
+                private val value: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("entity")
+                    @ExcludeMissing
+                    entity: JsonField<Entity> = JsonMissing.of(),
+                    @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("value")
+                    @ExcludeMissing
+                    value: JsonField<String> = JsonMissing.of(),
+                ) : this(entity, key, value, mutableMapOf())
+
+                /**
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun entity(): Entity = entity.getRequired("entity")
+
+                /**
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun key(): String = key.getRequired("key")
+
+                /**
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun value(): Optional<String> = value.getOptional("value")
+
+                /**
+                 * Returns the raw JSON value of [entity].
+                 *
+                 * Unlike [entity], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("entity") @ExcludeMissing fun _entity(): JsonField<Entity> = entity
+
+                /**
+                 * Returns the raw JSON value of [key].
+                 *
+                 * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+                /**
+                 * Returns the raw JSON value of [value].
+                 *
+                 * Unlike [value], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [CustomFieldFilter].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .entity()
+                     * .key()
+                     * ```
+                     */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [CustomFieldFilter]. */
+                class Builder internal constructor() {
+
+                    private var entity: JsonField<Entity>? = null
+                    private var key: JsonField<String>? = null
+                    private var value: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(customFieldFilter: CustomFieldFilter) = apply {
+                        entity = customFieldFilter.entity
+                        key = customFieldFilter.key
+                        value = customFieldFilter.value
+                        additionalProperties = customFieldFilter.additionalProperties.toMutableMap()
+                    }
+
+                    fun entity(entity: Entity) = entity(JsonField.of(entity))
+
+                    /**
+                     * Sets [Builder.entity] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.entity] with a well-typed [Entity] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
+
+                    fun key(key: String) = key(JsonField.of(key))
+
+                    /**
+                     * Sets [Builder.key] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.key] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun key(key: JsonField<String>) = apply { this.key = key }
+
+                    fun value(value: String) = value(JsonField.of(value))
+
+                    /**
+                     * Sets [Builder.value] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.value] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun value(value: JsonField<String>) = apply { this.value = value }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [CustomFieldFilter].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .entity()
+                     * .key()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): CustomFieldFilter =
+                        CustomFieldFilter(
+                            checkRequired("entity", entity),
+                            checkRequired("key", key),
+                            value,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): CustomFieldFilter = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    entity().validate()
+                    key()
+                    value()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (entity.asKnown().getOrNull()?.validity() ?: 0) +
+                        (if (key.asKnown().isPresent) 1 else 0) +
+                        (if (value.asKnown().isPresent) 1 else 0)
+
+                class Entity
+                @JsonCreator
+                private constructor(private val value: JsonField<String>) : Enum {
+
+                    /**
+                     * Returns this class instance's raw value.
+                     *
+                     * This is usually only useful if this instance was deserialized from data that
+                     * doesn't match any known member, and you want to know that value. For example,
+                     * if the SDK is on an older version than the API, then the API may respond with
+                     * new members that the SDK is unaware of.
+                     */
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    fun _value(): JsonField<String> = value
+
+                    companion object {
+
+                        @JvmField val CONTRACT = of("Contract")
+
+                        @JvmField val COMMIT = of("Commit")
+
+                        @JvmField val CONTRACT_CREDIT = of("ContractCredit")
+
+                        @JvmField val CONTRACT_CREDIT_OR_COMMIT = of("ContractCreditOrCommit")
+
+                        @JvmStatic fun of(value: String) = Entity(JsonField.of(value))
+                    }
+
+                    /** An enum containing [Entity]'s known values. */
+                    enum class Known {
+                        CONTRACT,
+                        COMMIT,
+                        CONTRACT_CREDIT,
+                        CONTRACT_CREDIT_OR_COMMIT,
+                    }
+
+                    /**
+                     * An enum containing [Entity]'s known values, as well as an [_UNKNOWN] member.
+                     *
+                     * An instance of [Entity] can contain an unknown value in a couple of cases:
+                     * - It was deserialized from data that doesn't match any known member. For
+                     *   example, if the SDK is on an older version than the API, then the API may
+                     *   respond with new members that the SDK is unaware of.
+                     * - It was constructed with an arbitrary value using the [of] method.
+                     */
+                    enum class Value {
+                        CONTRACT,
+                        COMMIT,
+                        CONTRACT_CREDIT,
+                        CONTRACT_CREDIT_OR_COMMIT,
+                        /**
+                         * An enum member indicating that [Entity] was instantiated with an unknown
+                         * value.
+                         */
+                        _UNKNOWN,
+                    }
+
+                    /**
+                     * Returns an enum member corresponding to this class instance's value, or
+                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                     *
+                     * Use the [known] method instead if you're certain the value is always known or
+                     * if you want to throw for the unknown case.
+                     */
+                    fun value(): Value =
+                        when (this) {
+                            CONTRACT -> Value.CONTRACT
+                            COMMIT -> Value.COMMIT
+                            CONTRACT_CREDIT -> Value.CONTRACT_CREDIT
+                            CONTRACT_CREDIT_OR_COMMIT -> Value.CONTRACT_CREDIT_OR_COMMIT
+                            else -> Value._UNKNOWN
+                        }
+
+                    /**
+                     * Returns an enum member corresponding to this class instance's value.
+                     *
+                     * Use the [value] method instead if you're uncertain the value is always known
+                     * and don't want to throw for the unknown case.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value is a not
+                     *   a known member.
+                     */
+                    fun known(): Known =
+                        when (this) {
+                            CONTRACT -> Known.CONTRACT
+                            COMMIT -> Known.COMMIT
+                            CONTRACT_CREDIT -> Known.CONTRACT_CREDIT
+                            CONTRACT_CREDIT_OR_COMMIT -> Known.CONTRACT_CREDIT_OR_COMMIT
+                            else -> throw MetronomeInvalidDataException("Unknown Entity: $value")
+                        }
+
+                    /**
+                     * Returns this class instance's primitive wire representation.
+                     *
+                     * This differs from the [toString] method because that method is primarily for
+                     * debugging and generally doesn't throw.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value does not
+                     *   have the expected primitive type.
+                     */
+                    fun asString(): String =
+                        _value().asString().orElseThrow {
+                            MetronomeInvalidDataException("Value is not a String")
+                        }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws MetronomeInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): Entity = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        known()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: MetronomeInvalidDataException) {
+                            false
+                        }
+
+                    /**
+                     * Returns a score indicating how many valid values are contained in this object
+                     * recursively.
+                     *
+                     * Used for best match union deserialization.
+                     */
+                    @JvmSynthetic
+                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is Entity && value == other.value
+                    }
+
+                    override fun hashCode() = value.hashCode()
+
+                    override fun toString() = value.toString()
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is CustomFieldFilter &&
+                        entity == other.entity &&
+                        key == other.key &&
+                        value == other.value &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(entity, key, value, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "CustomFieldFilter{entity=$entity, key=$key, value=$value, additionalProperties=$additionalProperties}"
+            }
+
+            class Exclude
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val customFieldFilters: JsonField<List<CustomFieldFilter>>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("custom_field_filters")
+                    @ExcludeMissing
+                    customFieldFilters: JsonField<List<CustomFieldFilter>> = JsonMissing.of()
+                ) : this(customFieldFilters, mutableMapOf())
+
+                /**
+                 * A list of custom field filters for notification types that support advanced
+                 * filtering
+                 *
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun customFieldFilters(): Optional<List<CustomFieldFilter>> =
+                    customFieldFilters.getOptional("custom_field_filters")
+
+                /**
+                 * Returns the raw JSON value of [customFieldFilters].
+                 *
+                 * Unlike [customFieldFilters], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("custom_field_filters")
+                @ExcludeMissing
+                fun _customFieldFilters(): JsonField<List<CustomFieldFilter>> = customFieldFilters
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Exclude]. */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [Exclude]. */
+                class Builder internal constructor() {
+
+                    private var customFieldFilters: JsonField<MutableList<CustomFieldFilter>>? =
+                        null
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(exclude: Exclude) = apply {
+                        customFieldFilters = exclude.customFieldFilters.map { it.toMutableList() }
+                        additionalProperties = exclude.additionalProperties.toMutableMap()
+                    }
+
+                    /**
+                     * A list of custom field filters for notification types that support advanced
+                     * filtering
+                     */
+                    fun customFieldFilters(customFieldFilters: List<CustomFieldFilter>) =
+                        customFieldFilters(JsonField.of(customFieldFilters))
+
+                    /**
+                     * Sets [Builder.customFieldFilters] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.customFieldFilters] with a well-typed
+                     * `List<CustomFieldFilter>` value instead. This method is primarily for setting
+                     * the field to an undocumented or not yet supported value.
+                     */
+                    fun customFieldFilters(customFieldFilters: JsonField<List<CustomFieldFilter>>) =
+                        apply {
+                            this.customFieldFilters = customFieldFilters.map { it.toMutableList() }
+                        }
+
+                    /**
+                     * Adds a single [CustomFieldFilter] to [customFieldFilters].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
+                    fun addCustomFieldFilter(customFieldFilter: CustomFieldFilter) = apply {
+                        customFieldFilters =
+                            (customFieldFilters ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("customFieldFilters", it).add(customFieldFilter)
+                            }
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Exclude].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Exclude =
+                        Exclude(
+                            (customFieldFilters ?: JsonMissing.of()).map { it.toImmutable() },
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): Exclude = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    customFieldFilters().ifPresent { it.forEach { it.validate() } }
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (customFieldFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
+                class CustomFieldFilter
+                @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+                private constructor(
+                    private val entity: JsonField<Entity>,
+                    private val key: JsonField<String>,
+                    private val value: JsonField<String>,
+                    private val additionalProperties: MutableMap<String, JsonValue>,
+                ) {
+
+                    @JsonCreator
+                    private constructor(
+                        @JsonProperty("entity")
+                        @ExcludeMissing
+                        entity: JsonField<Entity> = JsonMissing.of(),
+                        @JsonProperty("key")
+                        @ExcludeMissing
+                        key: JsonField<String> = JsonMissing.of(),
+                        @JsonProperty("value")
+                        @ExcludeMissing
+                        value: JsonField<String> = JsonMissing.of(),
+                    ) : this(entity, key, value, mutableMapOf())
+
+                    /**
+                     * @throws MetronomeInvalidDataException if the JSON field has an unexpected
+                     *   type or is unexpectedly missing or null (e.g. if the server responded with
+                     *   an unexpected value).
+                     */
+                    fun entity(): Entity = entity.getRequired("entity")
+
+                    /**
+                     * @throws MetronomeInvalidDataException if the JSON field has an unexpected
+                     *   type or is unexpectedly missing or null (e.g. if the server responded with
+                     *   an unexpected value).
+                     */
+                    fun key(): String = key.getRequired("key")
+
+                    /**
+                     * @throws MetronomeInvalidDataException if the JSON field has an unexpected
+                     *   type or is unexpectedly missing or null (e.g. if the server responded with
+                     *   an unexpected value).
+                     */
+                    fun value(): String = value.getRequired("value")
+
+                    /**
+                     * Returns the raw JSON value of [entity].
+                     *
+                     * Unlike [entity], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
+                    @JsonProperty("entity")
+                    @ExcludeMissing
+                    fun _entity(): JsonField<Entity> = entity
+
+                    /**
+                     * Returns the raw JSON value of [key].
+                     *
+                     * Unlike [key], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+                    /**
+                     * Returns the raw JSON value of [value].
+                     *
+                     * Unlike [value], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
+                    @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
+
+                    @JsonAnySetter
+                    private fun putAdditionalProperty(key: String, value: JsonValue) {
+                        additionalProperties.put(key, value)
+                    }
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> =
+                        Collections.unmodifiableMap(additionalProperties)
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /**
+                         * Returns a mutable builder for constructing an instance of
+                         * [CustomFieldFilter].
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .entity()
+                         * .key()
+                         * .value()
+                         * ```
+                         */
+                        @JvmStatic fun builder() = Builder()
+                    }
+
+                    /** A builder for [CustomFieldFilter]. */
+                    class Builder internal constructor() {
+
+                        private var entity: JsonField<Entity>? = null
+                        private var key: JsonField<String>? = null
+                        private var value: JsonField<String>? = null
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        @JvmSynthetic
+                        internal fun from(customFieldFilter: CustomFieldFilter) = apply {
+                            entity = customFieldFilter.entity
+                            key = customFieldFilter.key
+                            value = customFieldFilter.value
+                            additionalProperties =
+                                customFieldFilter.additionalProperties.toMutableMap()
+                        }
+
+                        fun entity(entity: Entity) = entity(JsonField.of(entity))
+
+                        /**
+                         * Sets [Builder.entity] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.entity] with a well-typed [Entity] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
+                        fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
+
+                        fun key(key: String) = key(JsonField.of(key))
+
+                        /**
+                         * Sets [Builder.key] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.key] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
+                        fun key(key: JsonField<String>) = apply { this.key = key }
+
+                        fun value(value: String) = value(JsonField.of(value))
+
+                        /**
+                         * Sets [Builder.value] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.value] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
+                        fun value(value: JsonField<String>) = apply { this.value = value }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [CustomFieldFilter].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .entity()
+                         * .key()
+                         * .value()
+                         * ```
+                         *
+                         * @throws IllegalStateException if any required field is unset.
+                         */
+                        fun build(): CustomFieldFilter =
+                            CustomFieldFilter(
+                                checkRequired("entity", entity),
+                                checkRequired("key", key),
+                                checkRequired("value", value),
+                                additionalProperties.toMutableMap(),
+                            )
+                    }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws MetronomeInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): CustomFieldFilter = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        entity().validate()
+                        key()
+                        value()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: MetronomeInvalidDataException) {
+                            false
+                        }
+
+                    /**
+                     * Returns a score indicating how many valid values are contained in this object
+                     * recursively.
+                     *
+                     * Used for best match union deserialization.
+                     */
+                    @JvmSynthetic
+                    internal fun validity(): Int =
+                        (entity.asKnown().getOrNull()?.validity() ?: 0) +
+                            (if (key.asKnown().isPresent) 1 else 0) +
+                            (if (value.asKnown().isPresent) 1 else 0)
+
+                    class Entity
+                    @JsonCreator
+                    private constructor(private val value: JsonField<String>) : Enum {
+
+                        /**
+                         * Returns this class instance's raw value.
+                         *
+                         * This is usually only useful if this instance was deserialized from data
+                         * that doesn't match any known member, and you want to know that value. For
+                         * example, if the SDK is on an older version than the API, then the API may
+                         * respond with new members that the SDK is unaware of.
+                         */
+                        @com.fasterxml.jackson.annotation.JsonValue
+                        fun _value(): JsonField<String> = value
+
+                        companion object {
+
+                            @JvmField val CONTRACT = of("Contract")
+
+                            @JvmField val COMMIT = of("Commit")
+
+                            @JvmField val CONTRACT_CREDIT = of("ContractCredit")
+
+                            @JvmField val CONTRACT_CREDIT_OR_COMMIT = of("ContractCreditOrCommit")
+
+                            @JvmStatic fun of(value: String) = Entity(JsonField.of(value))
+                        }
+
+                        /** An enum containing [Entity]'s known values. */
+                        enum class Known {
+                            CONTRACT,
+                            COMMIT,
+                            CONTRACT_CREDIT,
+                            CONTRACT_CREDIT_OR_COMMIT,
+                        }
+
+                        /**
+                         * An enum containing [Entity]'s known values, as well as an [_UNKNOWN]
+                         * member.
+                         *
+                         * An instance of [Entity] can contain an unknown value in a couple of
+                         * cases:
+                         * - It was deserialized from data that doesn't match any known member. For
+                         *   example, if the SDK is on an older version than the API, then the API
+                         *   may respond with new members that the SDK is unaware of.
+                         * - It was constructed with an arbitrary value using the [of] method.
+                         */
+                        enum class Value {
+                            CONTRACT,
+                            COMMIT,
+                            CONTRACT_CREDIT,
+                            CONTRACT_CREDIT_OR_COMMIT,
+                            /**
+                             * An enum member indicating that [Entity] was instantiated with an
+                             * unknown value.
+                             */
+                            _UNKNOWN,
+                        }
+
+                        /**
+                         * Returns an enum member corresponding to this class instance's value, or
+                         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                         *
+                         * Use the [known] method instead if you're certain the value is always
+                         * known or if you want to throw for the unknown case.
+                         */
+                        fun value(): Value =
+                            when (this) {
+                                CONTRACT -> Value.CONTRACT
+                                COMMIT -> Value.COMMIT
+                                CONTRACT_CREDIT -> Value.CONTRACT_CREDIT
+                                CONTRACT_CREDIT_OR_COMMIT -> Value.CONTRACT_CREDIT_OR_COMMIT
+                                else -> Value._UNKNOWN
+                            }
+
+                        /**
+                         * Returns an enum member corresponding to this class instance's value.
+                         *
+                         * Use the [value] method instead if you're uncertain the value is always
+                         * known and don't want to throw for the unknown case.
+                         *
+                         * @throws MetronomeInvalidDataException if this class instance's value is a
+                         *   not a known member.
+                         */
+                        fun known(): Known =
+                            when (this) {
+                                CONTRACT -> Known.CONTRACT
+                                COMMIT -> Known.COMMIT
+                                CONTRACT_CREDIT -> Known.CONTRACT_CREDIT
+                                CONTRACT_CREDIT_OR_COMMIT -> Known.CONTRACT_CREDIT_OR_COMMIT
+                                else ->
+                                    throw MetronomeInvalidDataException("Unknown Entity: $value")
+                            }
+
+                        /**
+                         * Returns this class instance's primitive wire representation.
+                         *
+                         * This differs from the [toString] method because that method is primarily
+                         * for debugging and generally doesn't throw.
+                         *
+                         * @throws MetronomeInvalidDataException if this class instance's value does
+                         *   not have the expected primitive type.
+                         */
+                        fun asString(): String =
+                            _value().asString().orElseThrow {
+                                MetronomeInvalidDataException("Value is not a String")
+                            }
+
+                        private var validated: Boolean = false
+
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws MetronomeInvalidDataException if any value type in this object
+                         *   doesn't match its expected type.
+                         */
+                        fun validate(): Entity = apply {
+                            if (validated) {
+                                return@apply
+                            }
+
+                            known()
+                            validated = true
+                        }
+
+                        fun isValid(): Boolean =
+                            try {
+                                validate()
+                                true
+                            } catch (e: MetronomeInvalidDataException) {
+                                false
+                            }
+
+                        /**
+                         * Returns a score indicating how many valid values are contained in this
+                         * object recursively.
+                         *
+                         * Used for best match union deserialization.
+                         */
+                        @JvmSynthetic
+                        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                        override fun equals(other: Any?): Boolean {
+                            if (this === other) {
+                                return true
+                            }
+
+                            return other is Entity && value == other.value
+                        }
+
+                        override fun hashCode() = value.hashCode()
+
+                        override fun toString() = value.toString()
+                    }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is CustomFieldFilter &&
+                            entity == other.entity &&
+                            key == other.key &&
+                            value == other.value &&
+                            additionalProperties == other.additionalProperties
+                    }
+
+                    private val hashCode: Int by lazy {
+                        Objects.hash(entity, key, value, additionalProperties)
+                    }
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "CustomFieldFilter{entity=$entity, key=$key, value=$value, additionalProperties=$additionalProperties}"
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Exclude &&
+                        customFieldFilters == other.customFieldFilters &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(customFieldFilters, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Exclude{customFieldFilters=$customFieldFilters, additionalProperties=$additionalProperties}"
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is AlertSpecifier &&
+                    customFieldFilters == other.customFieldFilters &&
+                    exclude == other.exclude &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(customFieldFilters, exclude, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "AlertSpecifier{customFieldFilters=$customFieldFilters, exclude=$exclude, additionalProperties=$additionalProperties}"
         }
 
         class CustomFieldFilter
@@ -2485,6 +3800,7 @@ private constructor(
                 threshold == other.threshold &&
                 type == other.type &&
                 updatedAt == other.updatedAt &&
+                alertSpecifiers == other.alertSpecifiers &&
                 creditGrantTypeFilters == other.creditGrantTypeFilters &&
                 creditType == other.creditType &&
                 customFieldFilters == other.customFieldFilters &&
@@ -2504,6 +3820,7 @@ private constructor(
                 threshold,
                 type,
                 updatedAt,
+                alertSpecifiers,
                 creditGrantTypeFilters,
                 creditType,
                 customFieldFilters,
@@ -2519,7 +3836,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Alert{id=$id, name=$name, status=$status, threshold=$threshold, type=$type, updatedAt=$updatedAt, creditGrantTypeFilters=$creditGrantTypeFilters, creditType=$creditType, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, groupValues=$groupValues, invoiceTypesFilter=$invoiceTypesFilter, seatFilter=$seatFilter, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+            "Alert{id=$id, name=$name, status=$status, threshold=$threshold, type=$type, updatedAt=$updatedAt, alertSpecifiers=$alertSpecifiers, creditGrantTypeFilters=$creditGrantTypeFilters, creditType=$creditType, customFieldFilters=$customFieldFilters, groupKeyFilter=$groupKeyFilter, groupValues=$groupValues, invoiceTypesFilter=$invoiceTypesFilter, seatFilter=$seatFilter, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     /**

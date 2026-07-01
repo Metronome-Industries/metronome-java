@@ -25,7 +25,13 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Add a new rate */
+/**
+ * Add a new rate
+ *
+ * This endpoint is heavily rate limited. For adding multiple rates, using the
+ * [addRates](https://docs.metronome.com/api-reference/rate-cards/add-rates) endpoint is strongly
+ * encouraged.
+ */
 class RateAddParams
 private constructor(
     private val body: Body,

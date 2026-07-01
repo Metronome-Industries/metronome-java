@@ -23,6 +23,7 @@ internal class InvoiceListParamsTest {
             .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .status("status")
             .type(InvoiceListParams.Type.USAGE)
+            .webhookNotificationId("webhook_notification_id")
             .build()
     }
 
@@ -51,6 +52,7 @@ internal class InvoiceListParamsTest {
                 .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .status("status")
                 .type(InvoiceListParams.Type.USAGE)
+                .webhookNotificationId("webhook_notification_id")
                 .build()
 
         val queryParams = params._queryParams()
@@ -68,6 +70,7 @@ internal class InvoiceListParamsTest {
                     .put("starting_on", "2019-12-27T18:11:19.117Z")
                     .put("status", "status")
                     .put("type", "USAGE")
+                    .put("webhook_notification_id", "webhook_notification_id")
                     .build()
             )
     }

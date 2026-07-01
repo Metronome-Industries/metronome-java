@@ -49,6 +49,7 @@ internal class CreditTest {
                 .contract(
                     Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                 )
+                .createdBy("created_by")
                 .customFields(
                     Credit.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -156,6 +157,7 @@ internal class CreditTest {
         assertThat(credit.balance()).contains(0.0)
         assertThat(credit.contract())
             .contains(Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+        assertThat(credit.createdBy()).contains("created_by")
         assertThat(credit.customFields())
             .contains(
                 Credit.CustomFields.builder()
@@ -273,6 +275,7 @@ internal class CreditTest {
                 .contract(
                     Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                 )
+                .createdBy("created_by")
                 .customFields(
                     Credit.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

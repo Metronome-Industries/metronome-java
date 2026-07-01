@@ -19,6 +19,7 @@ import com.metronome.api.models.v1.contracts.ContractArchiveParams
 import com.metronome.api.models.v1.contracts.ContractCreateHistoricalInvoicesParams
 import com.metronome.api.models.v1.contracts.ContractCreateParams
 import com.metronome.api.models.v1.contracts.ContractGetNetBalanceParams
+import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistoryParams
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListParams
 import com.metronome.api.models.v1.contracts.ContractListSeatBalancesParams
@@ -349,6 +350,7 @@ internal class ContractServiceTest {
                             .multiplier(0.0)
                             .addOverrideSpecifier(
                                 ContractCreateParams.Override.OverrideSpecifier.builder()
+                                    .addAnyCommitOrCreditId("string")
                                     .billingFrequency(
                                         ContractCreateParams.Override.OverrideSpecifier
                                             .BillingFrequency
@@ -591,6 +593,38 @@ internal class ContractServiceTest {
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                            .prorationRounding(
+                                ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                    .access(
+                                        ContractCreateParams.RecurringCommit.ProrationRounding
+                                            .Access
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                ContractCreateParams.RecurringCommit
+                                                    .ProrationRounding
+                                                    .Access
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
+                                    .invoice(
+                                        ContractCreateParams.RecurringCommit.ProrationRounding
+                                            .Invoice
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                ContractCreateParams.RecurringCommit
+                                                    .ProrationRounding
+                                                    .Invoice
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                             .recurrenceFrequency(
                                 ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -676,6 +710,24 @@ internal class ContractServiceTest {
                             .name("x")
                             .netsuiteSalesOrderId("netsuite_sales_order_id")
                             .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                            .prorationRounding(
+                                ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                    .access(
+                                        ContractCreateParams.RecurringCredit.ProrationRounding
+                                            .Access
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                ContractCreateParams.RecurringCredit
+                                                    .ProrationRounding
+                                                    .Access
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                             .recurrenceFrequency(
                                 ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -908,6 +960,17 @@ internal class ContractServiceTest {
                                             .BILL_IMMEDIATELY
                                     )
                                     .isProrated(true)
+                                    .rounding(
+                                        ContractCreateParams.Subscription.Proration.Rounding
+                                            .builder()
+                                            .decimalPlaces(-5.0)
+                                            .roundingMethod(
+                                                ContractCreateParams.Subscription.Proration.Rounding
+                                                    .RoundingMethod
+                                                    .HALF_UP
+                                            )
+                                            .build()
+                                    )
                                     .build()
                             )
                             .subscriptionRate(
@@ -918,6 +981,16 @@ internal class ContractServiceTest {
                                             .MONTHLY
                                     )
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .build()
+                            )
+                            .billingCycleConfig(
+                                ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .invoicePlacement(
+                                        ContractCreateParams.Subscription.BillingCycleConfig
+                                            .InvoicePlacement
+                                            .ON_SCHEDULED_INVOICE
+                                    )
                                     .build()
                             )
                             .customFields(
@@ -1327,6 +1400,7 @@ internal class ContractServiceTest {
                             .multiplier(0.0)
                             .addOverrideSpecifier(
                                 ContractAmendParams.Override.OverrideSpecifier.builder()
+                                    .addAnyCommitOrCreditId("string")
                                     .billingFrequency(
                                         ContractAmendParams.Override.OverrideSpecifier
                                             .BillingFrequency
@@ -1645,6 +1719,32 @@ internal class ContractServiceTest {
     }
 
     @Test
+    fun getSubscriptionSeatsHistory() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val contractService = client.v1().contracts()
+
+        val response =
+            contractService.getSubscriptionSeatsHistory(
+                ContractGetSubscriptionSeatsHistoryParams.builder()
+                    .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .subscriptionId("1a824d53-bde6-4d82-96d7-6347ff227d5c")
+                    .coveringDate(OffsetDateTime.parse("2024-01-15T00:00:00.000Z"))
+                    .cursor("cursor")
+                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .limit(10L)
+                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
+
+        response.validate()
+    }
+
+    @Test
     fun listBalances() {
         val client =
             MetronomeOkHttpClient.builder()
@@ -1684,6 +1784,7 @@ internal class ContractServiceTest {
                     .includeLedgers(true)
                     .limit(25L)
                     .addSeatId("string")
+                    .skipMissingSeatIds(true)
                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addSubscriptionId("8deed800-1b7a-495d-a207-6c52bac54dc9")
                     .build()

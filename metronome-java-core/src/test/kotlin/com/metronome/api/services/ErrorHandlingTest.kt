@@ -400,6 +400,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -656,6 +657,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -748,6 +781,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -997,6 +1048,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -1007,6 +1070,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -1412,6 +1487,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -1668,6 +1744,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -1760,6 +1868,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -2009,6 +2135,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -2019,6 +2157,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -2424,6 +2574,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -2680,6 +2831,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -2772,6 +2955,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -3021,6 +3222,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -3031,6 +3244,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -3436,6 +3661,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -3692,6 +3918,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -3784,6 +4042,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -4033,6 +4309,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -4043,6 +4331,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -4448,6 +4748,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -4704,6 +5005,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -4796,6 +5129,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -5045,6 +5396,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -5055,6 +5418,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -5460,6 +5835,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -5716,6 +6092,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -5808,6 +6216,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -6057,6 +6483,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -6067,6 +6505,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -6472,6 +6922,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -6728,6 +7179,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -6820,6 +7303,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -7069,6 +7570,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -7079,6 +7592,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -7484,6 +8009,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -7740,6 +8266,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -7832,6 +8390,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -8081,6 +8657,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -8091,6 +8679,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -8496,6 +9096,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -8752,6 +9353,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -8844,6 +9477,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -9093,6 +9744,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -9103,6 +9766,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -9508,6 +10183,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -9764,6 +10440,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -9856,6 +10564,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -10105,6 +10831,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -10115,6 +10853,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -10520,6 +11270,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -10776,6 +11527,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -10868,6 +11651,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -11117,6 +11918,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -11127,6 +11940,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -11532,6 +12357,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -11788,6 +12614,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -11880,6 +12738,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -12129,6 +13005,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -12139,6 +13027,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -12544,6 +13444,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -12800,6 +13701,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -12892,6 +13825,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -13141,6 +14092,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -13151,6 +14114,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -13556,6 +14531,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -13812,6 +14788,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -13904,6 +14912,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -14153,6 +15179,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -14163,6 +15201,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -14568,6 +15618,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -14824,6 +15875,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -14916,6 +15999,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -15165,6 +16266,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -15175,6 +16288,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -15580,6 +16705,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -15836,6 +16962,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -15928,6 +17086,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -16177,6 +17353,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -16187,6 +17375,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(
@@ -16590,6 +17790,7 @@ internal class ErrorHandlingTest {
                                 .multiplier(0.0)
                                 .addOverrideSpecifier(
                                     ContractCreateParams.Override.OverrideSpecifier.builder()
+                                        .addAnyCommitOrCreditId("string")
                                         .billingFrequency(
                                             ContractCreateParams.Override.OverrideSpecifier
                                                 .BillingFrequency
@@ -16846,6 +18047,38 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCommit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCommit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .invoice(
+                                            ContractCreateParams.RecurringCommit.ProrationRounding
+                                                .Invoice
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCommit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCommit.RecurrenceFrequency.MONTHLY
@@ -16938,6 +18171,24 @@ internal class ErrorHandlingTest {
                                 .name("x")
                                 .netsuiteSalesOrderId("netsuite_sales_order_id")
                                 .proration(ContractCreateParams.RecurringCredit.Proration.NONE)
+                                .prorationRounding(
+                                    ContractCreateParams.RecurringCredit.ProrationRounding.builder()
+                                        .access(
+                                            ContractCreateParams.RecurringCredit.ProrationRounding
+                                                .Access
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .rateType(ContractCreateParams.RecurringCredit.RateType.COMMIT_RATE)
                                 .recurrenceFrequency(
                                     ContractCreateParams.RecurringCredit.RecurrenceFrequency.MONTHLY
@@ -17187,6 +18438,18 @@ internal class ErrorHandlingTest {
                                                 .BILL_IMMEDIATELY
                                         )
                                         .isProrated(true)
+                                        .rounding(
+                                            ContractCreateParams.Subscription.Proration.Rounding
+                                                .builder()
+                                                .decimalPlaces(-5.0)
+                                                .roundingMethod(
+                                                    ContractCreateParams.Subscription.Proration
+                                                        .Rounding
+                                                        .RoundingMethod
+                                                        .HALF_UP
+                                                )
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .subscriptionRate(
@@ -17197,6 +18460,18 @@ internal class ErrorHandlingTest {
                                                 .MONTHLY
                                         )
                                         .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .build()
+                                )
+                                .billingCycleConfig(
+                                    ContractCreateParams.Subscription.BillingCycleConfig.builder()
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
+                                        .invoicePlacement(
+                                            ContractCreateParams.Subscription.BillingCycleConfig
+                                                .InvoicePlacement
+                                                .ON_SCHEDULED_INVOICE
+                                        )
                                         .build()
                                 )
                                 .customFields(

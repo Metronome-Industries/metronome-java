@@ -94,6 +94,7 @@ internal class ContractCreateResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -254,6 +255,7 @@ internal class ContractCreateResponseTest {
                                         .multiplier(0.0)
                                         .addOverrideSpecifier(
                                             Override.OverrideSpecifier.builder()
+                                                .addAnyCommitOrCreditId("string")
                                                 .billingFrequency(
                                                     Override.OverrideSpecifier.BillingFrequency
                                                         .MONTHLY
@@ -473,6 +475,7 @@ internal class ContractCreateResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -853,6 +856,46 @@ internal class ContractCreateResponseTest {
                                                 .Proration
                                                 .NONE
                                         )
+                                        .prorationRounding(
+                                            ContractCreateResponse.Data.Contract.RecurringCommit
+                                                .ProrationRounding
+                                                .builder()
+                                                .access(
+                                                    ContractCreateResponse.Data.Contract
+                                                        .RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .builder()
+                                                        .decimalPlaces(-5.0)
+                                                        .roundingMethod(
+                                                            ContractCreateResponse.Data.Contract
+                                                                .RecurringCommit
+                                                                .ProrationRounding
+                                                                .Access
+                                                                .RoundingMethod
+                                                                .HALF_UP
+                                                        )
+                                                        .build()
+                                                )
+                                                .invoice(
+                                                    ContractCreateResponse.Data.Contract
+                                                        .RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .builder()
+                                                        .decimalPlaces(-5.0)
+                                                        .roundingMethod(
+                                                            ContractCreateResponse.Data.Contract
+                                                                .RecurringCommit
+                                                                .ProrationRounding
+                                                                .Invoice
+                                                                .RoundingMethod
+                                                                .HALF_UP
+                                                        )
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
                                         .recurrenceFrequency(
                                             ContractCreateResponse.Data.Contract.RecurringCommit
                                                 .RecurrenceFrequency
@@ -984,6 +1027,29 @@ internal class ContractCreateResponseTest {
                                             ContractCreateResponse.Data.Contract.RecurringCredit
                                                 .Proration
                                                 .NONE
+                                        )
+                                        .prorationRounding(
+                                            ContractCreateResponse.Data.Contract.RecurringCredit
+                                                .ProrationRounding
+                                                .builder()
+                                                .access(
+                                                    ContractCreateResponse.Data.Contract
+                                                        .RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .builder()
+                                                        .decimalPlaces(-5.0)
+                                                        .roundingMethod(
+                                                            ContractCreateResponse.Data.Contract
+                                                                .RecurringCredit
+                                                                .ProrationRounding
+                                                                .Access
+                                                                .RoundingMethod
+                                                                .HALF_UP
+                                                        )
+                                                        .build()
+                                                )
+                                                .build()
                                         )
                                         .recurrenceFrequency(
                                             ContractCreateResponse.Data.Contract.RecurringCredit
@@ -1158,6 +1224,16 @@ internal class ContractCreateResponseTest {
                                                         .BILL_IMMEDIATELY
                                                 )
                                                 .isProrated(true)
+                                                .rounding(
+                                                    Subscription.Proration.Rounding.builder()
+                                                        .decimalPlaces(-5.0)
+                                                        .roundingMethod(
+                                                            Subscription.Proration.Rounding
+                                                                .RoundingMethod
+                                                                .HALF_UP
+                                                        )
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                         .quantityManagementMode(
@@ -1192,6 +1268,17 @@ internal class ContractCreateResponseTest {
                                                 .build()
                                         )
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .billingCycleConfig(
+                                            Subscription.BillingCycleConfig.builder()
+                                                .anchorDate(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
+                                                .invoicePlacement(
+                                                    Subscription.BillingCycleConfig.InvoicePlacement
+                                                        .ON_SCHEDULED_INVOICE
+                                                )
+                                                .build()
+                                        )
                                         .customFields(
                                             Subscription.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -1275,6 +1362,7 @@ internal class ContractCreateResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdBy("created_by")
                                     .customFields(
                                         Commit.CustomFields.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1422,6 +1510,7 @@ internal class ContractCreateResponseTest {
                                     .multiplier(0.0)
                                     .addOverrideSpecifier(
                                         Override.OverrideSpecifier.builder()
+                                            .addAnyCommitOrCreditId("string")
                                             .billingFrequency(
                                                 Override.OverrideSpecifier.BillingFrequency.MONTHLY
                                             )
@@ -1623,6 +1712,7 @@ internal class ContractCreateResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1976,6 +2066,44 @@ internal class ContractCreateResponseTest {
                                             .Proration
                                             .NONE
                                     )
+                                    .prorationRounding(
+                                        ContractCreateResponse.Data.Contract.RecurringCommit
+                                            .ProrationRounding
+                                            .builder()
+                                            .access(
+                                                ContractCreateResponse.Data.Contract.RecurringCommit
+                                                    .ProrationRounding
+                                                    .Access
+                                                    .builder()
+                                                    .decimalPlaces(-5.0)
+                                                    .roundingMethod(
+                                                        ContractCreateResponse.Data.Contract
+                                                            .RecurringCommit
+                                                            .ProrationRounding
+                                                            .Access
+                                                            .RoundingMethod
+                                                            .HALF_UP
+                                                    )
+                                                    .build()
+                                            )
+                                            .invoice(
+                                                ContractCreateResponse.Data.Contract.RecurringCommit
+                                                    .ProrationRounding
+                                                    .Invoice
+                                                    .builder()
+                                                    .decimalPlaces(-5.0)
+                                                    .roundingMethod(
+                                                        ContractCreateResponse.Data.Contract
+                                                            .RecurringCommit
+                                                            .ProrationRounding
+                                                            .Invoice
+                                                            .RoundingMethod
+                                                            .HALF_UP
+                                                    )
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
                                     .recurrenceFrequency(
                                         ContractCreateResponse.Data.Contract.RecurringCommit
                                             .RecurrenceFrequency
@@ -2094,6 +2222,28 @@ internal class ContractCreateResponseTest {
                                         ContractCreateResponse.Data.Contract.RecurringCredit
                                             .Proration
                                             .NONE
+                                    )
+                                    .prorationRounding(
+                                        ContractCreateResponse.Data.Contract.RecurringCredit
+                                            .ProrationRounding
+                                            .builder()
+                                            .access(
+                                                ContractCreateResponse.Data.Contract.RecurringCredit
+                                                    .ProrationRounding
+                                                    .Access
+                                                    .builder()
+                                                    .decimalPlaces(-5.0)
+                                                    .roundingMethod(
+                                                        ContractCreateResponse.Data.Contract
+                                                            .RecurringCredit
+                                                            .ProrationRounding
+                                                            .Access
+                                                            .RoundingMethod
+                                                            .HALF_UP
+                                                    )
+                                                    .build()
+                                            )
+                                            .build()
                                     )
                                     .recurrenceFrequency(
                                         ContractCreateResponse.Data.Contract.RecurringCredit
@@ -2258,6 +2408,16 @@ internal class ContractCreateResponseTest {
                                                     .BILL_IMMEDIATELY
                                             )
                                             .isProrated(true)
+                                            .rounding(
+                                                Subscription.Proration.Rounding.builder()
+                                                    .decimalPlaces(-5.0)
+                                                    .roundingMethod(
+                                                        Subscription.Proration.Rounding
+                                                            .RoundingMethod
+                                                            .HALF_UP
+                                                    )
+                                                    .build()
+                                            )
                                             .build()
                                     )
                                     .quantityManagementMode(
@@ -2290,6 +2450,17 @@ internal class ContractCreateResponseTest {
                                             .build()
                                     )
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                    .billingCycleConfig(
+                                        Subscription.BillingCycleConfig.builder()
+                                            .anchorDate(
+                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            )
+                                            .invoicePlacement(
+                                                Subscription.BillingCycleConfig.InvoicePlacement
+                                                    .ON_SCHEDULED_INVOICE
+                                            )
+                                            .build()
+                                    )
                                     .customFields(
                                         Subscription.CustomFields.builder()
                                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -2378,6 +2549,7 @@ internal class ContractCreateResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Commit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -2538,6 +2710,7 @@ internal class ContractCreateResponseTest {
                                         .multiplier(0.0)
                                         .addOverrideSpecifier(
                                             Override.OverrideSpecifier.builder()
+                                                .addAnyCommitOrCreditId("string")
                                                 .billingFrequency(
                                                     Override.OverrideSpecifier.BillingFrequency
                                                         .MONTHLY
@@ -2757,6 +2930,7 @@ internal class ContractCreateResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
                                                 .putAdditionalProperty(
@@ -3137,6 +3311,46 @@ internal class ContractCreateResponseTest {
                                                 .Proration
                                                 .NONE
                                         )
+                                        .prorationRounding(
+                                            ContractCreateResponse.Data.Contract.RecurringCommit
+                                                .ProrationRounding
+                                                .builder()
+                                                .access(
+                                                    ContractCreateResponse.Data.Contract
+                                                        .RecurringCommit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .builder()
+                                                        .decimalPlaces(-5.0)
+                                                        .roundingMethod(
+                                                            ContractCreateResponse.Data.Contract
+                                                                .RecurringCommit
+                                                                .ProrationRounding
+                                                                .Access
+                                                                .RoundingMethod
+                                                                .HALF_UP
+                                                        )
+                                                        .build()
+                                                )
+                                                .invoice(
+                                                    ContractCreateResponse.Data.Contract
+                                                        .RecurringCommit
+                                                        .ProrationRounding
+                                                        .Invoice
+                                                        .builder()
+                                                        .decimalPlaces(-5.0)
+                                                        .roundingMethod(
+                                                            ContractCreateResponse.Data.Contract
+                                                                .RecurringCommit
+                                                                .ProrationRounding
+                                                                .Invoice
+                                                                .RoundingMethod
+                                                                .HALF_UP
+                                                        )
+                                                        .build()
+                                                )
+                                                .build()
+                                        )
                                         .recurrenceFrequency(
                                             ContractCreateResponse.Data.Contract.RecurringCommit
                                                 .RecurrenceFrequency
@@ -3268,6 +3482,29 @@ internal class ContractCreateResponseTest {
                                             ContractCreateResponse.Data.Contract.RecurringCredit
                                                 .Proration
                                                 .NONE
+                                        )
+                                        .prorationRounding(
+                                            ContractCreateResponse.Data.Contract.RecurringCredit
+                                                .ProrationRounding
+                                                .builder()
+                                                .access(
+                                                    ContractCreateResponse.Data.Contract
+                                                        .RecurringCredit
+                                                        .ProrationRounding
+                                                        .Access
+                                                        .builder()
+                                                        .decimalPlaces(-5.0)
+                                                        .roundingMethod(
+                                                            ContractCreateResponse.Data.Contract
+                                                                .RecurringCredit
+                                                                .ProrationRounding
+                                                                .Access
+                                                                .RoundingMethod
+                                                                .HALF_UP
+                                                        )
+                                                        .build()
+                                                )
+                                                .build()
                                         )
                                         .recurrenceFrequency(
                                             ContractCreateResponse.Data.Contract.RecurringCredit
@@ -3442,6 +3679,16 @@ internal class ContractCreateResponseTest {
                                                         .BILL_IMMEDIATELY
                                                 )
                                                 .isProrated(true)
+                                                .rounding(
+                                                    Subscription.Proration.Rounding.builder()
+                                                        .decimalPlaces(-5.0)
+                                                        .roundingMethod(
+                                                            Subscription.Proration.Rounding
+                                                                .RoundingMethod
+                                                                .HALF_UP
+                                                        )
+                                                        .build()
+                                                )
                                                 .build()
                                         )
                                         .quantityManagementMode(
@@ -3476,6 +3723,17 @@ internal class ContractCreateResponseTest {
                                                 .build()
                                         )
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .billingCycleConfig(
+                                            Subscription.BillingCycleConfig.builder()
+                                                .anchorDate(
+                                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                                )
+                                                .invoicePlacement(
+                                                    Subscription.BillingCycleConfig.InvoicePlacement
+                                                        .ON_SCHEDULED_INVOICE
+                                                )
+                                                .build()
+                                        )
                                         .customFields(
                                             Subscription.CustomFields.builder()
                                                 .putAdditionalProperty(
