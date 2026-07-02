@@ -4769,12 +4769,15 @@ private constructor(
 
                     @JvmField val START_OF_CURRENT_PERIOD = of("START_OF_CURRENT_PERIOD")
 
+                    @JvmField val START_OF_NEXT_PERIOD = of("START_OF_NEXT_PERIOD")
+
                     @JvmStatic fun of(value: String) = EffectiveAt(JsonField.of(value))
                 }
 
                 /** An enum containing [EffectiveAt]'s known values. */
                 enum class Known {
-                    START_OF_CURRENT_PERIOD
+                    START_OF_CURRENT_PERIOD,
+                    START_OF_NEXT_PERIOD,
                 }
 
                 /**
@@ -4788,6 +4791,7 @@ private constructor(
                  */
                 enum class Value {
                     START_OF_CURRENT_PERIOD,
+                    START_OF_NEXT_PERIOD,
                     /**
                      * An enum member indicating that [EffectiveAt] was instantiated with an unknown
                      * value.
@@ -4805,6 +4809,7 @@ private constructor(
                 fun value(): Value =
                     when (this) {
                         START_OF_CURRENT_PERIOD -> Value.START_OF_CURRENT_PERIOD
+                        START_OF_NEXT_PERIOD -> Value.START_OF_NEXT_PERIOD
                         else -> Value._UNKNOWN
                     }
 
@@ -4820,6 +4825,7 @@ private constructor(
                 fun known(): Known =
                     when (this) {
                         START_OF_CURRENT_PERIOD -> Known.START_OF_CURRENT_PERIOD
+                        START_OF_NEXT_PERIOD -> Known.START_OF_NEXT_PERIOD
                         else -> throw MetronomeInvalidDataException("Unknown EffectiveAt: $value")
                     }
 
@@ -26590,12 +26596,15 @@ private constructor(
 
                     @JvmField val START_OF_CURRENT_PERIOD = of("START_OF_CURRENT_PERIOD")
 
+                    @JvmField val START_OF_NEXT_PERIOD = of("START_OF_NEXT_PERIOD")
+
                     @JvmStatic fun of(value: String) = EffectiveAt(JsonField.of(value))
                 }
 
                 /** An enum containing [EffectiveAt]'s known values. */
                 enum class Known {
-                    START_OF_CURRENT_PERIOD
+                    START_OF_CURRENT_PERIOD,
+                    START_OF_NEXT_PERIOD,
                 }
 
                 /**
@@ -26609,6 +26618,7 @@ private constructor(
                  */
                 enum class Value {
                     START_OF_CURRENT_PERIOD,
+                    START_OF_NEXT_PERIOD,
                     /**
                      * An enum member indicating that [EffectiveAt] was instantiated with an unknown
                      * value.
@@ -26626,6 +26636,7 @@ private constructor(
                 fun value(): Value =
                     when (this) {
                         START_OF_CURRENT_PERIOD -> Value.START_OF_CURRENT_PERIOD
+                        START_OF_NEXT_PERIOD -> Value.START_OF_NEXT_PERIOD
                         else -> Value._UNKNOWN
                     }
 
@@ -26641,6 +26652,7 @@ private constructor(
                 fun known(): Known =
                     when (this) {
                         START_OF_CURRENT_PERIOD -> Known.START_OF_CURRENT_PERIOD
+                        START_OF_NEXT_PERIOD -> Known.START_OF_NEXT_PERIOD
                         else -> throw MetronomeInvalidDataException("Unknown EffectiveAt: $value")
                     }
 

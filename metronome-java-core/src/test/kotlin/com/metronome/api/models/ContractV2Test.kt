@@ -306,6 +306,50 @@ internal class ContractV2Test {
                         .build()
                 )
                 .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addBillingProviderConfigurationSchedule(
+                    ContractV2.BillingProviderConfigurationSchedule.builder()
+                        .billingProviderConfiguration(
+                            ContractV2.BillingProviderConfigurationSchedule
+                                .BillingProviderConfiguration
+                                .builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .billingProvider(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .BillingProvider
+                                        .AWS_MARKETPLACE
+                                )
+                                .configuration(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .Configuration
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .deliveryMethod(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .DeliveryMethod
+                                        .DIRECT_TO_BILLING_PROVIDER
+                                )
+                                .deliveryMethodConfiguration(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .DeliveryMethodConfiguration
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .effectiveUntil(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
+                )
                 .addCredit(
                     ContractV2.Credit.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -432,14 +476,29 @@ internal class ContractV2Test {
                 .customerBillingProviderConfiguration(
                     ContractV2.CustomerBillingProviderConfiguration.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .billingProvider(
                             ContractV2.CustomerBillingProviderConfiguration.BillingProvider
                                 .AWS_MARKETPLACE
                         )
+                        .configuration(
+                            ContractV2.CustomerBillingProviderConfiguration.Configuration.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .deliveryMethod(
                             ContractV2.CustomerBillingProviderConfiguration.DeliveryMethod
                                 .DIRECT_TO_BILLING_PROVIDER
                         )
+                        .deliveryMethodConfiguration(
+                            ContractV2.CustomerBillingProviderConfiguration
+                                .DeliveryMethodConfiguration
+                                .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
                 .addDiscount(
@@ -874,6 +933,49 @@ internal class ContractV2Test {
                                 .resellerContractValue(0.0)
                                 .build()
                         )
+                        .build()
+                )
+                .addRevenueSystemConfigurationSchedule(
+                    ContractV2.RevenueSystemConfigurationSchedule.builder()
+                        .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .revenueSystemConfiguration(
+                            ContractV2.RevenueSystemConfigurationSchedule.RevenueSystemConfiguration
+                                .builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .configuration(
+                                    ContractV2.RevenueSystemConfigurationSchedule
+                                        .RevenueSystemConfiguration
+                                        .Configuration
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .provider(
+                                    ContractV2.RevenueSystemConfigurationSchedule
+                                        .RevenueSystemConfiguration
+                                        .Provider
+                                        .NETSUITE
+                                )
+                                .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .deliveryMethod(
+                                    ContractV2.RevenueSystemConfigurationSchedule
+                                        .RevenueSystemConfiguration
+                                        .DeliveryMethod
+                                        .DIRECT_TO_BILLING_PROVIDER
+                                )
+                                .deliveryMethodConfiguration(
+                                    ContractV2.RevenueSystemConfigurationSchedule
+                                        .RevenueSystemConfiguration
+                                        .DeliveryMethodConfiguration
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .effectiveUntil(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
                 .salesforceOpportunityId("salesforce_opportunity_id")
@@ -1366,6 +1468,50 @@ internal class ContractV2Test {
             )
         assertThat(contractV2.archivedAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(contractV2.billingProviderConfigurationSchedule().getOrNull())
+            .containsExactly(
+                ContractV2.BillingProviderConfigurationSchedule.builder()
+                    .billingProviderConfiguration(
+                        ContractV2.BillingProviderConfigurationSchedule.BillingProviderConfiguration
+                            .builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .billingProvider(
+                                ContractV2.BillingProviderConfigurationSchedule
+                                    .BillingProviderConfiguration
+                                    .BillingProvider
+                                    .AWS_MARKETPLACE
+                            )
+                            .configuration(
+                                ContractV2.BillingProviderConfigurationSchedule
+                                    .BillingProviderConfiguration
+                                    .Configuration
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .deliveryMethod(
+                                ContractV2.BillingProviderConfigurationSchedule
+                                    .BillingProviderConfiguration
+                                    .DeliveryMethod
+                                    .DIRECT_TO_BILLING_PROVIDER
+                            )
+                            .deliveryMethodConfiguration(
+                                ContractV2.BillingProviderConfigurationSchedule
+                                    .BillingProviderConfiguration
+                                    .DeliveryMethodConfiguration
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .build()
+                    )
+                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .effectiveUntil(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
         assertThat(contractV2.credits().getOrNull())
             .containsExactly(
                 ContractV2.Credit.builder()
@@ -1490,14 +1636,28 @@ internal class ContractV2Test {
             .contains(
                 ContractV2.CustomerBillingProviderConfiguration.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .billingProvider(
                         ContractV2.CustomerBillingProviderConfiguration.BillingProvider
                             .AWS_MARKETPLACE
                     )
+                    .configuration(
+                        ContractV2.CustomerBillingProviderConfiguration.Configuration.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .deliveryMethod(
                         ContractV2.CustomerBillingProviderConfiguration.DeliveryMethod
                             .DIRECT_TO_BILLING_PROVIDER
                     )
+                    .deliveryMethodConfiguration(
+                        ContractV2.CustomerBillingProviderConfiguration.DeliveryMethodConfiguration
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
         assertThat(contractV2.discounts().getOrNull())
@@ -1929,6 +2089,50 @@ internal class ContractV2Test {
                             .resellerContractValue(0.0)
                             .build()
                     )
+                    .build()
+            )
+        assertThat(contractV2.revenueSystemConfigurationSchedule().getOrNull())
+            .containsExactly(
+                ContractV2.RevenueSystemConfigurationSchedule.builder()
+                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .revenueSystemConfiguration(
+                        ContractV2.RevenueSystemConfigurationSchedule.RevenueSystemConfiguration
+                            .builder()
+                            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .configuration(
+                                ContractV2.RevenueSystemConfigurationSchedule
+                                    .RevenueSystemConfiguration
+                                    .Configuration
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .provider(
+                                ContractV2.RevenueSystemConfigurationSchedule
+                                    .RevenueSystemConfiguration
+                                    .Provider
+                                    .NETSUITE
+                            )
+                            .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .deliveryMethod(
+                                ContractV2.RevenueSystemConfigurationSchedule
+                                    .RevenueSystemConfiguration
+                                    .DeliveryMethod
+                                    .DIRECT_TO_BILLING_PROVIDER
+                            )
+                            .deliveryMethodConfiguration(
+                                ContractV2.RevenueSystemConfigurationSchedule
+                                    .RevenueSystemConfiguration
+                                    .DeliveryMethodConfiguration
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .effectiveUntil(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
         assertThat(contractV2.salesforceOpportunityId()).contains("salesforce_opportunity_id")
@@ -2406,6 +2610,50 @@ internal class ContractV2Test {
                         .build()
                 )
                 .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addBillingProviderConfigurationSchedule(
+                    ContractV2.BillingProviderConfigurationSchedule.builder()
+                        .billingProviderConfiguration(
+                            ContractV2.BillingProviderConfigurationSchedule
+                                .BillingProviderConfiguration
+                                .builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .billingProvider(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .BillingProvider
+                                        .AWS_MARKETPLACE
+                                )
+                                .configuration(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .Configuration
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .deliveryMethod(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .DeliveryMethod
+                                        .DIRECT_TO_BILLING_PROVIDER
+                                )
+                                .deliveryMethodConfiguration(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .DeliveryMethodConfiguration
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .build()
+                        )
+                        .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .effectiveUntil(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
+                )
                 .addCredit(
                     ContractV2.Credit.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2532,14 +2780,29 @@ internal class ContractV2Test {
                 .customerBillingProviderConfiguration(
                     ContractV2.CustomerBillingProviderConfiguration.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .billingProvider(
                             ContractV2.CustomerBillingProviderConfiguration.BillingProvider
                                 .AWS_MARKETPLACE
                         )
+                        .configuration(
+                            ContractV2.CustomerBillingProviderConfiguration.Configuration.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .deliveryMethod(
                             ContractV2.CustomerBillingProviderConfiguration.DeliveryMethod
                                 .DIRECT_TO_BILLING_PROVIDER
                         )
+                        .deliveryMethodConfiguration(
+                            ContractV2.CustomerBillingProviderConfiguration
+                                .DeliveryMethodConfiguration
+                                .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
                 .addDiscount(
@@ -2974,6 +3237,49 @@ internal class ContractV2Test {
                                 .resellerContractValue(0.0)
                                 .build()
                         )
+                        .build()
+                )
+                .addRevenueSystemConfigurationSchedule(
+                    ContractV2.RevenueSystemConfigurationSchedule.builder()
+                        .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .revenueSystemConfiguration(
+                            ContractV2.RevenueSystemConfigurationSchedule.RevenueSystemConfiguration
+                                .builder()
+                                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .configuration(
+                                    ContractV2.RevenueSystemConfigurationSchedule
+                                        .RevenueSystemConfiguration
+                                        .Configuration
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .provider(
+                                    ContractV2.RevenueSystemConfigurationSchedule
+                                        .RevenueSystemConfiguration
+                                        .Provider
+                                        .NETSUITE
+                                )
+                                .archivedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .deliveryMethod(
+                                    ContractV2.RevenueSystemConfigurationSchedule
+                                        .RevenueSystemConfiguration
+                                        .DeliveryMethod
+                                        .DIRECT_TO_BILLING_PROVIDER
+                                )
+                                .deliveryMethodConfiguration(
+                                    ContractV2.RevenueSystemConfigurationSchedule
+                                        .RevenueSystemConfiguration
+                                        .DeliveryMethodConfiguration
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .effectiveUntil(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
                 .salesforceOpportunityId("salesforce_opportunity_id")
