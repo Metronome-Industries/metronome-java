@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 (2026-07-02)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.4.0...v0.5.0)
+
+### Features
+
+* [ORCH-1875] add billing config schedule to api ([95e7b3e](https://github.com/Metronome-Industries/metronome-java/commit/95e7b3edef389cef4ecf232abc556309e5141679))
+
 ## 0.4.0 (2026-06-26)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.3.0...v0.4.0)
