@@ -157,8 +157,6 @@ private constructor(
     fun customFields(): Optional<CustomFields> = customFields.getOptional("custom_fields")
 
     /**
-     * The billing provider configuration associated with a contract.
-     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -540,7 +538,6 @@ private constructor(
             this.customFields = customFields
         }
 
-        /** The billing provider configuration associated with a contract. */
         fun customerBillingProviderConfiguration(
             customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
         ) = customerBillingProviderConfiguration(JsonField.of(customerBillingProviderConfiguration))
@@ -2458,34 +2455,64 @@ private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    /** The billing provider configuration associated with a contract. */
     class CustomerBillingProviderConfiguration
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val id: JsonField<String>,
         private val archivedAt: JsonField<OffsetDateTime>,
         private val billingProvider: JsonField<BillingProvider>,
-        private val deliveryMethod: JsonField<DeliveryMethod>,
-        private val id: JsonField<String>,
         private val configuration: JsonField<Configuration>,
+        private val customerId: JsonField<String>,
+        private val deliveryMethod: JsonField<DeliveryMethod>,
+        private val deliveryMethodConfiguration: JsonField<DeliveryMethodConfiguration>,
+        private val deliveryMethodId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("archived_at")
             @ExcludeMissing
             archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("billing_provider")
             @ExcludeMissing
             billingProvider: JsonField<BillingProvider> = JsonMissing.of(),
-            @JsonProperty("delivery_method")
-            @ExcludeMissing
-            deliveryMethod: JsonField<DeliveryMethod> = JsonMissing.of(),
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("configuration")
             @ExcludeMissing
             configuration: JsonField<Configuration> = JsonMissing.of(),
-        ) : this(archivedAt, billingProvider, deliveryMethod, id, configuration, mutableMapOf())
+            @JsonProperty("customer_id")
+            @ExcludeMissing
+            customerId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("delivery_method")
+            @ExcludeMissing
+            deliveryMethod: JsonField<DeliveryMethod> = JsonMissing.of(),
+            @JsonProperty("delivery_method_configuration")
+            @ExcludeMissing
+            deliveryMethodConfiguration: JsonField<DeliveryMethodConfiguration> = JsonMissing.of(),
+            @JsonProperty("delivery_method_id")
+            @ExcludeMissing
+            deliveryMethodId: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            id,
+            archivedAt,
+            billingProvider,
+            configuration,
+            customerId,
+            deliveryMethod,
+            deliveryMethodConfiguration,
+            deliveryMethodId,
+            mutableMapOf(),
+        )
+
+        /**
+         * ID of this configuration; can be provided as the billing_provider_configuration_id when
+         * creating a contract.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): String = id.getRequired("id")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -2494,31 +2521,60 @@ private constructor(
         fun archivedAt(): Optional<OffsetDateTime> = archivedAt.getOptional("archived_at")
 
         /**
+         * The billing provider set for this configuration.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun billingProvider(): BillingProvider = billingProvider.getRequired("billing_provider")
 
         /**
+         * Configuration for the billing provider. The structure of this object is specific to the
+         * billing provider.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun configuration(): Configuration = configuration.getRequired("configuration")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * The method to use for delivering invoices to this customer.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun deliveryMethod(): DeliveryMethod = deliveryMethod.getRequired("delivery_method")
 
         /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * Configuration for the delivery method. The structure of this object is specific to the
+         * delivery method.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun id(): Optional<String> = id.getOptional("id")
+        fun deliveryMethodConfiguration(): DeliveryMethodConfiguration =
+            deliveryMethodConfiguration.getRequired("delivery_method_configuration")
 
         /**
-         * Configuration for the billing provider. The structure of this object is specific to the
-         * billing provider.
+         * ID of the delivery method to use for this customer.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun configuration(): Optional<Configuration> = configuration.getOptional("configuration")
+        fun deliveryMethodId(): String = deliveryMethodId.getRequired("delivery_method_id")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [archivedAt].
@@ -2540,6 +2596,25 @@ private constructor(
         fun _billingProvider(): JsonField<BillingProvider> = billingProvider
 
         /**
+         * Returns the raw JSON value of [configuration].
+         *
+         * Unlike [configuration], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("configuration")
+        @ExcludeMissing
+        fun _configuration(): JsonField<Configuration> = configuration
+
+        /**
+         * Returns the raw JSON value of [customerId].
+         *
+         * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /**
          * Returns the raw JSON value of [deliveryMethod].
          *
          * Unlike [deliveryMethod], this method doesn't throw if the JSON field has an unexpected
@@ -2550,21 +2625,25 @@ private constructor(
         fun _deliveryMethod(): JsonField<DeliveryMethod> = deliveryMethod
 
         /**
-         * Returns the raw JSON value of [id].
+         * Returns the raw JSON value of [deliveryMethodConfiguration].
          *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [deliveryMethodConfiguration], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+        @JsonProperty("delivery_method_configuration")
+        @ExcludeMissing
+        fun _deliveryMethodConfiguration(): JsonField<DeliveryMethodConfiguration> =
+            deliveryMethodConfiguration
 
         /**
-         * Returns the raw JSON value of [configuration].
+         * Returns the raw JSON value of [deliveryMethodId].
          *
-         * Unlike [configuration], this method doesn't throw if the JSON field has an unexpected
+         * Unlike [deliveryMethodId], this method doesn't throw if the JSON field has an unexpected
          * type.
          */
-        @JsonProperty("configuration")
+        @JsonProperty("delivery_method_id")
         @ExcludeMissing
-        fun _configuration(): JsonField<Configuration> = configuration
+        fun _deliveryMethodId(): JsonField<String> = deliveryMethodId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -2586,9 +2665,14 @@ private constructor(
              *
              * The following fields are required:
              * ```java
+             * .id()
              * .archivedAt()
              * .billingProvider()
+             * .configuration()
+             * .customerId()
              * .deliveryMethod()
+             * .deliveryMethodConfiguration()
+             * .deliveryMethodId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -2597,25 +2681,47 @@ private constructor(
         /** A builder for [CustomerBillingProviderConfiguration]. */
         class Builder internal constructor() {
 
+            private var id: JsonField<String>? = null
             private var archivedAt: JsonField<OffsetDateTime>? = null
             private var billingProvider: JsonField<BillingProvider>? = null
+            private var configuration: JsonField<Configuration>? = null
+            private var customerId: JsonField<String>? = null
             private var deliveryMethod: JsonField<DeliveryMethod>? = null
-            private var id: JsonField<String> = JsonMissing.of()
-            private var configuration: JsonField<Configuration> = JsonMissing.of()
+            private var deliveryMethodConfiguration: JsonField<DeliveryMethodConfiguration>? = null
+            private var deliveryMethodId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(
                 customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
             ) = apply {
+                id = customerBillingProviderConfiguration.id
                 archivedAt = customerBillingProviderConfiguration.archivedAt
                 billingProvider = customerBillingProviderConfiguration.billingProvider
-                deliveryMethod = customerBillingProviderConfiguration.deliveryMethod
-                id = customerBillingProviderConfiguration.id
                 configuration = customerBillingProviderConfiguration.configuration
+                customerId = customerBillingProviderConfiguration.customerId
+                deliveryMethod = customerBillingProviderConfiguration.deliveryMethod
+                deliveryMethodConfiguration =
+                    customerBillingProviderConfiguration.deliveryMethodConfiguration
+                deliveryMethodId = customerBillingProviderConfiguration.deliveryMethodId
                 additionalProperties =
                     customerBillingProviderConfiguration.additionalProperties.toMutableMap()
             }
+
+            /**
+             * ID of this configuration; can be provided as the billing_provider_configuration_id
+             * when creating a contract.
+             */
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun archivedAt(archivedAt: OffsetDateTime?) =
                 archivedAt(JsonField.ofNullable(archivedAt))
@@ -2635,6 +2741,7 @@ private constructor(
                 this.archivedAt = archivedAt
             }
 
+            /** The billing provider set for this configuration. */
             fun billingProvider(billingProvider: BillingProvider) =
                 billingProvider(JsonField.of(billingProvider))
 
@@ -2648,31 +2755,6 @@ private constructor(
             fun billingProvider(billingProvider: JsonField<BillingProvider>) = apply {
                 this.billingProvider = billingProvider
             }
-
-            fun deliveryMethod(deliveryMethod: DeliveryMethod) =
-                deliveryMethod(JsonField.of(deliveryMethod))
-
-            /**
-             * Sets [Builder.deliveryMethod] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.deliveryMethod] with a well-typed [DeliveryMethod]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun deliveryMethod(deliveryMethod: JsonField<DeliveryMethod>) = apply {
-                this.deliveryMethod = deliveryMethod
-            }
-
-            fun id(id: String) = id(JsonField.of(id))
-
-            /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /**
              * Configuration for the billing provider. The structure of this object is specific to
@@ -2690,6 +2772,66 @@ private constructor(
              */
             fun configuration(configuration: JsonField<Configuration>) = apply {
                 this.configuration = configuration
+            }
+
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+            /**
+             * Sets [Builder.customerId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
+            /** The method to use for delivering invoices to this customer. */
+            fun deliveryMethod(deliveryMethod: DeliveryMethod) =
+                deliveryMethod(JsonField.of(deliveryMethod))
+
+            /**
+             * Sets [Builder.deliveryMethod] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.deliveryMethod] with a well-typed [DeliveryMethod]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun deliveryMethod(deliveryMethod: JsonField<DeliveryMethod>) = apply {
+                this.deliveryMethod = deliveryMethod
+            }
+
+            /**
+             * Configuration for the delivery method. The structure of this object is specific to
+             * the delivery method.
+             */
+            fun deliveryMethodConfiguration(
+                deliveryMethodConfiguration: DeliveryMethodConfiguration
+            ) = deliveryMethodConfiguration(JsonField.of(deliveryMethodConfiguration))
+
+            /**
+             * Sets [Builder.deliveryMethodConfiguration] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.deliveryMethodConfiguration] with a well-typed
+             * [DeliveryMethodConfiguration] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun deliveryMethodConfiguration(
+                deliveryMethodConfiguration: JsonField<DeliveryMethodConfiguration>
+            ) = apply { this.deliveryMethodConfiguration = deliveryMethodConfiguration }
+
+            /** ID of the delivery method to use for this customer. */
+            fun deliveryMethodId(deliveryMethodId: String) =
+                deliveryMethodId(JsonField.of(deliveryMethodId))
+
+            /**
+             * Sets [Builder.deliveryMethodId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.deliveryMethodId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun deliveryMethodId(deliveryMethodId: JsonField<String>) = apply {
+                this.deliveryMethodId = deliveryMethodId
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2718,20 +2860,28 @@ private constructor(
              *
              * The following fields are required:
              * ```java
+             * .id()
              * .archivedAt()
              * .billingProvider()
+             * .configuration()
+             * .customerId()
              * .deliveryMethod()
+             * .deliveryMethodConfiguration()
+             * .deliveryMethodId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): CustomerBillingProviderConfiguration =
                 CustomerBillingProviderConfiguration(
+                    checkRequired("id", id),
                     checkRequired("archivedAt", archivedAt),
                     checkRequired("billingProvider", billingProvider),
+                    checkRequired("configuration", configuration),
+                    checkRequired("customerId", customerId),
                     checkRequired("deliveryMethod", deliveryMethod),
-                    id,
-                    configuration,
+                    checkRequired("deliveryMethodConfiguration", deliveryMethodConfiguration),
+                    checkRequired("deliveryMethodId", deliveryMethodId),
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -2752,11 +2902,14 @@ private constructor(
                 return@apply
             }
 
+            id()
             archivedAt()
             billingProvider().validate()
+            configuration().validate()
+            customerId()
             deliveryMethod().validate()
-            id()
-            configuration().ifPresent { it.validate() }
+            deliveryMethodConfiguration().validate()
+            deliveryMethodId()
             validated = true
         }
 
@@ -2776,12 +2929,16 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (archivedAt.asKnown().isPresent) 1 else 0) +
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (archivedAt.asKnown().isPresent) 1 else 0) +
                 (billingProvider.asKnown().getOrNull()?.validity() ?: 0) +
+                (configuration.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (customerId.asKnown().isPresent) 1 else 0) +
                 (deliveryMethod.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (id.asKnown().isPresent) 1 else 0) +
-                (configuration.asKnown().getOrNull()?.validity() ?: 0)
+                (deliveryMethodConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (deliveryMethodId.asKnown().isPresent) 1 else 0)
 
+        /** The billing provider set for this configuration. */
         class BillingProvider
         @JsonCreator
         private constructor(private val value: JsonField<String>) : Enum {
@@ -2966,6 +3123,123 @@ private constructor(
             override fun toString() = value.toString()
         }
 
+        /**
+         * Configuration for the billing provider. The structure of this object is specific to the
+         * billing provider.
+         */
+        class Configuration
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Configuration]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Configuration]. */
+            class Builder internal constructor() {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(configuration: Configuration) = apply {
+                    additionalProperties = configuration.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Configuration].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Configuration = Configuration(additionalProperties.toImmutable())
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): Configuration = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Configuration && additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "Configuration{additionalProperties=$additionalProperties}"
+        }
+
+        /** The method to use for delivering invoices to this customer. */
         class DeliveryMethod
         @JsonCreator
         private constructor(private val value: JsonField<String>) : Enum {
@@ -3121,10 +3395,10 @@ private constructor(
         }
 
         /**
-         * Configuration for the billing provider. The structure of this object is specific to the
-         * billing provider.
+         * Configuration for the delivery method. The structure of this object is specific to the
+         * delivery method.
          */
-        class Configuration
+        class DeliveryMethodConfiguration
         @JsonCreator
         private constructor(
             @com.fasterxml.jackson.annotation.JsonValue
@@ -3139,19 +3413,24 @@ private constructor(
 
             companion object {
 
-                /** Returns a mutable builder for constructing an instance of [Configuration]. */
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [DeliveryMethodConfiguration].
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [Configuration]. */
+            /** A builder for [DeliveryMethodConfiguration]. */
             class Builder internal constructor() {
 
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(configuration: Configuration) = apply {
-                    additionalProperties = configuration.additionalProperties.toMutableMap()
-                }
+                internal fun from(deliveryMethodConfiguration: DeliveryMethodConfiguration) =
+                    apply {
+                        additionalProperties =
+                            deliveryMethodConfiguration.additionalProperties.toMutableMap()
+                    }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -3176,11 +3455,12 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [Configuration].
+                 * Returns an immutable instance of [DeliveryMethodConfiguration].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): Configuration = Configuration(additionalProperties.toImmutable())
+                fun build(): DeliveryMethodConfiguration =
+                    DeliveryMethodConfiguration(additionalProperties.toImmutable())
             }
 
             private var validated: Boolean = false
@@ -3195,7 +3475,7 @@ private constructor(
              * @throws MetronomeInvalidDataException if any value type in this object doesn't match
              *   its expected type.
              */
-            fun validate(): Configuration = apply {
+            fun validate(): DeliveryMethodConfiguration = apply {
                 if (validated) {
                     return@apply
                 }
@@ -3226,14 +3506,16 @@ private constructor(
                     return true
                 }
 
-                return other is Configuration && additionalProperties == other.additionalProperties
+                return other is DeliveryMethodConfiguration &&
+                    additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "Configuration{additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "DeliveryMethodConfiguration{additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -3242,21 +3524,27 @@ private constructor(
             }
 
             return other is CustomerBillingProviderConfiguration &&
+                id == other.id &&
                 archivedAt == other.archivedAt &&
                 billingProvider == other.billingProvider &&
-                deliveryMethod == other.deliveryMethod &&
-                id == other.id &&
                 configuration == other.configuration &&
+                customerId == other.customerId &&
+                deliveryMethod == other.deliveryMethod &&
+                deliveryMethodConfiguration == other.deliveryMethodConfiguration &&
+                deliveryMethodId == other.deliveryMethodId &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
             Objects.hash(
+                id,
                 archivedAt,
                 billingProvider,
-                deliveryMethod,
-                id,
                 configuration,
+                customerId,
+                deliveryMethod,
+                deliveryMethodConfiguration,
+                deliveryMethodId,
                 additionalProperties,
             )
         }
@@ -3264,7 +3552,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerBillingProviderConfiguration{archivedAt=$archivedAt, billingProvider=$billingProvider, deliveryMethod=$deliveryMethod, id=$id, configuration=$configuration, additionalProperties=$additionalProperties}"
+            "CustomerBillingProviderConfiguration{id=$id, archivedAt=$archivedAt, billingProvider=$billingProvider, configuration=$configuration, customerId=$customerId, deliveryMethod=$deliveryMethod, deliveryMethodConfiguration=$deliveryMethodConfiguration, deliveryMethodId=$deliveryMethodId, additionalProperties=$additionalProperties}"
     }
 
     /**
