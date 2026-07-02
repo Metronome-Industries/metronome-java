@@ -623,18 +623,39 @@ internal class ProGuardCompatibilityTest {
                                         .CustomerBillingProviderConfiguration
                                         .builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .archivedAt(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
                                         .billingProvider(
                                             ContractCreateResponse.Data.Contract
                                                 .CustomerBillingProviderConfiguration
                                                 .BillingProvider
                                                 .AWS_MARKETPLACE
                                         )
+                                        .configuration(
+                                            ContractCreateResponse.Data.Contract
+                                                .CustomerBillingProviderConfiguration
+                                                .Configuration
+                                                .builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .build()
+                                        )
+                                        .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .deliveryMethod(
                                             ContractCreateResponse.Data.Contract
                                                 .CustomerBillingProviderConfiguration
                                                 .DeliveryMethod
                                                 .DIRECT_TO_BILLING_PROVIDER
                                         )
+                                        .deliveryMethodConfiguration(
+                                            ContractCreateResponse.Data.Contract
+                                                .CustomerBillingProviderConfiguration
+                                                .DeliveryMethodConfiguration
+                                                .builder()
+                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .build()
+                                        )
+                                        .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .build()
                                 )
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
