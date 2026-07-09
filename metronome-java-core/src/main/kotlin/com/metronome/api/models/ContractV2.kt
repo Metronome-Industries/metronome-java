@@ -15806,8 +15806,6 @@ private constructor(
 
             companion object {
 
-                @JvmField val SUPERSEDE = of("SUPERSEDE")
-
                 @JvmField val RENEWAL = of("RENEWAL")
 
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
@@ -15815,8 +15813,7 @@ private constructor(
 
             /** An enum containing [Type]'s known values. */
             enum class Known {
-                SUPERSEDE,
-                RENEWAL,
+                RENEWAL
             }
 
             /**
@@ -15829,7 +15826,6 @@ private constructor(
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
-                SUPERSEDE,
                 RENEWAL,
                 /** An enum member indicating that [Type] was instantiated with an unknown value. */
                 _UNKNOWN,
@@ -15844,7 +15840,6 @@ private constructor(
              */
             fun value(): Value =
                 when (this) {
-                    SUPERSEDE -> Value.SUPERSEDE
                     RENEWAL -> Value.RENEWAL
                     else -> Value._UNKNOWN
                 }
@@ -15860,7 +15855,6 @@ private constructor(
              */
             fun known(): Known =
                 when (this) {
-                    SUPERSEDE -> Known.SUPERSEDE
                     RENEWAL -> Known.RENEWAL
                     else -> throw MetronomeInvalidDataException("Unknown Type: $value")
                 }

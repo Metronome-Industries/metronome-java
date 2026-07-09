@@ -440,7 +440,7 @@ internal class ProGuardCompatibilityTest {
                                         .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .type(
                                             ContractCreateResponse.Data.Contract.Transition.Type
-                                                .SUPERSEDE
+                                                .RENEWAL
                                         )
                                         .build()
                                 )
