@@ -48,15 +48,12 @@ interface DashboardServiceAsync {
      * ### Usage guidelines:
      * - Dashboard types: Choose from `invoices`, `usage`, or `commits_and_credits`
      * - Customization options:
-     *     - `dashboard_options`: Configure dashboard behavior. For the invoices dashboard,
-     *       supported keys include: `show_zero_usage_line_items` ("true"/"false"),
-     *       `hide_voided_invoices` ("true"/"false"), `contract_id` (UUID, filters invoices by
-     *       contract), `invoice_type` ("USAGE" or "SCHEDULED", filters by invoice type),
-     *       `invoice_status_filter` ("VOID", "FINALIZED", "DRAFT", "FINALIZED_AND_DRAFT", or
-     *       "ALL"), and `billable_status_filter` ("BILLABLE", "UNBILLABLE", or "ALL")
+     *     - `dashboard_options`: Configure dashboard behavior. Supported for the invoices dashboard
+     *       only. Available keys include: `show_zero_usage_line_items` ("true"/"false"),
+     *       `contract_id` (UUID, filters invoices by contract), `invoice_type` ("USAGE" or
+     *       "SCHEDULED", filters by invoice type), and `invoice_status_filter` ("VOID",
+     *       "FINALIZED", "DRAFT", "FINALIZED_AND_DRAFT", or "ALL")
      *     - `color_overrides`: Match your brand's color palette
-     *     - `bm_group_key_overrides`: Customize how dimensions are displayed (for the usage
-     *       embeddable dashboard)
      * - Iframe implementation: Embed the returned URL directly in an iframe element
      * - Responsive design: Dashboards automatically adapt to container dimensions
      */
