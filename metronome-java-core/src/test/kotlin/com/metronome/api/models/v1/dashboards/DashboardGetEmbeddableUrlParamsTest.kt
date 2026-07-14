@@ -16,13 +16,12 @@ internal class DashboardGetEmbeddableUrlParamsTest {
             .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
             .addBmGroupKeyOverride(
                 DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
-                    .groupKeyName("tenant_id")
-                    .displayName("Org ID")
+                    .groupKeyName("group_key_name")
+                    .displayName("display_name")
                     .valueDisplayNames(
                         DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
                             .builder()
-                            .putAdditionalProperty("48ecb18f358f", JsonValue.from("bar"))
-                            .putAdditionalProperty("e358f3ce242d", JsonValue.from("bar"))
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .build()
@@ -35,14 +34,17 @@ internal class DashboardGetEmbeddableUrlParamsTest {
             )
             .addDashboardOption(
                 DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                    .key("show_zero_usage_line_items")
+                    .key(
+                        DashboardGetEmbeddableUrlParams.DashboardOption.Key
+                            .SHOW_ZERO_USAGE_LINE_ITEMS
+                    )
                     .value("false")
                     .build()
             )
             .addDashboardOption(
                 DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                    .key("hide_voided_invoices")
-                    .value("true")
+                    .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.INVOICE_STATUS_FILTER)
+                    .value("FINALIZED")
                     .build()
             )
             .build()
@@ -56,13 +58,12 @@ internal class DashboardGetEmbeddableUrlParamsTest {
                 .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
                 .addBmGroupKeyOverride(
                     DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
-                        .groupKeyName("tenant_id")
-                        .displayName("Org ID")
+                        .groupKeyName("group_key_name")
+                        .displayName("display_name")
                         .valueDisplayNames(
                             DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
                                 .builder()
-                                .putAdditionalProperty("48ecb18f358f", JsonValue.from("bar"))
-                                .putAdditionalProperty("e358f3ce242d", JsonValue.from("bar"))
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
                         .build()
@@ -75,14 +76,20 @@ internal class DashboardGetEmbeddableUrlParamsTest {
                 )
                 .addDashboardOption(
                     DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                        .key("show_zero_usage_line_items")
+                        .key(
+                            DashboardGetEmbeddableUrlParams.DashboardOption.Key
+                                .SHOW_ZERO_USAGE_LINE_ITEMS
+                        )
                         .value("false")
                         .build()
                 )
                 .addDashboardOption(
                     DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                        .key("hide_voided_invoices")
-                        .value("true")
+                        .key(
+                            DashboardGetEmbeddableUrlParams.DashboardOption.Key
+                                .INVOICE_STATUS_FILTER
+                        )
+                        .value("FINALIZED")
                         .build()
                 )
                 .build()
@@ -94,13 +101,12 @@ internal class DashboardGetEmbeddableUrlParamsTest {
         assertThat(body.bmGroupKeyOverrides().getOrNull())
             .containsExactly(
                 DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
-                    .groupKeyName("tenant_id")
-                    .displayName("Org ID")
+                    .groupKeyName("group_key_name")
+                    .displayName("display_name")
                     .valueDisplayNames(
                         DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
                             .builder()
-                            .putAdditionalProperty("48ecb18f358f", JsonValue.from("bar"))
-                            .putAdditionalProperty("e358f3ce242d", JsonValue.from("bar"))
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
                     .build()
@@ -115,12 +121,15 @@ internal class DashboardGetEmbeddableUrlParamsTest {
         assertThat(body.dashboardOptions().getOrNull())
             .containsExactly(
                 DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                    .key("show_zero_usage_line_items")
+                    .key(
+                        DashboardGetEmbeddableUrlParams.DashboardOption.Key
+                            .SHOW_ZERO_USAGE_LINE_ITEMS
+                    )
                     .value("false")
                     .build(),
                 DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-                    .key("hide_voided_invoices")
-                    .value("true")
+                    .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.INVOICE_STATUS_FILTER)
+                    .value("FINALIZED")
                     .build(),
             )
     }

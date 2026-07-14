@@ -330,7 +330,7 @@ internal class ContractRetrieveResponseTest {
                             ContractV2.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractV2.Transition.Type.SUPERSEDE)
+                                .type(ContractV2.Transition.Type.RENEWAL)
                                 .build()
                         )
                         .addUsageFilter(
@@ -1596,7 +1596,7 @@ internal class ContractRetrieveResponseTest {
                         ContractV2.Transition.builder()
                             .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                            .type(ContractV2.Transition.Type.SUPERSEDE)
+                            .type(ContractV2.Transition.Type.RENEWAL)
                             .build()
                     )
                     .addUsageFilter(
@@ -2817,7 +2817,7 @@ internal class ContractRetrieveResponseTest {
                             ContractV2.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractV2.Transition.Type.SUPERSEDE)
+                                .type(ContractV2.Transition.Type.RENEWAL)
                                 .build()
                         )
                         .addUsageFilter(

@@ -15806,8 +15806,6 @@ private constructor(
 
             companion object {
 
-                @JvmField val SUPERSEDE = of("SUPERSEDE")
-
                 @JvmField val RENEWAL = of("RENEWAL")
 
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
@@ -15815,8 +15813,7 @@ private constructor(
 
             /** An enum containing [Type]'s known values. */
             enum class Known {
-                SUPERSEDE,
-                RENEWAL,
+                RENEWAL
             }
 
             /**
@@ -15829,7 +15826,6 @@ private constructor(
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
-                SUPERSEDE,
                 RENEWAL,
                 /** An enum member indicating that [Type] was instantiated with an unknown value. */
                 _UNKNOWN,
@@ -15844,7 +15840,6 @@ private constructor(
              */
             fun value(): Value =
                 when (this) {
-                    SUPERSEDE -> Value.SUPERSEDE
                     RENEWAL -> Value.RENEWAL
                     else -> Value._UNKNOWN
                 }
@@ -15860,7 +15855,6 @@ private constructor(
              */
             fun known(): Known =
                 when (this) {
-                    SUPERSEDE -> Known.SUPERSEDE
                     RENEWAL -> Known.RENEWAL
                     else -> throw MetronomeInvalidDataException("Unknown Type: $value")
                 }
@@ -28244,7 +28238,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -28848,7 +28844,9 @@ private constructor(
              * The frequency at which the recurring commits will be created. If not provided: - The
              * commits will be created on the usage invoice frequency. If provided: - The period
              * defined in the duration will correspond to this frequency. - Commits will be created
-             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             * aligned with the recurring commit's starting_at rather than the usage invoice
+             * dates. - Daily recurring commits have a limit of one per contract, and are unable to
+             * be created with seat-based subscriptions
              */
             fun recurrenceFrequency(recurrenceFrequency: RecurrenceFrequency) =
                 recurrenceFrequency(JsonField.of(recurrenceFrequency))
@@ -31575,7 +31573,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          */
         class RecurrenceFrequency
         @JsonCreator
@@ -32056,7 +32056,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -32633,7 +32635,9 @@ private constructor(
              * The frequency at which the recurring commits will be created. If not provided: - The
              * commits will be created on the usage invoice frequency. If provided: - The period
              * defined in the duration will correspond to this frequency. - Commits will be created
-             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             * aligned with the recurring commit's starting_at rather than the usage invoice
+             * dates. - Daily recurring commits have a limit of one per contract, and are unable to
+             * be created with seat-based subscriptions
              */
             fun recurrenceFrequency(recurrenceFrequency: RecurrenceFrequency) =
                 recurrenceFrequency(JsonField.of(recurrenceFrequency))
@@ -34670,7 +34674,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          */
         class RecurrenceFrequency
         @JsonCreator
