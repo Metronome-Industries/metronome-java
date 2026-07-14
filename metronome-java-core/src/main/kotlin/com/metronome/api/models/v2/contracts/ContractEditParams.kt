@@ -4105,8 +4105,18 @@ private constructor(
                     this.billingProvider = billingProvider
                 }
 
-                fun billingProviderConfigurationId(billingProviderConfigurationId: String) =
-                    billingProviderConfigurationId(JsonField.of(billingProviderConfigurationId))
+                fun billingProviderConfigurationId(billingProviderConfigurationId: String?) =
+                    billingProviderConfigurationId(
+                        JsonField.ofNullable(billingProviderConfigurationId)
+                    )
+
+                /**
+                 * Alias for calling [Builder.billingProviderConfigurationId] with
+                 * `billingProviderConfigurationId.orElse(null)`.
+                 */
+                fun billingProviderConfigurationId(
+                    billingProviderConfigurationId: Optional<String>
+                ) = billingProviderConfigurationId(billingProviderConfigurationId.getOrNull())
 
                 /**
                  * Sets [Builder.billingProviderConfigurationId] to an arbitrary JSON value.
@@ -26012,8 +26022,15 @@ private constructor(
                  */
                 fun provider(provider: JsonField<Provider>) = apply { this.provider = provider }
 
-                fun revenueSystemConfigurationId(revenueSystemConfigurationId: String) =
-                    revenueSystemConfigurationId(JsonField.of(revenueSystemConfigurationId))
+                fun revenueSystemConfigurationId(revenueSystemConfigurationId: String?) =
+                    revenueSystemConfigurationId(JsonField.ofNullable(revenueSystemConfigurationId))
+
+                /**
+                 * Alias for calling [Builder.revenueSystemConfigurationId] with
+                 * `revenueSystemConfigurationId.orElse(null)`.
+                 */
+                fun revenueSystemConfigurationId(revenueSystemConfigurationId: Optional<String>) =
+                    revenueSystemConfigurationId(revenueSystemConfigurationId.getOrNull())
 
                 /**
                  * Sets [Builder.revenueSystemConfigurationId] to an arbitrary JSON value.

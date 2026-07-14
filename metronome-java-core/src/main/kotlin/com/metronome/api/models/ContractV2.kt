@@ -16658,11 +16658,11 @@ private constructor(
         ) : this(billingProviderConfiguration, effectiveAt, effectiveUntil, mutableMapOf())
 
         /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun billingProviderConfiguration(): BillingProviderConfiguration =
-            billingProviderConfiguration.getRequired("billing_provider_configuration")
+        fun billingProviderConfiguration(): Optional<BillingProviderConfiguration> =
+            billingProviderConfiguration.getOptional("billing_provider_configuration")
 
         /**
          * The date this billing provider configuration became or becomes active.
@@ -16761,8 +16761,16 @@ private constructor(
             }
 
             fun billingProviderConfiguration(
-                billingProviderConfiguration: BillingProviderConfiguration
-            ) = billingProviderConfiguration(JsonField.of(billingProviderConfiguration))
+                billingProviderConfiguration: BillingProviderConfiguration?
+            ) = billingProviderConfiguration(JsonField.ofNullable(billingProviderConfiguration))
+
+            /**
+             * Alias for calling [Builder.billingProviderConfiguration] with
+             * `billingProviderConfiguration.orElse(null)`.
+             */
+            fun billingProviderConfiguration(
+                billingProviderConfiguration: Optional<BillingProviderConfiguration>
+            ) = billingProviderConfiguration(billingProviderConfiguration.getOrNull())
 
             /**
              * Sets [Builder.billingProviderConfiguration] to an arbitrary JSON value.
@@ -16864,7 +16872,7 @@ private constructor(
                 return@apply
             }
 
-            billingProviderConfiguration().validate()
+            billingProviderConfiguration().ifPresent { it.validate() }
             effectiveAt()
             effectiveUntil()
             validated = true
@@ -36193,11 +36201,11 @@ private constructor(
         fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
 
         /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun revenueSystemConfiguration(): RevenueSystemConfiguration =
-            revenueSystemConfiguration.getRequired("revenue_system_configuration")
+        fun revenueSystemConfiguration(): Optional<RevenueSystemConfiguration> =
+            revenueSystemConfiguration.getOptional("revenue_system_configuration")
 
         /**
          * The date this revenue system configuration is superseded by the next entry. Null for the
@@ -36300,8 +36308,17 @@ private constructor(
                 this.effectiveAt = effectiveAt
             }
 
-            fun revenueSystemConfiguration(revenueSystemConfiguration: RevenueSystemConfiguration) =
-                revenueSystemConfiguration(JsonField.of(revenueSystemConfiguration))
+            fun revenueSystemConfiguration(
+                revenueSystemConfiguration: RevenueSystemConfiguration?
+            ) = revenueSystemConfiguration(JsonField.ofNullable(revenueSystemConfiguration))
+
+            /**
+             * Alias for calling [Builder.revenueSystemConfiguration] with
+             * `revenueSystemConfiguration.orElse(null)`.
+             */
+            fun revenueSystemConfiguration(
+                revenueSystemConfiguration: Optional<RevenueSystemConfiguration>
+            ) = revenueSystemConfiguration(revenueSystemConfiguration.getOrNull())
 
             /**
              * Sets [Builder.revenueSystemConfiguration] to an arbitrary JSON value.
@@ -36390,7 +36407,7 @@ private constructor(
             }
 
             effectiveAt()
-            revenueSystemConfiguration().validate()
+            revenueSystemConfiguration().ifPresent { it.validate() }
             effectiveUntil()
             validated = true
         }
