@@ -71,6 +71,16 @@ private constructor(
     fun accessSchedule(): Optional<AccessSchedule> = body.accessSchedule()
 
     /**
+     * Which contracts the customer-level commit applies to. If set to null, the commit applies to
+     * all of the customer's contracts. This field cannot be edited for POSTPAID commits or
+     * contract-level commits.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun applicableContractIds(): Optional<List<String>> = body.applicableContractIds()
+
+    /**
      * Which products the commit applies to. If applicable_product_ids, applicable_product_tags or
      * specifiers are not provided, the commit applies to all products.
      *
@@ -183,6 +193,14 @@ private constructor(
      * Unlike [accessSchedule], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _accessSchedule(): JsonField<AccessSchedule> = body._accessSchedule()
+
+    /**
+     * Returns the raw JSON value of [applicableContractIds].
+     *
+     * Unlike [applicableContractIds], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _applicableContractIds(): JsonField<List<String>> = body._applicableContractIds()
 
     /**
      * Returns the raw JSON value of [applicableProductIds].
@@ -312,8 +330,8 @@ private constructor(
          * - [commitId]
          * - [customerId]
          * - [accessSchedule]
+         * - [applicableContractIds]
          * - [applicableProductIds]
-         * - [applicableProductTags]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -354,6 +372,42 @@ private constructor(
          */
         fun accessSchedule(accessSchedule: JsonField<AccessSchedule>) = apply {
             body.accessSchedule(accessSchedule)
+        }
+
+        /**
+         * Which contracts the customer-level commit applies to. If set to null, the commit applies
+         * to all of the customer's contracts. This field cannot be edited for POSTPAID commits or
+         * contract-level commits.
+         */
+        fun applicableContractIds(applicableContractIds: List<String>?) = apply {
+            body.applicableContractIds(applicableContractIds)
+        }
+
+        /**
+         * Alias for calling [Builder.applicableContractIds] with
+         * `applicableContractIds.orElse(null)`.
+         */
+        fun applicableContractIds(applicableContractIds: Optional<List<String>>) =
+            applicableContractIds(applicableContractIds.getOrNull())
+
+        /**
+         * Sets [Builder.applicableContractIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.applicableContractIds] with a well-typed `List<String>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun applicableContractIds(applicableContractIds: JsonField<List<String>>) = apply {
+            body.applicableContractIds(applicableContractIds)
+        }
+
+        /**
+         * Adds a single [String] to [applicableContractIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addApplicableContractId(applicableContractId: String) = apply {
+            body.addApplicableContractId(applicableContractId)
         }
 
         /**
@@ -727,6 +781,7 @@ private constructor(
         private val commitId: JsonField<String>,
         private val customerId: JsonField<String>,
         private val accessSchedule: JsonField<AccessSchedule>,
+        private val applicableContractIds: JsonField<List<String>>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
         private val description: JsonField<String>,
@@ -752,6 +807,9 @@ private constructor(
             @JsonProperty("access_schedule")
             @ExcludeMissing
             accessSchedule: JsonField<AccessSchedule> = JsonMissing.of(),
+            @JsonProperty("applicable_contract_ids")
+            @ExcludeMissing
+            applicableContractIds: JsonField<List<String>> = JsonMissing.of(),
             @JsonProperty("applicable_product_ids")
             @ExcludeMissing
             applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -787,6 +845,7 @@ private constructor(
             commitId,
             customerId,
             accessSchedule,
+            applicableContractIds,
             applicableProductIds,
             applicableProductTags,
             description,
@@ -823,6 +882,17 @@ private constructor(
          */
         fun accessSchedule(): Optional<AccessSchedule> =
             accessSchedule.getOptional("access_schedule")
+
+        /**
+         * Which contracts the customer-level commit applies to. If set to null, the commit applies
+         * to all of the customer's contracts. This field cannot be edited for POSTPAID commits or
+         * contract-level commits.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun applicableContractIds(): Optional<List<String>> =
+            applicableContractIds.getOptional("applicable_contract_ids")
 
         /**
          * Which products the commit applies to. If applicable_product_ids, applicable_product_tags
@@ -947,6 +1017,16 @@ private constructor(
         @JsonProperty("access_schedule")
         @ExcludeMissing
         fun _accessSchedule(): JsonField<AccessSchedule> = accessSchedule
+
+        /**
+         * Returns the raw JSON value of [applicableContractIds].
+         *
+         * Unlike [applicableContractIds], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("applicable_contract_ids")
+        @ExcludeMissing
+        fun _applicableContractIds(): JsonField<List<String>> = applicableContractIds
 
         /**
          * Returns the raw JSON value of [applicableProductIds].
@@ -1077,6 +1157,7 @@ private constructor(
             private var commitId: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
             private var accessSchedule: JsonField<AccessSchedule> = JsonMissing.of()
+            private var applicableContractIds: JsonField<MutableList<String>>? = null
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
@@ -1096,6 +1177,7 @@ private constructor(
                 commitId = body.commitId
                 customerId = body.customerId
                 accessSchedule = body.accessSchedule
+                applicableContractIds = body.applicableContractIds.map { it.toMutableList() }
                 applicableProductIds = body.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags = body.applicableProductTags.map { it.toMutableList() }
                 description = body.description
@@ -1146,6 +1228,44 @@ private constructor(
              */
             fun accessSchedule(accessSchedule: JsonField<AccessSchedule>) = apply {
                 this.accessSchedule = accessSchedule
+            }
+
+            /**
+             * Which contracts the customer-level commit applies to. If set to null, the commit
+             * applies to all of the customer's contracts. This field cannot be edited for POSTPAID
+             * commits or contract-level commits.
+             */
+            fun applicableContractIds(applicableContractIds: List<String>?) =
+                applicableContractIds(JsonField.ofNullable(applicableContractIds))
+
+            /**
+             * Alias for calling [Builder.applicableContractIds] with
+             * `applicableContractIds.orElse(null)`.
+             */
+            fun applicableContractIds(applicableContractIds: Optional<List<String>>) =
+                applicableContractIds(applicableContractIds.getOrNull())
+
+            /**
+             * Sets [Builder.applicableContractIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.applicableContractIds] with a well-typed
+             * `List<String>` value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
+             */
+            fun applicableContractIds(applicableContractIds: JsonField<List<String>>) = apply {
+                this.applicableContractIds = applicableContractIds.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [applicableContractIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addApplicableContractId(applicableContractId: String) = apply {
+                applicableContractIds =
+                    (applicableContractIds ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("applicableContractIds", it).add(applicableContractId)
+                    }
             }
 
             /**
@@ -1419,6 +1539,7 @@ private constructor(
                     checkRequired("commitId", commitId),
                     checkRequired("customerId", customerId),
                     accessSchedule,
+                    (applicableContractIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
@@ -1453,6 +1574,7 @@ private constructor(
             commitId()
             customerId()
             accessSchedule().ifPresent { it.validate() }
+            applicableContractIds()
             applicableProductIds()
             applicableProductTags()
             description()
@@ -1486,6 +1608,7 @@ private constructor(
             (if (commitId.asKnown().isPresent) 1 else 0) +
                 (if (customerId.asKnown().isPresent) 1 else 0) +
                 (accessSchedule.asKnown().getOrNull()?.validity() ?: 0) +
+                (applicableContractIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -1507,6 +1630,7 @@ private constructor(
                 commitId == other.commitId &&
                 customerId == other.customerId &&
                 accessSchedule == other.accessSchedule &&
+                applicableContractIds == other.applicableContractIds &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
                 description == other.description &&
@@ -1526,6 +1650,7 @@ private constructor(
                 commitId,
                 customerId,
                 accessSchedule,
+                applicableContractIds,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -1544,7 +1669,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{commitId=$commitId, customerId=$customerId, accessSchedule=$accessSchedule, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, priority=$priority, productId=$productId, rateType=$rateType, specifiers=$specifiers, additionalProperties=$additionalProperties}"
+            "Body{commitId=$commitId, customerId=$customerId, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, priority=$priority, productId=$productId, rateType=$rateType, specifiers=$specifiers, additionalProperties=$additionalProperties}"
     }
 
     class AccessSchedule
