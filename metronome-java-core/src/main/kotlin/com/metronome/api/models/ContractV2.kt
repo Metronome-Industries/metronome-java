@@ -2016,6 +2016,7 @@ private constructor(
         private val archivedAt: JsonField<OffsetDateTime>,
         private val balance: JsonField<Double>,
         private val contract: JsonField<Contract>,
+        private val costBasis: JsonField<Double>,
         private val createdBy: JsonField<String>,
         private val customFields: JsonField<CustomFields>,
         private val description: JsonField<String>,
@@ -2064,6 +2065,9 @@ private constructor(
             @JsonProperty("contract")
             @ExcludeMissing
             contract: JsonField<Contract> = JsonMissing.of(),
+            @JsonProperty("cost_basis")
+            @ExcludeMissing
+            costBasis: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("created_by")
             @ExcludeMissing
             createdBy: JsonField<String> = JsonMissing.of(),
@@ -2128,6 +2132,7 @@ private constructor(
             archivedAt,
             balance,
             contract,
+            costBasis,
             createdBy,
             customFields,
             description,
@@ -2232,6 +2237,14 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun contract(): Optional<Contract> = contract.getOptional("contract")
+
+        /**
+         * The ratio of the amount paid for the commit to the amount of credit granted.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun costBasis(): Optional<Double> = costBasis.getOptional("cost_basis")
 
         /**
          * The actor who created this commit. Omitted for system-generated commits such as recurring
@@ -2475,6 +2488,13 @@ private constructor(
         @JsonProperty("contract") @ExcludeMissing fun _contract(): JsonField<Contract> = contract
 
         /**
+         * Returns the raw JSON value of [costBasis].
+         *
+         * Unlike [costBasis], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("cost_basis") @ExcludeMissing fun _costBasis(): JsonField<Double> = costBasis
+
+        /**
          * Returns the raw JSON value of [createdBy].
          *
          * Unlike [createdBy], this method doesn't throw if the JSON field has an unexpected type.
@@ -2680,6 +2700,7 @@ private constructor(
             private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var balance: JsonField<Double> = JsonMissing.of()
             private var contract: JsonField<Contract> = JsonMissing.of()
+            private var costBasis: JsonField<Double> = JsonMissing.of()
             private var createdBy: JsonField<String> = JsonMissing.of()
             private var customFields: JsonField<CustomFields> = JsonMissing.of()
             private var description: JsonField<String> = JsonMissing.of()
@@ -2715,6 +2736,7 @@ private constructor(
                 archivedAt = commit.archivedAt
                 balance = commit.balance
                 contract = commit.contract
+                costBasis = commit.costBasis
                 createdBy = commit.createdBy
                 customFields = commit.customFields
                 description = commit.description
@@ -2928,6 +2950,18 @@ private constructor(
              * supported value.
              */
             fun contract(contract: JsonField<Contract>) = apply { this.contract = contract }
+
+            /** The ratio of the amount paid for the commit to the amount of credit granted. */
+            fun costBasis(costBasis: Double) = costBasis(JsonField.of(costBasis))
+
+            /**
+             * Sets [Builder.costBasis] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.costBasis] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun costBasis(costBasis: JsonField<Double>) = apply { this.costBasis = costBasis }
 
             /**
              * The actor who created this commit. Omitted for system-generated commits such as
@@ -3421,6 +3455,7 @@ private constructor(
                     archivedAt,
                     balance,
                     contract,
+                    costBasis,
                     createdBy,
                     customFields,
                     description,
@@ -3470,6 +3505,7 @@ private constructor(
             archivedAt()
             balance()
             contract().ifPresent { it.validate() }
+            costBasis()
             createdBy()
             customFields().ifPresent { it.validate() }
             description()
@@ -3518,6 +3554,7 @@ private constructor(
                 (if (archivedAt.asKnown().isPresent) 1 else 0) +
                 (if (balance.asKnown().isPresent) 1 else 0) +
                 (contract.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (costBasis.asKnown().isPresent) 1 else 0) +
                 (if (createdBy.asKnown().isPresent) 1 else 0) +
                 (customFields.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -12382,6 +12419,7 @@ private constructor(
                 archivedAt == other.archivedAt &&
                 balance == other.balance &&
                 contract == other.contract &&
+                costBasis == other.costBasis &&
                 createdBy == other.createdBy &&
                 customFields == other.customFields &&
                 description == other.description &&
@@ -12416,6 +12454,7 @@ private constructor(
                 archivedAt,
                 balance,
                 contract,
+                costBasis,
                 createdBy,
                 customFields,
                 description,
@@ -12441,7 +12480,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Commit{id=$id, createdAt=$createdAt, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, archivedAt=$archivedAt, balance=$balance, contract=$contract, createdBy=$createdBy, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContract=$invoiceContract, invoiceSchedule=$invoiceSchedule, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCommitId=$recurringCommitId, rolledOverFrom=$rolledOverFrom, rolloverFraction=$rolloverFraction, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, spendTrackerAttributes=$spendTrackerAttributes, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
+            "Commit{id=$id, createdAt=$createdAt, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, archivedAt=$archivedAt, balance=$balance, contract=$contract, costBasis=$costBasis, createdBy=$createdBy, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContract=$invoiceContract, invoiceSchedule=$invoiceSchedule, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCommitId=$recurringCommitId, rolledOverFrom=$rolledOverFrom, rolloverFraction=$rolloverFraction, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, spendTrackerAttributes=$spendTrackerAttributes, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
     }
 
     class Override
