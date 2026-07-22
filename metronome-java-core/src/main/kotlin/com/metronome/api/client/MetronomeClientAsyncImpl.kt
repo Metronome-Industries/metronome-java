@@ -8,6 +8,8 @@ import com.metronome.api.services.async.V1ServiceAsync
 import com.metronome.api.services.async.V1ServiceAsyncImpl
 import com.metronome.api.services.async.V2ServiceAsync
 import com.metronome.api.services.async.V2ServiceAsyncImpl
+import com.metronome.api.services.async.WebhookServiceAsync
+import com.metronome.api.services.async.WebhookServiceAsyncImpl
 import java.util.function.Consumer
 
 class MetronomeClientAsyncImpl(private val clientOptions: ClientOptions) : MetronomeClientAsync {
@@ -27,6 +29,10 @@ class MetronomeClientAsyncImpl(private val clientOptions: ClientOptions) : Metro
         WithRawResponseImpl(clientOptions)
     }
 
+    private val webhooks: WebhookServiceAsync by lazy {
+        WebhookServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     private val v2: V2ServiceAsync by lazy { V2ServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     private val v1: V1ServiceAsync by lazy { V1ServiceAsyncImpl(clientOptionsWithUserAgent) }
@@ -38,6 +44,8 @@ class MetronomeClientAsyncImpl(private val clientOptions: ClientOptions) : Metro
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetronomeClientAsync =
         MetronomeClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    override fun webhooks(): WebhookServiceAsync = webhooks
+
     override fun v2(): V2ServiceAsync = v2
 
     override fun v1(): V1ServiceAsync = v1
@@ -46,6 +54,10 @@ class MetronomeClientAsyncImpl(private val clientOptions: ClientOptions) : Metro
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MetronomeClientAsync.WithRawResponse {
+
+        private val webhooks: WebhookServiceAsync.WithRawResponse by lazy {
+            WebhookServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
         private val v2: V2ServiceAsync.WithRawResponse by lazy {
             V2ServiceAsyncImpl.WithRawResponseImpl(clientOptions)
@@ -61,6 +73,8 @@ class MetronomeClientAsyncImpl(private val clientOptions: ClientOptions) : Metro
             MetronomeClientAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
+
+        override fun webhooks(): WebhookServiceAsync.WithRawResponse = webhooks
 
         override fun v2(): V2ServiceAsync.WithRawResponse = v2
 

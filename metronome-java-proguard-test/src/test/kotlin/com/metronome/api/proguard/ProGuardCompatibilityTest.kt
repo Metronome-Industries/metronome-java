@@ -69,6 +69,7 @@ internal class ProGuardCompatibilityTest {
         val client = MetronomeOkHttpClient.builder().bearerToken("My Bearer Token").build()
 
         assertThat(client).isNotNull()
+        assertThat(client.webhooks()).isNotNull()
         assertThat(client.v2()).isNotNull()
         assertThat(client.v1()).isNotNull()
     }
@@ -138,6 +139,7 @@ internal class ProGuardCompatibilityTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .costBasis(0.0)
                                         .createdBy("created_by")
                                         .customFields(
                                             Commit.CustomFields.builder()
@@ -1423,6 +1425,7 @@ internal class ProGuardCompatibilityTest {
                     .contract(
                         Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                     )
+                    .costBasis(0.0)
                     .createdBy("created_by")
                     .customFields(
                         Commit.CustomFields.builder()
