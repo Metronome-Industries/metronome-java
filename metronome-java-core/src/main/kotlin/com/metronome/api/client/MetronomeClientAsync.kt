@@ -5,7 +5,6 @@ package com.metronome.api.client
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.services.async.V1ServiceAsync
 import com.metronome.api.services.async.V2ServiceAsync
-import com.metronome.api.services.async.WebhookServiceAsync
 import java.util.function.Consumer
 
 /**
@@ -44,8 +43,6 @@ interface MetronomeClientAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetronomeClientAsync
 
-    fun webhooks(): WebhookServiceAsync
-
     fun v2(): V2ServiceAsync
 
     fun v1(): V1ServiceAsync
@@ -76,8 +73,6 @@ interface MetronomeClientAsync {
         fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): MetronomeClientAsync.WithRawResponse
-
-        fun webhooks(): WebhookServiceAsync.WithRawResponse
 
         fun v2(): V2ServiceAsync.WithRawResponse
 

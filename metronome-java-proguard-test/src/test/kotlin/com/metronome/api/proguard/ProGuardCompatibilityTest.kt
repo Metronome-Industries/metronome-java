@@ -69,7 +69,6 @@ internal class ProGuardCompatibilityTest {
         val client = MetronomeOkHttpClient.builder().bearerToken("My Bearer Token").build()
 
         assertThat(client).isNotNull()
-        assertThat(client.webhooks()).isNotNull()
         assertThat(client.v2()).isNotNull()
         assertThat(client.v1()).isNotNull()
     }
