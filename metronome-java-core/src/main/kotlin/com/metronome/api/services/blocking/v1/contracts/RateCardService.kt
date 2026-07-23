@@ -116,20 +116,16 @@ interface RateCardService {
     fun retrieve(id: Id): RateCardRetrieveResponse = retrieve(id, RequestOptions.none())
 
     /**
-     * Update the metadata properties of an existing rate card, including its name, description, and
-     * aliases. This endpoint is designed for managing rate card identity and reference aliases
-     * rather than modifying pricing rates.
-     *
-     * Modifies the descriptive properties and alias configuration of a rate card without affecting
-     * the underlying pricing rates or schedules. This allows you to update how a rate card is
-     * identified and referenced throughout your system.
+     * Update a rate card's name, description, aliases, and credit type conversion rates. This
+     * endpoint does not affect underlying pricing rates or schedules.
      *
      * ### Use this endpoint to:
-     * - Rate card renaming: Update display names or descriptions for organizational clarity
-     * - Alias management: Add, modify, or schedule alias transitions for seamless rate card
-     *   migrations
-     * - Documentation updates: Keep rate card descriptions current with business context
-     * - Self-serve provisioning setup: Configure aliases to enable code-free rate card transitions
+     * - Rename rate cards: Update display names or descriptions for organizational clarity
+     * - Manage aliases: Add, modify, or schedule alias transitions for seamless and code-free rate
+     *   card migrations
+     * - Update documentation: Keep rate card descriptions current with business context
+     * - Configure custom pricing units: Add credit type conversions to enable rates with different
+     *   pricing units
      *
      * #### Active contract impact:
      * - Alias changes: Already-created contracts continue using their originally assigned rate

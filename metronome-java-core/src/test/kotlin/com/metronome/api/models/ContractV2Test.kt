@@ -60,6 +60,7 @@ internal class ContractV2Test {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
+                        .costBasis(0.0)
                         .createdBy("created_by")
                         .customFields(
                             ContractV2.Commit.CustomFields.builder()
@@ -288,7 +289,7 @@ internal class ContractV2Test {
                     ContractV2.Transition.builder()
                         .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .type(ContractV2.Transition.Type.SUPERSEDE)
+                        .type(ContractV2.Transition.Type.RENEWAL)
                         .build()
                 )
                 .addUsageFilter(
@@ -1217,6 +1218,7 @@ internal class ContractV2Test {
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
+                    .costBasis(0.0)
                     .createdBy("created_by")
                     .customFields(
                         ContractV2.Commit.CustomFields.builder()
@@ -1447,7 +1449,7 @@ internal class ContractV2Test {
                 ContractV2.Transition.builder()
                     .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .type(ContractV2.Transition.Type.SUPERSEDE)
+                    .type(ContractV2.Transition.Type.RENEWAL)
                     .build()
             )
         assertThat(contractV2.usageFilter())
@@ -2364,6 +2366,7 @@ internal class ContractV2Test {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
+                        .costBasis(0.0)
                         .createdBy("created_by")
                         .customFields(
                             ContractV2.Commit.CustomFields.builder()
@@ -2592,7 +2595,7 @@ internal class ContractV2Test {
                     ContractV2.Transition.builder()
                         .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .type(ContractV2.Transition.Type.SUPERSEDE)
+                        .type(ContractV2.Transition.Type.RENEWAL)
                         .build()
                 )
                 .addUsageFilter(

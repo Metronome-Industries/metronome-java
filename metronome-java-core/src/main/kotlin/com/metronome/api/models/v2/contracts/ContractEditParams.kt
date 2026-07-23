@@ -4105,8 +4105,18 @@ private constructor(
                     this.billingProvider = billingProvider
                 }
 
-                fun billingProviderConfigurationId(billingProviderConfigurationId: String) =
-                    billingProviderConfigurationId(JsonField.of(billingProviderConfigurationId))
+                fun billingProviderConfigurationId(billingProviderConfigurationId: String?) =
+                    billingProviderConfigurationId(
+                        JsonField.ofNullable(billingProviderConfigurationId)
+                    )
+
+                /**
+                 * Alias for calling [Builder.billingProviderConfigurationId] with
+                 * `billingProviderConfigurationId.orElse(null)`.
+                 */
+                fun billingProviderConfigurationId(
+                    billingProviderConfigurationId: Optional<String>
+                ) = billingProviderConfigurationId(billingProviderConfigurationId.getOrNull())
 
                 /**
                  * Sets [Builder.billingProviderConfigurationId] to an arbitrary JSON value.
@@ -17335,7 +17345,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -17917,7 +17929,9 @@ private constructor(
              * The frequency at which the recurring commits will be created. If not provided: - The
              * commits will be created on the usage invoice frequency. If provided: - The period
              * defined in the duration will correspond to this frequency. - Commits will be created
-             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             * aligned with the recurring commit's starting_at rather than the usage invoice
+             * dates. - Daily recurring commits have a limit of one per contract, and are unable to
+             * be created with seat-based subscriptions
              */
             fun recurrenceFrequency(recurrenceFrequency: RecurrenceFrequency) =
                 recurrenceFrequency(JsonField.of(recurrenceFrequency))
@@ -20298,7 +20312,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          */
         class RecurrenceFrequency
         @JsonCreator
@@ -21377,7 +21393,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -21932,7 +21950,9 @@ private constructor(
              * The frequency at which the recurring commits will be created. If not provided: - The
              * commits will be created on the usage invoice frequency. If provided: - The period
              * defined in the duration will correspond to this frequency. - Commits will be created
-             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             * aligned with the recurring commit's starting_at rather than the usage invoice
+             * dates. - Daily recurring commits have a limit of one per contract, and are unable to
+             * be created with seat-based subscriptions
              */
             fun recurrenceFrequency(recurrenceFrequency: RecurrenceFrequency) =
                 recurrenceFrequency(JsonField.of(recurrenceFrequency))
@@ -23623,7 +23643,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          */
         class RecurrenceFrequency
         @JsonCreator
@@ -26000,8 +26022,15 @@ private constructor(
                  */
                 fun provider(provider: JsonField<Provider>) = apply { this.provider = provider }
 
-                fun revenueSystemConfigurationId(revenueSystemConfigurationId: String) =
-                    revenueSystemConfigurationId(JsonField.of(revenueSystemConfigurationId))
+                fun revenueSystemConfigurationId(revenueSystemConfigurationId: String?) =
+                    revenueSystemConfigurationId(JsonField.ofNullable(revenueSystemConfigurationId))
+
+                /**
+                 * Alias for calling [Builder.revenueSystemConfigurationId] with
+                 * `revenueSystemConfigurationId.orElse(null)`.
+                 */
+                fun revenueSystemConfigurationId(revenueSystemConfigurationId: Optional<String>) =
+                    revenueSystemConfigurationId(revenueSystemConfigurationId.getOrNull())
 
                 /**
                  * Sets [Builder.revenueSystemConfigurationId] to an arbitrary JSON value.

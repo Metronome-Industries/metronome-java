@@ -13,6 +13,12 @@ internal class RateCardUpdateParamsTest {
     fun create() {
         RateCardUpdateParams.builder()
             .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .addAddCreditTypeConversion(
+                RateCardUpdateParams.AddCreditTypeConversion.builder()
+                    .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .fiatPerCustomCredit(0.0)
+                    .build()
+            )
             .addAlias(
                 RateCardUpdateParams.Alias.builder()
                     .name("name")
@@ -30,6 +36,12 @@ internal class RateCardUpdateParamsTest {
         val params =
             RateCardUpdateParams.builder()
                 .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .addAddCreditTypeConversion(
+                    RateCardUpdateParams.AddCreditTypeConversion.builder()
+                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .fiatPerCustomCredit(0.0)
+                        .build()
+                )
                 .addAlias(
                     RateCardUpdateParams.Alias.builder()
                         .name("name")
@@ -44,6 +56,13 @@ internal class RateCardUpdateParamsTest {
         val body = params._body()
 
         assertThat(body.rateCardId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.addCreditTypeConversions().getOrNull())
+            .containsExactly(
+                RateCardUpdateParams.AddCreditTypeConversion.builder()
+                    .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .fiatPerCustomCredit(0.0)
+                    .build()
+            )
         assertThat(body.aliases().getOrNull())
             .containsExactly(
                 RateCardUpdateParams.Alias.builder()

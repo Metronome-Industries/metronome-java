@@ -42,15 +42,12 @@ import kotlin.jvm.optionals.getOrNull
  * ### Usage guidelines:
  * - Dashboard types: Choose from `invoices`, `usage`, or `commits_and_credits`
  * - Customization options:
- *     - `dashboard_options`: Configure dashboard behavior. For the invoices dashboard, supported
- *       keys include: `show_zero_usage_line_items` ("true"/"false"), `hide_voided_invoices`
- *       ("true"/"false"), `contract_id` (UUID, filters invoices by contract), `invoice_type`
- *       ("USAGE" or "SCHEDULED", filters by invoice type), `invoice_status_filter` ("VOID",
- *       "FINALIZED", "DRAFT", "FINALIZED_AND_DRAFT", or "ALL"), and `billable_status_filter`
- *       ("BILLABLE", "UNBILLABLE", or "ALL")
+ *     - `dashboard_options`: Configure dashboard behavior. Supported for the invoices dashboard
+ *       only. Available keys include: `show_zero_usage_line_items` ("true"/"false"), `contract_id`
+ *       (UUID, filters invoices by contract), `invoice_type` ("USAGE" or "SCHEDULED", filters by
+ *       invoice type), and `invoice_status_filter` ("VOID", "FINALIZED", "DRAFT",
+ *       "FINALIZED_AND_DRAFT", or "ALL")
  *     - `color_overrides`: Match your brand's color palette
- *     - `bm_group_key_overrides`: Customize how dimensions are displayed (for the usage embeddable
- *       dashboard)
  * - Iframe implementation: Embed the returned URL directly in an iframe element
  * - Responsive design: Dashboards automatically adapt to container dimensions
  */
@@ -1824,14 +1821,14 @@ private constructor(
     class DashboardOption
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val key: JsonField<String>,
+        private val key: JsonField<Key>,
         private val value: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("key") @ExcludeMissing key: JsonField<Key> = JsonMissing.of(),
             @JsonProperty("value") @ExcludeMissing value: JsonField<String> = JsonMissing.of(),
         ) : this(key, value, mutableMapOf())
 
@@ -1841,10 +1838,14 @@ private constructor(
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun key(): String = key.getRequired("key")
+        fun key(): Key = key.getRequired("key")
 
         /**
-         * The option value
+         * The option value. For show_zero_usage_line_items: "true" or "false" (default "false").
+         * For contract_id: a UUID filtering invoices to a specific contract. For invoice_type:
+         * "USAGE" or "SCHEDULED". For invoice_status_filter: "VOID", "FINALIZED", "DRAFT",
+         * "FINALIZED_AND_DRAFT", or "ALL". For hide_voided_invoices (deprecated): "true" or
+         * "false".
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1856,7 +1857,7 @@ private constructor(
          *
          * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<Key> = key
 
         /**
          * Returns the raw JSON value of [value].
@@ -1894,7 +1895,7 @@ private constructor(
         /** A builder for [DashboardOption]. */
         class Builder internal constructor() {
 
-            private var key: JsonField<String>? = null
+            private var key: JsonField<Key>? = null
             private var value: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1906,18 +1907,24 @@ private constructor(
             }
 
             /** The option key name */
-            fun key(key: String) = key(JsonField.of(key))
+            fun key(key: Key) = key(JsonField.of(key))
 
             /**
              * Sets [Builder.key] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.key] with a well-typed [String] value instead. This
+             * You should usually call [Builder.key] with a well-typed [Key] value instead. This
              * method is primarily for setting the field to an undocumented or not yet supported
              * value.
              */
-            fun key(key: JsonField<String>) = apply { this.key = key }
+            fun key(key: JsonField<Key>) = apply { this.key = key }
 
-            /** The option value */
+            /**
+             * The option value. For show_zero_usage_line_items: "true" or "false" (default
+             * "false"). For contract_id: a UUID filtering invoices to a specific contract. For
+             * invoice_type: "USAGE" or "SCHEDULED". For invoice_status_filter: "VOID", "FINALIZED",
+             * "DRAFT", "FINALIZED_AND_DRAFT", or "ALL". For hide_voided_invoices (deprecated):
+             * "true" or "false".
+             */
             fun value(value: String) = value(JsonField.of(value))
 
             /**
@@ -1985,7 +1992,7 @@ private constructor(
                 return@apply
             }
 
-            key()
+            key().validate()
             value()
             validated = true
         }
@@ -2006,7 +2013,181 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (key.asKnown().isPresent) 1 else 0) + (if (value.asKnown().isPresent) 1 else 0)
+            (key.asKnown().getOrNull()?.validity() ?: 0) + (if (value.asKnown().isPresent) 1 else 0)
+
+        /** The option key name */
+        class Key @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val SHOW_ZERO_USAGE_LINE_ITEMS = of("show_zero_usage_line_items")
+
+                @JvmField val CONTRACT_ID = of("contract_id")
+
+                @JvmField val INVOICE_TYPE = of("invoice_type")
+
+                @JvmField val INVOICE_STATUS_FILTER = of("invoice_status_filter")
+
+                @JvmField val HIDE_VOIDED_INVOICES = of("hide_voided_invoices")
+
+                @JvmField val BILLABLE_STATUS_FILTER = of("billable_status_filter")
+
+                @JvmField val HIDE_GRANT_NAME = of("hide_grant_name")
+
+                @JvmField val CREDIT_LEDGER_CREDIT_TYPE_ID = of("credit_ledger_credit_type_id")
+
+                @JvmStatic fun of(value: String) = Key(JsonField.of(value))
+            }
+
+            /** An enum containing [Key]'s known values. */
+            enum class Known {
+                SHOW_ZERO_USAGE_LINE_ITEMS,
+                CONTRACT_ID,
+                INVOICE_TYPE,
+                INVOICE_STATUS_FILTER,
+                HIDE_VOIDED_INVOICES,
+                BILLABLE_STATUS_FILTER,
+                HIDE_GRANT_NAME,
+                CREDIT_LEDGER_CREDIT_TYPE_ID,
+            }
+
+            /**
+             * An enum containing [Key]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Key] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                SHOW_ZERO_USAGE_LINE_ITEMS,
+                CONTRACT_ID,
+                INVOICE_TYPE,
+                INVOICE_STATUS_FILTER,
+                HIDE_VOIDED_INVOICES,
+                BILLABLE_STATUS_FILTER,
+                HIDE_GRANT_NAME,
+                CREDIT_LEDGER_CREDIT_TYPE_ID,
+                /** An enum member indicating that [Key] was instantiated with an unknown value. */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    SHOW_ZERO_USAGE_LINE_ITEMS -> Value.SHOW_ZERO_USAGE_LINE_ITEMS
+                    CONTRACT_ID -> Value.CONTRACT_ID
+                    INVOICE_TYPE -> Value.INVOICE_TYPE
+                    INVOICE_STATUS_FILTER -> Value.INVOICE_STATUS_FILTER
+                    HIDE_VOIDED_INVOICES -> Value.HIDE_VOIDED_INVOICES
+                    BILLABLE_STATUS_FILTER -> Value.BILLABLE_STATUS_FILTER
+                    HIDE_GRANT_NAME -> Value.HIDE_GRANT_NAME
+                    CREDIT_LEDGER_CREDIT_TYPE_ID -> Value.CREDIT_LEDGER_CREDIT_TYPE_ID
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    SHOW_ZERO_USAGE_LINE_ITEMS -> Known.SHOW_ZERO_USAGE_LINE_ITEMS
+                    CONTRACT_ID -> Known.CONTRACT_ID
+                    INVOICE_TYPE -> Known.INVOICE_TYPE
+                    INVOICE_STATUS_FILTER -> Known.INVOICE_STATUS_FILTER
+                    HIDE_VOIDED_INVOICES -> Known.HIDE_VOIDED_INVOICES
+                    BILLABLE_STATUS_FILTER -> Known.BILLABLE_STATUS_FILTER
+                    HIDE_GRANT_NAME -> Known.HIDE_GRANT_NAME
+                    CREDIT_LEDGER_CREDIT_TYPE_ID -> Known.CREDIT_LEDGER_CREDIT_TYPE_ID
+                    else -> throw MetronomeInvalidDataException("Unknown Key: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): Key = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Key && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

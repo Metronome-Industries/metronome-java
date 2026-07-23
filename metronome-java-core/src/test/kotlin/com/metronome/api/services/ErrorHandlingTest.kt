@@ -1112,7 +1112,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -2199,7 +2199,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -3286,7 +3286,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -4373,7 +4373,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -5460,7 +5460,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -6547,7 +6547,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -7634,7 +7634,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -8721,7 +8721,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -9808,7 +9808,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -10895,7 +10895,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -11982,7 +11982,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -13069,7 +13069,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -14156,7 +14156,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -15243,7 +15243,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -16330,7 +16330,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -17417,7 +17417,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(
@@ -18502,7 +18502,7 @@ internal class ErrorHandlingTest {
                         .transition(
                             ContractCreateParams.Transition.builder()
                                 .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .type(ContractCreateParams.Transition.Type.SUPERSEDE)
+                                .type(ContractCreateParams.Transition.Type.RENEWAL)
                                 .futureInvoiceBehavior(
                                     ContractCreateParams.Transition.FutureInvoiceBehavior.builder()
                                         .trueup(

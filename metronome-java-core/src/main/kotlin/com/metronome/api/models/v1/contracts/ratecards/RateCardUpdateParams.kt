@@ -24,19 +24,16 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Update the metadata properties of an existing rate card, including its name, description, and
- * aliases. This endpoint is designed for managing rate card identity and reference aliases rather
- * than modifying pricing rates.
- *
- * Modifies the descriptive properties and alias configuration of a rate card without affecting the
- * underlying pricing rates or schedules. This allows you to update how a rate card is identified
- * and referenced throughout your system.
+ * Update a rate card's name, description, aliases, and credit type conversion rates. This endpoint
+ * does not affect underlying pricing rates or schedules.
  *
  * ### Use this endpoint to:
- * - Rate card renaming: Update display names or descriptions for organizational clarity
- * - Alias management: Add, modify, or schedule alias transitions for seamless rate card migrations
- * - Documentation updates: Keep rate card descriptions current with business context
- * - Self-serve provisioning setup: Configure aliases to enable code-free rate card transitions
+ * - Rename rate cards: Update display names or descriptions for organizational clarity
+ * - Manage aliases: Add, modify, or schedule alias transitions for seamless and code-free rate card
+ *   migrations
+ * - Update documentation: Keep rate card descriptions current with business context
+ * - Configure custom pricing units: Add credit type conversions to enable rates with different
+ *   pricing units
  *
  * #### Active contract impact:
  * - Alias changes: Already-created contracts continue using their originally assigned rate cards.
@@ -79,6 +76,16 @@ private constructor(
     fun rateCardId(): String = body.rateCardId()
 
     /**
+     * Add credit type conversions for using custom pricing units in rates. Existing conversions
+     * cannot be modified.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun addCreditTypeConversions(): Optional<List<AddCreditTypeConversion>> =
+        body.addCreditTypeConversions()
+
+    /**
      * Reference this alias when creating a contract. If the same alias is assigned to multiple rate
      * cards, it will reference the rate card to which it was most recently assigned. It is not
      * exposed to end customers.
@@ -108,6 +115,15 @@ private constructor(
      * Unlike [rateCardId], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _rateCardId(): JsonField<String> = body._rateCardId()
+
+    /**
+     * Returns the raw JSON value of [addCreditTypeConversions].
+     *
+     * Unlike [addCreditTypeConversions], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _addCreditTypeConversions(): JsonField<List<AddCreditTypeConversion>> =
+        body._addCreditTypeConversions()
 
     /**
      * Returns the raw JSON value of [aliases].
@@ -173,9 +189,11 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [rateCardId]
+         * - [addCreditTypeConversions]
          * - [aliases]
          * - [description]
          * - [name]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -190,6 +208,35 @@ private constructor(
          * value.
          */
         fun rateCardId(rateCardId: JsonField<String>) = apply { body.rateCardId(rateCardId) }
+
+        /**
+         * Add credit type conversions for using custom pricing units in rates. Existing conversions
+         * cannot be modified.
+         */
+        fun addCreditTypeConversions(addCreditTypeConversions: List<AddCreditTypeConversion>) =
+            apply {
+                body.addCreditTypeConversions(addCreditTypeConversions)
+            }
+
+        /**
+         * Sets [Builder.addCreditTypeConversions] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.addCreditTypeConversions] with a well-typed
+         * `List<AddCreditTypeConversion>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
+         */
+        fun addCreditTypeConversions(
+            addCreditTypeConversions: JsonField<List<AddCreditTypeConversion>>
+        ) = apply { body.addCreditTypeConversions(addCreditTypeConversions) }
+
+        /**
+         * Adds a single [AddCreditTypeConversion] to [addCreditTypeConversions].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addAddCreditTypeConversion(addCreditTypeConversion: AddCreditTypeConversion) = apply {
+            body.addAddCreditTypeConversion(addCreditTypeConversion)
+        }
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
@@ -383,6 +430,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val rateCardId: JsonField<String>,
+        private val addCreditTypeConversions: JsonField<List<AddCreditTypeConversion>>,
         private val aliases: JsonField<List<Alias>>,
         private val description: JsonField<String>,
         private val name: JsonField<String>,
@@ -394,6 +442,9 @@ private constructor(
             @JsonProperty("rate_card_id")
             @ExcludeMissing
             rateCardId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("add_credit_type_conversions")
+            @ExcludeMissing
+            addCreditTypeConversions: JsonField<List<AddCreditTypeConversion>> = JsonMissing.of(),
             @JsonProperty("aliases")
             @ExcludeMissing
             aliases: JsonField<List<Alias>> = JsonMissing.of(),
@@ -401,7 +452,7 @@ private constructor(
             @ExcludeMissing
             description: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-        ) : this(rateCardId, aliases, description, name, mutableMapOf())
+        ) : this(rateCardId, addCreditTypeConversions, aliases, description, name, mutableMapOf())
 
         /**
          * ID of the rate card to update
@@ -410,6 +461,16 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun rateCardId(): String = rateCardId.getRequired("rate_card_id")
+
+        /**
+         * Add credit type conversions for using custom pricing units in rates. Existing conversions
+         * cannot be modified.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun addCreditTypeConversions(): Optional<List<AddCreditTypeConversion>> =
+            addCreditTypeConversions.getOptional("add_credit_type_conversions")
 
         /**
          * Reference this alias when creating a contract. If the same alias is assigned to multiple
@@ -443,6 +504,17 @@ private constructor(
         @JsonProperty("rate_card_id")
         @ExcludeMissing
         fun _rateCardId(): JsonField<String> = rateCardId
+
+        /**
+         * Returns the raw JSON value of [addCreditTypeConversions].
+         *
+         * Unlike [addCreditTypeConversions], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("add_credit_type_conversions")
+        @ExcludeMissing
+        fun _addCreditTypeConversions(): JsonField<List<AddCreditTypeConversion>> =
+            addCreditTypeConversions
 
         /**
          * Returns the raw JSON value of [aliases].
@@ -496,6 +568,8 @@ private constructor(
         class Builder internal constructor() {
 
             private var rateCardId: JsonField<String>? = null
+            private var addCreditTypeConversions: JsonField<MutableList<AddCreditTypeConversion>>? =
+                null
             private var aliases: JsonField<MutableList<Alias>>? = null
             private var description: JsonField<String> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
@@ -504,6 +578,7 @@ private constructor(
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 rateCardId = body.rateCardId
+                addCreditTypeConversions = body.addCreditTypeConversions.map { it.toMutableList() }
                 aliases = body.aliases.map { it.toMutableList() }
                 description = body.description
                 name = body.name
@@ -521,6 +596,39 @@ private constructor(
              * supported value.
              */
             fun rateCardId(rateCardId: JsonField<String>) = apply { this.rateCardId = rateCardId }
+
+            /**
+             * Add credit type conversions for using custom pricing units in rates. Existing
+             * conversions cannot be modified.
+             */
+            fun addCreditTypeConversions(addCreditTypeConversions: List<AddCreditTypeConversion>) =
+                addCreditTypeConversions(JsonField.of(addCreditTypeConversions))
+
+            /**
+             * Sets [Builder.addCreditTypeConversions] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.addCreditTypeConversions] with a well-typed
+             * `List<AddCreditTypeConversion>` value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
+             */
+            fun addCreditTypeConversions(
+                addCreditTypeConversions: JsonField<List<AddCreditTypeConversion>>
+            ) = apply {
+                this.addCreditTypeConversions = addCreditTypeConversions.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [AddCreditTypeConversion] to [addCreditTypeConversions].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addAddCreditTypeConversion(addCreditTypeConversion: AddCreditTypeConversion) =
+                apply {
+                    addCreditTypeConversions =
+                        (addCreditTypeConversions ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("addCreditTypeConversions", it).add(addCreditTypeConversion)
+                        }
+                }
 
             /**
              * Reference this alias when creating a contract. If the same alias is assigned to
@@ -611,6 +719,7 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("rateCardId", rateCardId),
+                    (addCreditTypeConversions ?: JsonMissing.of()).map { it.toImmutable() },
                     (aliases ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
                     name,
@@ -635,6 +744,7 @@ private constructor(
             }
 
             rateCardId()
+            addCreditTypeConversions().ifPresent { it.forEach { it.validate() } }
             aliases().ifPresent { it.forEach { it.validate() } }
             description()
             name()
@@ -658,6 +768,8 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (rateCardId.asKnown().isPresent) 1 else 0) +
+                (addCreditTypeConversions.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (aliases.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
                 (if (name.asKnown().isPresent) 1 else 0)
@@ -669,6 +781,7 @@ private constructor(
 
             return other is Body &&
                 rateCardId == other.rateCardId &&
+                addCreditTypeConversions == other.addCreditTypeConversions &&
                 aliases == other.aliases &&
                 description == other.description &&
                 name == other.name &&
@@ -676,13 +789,240 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(rateCardId, aliases, description, name, additionalProperties)
+            Objects.hash(
+                rateCardId,
+                addCreditTypeConversions,
+                aliases,
+                description,
+                name,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{rateCardId=$rateCardId, aliases=$aliases, description=$description, name=$name, additionalProperties=$additionalProperties}"
+            "Body{rateCardId=$rateCardId, addCreditTypeConversions=$addCreditTypeConversions, aliases=$aliases, description=$description, name=$name, additionalProperties=$additionalProperties}"
+    }
+
+    class AddCreditTypeConversion
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val customCreditTypeId: JsonField<String>,
+        private val fiatPerCustomCredit: JsonField<Double>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("custom_credit_type_id")
+            @ExcludeMissing
+            customCreditTypeId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("fiat_per_custom_credit")
+            @ExcludeMissing
+            fiatPerCustomCredit: JsonField<Double> = JsonMissing.of(),
+        ) : this(customCreditTypeId, fiatPerCustomCredit, mutableMapOf())
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customCreditTypeId(): String = customCreditTypeId.getRequired("custom_credit_type_id")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun fiatPerCustomCredit(): Double =
+            fiatPerCustomCredit.getRequired("fiat_per_custom_credit")
+
+        /**
+         * Returns the raw JSON value of [customCreditTypeId].
+         *
+         * Unlike [customCreditTypeId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("custom_credit_type_id")
+        @ExcludeMissing
+        fun _customCreditTypeId(): JsonField<String> = customCreditTypeId
+
+        /**
+         * Returns the raw JSON value of [fiatPerCustomCredit].
+         *
+         * Unlike [fiatPerCustomCredit], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("fiat_per_custom_credit")
+        @ExcludeMissing
+        fun _fiatPerCustomCredit(): JsonField<Double> = fiatPerCustomCredit
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [AddCreditTypeConversion].
+             *
+             * The following fields are required:
+             * ```java
+             * .customCreditTypeId()
+             * .fiatPerCustomCredit()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [AddCreditTypeConversion]. */
+        class Builder internal constructor() {
+
+            private var customCreditTypeId: JsonField<String>? = null
+            private var fiatPerCustomCredit: JsonField<Double>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(addCreditTypeConversion: AddCreditTypeConversion) = apply {
+                customCreditTypeId = addCreditTypeConversion.customCreditTypeId
+                fiatPerCustomCredit = addCreditTypeConversion.fiatPerCustomCredit
+                additionalProperties = addCreditTypeConversion.additionalProperties.toMutableMap()
+            }
+
+            fun customCreditTypeId(customCreditTypeId: String) =
+                customCreditTypeId(JsonField.of(customCreditTypeId))
+
+            /**
+             * Sets [Builder.customCreditTypeId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customCreditTypeId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customCreditTypeId(customCreditTypeId: JsonField<String>) = apply {
+                this.customCreditTypeId = customCreditTypeId
+            }
+
+            fun fiatPerCustomCredit(fiatPerCustomCredit: Double) =
+                fiatPerCustomCredit(JsonField.of(fiatPerCustomCredit))
+
+            /**
+             * Sets [Builder.fiatPerCustomCredit] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.fiatPerCustomCredit] with a well-typed [Double]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun fiatPerCustomCredit(fiatPerCustomCredit: JsonField<Double>) = apply {
+                this.fiatPerCustomCredit = fiatPerCustomCredit
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [AddCreditTypeConversion].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .customCreditTypeId()
+             * .fiatPerCustomCredit()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): AddCreditTypeConversion =
+                AddCreditTypeConversion(
+                    checkRequired("customCreditTypeId", customCreditTypeId),
+                    checkRequired("fiatPerCustomCredit", fiatPerCustomCredit),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): AddCreditTypeConversion = apply {
+            if (validated) {
+                return@apply
+            }
+
+            customCreditTypeId()
+            fiatPerCustomCredit()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (customCreditTypeId.asKnown().isPresent) 1 else 0) +
+                (if (fiatPerCustomCredit.asKnown().isPresent) 1 else 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is AddCreditTypeConversion &&
+                customCreditTypeId == other.customCreditTypeId &&
+                fiatPerCustomCredit == other.fiatPerCustomCredit &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(customCreditTypeId, fiatPerCustomCredit, additionalProperties)
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "AddCreditTypeConversion{customCreditTypeId=$customCreditTypeId, fiatPerCustomCredit=$fiatPerCustomCredit, additionalProperties=$additionalProperties}"
     }
 
     class Alias

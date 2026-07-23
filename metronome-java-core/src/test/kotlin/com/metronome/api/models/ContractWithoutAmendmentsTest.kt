@@ -60,6 +60,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
+                        .costBasis(0.0)
                         .createdBy("created_by")
                         .customFields(
                             Commit.CustomFields.builder()
@@ -293,7 +294,7 @@ internal class ContractWithoutAmendmentsTest {
                     ContractWithoutAmendments.Transition.builder()
                         .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .type(ContractWithoutAmendments.Transition.Type.SUPERSEDE)
+                        .type(ContractWithoutAmendments.Transition.Type.RENEWAL)
                         .build()
                 )
                 .usageStatementSchedule(
@@ -1024,6 +1025,7 @@ internal class ContractWithoutAmendmentsTest {
                     .contract(
                         Commit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                     )
+                    .costBasis(0.0)
                     .createdBy("created_by")
                     .customFields(
                         Commit.CustomFields.builder()
@@ -1260,7 +1262,7 @@ internal class ContractWithoutAmendmentsTest {
                 ContractWithoutAmendments.Transition.builder()
                     .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .type(ContractWithoutAmendments.Transition.Type.SUPERSEDE)
+                    .type(ContractWithoutAmendments.Transition.Type.RENEWAL)
                     .build()
             )
         assertThat(contractWithoutAmendments.usageStatementSchedule())
@@ -1983,6 +1985,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
+                        .costBasis(0.0)
                         .createdBy("created_by")
                         .customFields(
                             Commit.CustomFields.builder()
@@ -2216,7 +2219,7 @@ internal class ContractWithoutAmendmentsTest {
                     ContractWithoutAmendments.Transition.builder()
                         .fromContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .toContractId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .type(ContractWithoutAmendments.Transition.Type.SUPERSEDE)
+                        .type(ContractWithoutAmendments.Transition.Type.RENEWAL)
                         .build()
                 )
                 .usageStatementSchedule(

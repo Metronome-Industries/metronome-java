@@ -2016,6 +2016,7 @@ private constructor(
         private val archivedAt: JsonField<OffsetDateTime>,
         private val balance: JsonField<Double>,
         private val contract: JsonField<Contract>,
+        private val costBasis: JsonField<Double>,
         private val createdBy: JsonField<String>,
         private val customFields: JsonField<CustomFields>,
         private val description: JsonField<String>,
@@ -2064,6 +2065,9 @@ private constructor(
             @JsonProperty("contract")
             @ExcludeMissing
             contract: JsonField<Contract> = JsonMissing.of(),
+            @JsonProperty("cost_basis")
+            @ExcludeMissing
+            costBasis: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("created_by")
             @ExcludeMissing
             createdBy: JsonField<String> = JsonMissing.of(),
@@ -2128,6 +2132,7 @@ private constructor(
             archivedAt,
             balance,
             contract,
+            costBasis,
             createdBy,
             customFields,
             description,
@@ -2232,6 +2237,14 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun contract(): Optional<Contract> = contract.getOptional("contract")
+
+        /**
+         * The ratio of the amount paid for the commit to the amount of credit granted.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun costBasis(): Optional<Double> = costBasis.getOptional("cost_basis")
 
         /**
          * The actor who created this commit. Omitted for system-generated commits such as recurring
@@ -2475,6 +2488,13 @@ private constructor(
         @JsonProperty("contract") @ExcludeMissing fun _contract(): JsonField<Contract> = contract
 
         /**
+         * Returns the raw JSON value of [costBasis].
+         *
+         * Unlike [costBasis], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("cost_basis") @ExcludeMissing fun _costBasis(): JsonField<Double> = costBasis
+
+        /**
          * Returns the raw JSON value of [createdBy].
          *
          * Unlike [createdBy], this method doesn't throw if the JSON field has an unexpected type.
@@ -2680,6 +2700,7 @@ private constructor(
             private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var balance: JsonField<Double> = JsonMissing.of()
             private var contract: JsonField<Contract> = JsonMissing.of()
+            private var costBasis: JsonField<Double> = JsonMissing.of()
             private var createdBy: JsonField<String> = JsonMissing.of()
             private var customFields: JsonField<CustomFields> = JsonMissing.of()
             private var description: JsonField<String> = JsonMissing.of()
@@ -2715,6 +2736,7 @@ private constructor(
                 archivedAt = commit.archivedAt
                 balance = commit.balance
                 contract = commit.contract
+                costBasis = commit.costBasis
                 createdBy = commit.createdBy
                 customFields = commit.customFields
                 description = commit.description
@@ -2928,6 +2950,18 @@ private constructor(
              * supported value.
              */
             fun contract(contract: JsonField<Contract>) = apply { this.contract = contract }
+
+            /** The ratio of the amount paid for the commit to the amount of credit granted. */
+            fun costBasis(costBasis: Double) = costBasis(JsonField.of(costBasis))
+
+            /**
+             * Sets [Builder.costBasis] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.costBasis] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun costBasis(costBasis: JsonField<Double>) = apply { this.costBasis = costBasis }
 
             /**
              * The actor who created this commit. Omitted for system-generated commits such as
@@ -3421,6 +3455,7 @@ private constructor(
                     archivedAt,
                     balance,
                     contract,
+                    costBasis,
                     createdBy,
                     customFields,
                     description,
@@ -3470,6 +3505,7 @@ private constructor(
             archivedAt()
             balance()
             contract().ifPresent { it.validate() }
+            costBasis()
             createdBy()
             customFields().ifPresent { it.validate() }
             description()
@@ -3518,6 +3554,7 @@ private constructor(
                 (if (archivedAt.asKnown().isPresent) 1 else 0) +
                 (if (balance.asKnown().isPresent) 1 else 0) +
                 (contract.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (costBasis.asKnown().isPresent) 1 else 0) +
                 (if (createdBy.asKnown().isPresent) 1 else 0) +
                 (customFields.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -12382,6 +12419,7 @@ private constructor(
                 archivedAt == other.archivedAt &&
                 balance == other.balance &&
                 contract == other.contract &&
+                costBasis == other.costBasis &&
                 createdBy == other.createdBy &&
                 customFields == other.customFields &&
                 description == other.description &&
@@ -12416,6 +12454,7 @@ private constructor(
                 archivedAt,
                 balance,
                 contract,
+                costBasis,
                 createdBy,
                 customFields,
                 description,
@@ -12441,7 +12480,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Commit{id=$id, createdAt=$createdAt, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, archivedAt=$archivedAt, balance=$balance, contract=$contract, createdBy=$createdBy, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContract=$invoiceContract, invoiceSchedule=$invoiceSchedule, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCommitId=$recurringCommitId, rolledOverFrom=$rolledOverFrom, rolloverFraction=$rolloverFraction, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, spendTrackerAttributes=$spendTrackerAttributes, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
+            "Commit{id=$id, createdAt=$createdAt, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, archivedAt=$archivedAt, balance=$balance, contract=$contract, costBasis=$costBasis, createdBy=$createdBy, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContract=$invoiceContract, invoiceSchedule=$invoiceSchedule, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCommitId=$recurringCommitId, rolledOverFrom=$rolledOverFrom, rolloverFraction=$rolloverFraction, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, spendTrackerAttributes=$spendTrackerAttributes, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
     }
 
     class Override
@@ -15806,8 +15845,6 @@ private constructor(
 
             companion object {
 
-                @JvmField val SUPERSEDE = of("SUPERSEDE")
-
                 @JvmField val RENEWAL = of("RENEWAL")
 
                 @JvmStatic fun of(value: String) = Type(JsonField.of(value))
@@ -15815,8 +15852,7 @@ private constructor(
 
             /** An enum containing [Type]'s known values. */
             enum class Known {
-                SUPERSEDE,
-                RENEWAL,
+                RENEWAL
             }
 
             /**
@@ -15829,7 +15865,6 @@ private constructor(
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
-                SUPERSEDE,
                 RENEWAL,
                 /** An enum member indicating that [Type] was instantiated with an unknown value. */
                 _UNKNOWN,
@@ -15844,7 +15879,6 @@ private constructor(
              */
             fun value(): Value =
                 when (this) {
-                    SUPERSEDE -> Value.SUPERSEDE
                     RENEWAL -> Value.RENEWAL
                     else -> Value._UNKNOWN
                 }
@@ -15860,7 +15894,6 @@ private constructor(
              */
             fun known(): Known =
                 when (this) {
-                    SUPERSEDE -> Known.SUPERSEDE
                     RENEWAL -> Known.RENEWAL
                     else -> throw MetronomeInvalidDataException("Unknown Type: $value")
                 }
@@ -16664,11 +16697,11 @@ private constructor(
         ) : this(billingProviderConfiguration, effectiveAt, effectiveUntil, mutableMapOf())
 
         /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun billingProviderConfiguration(): BillingProviderConfiguration =
-            billingProviderConfiguration.getRequired("billing_provider_configuration")
+        fun billingProviderConfiguration(): Optional<BillingProviderConfiguration> =
+            billingProviderConfiguration.getOptional("billing_provider_configuration")
 
         /**
          * The date this billing provider configuration became or becomes active.
@@ -16767,8 +16800,16 @@ private constructor(
             }
 
             fun billingProviderConfiguration(
-                billingProviderConfiguration: BillingProviderConfiguration
-            ) = billingProviderConfiguration(JsonField.of(billingProviderConfiguration))
+                billingProviderConfiguration: BillingProviderConfiguration?
+            ) = billingProviderConfiguration(JsonField.ofNullable(billingProviderConfiguration))
+
+            /**
+             * Alias for calling [Builder.billingProviderConfiguration] with
+             * `billingProviderConfiguration.orElse(null)`.
+             */
+            fun billingProviderConfiguration(
+                billingProviderConfiguration: Optional<BillingProviderConfiguration>
+            ) = billingProviderConfiguration(billingProviderConfiguration.getOrNull())
 
             /**
              * Sets [Builder.billingProviderConfiguration] to an arbitrary JSON value.
@@ -16870,7 +16911,7 @@ private constructor(
                 return@apply
             }
 
-            billingProviderConfiguration().validate()
+            billingProviderConfiguration().ifPresent { it.validate() }
             effectiveAt()
             effectiveUntil()
             validated = true
@@ -28244,7 +28285,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -28848,7 +28891,9 @@ private constructor(
              * The frequency at which the recurring commits will be created. If not provided: - The
              * commits will be created on the usage invoice frequency. If provided: - The period
              * defined in the duration will correspond to this frequency. - Commits will be created
-             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             * aligned with the recurring commit's starting_at rather than the usage invoice
+             * dates. - Daily recurring commits have a limit of one per contract, and are unable to
+             * be created with seat-based subscriptions
              */
             fun recurrenceFrequency(recurrenceFrequency: RecurrenceFrequency) =
                 recurrenceFrequency(JsonField.of(recurrenceFrequency))
@@ -31575,7 +31620,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          */
         class RecurrenceFrequency
         @JsonCreator
@@ -32056,7 +32103,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -32633,7 +32682,9 @@ private constructor(
              * The frequency at which the recurring commits will be created. If not provided: - The
              * commits will be created on the usage invoice frequency. If provided: - The period
              * defined in the duration will correspond to this frequency. - Commits will be created
-             * aligned with the recurring commit's starting_at rather than the usage invoice dates.
+             * aligned with the recurring commit's starting_at rather than the usage invoice
+             * dates. - Daily recurring commits have a limit of one per contract, and are unable to
+             * be created with seat-based subscriptions
              */
             fun recurrenceFrequency(recurrenceFrequency: RecurrenceFrequency) =
                 recurrenceFrequency(JsonField.of(recurrenceFrequency))
@@ -34670,7 +34721,9 @@ private constructor(
          * The frequency at which the recurring commits will be created. If not provided: - The
          * commits will be created on the usage invoice frequency. If provided: - The period defined
          * in the duration will correspond to this frequency. - Commits will be created aligned with
-         * the recurring commit's starting_at rather than the usage invoice dates.
+         * the recurring commit's starting_at rather than the usage invoice dates. - Daily recurring
+         * commits have a limit of one per contract, and are unable to be created with seat-based
+         * subscriptions
          */
         class RecurrenceFrequency
         @JsonCreator
@@ -36187,11 +36240,11 @@ private constructor(
         fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
 
         /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun revenueSystemConfiguration(): RevenueSystemConfiguration =
-            revenueSystemConfiguration.getRequired("revenue_system_configuration")
+        fun revenueSystemConfiguration(): Optional<RevenueSystemConfiguration> =
+            revenueSystemConfiguration.getOptional("revenue_system_configuration")
 
         /**
          * The date this revenue system configuration is superseded by the next entry. Null for the
@@ -36294,8 +36347,17 @@ private constructor(
                 this.effectiveAt = effectiveAt
             }
 
-            fun revenueSystemConfiguration(revenueSystemConfiguration: RevenueSystemConfiguration) =
-                revenueSystemConfiguration(JsonField.of(revenueSystemConfiguration))
+            fun revenueSystemConfiguration(
+                revenueSystemConfiguration: RevenueSystemConfiguration?
+            ) = revenueSystemConfiguration(JsonField.ofNullable(revenueSystemConfiguration))
+
+            /**
+             * Alias for calling [Builder.revenueSystemConfiguration] with
+             * `revenueSystemConfiguration.orElse(null)`.
+             */
+            fun revenueSystemConfiguration(
+                revenueSystemConfiguration: Optional<RevenueSystemConfiguration>
+            ) = revenueSystemConfiguration(revenueSystemConfiguration.getOrNull())
 
             /**
              * Sets [Builder.revenueSystemConfiguration] to an arbitrary JSON value.
@@ -36384,7 +36446,7 @@ private constructor(
             }
 
             effectiveAt()
-            revenueSystemConfiguration().validate()
+            revenueSystemConfiguration().ifPresent { it.validate() }
             effectiveUntil()
             validated = true
         }
