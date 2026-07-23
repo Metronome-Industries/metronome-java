@@ -8,8 +8,6 @@ import com.metronome.api.services.blocking.V1Service
 import com.metronome.api.services.blocking.V1ServiceImpl
 import com.metronome.api.services.blocking.V2Service
 import com.metronome.api.services.blocking.V2ServiceImpl
-import com.metronome.api.services.blocking.WebhookService
-import com.metronome.api.services.blocking.WebhookServiceImpl
 import java.util.function.Consumer
 
 class MetronomeClientImpl(private val clientOptions: ClientOptions) : MetronomeClient {
@@ -29,8 +27,6 @@ class MetronomeClientImpl(private val clientOptions: ClientOptions) : MetronomeC
         WithRawResponseImpl(clientOptions)
     }
 
-    private val webhooks: WebhookService by lazy { WebhookServiceImpl(clientOptionsWithUserAgent) }
-
     private val v2: V2Service by lazy { V2ServiceImpl(clientOptionsWithUserAgent) }
 
     private val v1: V1Service by lazy { V1ServiceImpl(clientOptionsWithUserAgent) }
@@ -42,8 +38,6 @@ class MetronomeClientImpl(private val clientOptions: ClientOptions) : MetronomeC
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetronomeClient =
         MetronomeClientImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun webhooks(): WebhookService = webhooks
-
     override fun v2(): V2Service = v2
 
     override fun v1(): V1Service = v1
@@ -52,10 +46,6 @@ class MetronomeClientImpl(private val clientOptions: ClientOptions) : MetronomeC
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         MetronomeClient.WithRawResponse {
-
-        private val webhooks: WebhookService.WithRawResponse by lazy {
-            WebhookServiceImpl.WithRawResponseImpl(clientOptions)
-        }
 
         private val v2: V2Service.WithRawResponse by lazy {
             V2ServiceImpl.WithRawResponseImpl(clientOptions)
@@ -71,8 +61,6 @@ class MetronomeClientImpl(private val clientOptions: ClientOptions) : MetronomeC
             MetronomeClientImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
-
-        override fun webhooks(): WebhookService.WithRawResponse = webhooks
 
         override fun v2(): V2Service.WithRawResponse = v2
 
