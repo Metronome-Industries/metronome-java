@@ -9,8 +9,6 @@
 
 The Metronome Java SDK provides convenient access to the [Metronome REST API](https://docs.metronome.com) from applications written in Java.
 
-It is generated with [Stainless](https://www.stainless.com/).
-
 ## MCP Server
 
 Use the Metronome MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
