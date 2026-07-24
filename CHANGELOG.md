@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.6.0 (2026-07-23)
+
+Full Changelog: [v0.5.0...v0.6.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.5.0...v0.6.0)
+
+### Features
+
+* [ORCH-2018] fixes type issues created from breaking gql changes ([8162ede](https://github.com/Metronome-Industries/metronome-java/commit/8162ede82cf0fcaa6a34f0651550267f3728090b))
+* Add add_credit_type_conversions field to update_rate_card ([32c888c](https://github.com/Metronome-Industries/metronome-java/commit/32c888c1cab43e02331468269e0ebbec19636e0c))
+* Add cost_basis to commits ([9572718](https://github.com/Metronome-Industries/metronome-java/commit/95727184604ffbd6c179d5f57825499cc585fbbe))
+* Add daily recurring commit description to docs ([b9771d4](https://github.com/Metronome-Industries/metronome-java/commit/b9771d45888a062e4739e375efb23d9765d7b1bf))
+* add stlc SDK generation workflow to api repo ([a38493e](https://github.com/Metronome-Industries/metronome-java/commit/a38493e167a2be2653c9477d11d041b6e7ae2a00))
+* Docs: embeddable dashboard doc updates ([6fc1897](https://github.com/Metronome-Industries/metronome-java/commit/6fc1897812a7674fe340faf81027c329cf37c16a))
+* Kmd/remove supersede from contract transition ([25c53cb](https://github.com/Metronome-Industries/metronome-java/commit/25c53cbecfd7e2adcf8f8688fe0b7ddb5436c168))
+* Plumb applicable_contract_ids in edit customer commit ([a206af0](https://github.com/Metronome-Industries/metronome-java/commit/a206af0e74b2b529e4829099e98aebfb6932b5a6))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([2572843](https://github.com/Metronome-Industries/metronome-java/commit/25728434c80489718ff1e3ffb18f51eb4d14fd86))
+
+
+### Bug Fixes
+
+* remove webhook config that overwrites custom code ([d65db1b](https://github.com/Metronome-Industries/metronome-java/commit/d65db1b7757fa72871a0c42772dd53d7b7ca1c5f))
+
+
+### Chores
+
+* update tracking files for promote workflow ([40aa41e](https://github.com/Metronome-Industries/metronome-java/commit/40aa41ef159692b03bd19e2fc09e5cf65909f0a0))
+
 ## 0.5.0 (2026-07-02)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.4.0...v0.5.0)
