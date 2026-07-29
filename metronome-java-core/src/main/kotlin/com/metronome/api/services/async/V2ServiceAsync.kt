@@ -4,6 +4,7 @@ package com.metronome.api.services.async
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.services.async.v2.ContractServiceAsync
+import com.metronome.api.services.async.v2.NotificationServiceAsync
 import java.util.function.Consumer
 
 interface V2ServiceAsync {
@@ -22,6 +23,8 @@ interface V2ServiceAsync {
 
     fun contracts(): ContractServiceAsync
 
+    fun notifications(): NotificationServiceAsync
+
     /** A view of [V2ServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
@@ -33,5 +36,7 @@ interface V2ServiceAsync {
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): V2ServiceAsync.WithRawResponse
 
         fun contracts(): ContractServiceAsync.WithRawResponse
+
+        fun notifications(): NotificationServiceAsync.WithRawResponse
     }
 }
