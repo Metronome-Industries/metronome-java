@@ -5,6 +5,8 @@ package com.metronome.api.services.async
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.services.async.v2.ContractServiceAsync
 import com.metronome.api.services.async.v2.ContractServiceAsyncImpl
+import com.metronome.api.services.async.v2.NotificationServiceAsync
+import com.metronome.api.services.async.v2.NotificationServiceAsyncImpl
 import java.util.function.Consumer
 
 class V2ServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -16,6 +18,10 @@ class V2ServiceAsyncImpl internal constructor(private val clientOptions: ClientO
 
     private val contracts: ContractServiceAsync by lazy { ContractServiceAsyncImpl(clientOptions) }
 
+    private val notifications: NotificationServiceAsync by lazy {
+        NotificationServiceAsyncImpl(clientOptions)
+    }
+
     override fun withRawResponse(): V2ServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): V2ServiceAsync =
@@ -23,11 +29,17 @@ class V2ServiceAsyncImpl internal constructor(private val clientOptions: ClientO
 
     override fun contracts(): ContractServiceAsync = contracts
 
+    override fun notifications(): NotificationServiceAsync = notifications
+
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         V2ServiceAsync.WithRawResponse {
 
         private val contracts: ContractServiceAsync.WithRawResponse by lazy {
             ContractServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val notifications: NotificationServiceAsync.WithRawResponse by lazy {
+            NotificationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun withOptions(
@@ -38,5 +50,7 @@ class V2ServiceAsyncImpl internal constructor(private val clientOptions: ClientO
             )
 
         override fun contracts(): ContractServiceAsync.WithRawResponse = contracts
+
+        override fun notifications(): NotificationServiceAsync.WithRawResponse = notifications
     }
 }
