@@ -26,29 +26,26 @@ import com.metronome.api.core.checkRequired
 import com.metronome.api.core.getOrThrow
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.CommitHierarchyConfiguration
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class CommitHierarchyConfiguration
-@JsonCreator(mode = JsonCreator.Mode.DISABLED)
-private constructor(
+class CommitHierarchyConfiguration @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
     private val childAccess: JsonField<ChildAccess>,
     private val additionalProperties: MutableMap<String, JsonValue>,
+
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("child_access")
-        @ExcludeMissing
-        childAccess: JsonField<ChildAccess> = JsonMissing.of()
-    ) : this(childAccess, mutableMapOf())
+        @JsonProperty("child_access") @ExcludeMissing childAccess: JsonField<ChildAccess> = JsonMissing.of()
+    ) : this(
+      childAccess, mutableMapOf()
+    )
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun childAccess(): ChildAccess = childAccess.getRequired("child_access")
 
     /**
@@ -62,13 +59,12 @@ private constructor(
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-        additionalProperties.put(key, value)
+      additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -78,11 +74,13 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [CommitHierarchyConfiguration].
          *
          * The following fields are required:
+         *
          * ```java
          * .childAccess()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [CommitHierarchyConfiguration]. */
@@ -92,73 +90,59 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(commitHierarchyConfiguration: CommitHierarchyConfiguration) = apply {
-            childAccess = commitHierarchyConfiguration.childAccess
-            additionalProperties = commitHierarchyConfiguration.additionalProperties.toMutableMap()
-        }
+        internal fun from(commitHierarchyConfiguration: CommitHierarchyConfiguration) =
+            apply {
+                childAccess = commitHierarchyConfiguration.childAccess
+                additionalProperties = commitHierarchyConfiguration.additionalProperties.toMutableMap()
+            }
 
         fun childAccess(childAccess: ChildAccess) = childAccess(JsonField.of(childAccess))
 
         /**
          * Sets [Builder.childAccess] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.childAccess] with a well-typed [ChildAccess] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.childAccess] with a well-typed [ChildAccess] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun childAccess(childAccess: JsonField<ChildAccess>) = apply {
-            this.childAccess = childAccess
-        }
+        fun childAccess(childAccess: JsonField<ChildAccess>) =
+            apply {
+                this.childAccess = childAccess
+            }
 
-        /**
-         * Alias for calling [childAccess] with
-         * `ChildAccess.ofCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll)`.
-         */
-        fun childAccess(commitHierarchyChildAccessAll: ChildAccess.CommitHierarchyChildAccessAll) =
-            childAccess(ChildAccess.ofCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll))
+        /** Alias for calling [childAccess] with `ChildAccess.ofCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll)`. */
+        fun childAccess(commitHierarchyChildAccessAll: ChildAccess.CommitHierarchyChildAccessAll) = childAccess(ChildAccess.ofCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll))
 
-        /**
-         * Alias for calling [childAccess] with
-         * `ChildAccess.ofCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone)`.
-         */
-        fun childAccess(
-            commitHierarchyChildAccessNone: ChildAccess.CommitHierarchyChildAccessNone
-        ) =
-            childAccess(
-                ChildAccess.ofCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone)
-            )
+        /** Alias for calling [childAccess] with `ChildAccess.ofCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone)`. */
+        fun childAccess(commitHierarchyChildAccessNone: ChildAccess.CommitHierarchyChildAccessNone) = childAccess(ChildAccess.ofCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone))
 
-        /**
-         * Alias for calling [childAccess] with
-         * `ChildAccess.ofCommitHierarchyChildAccessContractIds(commitHierarchyChildAccessContractIds)`.
-         */
-        fun childAccess(
-            commitHierarchyChildAccessContractIds: ChildAccess.CommitHierarchyChildAccessContractIds
-        ) =
-            childAccess(
-                ChildAccess.ofCommitHierarchyChildAccessContractIds(
-                    commitHierarchyChildAccessContractIds
-                )
-            )
+        /** Alias for calling [childAccess] with `ChildAccess.ofCommitHierarchyChildAccessContractIds(commitHierarchyChildAccessContractIds)`. */
+        fun childAccess(commitHierarchyChildAccessContractIds: ChildAccess.CommitHierarchyChildAccessContractIds) = childAccess(ChildAccess.ofCommitHierarchyChildAccessContractIds(commitHierarchyChildAccessContractIds))
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         /**
          * Returns an immutable instance of [CommitHierarchyConfiguration].
@@ -166,6 +150,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .childAccess()
          * ```
@@ -174,8 +159,9 @@ private constructor(
          */
         fun build(): CommitHierarchyConfiguration =
             CommitHierarchyConfiguration(
-                checkRequired("childAccess", childAccess),
-                additionalProperties.toMutableMap(),
+              checkRequired(
+                "childAccess", childAccess
+              ), additionalProperties.toMutableMap()
             )
     }
 
@@ -189,14 +175,15 @@ private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): CommitHierarchyConfiguration = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): CommitHierarchyConfiguration =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        childAccess().validate()
-        validated = true
-    }
+            childAccess().validate()
+            validated = true
+        }
 
     fun isValid(): Boolean =
         try {
@@ -216,42 +203,31 @@ private constructor(
 
     @JsonDeserialize(using = ChildAccess.Deserializer::class)
     @JsonSerialize(using = ChildAccess.Serializer::class)
-    class ChildAccess
-    private constructor(
+    class ChildAccess private constructor(
         private val commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll? = null,
         private val commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone? = null,
-        private val commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds? =
-            null,
+        private val commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds? = null,
         private val _json: JsonValue? = null,
+
     ) {
 
-        fun commitHierarchyChildAccessAll(): Optional<CommitHierarchyChildAccessAll> =
-            Optional.ofNullable(commitHierarchyChildAccessAll)
+        fun commitHierarchyChildAccessAll(): Optional<CommitHierarchyChildAccessAll> = Optional.ofNullable(commitHierarchyChildAccessAll)
 
-        fun commitHierarchyChildAccessNone(): Optional<CommitHierarchyChildAccessNone> =
-            Optional.ofNullable(commitHierarchyChildAccessNone)
+        fun commitHierarchyChildAccessNone(): Optional<CommitHierarchyChildAccessNone> = Optional.ofNullable(commitHierarchyChildAccessNone)
 
-        fun commitHierarchyChildAccessContractIds():
-            Optional<CommitHierarchyChildAccessContractIds> =
-            Optional.ofNullable(commitHierarchyChildAccessContractIds)
+        fun commitHierarchyChildAccessContractIds(): Optional<CommitHierarchyChildAccessContractIds> = Optional.ofNullable(commitHierarchyChildAccessContractIds)
 
         fun isCommitHierarchyChildAccessAll(): Boolean = commitHierarchyChildAccessAll != null
 
         fun isCommitHierarchyChildAccessNone(): Boolean = commitHierarchyChildAccessNone != null
 
-        fun isCommitHierarchyChildAccessContractIds(): Boolean =
-            commitHierarchyChildAccessContractIds != null
+        fun isCommitHierarchyChildAccessContractIds(): Boolean = commitHierarchyChildAccessContractIds != null
 
-        fun asCommitHierarchyChildAccessAll(): CommitHierarchyChildAccessAll =
-            commitHierarchyChildAccessAll.getOrThrow("commitHierarchyChildAccessAll")
+        fun asCommitHierarchyChildAccessAll(): CommitHierarchyChildAccessAll = commitHierarchyChildAccessAll.getOrThrow("commitHierarchyChildAccessAll")
 
-        fun asCommitHierarchyChildAccessNone(): CommitHierarchyChildAccessNone =
-            commitHierarchyChildAccessNone.getOrThrow("commitHierarchyChildAccessNone")
+        fun asCommitHierarchyChildAccessNone(): CommitHierarchyChildAccessNone = commitHierarchyChildAccessNone.getOrThrow("commitHierarchyChildAccessNone")
 
-        fun asCommitHierarchyChildAccessContractIds(): CommitHierarchyChildAccessContractIds =
-            commitHierarchyChildAccessContractIds.getOrThrow(
-                "commitHierarchyChildAccessContractIds"
-            )
+        fun asCommitHierarchyChildAccessContractIds(): CommitHierarchyChildAccessContractIds = commitHierarchyChildAccessContractIds.getOrThrow("commitHierarchyChildAccessContractIds")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
@@ -259,8 +235,9 @@ private constructor(
          * Maps this instance's current variant to a value of type [T] using the given [visitor].
          *
          * Note that this method is _not_ forwards compatible with new variants from the API, unless
-         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of
-         * the SDK gracefully, consider overriding [Visitor.unknown]:
+         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of the SDK
+         * gracefully, consider overriding [Visitor.unknown]:
+         *
          * ```java
          * import com.metronome.api.core.JsonValue;
          * import java.util.Optional;
@@ -281,61 +258,48 @@ private constructor(
          * });
          * ```
          *
-         * @throws MetronomeInvalidDataException if [Visitor.unknown] is not overridden in [visitor]
-         *   and the current variant is unknown.
+         * @throws MetronomeInvalidDataException if [Visitor.unknown] is not overridden in
+         *   [visitor] and the current variant is unknown.
          */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                commitHierarchyChildAccessAll != null ->
-                    visitor.visitCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll)
-                commitHierarchyChildAccessNone != null ->
-                    visitor.visitCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone)
-                commitHierarchyChildAccessContractIds != null ->
-                    visitor.visitCommitHierarchyChildAccessContractIds(
-                        commitHierarchyChildAccessContractIds
-                    )
+                commitHierarchyChildAccessAll != null -> visitor.visitCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll)
+                commitHierarchyChildAccessNone != null -> visitor.visitCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone)
+                commitHierarchyChildAccessContractIds != null -> visitor.visitCommitHierarchyChildAccessContractIds(commitHierarchyChildAccessContractIds)
                 else -> visitor.unknown(_json)
             }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): ChildAccess = apply {
-            if (validated) {
-                return@apply
-            }
-
-            accept(
-                object : Visitor<Unit> {
-                    override fun visitCommitHierarchyChildAccessAll(
-                        commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll
-                    ) {
-                        commitHierarchyChildAccessAll.validate()
-                    }
-
-                    override fun visitCommitHierarchyChildAccessNone(
-                        commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone
-                    ) {
-                        commitHierarchyChildAccessNone.validate()
-                    }
-
-                    override fun visitCommitHierarchyChildAccessContractIds(
-                        commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds
-                    ) {
-                        commitHierarchyChildAccessContractIds.validate()
-                    }
+        fun validate(): ChildAccess =
+            apply {
+                if (validated) {
+                  return@apply
                 }
-            )
-            validated = true
-        }
+
+                accept(object : Visitor<Unit> {
+                    override fun visitCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll) {
+                      commitHierarchyChildAccessAll.validate()
+                    }
+
+                    override fun visitCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone) {
+                      commitHierarchyChildAccessNone.validate()
+                    }
+
+                    override fun visitCommitHierarchyChildAccessContractIds(commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds) {
+                      commitHierarchyChildAccessContractIds.validate()
+                    }
+                })
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -346,57 +310,37 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            accept(
-                object : Visitor<Int> {
-                    override fun visitCommitHierarchyChildAccessAll(
-                        commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll
-                    ) = commitHierarchyChildAccessAll.validity()
+            accept(object : Visitor<Int> {
+                override fun visitCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll) = commitHierarchyChildAccessAll.validity()
 
-                    override fun visitCommitHierarchyChildAccessNone(
-                        commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone
-                    ) = commitHierarchyChildAccessNone.validity()
+                override fun visitCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone) = commitHierarchyChildAccessNone.validity()
 
-                    override fun visitCommitHierarchyChildAccessContractIds(
-                        commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds
-                    ) = commitHierarchyChildAccessContractIds.validity()
+                override fun visitCommitHierarchyChildAccessContractIds(commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds) = commitHierarchyChildAccessContractIds.validity()
 
-                    override fun unknown(json: JsonValue?) = 0
-                }
-            )
+                override fun unknown(json: JsonValue?) = 0
+            })
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is ChildAccess &&
-                commitHierarchyChildAccessAll == other.commitHierarchyChildAccessAll &&
-                commitHierarchyChildAccessNone == other.commitHierarchyChildAccessNone &&
-                commitHierarchyChildAccessContractIds == other.commitHierarchyChildAccessContractIds
+          return other is ChildAccess && commitHierarchyChildAccessAll == other.commitHierarchyChildAccessAll && commitHierarchyChildAccessNone == other.commitHierarchyChildAccessNone && commitHierarchyChildAccessContractIds == other.commitHierarchyChildAccessContractIds
         }
 
-        override fun hashCode(): Int =
-            Objects.hash(
-                commitHierarchyChildAccessAll,
-                commitHierarchyChildAccessNone,
-                commitHierarchyChildAccessContractIds,
-            )
+        override fun hashCode(): Int = Objects.hash(commitHierarchyChildAccessAll, commitHierarchyChildAccessNone, commitHierarchyChildAccessContractIds)
 
         override fun toString(): String =
             when {
-                commitHierarchyChildAccessAll != null ->
-                    "ChildAccess{commitHierarchyChildAccessAll=$commitHierarchyChildAccessAll}"
-                commitHierarchyChildAccessNone != null ->
-                    "ChildAccess{commitHierarchyChildAccessNone=$commitHierarchyChildAccessNone}"
-                commitHierarchyChildAccessContractIds != null ->
-                    "ChildAccess{commitHierarchyChildAccessContractIds=$commitHierarchyChildAccessContractIds}"
+                commitHierarchyChildAccessAll != null -> "ChildAccess{commitHierarchyChildAccessAll=$commitHierarchyChildAccessAll}"
+                commitHierarchyChildAccessNone != null -> "ChildAccess{commitHierarchyChildAccessNone=$commitHierarchyChildAccessNone}"
+                commitHierarchyChildAccessContractIds != null -> "ChildAccess{commitHierarchyChildAccessContractIds=$commitHierarchyChildAccessContractIds}"
                 _json != null -> "ChildAccess{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid ChildAccess")
             }
@@ -404,136 +348,97 @@ private constructor(
         companion object {
 
             @JvmStatic
-            fun ofCommitHierarchyChildAccessAll(
-                commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll
-            ) = ChildAccess(commitHierarchyChildAccessAll = commitHierarchyChildAccessAll)
+            fun ofCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll) = ChildAccess(commitHierarchyChildAccessAll = commitHierarchyChildAccessAll)
 
             @JvmStatic
-            fun ofCommitHierarchyChildAccessNone(
-                commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone
-            ) = ChildAccess(commitHierarchyChildAccessNone = commitHierarchyChildAccessNone)
+            fun ofCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone) = ChildAccess(commitHierarchyChildAccessNone = commitHierarchyChildAccessNone)
 
             @JvmStatic
-            fun ofCommitHierarchyChildAccessContractIds(
-                commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds
-            ) =
-                ChildAccess(
-                    commitHierarchyChildAccessContractIds = commitHierarchyChildAccessContractIds
-                )
+            fun ofCommitHierarchyChildAccessContractIds(commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds) = ChildAccess(commitHierarchyChildAccessContractIds = commitHierarchyChildAccessContractIds)
         }
 
-        /**
-         * An interface that defines how to map each variant of [ChildAccess] to a value of type
-         * [T].
-         */
+        /** An interface that defines how to map each variant of [ChildAccess] to a value of type [T]. */
         interface Visitor<out T> {
 
-            fun visitCommitHierarchyChildAccessAll(
-                commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll
-            ): T
+            fun visitCommitHierarchyChildAccessAll(commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll): T
 
-            fun visitCommitHierarchyChildAccessNone(
-                commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone
-            ): T
+            fun visitCommitHierarchyChildAccessNone(commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone): T
 
-            fun visitCommitHierarchyChildAccessContractIds(
-                commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds
-            ): T
+            fun visitCommitHierarchyChildAccessContractIds(commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds): T
 
             /**
              * Maps an unknown variant of [ChildAccess] to a value of type [T].
              *
-             * An instance of [ChildAccess] can contain an unknown variant if it was deserialized
-             * from data that doesn't match any known variant. For example, if the SDK is on an
-             * older version than the API, then the API may respond with new variants that the SDK
-             * is unaware of.
+             * An instance of [ChildAccess] can contain an unknown variant if it was deserialized from data
+             * that doesn't match any known variant. For example, if the SDK is on an older version than the
+             * API, then the API may respond with new variants that the SDK is unaware of.
              *
              * @throws MetronomeInvalidDataException in the default implementation.
              */
             fun unknown(json: JsonValue?): T {
-                throw MetronomeInvalidDataException("Unknown ChildAccess: $json")
+              throw MetronomeInvalidDataException("Unknown ChildAccess: $json")
             }
         }
 
         internal class Deserializer : BaseDeserializer<ChildAccess>(ChildAccess::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): ChildAccess {
-                val json = JsonValue.fromJsonNode(node)
+              val json = JsonValue.fromJsonNode(node)
 
-                val bestMatches =
-                    sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessAll>())
-                                ?.let {
-                                    ChildAccess(commitHierarchyChildAccessAll = it, _json = json)
-                                },
-                            tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessNone>())
-                                ?.let {
-                                    ChildAccess(commitHierarchyChildAccessNone = it, _json = json)
-                                },
-                            tryDeserialize(
-                                    node,
-                                    jacksonTypeRef<CommitHierarchyChildAccessContractIds>(),
-                                )
-                                ?.let {
-                                    ChildAccess(
-                                        commitHierarchyChildAccessContractIds = it,
-                                        _json = json,
-                                    )
-                                },
-                        )
-                        .filterNotNull()
-                        .allMaxBy { it.validity() }
-                        .toList()
-                return when (bestMatches.size) {
-                    // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from boolean).
-                    0 -> ChildAccess(_json = json)
-                    1 -> bestMatches.single()
-                    // If there's more than one match with the highest validity, then use the first
-                    // completely valid match, or simply the first match if none are completely
-                    // valid.
-                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
-                }
+              val bestMatches = sequenceOf(
+                      tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessAll>())
+                          ?.let {
+                              ChildAccess(commitHierarchyChildAccessAll = it, _json = json)
+                          },
+                      tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessNone>())
+                          ?.let {
+                              ChildAccess(commitHierarchyChildAccessNone = it, _json = json)
+                          },
+                      tryDeserialize(node, jacksonTypeRef<CommitHierarchyChildAccessContractIds>())
+                          ?.let {
+                              ChildAccess(commitHierarchyChildAccessContractIds = it, _json = json)
+                          }
+                  )
+                  .filterNotNull()
+                  .allMaxBy { it.validity() }
+                  .toList()
+              return when (bestMatches.size) {
+                  // This can happen if what we're deserializing is completely incompatible with all the possible variants (e.g. deserializing from boolean).
+                  0 -> ChildAccess(_json = json)
+                  1 -> bestMatches.single()
+                  // If there's more than one match with the highest validity, then use the first completely valid match, or simply the first match if none are completely valid.
+                  else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+              }
             }
         }
 
         internal class Serializer : BaseSerializer<ChildAccess>(ChildAccess::class) {
 
-            override fun serialize(
-                value: ChildAccess,
-                generator: JsonGenerator,
-                provider: SerializerProvider,
-            ) {
-                when {
-                    value.commitHierarchyChildAccessAll != null ->
-                        generator.writeObject(value.commitHierarchyChildAccessAll)
-                    value.commitHierarchyChildAccessNone != null ->
-                        generator.writeObject(value.commitHierarchyChildAccessNone)
-                    value.commitHierarchyChildAccessContractIds != null ->
-                        generator.writeObject(value.commitHierarchyChildAccessContractIds)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid ChildAccess")
-                }
+            override fun serialize(value: ChildAccess, generator: JsonGenerator, provider: SerializerProvider) {
+              when {
+                  value.commitHierarchyChildAccessAll != null -> generator.writeObject(value.commitHierarchyChildAccessAll)
+                  value.commitHierarchyChildAccessNone != null -> generator.writeObject(value.commitHierarchyChildAccessNone)
+                  value.commitHierarchyChildAccessContractIds != null -> generator.writeObject(value.commitHierarchyChildAccessContractIds)
+                  value._json != null -> generator.writeObject(value._json)
+                  else -> throw IllegalStateException("Invalid ChildAccess")
+              }
             }
         }
 
-        class CommitHierarchyChildAccessAll
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
+        class CommitHierarchyChildAccessAll @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
             private val type: JsonField<Type>,
             private val additionalProperties: MutableMap<String, JsonValue>,
+
         ) {
 
             @JsonCreator
             private constructor(
                 @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of()
-            ) : this(type, mutableMapOf())
+            ) : this(
+              type, mutableMapOf()
+            )
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun type(): Type = type.getRequired("type")
 
             /**
@@ -541,32 +446,34 @@ private constructor(
              *
              * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+            @JsonProperty("type")
+            @ExcludeMissing
+            fun _type(): JsonField<Type> = type
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
+              additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of
-                 * [CommitHierarchyChildAccessAll].
+                 * Returns a mutable builder for constructing an instance of [CommitHierarchyChildAccessAll].
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .type()
                  * ```
                  */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [CommitHierarchyChildAccessAll]. */
@@ -579,8 +486,7 @@ private constructor(
                 internal fun from(commitHierarchyChildAccessAll: CommitHierarchyChildAccessAll) =
                     apply {
                         type = commitHierarchyChildAccessAll.type
-                        additionalProperties =
-                            commitHierarchyChildAccessAll.additionalProperties.toMutableMap()
+                        additionalProperties = commitHierarchyChildAccessAll.additionalProperties.toMutableMap()
                     }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -588,33 +494,39 @@ private constructor(
                 /**
                  * Sets [Builder.type] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.type] with a well-typed [Type] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
+                 * You should usually call [Builder.type] with a well-typed [Type] value instead. This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun type(type: JsonField<Type>) = apply { this.type = type }
+                fun type(type: JsonField<Type>) =
+                    apply {
+                        this.type = type
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 /**
                  * Returns an immutable instance of [CommitHierarchyChildAccessAll].
@@ -622,6 +534,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .type()
                  * ```
@@ -630,31 +543,31 @@ private constructor(
                  */
                 fun build(): CommitHierarchyChildAccessAll =
                     CommitHierarchyChildAccessAll(
-                        checkRequired("type", type),
-                        additionalProperties.toMutableMap(),
+                      checkRequired(
+                        "type", type
+                      ), additionalProperties.toMutableMap()
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): CommitHierarchyChildAccessAll = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): CommitHierarchyChildAccessAll =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                type().validate()
-                validated = true
-            }
+                    type().validate()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -665,26 +578,27 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
             internal fun validity(): Int = (type.asKnown().getOrNull()?.validity() ?: 0)
 
-            class Type @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
+            class Type @JsonCreator private constructor(
+                private val value: JsonField<String>,
+
+            ) : Enum {
 
                 /**
                  * Returns this class instance's raw value.
                  *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
+                 * This is usually only useful if this instance was deserialized from data that doesn't match any known
+                 * member, and you want to know that value. For example, if the SDK is on an older version than the
+                 * API, then the API may respond with new members that the SDK is unaware of.
                  */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue
+                fun _value(): JsonField<String> = value
 
                 companion object {
 
@@ -695,32 +609,32 @@ private constructor(
 
                 /** An enum containing [Type]'s known values. */
                 enum class Known {
-                    ALL
+                    ALL,
                 }
 
                 /**
                  * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
                  *
                  * An instance of [Type] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
+                 *
+                 * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+                 *   an older version than the API, then the API may respond with new members that the SDK is unaware
+                 *   of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
                     ALL,
-                    /**
-                     * An enum member indicating that [Type] was instantiated with an unknown value.
-                     */
+                    /** An enum member indicating that [Type] was instantiated with an unknown value. */
                     _UNKNOWN,
                 }
 
                 /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+                 * class was instantiated with an unknown value.
                  *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
+                 * Use the [known] method instead if you're certain the value is always known or if you want to throw
+                 * for the unknown case.
                  */
                 fun value(): Value =
                     when (this) {
@@ -731,11 +645,10 @@ private constructor(
                 /**
                  * Returns an enum member corresponding to this class instance's value.
                  *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
+                 * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+                 * for the unknown case.
                  *
-                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
-                 *   known member.
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
                  */
                 fun known(): Known =
                     when (this) {
@@ -746,37 +659,33 @@ private constructor(
                 /**
                  * Returns this class instance's primitive wire representation.
                  *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
+                 * This differs from the [toString] method because that method is primarily for debugging and generally
+                 * doesn't throw.
                  *
-                 * @throws MetronomeInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
+                 * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+                 *   primitive type.
                  */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        MetronomeInvalidDataException("Value is not a String")
-                    }
+                fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
                 private var validated: Boolean = false
 
                 /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
+                 * Validates that the types of all values in this object match their expected types recursively.
                  *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
+                 * This method is _not_ forwards compatible with new types from the API for existing fields.
                  *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+                 *   expected type.
                  */
-                fun validate(): Type = apply {
-                    if (validated) {
-                        return@apply
-                    }
+                fun validate(): Type =
+                    apply {
+                        if (validated) {
+                          return@apply
+                        }
 
-                    known()
-                    validated = true
-                }
+                        known()
+                        validated = true
+                    }
 
                 fun isValid(): Boolean =
                     try {
@@ -787,19 +696,19 @@ private constructor(
                     }
 
                 /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
+                 * Returns a score indicating how many valid values are contained in this object recursively.
                  *
                  * Used for best match union deserialization.
                  */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+                @JvmSynthetic
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return other is Type && value == other.value
+                  return other is Type && value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -808,40 +717,34 @@ private constructor(
             }
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is CommitHierarchyChildAccessAll &&
-                    type == other.type &&
-                    additionalProperties == other.additionalProperties
+              return other is CommitHierarchyChildAccessAll && type == other.type && additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(type, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "CommitHierarchyChildAccessAll{type=$type, additionalProperties=$additionalProperties}"
+            override fun toString() = "CommitHierarchyChildAccessAll{type=$type, additionalProperties=$additionalProperties}"
         }
 
-        class CommitHierarchyChildAccessNone
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
+        class CommitHierarchyChildAccessNone @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
             private val type: JsonField<Type>,
             private val additionalProperties: MutableMap<String, JsonValue>,
+
         ) {
 
             @JsonCreator
             private constructor(
                 @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of()
-            ) : this(type, mutableMapOf())
+            ) : this(
+              type, mutableMapOf()
+            )
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun type(): Type = type.getRequired("type")
 
             /**
@@ -849,32 +752,34 @@ private constructor(
              *
              * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+            @JsonProperty("type")
+            @ExcludeMissing
+            fun _type(): JsonField<Type> = type
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
+              additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of
-                 * [CommitHierarchyChildAccessNone].
+                 * Returns a mutable builder for constructing an instance of [CommitHierarchyChildAccessNone].
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .type()
                  * ```
                  */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [CommitHierarchyChildAccessNone]. */
@@ -887,8 +792,7 @@ private constructor(
                 internal fun from(commitHierarchyChildAccessNone: CommitHierarchyChildAccessNone) =
                     apply {
                         type = commitHierarchyChildAccessNone.type
-                        additionalProperties =
-                            commitHierarchyChildAccessNone.additionalProperties.toMutableMap()
+                        additionalProperties = commitHierarchyChildAccessNone.additionalProperties.toMutableMap()
                     }
 
                 fun type(type: Type) = type(JsonField.of(type))
@@ -896,33 +800,39 @@ private constructor(
                 /**
                  * Sets [Builder.type] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.type] with a well-typed [Type] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
+                 * You should usually call [Builder.type] with a well-typed [Type] value instead. This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun type(type: JsonField<Type>) = apply { this.type = type }
+                fun type(type: JsonField<Type>) =
+                    apply {
+                        this.type = type
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 /**
                  * Returns an immutable instance of [CommitHierarchyChildAccessNone].
@@ -930,6 +840,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .type()
                  * ```
@@ -938,31 +849,31 @@ private constructor(
                  */
                 fun build(): CommitHierarchyChildAccessNone =
                     CommitHierarchyChildAccessNone(
-                        checkRequired("type", type),
-                        additionalProperties.toMutableMap(),
+                      checkRequired(
+                        "type", type
+                      ), additionalProperties.toMutableMap()
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): CommitHierarchyChildAccessNone = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): CommitHierarchyChildAccessNone =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                type().validate()
-                validated = true
-            }
+                    type().validate()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -973,26 +884,27 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
             internal fun validity(): Int = (type.asKnown().getOrNull()?.validity() ?: 0)
 
-            class Type @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
+            class Type @JsonCreator private constructor(
+                private val value: JsonField<String>,
+
+            ) : Enum {
 
                 /**
                  * Returns this class instance's raw value.
                  *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
+                 * This is usually only useful if this instance was deserialized from data that doesn't match any known
+                 * member, and you want to know that value. For example, if the SDK is on an older version than the
+                 * API, then the API may respond with new members that the SDK is unaware of.
                  */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue
+                fun _value(): JsonField<String> = value
 
                 companion object {
 
@@ -1003,32 +915,32 @@ private constructor(
 
                 /** An enum containing [Type]'s known values. */
                 enum class Known {
-                    NONE
+                    NONE,
                 }
 
                 /**
                  * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
                  *
                  * An instance of [Type] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
+                 *
+                 * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+                 *   an older version than the API, then the API may respond with new members that the SDK is unaware
+                 *   of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
                     NONE,
-                    /**
-                     * An enum member indicating that [Type] was instantiated with an unknown value.
-                     */
+                    /** An enum member indicating that [Type] was instantiated with an unknown value. */
                     _UNKNOWN,
                 }
 
                 /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+                 * class was instantiated with an unknown value.
                  *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
+                 * Use the [known] method instead if you're certain the value is always known or if you want to throw
+                 * for the unknown case.
                  */
                 fun value(): Value =
                     when (this) {
@@ -1039,11 +951,10 @@ private constructor(
                 /**
                  * Returns an enum member corresponding to this class instance's value.
                  *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
+                 * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+                 * for the unknown case.
                  *
-                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
-                 *   known member.
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
                  */
                 fun known(): Known =
                     when (this) {
@@ -1054,37 +965,33 @@ private constructor(
                 /**
                  * Returns this class instance's primitive wire representation.
                  *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
+                 * This differs from the [toString] method because that method is primarily for debugging and generally
+                 * doesn't throw.
                  *
-                 * @throws MetronomeInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
+                 * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+                 *   primitive type.
                  */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        MetronomeInvalidDataException("Value is not a String")
-                    }
+                fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
                 private var validated: Boolean = false
 
                 /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
+                 * Validates that the types of all values in this object match their expected types recursively.
                  *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
+                 * This method is _not_ forwards compatible with new types from the API for existing fields.
                  *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+                 *   expected type.
                  */
-                fun validate(): Type = apply {
-                    if (validated) {
-                        return@apply
-                    }
+                fun validate(): Type =
+                    apply {
+                        if (validated) {
+                          return@apply
+                        }
 
-                    known()
-                    validated = true
-                }
+                        known()
+                        validated = true
+                    }
 
                 fun isValid(): Boolean =
                     try {
@@ -1095,19 +1002,19 @@ private constructor(
                     }
 
                 /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
+                 * Returns a score indicating how many valid values are contained in this object recursively.
                  *
                  * Used for best match union deserialization.
                  */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+                @JvmSynthetic
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return other is Type && value == other.value
+                  return other is Type && value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1116,58 +1023,47 @@ private constructor(
             }
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is CommitHierarchyChildAccessNone &&
-                    type == other.type &&
-                    additionalProperties == other.additionalProperties
+              return other is CommitHierarchyChildAccessNone && type == other.type && additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(type, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "CommitHierarchyChildAccessNone{type=$type, additionalProperties=$additionalProperties}"
+            override fun toString() = "CommitHierarchyChildAccessNone{type=$type, additionalProperties=$additionalProperties}"
         }
 
-        class CommitHierarchyChildAccessContractIds
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
+        class CommitHierarchyChildAccessContractIds @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
             private val contractIds: JsonField<List<String>>,
             private val type: JsonField<Type>,
             private val additionalProperties: MutableMap<String, JsonValue>,
+
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("contract_ids")
-                @ExcludeMissing
-                contractIds: JsonField<List<String>> = JsonMissing.of(),
-                @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-            ) : this(contractIds, type, mutableMapOf())
+                @JsonProperty("contract_ids") @ExcludeMissing contractIds: JsonField<List<String>> = JsonMissing.of(),
+                @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of()
+            ) : this(
+              contractIds,
+              type,
+              mutableMapOf(),
+            )
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun contractIds(): List<String> = contractIds.getRequired("contract_ids")
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun type(): Type = type.getRequired("type")
 
             /**
              * Returns the raw JSON value of [contractIds].
              *
-             * Unlike [contractIds], this method doesn't throw if the JSON field has an unexpected
-             * type.
+             * Unlike [contractIds], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("contract_ids")
             @ExcludeMissing
@@ -1178,33 +1074,35 @@ private constructor(
              *
              * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+            @JsonProperty("type")
+            @ExcludeMissing
+            fun _type(): JsonField<Type> = type
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
+              additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of
-                 * [CommitHierarchyChildAccessContractIds].
+                 * Returns a mutable builder for constructing an instance of [CommitHierarchyChildAccessContractIds].
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .contractIds()
                  * .type()
                  * ```
                  */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [CommitHierarchyChildAccessContractIds]. */
@@ -1215,73 +1113,76 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(
-                    commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds
-                ) = apply {
-                    contractIds =
-                        commitHierarchyChildAccessContractIds.contractIds.map { it.toMutableList() }
-                    type = commitHierarchyChildAccessContractIds.type
-                    additionalProperties =
-                        commitHierarchyChildAccessContractIds.additionalProperties.toMutableMap()
-                }
+                internal fun from(commitHierarchyChildAccessContractIds: CommitHierarchyChildAccessContractIds) =
+                    apply {
+                        contractIds = commitHierarchyChildAccessContractIds.contractIds.map { it.toMutableList() }
+                        type = commitHierarchyChildAccessContractIds.type
+                        additionalProperties = commitHierarchyChildAccessContractIds.additionalProperties.toMutableMap()
+                    }
 
                 fun contractIds(contractIds: List<String>) = contractIds(JsonField.of(contractIds))
 
                 /**
                  * Sets [Builder.contractIds] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.contractIds] with a well-typed `List<String>`
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.contractIds] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun contractIds(contractIds: JsonField<List<String>>) = apply {
-                    this.contractIds = contractIds.map { it.toMutableList() }
-                }
+                fun contractIds(contractIds: JsonField<List<String>>) =
+                    apply {
+                        this.contractIds = contractIds.map { it.toMutableList() }
+                    }
 
                 /**
                  * Adds a single [String] to [contractIds].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addContractId(contractId: String) = apply {
-                    contractIds =
-                        (contractIds ?: JsonField.of(mutableListOf())).also {
+                fun addContractId(contractId: String) =
+                    apply {
+                        contractIds = (contractIds ?: JsonField.of(mutableListOf())).also {
                             checkKnown("contractIds", it).add(contractId)
                         }
-                }
+                    }
 
                 fun type(type: Type) = type(JsonField.of(type))
 
                 /**
                  * Sets [Builder.type] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.type] with a well-typed [Type] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
+                 * You should usually call [Builder.type] with a well-typed [Type] value instead. This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun type(type: JsonField<Type>) = apply { this.type = type }
+                fun type(type: JsonField<Type>) =
+                    apply {
+                        this.type = type
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 /**
                  * Returns an immutable instance of [CommitHierarchyChildAccessContractIds].
@@ -1289,6 +1190,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .contractIds()
                  * .type()
@@ -1298,33 +1200,36 @@ private constructor(
                  */
                 fun build(): CommitHierarchyChildAccessContractIds =
                     CommitHierarchyChildAccessContractIds(
-                        checkRequired("contractIds", contractIds).map { it.toImmutable() },
-                        checkRequired("type", type),
-                        additionalProperties.toMutableMap(),
+                      checkRequired(
+                        "contractIds", contractIds
+                      ).map { it.toImmutable() },
+                      checkRequired(
+                        "type", type
+                      ),
+                      additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): CommitHierarchyChildAccessContractIds = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): CommitHierarchyChildAccessContractIds =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                contractIds()
-                type().validate()
-                validated = true
-            }
+                    contractIds()
+                    type().validate()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -1335,28 +1240,27 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int =
-                (contractIds.asKnown().getOrNull()?.size ?: 0) +
-                    (type.asKnown().getOrNull()?.validity() ?: 0)
+            internal fun validity(): Int = (contractIds.asKnown().getOrNull()?.size ?: 0) + (type.asKnown().getOrNull()?.validity() ?: 0)
 
-            class Type @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
+            class Type @JsonCreator private constructor(
+                private val value: JsonField<String>,
+
+            ) : Enum {
 
                 /**
                  * Returns this class instance's raw value.
                  *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
+                 * This is usually only useful if this instance was deserialized from data that doesn't match any known
+                 * member, and you want to know that value. For example, if the SDK is on an older version than the
+                 * API, then the API may respond with new members that the SDK is unaware of.
                  */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue
+                fun _value(): JsonField<String> = value
 
                 companion object {
 
@@ -1367,32 +1271,32 @@ private constructor(
 
                 /** An enum containing [Type]'s known values. */
                 enum class Known {
-                    CONTRACT_IDS
+                    CONTRACT_IDS,
                 }
 
                 /**
                  * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
                  *
                  * An instance of [Type] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
+                 *
+                 * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+                 *   an older version than the API, then the API may respond with new members that the SDK is unaware
+                 *   of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
                     CONTRACT_IDS,
-                    /**
-                     * An enum member indicating that [Type] was instantiated with an unknown value.
-                     */
+                    /** An enum member indicating that [Type] was instantiated with an unknown value. */
                     _UNKNOWN,
                 }
 
                 /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+                 * class was instantiated with an unknown value.
                  *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
+                 * Use the [known] method instead if you're certain the value is always known or if you want to throw
+                 * for the unknown case.
                  */
                 fun value(): Value =
                     when (this) {
@@ -1403,11 +1307,10 @@ private constructor(
                 /**
                  * Returns an enum member corresponding to this class instance's value.
                  *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
+                 * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+                 * for the unknown case.
                  *
-                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
-                 *   known member.
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
                  */
                 fun known(): Known =
                     when (this) {
@@ -1418,37 +1321,33 @@ private constructor(
                 /**
                  * Returns this class instance's primitive wire representation.
                  *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
+                 * This differs from the [toString] method because that method is primarily for debugging and generally
+                 * doesn't throw.
                  *
-                 * @throws MetronomeInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
+                 * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+                 *   primitive type.
                  */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        MetronomeInvalidDataException("Value is not a String")
-                    }
+                fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
                 private var validated: Boolean = false
 
                 /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
+                 * Validates that the types of all values in this object match their expected types recursively.
                  *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
+                 * This method is _not_ forwards compatible with new types from the API for existing fields.
                  *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+                 *   expected type.
                  */
-                fun validate(): Type = apply {
-                    if (validated) {
-                        return@apply
-                    }
+                fun validate(): Type =
+                    apply {
+                        if (validated) {
+                          return@apply
+                        }
 
-                    known()
-                    validated = true
-                }
+                        known()
+                        validated = true
+                    }
 
                 fun isValid(): Boolean =
                     try {
@@ -1459,19 +1358,19 @@ private constructor(
                     }
 
                 /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
+                 * Returns a score indicating how many valid values are contained in this object recursively.
                  *
                  * Used for best match union deserialization.
                  */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+                @JvmSynthetic
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return other is Type && value == other.value
+                  return other is Type && value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -1480,41 +1379,32 @@ private constructor(
             }
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is CommitHierarchyChildAccessContractIds &&
-                    contractIds == other.contractIds &&
-                    type == other.type &&
-                    additionalProperties == other.additionalProperties
+              return other is CommitHierarchyChildAccessContractIds && contractIds == other.contractIds && type == other.type && additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy {
-                Objects.hash(contractIds, type, additionalProperties)
-            }
+            private val hashCode: Int by lazy { Objects.hash(contractIds, type, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "CommitHierarchyChildAccessContractIds{contractIds=$contractIds, type=$type, additionalProperties=$additionalProperties}"
+            override fun toString() = "CommitHierarchyChildAccessContractIds{contractIds=$contractIds, type=$type, additionalProperties=$additionalProperties}"
         }
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is CommitHierarchyConfiguration &&
-            childAccess == other.childAccess &&
-            additionalProperties == other.additionalProperties
+      return other is CommitHierarchyConfiguration && childAccess == other.childAccess && additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy { Objects.hash(childAccess, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "CommitHierarchyConfiguration{childAccess=$childAccess, additionalProperties=$additionalProperties}"
+    override fun toString() = "CommitHierarchyConfiguration{childAccess=$childAccess, additionalProperties=$additionalProperties}"
 }

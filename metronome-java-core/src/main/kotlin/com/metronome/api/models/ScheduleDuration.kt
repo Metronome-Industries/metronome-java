@@ -14,40 +14,35 @@ import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.CreditTypeData
+import com.metronome.api.models.ScheduleDuration
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class ScheduleDuration
-@JsonCreator(mode = JsonCreator.Mode.DISABLED)
-private constructor(
+class ScheduleDuration @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
     private val scheduleItems: JsonField<List<ScheduleItem>>,
     private val creditType: JsonField<CreditTypeData>,
     private val additionalProperties: MutableMap<String, JsonValue>,
+
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("schedule_items")
-        @ExcludeMissing
-        scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
-        @JsonProperty("credit_type")
-        @ExcludeMissing
-        creditType: JsonField<CreditTypeData> = JsonMissing.of(),
-    ) : this(scheduleItems, creditType, mutableMapOf())
+        @JsonProperty("schedule_items") @ExcludeMissing scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
+        @JsonProperty("credit_type") @ExcludeMissing creditType: JsonField<CreditTypeData> = JsonMissing.of()
+    ) : this(
+      scheduleItems,
+      creditType,
+      mutableMapOf(),
+    )
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun scheduleItems(): List<ScheduleItem> = scheduleItems.getRequired("schedule_items")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
     fun creditType(): Optional<CreditTypeData> = creditType.getOptional("credit_type")
 
     /**
@@ -70,13 +65,12 @@ private constructor(
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-        additionalProperties.put(key, value)
+      additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -86,11 +80,13 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [ScheduleDuration].
          *
          * The following fields are required:
+         *
          * ```java
          * .scheduleItems()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [ScheduleDuration]. */
@@ -101,69 +97,76 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(scheduleDuration: ScheduleDuration) = apply {
-            scheduleItems = scheduleDuration.scheduleItems.map { it.toMutableList() }
-            creditType = scheduleDuration.creditType
-            additionalProperties = scheduleDuration.additionalProperties.toMutableMap()
-        }
+        internal fun from(scheduleDuration: ScheduleDuration) =
+            apply {
+                scheduleItems = scheduleDuration.scheduleItems.map { it.toMutableList() }
+                creditType = scheduleDuration.creditType
+                additionalProperties = scheduleDuration.additionalProperties.toMutableMap()
+            }
 
-        fun scheduleItems(scheduleItems: List<ScheduleItem>) =
-            scheduleItems(JsonField.of(scheduleItems))
+        fun scheduleItems(scheduleItems: List<ScheduleItem>) = scheduleItems(JsonField.of(scheduleItems))
 
         /**
          * Sets [Builder.scheduleItems] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.scheduleItems] with a well-typed `List<ScheduleItem>`
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.scheduleItems] with a well-typed `List<ScheduleItem>` value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) = apply {
-            this.scheduleItems = scheduleItems.map { it.toMutableList() }
-        }
+        fun scheduleItems(scheduleItems: JsonField<List<ScheduleItem>>) =
+            apply {
+                this.scheduleItems = scheduleItems.map { it.toMutableList() }
+            }
 
         /**
          * Adds a single [ScheduleItem] to [scheduleItems].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addScheduleItem(scheduleItem: ScheduleItem) = apply {
-            scheduleItems =
-                (scheduleItems ?: JsonField.of(mutableListOf())).also {
+        fun addScheduleItem(scheduleItem: ScheduleItem) =
+            apply {
+                scheduleItems = (scheduleItems ?: JsonField.of(mutableListOf())).also {
                     checkKnown("scheduleItems", it).add(scheduleItem)
                 }
-        }
+            }
 
         fun creditType(creditType: CreditTypeData) = creditType(JsonField.of(creditType))
 
         /**
          * Sets [Builder.creditType] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.creditType] with a well-typed [CreditTypeData] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.creditType] with a well-typed [CreditTypeData] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun creditType(creditType: JsonField<CreditTypeData>) = apply {
-            this.creditType = creditType
-        }
+        fun creditType(creditType: JsonField<CreditTypeData>) =
+            apply {
+                this.creditType = creditType
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         /**
          * Returns an immutable instance of [ScheduleDuration].
@@ -171,6 +174,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .scheduleItems()
          * ```
@@ -179,9 +183,11 @@ private constructor(
          */
         fun build(): ScheduleDuration =
             ScheduleDuration(
-                checkRequired("scheduleItems", scheduleItems).map { it.toImmutable() },
-                creditType,
-                additionalProperties.toMutableMap(),
+              checkRequired(
+                "scheduleItems", scheduleItems
+              ).map { it.toImmutable() },
+              creditType,
+              additionalProperties.toMutableMap(),
             )
     }
 
@@ -195,15 +201,16 @@ private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): ScheduleDuration = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): ScheduleDuration =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        scheduleItems().forEach { it.validate() }
-        creditType().ifPresent { it.validate() }
-        validated = true
-    }
+            scheduleItems().forEach { it.validate() }
+            creditType().ifPresent { it.validate() }
+            validated = true
+        }
 
     fun isValid(): Boolean =
         try {
@@ -219,54 +226,41 @@ private constructor(
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int =
-        (scheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (creditType.asKnown().getOrNull()?.validity() ?: 0)
+    internal fun validity(): Int = (scheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (creditType.asKnown().getOrNull()?.validity() ?: 0)
 
-    class ScheduleItem
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class ScheduleItem @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val id: JsonField<String>,
         private val amount: JsonField<Double>,
         private val endingBefore: JsonField<OffsetDateTime>,
         private val startingAt: JsonField<OffsetDateTime>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("ending_before")
-            @ExcludeMissing
-            endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("starting_at")
-            @ExcludeMissing
-            startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        ) : this(id, amount, endingBefore, startingAt, mutableMapOf())
+            @JsonProperty("ending_before") @ExcludeMissing endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        ) : this(
+          id,
+          amount,
+          endingBefore,
+          startingAt,
+          mutableMapOf(),
+        )
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun id(): String = id.getRequired("id")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun amount(): Double = amount.getRequired("amount")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
         /**
@@ -274,20 +268,23 @@ private constructor(
          *
          * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+        @JsonProperty("id")
+        @ExcludeMissing
+        fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [amount].
          *
          * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
+        @JsonProperty("amount")
+        @ExcludeMissing
+        fun _amount(): JsonField<Double> = amount
 
         /**
          * Returns the raw JSON value of [endingBefore].
          *
-         * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("ending_before")
         @ExcludeMissing
@@ -304,13 +301,12 @@ private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -320,6 +316,7 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [ScheduleItem].
              *
              * The following fields are required:
+             *
              * ```java
              * .id()
              * .amount()
@@ -327,7 +324,8 @@ private constructor(
              * .startingAt()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [ScheduleItem]. */
@@ -340,81 +338,92 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(scheduleItem: ScheduleItem) = apply {
-                id = scheduleItem.id
-                amount = scheduleItem.amount
-                endingBefore = scheduleItem.endingBefore
-                startingAt = scheduleItem.startingAt
-                additionalProperties = scheduleItem.additionalProperties.toMutableMap()
-            }
+            internal fun from(scheduleItem: ScheduleItem) =
+                apply {
+                    id = scheduleItem.id
+                    amount = scheduleItem.amount
+                    endingBefore = scheduleItem.endingBefore
+                    startingAt = scheduleItem.startingAt
+                    additionalProperties = scheduleItem.additionalProperties.toMutableMap()
+                }
 
             fun id(id: String) = id(JsonField.of(id))
 
             /**
              * Sets [Builder.id] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun id(id: JsonField<String>) = apply { this.id = id }
+            fun id(id: JsonField<String>) =
+                apply {
+                    this.id = id
+                }
 
             fun amount(amount: Double) = amount(JsonField.of(amount))
 
             /**
              * Sets [Builder.amount] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.amount] with a well-typed [Double] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.amount] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
+            fun amount(amount: JsonField<Double>) =
+                apply {
+                    this.amount = amount
+                }
 
-            fun endingBefore(endingBefore: OffsetDateTime) =
-                endingBefore(JsonField.of(endingBefore))
+            fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
             /**
              * Sets [Builder.endingBefore] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
-                this.endingBefore = endingBefore
-            }
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) =
+                apply {
+                    this.endingBefore = endingBefore
+                }
 
             fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
             /**
              * Sets [Builder.startingAt] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-                this.startingAt = startingAt
-            }
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) =
+                apply {
+                    this.startingAt = startingAt
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [ScheduleItem].
@@ -422,6 +431,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .id()
              * .amount()
@@ -433,36 +443,44 @@ private constructor(
              */
             fun build(): ScheduleItem =
                 ScheduleItem(
-                    checkRequired("id", id),
-                    checkRequired("amount", amount),
-                    checkRequired("endingBefore", endingBefore),
-                    checkRequired("startingAt", startingAt),
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "id", id
+                  ),
+                  checkRequired(
+                    "amount", amount
+                  ),
+                  checkRequired(
+                    "endingBefore", endingBefore
+                  ),
+                  checkRequired(
+                    "startingAt", startingAt
+                  ),
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): ScheduleItem = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): ScheduleItem =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            id()
-            amount()
-            endingBefore()
-            startingAt()
-            validated = true
-        }
+                id()
+                amount()
+                endingBefore()
+                startingAt()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -473,58 +491,39 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (if (id.asKnown().isPresent) 1 else 0) +
-                (if (amount.asKnown().isPresent) 1 else 0) +
-                (if (endingBefore.asKnown().isPresent) 1 else 0) +
-                (if (startingAt.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0) + (if (amount.asKnown().isPresent) 1 else 0) + (if (endingBefore.asKnown().isPresent) 1 else 0) + (if (startingAt.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is ScheduleItem &&
-                id == other.id &&
-                amount == other.amount &&
-                endingBefore == other.endingBefore &&
-                startingAt == other.startingAt &&
-                additionalProperties == other.additionalProperties
+          return other is ScheduleItem && id == other.id && amount == other.amount && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(id, amount, endingBefore, startingAt, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(id, amount, endingBefore, startingAt, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "ScheduleItem{id=$id, amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+        override fun toString() = "ScheduleItem{id=$id, amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is ScheduleDuration &&
-            scheduleItems == other.scheduleItems &&
-            creditType == other.creditType &&
-            additionalProperties == other.additionalProperties
+      return other is ScheduleDuration && scheduleItems == other.scheduleItems && creditType == other.creditType && additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy {
-        Objects.hash(scheduleItems, creditType, additionalProperties)
-    }
+    private val hashCode: Int by lazy { Objects.hash(scheduleItems, creditType, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "ScheduleDuration{scheduleItems=$scheduleItems, creditType=$creditType, additionalProperties=$additionalProperties}"
+    override fun toString() = "ScheduleDuration{scheduleItems=$scheduleItems, creditType=$creditType, additionalProperties=$additionalProperties}"
 }

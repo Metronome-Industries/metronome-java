@@ -17,76 +17,68 @@ import com.metronome.api.core.prepare
 import com.metronome.api.models.v1.auditlogs.AuditLogListPage
 import com.metronome.api.models.v1.auditlogs.AuditLogListPageResponse
 import com.metronome.api.models.v1.auditlogs.AuditLogListParams
+import com.metronome.api.services.blocking.v1.AuditLogService
+import com.metronome.api.services.blocking.v1.AuditLogServiceImpl
 import java.util.function.Consumer
 
-/**
- * [Security](https://docs.metronome.com/developer-resources/security/) endpoints allow you to
- * retrieve security-related data.
- */
-class AuditLogServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    AuditLogService {
+/** [Security](https://docs.metronome.com/developer-resources/security/) endpoints allow you to retrieve security-related data. */
+class AuditLogServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: AuditLogService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : AuditLogService {
+
+    private val withRawResponse: AuditLogService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): AuditLogService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AuditLogService =
-        AuditLogServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AuditLogService = AuditLogServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun list(
-        params: AuditLogListParams,
-        requestOptions: RequestOptions,
-    ): AuditLogListPage =
+    override fun list(params: AuditLogListParams, requestOptions: RequestOptions): AuditLogListPage =
         // get /v1/auditLogs
         withRawResponse().list(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        AuditLogService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : AuditLogService.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): AuditLogService.WithRawResponse =
-            AuditLogServiceImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AuditLogService.WithRawResponse = AuditLogServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val listHandler: Handler<AuditLogListPageResponse> = jsonHandler<AuditLogListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(params: AuditLogListParams, requestOptions: RequestOptions): HttpResponseFor<AuditLogListPage> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "auditLogs")
+            .build()
+            .prepare(
+              clientOptions, params
             )
-
-        private val listHandler: Handler<AuditLogListPageResponse> =
-            jsonHandler<AuditLogListPageResponse>(clientOptions.jsonMapper)
-
-        override fun list(
-            params: AuditLogListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<AuditLogListPage> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "auditLogs")
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-                    .let {
-                        AuditLogListPage.builder()
-                            .service(AuditLogServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
-                    }
-            }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  AuditLogListPage.builder()
+                      .service(AuditLogServiceImpl(clientOptions))
+                      .params(params)
+                      .response(it)
+                      .build()
+              }
+          }
         }
     }
 }

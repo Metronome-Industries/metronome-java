@@ -25,178 +25,171 @@ import com.metronome.api.models.v1.usage.UsageListWithGroupsPageResponse
 import com.metronome.api.models.v1.usage.UsageListWithGroupsParams
 import com.metronome.api.models.v1.usage.UsageSearchParams
 import com.metronome.api.models.v1.usage.UsageSearchResponse
+import com.metronome.api.services.blocking.v1.UsageService
+import com.metronome.api.services.blocking.v1.UsageServiceImpl
 import java.util.function.Consumer
 
-/**
- * [Usage events](https://docs.metronome.com/connecting-metronome/send-usage-data/) are the basis
- * for billable metrics. Use these endpoints to send usage events to Metronome and retrieve
- * aggregated event data.
- */
-class UsageServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    UsageService {
+/** [Usage events](https://docs.metronome.com/connecting-metronome/send-usage-data/) are the basis for billable metrics. Use these endpoints to send usage events to Metronome and retrieve aggregated event data. */
+class UsageServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: UsageService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : UsageService {
+
+    private val withRawResponse: UsageService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): UsageService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): UsageService =
-        UsageServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): UsageService = UsageServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun list(params: UsageListParams, requestOptions: RequestOptions): UsageListPage =
         // post /v1/usage
         withRawResponse().list(params, requestOptions).parse()
 
     override fun ingest(params: UsageIngestParams, requestOptions: RequestOptions) {
-        // post /v1/ingest
-        withRawResponse().ingest(params, requestOptions)
+      // post /v1/ingest
+      withRawResponse().ingest(params, requestOptions)
     }
 
-    override fun listWithGroups(
-        params: UsageListWithGroupsParams,
-        requestOptions: RequestOptions,
-    ): UsageListWithGroupsPage =
+    override fun listWithGroups(params: UsageListWithGroupsParams, requestOptions: RequestOptions): UsageListWithGroupsPage =
         // post /v1/usage/groups
         withRawResponse().listWithGroups(params, requestOptions).parse()
 
-    override fun search(
-        params: UsageSearchParams,
-        requestOptions: RequestOptions,
-    ): List<UsageSearchResponse> =
+    override fun search(params: UsageSearchParams, requestOptions: RequestOptions): List<UsageSearchResponse> =
         // post /v1/events/search
         withRawResponse().search(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        UsageService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : UsageService.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): UsageService.WithRawResponse =
-            UsageServiceImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): UsageService.WithRawResponse = UsageServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val listHandler: Handler<UsageListPageResponse> = jsonHandler<UsageListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(params: UsageListParams, requestOptions: RequestOptions): HttpResponseFor<UsageListPage> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "usage")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
             )
-
-        private val listHandler: Handler<UsageListPageResponse> =
-            jsonHandler<UsageListPageResponse>(clientOptions.jsonMapper)
-
-        override fun list(
-            params: UsageListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<UsageListPage> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "usage")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-                    .let {
-                        UsageListPage.builder()
-                            .service(UsageServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
-                    }
-            }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  UsageListPage.builder()
+                      .service(UsageServiceImpl(clientOptions))
+                      .params(params)
+                      .response(it)
+                      .build()
+              }
+          }
         }
 
         private val ingestHandler: Handler<Void?> = emptyHandler()
 
-        override fun ingest(
-            params: UsageIngestParams,
-            requestOptions: RequestOptions,
-        ): HttpResponse {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "ingest")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response.use { ingestHandler.handle(it) }
-            }
+        override fun ingest(params: UsageIngestParams, requestOptions: RequestOptions): HttpResponse {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "ingest")
+            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  ingestHandler.handle(it)
+              }
+          }
         }
 
-        private val listWithGroupsHandler: Handler<UsageListWithGroupsPageResponse> =
-            jsonHandler<UsageListWithGroupsPageResponse>(clientOptions.jsonMapper)
+        private val listWithGroupsHandler: Handler<UsageListWithGroupsPageResponse> = jsonHandler<UsageListWithGroupsPageResponse>(clientOptions.jsonMapper)
 
-        override fun listWithGroups(
-            params: UsageListWithGroupsParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<UsageListWithGroupsPage> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "usage", "groups")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { listWithGroupsHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-                    .let {
-                        UsageListWithGroupsPage.builder()
-                            .service(UsageServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
-                    }
-            }
+        override fun listWithGroups(params: UsageListWithGroupsParams, requestOptions: RequestOptions): HttpResponseFor<UsageListWithGroupsPage> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "usage", "groups")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  listWithGroupsHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  UsageListWithGroupsPage.builder()
+                      .service(UsageServiceImpl(clientOptions))
+                      .params(params)
+                      .response(it)
+                      .build()
+              }
+          }
         }
 
-        private val searchHandler: Handler<List<UsageSearchResponse>> =
-            jsonHandler<List<UsageSearchResponse>>(clientOptions.jsonMapper)
+        private val searchHandler: Handler<List<UsageSearchResponse>> = jsonHandler<List<UsageSearchResponse>>(clientOptions.jsonMapper)
 
-        override fun search(
-            params: UsageSearchParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<List<UsageSearchResponse>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "events", "search")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { searchHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.forEach { it.validate() }
-                        }
-                    }
-            }
+        override fun search(params: UsageSearchParams, requestOptions: RequestOptions): HttpResponseFor<List<UsageSearchResponse>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "events", "search")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  searchHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.forEach { it.validate() }
+                  }
+              }
+          }
         }
     }
 }

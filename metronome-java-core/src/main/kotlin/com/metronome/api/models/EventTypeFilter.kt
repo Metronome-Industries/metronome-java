@@ -19,39 +19,34 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** An optional filtering rule to match the 'event_type' property of an event. */
-class EventTypeFilter
-@JsonCreator(mode = JsonCreator.Mode.DISABLED)
-private constructor(
+class EventTypeFilter @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
     private val inValues: JsonField<List<String>>,
     private val notInValues: JsonField<List<String>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
+
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("in_values")
-        @ExcludeMissing
-        inValues: JsonField<List<String>> = JsonMissing.of(),
-        @JsonProperty("not_in_values")
-        @ExcludeMissing
-        notInValues: JsonField<List<String>> = JsonMissing.of(),
-    ) : this(inValues, notInValues, mutableMapOf())
+        @JsonProperty("in_values") @ExcludeMissing inValues: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("not_in_values") @ExcludeMissing notInValues: JsonField<List<String>> = JsonMissing.of()
+    ) : this(
+      inValues,
+      notInValues,
+      mutableMapOf(),
+    )
 
     /**
-     * A list of event types that are explicitly included in the billable metric. If specified, only
-     * events of these types will match the billable metric. Must be non-empty if present.
+     * A list of event types that are explicitly included in the billable metric. If specified, only events of these types will match the billable metric. Must be non-empty if present.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun inValues(): Optional<List<String>> = inValues.getOptional("in_values")
 
     /**
-     * A list of event types that are explicitly excluded from the billable metric. If specified,
-     * events of these types will not match the billable metric. Must be non-empty if present.
+     * A list of event types that are explicitly excluded from the billable metric. If specified, events of these types will not match the billable metric. Must be non-empty if present.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun notInValues(): Optional<List<String>> = notInValues.getOptional("not_in_values")
 
@@ -60,7 +55,9 @@ private constructor(
      *
      * Unlike [inValues], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("in_values") @ExcludeMissing fun _inValues(): JsonField<List<String>> = inValues
+    @JsonProperty("in_values")
+    @ExcludeMissing
+    fun _inValues(): JsonField<List<String>> = inValues
 
     /**
      * Returns the raw JSON value of [notInValues].
@@ -73,20 +70,20 @@ private constructor(
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-        additionalProperties.put(key, value)
+      additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /** Returns a mutable builder for constructing an instance of [EventTypeFilter]. */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [EventTypeFilter]. */
@@ -97,89 +94,90 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(eventTypeFilter: EventTypeFilter) = apply {
-            inValues = eventTypeFilter.inValues.map { it.toMutableList() }
-            notInValues = eventTypeFilter.notInValues.map { it.toMutableList() }
-            additionalProperties = eventTypeFilter.additionalProperties.toMutableMap()
-        }
+        internal fun from(eventTypeFilter: EventTypeFilter) =
+            apply {
+                inValues = eventTypeFilter.inValues.map { it.toMutableList() }
+                notInValues = eventTypeFilter.notInValues.map { it.toMutableList() }
+                additionalProperties = eventTypeFilter.additionalProperties.toMutableMap()
+            }
 
-        /**
-         * A list of event types that are explicitly included in the billable metric. If specified,
-         * only events of these types will match the billable metric. Must be non-empty if present.
-         */
+        /** A list of event types that are explicitly included in the billable metric. If specified, only events of these types will match the billable metric. Must be non-empty if present. */
         fun inValues(inValues: List<String>) = inValues(JsonField.of(inValues))
 
         /**
          * Sets [Builder.inValues] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.inValues] with a well-typed `List<String>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.inValues] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun inValues(inValues: JsonField<List<String>>) = apply {
-            this.inValues = inValues.map { it.toMutableList() }
-        }
+        fun inValues(inValues: JsonField<List<String>>) =
+            apply {
+                this.inValues = inValues.map { it.toMutableList() }
+            }
 
         /**
          * Adds a single [String] to [inValues].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addInValue(inValue: String) = apply {
-            inValues =
-                (inValues ?: JsonField.of(mutableListOf())).also {
+        fun addInValue(inValue: String) =
+            apply {
+                inValues = (inValues ?: JsonField.of(mutableListOf())).also {
                     checkKnown("inValues", it).add(inValue)
                 }
-        }
+            }
 
-        /**
-         * A list of event types that are explicitly excluded from the billable metric. If
-         * specified, events of these types will not match the billable metric. Must be non-empty if
-         * present.
-         */
+        /** A list of event types that are explicitly excluded from the billable metric. If specified, events of these types will not match the billable metric. Must be non-empty if present. */
         fun notInValues(notInValues: List<String>) = notInValues(JsonField.of(notInValues))
 
         /**
          * Sets [Builder.notInValues] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.notInValues] with a well-typed `List<String>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.notInValues] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun notInValues(notInValues: JsonField<List<String>>) = apply {
-            this.notInValues = notInValues.map { it.toMutableList() }
-        }
+        fun notInValues(notInValues: JsonField<List<String>>) =
+            apply {
+                this.notInValues = notInValues.map { it.toMutableList() }
+            }
 
         /**
          * Adds a single [String] to [notInValues].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addNotInValue(notInValue: String) = apply {
-            notInValues =
-                (notInValues ?: JsonField.of(mutableListOf())).also {
+        fun addNotInValue(notInValue: String) =
+            apply {
+                notInValues = (notInValues ?: JsonField.of(mutableListOf())).also {
                     checkKnown("notInValues", it).add(notInValue)
                 }
-        }
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         /**
          * Returns an immutable instance of [EventTypeFilter].
@@ -188,9 +186,9 @@ private constructor(
          */
         fun build(): EventTypeFilter =
             EventTypeFilter(
-                (inValues ?: JsonMissing.of()).map { it.toImmutable() },
-                (notInValues ?: JsonMissing.of()).map { it.toImmutable() },
-                additionalProperties.toMutableMap(),
+              (inValues?: JsonMissing.of()).map { it.toImmutable() },
+              (notInValues?: JsonMissing.of()).map { it.toImmutable() },
+              additionalProperties.toMutableMap(),
             )
     }
 
@@ -204,15 +202,16 @@ private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): EventTypeFilter = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): EventTypeFilter =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        inValues()
-        notInValues()
-        validated = true
-    }
+            inValues()
+            notInValues()
+            validated = true
+        }
 
     fun isValid(): Boolean =
         try {
@@ -228,24 +227,19 @@ private constructor(
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int =
-        (inValues.asKnown().getOrNull()?.size ?: 0) + (notInValues.asKnown().getOrNull()?.size ?: 0)
+    internal fun validity(): Int = (inValues.asKnown().getOrNull()?.size ?: 0) + (notInValues.asKnown().getOrNull()?.size ?: 0)
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is EventTypeFilter &&
-            inValues == other.inValues &&
-            notInValues == other.notInValues &&
-            additionalProperties == other.additionalProperties
+      return other is EventTypeFilter && inValues == other.inValues && notInValues == other.notInValues && additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy { Objects.hash(inValues, notInValues, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "EventTypeFilter{inValues=$inValues, notInValues=$notInValues, additionalProperties=$additionalProperties}"
+    override fun toString() = "EventTypeFilter{inValues=$inValues, notInValues=$notInValues, additionalProperties=$additionalProperties}"
 }

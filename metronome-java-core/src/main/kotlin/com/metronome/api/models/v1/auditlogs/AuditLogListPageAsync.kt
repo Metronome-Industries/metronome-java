@@ -5,6 +5,9 @@ package com.metronome.api.models.v1.auditlogs
 import com.metronome.api.core.AutoPagerAsync
 import com.metronome.api.core.PageAsync
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.auditlogs.AuditLogListPageResponse
+import com.metronome.api.models.v1.auditlogs.AuditLogListParams
+import com.metronome.api.models.v1.auditlogs.AuditLogListResponse
 import com.metronome.api.services.async.v1.AuditLogServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -13,12 +16,12 @@ import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
 /** @see AuditLogServiceAsync.list */
-class AuditLogListPageAsync
-private constructor(
+class AuditLogListPageAsync private constructor(
     private val service: AuditLogServiceAsync,
     private val streamHandlerExecutor: Executor,
     private val params: AuditLogListParams,
     private val response: AuditLogListPageResponse,
+
 ) : PageAsync<AuditLogListResponse> {
 
     /**
@@ -33,25 +36,25 @@ private constructor(
      *
      * @see AuditLogListPageResponse.data
      */
-    fun data(): List<AuditLogListResponse> =
-        response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<AuditLogListResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<AuditLogListResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): AuditLogListParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
-    override fun nextPage(): CompletableFuture<AuditLogListPageAsync> =
-        service.list(nextPageParams())
+    override fun nextPage(): CompletableFuture<AuditLogListPageAsync> = service.list(nextPageParams())
 
     fun autoPager(): AutoPagerAsync<AuditLogListResponse> =
-        AutoPagerAsync.from(this, streamHandlerExecutor)
+        AutoPagerAsync.from(
+          this, streamHandlerExecutor
+        )
 
     /** The parameters that were used to request this page. */
     fun params(): AuditLogListParams = params
@@ -67,6 +70,7 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [AuditLogListPageAsync].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -74,7 +78,8 @@ private constructor(
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [AuditLogListPageAsync]. */
@@ -86,24 +91,35 @@ private constructor(
         private var response: AuditLogListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(auditLogListPageAsync: AuditLogListPageAsync) = apply {
-            service = auditLogListPageAsync.service
-            streamHandlerExecutor = auditLogListPageAsync.streamHandlerExecutor
-            params = auditLogListPageAsync.params
-            response = auditLogListPageAsync.response
-        }
+        internal fun from(auditLogListPageAsync: AuditLogListPageAsync) =
+            apply {
+                service = auditLogListPageAsync.service
+                streamHandlerExecutor = auditLogListPageAsync.streamHandlerExecutor
+                params = auditLogListPageAsync.params
+                response = auditLogListPageAsync.response
+            }
 
-        fun service(service: AuditLogServiceAsync) = apply { this.service = service }
+        fun service(service: AuditLogServiceAsync) =
+            apply {
+                this.service = service
+            }
 
-        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
-            this.streamHandlerExecutor = streamHandlerExecutor
-        }
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) =
+            apply {
+                this.streamHandlerExecutor = streamHandlerExecutor
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: AuditLogListParams) = apply { this.params = params }
+        fun params(params: AuditLogListParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: AuditLogListPageResponse) = apply { this.response = response }
+        fun response(response: AuditLogListPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [AuditLogListPageAsync].
@@ -111,6 +127,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -122,27 +139,30 @@ private constructor(
          */
         fun build(): AuditLogListPageAsync =
             AuditLogListPageAsync(
-                checkRequired("service", service),
-                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "streamHandlerExecutor", streamHandlerExecutor
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is AuditLogListPageAsync &&
-            service == other.service &&
-            streamHandlerExecutor == other.streamHandlerExecutor &&
-            params == other.params &&
-            response == other.response
+      return other is AuditLogListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, streamHandlerExecutor, params, response)
 
-    override fun toString() =
-        "AuditLogListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
+    override fun toString() = "AuditLogListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

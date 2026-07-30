@@ -5,17 +5,20 @@ package com.metronome.api.models.v1.customers.invoices
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.customers.invoices.Invoice
+import com.metronome.api.models.v1.customers.invoices.InvoiceListPageResponse
+import com.metronome.api.models.v1.customers.invoices.InvoiceListParams
 import com.metronome.api.services.blocking.v1.customers.InvoiceService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see InvoiceService.list */
-class InvoiceListPage
-private constructor(
+class InvoiceListPage private constructor(
     private val service: InvoiceService,
     private val params: InvoiceListParams,
     private val response: InvoiceListPageResponse,
+
 ) : Page<Invoice> {
 
     /**
@@ -37,10 +40,10 @@ private constructor(
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): InvoiceListParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
     override fun nextPage(): InvoiceListPage = service.list(nextPageParams())
@@ -61,13 +64,15 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [InvoiceListPage].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [InvoiceListPage]. */
@@ -78,19 +83,29 @@ private constructor(
         private var response: InvoiceListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(invoiceListPage: InvoiceListPage) = apply {
-            service = invoiceListPage.service
-            params = invoiceListPage.params
-            response = invoiceListPage.response
-        }
+        internal fun from(invoiceListPage: InvoiceListPage) =
+            apply {
+                service = invoiceListPage.service
+                params = invoiceListPage.params
+                response = invoiceListPage.response
+            }
 
-        fun service(service: InvoiceService) = apply { this.service = service }
+        fun service(service: InvoiceService) =
+            apply {
+                this.service = service
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: InvoiceListParams) = apply { this.params = params }
+        fun params(params: InvoiceListParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: InvoiceListPageResponse) = apply { this.response = response }
+        fun response(response: InvoiceListPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [InvoiceListPage].
@@ -98,6 +113,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
@@ -108,25 +124,27 @@ private constructor(
          */
         fun build(): InvoiceListPage =
             InvoiceListPage(
-                checkRequired("service", service),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is InvoiceListPage &&
-            service == other.service &&
-            params == other.params &&
-            response == other.response
+      return other is InvoiceListPage && service == other.service && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() =
-        "InvoiceListPage{service=$service, params=$params, response=$response}"
+    override fun toString() = "InvoiceListPage{service=$service, params=$params, response=$response}"
 }

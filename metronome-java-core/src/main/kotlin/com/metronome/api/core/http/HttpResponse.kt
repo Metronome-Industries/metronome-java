@@ -2,6 +2,7 @@
 
 package com.metronome.api.core.http
 
+import com.metronome.api.core.http.Headers
 import java.io.InputStream
 
 interface HttpResponse : AutoCloseable {

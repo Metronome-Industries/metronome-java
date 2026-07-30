@@ -18,38 +18,29 @@ import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.v1.customfields.CustomFieldDeleteValuesParams
 import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Remove specific custom field values from a Metronome entity instance by specifying the field keys
- * to delete. Use this endpoint to clean up unwanted custom field data while preserving other fields
- * on the same entity. Requires the entity type, entity ID, and array of keys to remove.
+ * Remove specific custom field values from a Metronome entity instance by specifying the field keys to delete. Use this endpoint to clean up unwanted custom field data while preserving other fields on the same entity. Requires the entity type, entity ID, and array of keys to remove.
+ *
  */
-class CustomFieldDeleteValuesParams
-private constructor(
+class CustomFieldDeleteValuesParams private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+
 ) : Params {
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun entity(): Entity = body.entity()
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun entityId(): String = body.entityId()
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun keys(): List<String> = body.keys()
 
     /**
@@ -86,17 +77,18 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [CustomFieldDeleteValuesParams].
+         * Returns a mutable builder for constructing an instance of [CustomFieldDeleteValuesParams].
          *
          * The following fields are required:
+         *
          * ```java
          * .entity()
          * .entityId()
          * .keys()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [CustomFieldDeleteValuesParams]. */
@@ -107,177 +99,235 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(customFieldDeleteValuesParams: CustomFieldDeleteValuesParams) = apply {
-            body = customFieldDeleteValuesParams.body.toBuilder()
-            additionalHeaders = customFieldDeleteValuesParams.additionalHeaders.toBuilder()
-            additionalQueryParams = customFieldDeleteValuesParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(customFieldDeleteValuesParams: CustomFieldDeleteValuesParams) =
+            apply {
+                body = customFieldDeleteValuesParams.body.toBuilder()
+                additionalHeaders = customFieldDeleteValuesParams.additionalHeaders.toBuilder()
+                additionalQueryParams = customFieldDeleteValuesParams.additionalQueryParams.toBuilder()
+            }
 
         /**
          * Sets the entire request body.
          *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
+         * This is generally only useful if you are already constructing the body separately. Otherwise,
+         * it's more convenient to use the top-level setters instead:
          * - [entity]
          * - [entityId]
          * - [keys]
          */
-        fun body(body: Body) = apply { this.body = body.toBuilder() }
+        fun body(body: Body) =
+            apply {
+                this.body = body.toBuilder()
+            }
 
-        fun entity(entity: Entity) = apply { body.entity(entity) }
+        fun entity(entity: Entity) =
+            apply {
+                body.entity(entity)
+            }
 
         /**
          * Sets [Builder.entity] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.entity] with a well-typed [Entity] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.entity] with a well-typed [Entity] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun entity(entity: JsonField<Entity>) = apply { body.entity(entity) }
+        fun entity(entity: JsonField<Entity>) =
+            apply {
+                body.entity(entity)
+            }
 
-        fun entityId(entityId: String) = apply { body.entityId(entityId) }
+        fun entityId(entityId: String) =
+            apply {
+                body.entityId(entityId)
+            }
 
         /**
          * Sets [Builder.entityId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.entityId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.entityId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun entityId(entityId: JsonField<String>) = apply { body.entityId(entityId) }
+        fun entityId(entityId: JsonField<String>) =
+            apply {
+                body.entityId(entityId)
+            }
 
-        fun keys(keys: List<String>) = apply { body.keys(keys) }
+        fun keys(keys: List<String>) =
+            apply {
+                body.keys(keys)
+            }
 
         /**
          * Sets [Builder.keys] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.keys] with a well-typed `List<String>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.keys] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun keys(keys: JsonField<List<String>>) = apply { body.keys(keys) }
+        fun keys(keys: JsonField<List<String>>) =
+            apply {
+                body.keys(keys)
+            }
 
         /**
          * Adds a single [String] to [keys].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addKey(key: String) = apply { body.addKey(key) }
+        fun addKey(key: String) =
+            apply {
+                body.addKey(key)
+            }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.additionalProperties(additionalBodyProperties)
+            }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
+            apply {
+                body.putAdditionalProperty(
+                  key, value
+                )
+            }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+        fun removeAdditionalBodyProperty(key: String) =
+            apply {
+                body.removeAdditionalProperty(key)
+            }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
+            apply {
+                body.removeAllAdditionalProperties(keys)
+            }
 
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
+        fun putAdditionalHeader(name: String, value: String) =
+            apply {
+                additionalHeaders.put(name, value)
+            }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.put(name, values)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
+        fun replaceAdditionalHeaders(name: String, value: String) =
+            apply {
+                additionalHeaders.replace(name, value)
+            }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.replace(name, values)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) =
+            apply {
+                additionalHeaders.remove(name)
+            }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
+        fun removeAllAdditionalHeaders(names: Set<String>) =
+            apply {
+                additionalHeaders.removeAll(names)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
+        fun putAdditionalQueryParam(key: String, value: String) =
+            apply {
+                additionalQueryParams.put(key, value)
+            }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.put(key, values)
+            }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
+        fun replaceAdditionalQueryParams(key: String, value: String) =
+            apply {
+                additionalQueryParams.replace(key, value)
+            }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.replace(key, values)
+            }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+        fun removeAdditionalQueryParams(key: String) =
+            apply {
+                additionalQueryParams.remove(key)
+            }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) =
+            apply {
+                additionalQueryParams.removeAll(keys)
+            }
 
         /**
          * Returns an immutable instance of [CustomFieldDeleteValuesParams].
@@ -285,6 +335,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .entity()
          * .entityId()
@@ -295,9 +346,9 @@ private constructor(
          */
         fun build(): CustomFieldDeleteValuesParams =
             CustomFieldDeleteValuesParams(
-                body.build(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
+              body.build(),
+              additionalHeaders.build(),
+              additionalQueryParams.build(),
             )
     }
 
@@ -307,40 +358,33 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    class Body
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class Body @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val entity: JsonField<Entity>,
         private val entityId: JsonField<String>,
         private val keys: JsonField<List<String>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("entity") @ExcludeMissing entity: JsonField<Entity> = JsonMissing.of(),
-            @JsonProperty("entity_id")
-            @ExcludeMissing
-            entityId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("keys") @ExcludeMissing keys: JsonField<List<String>> = JsonMissing.of(),
-        ) : this(entity, entityId, keys, mutableMapOf())
+            @JsonProperty("entity_id") @ExcludeMissing entityId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("keys") @ExcludeMissing keys: JsonField<List<String>> = JsonMissing.of()
+        ) : this(
+          entity,
+          entityId,
+          keys,
+          mutableMapOf(),
+        )
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun entity(): Entity = entity.getRequired("entity")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun entityId(): String = entityId.getRequired("entity_id")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun keys(): List<String> = keys.getRequired("keys")
 
         /**
@@ -348,31 +392,36 @@ private constructor(
          *
          * Unlike [entity], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("entity") @ExcludeMissing fun _entity(): JsonField<Entity> = entity
+        @JsonProperty("entity")
+        @ExcludeMissing
+        fun _entity(): JsonField<Entity> = entity
 
         /**
          * Returns the raw JSON value of [entityId].
          *
          * Unlike [entityId], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("entity_id") @ExcludeMissing fun _entityId(): JsonField<String> = entityId
+        @JsonProperty("entity_id")
+        @ExcludeMissing
+        fun _entityId(): JsonField<String> = entityId
 
         /**
          * Returns the raw JSON value of [keys].
          *
          * Unlike [keys], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("keys") @ExcludeMissing fun _keys(): JsonField<List<String>> = keys
+        @JsonProperty("keys")
+        @ExcludeMissing
+        fun _keys(): JsonField<List<String>> = keys
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -382,13 +431,15 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [Body].
              *
              * The following fields are required:
+             *
              * ```java
              * .entity()
              * .entityId()
              * .keys()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
@@ -400,76 +451,90 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                entity = body.entity
-                entityId = body.entityId
-                keys = body.keys.map { it.toMutableList() }
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
+            internal fun from(body: Body) =
+                apply {
+                    entity = body.entity
+                    entityId = body.entityId
+                    keys = body.keys.map { it.toMutableList() }
+                    additionalProperties = body.additionalProperties.toMutableMap()
+                }
 
             fun entity(entity: Entity) = entity(JsonField.of(entity))
 
             /**
              * Sets [Builder.entity] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.entity] with a well-typed [Entity] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.entity] with a well-typed [Entity] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
+            fun entity(entity: JsonField<Entity>) =
+                apply {
+                    this.entity = entity
+                }
 
             fun entityId(entityId: String) = entityId(JsonField.of(entityId))
 
             /**
              * Sets [Builder.entityId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.entityId] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.entityId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun entityId(entityId: JsonField<String>) = apply { this.entityId = entityId }
+            fun entityId(entityId: JsonField<String>) =
+                apply {
+                    this.entityId = entityId
+                }
 
             fun keys(keys: List<String>) = keys(JsonField.of(keys))
 
             /**
              * Sets [Builder.keys] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.keys] with a well-typed `List<String>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.keys] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun keys(keys: JsonField<List<String>>) = apply {
-                this.keys = keys.map { it.toMutableList() }
-            }
+            fun keys(keys: JsonField<List<String>>) =
+                apply {
+                    this.keys = keys.map { it.toMutableList() }
+                }
 
             /**
              * Adds a single [String] to [keys].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addKey(key: String) = apply {
-                keys =
-                    (keys ?: JsonField.of(mutableListOf())).also { checkKnown("keys", it).add(key) }
-            }
+            fun addKey(key: String) =
+                apply {
+                    keys = (keys ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("keys", it).add(key)
+                    }
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [Body].
@@ -477,6 +542,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .entity()
              * .entityId()
@@ -487,34 +553,40 @@ private constructor(
              */
             fun build(): Body =
                 Body(
-                    checkRequired("entity", entity),
-                    checkRequired("entityId", entityId),
-                    checkRequired("keys", keys).map { it.toImmutable() },
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "entity", entity
+                  ),
+                  checkRequired(
+                    "entityId", entityId
+                  ),
+                  checkRequired(
+                    "keys", keys
+                  ).map { it.toImmutable() },
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Body =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            entity().validate()
-            entityId()
-            keys()
-            validated = true
-        }
+                entity().validate()
+                entityId()
+                keys()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -525,50 +597,42 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (entity.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (entityId.asKnown().isPresent) 1 else 0) +
-                (keys.asKnown().getOrNull()?.size ?: 0)
+        internal fun validity(): Int = (entity.asKnown().getOrNull()?.validity() ?: 0) + (if (entityId.asKnown().isPresent) 1 else 0) + (keys.asKnown().getOrNull()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Body &&
-                entity == other.entity &&
-                entityId == other.entityId &&
-                keys == other.keys &&
-                additionalProperties == other.additionalProperties
+          return other is Body && entity == other.entity && entityId == other.entityId && keys == other.keys && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(entity, entityId, keys, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(entity, entityId, keys, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Body{entity=$entity, entityId=$entityId, keys=$keys, additionalProperties=$additionalProperties}"
+        override fun toString() = "Body{entity=$entity, entityId=$entityId, keys=$keys, additionalProperties=$additionalProperties}"
     }
 
-    class Entity @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    class Entity @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't match any known
+         * member, and you want to know that value. For example, if the SDK is on an older version than the
+         * API, then the API may respond with new members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -649,9 +713,11 @@ private constructor(
          * An enum containing [Entity]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Entity] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+         *   an older version than the API, then the API may respond with new members that the SDK is unaware
+         *   of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -682,11 +748,11 @@ private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+         * class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want to throw
+         * for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -718,11 +784,10 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+         * for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
-         *   member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
          */
         fun known(): Known =
             when (this) {
@@ -754,36 +819,33 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging and generally
+         * doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow {
-                MetronomeInvalidDataException("Value is not a String")
-            }
+        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Entity = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Entity =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            known()
-            validated = true
-        }
+                known()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -794,19 +856,19 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Entity && value == other.value
+          return other is Entity && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -815,18 +877,14 @@ private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is CustomFieldDeleteValuesParams &&
-            body == other.body &&
-            additionalHeaders == other.additionalHeaders &&
-            additionalQueryParams == other.additionalQueryParams
+      return other is CustomFieldDeleteValuesParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
-    override fun toString() =
-        "CustomFieldDeleteValuesParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() = "CustomFieldDeleteValuesParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

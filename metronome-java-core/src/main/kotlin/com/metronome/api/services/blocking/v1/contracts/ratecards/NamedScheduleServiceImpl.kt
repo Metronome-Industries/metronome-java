@@ -19,96 +19,91 @@ import com.metronome.api.core.prepare
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveResponse
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleUpdateParams
+import com.metronome.api.services.blocking.v1.contracts.ratecards.NamedScheduleService
+import com.metronome.api.services.blocking.v1.contracts.ratecards.NamedScheduleServiceImpl
 import java.util.function.Consumer
 
-/**
- * Named schedules are used for storing custom data that can change over time. Named schedules are
- * often used in custom pricing logic.
- */
-class NamedScheduleServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    NamedScheduleService {
+/** Named schedules are used for storing custom data that can change over time. Named schedules are often used in custom pricing logic. */
+class NamedScheduleServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: NamedScheduleService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : NamedScheduleService {
+
+    private val withRawResponse: NamedScheduleService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): NamedScheduleService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleService =
-        NamedScheduleServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleService = NamedScheduleServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun retrieve(
-        params: NamedScheduleRetrieveParams,
-        requestOptions: RequestOptions,
-    ): NamedScheduleRetrieveResponse =
+    override fun retrieve(params: NamedScheduleRetrieveParams, requestOptions: RequestOptions): NamedScheduleRetrieveResponse =
         // post /v1/contracts/getNamedSchedule
         withRawResponse().retrieve(params, requestOptions).parse()
 
     override fun update(params: NamedScheduleUpdateParams, requestOptions: RequestOptions) {
-        // post /v1/contracts/updateNamedSchedule
-        withRawResponse().update(params, requestOptions)
+      // post /v1/contracts/updateNamedSchedule
+      withRawResponse().update(params, requestOptions)
     }
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        NamedScheduleService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : NamedScheduleService.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): NamedScheduleService.WithRawResponse =
-            NamedScheduleServiceImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleService.WithRawResponse = NamedScheduleServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val retrieveHandler: Handler<NamedScheduleRetrieveResponse> = jsonHandler<NamedScheduleRetrieveResponse>(clientOptions.jsonMapper)
+
+        override fun retrieve(params: NamedScheduleRetrieveParams, requestOptions: RequestOptions): HttpResponseFor<NamedScheduleRetrieveResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contracts", "getNamedSchedule")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
             )
-
-        private val retrieveHandler: Handler<NamedScheduleRetrieveResponse> =
-            jsonHandler<NamedScheduleRetrieveResponse>(clientOptions.jsonMapper)
-
-        override fun retrieve(
-            params: NamedScheduleRetrieveParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<NamedScheduleRetrieveResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contracts", "getNamedSchedule")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { retrieveHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  retrieveHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
         private val updateHandler: Handler<Void?> = emptyHandler()
 
-        override fun update(
-            params: NamedScheduleUpdateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponse {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contracts", "updateNamedSchedule")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response.use { updateHandler.handle(it) }
-            }
+        override fun update(params: NamedScheduleUpdateParams, requestOptions: RequestOptions): HttpResponse {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contracts", "updateNamedSchedule")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  updateHandler.handle(it)
+              }
+          }
         }
     }
 }

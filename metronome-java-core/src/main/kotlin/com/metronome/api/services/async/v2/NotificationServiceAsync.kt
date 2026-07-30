@@ -3,15 +3,14 @@
 package com.metronome.api.services.async.v2
 
 import com.metronome.api.core.ClientOptions
+import com.metronome.api.services.async.v2.NotificationServiceAsync
 import com.metronome.api.services.async.v2.notifications.OffsetServiceAsync
 import com.metronome.api.services.async.v2.notifications.SystemServiceAsync
 import java.util.function.Consumer
 
 interface NotificationServiceAsync {
 
-    /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
-     */
+    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -25,10 +24,7 @@ interface NotificationServiceAsync {
 
     fun system(): SystemServiceAsync
 
-    /**
-     * A view of [NotificationServiceAsync] that provides access to raw HTTP responses for each
-     * method.
-     */
+    /** A view of [NotificationServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         /**
@@ -36,9 +32,7 @@ interface NotificationServiceAsync {
          *
          * The original service is not modified.
          */
-        fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): NotificationServiceAsync.WithRawResponse
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): NotificationServiceAsync.WithRawResponse
 
         fun offset(): OffsetServiceAsync.WithRawResponse
 

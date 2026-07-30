@@ -2,12 +2,13 @@
 
 package com.metronome.api.models.v1.services
 
+import com.metronome.api.models.v1.services.ServiceListParams
 import org.junit.jupiter.api.Test
 
 internal class ServiceListParamsTest {
 
     @Test
     fun create() {
-        ServiceListParams.builder().build()
+      ServiceListParams.builder().build()
     }
 }

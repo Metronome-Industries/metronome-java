@@ -5,17 +5,20 @@ package com.metronome.api.models.v1.usage
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.usage.UsageListWithGroupsPageResponse
+import com.metronome.api.models.v1.usage.UsageListWithGroupsParams
+import com.metronome.api.models.v1.usage.UsageListWithGroupsResponse
 import com.metronome.api.services.blocking.v1.UsageService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see UsageService.listWithGroups */
-class UsageListWithGroupsPage
-private constructor(
+class UsageListWithGroupsPage private constructor(
     private val service: UsageService,
     private val params: UsageListWithGroupsParams,
     private val response: UsageListWithGroupsPageResponse,
+
 ) : Page<UsageListWithGroupsResponse> {
 
     /**
@@ -30,18 +33,17 @@ private constructor(
      *
      * @see UsageListWithGroupsPageResponse.data
      */
-    fun data(): List<UsageListWithGroupsResponse> =
-        response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<UsageListWithGroupsResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<UsageListWithGroupsResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): UsageListWithGroupsParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
     override fun nextPage(): UsageListWithGroupsPage = service.listWithGroups(nextPageParams())
@@ -62,13 +64,15 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [UsageListWithGroupsPage].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [UsageListWithGroupsPage]. */
@@ -79,19 +83,29 @@ private constructor(
         private var response: UsageListWithGroupsPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(usageListWithGroupsPage: UsageListWithGroupsPage) = apply {
-            service = usageListWithGroupsPage.service
-            params = usageListWithGroupsPage.params
-            response = usageListWithGroupsPage.response
-        }
+        internal fun from(usageListWithGroupsPage: UsageListWithGroupsPage) =
+            apply {
+                service = usageListWithGroupsPage.service
+                params = usageListWithGroupsPage.params
+                response = usageListWithGroupsPage.response
+            }
 
-        fun service(service: UsageService) = apply { this.service = service }
+        fun service(service: UsageService) =
+            apply {
+                this.service = service
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: UsageListWithGroupsParams) = apply { this.params = params }
+        fun params(params: UsageListWithGroupsParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: UsageListWithGroupsPageResponse) = apply { this.response = response }
+        fun response(response: UsageListWithGroupsPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [UsageListWithGroupsPage].
@@ -99,6 +113,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
@@ -109,25 +124,27 @@ private constructor(
          */
         fun build(): UsageListWithGroupsPage =
             UsageListWithGroupsPage(
-                checkRequired("service", service),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is UsageListWithGroupsPage &&
-            service == other.service &&
-            params == other.params &&
-            response == other.response
+      return other is UsageListWithGroupsPage && service == other.service && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() =
-        "UsageListWithGroupsPage{service=$service, params=$params, response=$response}"
+    override fun toString() = "UsageListWithGroupsPage{service=$service, params=$params, response=$response}"
 }

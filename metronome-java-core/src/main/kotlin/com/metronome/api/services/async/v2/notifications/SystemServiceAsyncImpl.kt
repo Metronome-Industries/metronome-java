@@ -17,70 +17,61 @@ import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepareAsync
 import com.metronome.api.models.v2.notifications.system.SystemListParams
 import com.metronome.api.models.v2.notifications.system.SystemListResponse
+import com.metronome.api.services.async.v2.notifications.SystemServiceAsync
+import com.metronome.api.services.async.v2.notifications.SystemServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-class SystemServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    SystemServiceAsync {
+class SystemServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: SystemServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : SystemServiceAsync {
+
+    private val withRawResponse: SystemServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): SystemServiceAsync.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SystemServiceAsync =
-        SystemServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SystemServiceAsync = SystemServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun list(
-        params: SystemListParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<SystemListResponse> =
+    override fun list(params: SystemListParams, requestOptions: RequestOptions): CompletableFuture<SystemListResponse> =
         // post /v2/notifications/system/list
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        SystemServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : SystemServiceAsync.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): SystemServiceAsync.WithRawResponse =
-            SystemServiceAsyncImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SystemServiceAsync.WithRawResponse = SystemServiceAsyncImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val listHandler: Handler<SystemListResponse> = jsonHandler<SystemListResponse>(clientOptions.jsonMapper)
+
+        override fun list(params: SystemListParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<SystemListResponse>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v2", "notifications", "system", "list")
+            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
+            .build()
+            .prepareAsync(
+              clientOptions, params
             )
-
-        private val listHandler: Handler<SystemListResponse> =
-            jsonHandler<SystemListResponse>(clientOptions.jsonMapper)
-
-        override fun list(
-            params: SystemListParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<SystemListResponse>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v2", "notifications", "system", "list")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response
-                            .use { listHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> errorHandler.handle(response).parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          } }
         }
     }
 }

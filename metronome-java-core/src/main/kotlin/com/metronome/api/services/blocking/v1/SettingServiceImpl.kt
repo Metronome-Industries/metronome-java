@@ -17,93 +17,74 @@ import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
 import com.metronome.api.models.v1.settings.SettingUpsertAvalaraCredentialsParams
 import com.metronome.api.models.v1.settings.SettingUpsertAvalaraCredentialsResponse
+import com.metronome.api.services.blocking.v1.SettingService
+import com.metronome.api.services.blocking.v1.SettingServiceImpl
 import com.metronome.api.services.blocking.v1.settings.BillingProviderService
 import com.metronome.api.services.blocking.v1.settings.BillingProviderServiceImpl
 import java.util.function.Consumer
 
-/**
- * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
- * behavior.
- */
-class SettingServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    SettingService {
+/** Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization behavior. */
+class SettingServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: SettingService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : SettingService {
 
-    private val billingProviders: BillingProviderService by lazy {
-        BillingProviderServiceImpl(clientOptions)
-    }
+    private val withRawResponse: SettingService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+
+    private val billingProviders: BillingProviderService by lazy { BillingProviderServiceImpl(clientOptions) }
 
     override fun withRawResponse(): SettingService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingService =
-        SettingServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingService = SettingServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    /**
-     * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
-     * behavior.
-     */
+    /** Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization behavior. */
     override fun billingProviders(): BillingProviderService = billingProviders
 
-    override fun upsertAvalaraCredentials(
-        params: SettingUpsertAvalaraCredentialsParams,
-        requestOptions: RequestOptions,
-    ): SettingUpsertAvalaraCredentialsResponse =
+    override fun upsertAvalaraCredentials(params: SettingUpsertAvalaraCredentialsParams, requestOptions: RequestOptions): SettingUpsertAvalaraCredentialsResponse =
         // post /v1/upsertAvalaraCredentials
         withRawResponse().upsertAvalaraCredentials(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        SettingService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : SettingService.WithRawResponse {
 
-        private val billingProviders: BillingProviderService.WithRawResponse by lazy {
-            BillingProviderServiceImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): SettingService.WithRawResponse =
-            SettingServiceImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
-            )
+        private val billingProviders: BillingProviderService.WithRawResponse by lazy { BillingProviderServiceImpl.WithRawResponseImpl(clientOptions) }
 
-        /**
-         * Use these endpoints to configure a billing API key, a webhook secret, or invoice
-         * finalization behavior.
-         */
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingService.WithRawResponse = SettingServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        /** Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization behavior. */
         override fun billingProviders(): BillingProviderService.WithRawResponse = billingProviders
 
-        private val upsertAvalaraCredentialsHandler:
-            Handler<SettingUpsertAvalaraCredentialsResponse> =
-            jsonHandler<SettingUpsertAvalaraCredentialsResponse>(clientOptions.jsonMapper)
+        private val upsertAvalaraCredentialsHandler: Handler<SettingUpsertAvalaraCredentialsResponse> = jsonHandler<SettingUpsertAvalaraCredentialsResponse>(clientOptions.jsonMapper)
 
-        override fun upsertAvalaraCredentials(
-            params: SettingUpsertAvalaraCredentialsParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<SettingUpsertAvalaraCredentialsResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "upsertAvalaraCredentials")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { upsertAvalaraCredentialsHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun upsertAvalaraCredentials(params: SettingUpsertAvalaraCredentialsParams, requestOptions: RequestOptions): HttpResponseFor<SettingUpsertAvalaraCredentialsResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "upsertAvalaraCredentials")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  upsertAvalaraCredentialsHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

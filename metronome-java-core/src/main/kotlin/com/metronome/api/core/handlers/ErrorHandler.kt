@@ -7,6 +7,7 @@ package com.metronome.api.core.handlers
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
+import com.metronome.api.core.handlers.jsonHandler
 import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
 import com.metronome.api.errors.BadRequestException
@@ -33,7 +34,9 @@ internal fun errorBodyHandler(jsonMapper: JsonMapper): Handler<JsonValue> {
 }
 
 @JvmSynthetic
-internal fun errorHandler(errorBodyHandler: Handler<JsonValue>): Handler<HttpResponse> =
+internal fun errorHandler(
+    errorBodyHandler: Handler<JsonValue>
+): Handler<HttpResponse> =
     object : Handler<HttpResponse> {
         override fun handle(response: HttpResponse): HttpResponse =
             when (val statusCode = response.statusCode()) {

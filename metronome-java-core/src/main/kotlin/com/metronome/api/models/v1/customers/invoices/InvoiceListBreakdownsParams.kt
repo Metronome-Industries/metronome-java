@@ -10,6 +10,7 @@ import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.v1.customers.invoices.InvoiceListBreakdownsParams
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
@@ -17,10 +18,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Retrieve granular time-series breakdowns of invoice data at hourly or daily intervals. This
- * endpoint transforms standard invoices into detailed timelines, enabling you to track usage
- * patterns, identify consumption spikes, and provide customers with transparency into their billing
- * details throughout the billing period.
+ * Retrieve granular time-series breakdowns of invoice data at hourly or daily intervals. This endpoint transforms standard invoices into detailed timelines, enabling you to track usage patterns, identify consumption spikes, and provide customers with transparency into their billing details throughout the billing period.
  *
  * ### Use this endpoint to:
  * - Build usage analytics dashboards showing daily or hourly consumption trends
@@ -39,16 +37,13 @@ import kotlin.jvm.optionals.getOrNull
  *
  * ### Usage guidelines:
  * - Time granularity: Set `window_size` to hour or day based on your analysis needs
- * - Response limits: Daily breakdowns return up to 35 days; hourly breakdowns return up to 24 hours
- *   per request
+ * - Response limits: Daily breakdowns return up to 35 days; hourly breakdowns return up to 24 hours per request
  * - Date filtering: Use `starting_on` and `ending_before` to focus on specific periods
  * - Performance: For large date ranges, use pagination to retrieve all data efficiently
- * - Backdated usage: If usage events arrive after invoice finalization, breakdowns will reflect the
- *   updated usage
+ * - Backdated usage: If usage events arrive after invoice finalization, breakdowns will reflect the updated usage
  * - Zero quantity filtering: Use `skip_zero_qty_line_items=true` to exclude periods with no usage
  */
-class InvoiceListBreakdownsParams
-private constructor(
+class InvoiceListBreakdownsParams private constructor(
     private val customerId: String,
     private val endingBefore: OffsetDateTime,
     private val startingOn: OffsetDateTime,
@@ -61,30 +56,21 @@ private constructor(
     private val windowSize: WindowSize?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+
 ) : Params {
 
     fun customerId(): String = customerId
 
-    /**
-     * RFC 3339 timestamp. Breakdowns will only be returned for time windows that end on or before
-     * this time.
-     */
+    /** RFC 3339 timestamp. Breakdowns will only be returned for time windows that end on or before this time. */
     fun endingBefore(): OffsetDateTime = endingBefore
 
-    /**
-     * RFC 3339 timestamp. Breakdowns will only be returned for time windows that start on or after
-     * this time.
-     */
+    /** RFC 3339 timestamp. Breakdowns will only be returned for time windows that start on or after this time. */
     fun startingOn(): OffsetDateTime = startingOn
 
     /** Only return invoices for the specified credit type */
     fun creditTypeId(): Optional<String> = Optional.ofNullable(creditTypeId)
 
-    /**
-     * Max number of results that should be returned. For daily breakdowns, the response can return
-     * up to 35 days worth of breakdowns. For hourly breakdowns, the response can return up to 24
-     * hours. If there are more results, a cursor to the next page is returned.
-     */
+    /** Max number of results that should be returned. For daily breakdowns, the response can return up to 35 days worth of breakdowns. For hourly breakdowns, the response can return up to 24 hours. If there are more results, a cursor to the next page is returned. */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
     /** Cursor that indicates where the next page of results should start. */
@@ -93,7 +79,7 @@ private constructor(
     /** If set, all zero quantity line items will be filtered out of the response */
     fun skipZeroQtyLineItems(): Optional<Boolean> = Optional.ofNullable(skipZeroQtyLineItems)
 
-    /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
+    /** Invoice sort order by issued_at, e.g. date_asc or date_desc.  Defaults to date_asc. */
     fun sort(): Optional<Sort> = Optional.ofNullable(sort)
 
     /** Invoice status, e.g. DRAFT or FINALIZED */
@@ -116,13 +102,15 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [InvoiceListBreakdownsParams].
          *
          * The following fields are required:
+         *
          * ```java
          * .customerId()
          * .endingBefore()
          * .startingOn()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [InvoiceListBreakdownsParams]. */
@@ -142,47 +130,53 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(invoiceListBreakdownsParams: InvoiceListBreakdownsParams) = apply {
-            customerId = invoiceListBreakdownsParams.customerId
-            endingBefore = invoiceListBreakdownsParams.endingBefore
-            startingOn = invoiceListBreakdownsParams.startingOn
-            creditTypeId = invoiceListBreakdownsParams.creditTypeId
-            limit = invoiceListBreakdownsParams.limit
-            nextPage = invoiceListBreakdownsParams.nextPage
-            skipZeroQtyLineItems = invoiceListBreakdownsParams.skipZeroQtyLineItems
-            sort = invoiceListBreakdownsParams.sort
-            status = invoiceListBreakdownsParams.status
-            windowSize = invoiceListBreakdownsParams.windowSize
-            additionalHeaders = invoiceListBreakdownsParams.additionalHeaders.toBuilder()
-            additionalQueryParams = invoiceListBreakdownsParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(invoiceListBreakdownsParams: InvoiceListBreakdownsParams) =
+            apply {
+                customerId = invoiceListBreakdownsParams.customerId
+                endingBefore = invoiceListBreakdownsParams.endingBefore
+                startingOn = invoiceListBreakdownsParams.startingOn
+                creditTypeId = invoiceListBreakdownsParams.creditTypeId
+                limit = invoiceListBreakdownsParams.limit
+                nextPage = invoiceListBreakdownsParams.nextPage
+                skipZeroQtyLineItems = invoiceListBreakdownsParams.skipZeroQtyLineItems
+                sort = invoiceListBreakdownsParams.sort
+                status = invoiceListBreakdownsParams.status
+                windowSize = invoiceListBreakdownsParams.windowSize
+                additionalHeaders = invoiceListBreakdownsParams.additionalHeaders.toBuilder()
+                additionalQueryParams = invoiceListBreakdownsParams.additionalQueryParams.toBuilder()
+            }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) =
+            apply {
+                this.customerId = customerId
+            }
 
-        /**
-         * RFC 3339 timestamp. Breakdowns will only be returned for time windows that end on or
-         * before this time.
-         */
-        fun endingBefore(endingBefore: OffsetDateTime) = apply { this.endingBefore = endingBefore }
+        /** RFC 3339 timestamp. Breakdowns will only be returned for time windows that end on or before this time. */
+        fun endingBefore(endingBefore: OffsetDateTime) =
+            apply {
+                this.endingBefore = endingBefore
+            }
 
-        /**
-         * RFC 3339 timestamp. Breakdowns will only be returned for time windows that start on or
-         * after this time.
-         */
-        fun startingOn(startingOn: OffsetDateTime) = apply { this.startingOn = startingOn }
+        /** RFC 3339 timestamp. Breakdowns will only be returned for time windows that start on or after this time. */
+        fun startingOn(startingOn: OffsetDateTime) =
+            apply {
+                this.startingOn = startingOn
+            }
 
         /** Only return invoices for the specified credit type */
-        fun creditTypeId(creditTypeId: String?) = apply { this.creditTypeId = creditTypeId }
+        fun creditTypeId(creditTypeId: String?) =
+            apply {
+                this.creditTypeId = creditTypeId
+            }
 
         /** Alias for calling [Builder.creditTypeId] with `creditTypeId.orElse(null)`. */
         fun creditTypeId(creditTypeId: Optional<String>) = creditTypeId(creditTypeId.getOrNull())
 
-        /**
-         * Max number of results that should be returned. For daily breakdowns, the response can
-         * return up to 35 days worth of breakdowns. For hourly breakdowns, the response can return
-         * up to 24 hours. If there are more results, a cursor to the next page is returned.
-         */
-        fun limit(limit: Long?) = apply { this.limit = limit }
+        /** Max number of results that should be returned. For daily breakdowns, the response can return up to 35 days worth of breakdowns. For hourly breakdowns, the response can return up to 24 hours. If there are more results, a cursor to the next page is returned. */
+        fun limit(limit: Long?) =
+            apply {
+                this.limit = limit
+            }
 
         /**
          * Alias for [Builder.limit].
@@ -195,146 +189,180 @@ private constructor(
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: String?) =
+            apply {
+                this.nextPage = nextPage
+            }
 
         /** Alias for calling [Builder.nextPage] with `nextPage.orElse(null)`. */
         fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.getOrNull())
 
         /** If set, all zero quantity line items will be filtered out of the response */
-        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean?) = apply {
-            this.skipZeroQtyLineItems = skipZeroQtyLineItems
-        }
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean?) =
+            apply {
+                this.skipZeroQtyLineItems = skipZeroQtyLineItems
+            }
 
         /**
          * Alias for [Builder.skipZeroQtyLineItems].
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean) =
-            skipZeroQtyLineItems(skipZeroQtyLineItems as Boolean?)
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Boolean) = skipZeroQtyLineItems(skipZeroQtyLineItems as Boolean?)
 
-        /**
-         * Alias for calling [Builder.skipZeroQtyLineItems] with
-         * `skipZeroQtyLineItems.orElse(null)`.
-         */
-        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Optional<Boolean>) =
-            skipZeroQtyLineItems(skipZeroQtyLineItems.getOrNull())
+        /** Alias for calling [Builder.skipZeroQtyLineItems] with `skipZeroQtyLineItems.orElse(null)`. */
+        fun skipZeroQtyLineItems(skipZeroQtyLineItems: Optional<Boolean>) = skipZeroQtyLineItems(skipZeroQtyLineItems.getOrNull())
 
-        /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
-        fun sort(sort: Sort?) = apply { this.sort = sort }
+        /** Invoice sort order by issued_at, e.g. date_asc or date_desc.  Defaults to date_asc. */
+        fun sort(sort: Sort?) =
+            apply {
+                this.sort = sort
+            }
 
         /** Alias for calling [Builder.sort] with `sort.orElse(null)`. */
         fun sort(sort: Optional<Sort>) = sort(sort.getOrNull())
 
         /** Invoice status, e.g. DRAFT or FINALIZED */
-        fun status(status: String?) = apply { this.status = status }
+        fun status(status: String?) =
+            apply {
+                this.status = status
+            }
 
         /** Alias for calling [Builder.status] with `status.orElse(null)`. */
         fun status(status: Optional<String>) = status(status.getOrNull())
 
         /** The granularity of the breakdowns to return. Defaults to day. */
-        fun windowSize(windowSize: WindowSize?) = apply { this.windowSize = windowSize }
+        fun windowSize(windowSize: WindowSize?) =
+            apply {
+                this.windowSize = windowSize
+            }
 
         /** Alias for calling [Builder.windowSize] with `windowSize.orElse(null)`. */
         fun windowSize(windowSize: Optional<WindowSize>) = windowSize(windowSize.getOrNull())
 
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
+        fun putAdditionalHeader(name: String, value: String) =
+            apply {
+                additionalHeaders.put(name, value)
+            }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.put(name, values)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
+        fun replaceAdditionalHeaders(name: String, value: String) =
+            apply {
+                additionalHeaders.replace(name, value)
+            }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.replace(name, values)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) =
+            apply {
+                additionalHeaders.remove(name)
+            }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
+        fun removeAllAdditionalHeaders(names: Set<String>) =
+            apply {
+                additionalHeaders.removeAll(names)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
+        fun putAdditionalQueryParam(key: String, value: String) =
+            apply {
+                additionalQueryParams.put(key, value)
+            }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.put(key, values)
+            }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
+        fun replaceAdditionalQueryParams(key: String, value: String) =
+            apply {
+                additionalQueryParams.replace(key, value)
+            }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.replace(key, values)
+            }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+        fun removeAdditionalQueryParams(key: String) =
+            apply {
+                additionalQueryParams.remove(key)
+            }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) =
+            apply {
+                additionalQueryParams.removeAll(keys)
+            }
 
         /**
          * Returns an immutable instance of [InvoiceListBreakdownsParams].
@@ -342,6 +370,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .customerId()
          * .endingBefore()
@@ -352,18 +381,24 @@ private constructor(
          */
         fun build(): InvoiceListBreakdownsParams =
             InvoiceListBreakdownsParams(
-                checkRequired("customerId", customerId),
-                checkRequired("endingBefore", endingBefore),
-                checkRequired("startingOn", startingOn),
-                creditTypeId,
-                limit,
-                nextPage,
-                skipZeroQtyLineItems,
-                sort,
-                status,
-                windowSize,
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
+              checkRequired(
+                "customerId", customerId
+              ),
+              checkRequired(
+                "endingBefore", endingBefore
+              ),
+              checkRequired(
+                "startingOn", startingOn
+              ),
+              creditTypeId,
+              limit,
+              nextPage,
+              skipZeroQtyLineItems,
+              sort,
+              status,
+              windowSize,
+              additionalHeaders.build(),
+              additionalQueryParams.build(),
             )
     }
 
@@ -391,18 +426,21 @@ private constructor(
             }
             .build()
 
-    /** Invoice sort order by issued_at, e.g. date_asc or date_desc. Defaults to date_asc. */
-    class Sort @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    /** Invoice sort order by issued_at, e.g. date_asc or date_desc.  Defaults to date_asc. */
+    class Sort @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't match any known
+         * member, and you want to know that value. For example, if the SDK is on an older version than the
+         * API, then the API may respond with new members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -423,9 +461,11 @@ private constructor(
          * An enum containing [Sort]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Sort] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+         *   an older version than the API, then the API may respond with new members that the SDK is unaware
+         *   of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -436,11 +476,11 @@ private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+         * class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want to throw
+         * for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -452,11 +492,10 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+         * for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
-         *   member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
          */
         fun known(): Known =
             when (this) {
@@ -468,36 +507,33 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging and generally
+         * doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow {
-                MetronomeInvalidDataException("Value is not a String")
-            }
+        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Sort = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Sort =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            known()
-            validated = true
-        }
+                known()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -508,19 +544,19 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Sort && value == other.value
+          return other is Sort && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -529,17 +565,20 @@ private constructor(
     }
 
     /** The granularity of the breakdowns to return. Defaults to day. */
-    class WindowSize @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    class WindowSize @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't match any known
+         * member, and you want to know that value. For example, if the SDK is on an older version than the
+         * API, then the API may respond with new members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -560,26 +599,26 @@ private constructor(
          * An enum containing [WindowSize]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [WindowSize] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+         *   an older version than the API, then the API may respond with new members that the SDK is unaware
+         *   of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
             HOUR,
             DAY,
-            /**
-             * An enum member indicating that [WindowSize] was instantiated with an unknown value.
-             */
+            /** An enum member indicating that [WindowSize] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+         * class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want to throw
+         * for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -591,11 +630,10 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+         * for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
-         *   member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
          */
         fun known(): Known =
             when (this) {
@@ -607,36 +645,33 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging and generally
+         * doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow {
-                MetronomeInvalidDataException("Value is not a String")
-            }
+        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): WindowSize = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): WindowSize =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            known()
-            validated = true
-        }
+                known()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -647,19 +682,19 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is WindowSize && value == other.value
+          return other is WindowSize && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -668,41 +703,14 @@ private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is InvoiceListBreakdownsParams &&
-            customerId == other.customerId &&
-            endingBefore == other.endingBefore &&
-            startingOn == other.startingOn &&
-            creditTypeId == other.creditTypeId &&
-            limit == other.limit &&
-            nextPage == other.nextPage &&
-            skipZeroQtyLineItems == other.skipZeroQtyLineItems &&
-            sort == other.sort &&
-            status == other.status &&
-            windowSize == other.windowSize &&
-            additionalHeaders == other.additionalHeaders &&
-            additionalQueryParams == other.additionalQueryParams
+      return other is InvoiceListBreakdownsParams && customerId == other.customerId && endingBefore == other.endingBefore && startingOn == other.startingOn && creditTypeId == other.creditTypeId && limit == other.limit && nextPage == other.nextPage && skipZeroQtyLineItems == other.skipZeroQtyLineItems && sort == other.sort && status == other.status && windowSize == other.windowSize && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int =
-        Objects.hash(
-            customerId,
-            endingBefore,
-            startingOn,
-            creditTypeId,
-            limit,
-            nextPage,
-            skipZeroQtyLineItems,
-            sort,
-            status,
-            windowSize,
-            additionalHeaders,
-            additionalQueryParams,
-        )
+    override fun hashCode(): Int = Objects.hash(customerId, endingBefore, startingOn, creditTypeId, limit, nextPage, skipZeroQtyLineItems, sort, status, windowSize, additionalHeaders, additionalQueryParams)
 
-    override fun toString() =
-        "InvoiceListBreakdownsParams{customerId=$customerId, endingBefore=$endingBefore, startingOn=$startingOn, creditTypeId=$creditTypeId, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, status=$status, windowSize=$windowSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() = "InvoiceListBreakdownsParams{customerId=$customerId, endingBefore=$endingBefore, startingOn=$startingOn, creditTypeId=$creditTypeId, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, status=$status, windowSize=$windowSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -5,17 +5,20 @@ package com.metronome.api.models.v1.usage
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.usage.UsageListPageResponse
+import com.metronome.api.models.v1.usage.UsageListParams
+import com.metronome.api.models.v1.usage.UsageListResponse
 import com.metronome.api.services.blocking.v1.UsageService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see UsageService.list */
-class UsageListPage
-private constructor(
+class UsageListPage private constructor(
     private val service: UsageService,
     private val params: UsageListParams,
     private val response: UsageListPageResponse,
+
 ) : Page<UsageListResponse> {
 
     /**
@@ -30,18 +33,17 @@ private constructor(
      *
      * @see UsageListPageResponse.data
      */
-    fun data(): List<UsageListResponse> =
-        response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<UsageListResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<UsageListResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): UsageListParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
     override fun nextPage(): UsageListPage = service.list(nextPageParams())
@@ -62,13 +64,15 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [UsageListPage].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [UsageListPage]. */
@@ -79,19 +83,29 @@ private constructor(
         private var response: UsageListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(usageListPage: UsageListPage) = apply {
-            service = usageListPage.service
-            params = usageListPage.params
-            response = usageListPage.response
-        }
+        internal fun from(usageListPage: UsageListPage) =
+            apply {
+                service = usageListPage.service
+                params = usageListPage.params
+                response = usageListPage.response
+            }
 
-        fun service(service: UsageService) = apply { this.service = service }
+        fun service(service: UsageService) =
+            apply {
+                this.service = service
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: UsageListParams) = apply { this.params = params }
+        fun params(params: UsageListParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: UsageListPageResponse) = apply { this.response = response }
+        fun response(response: UsageListPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [UsageListPage].
@@ -99,6 +113,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
@@ -109,21 +124,24 @@ private constructor(
          */
         fun build(): UsageListPage =
             UsageListPage(
-                checkRequired("service", service),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is UsageListPage &&
-            service == other.service &&
-            params == other.params &&
-            response == other.response
+      return other is UsageListPage && service == other.service && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)

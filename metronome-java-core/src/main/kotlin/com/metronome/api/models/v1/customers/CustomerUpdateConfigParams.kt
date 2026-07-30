@@ -21,51 +21,44 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Update configuration settings for a specific customer, such as external system integrations
- * (e.g., Salesforce account ID) and other customer-specific billing parameters. Use this endpoint
- * to modify customer configurations without affecting core customer data like name or ingest
- * aliases.
+ * Update configuration settings for a specific customer, such as external system integrations (e.g., Salesforce account ID) and other customer-specific billing parameters. Use this endpoint to modify customer configurations without affecting core customer data like name or ingest aliases.
+ *
  */
-class CustomerUpdateConfigParams
-private constructor(
+class CustomerUpdateConfigParams private constructor(
     private val customerId: String,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+
 ) : Params {
 
     fun customerId(): String = customerId
 
     /**
-     * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
-     * client-level config if unset, which defaults to true if unset.
+     * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the client-level config if unset, which defaults to true if unset.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun leaveStripeInvoicesInDraft(): Optional<Boolean> = body.leaveStripeInvoicesInDraft()
 
     /**
      * The Salesforce account ID for the customer
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun salesforceAccountId(): Optional<String> = body.salesforceAccountId()
 
     /**
      * Returns the raw JSON value of [leaveStripeInvoicesInDraft].
      *
-     * Unlike [leaveStripeInvoicesInDraft], this method doesn't throw if the JSON field has an
-     * unexpected type.
+     * Unlike [leaveStripeInvoicesInDraft], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _leaveStripeInvoicesInDraft(): JsonField<Boolean> = body._leaveStripeInvoicesInDraft()
 
     /**
      * Returns the raw JSON value of [salesforceAccountId].
      *
-     * Unlike [salesforceAccountId], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [salesforceAccountId], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _salesforceAccountId(): JsonField<String> = body._salesforceAccountId()
 
@@ -85,11 +78,13 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [CustomerUpdateConfigParams].
          *
          * The following fields are required:
+         *
          * ```java
          * .customerId()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [CustomerUpdateConfigParams]. */
@@ -101,197 +96,229 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(customerUpdateConfigParams: CustomerUpdateConfigParams) = apply {
-            customerId = customerUpdateConfigParams.customerId
-            body = customerUpdateConfigParams.body.toBuilder()
-            additionalHeaders = customerUpdateConfigParams.additionalHeaders.toBuilder()
-            additionalQueryParams = customerUpdateConfigParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(customerUpdateConfigParams: CustomerUpdateConfigParams) =
+            apply {
+                customerId = customerUpdateConfigParams.customerId
+                body = customerUpdateConfigParams.body.toBuilder()
+                additionalHeaders = customerUpdateConfigParams.additionalHeaders.toBuilder()
+                additionalQueryParams = customerUpdateConfigParams.additionalQueryParams.toBuilder()
+            }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) =
+            apply {
+                this.customerId = customerId
+            }
 
         /**
          * Sets the entire request body.
          *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
+         * This is generally only useful if you are already constructing the body separately. Otherwise,
+         * it's more convenient to use the top-level setters instead:
          * - [leaveStripeInvoicesInDraft]
          * - [salesforceAccountId]
          */
-        fun body(body: Body) = apply { this.body = body.toBuilder() }
+        fun body(body: Body) =
+            apply {
+                this.body = body.toBuilder()
+            }
 
-        /**
-         * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
-         * client-level config if unset, which defaults to true if unset.
-         */
-        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean?) = apply {
-            body.leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft)
-        }
+        /** Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the client-level config if unset, which defaults to true if unset. */
+        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean?) =
+            apply {
+                body.leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft)
+            }
 
         /**
          * Alias for [Builder.leaveStripeInvoicesInDraft].
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean) =
-            leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft as Boolean?)
+        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean) = leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft as Boolean?)
 
-        /**
-         * Alias for calling [Builder.leaveStripeInvoicesInDraft] with
-         * `leaveStripeInvoicesInDraft.orElse(null)`.
-         */
-        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Optional<Boolean>) =
-            leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft.getOrNull())
+        /** Alias for calling [Builder.leaveStripeInvoicesInDraft] with `leaveStripeInvoicesInDraft.orElse(null)`. */
+        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Optional<Boolean>) = leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft.getOrNull())
 
         /**
          * Sets [Builder.leaveStripeInvoicesInDraft] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.leaveStripeInvoicesInDraft] with a well-typed [Boolean]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.leaveStripeInvoicesInDraft] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: JsonField<Boolean>) = apply {
-            body.leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft)
-        }
+        fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: JsonField<Boolean>) =
+            apply {
+                body.leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft)
+            }
 
         /** The Salesforce account ID for the customer */
-        fun salesforceAccountId(salesforceAccountId: String?) = apply {
-            body.salesforceAccountId(salesforceAccountId)
-        }
+        fun salesforceAccountId(salesforceAccountId: String?) =
+            apply {
+                body.salesforceAccountId(salesforceAccountId)
+            }
 
-        /**
-         * Alias for calling [Builder.salesforceAccountId] with `salesforceAccountId.orElse(null)`.
-         */
-        fun salesforceAccountId(salesforceAccountId: Optional<String>) =
-            salesforceAccountId(salesforceAccountId.getOrNull())
+        /** Alias for calling [Builder.salesforceAccountId] with `salesforceAccountId.orElse(null)`. */
+        fun salesforceAccountId(salesforceAccountId: Optional<String>) = salesforceAccountId(salesforceAccountId.getOrNull())
 
         /**
          * Sets [Builder.salesforceAccountId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.salesforceAccountId] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.salesforceAccountId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun salesforceAccountId(salesforceAccountId: JsonField<String>) = apply {
-            body.salesforceAccountId(salesforceAccountId)
-        }
+        fun salesforceAccountId(salesforceAccountId: JsonField<String>) =
+            apply {
+                body.salesforceAccountId(salesforceAccountId)
+            }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.additionalProperties(additionalBodyProperties)
+            }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
+            apply {
+                body.putAdditionalProperty(
+                  key, value
+                )
+            }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+        fun removeAdditionalBodyProperty(key: String) =
+            apply {
+                body.removeAdditionalProperty(key)
+            }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
+            apply {
+                body.removeAllAdditionalProperties(keys)
+            }
 
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
+        fun putAdditionalHeader(name: String, value: String) =
+            apply {
+                additionalHeaders.put(name, value)
+            }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.put(name, values)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
+        fun replaceAdditionalHeaders(name: String, value: String) =
+            apply {
+                additionalHeaders.replace(name, value)
+            }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.replace(name, values)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) =
+            apply {
+                additionalHeaders.remove(name)
+            }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
+        fun removeAllAdditionalHeaders(names: Set<String>) =
+            apply {
+                additionalHeaders.removeAll(names)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
+        fun putAdditionalQueryParam(key: String, value: String) =
+            apply {
+                additionalQueryParams.put(key, value)
+            }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.put(key, values)
+            }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
+        fun replaceAdditionalQueryParams(key: String, value: String) =
+            apply {
+                additionalQueryParams.replace(key, value)
+            }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.replace(key, values)
+            }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+        fun removeAdditionalQueryParams(key: String) =
+            apply {
+                additionalQueryParams.remove(key)
+            }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) =
+            apply {
+                additionalQueryParams.removeAll(keys)
+            }
 
         /**
          * Returns an immutable instance of [CustomerUpdateConfigParams].
@@ -299,6 +326,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .customerId()
          * ```
@@ -307,10 +335,12 @@ private constructor(
          */
         fun build(): CustomerUpdateConfigParams =
             CustomerUpdateConfigParams(
-                checkRequired("customerId", customerId),
-                body.build(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
+              checkRequired(
+                "customerId", customerId
+              ),
+              body.build(),
+              additionalHeaders.build(),
+              additionalQueryParams.build(),
             )
     }
 
@@ -326,48 +356,41 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    class Body
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class Body @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val leaveStripeInvoicesInDraft: JsonField<Boolean>,
         private val salesforceAccountId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("leave_stripe_invoices_in_draft")
-            @ExcludeMissing
-            leaveStripeInvoicesInDraft: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("salesforce_account_id")
-            @ExcludeMissing
-            salesforceAccountId: JsonField<String> = JsonMissing.of(),
-        ) : this(leaveStripeInvoicesInDraft, salesforceAccountId, mutableMapOf())
+            @JsonProperty("leave_stripe_invoices_in_draft") @ExcludeMissing leaveStripeInvoicesInDraft: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("salesforce_account_id") @ExcludeMissing salesforceAccountId: JsonField<String> = JsonMissing.of()
+        ) : this(
+          leaveStripeInvoicesInDraft,
+          salesforceAccountId,
+          mutableMapOf(),
+        )
 
         /**
-         * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
-         * client-level config if unset, which defaults to true if unset.
+         * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the client-level config if unset, which defaults to true if unset.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
-        fun leaveStripeInvoicesInDraft(): Optional<Boolean> =
-            leaveStripeInvoicesInDraft.getOptional("leave_stripe_invoices_in_draft")
+        fun leaveStripeInvoicesInDraft(): Optional<Boolean> = leaveStripeInvoicesInDraft.getOptional("leave_stripe_invoices_in_draft")
 
         /**
          * The Salesforce account ID for the customer
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
-        fun salesforceAccountId(): Optional<String> =
-            salesforceAccountId.getOptional("salesforce_account_id")
+        fun salesforceAccountId(): Optional<String> = salesforceAccountId.getOptional("salesforce_account_id")
 
         /**
          * Returns the raw JSON value of [leaveStripeInvoicesInDraft].
          *
-         * Unlike [leaveStripeInvoicesInDraft], this method doesn't throw if the JSON field has an
-         * unexpected type.
+         * Unlike [leaveStripeInvoicesInDraft], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("leave_stripe_invoices_in_draft")
         @ExcludeMissing
@@ -376,8 +399,7 @@ private constructor(
         /**
          * Returns the raw JSON value of [salesforceAccountId].
          *
-         * Unlike [salesforceAccountId], this method doesn't throw if the JSON field has an
-         * unexpected type.
+         * Unlike [salesforceAccountId], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("salesforce_account_id")
         @ExcludeMissing
@@ -385,20 +407,20 @@ private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Body]. */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
@@ -409,85 +431,79 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                leaveStripeInvoicesInDraft = body.leaveStripeInvoicesInDraft
-                salesforceAccountId = body.salesforceAccountId
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
+            internal fun from(body: Body) =
+                apply {
+                    leaveStripeInvoicesInDraft = body.leaveStripeInvoicesInDraft
+                    salesforceAccountId = body.salesforceAccountId
+                    additionalProperties = body.additionalProperties.toMutableMap()
+                }
 
-            /**
-             * Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the
-             * client-level config if unset, which defaults to true if unset.
-             */
-            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean?) =
-                leaveStripeInvoicesInDraft(JsonField.ofNullable(leaveStripeInvoicesInDraft))
+            /** Leave in draft or set to auto-advance on invoices sent to Stripe. Falls back to the client-level config if unset, which defaults to true if unset. */
+            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean?) = leaveStripeInvoicesInDraft(JsonField.ofNullable(leaveStripeInvoicesInDraft))
 
             /**
              * Alias for [Builder.leaveStripeInvoicesInDraft].
              *
              * This unboxed primitive overload exists for backwards compatibility.
              */
-            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean) =
-                leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft as Boolean?)
+            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Boolean) = leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft as Boolean?)
 
-            /**
-             * Alias for calling [Builder.leaveStripeInvoicesInDraft] with
-             * `leaveStripeInvoicesInDraft.orElse(null)`.
-             */
-            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Optional<Boolean>) =
-                leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft.getOrNull())
+            /** Alias for calling [Builder.leaveStripeInvoicesInDraft] with `leaveStripeInvoicesInDraft.orElse(null)`. */
+            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: Optional<Boolean>) = leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft.getOrNull())
 
             /**
              * Sets [Builder.leaveStripeInvoicesInDraft] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.leaveStripeInvoicesInDraft] with a well-typed
-             * [Boolean] value instead. This method is primarily for setting the field to an
-             * undocumented or not yet supported value.
+             * You should usually call [Builder.leaveStripeInvoicesInDraft] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: JsonField<Boolean>) = apply {
-                this.leaveStripeInvoicesInDraft = leaveStripeInvoicesInDraft
-            }
+            fun leaveStripeInvoicesInDraft(leaveStripeInvoicesInDraft: JsonField<Boolean>) =
+                apply {
+                    this.leaveStripeInvoicesInDraft = leaveStripeInvoicesInDraft
+                }
 
             /** The Salesforce account ID for the customer */
-            fun salesforceAccountId(salesforceAccountId: String?) =
-                salesforceAccountId(JsonField.ofNullable(salesforceAccountId))
+            fun salesforceAccountId(salesforceAccountId: String?) = salesforceAccountId(JsonField.ofNullable(salesforceAccountId))
 
-            /**
-             * Alias for calling [Builder.salesforceAccountId] with
-             * `salesforceAccountId.orElse(null)`.
-             */
-            fun salesforceAccountId(salesforceAccountId: Optional<String>) =
-                salesforceAccountId(salesforceAccountId.getOrNull())
+            /** Alias for calling [Builder.salesforceAccountId] with `salesforceAccountId.orElse(null)`. */
+            fun salesforceAccountId(salesforceAccountId: Optional<String>) = salesforceAccountId(salesforceAccountId.getOrNull())
 
             /**
              * Sets [Builder.salesforceAccountId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.salesforceAccountId] with a well-typed [String]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.salesforceAccountId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun salesforceAccountId(salesforceAccountId: JsonField<String>) = apply {
-                this.salesforceAccountId = salesforceAccountId
-            }
+            fun salesforceAccountId(salesforceAccountId: JsonField<String>) =
+                apply {
+                    this.salesforceAccountId = salesforceAccountId
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [Body].
@@ -496,32 +512,32 @@ private constructor(
              */
             fun build(): Body =
                 Body(
-                    leaveStripeInvoicesInDraft,
-                    salesforceAccountId,
-                    additionalProperties.toMutableMap(),
+                  leaveStripeInvoicesInDraft,
+                  salesforceAccountId,
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Body =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            leaveStripeInvoicesInDraft()
-            salesforceAccountId()
-            validated = true
-        }
+                leaveStripeInvoicesInDraft()
+                salesforceAccountId()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -532,52 +548,37 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (if (leaveStripeInvoicesInDraft.asKnown().isPresent) 1 else 0) +
-                (if (salesforceAccountId.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int = (if (leaveStripeInvoicesInDraft.asKnown().isPresent) 1 else 0) + (if (salesforceAccountId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Body &&
-                leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft &&
-                salesforceAccountId == other.salesforceAccountId &&
-                additionalProperties == other.additionalProperties
+          return other is Body && leaveStripeInvoicesInDraft == other.leaveStripeInvoicesInDraft && salesforceAccountId == other.salesforceAccountId && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(leaveStripeInvoicesInDraft, salesforceAccountId, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(leaveStripeInvoicesInDraft, salesforceAccountId, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Body{leaveStripeInvoicesInDraft=$leaveStripeInvoicesInDraft, salesforceAccountId=$salesforceAccountId, additionalProperties=$additionalProperties}"
+        override fun toString() = "Body{leaveStripeInvoicesInDraft=$leaveStripeInvoicesInDraft, salesforceAccountId=$salesforceAccountId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is CustomerUpdateConfigParams &&
-            customerId == other.customerId &&
-            body == other.body &&
-            additionalHeaders == other.additionalHeaders &&
-            additionalQueryParams == other.additionalQueryParams
+      return other is CustomerUpdateConfigParams && customerId == other.customerId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int =
-        Objects.hash(customerId, body, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int = Objects.hash(customerId, body, additionalHeaders, additionalQueryParams)
 
-    override fun toString() =
-        "CustomerUpdateConfigParams{customerId=$customerId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() = "CustomerUpdateConfigParams{customerId=$customerId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

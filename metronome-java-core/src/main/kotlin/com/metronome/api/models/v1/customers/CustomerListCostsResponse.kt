@@ -13,49 +13,39 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.v1.customers.CustomerListCostsResponse
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-class CustomerListCostsResponse
-@JsonCreator(mode = JsonCreator.Mode.DISABLED)
-private constructor(
+class CustomerListCostsResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
     private val creditTypes: JsonField<CreditTypes>,
     private val endTimestamp: JsonField<OffsetDateTime>,
     private val startTimestamp: JsonField<OffsetDateTime>,
     private val additionalProperties: MutableMap<String, JsonValue>,
+
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("credit_types")
-        @ExcludeMissing
-        creditTypes: JsonField<CreditTypes> = JsonMissing.of(),
-        @JsonProperty("end_timestamp")
-        @ExcludeMissing
-        endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("start_timestamp")
-        @ExcludeMissing
-        startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-    ) : this(creditTypes, endTimestamp, startTimestamp, mutableMapOf())
+        @JsonProperty("credit_types") @ExcludeMissing creditTypes: JsonField<CreditTypes> = JsonMissing.of(),
+        @JsonProperty("end_timestamp") @ExcludeMissing endTimestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("start_timestamp") @ExcludeMissing startTimestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+    ) : this(
+      creditTypes,
+      endTimestamp,
+      startTimestamp,
+      mutableMapOf(),
+    )
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun creditTypes(): CreditTypes = creditTypes.getRequired("credit_types")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun endTimestamp(): OffsetDateTime = endTimestamp.getRequired("end_timestamp")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun startTimestamp(): OffsetDateTime = startTimestamp.getRequired("start_timestamp")
 
     /**
@@ -87,13 +77,12 @@ private constructor(
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-        additionalProperties.put(key, value)
+      additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -103,13 +92,15 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [CustomerListCostsResponse].
          *
          * The following fields are required:
+         *
          * ```java
          * .creditTypes()
          * .endTimestamp()
          * .startTimestamp()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [CustomerListCostsResponse]. */
@@ -121,71 +112,78 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(customerListCostsResponse: CustomerListCostsResponse) = apply {
-            creditTypes = customerListCostsResponse.creditTypes
-            endTimestamp = customerListCostsResponse.endTimestamp
-            startTimestamp = customerListCostsResponse.startTimestamp
-            additionalProperties = customerListCostsResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(customerListCostsResponse: CustomerListCostsResponse) =
+            apply {
+                creditTypes = customerListCostsResponse.creditTypes
+                endTimestamp = customerListCostsResponse.endTimestamp
+                startTimestamp = customerListCostsResponse.startTimestamp
+                additionalProperties = customerListCostsResponse.additionalProperties.toMutableMap()
+            }
 
         fun creditTypes(creditTypes: CreditTypes) = creditTypes(JsonField.of(creditTypes))
 
         /**
          * Sets [Builder.creditTypes] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.creditTypes] with a well-typed [CreditTypes] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.creditTypes] with a well-typed [CreditTypes] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun creditTypes(creditTypes: JsonField<CreditTypes>) = apply {
-            this.creditTypes = creditTypes
-        }
+        fun creditTypes(creditTypes: JsonField<CreditTypes>) =
+            apply {
+                this.creditTypes = creditTypes
+            }
 
         fun endTimestamp(endTimestamp: OffsetDateTime) = endTimestamp(JsonField.of(endTimestamp))
 
         /**
          * Sets [Builder.endTimestamp] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.endTimestamp] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.endTimestamp] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) = apply {
-            this.endTimestamp = endTimestamp
-        }
+        fun endTimestamp(endTimestamp: JsonField<OffsetDateTime>) =
+            apply {
+                this.endTimestamp = endTimestamp
+            }
 
-        fun startTimestamp(startTimestamp: OffsetDateTime) =
-            startTimestamp(JsonField.of(startTimestamp))
+        fun startTimestamp(startTimestamp: OffsetDateTime) = startTimestamp(JsonField.of(startTimestamp))
 
         /**
          * Sets [Builder.startTimestamp] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.startTimestamp] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.startTimestamp] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) = apply {
-            this.startTimestamp = startTimestamp
-        }
+        fun startTimestamp(startTimestamp: JsonField<OffsetDateTime>) =
+            apply {
+                this.startTimestamp = startTimestamp
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         /**
          * Returns an immutable instance of [CustomerListCostsResponse].
@@ -193,6 +191,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .creditTypes()
          * .endTimestamp()
@@ -203,10 +202,16 @@ private constructor(
          */
         fun build(): CustomerListCostsResponse =
             CustomerListCostsResponse(
-                checkRequired("creditTypes", creditTypes),
-                checkRequired("endTimestamp", endTimestamp),
-                checkRequired("startTimestamp", startTimestamp),
-                additionalProperties.toMutableMap(),
+              checkRequired(
+                "creditTypes", creditTypes
+              ),
+              checkRequired(
+                "endTimestamp", endTimestamp
+              ),
+              checkRequired(
+                "startTimestamp", startTimestamp
+              ),
+              additionalProperties.toMutableMap(),
             )
     }
 
@@ -220,16 +225,17 @@ private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): CustomerListCostsResponse = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): CustomerListCostsResponse =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        creditTypes().validate()
-        endTimestamp()
-        startTimestamp()
-        validated = true
-    }
+            creditTypes().validate()
+            endTimestamp()
+            startTimestamp()
+            validated = true
+        }
 
     fun isValid(): Boolean =
         try {
@@ -245,16 +251,11 @@ private constructor(
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int =
-        (creditTypes.asKnown().getOrNull()?.validity() ?: 0) +
-            (if (endTimestamp.asKnown().isPresent) 1 else 0) +
-            (if (startTimestamp.asKnown().isPresent) 1 else 0)
+    internal fun validity(): Int = (creditTypes.asKnown().getOrNull()?.validity() ?: 0) + (if (endTimestamp.asKnown().isPresent) 1 else 0) + (if (startTimestamp.asKnown().isPresent) 1 else 0)
 
-    class CreditTypes
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
+    class CreditTypes @JsonCreator private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         @JsonAnyGetter
@@ -266,7 +267,8 @@ private constructor(
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [CreditTypes]. */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [CreditTypes]. */
@@ -275,28 +277,36 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(creditTypes: CreditTypes) = apply {
-                additionalProperties = creditTypes.additionalProperties.toMutableMap()
-            }
+            internal fun from(creditTypes: CreditTypes) =
+                apply {
+                    additionalProperties = creditTypes.additionalProperties.toMutableMap()
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [CreditTypes].
@@ -309,21 +319,21 @@ private constructor(
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): CreditTypes = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): CreditTypes =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            validated = true
-        }
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -334,21 +344,19 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is CreditTypes && additionalProperties == other.additionalProperties
+          return other is CreditTypes && additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -359,23 +367,16 @@ private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is CustomerListCostsResponse &&
-            creditTypes == other.creditTypes &&
-            endTimestamp == other.endTimestamp &&
-            startTimestamp == other.startTimestamp &&
-            additionalProperties == other.additionalProperties
+      return other is CustomerListCostsResponse && creditTypes == other.creditTypes && endTimestamp == other.endTimestamp && startTimestamp == other.startTimestamp && additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy {
-        Objects.hash(creditTypes, endTimestamp, startTimestamp, additionalProperties)
-    }
+    private val hashCode: Int by lazy { Objects.hash(creditTypes, endTimestamp, startTimestamp, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "CustomerListCostsResponse{creditTypes=$creditTypes, endTimestamp=$endTimestamp, startTimestamp=$startTimestamp, additionalProperties=$additionalProperties}"
+    override fun toString() = "CustomerListCostsResponse{creditTypes=$creditTypes, endTimestamp=$endTimestamp, startTimestamp=$startTimestamp, additionalProperties=$additionalProperties}"
 }

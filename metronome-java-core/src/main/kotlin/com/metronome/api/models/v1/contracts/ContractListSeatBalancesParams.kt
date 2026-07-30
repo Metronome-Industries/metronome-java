@@ -24,8 +24,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Retrieve detailed balance for seat-based credits and commits from the contract's subscriptions,
- * broken down by individual seats.
+ * Retrieve detailed balance for seat-based credits and commits from the contract's subscriptions, broken down by individual seats.
  *
  * ### Use this endpoint to:
  * - Display per-seat balance information in customer dashboards
@@ -37,122 +36,101 @@ import kotlin.jvm.optionals.getOrNull
  * - Balance: current total balance across all commits and credits
  *
  * ### Usage guidelines:
- * - Date filtering: use `covering_date` OR `starting_at`/`ending_before` to filter balance data by
- *   time range
+ * - Date filtering: use `covering_date` OR `starting_at`/`ending_before` to filter balance data by time range
  * - Set `include_credits_and_commits=true` for detailed commits and credits breakdown per seat
  * - Set `include_ledgers=true` for detailed transaction history per commit/credit per seat
+ *
  */
-class ContractListSeatBalancesParams
-private constructor(
+class ContractListSeatBalancesParams private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+
 ) : Params {
 
     /**
      * The contract ID to retrieve seat balances for
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun contractId(): String = body.contractId()
 
     /**
      * The customer ID to retrieve seat balances for
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun customerId(): String = body.customerId()
 
     /**
-     * Include only commits or credits with access that cover this specific date (cannot be used
-     * with starting_at or ending_before).
+     * Include only commits or credits with access that cover this specific date (cannot be used with starting_at or ending_before).
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun coveringDate(): Optional<OffsetDateTime> = body.coveringDate()
 
     /**
      * Page token from a previous response to retrieve the next page
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun cursor(): Optional<String> = body.cursor()
 
     /**
-     * Include only commits or credits with access effective on or before this date (cannot be used
-     * with covering_date).
+     * Include only commits or credits with access effective on or before this date (cannot be used with covering_date).
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun effectiveBefore(): Optional<OffsetDateTime> = body.effectiveBefore()
 
     /**
      * Include credits and commits in the response
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun includeCreditsAndCommits(): Optional<Boolean> = body.includeCreditsAndCommits()
 
     /**
-     * Include ledger entries for each commit and commit. `include_credits_and_commits` must be set
-     * to `true` for `include_ledgers=true` to apply.
+     * Include ledger entries for each commit and commit. `include_credits_and_commits` must be set to `true` for `include_ledgers=true` to apply.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun includeLedgers(): Optional<Boolean> = body.includeLedgers()
 
     /**
-     * Maximum number of seats to return. Range: 1-100. Default: 25. When
-     * `include_credits_and_commits = true`, if the total commits/credits across all seats exceeds
-     * 100, a limit of 100 applies to the total credits and commits. Seats are included greedily to
-     * maximize the number of seats returned. Example: if seat 1 has 98 commits and seat 2 has 10
-     * commits, both seats will be returned (total: 108 commits). Each returned seat includes all of
-     * its associated credits and commits.
+     * Maximum number of seats to return. Range: 1-100. Default: 25.
+     * When `include_credits_and_commits = true`, if the total commits/credits across all seats exceeds 100, a limit of 100 applies to the total credits and commits. Seats are included greedily to maximize the number of seats returned.
+     * Example: if seat 1 has 98 commits and seat 2 has 10 commits, both seats will be returned (total: 108 commits). Each returned seat includes all of its associated credits and commits.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun limit(): Optional<Long> = body.limit()
 
     /**
      * Optional filter to only include specific seats.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun seatIds(): Optional<List<String>> = body.seatIds()
 
     /**
-     * When true, any seat_ids not found in contract subscriptions will be silently omitted from the
-     * response instead of returning a 400 error.
+     * When true, any seat_ids not found in contract subscriptions will be silently omitted from the response instead of returning a 400 error.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun skipMissingSeatIds(): Optional<Boolean> = body.skipMissingSeatIds()
 
     /**
-     * Include only commits or credits with access effective on or after this date (cannot be used
-     * with covering_date).
+     * Include only commits or credits with access effective on or after this date (cannot be used with covering_date).
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun startingAt(): Optional<OffsetDateTime> = body.startingAt()
 
     /**
-     * Optional filter to only include seats from specific subscriptions. If subscriptions ids are
-     * not mapped to SEAT_BASED subscriptions, error will be returned.
+     * Optional filter to only include seats from specific subscriptions. If subscriptions ids are not mapped to SEAT_BASED subscriptions, error will be returned.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun subscriptionIds(): Optional<List<String>> = body.subscriptionIds()
 
@@ -194,8 +172,7 @@ private constructor(
     /**
      * Returns the raw JSON value of [includeCreditsAndCommits].
      *
-     * Unlike [includeCreditsAndCommits], this method doesn't throw if the JSON field has an
-     * unexpected type.
+     * Unlike [includeCreditsAndCommits], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _includeCreditsAndCommits(): JsonField<Boolean> = body._includeCreditsAndCommits()
 
@@ -223,8 +200,7 @@ private constructor(
     /**
      * Returns the raw JSON value of [skipMissingSeatIds].
      *
-     * Unlike [skipMissingSeatIds], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [skipMissingSeatIds], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _skipMissingSeatIds(): JsonField<Boolean> = body._skipMissingSeatIds()
 
@@ -255,16 +231,17 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [ContractListSeatBalancesParams].
+         * Returns a mutable builder for constructing an instance of [ContractListSeatBalancesParams].
          *
          * The following fields are required:
+         *
          * ```java
          * .contractId()
          * .customerId()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [ContractListSeatBalancesParams]. */
@@ -275,17 +252,18 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(contractListSeatBalancesParams: ContractListSeatBalancesParams) = apply {
-            body = contractListSeatBalancesParams.body.toBuilder()
-            additionalHeaders = contractListSeatBalancesParams.additionalHeaders.toBuilder()
-            additionalQueryParams = contractListSeatBalancesParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(contractListSeatBalancesParams: ContractListSeatBalancesParams) =
+            apply {
+                body = contractListSeatBalancesParams.body.toBuilder()
+                additionalHeaders = contractListSeatBalancesParams.additionalHeaders.toBuilder()
+                additionalQueryParams = contractListSeatBalancesParams.additionalQueryParams.toBuilder()
+            }
 
         /**
          * Sets the entire request body.
          *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
+         * This is generally only useful if you are already constructing the body separately. Otherwise,
+         * it's more convenient to use the top-level setters instead:
          * - [contractId]
          * - [customerId]
          * - [coveringDate]
@@ -293,329 +271,390 @@ private constructor(
          * - [effectiveBefore]
          * - etc.
          */
-        fun body(body: Body) = apply { this.body = body.toBuilder() }
+        fun body(body: Body) =
+            apply {
+                this.body = body.toBuilder()
+            }
 
         /** The contract ID to retrieve seat balances for */
-        fun contractId(contractId: String) = apply { body.contractId(contractId) }
+        fun contractId(contractId: String) =
+            apply {
+                body.contractId(contractId)
+            }
 
         /**
          * Sets [Builder.contractId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.contractId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.contractId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun contractId(contractId: JsonField<String>) = apply { body.contractId(contractId) }
+        fun contractId(contractId: JsonField<String>) =
+            apply {
+                body.contractId(contractId)
+            }
 
         /** The customer ID to retrieve seat balances for */
-        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+        fun customerId(customerId: String) =
+            apply {
+                body.customerId(customerId)
+            }
 
         /**
          * Sets [Builder.customerId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.customerId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.customerId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+        fun customerId(customerId: JsonField<String>) =
+            apply {
+                body.customerId(customerId)
+            }
 
-        /**
-         * Include only commits or credits with access that cover this specific date (cannot be used
-         * with starting_at or ending_before).
-         */
-        fun coveringDate(coveringDate: OffsetDateTime) = apply { body.coveringDate(coveringDate) }
+        /** Include only commits or credits with access that cover this specific date (cannot be used with starting_at or ending_before). */
+        fun coveringDate(coveringDate: OffsetDateTime) =
+            apply {
+                body.coveringDate(coveringDate)
+            }
 
         /**
          * Sets [Builder.coveringDate] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.coveringDate] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.coveringDate] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
-            body.coveringDate(coveringDate)
-        }
+        fun coveringDate(coveringDate: JsonField<OffsetDateTime>) =
+            apply {
+                body.coveringDate(coveringDate)
+            }
 
         /** Page token from a previous response to retrieve the next page */
-        fun cursor(cursor: String) = apply { body.cursor(cursor) }
+        fun cursor(cursor: String) =
+            apply {
+                body.cursor(cursor)
+            }
 
         /**
          * Sets [Builder.cursor] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.cursor] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.cursor] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun cursor(cursor: JsonField<String>) = apply { body.cursor(cursor) }
+        fun cursor(cursor: JsonField<String>) =
+            apply {
+                body.cursor(cursor)
+            }
 
-        /**
-         * Include only commits or credits with access effective on or before this date (cannot be
-         * used with covering_date).
-         */
-        fun effectiveBefore(effectiveBefore: OffsetDateTime) = apply {
-            body.effectiveBefore(effectiveBefore)
-        }
+        /** Include only commits or credits with access effective on or before this date (cannot be used with covering_date). */
+        fun effectiveBefore(effectiveBefore: OffsetDateTime) =
+            apply {
+                body.effectiveBefore(effectiveBefore)
+            }
 
         /**
          * Sets [Builder.effectiveBefore] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.effectiveBefore] with a well-typed [OffsetDateTime]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.effectiveBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun effectiveBefore(effectiveBefore: JsonField<OffsetDateTime>) = apply {
-            body.effectiveBefore(effectiveBefore)
-        }
+        fun effectiveBefore(effectiveBefore: JsonField<OffsetDateTime>) =
+            apply {
+                body.effectiveBefore(effectiveBefore)
+            }
 
         /** Include credits and commits in the response */
-        fun includeCreditsAndCommits(includeCreditsAndCommits: Boolean) = apply {
-            body.includeCreditsAndCommits(includeCreditsAndCommits)
-        }
+        fun includeCreditsAndCommits(includeCreditsAndCommits: Boolean) =
+            apply {
+                body.includeCreditsAndCommits(includeCreditsAndCommits)
+            }
 
         /**
          * Sets [Builder.includeCreditsAndCommits] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.includeCreditsAndCommits] with a well-typed [Boolean]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.includeCreditsAndCommits] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun includeCreditsAndCommits(includeCreditsAndCommits: JsonField<Boolean>) = apply {
-            body.includeCreditsAndCommits(includeCreditsAndCommits)
-        }
+        fun includeCreditsAndCommits(includeCreditsAndCommits: JsonField<Boolean>) =
+            apply {
+                body.includeCreditsAndCommits(includeCreditsAndCommits)
+            }
 
-        /**
-         * Include ledger entries for each commit and commit. `include_credits_and_commits` must be
-         * set to `true` for `include_ledgers=true` to apply.
-         */
-        fun includeLedgers(includeLedgers: Boolean) = apply { body.includeLedgers(includeLedgers) }
+        /** Include ledger entries for each commit and commit. `include_credits_and_commits` must be set to `true` for `include_ledgers=true` to apply. */
+        fun includeLedgers(includeLedgers: Boolean) =
+            apply {
+                body.includeLedgers(includeLedgers)
+            }
 
         /**
          * Sets [Builder.includeLedgers] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.includeLedgers] with a well-typed [Boolean] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.includeLedgers] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun includeLedgers(includeLedgers: JsonField<Boolean>) = apply {
-            body.includeLedgers(includeLedgers)
-        }
+        fun includeLedgers(includeLedgers: JsonField<Boolean>) =
+            apply {
+                body.includeLedgers(includeLedgers)
+            }
 
         /**
-         * Maximum number of seats to return. Range: 1-100. Default: 25. When
-         * `include_credits_and_commits = true`, if the total commits/credits across all seats
-         * exceeds 100, a limit of 100 applies to the total credits and commits. Seats are included
-         * greedily to maximize the number of seats returned. Example: if seat 1 has 98 commits and
-         * seat 2 has 10 commits, both seats will be returned (total: 108 commits). Each returned
-         * seat includes all of its associated credits and commits.
+         * Maximum number of seats to return. Range: 1-100. Default: 25.
+         * When `include_credits_and_commits = true`, if the total commits/credits across all seats exceeds 100, a limit of 100 applies to the total credits and commits. Seats are included greedily to maximize the number of seats returned.
+         * Example: if seat 1 has 98 commits and seat 2 has 10 commits, both seats will be returned (total: 108 commits). Each returned seat includes all of its associated credits and commits.
+         *
          */
-        fun limit(limit: Long) = apply { body.limit(limit) }
+        fun limit(limit: Long) =
+            apply {
+                body.limit(limit)
+            }
 
         /**
          * Sets [Builder.limit] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.limit] with a well-typed [Long] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.limit] with a well-typed [Long] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun limit(limit: JsonField<Long>) = apply { body.limit(limit) }
+        fun limit(limit: JsonField<Long>) =
+            apply {
+                body.limit(limit)
+            }
 
         /** Optional filter to only include specific seats. */
-        fun seatIds(seatIds: List<String>) = apply { body.seatIds(seatIds) }
+        fun seatIds(seatIds: List<String>) =
+            apply {
+                body.seatIds(seatIds)
+            }
 
         /**
          * Sets [Builder.seatIds] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.seatIds] with a well-typed `List<String>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.seatIds] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun seatIds(seatIds: JsonField<List<String>>) = apply { body.seatIds(seatIds) }
+        fun seatIds(seatIds: JsonField<List<String>>) =
+            apply {
+                body.seatIds(seatIds)
+            }
 
         /**
          * Adds a single [String] to [seatIds].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addSeatId(seatId: String) = apply { body.addSeatId(seatId) }
+        fun addSeatId(seatId: String) =
+            apply {
+                body.addSeatId(seatId)
+            }
 
-        /**
-         * When true, any seat_ids not found in contract subscriptions will be silently omitted from
-         * the response instead of returning a 400 error.
-         */
-        fun skipMissingSeatIds(skipMissingSeatIds: Boolean) = apply {
-            body.skipMissingSeatIds(skipMissingSeatIds)
-        }
+        /** When true, any seat_ids not found in contract subscriptions will be silently omitted from the response instead of returning a 400 error. */
+        fun skipMissingSeatIds(skipMissingSeatIds: Boolean) =
+            apply {
+                body.skipMissingSeatIds(skipMissingSeatIds)
+            }
 
         /**
          * Sets [Builder.skipMissingSeatIds] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.skipMissingSeatIds] with a well-typed [Boolean] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.skipMissingSeatIds] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun skipMissingSeatIds(skipMissingSeatIds: JsonField<Boolean>) = apply {
-            body.skipMissingSeatIds(skipMissingSeatIds)
-        }
+        fun skipMissingSeatIds(skipMissingSeatIds: JsonField<Boolean>) =
+            apply {
+                body.skipMissingSeatIds(skipMissingSeatIds)
+            }
 
-        /**
-         * Include only commits or credits with access effective on or after this date (cannot be
-         * used with covering_date).
-         */
-        fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
+        /** Include only commits or credits with access effective on or after this date (cannot be used with covering_date). */
+        fun startingAt(startingAt: OffsetDateTime) =
+            apply {
+                body.startingAt(startingAt)
+            }
 
         /**
          * Sets [Builder.startingAt] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-            body.startingAt(startingAt)
-        }
+        fun startingAt(startingAt: JsonField<OffsetDateTime>) =
+            apply {
+                body.startingAt(startingAt)
+            }
 
-        /**
-         * Optional filter to only include seats from specific subscriptions. If subscriptions ids
-         * are not mapped to SEAT_BASED subscriptions, error will be returned.
-         */
-        fun subscriptionIds(subscriptionIds: List<String>) = apply {
-            body.subscriptionIds(subscriptionIds)
-        }
+        /** Optional filter to only include seats from specific subscriptions. If subscriptions ids are not mapped to SEAT_BASED subscriptions, error will be returned. */
+        fun subscriptionIds(subscriptionIds: List<String>) =
+            apply {
+                body.subscriptionIds(subscriptionIds)
+            }
 
         /**
          * Sets [Builder.subscriptionIds] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.subscriptionIds] with a well-typed `List<String>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.subscriptionIds] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun subscriptionIds(subscriptionIds: JsonField<List<String>>) = apply {
-            body.subscriptionIds(subscriptionIds)
-        }
+        fun subscriptionIds(subscriptionIds: JsonField<List<String>>) =
+            apply {
+                body.subscriptionIds(subscriptionIds)
+            }
 
         /**
          * Adds a single [String] to [subscriptionIds].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addSubscriptionId(subscriptionId: String) = apply {
-            body.addSubscriptionId(subscriptionId)
-        }
+        fun addSubscriptionId(subscriptionId: String) =
+            apply {
+                body.addSubscriptionId(subscriptionId)
+            }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.additionalProperties(additionalBodyProperties)
+            }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
+            apply {
+                body.putAdditionalProperty(
+                  key, value
+                )
+            }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+        fun removeAdditionalBodyProperty(key: String) =
+            apply {
+                body.removeAdditionalProperty(key)
+            }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
+            apply {
+                body.removeAllAdditionalProperties(keys)
+            }
 
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
+        fun putAdditionalHeader(name: String, value: String) =
+            apply {
+                additionalHeaders.put(name, value)
+            }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.put(name, values)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
+        fun replaceAdditionalHeaders(name: String, value: String) =
+            apply {
+                additionalHeaders.replace(name, value)
+            }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.replace(name, values)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) =
+            apply {
+                additionalHeaders.remove(name)
+            }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
+        fun removeAllAdditionalHeaders(names: Set<String>) =
+            apply {
+                additionalHeaders.removeAll(names)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
+        fun putAdditionalQueryParam(key: String, value: String) =
+            apply {
+                additionalQueryParams.put(key, value)
+            }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.put(key, values)
+            }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
+        fun replaceAdditionalQueryParams(key: String, value: String) =
+            apply {
+                additionalQueryParams.replace(key, value)
+            }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.replace(key, values)
+            }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+        fun removeAdditionalQueryParams(key: String) =
+            apply {
+                additionalQueryParams.remove(key)
+            }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) =
+            apply {
+                additionalQueryParams.removeAll(keys)
+            }
 
         /**
          * Returns an immutable instance of [ContractListSeatBalancesParams].
@@ -623,6 +662,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .contractId()
          * .customerId()
@@ -632,9 +672,9 @@ private constructor(
          */
         fun build(): ContractListSeatBalancesParams =
             ContractListSeatBalancesParams(
-                body.build(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
+              body.build(),
+              additionalHeaders.build(),
+              additionalQueryParams.build(),
             )
     }
 
@@ -644,9 +684,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    class Body
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class Body @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val contractId: JsonField<String>,
         private val customerId: JsonField<String>,
         private val coveringDate: JsonField<OffsetDateTime>,
@@ -660,168 +698,124 @@ private constructor(
         private val startingAt: JsonField<OffsetDateTime>,
         private val subscriptionIds: JsonField<List<String>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("contract_id")
-            @ExcludeMissing
-            contractId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("customer_id")
-            @ExcludeMissing
-            customerId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("covering_date")
-            @ExcludeMissing
-            coveringDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("contract_id") @ExcludeMissing contractId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("customer_id") @ExcludeMissing customerId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("covering_date") @ExcludeMissing coveringDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("cursor") @ExcludeMissing cursor: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("effective_before")
-            @ExcludeMissing
-            effectiveBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("include_credits_and_commits")
-            @ExcludeMissing
-            includeCreditsAndCommits: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("include_ledgers")
-            @ExcludeMissing
-            includeLedgers: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("effective_before") @ExcludeMissing effectiveBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("include_credits_and_commits") @ExcludeMissing includeCreditsAndCommits: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("include_ledgers") @ExcludeMissing includeLedgers: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("limit") @ExcludeMissing limit: JsonField<Long> = JsonMissing.of(),
-            @JsonProperty("seat_ids")
-            @ExcludeMissing
-            seatIds: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("skip_missing_seat_ids")
-            @ExcludeMissing
-            skipMissingSeatIds: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("starting_at")
-            @ExcludeMissing
-            startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("subscription_ids")
-            @ExcludeMissing
-            subscriptionIds: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("seat_ids") @ExcludeMissing seatIds: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("skip_missing_seat_ids") @ExcludeMissing skipMissingSeatIds: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("subscription_ids") @ExcludeMissing subscriptionIds: JsonField<List<String>> = JsonMissing.of()
         ) : this(
-            contractId,
-            customerId,
-            coveringDate,
-            cursor,
-            effectiveBefore,
-            includeCreditsAndCommits,
-            includeLedgers,
-            limit,
-            seatIds,
-            skipMissingSeatIds,
-            startingAt,
-            subscriptionIds,
-            mutableMapOf(),
+          contractId,
+          customerId,
+          coveringDate,
+          cursor,
+          effectiveBefore,
+          includeCreditsAndCommits,
+          includeLedgers,
+          limit,
+          seatIds,
+          skipMissingSeatIds,
+          startingAt,
+          subscriptionIds,
+          mutableMapOf(),
         )
 
         /**
          * The contract ID to retrieve seat balances for
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun contractId(): String = contractId.getRequired("contract_id")
 
         /**
          * The customer ID to retrieve seat balances for
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun customerId(): String = customerId.getRequired("customer_id")
 
         /**
-         * Include only commits or credits with access that cover this specific date (cannot be used
-         * with starting_at or ending_before).
+         * Include only commits or credits with access that cover this specific date (cannot be used with starting_at or ending_before).
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
         fun coveringDate(): Optional<OffsetDateTime> = coveringDate.getOptional("covering_date")
 
         /**
          * Page token from a previous response to retrieve the next page
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
         fun cursor(): Optional<String> = cursor.getOptional("cursor")
 
         /**
-         * Include only commits or credits with access effective on or before this date (cannot be
-         * used with covering_date).
+         * Include only commits or credits with access effective on or before this date (cannot be used with covering_date).
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
-        fun effectiveBefore(): Optional<OffsetDateTime> =
-            effectiveBefore.getOptional("effective_before")
+        fun effectiveBefore(): Optional<OffsetDateTime> = effectiveBefore.getOptional("effective_before")
 
         /**
          * Include credits and commits in the response
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
-        fun includeCreditsAndCommits(): Optional<Boolean> =
-            includeCreditsAndCommits.getOptional("include_credits_and_commits")
+        fun includeCreditsAndCommits(): Optional<Boolean> = includeCreditsAndCommits.getOptional("include_credits_and_commits")
 
         /**
-         * Include ledger entries for each commit and commit. `include_credits_and_commits` must be
-         * set to `true` for `include_ledgers=true` to apply.
+         * Include ledger entries for each commit and commit. `include_credits_and_commits` must be set to `true` for `include_ledgers=true` to apply.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
         fun includeLedgers(): Optional<Boolean> = includeLedgers.getOptional("include_ledgers")
 
         /**
-         * Maximum number of seats to return. Range: 1-100. Default: 25. When
-         * `include_credits_and_commits = true`, if the total commits/credits across all seats
-         * exceeds 100, a limit of 100 applies to the total credits and commits. Seats are included
-         * greedily to maximize the number of seats returned. Example: if seat 1 has 98 commits and
-         * seat 2 has 10 commits, both seats will be returned (total: 108 commits). Each returned
-         * seat includes all of its associated credits and commits.
+         * Maximum number of seats to return. Range: 1-100. Default: 25.
+         * When `include_credits_and_commits = true`, if the total commits/credits across all seats exceeds 100, a limit of 100 applies to the total credits and commits. Seats are included greedily to maximize the number of seats returned.
+         * Example: if seat 1 has 98 commits and seat 2 has 10 commits, both seats will be returned (total: 108 commits). Each returned seat includes all of its associated credits and commits.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
         fun limit(): Optional<Long> = limit.getOptional("limit")
 
         /**
          * Optional filter to only include specific seats.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
         fun seatIds(): Optional<List<String>> = seatIds.getOptional("seat_ids")
 
         /**
-         * When true, any seat_ids not found in contract subscriptions will be silently omitted from
-         * the response instead of returning a 400 error.
+         * When true, any seat_ids not found in contract subscriptions will be silently omitted from the response instead of returning a 400 error.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
-        fun skipMissingSeatIds(): Optional<Boolean> =
-            skipMissingSeatIds.getOptional("skip_missing_seat_ids")
+        fun skipMissingSeatIds(): Optional<Boolean> = skipMissingSeatIds.getOptional("skip_missing_seat_ids")
 
         /**
-         * Include only commits or credits with access effective on or after this date (cannot be
-         * used with covering_date).
+         * Include only commits or credits with access effective on or after this date (cannot be used with covering_date).
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
         fun startingAt(): Optional<OffsetDateTime> = startingAt.getOptional("starting_at")
 
         /**
-         * Optional filter to only include seats from specific subscriptions. If subscriptions ids
-         * are not mapped to SEAT_BASED subscriptions, error will be returned.
+         * Optional filter to only include seats from specific subscriptions. If subscriptions ids are not mapped to SEAT_BASED subscriptions, error will be returned.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
          */
-        fun subscriptionIds(): Optional<List<String>> =
-            subscriptionIds.getOptional("subscription_ids")
+        fun subscriptionIds(): Optional<List<String>> = subscriptionIds.getOptional("subscription_ids")
 
         /**
          * Returns the raw JSON value of [contractId].
@@ -844,8 +838,7 @@ private constructor(
         /**
          * Returns the raw JSON value of [coveringDate].
          *
-         * Unlike [coveringDate], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [coveringDate], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("covering_date")
         @ExcludeMissing
@@ -856,13 +849,14 @@ private constructor(
          *
          * Unlike [cursor], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("cursor") @ExcludeMissing fun _cursor(): JsonField<String> = cursor
+        @JsonProperty("cursor")
+        @ExcludeMissing
+        fun _cursor(): JsonField<String> = cursor
 
         /**
          * Returns the raw JSON value of [effectiveBefore].
          *
-         * Unlike [effectiveBefore], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [effectiveBefore], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("effective_before")
         @ExcludeMissing
@@ -871,8 +865,7 @@ private constructor(
         /**
          * Returns the raw JSON value of [includeCreditsAndCommits].
          *
-         * Unlike [includeCreditsAndCommits], this method doesn't throw if the JSON field has an
-         * unexpected type.
+         * Unlike [includeCreditsAndCommits], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("include_credits_and_commits")
         @ExcludeMissing
@@ -881,8 +874,7 @@ private constructor(
         /**
          * Returns the raw JSON value of [includeLedgers].
          *
-         * Unlike [includeLedgers], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [includeLedgers], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("include_ledgers")
         @ExcludeMissing
@@ -893,20 +885,23 @@ private constructor(
          *
          * Unlike [limit], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("limit") @ExcludeMissing fun _limit(): JsonField<Long> = limit
+        @JsonProperty("limit")
+        @ExcludeMissing
+        fun _limit(): JsonField<Long> = limit
 
         /**
          * Returns the raw JSON value of [seatIds].
          *
          * Unlike [seatIds], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("seat_ids") @ExcludeMissing fun _seatIds(): JsonField<List<String>> = seatIds
+        @JsonProperty("seat_ids")
+        @ExcludeMissing
+        fun _seatIds(): JsonField<List<String>> = seatIds
 
         /**
          * Returns the raw JSON value of [skipMissingSeatIds].
          *
-         * Unlike [skipMissingSeatIds], this method doesn't throw if the JSON field has an
-         * unexpected type.
+         * Unlike [skipMissingSeatIds], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("skip_missing_seat_ids")
         @ExcludeMissing
@@ -924,8 +919,7 @@ private constructor(
         /**
          * Returns the raw JSON value of [subscriptionIds].
          *
-         * Unlike [subscriptionIds], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [subscriptionIds], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("subscription_ids")
         @ExcludeMissing
@@ -933,13 +927,12 @@ private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -949,12 +942,14 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [Body].
              *
              * The following fields are required:
+             *
              * ```java
              * .contractId()
              * .customerId()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
@@ -975,21 +970,22 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                contractId = body.contractId
-                customerId = body.customerId
-                coveringDate = body.coveringDate
-                cursor = body.cursor
-                effectiveBefore = body.effectiveBefore
-                includeCreditsAndCommits = body.includeCreditsAndCommits
-                includeLedgers = body.includeLedgers
-                limit = body.limit
-                seatIds = body.seatIds.map { it.toMutableList() }
-                skipMissingSeatIds = body.skipMissingSeatIds
-                startingAt = body.startingAt
-                subscriptionIds = body.subscriptionIds.map { it.toMutableList() }
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
+            internal fun from(body: Body) =
+                apply {
+                    contractId = body.contractId
+                    customerId = body.customerId
+                    coveringDate = body.coveringDate
+                    cursor = body.cursor
+                    effectiveBefore = body.effectiveBefore
+                    includeCreditsAndCommits = body.includeCreditsAndCommits
+                    includeLedgers = body.includeLedgers
+                    limit = body.limit
+                    seatIds = body.seatIds.map { it.toMutableList() }
+                    skipMissingSeatIds = body.skipMissingSeatIds
+                    startingAt = body.startingAt
+                    subscriptionIds = body.subscriptionIds.map { it.toMutableList() }
+                    additionalProperties = body.additionalProperties.toMutableMap()
+                }
 
             /** The contract ID to retrieve seat balances for */
             fun contractId(contractId: String) = contractId(JsonField.of(contractId))
@@ -997,11 +993,13 @@ private constructor(
             /**
              * Sets [Builder.contractId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.contractId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.contractId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
+            fun contractId(contractId: JsonField<String>) =
+                apply {
+                    this.contractId = contractId
+                }
 
             /** The customer ID to retrieve seat balances for */
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
@@ -1009,29 +1007,27 @@ private constructor(
             /**
              * Sets [Builder.customerId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.customerId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.customerId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+            fun customerId(customerId: JsonField<String>) =
+                apply {
+                    this.customerId = customerId
+                }
 
-            /**
-             * Include only commits or credits with access that cover this specific date (cannot be
-             * used with starting_at or ending_before).
-             */
-            fun coveringDate(coveringDate: OffsetDateTime) =
-                coveringDate(JsonField.of(coveringDate))
+            /** Include only commits or credits with access that cover this specific date (cannot be used with starting_at or ending_before). */
+            fun coveringDate(coveringDate: OffsetDateTime) = coveringDate(JsonField.of(coveringDate))
 
             /**
              * Sets [Builder.coveringDate] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.coveringDate] with a well-typed [OffsetDateTime]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.coveringDate] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
-                this.coveringDate = coveringDate
-            }
+            fun coveringDate(coveringDate: JsonField<OffsetDateTime>) =
+                apply {
+                    this.coveringDate = coveringDate
+                }
 
             /** Page token from a previous response to retrieve the next page */
             fun cursor(cursor: String) = cursor(JsonField.of(cursor))
@@ -1039,81 +1035,74 @@ private constructor(
             /**
              * Sets [Builder.cursor] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.cursor] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.cursor] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun cursor(cursor: JsonField<String>) = apply { this.cursor = cursor }
+            fun cursor(cursor: JsonField<String>) =
+                apply {
+                    this.cursor = cursor
+                }
 
-            /**
-             * Include only commits or credits with access effective on or before this date (cannot
-             * be used with covering_date).
-             */
-            fun effectiveBefore(effectiveBefore: OffsetDateTime) =
-                effectiveBefore(JsonField.of(effectiveBefore))
+            /** Include only commits or credits with access effective on or before this date (cannot be used with covering_date). */
+            fun effectiveBefore(effectiveBefore: OffsetDateTime) = effectiveBefore(JsonField.of(effectiveBefore))
 
             /**
              * Sets [Builder.effectiveBefore] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.effectiveBefore] with a well-typed [OffsetDateTime]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.effectiveBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun effectiveBefore(effectiveBefore: JsonField<OffsetDateTime>) = apply {
-                this.effectiveBefore = effectiveBefore
-            }
+            fun effectiveBefore(effectiveBefore: JsonField<OffsetDateTime>) =
+                apply {
+                    this.effectiveBefore = effectiveBefore
+                }
 
             /** Include credits and commits in the response */
-            fun includeCreditsAndCommits(includeCreditsAndCommits: Boolean) =
-                includeCreditsAndCommits(JsonField.of(includeCreditsAndCommits))
+            fun includeCreditsAndCommits(includeCreditsAndCommits: Boolean) = includeCreditsAndCommits(JsonField.of(includeCreditsAndCommits))
 
             /**
              * Sets [Builder.includeCreditsAndCommits] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.includeCreditsAndCommits] with a well-typed
-             * [Boolean] value instead. This method is primarily for setting the field to an
-             * undocumented or not yet supported value.
+             * You should usually call [Builder.includeCreditsAndCommits] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun includeCreditsAndCommits(includeCreditsAndCommits: JsonField<Boolean>) = apply {
-                this.includeCreditsAndCommits = includeCreditsAndCommits
-            }
+            fun includeCreditsAndCommits(includeCreditsAndCommits: JsonField<Boolean>) =
+                apply {
+                    this.includeCreditsAndCommits = includeCreditsAndCommits
+                }
 
-            /**
-             * Include ledger entries for each commit and commit. `include_credits_and_commits` must
-             * be set to `true` for `include_ledgers=true` to apply.
-             */
-            fun includeLedgers(includeLedgers: Boolean) =
-                includeLedgers(JsonField.of(includeLedgers))
+            /** Include ledger entries for each commit and commit. `include_credits_and_commits` must be set to `true` for `include_ledgers=true` to apply. */
+            fun includeLedgers(includeLedgers: Boolean) = includeLedgers(JsonField.of(includeLedgers))
 
             /**
              * Sets [Builder.includeLedgers] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.includeLedgers] with a well-typed [Boolean] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.includeLedgers] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun includeLedgers(includeLedgers: JsonField<Boolean>) = apply {
-                this.includeLedgers = includeLedgers
-            }
+            fun includeLedgers(includeLedgers: JsonField<Boolean>) =
+                apply {
+                    this.includeLedgers = includeLedgers
+                }
 
             /**
-             * Maximum number of seats to return. Range: 1-100. Default: 25. When
-             * `include_credits_and_commits = true`, if the total commits/credits across all seats
-             * exceeds 100, a limit of 100 applies to the total credits and commits. Seats are
-             * included greedily to maximize the number of seats returned. Example: if seat 1 has 98
-             * commits and seat 2 has 10 commits, both seats will be returned (total: 108 commits).
-             * Each returned seat includes all of its associated credits and commits.
+             * Maximum number of seats to return. Range: 1-100. Default: 25.
+             * When `include_credits_and_commits = true`, if the total commits/credits across all seats exceeds 100, a limit of 100 applies to the total credits and commits. Seats are included greedily to maximize the number of seats returned.
+             * Example: if seat 1 has 98 commits and seat 2 has 10 commits, both seats will be returned (total: 108 commits). Each returned seat includes all of its associated credits and commits.
+             *
              */
             fun limit(limit: Long) = limit(JsonField.of(limit))
 
             /**
              * Sets [Builder.limit] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.limit] with a well-typed [Long] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
+             * You should usually call [Builder.limit] with a well-typed [Long] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun limit(limit: JsonField<Long>) = apply { this.limit = limit }
+            fun limit(limit: JsonField<Long>) =
+                apply {
+                    this.limit = limit
+                }
 
             /** Optional filter to only include specific seats. */
             fun seatIds(seatIds: List<String>) = seatIds(JsonField.of(seatIds))
@@ -1121,109 +1110,105 @@ private constructor(
             /**
              * Sets [Builder.seatIds] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.seatIds] with a well-typed `List<String>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.seatIds] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun seatIds(seatIds: JsonField<List<String>>) = apply {
-                this.seatIds = seatIds.map { it.toMutableList() }
-            }
+            fun seatIds(seatIds: JsonField<List<String>>) =
+                apply {
+                    this.seatIds = seatIds.map { it.toMutableList() }
+                }
 
             /**
              * Adds a single [String] to [seatIds].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addSeatId(seatId: String) = apply {
-                seatIds =
-                    (seatIds ?: JsonField.of(mutableListOf())).also {
+            fun addSeatId(seatId: String) =
+                apply {
+                    seatIds = (seatIds ?: JsonField.of(mutableListOf())).also {
                         checkKnown("seatIds", it).add(seatId)
                     }
-            }
+                }
 
-            /**
-             * When true, any seat_ids not found in contract subscriptions will be silently omitted
-             * from the response instead of returning a 400 error.
-             */
-            fun skipMissingSeatIds(skipMissingSeatIds: Boolean) =
-                skipMissingSeatIds(JsonField.of(skipMissingSeatIds))
+            /** When true, any seat_ids not found in contract subscriptions will be silently omitted from the response instead of returning a 400 error. */
+            fun skipMissingSeatIds(skipMissingSeatIds: Boolean) = skipMissingSeatIds(JsonField.of(skipMissingSeatIds))
 
             /**
              * Sets [Builder.skipMissingSeatIds] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.skipMissingSeatIds] with a well-typed [Boolean]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.skipMissingSeatIds] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun skipMissingSeatIds(skipMissingSeatIds: JsonField<Boolean>) = apply {
-                this.skipMissingSeatIds = skipMissingSeatIds
-            }
+            fun skipMissingSeatIds(skipMissingSeatIds: JsonField<Boolean>) =
+                apply {
+                    this.skipMissingSeatIds = skipMissingSeatIds
+                }
 
-            /**
-             * Include only commits or credits with access effective on or after this date (cannot
-             * be used with covering_date).
-             */
+            /** Include only commits or credits with access effective on or after this date (cannot be used with covering_date). */
             fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
             /**
              * Sets [Builder.startingAt] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-                this.startingAt = startingAt
-            }
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) =
+                apply {
+                    this.startingAt = startingAt
+                }
 
-            /**
-             * Optional filter to only include seats from specific subscriptions. If subscriptions
-             * ids are not mapped to SEAT_BASED subscriptions, error will be returned.
-             */
-            fun subscriptionIds(subscriptionIds: List<String>) =
-                subscriptionIds(JsonField.of(subscriptionIds))
+            /** Optional filter to only include seats from specific subscriptions. If subscriptions ids are not mapped to SEAT_BASED subscriptions, error will be returned. */
+            fun subscriptionIds(subscriptionIds: List<String>) = subscriptionIds(JsonField.of(subscriptionIds))
 
             /**
              * Sets [Builder.subscriptionIds] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.subscriptionIds] with a well-typed `List<String>`
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.subscriptionIds] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun subscriptionIds(subscriptionIds: JsonField<List<String>>) = apply {
-                this.subscriptionIds = subscriptionIds.map { it.toMutableList() }
-            }
+            fun subscriptionIds(subscriptionIds: JsonField<List<String>>) =
+                apply {
+                    this.subscriptionIds = subscriptionIds.map { it.toMutableList() }
+                }
 
             /**
              * Adds a single [String] to [subscriptionIds].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addSubscriptionId(subscriptionId: String) = apply {
-                subscriptionIds =
-                    (subscriptionIds ?: JsonField.of(mutableListOf())).also {
+            fun addSubscriptionId(subscriptionId: String) =
+                apply {
+                    subscriptionIds = (subscriptionIds ?: JsonField.of(mutableListOf())).also {
                         checkKnown("subscriptionIds", it).add(subscriptionId)
                     }
-            }
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [Body].
@@ -1231,6 +1216,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .contractId()
              * .customerId()
@@ -1240,52 +1226,56 @@ private constructor(
              */
             fun build(): Body =
                 Body(
-                    checkRequired("contractId", contractId),
-                    checkRequired("customerId", customerId),
-                    coveringDate,
-                    cursor,
-                    effectiveBefore,
-                    includeCreditsAndCommits,
-                    includeLedgers,
-                    limit,
-                    (seatIds ?: JsonMissing.of()).map { it.toImmutable() },
-                    skipMissingSeatIds,
-                    startingAt,
-                    (subscriptionIds ?: JsonMissing.of()).map { it.toImmutable() },
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "contractId", contractId
+                  ),
+                  checkRequired(
+                    "customerId", customerId
+                  ),
+                  coveringDate,
+                  cursor,
+                  effectiveBefore,
+                  includeCreditsAndCommits,
+                  includeLedgers,
+                  limit,
+                  (seatIds?: JsonMissing.of()).map { it.toImmutable() },
+                  skipMissingSeatIds,
+                  startingAt,
+                  (subscriptionIds?: JsonMissing.of()).map { it.toImmutable() },
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Body =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            contractId()
-            customerId()
-            coveringDate()
-            cursor()
-            effectiveBefore()
-            includeCreditsAndCommits()
-            includeLedgers()
-            limit()
-            seatIds()
-            skipMissingSeatIds()
-            startingAt()
-            subscriptionIds()
-            validated = true
-        }
+                contractId()
+                customerId()
+                coveringDate()
+                cursor()
+                effectiveBefore()
+                includeCreditsAndCommits()
+                includeLedgers()
+                limit()
+                seatIds()
+                skipMissingSeatIds()
+                startingAt()
+                subscriptionIds()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -1296,84 +1286,37 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (if (contractId.asKnown().isPresent) 1 else 0) +
-                (if (customerId.asKnown().isPresent) 1 else 0) +
-                (if (coveringDate.asKnown().isPresent) 1 else 0) +
-                (if (cursor.asKnown().isPresent) 1 else 0) +
-                (if (effectiveBefore.asKnown().isPresent) 1 else 0) +
-                (if (includeCreditsAndCommits.asKnown().isPresent) 1 else 0) +
-                (if (includeLedgers.asKnown().isPresent) 1 else 0) +
-                (if (limit.asKnown().isPresent) 1 else 0) +
-                (seatIds.asKnown().getOrNull()?.size ?: 0) +
-                (if (skipMissingSeatIds.asKnown().isPresent) 1 else 0) +
-                (if (startingAt.asKnown().isPresent) 1 else 0) +
-                (subscriptionIds.asKnown().getOrNull()?.size ?: 0)
+        internal fun validity(): Int = (if (contractId.asKnown().isPresent) 1 else 0) + (if (customerId.asKnown().isPresent) 1 else 0) + (if (coveringDate.asKnown().isPresent) 1 else 0) + (if (cursor.asKnown().isPresent) 1 else 0) + (if (effectiveBefore.asKnown().isPresent) 1 else 0) + (if (includeCreditsAndCommits.asKnown().isPresent) 1 else 0) + (if (includeLedgers.asKnown().isPresent) 1 else 0) + (if (limit.asKnown().isPresent) 1 else 0) + (seatIds.asKnown().getOrNull()?.size ?: 0) + (if (skipMissingSeatIds.asKnown().isPresent) 1 else 0) + (if (startingAt.asKnown().isPresent) 1 else 0) + (subscriptionIds.asKnown().getOrNull()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Body &&
-                contractId == other.contractId &&
-                customerId == other.customerId &&
-                coveringDate == other.coveringDate &&
-                cursor == other.cursor &&
-                effectiveBefore == other.effectiveBefore &&
-                includeCreditsAndCommits == other.includeCreditsAndCommits &&
-                includeLedgers == other.includeLedgers &&
-                limit == other.limit &&
-                seatIds == other.seatIds &&
-                skipMissingSeatIds == other.skipMissingSeatIds &&
-                startingAt == other.startingAt &&
-                subscriptionIds == other.subscriptionIds &&
-                additionalProperties == other.additionalProperties
+          return other is Body && contractId == other.contractId && customerId == other.customerId && coveringDate == other.coveringDate && cursor == other.cursor && effectiveBefore == other.effectiveBefore && includeCreditsAndCommits == other.includeCreditsAndCommits && includeLedgers == other.includeLedgers && limit == other.limit && seatIds == other.seatIds && skipMissingSeatIds == other.skipMissingSeatIds && startingAt == other.startingAt && subscriptionIds == other.subscriptionIds && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(
-                contractId,
-                customerId,
-                coveringDate,
-                cursor,
-                effectiveBefore,
-                includeCreditsAndCommits,
-                includeLedgers,
-                limit,
-                seatIds,
-                skipMissingSeatIds,
-                startingAt,
-                subscriptionIds,
-                additionalProperties,
-            )
-        }
+        private val hashCode: Int by lazy { Objects.hash(contractId, customerId, coveringDate, cursor, effectiveBefore, includeCreditsAndCommits, includeLedgers, limit, seatIds, skipMissingSeatIds, startingAt, subscriptionIds, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Body{contractId=$contractId, customerId=$customerId, coveringDate=$coveringDate, cursor=$cursor, effectiveBefore=$effectiveBefore, includeCreditsAndCommits=$includeCreditsAndCommits, includeLedgers=$includeLedgers, limit=$limit, seatIds=$seatIds, skipMissingSeatIds=$skipMissingSeatIds, startingAt=$startingAt, subscriptionIds=$subscriptionIds, additionalProperties=$additionalProperties}"
+        override fun toString() = "Body{contractId=$contractId, customerId=$customerId, coveringDate=$coveringDate, cursor=$cursor, effectiveBefore=$effectiveBefore, includeCreditsAndCommits=$includeCreditsAndCommits, includeLedgers=$includeLedgers, limit=$limit, seatIds=$seatIds, skipMissingSeatIds=$skipMissingSeatIds, startingAt=$startingAt, subscriptionIds=$subscriptionIds, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is ContractListSeatBalancesParams &&
-            body == other.body &&
-            additionalHeaders == other.additionalHeaders &&
-            additionalQueryParams == other.additionalQueryParams
+      return other is ContractListSeatBalancesParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
-    override fun toString() =
-        "ContractListSeatBalancesParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() = "ContractListSeatBalancesParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

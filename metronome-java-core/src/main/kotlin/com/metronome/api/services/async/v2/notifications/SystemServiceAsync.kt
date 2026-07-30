@@ -7,14 +7,13 @@ import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.models.v2.notifications.system.SystemListParams
 import com.metronome.api.models.v2.notifications.system.SystemListResponse
+import com.metronome.api.services.async.v2.notifications.SystemServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
 interface SystemServiceAsync {
 
-    /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
-     */
+    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -24,30 +23,25 @@ interface SystemServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SystemServiceAsync
 
-    /**
-     * List available system lifecycle event types for notifications. These are read-only event
-     * types that can be used when creating offset notifications.
-     */
+    /** List available system lifecycle event types for notifications. These are read-only event types that can be used when creating offset notifications. */
     fun list(): CompletableFuture<SystemListResponse> = list(SystemListParams.none())
 
     /** @see list */
-    fun list(
-        params: SystemListParams = SystemListParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SystemListResponse>
+    fun list(params: SystemListParams = SystemListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<SystemListResponse>
 
     /** @see list */
-    fun list(
-        params: SystemListParams = SystemListParams.none()
-    ): CompletableFuture<SystemListResponse> = list(params, RequestOptions.none())
+    fun list(params: SystemListParams = SystemListParams.none()): CompletableFuture<SystemListResponse> =
+        list(
+          params, RequestOptions.none()
+        )
 
     /** @see list */
     fun list(requestOptions: RequestOptions): CompletableFuture<SystemListResponse> =
-        list(SystemListParams.none(), requestOptions)
+        list(
+          SystemListParams.none(), requestOptions
+        )
 
-    /**
-     * A view of [SystemServiceAsync] that provides access to raw HTTP responses for each method.
-     */
+    /** A view of [SystemServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         /**
@@ -55,33 +49,24 @@ interface SystemServiceAsync {
          *
          * The original service is not modified.
          */
-        fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): SystemServiceAsync.WithRawResponse
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): SystemServiceAsync.WithRawResponse
 
-        /**
-         * Returns a raw HTTP response for `post /v2/notifications/system/list`, but is otherwise
-         * the same as [SystemServiceAsync.list].
-         */
-        fun list(): CompletableFuture<HttpResponseFor<SystemListResponse>> =
-            list(SystemListParams.none())
+        /** Returns a raw HTTP response for `post /v2/notifications/system/list`, but is otherwise the             same as [SystemServiceAsync.list]. */
+        fun list(): CompletableFuture<HttpResponseFor<SystemListResponse>> = list(SystemListParams.none())
 
         /** @see list */
-        fun list(
-            params: SystemListParams = SystemListParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SystemListResponse>>
+        fun list(params: SystemListParams = SystemListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<SystemListResponse>>
 
         /** @see list */
-        fun list(
-            params: SystemListParams = SystemListParams.none()
-        ): CompletableFuture<HttpResponseFor<SystemListResponse>> =
-            list(params, RequestOptions.none())
+        fun list(params: SystemListParams = SystemListParams.none()): CompletableFuture<HttpResponseFor<SystemListResponse>> =
+            list(
+              params, RequestOptions.none()
+            )
 
         /** @see list */
-        fun list(
-            requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<SystemListResponse>> =
-            list(SystemListParams.none(), requestOptions)
+        fun list(requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<SystemListResponse>> =
+            list(
+              SystemListParams.none(), requestOptions
+            )
     }
 }

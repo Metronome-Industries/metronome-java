@@ -8,18 +8,14 @@ import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.models.v1.settings.SettingUpsertAvalaraCredentialsParams
 import com.metronome.api.models.v1.settings.SettingUpsertAvalaraCredentialsResponse
+import com.metronome.api.services.blocking.v1.SettingService
 import com.metronome.api.services.blocking.v1.settings.BillingProviderService
 import java.util.function.Consumer
 
-/**
- * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
- * behavior.
- */
+/** Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization behavior. */
 interface SettingService {
 
-    /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
-     */
+    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -29,27 +25,20 @@ interface SettingService {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingService
 
-    /**
-     * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
-     * behavior.
-     */
+    /** Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization behavior. */
     fun billingProviders(): BillingProviderService
 
     /**
-     * Set the Avalara credentials for some specified `delivery_method_ids`, which can be found in
-     * the `/listConfiguredBillingProviders` response. This maps the Avalara credentials to the
-     * appropriate billing entity. These credentials are only used for PLG Invoicing today.
+     * Set the Avalara credentials for some specified `delivery_method_ids`, which can be found in the `/listConfiguredBillingProviders` response. This maps the Avalara credentials to the appropriate billing entity. These credentials are only used for PLG Invoicing today.
+     *
      */
-    fun upsertAvalaraCredentials(
-        params: SettingUpsertAvalaraCredentialsParams
-    ): SettingUpsertAvalaraCredentialsResponse =
-        upsertAvalaraCredentials(params, RequestOptions.none())
+    fun upsertAvalaraCredentials(params: SettingUpsertAvalaraCredentialsParams): SettingUpsertAvalaraCredentialsResponse =
+        upsertAvalaraCredentials(
+          params, RequestOptions.none()
+        )
 
     /** @see upsertAvalaraCredentials */
-    fun upsertAvalaraCredentials(
-        params: SettingUpsertAvalaraCredentialsParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): SettingUpsertAvalaraCredentialsResponse
+    fun upsertAvalaraCredentials(params: SettingUpsertAvalaraCredentialsParams, requestOptions: RequestOptions = RequestOptions.none()): SettingUpsertAvalaraCredentialsResponse
 
     /** A view of [SettingService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -61,27 +50,18 @@ interface SettingService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): SettingService.WithRawResponse
 
-        /**
-         * Use these endpoints to configure a billing API key, a webhook secret, or invoice
-         * finalization behavior.
-         */
+        /** Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization behavior. */
         fun billingProviders(): BillingProviderService.WithRawResponse
 
-        /**
-         * Returns a raw HTTP response for `post /v1/upsertAvalaraCredentials`, but is otherwise the
-         * same as [SettingService.upsertAvalaraCredentials].
-         */
+        /** Returns a raw HTTP response for `post /v1/upsertAvalaraCredentials`, but is otherwise the             same as [SettingService.upsertAvalaraCredentials]. */
         @MustBeClosed
-        fun upsertAvalaraCredentials(
-            params: SettingUpsertAvalaraCredentialsParams
-        ): HttpResponseFor<SettingUpsertAvalaraCredentialsResponse> =
-            upsertAvalaraCredentials(params, RequestOptions.none())
+        fun upsertAvalaraCredentials(params: SettingUpsertAvalaraCredentialsParams): HttpResponseFor<SettingUpsertAvalaraCredentialsResponse> =
+            upsertAvalaraCredentials(
+              params, RequestOptions.none()
+            )
 
         /** @see upsertAvalaraCredentials */
         @MustBeClosed
-        fun upsertAvalaraCredentials(
-            params: SettingUpsertAvalaraCredentialsParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<SettingUpsertAvalaraCredentialsResponse>
+        fun upsertAvalaraCredentials(params: SettingUpsertAvalaraCredentialsParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<SettingUpsertAvalaraCredentialsResponse>
     }
 }

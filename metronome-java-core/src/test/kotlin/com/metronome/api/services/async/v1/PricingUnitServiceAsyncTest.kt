@@ -4,6 +4,7 @@ package com.metronome.api.services.async.v1
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
+import com.metronome.api.models.v1.pricingunits.PricingUnitListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -12,16 +13,15 @@ internal class PricingUnitServiceAsyncTest {
 
     @Test
     fun list() {
-        val client =
-            MetronomeOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val pricingUnitServiceAsync = client.v1().pricingUnits()
+      val client = MetronomeOkHttpClientAsync.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val pricingUnitServiceAsync = client.v1().pricingUnits()
 
-        val pageFuture = pricingUnitServiceAsync.list()
+      val pageFuture = pricingUnitServiceAsync.list()
 
-        val page = pageFuture.get()
-        page.response().validate()
+      val page = pageFuture.get()
+      page.response().validate()
     }
 }

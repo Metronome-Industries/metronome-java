@@ -4,6 +4,7 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.jsonMapper
+import com.metronome.api.models.CommitHierarchyConfiguration
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,55 +12,28 @@ internal class CommitHierarchyConfigurationTest {
 
     @Test
     fun create() {
-        val commitHierarchyConfiguration =
-            CommitHierarchyConfiguration.builder()
-                .childAccess(
-                    CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.builder()
-                        .type(
-                            CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll
-                                .Type
-                                .ALL
-                        )
-                        .build()
-                )
-                .build()
+      val commitHierarchyConfiguration = CommitHierarchyConfiguration.builder()
+          .childAccess(CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.builder()
+              .type(CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.Type.ALL)
+              .build())
+          .build()
 
-        assertThat(commitHierarchyConfiguration.childAccess())
-            .isEqualTo(
-                CommitHierarchyConfiguration.ChildAccess.ofCommitHierarchyChildAccessAll(
-                    CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.builder()
-                        .type(
-                            CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll
-                                .Type
-                                .ALL
-                        )
-                        .build()
-                )
-            )
+      assertThat(commitHierarchyConfiguration.childAccess()).isEqualTo(CommitHierarchyConfiguration.ChildAccess.ofCommitHierarchyChildAccessAll(CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.builder()
+          .type(CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.Type.ALL)
+          .build()))
     }
 
     @Test
     fun roundtrip() {
-        val jsonMapper = jsonMapper()
-        val commitHierarchyConfiguration =
-            CommitHierarchyConfiguration.builder()
-                .childAccess(
-                    CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.builder()
-                        .type(
-                            CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll
-                                .Type
-                                .ALL
-                        )
-                        .build()
-                )
-                .build()
+      val jsonMapper = jsonMapper()
+      val commitHierarchyConfiguration = CommitHierarchyConfiguration.builder()
+          .childAccess(CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.builder()
+              .type(CommitHierarchyConfiguration.ChildAccess.CommitHierarchyChildAccessAll.Type.ALL)
+              .build())
+          .build()
 
-        val roundtrippedCommitHierarchyConfiguration =
-            jsonMapper.readValue(
-                jsonMapper.writeValueAsString(commitHierarchyConfiguration),
-                jacksonTypeRef<CommitHierarchyConfiguration>(),
-            )
+      val roundtrippedCommitHierarchyConfiguration = jsonMapper.readValue(jsonMapper.writeValueAsString(commitHierarchyConfiguration), jacksonTypeRef<CommitHierarchyConfiguration>())
 
-        assertThat(roundtrippedCommitHierarchyConfiguration).isEqualTo(commitHierarchyConfiguration)
+      assertThat(roundtrippedCommitHierarchyConfiguration).isEqualTo(commitHierarchyConfiguration)
     }
 }

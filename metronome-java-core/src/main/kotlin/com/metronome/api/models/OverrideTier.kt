@@ -16,32 +16,27 @@ import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
-class OverrideTier
-@JsonCreator(mode = JsonCreator.Mode.DISABLED)
-private constructor(
+class OverrideTier @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
     private val multiplier: JsonField<Double>,
     private val size: JsonField<Double>,
     private val additionalProperties: MutableMap<String, JsonValue>,
+
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("multiplier")
-        @ExcludeMissing
-        multiplier: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("size") @ExcludeMissing size: JsonField<Double> = JsonMissing.of(),
-    ) : this(multiplier, size, mutableMapOf())
+        @JsonProperty("multiplier") @ExcludeMissing multiplier: JsonField<Double> = JsonMissing.of(),
+        @JsonProperty("size") @ExcludeMissing size: JsonField<Double> = JsonMissing.of()
+    ) : this(
+      multiplier,
+      size,
+      mutableMapOf(),
+    )
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun multiplier(): Double = multiplier.getRequired("multiplier")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
     fun size(): Optional<Double> = size.getOptional("size")
 
     /**
@@ -49,24 +44,27 @@ private constructor(
      *
      * Unlike [multiplier], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("multiplier") @ExcludeMissing fun _multiplier(): JsonField<Double> = multiplier
+    @JsonProperty("multiplier")
+    @ExcludeMissing
+    fun _multiplier(): JsonField<Double> = multiplier
 
     /**
      * Returns the raw JSON value of [size].
      *
      * Unlike [size], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("size") @ExcludeMissing fun _size(): JsonField<Double> = size
+    @JsonProperty("size")
+    @ExcludeMissing
+    fun _size(): JsonField<Double> = size
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-        additionalProperties.put(key, value)
+      additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -76,11 +74,13 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [OverrideTier].
          *
          * The following fields are required:
+         *
          * ```java
          * .multiplier()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [OverrideTier]. */
@@ -91,51 +91,64 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(overrideTier: OverrideTier) = apply {
-            multiplier = overrideTier.multiplier
-            size = overrideTier.size
-            additionalProperties = overrideTier.additionalProperties.toMutableMap()
-        }
+        internal fun from(overrideTier: OverrideTier) =
+            apply {
+                multiplier = overrideTier.multiplier
+                size = overrideTier.size
+                additionalProperties = overrideTier.additionalProperties.toMutableMap()
+            }
 
         fun multiplier(multiplier: Double) = multiplier(JsonField.of(multiplier))
 
         /**
          * Sets [Builder.multiplier] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.multiplier] with a well-typed [Double] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.multiplier] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun multiplier(multiplier: JsonField<Double>) = apply { this.multiplier = multiplier }
+        fun multiplier(multiplier: JsonField<Double>) =
+            apply {
+                this.multiplier = multiplier
+            }
 
         fun size(size: Double) = size(JsonField.of(size))
 
         /**
          * Sets [Builder.size] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.size] with a well-typed [Double] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.size] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun size(size: JsonField<Double>) = apply { this.size = size }
+        fun size(size: JsonField<Double>) =
+            apply {
+                this.size = size
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         /**
          * Returns an immutable instance of [OverrideTier].
@@ -143,6 +156,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .multiplier()
          * ```
@@ -151,9 +165,11 @@ private constructor(
          */
         fun build(): OverrideTier =
             OverrideTier(
-                checkRequired("multiplier", multiplier),
-                size,
-                additionalProperties.toMutableMap(),
+              checkRequired(
+                "multiplier", multiplier
+              ),
+              size,
+              additionalProperties.toMutableMap(),
             )
     }
 
@@ -167,15 +183,16 @@ private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): OverrideTier = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): OverrideTier =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        multiplier()
-        size()
-        validated = true
-    }
+            multiplier()
+            size()
+            validated = true
+        }
 
     fun isValid(): Boolean =
         try {
@@ -191,24 +208,19 @@ private constructor(
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int =
-        (if (multiplier.asKnown().isPresent) 1 else 0) + (if (size.asKnown().isPresent) 1 else 0)
+    internal fun validity(): Int = (if (multiplier.asKnown().isPresent) 1 else 0) + (if (size.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is OverrideTier &&
-            multiplier == other.multiplier &&
-            size == other.size &&
-            additionalProperties == other.additionalProperties
+      return other is OverrideTier && multiplier == other.multiplier && size == other.size && additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy { Objects.hash(multiplier, size, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "OverrideTier{multiplier=$multiplier, size=$size, additionalProperties=$additionalProperties}"
+    override fun toString() = "OverrideTier{multiplier=$multiplier, size=$size, additionalProperties=$additionalProperties}"
 }

@@ -19,106 +19,95 @@ import com.metronome.api.models.v1.invoices.InvoiceRegenerateParams
 import com.metronome.api.models.v1.invoices.InvoiceRegenerateResponse
 import com.metronome.api.models.v1.invoices.InvoiceVoidParams
 import com.metronome.api.models.v1.invoices.InvoiceVoidResponse
+import com.metronome.api.services.blocking.v1.InvoiceService
+import com.metronome.api.services.blocking.v1.InvoiceServiceImpl
 import java.util.function.Consumer
 
-/**
- * [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent during a
- * period, which is the basis for billing. Metronome automatically generates invoices based upon
- * your pricing, packaging, and usage events. Use these endpoints to retrieve invoices.
- */
-class InvoiceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    InvoiceService {
+/** [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent during a period, which is the basis for billing. Metronome automatically generates invoices based upon your pricing, packaging, and usage events. Use these endpoints to retrieve invoices. */
+class InvoiceServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: InvoiceService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : InvoiceService {
+
+    private val withRawResponse: InvoiceService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): InvoiceService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvoiceService =
-        InvoiceServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvoiceService = InvoiceServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun regenerate(
-        params: InvoiceRegenerateParams,
-        requestOptions: RequestOptions,
-    ): InvoiceRegenerateResponse =
+    override fun regenerate(params: InvoiceRegenerateParams, requestOptions: RequestOptions): InvoiceRegenerateResponse =
         // post /v1/invoices/regenerate
         withRawResponse().regenerate(params, requestOptions).parse()
 
-    override fun void_(
-        params: InvoiceVoidParams,
-        requestOptions: RequestOptions,
-    ): InvoiceVoidResponse =
+    override fun void_(params: InvoiceVoidParams, requestOptions: RequestOptions): InvoiceVoidResponse =
         // post /v1/invoices/void
         withRawResponse().void_(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        InvoiceService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : InvoiceService.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): InvoiceService.WithRawResponse =
-            InvoiceServiceImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvoiceService.WithRawResponse = InvoiceServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val regenerateHandler: Handler<InvoiceRegenerateResponse> = jsonHandler<InvoiceRegenerateResponse>(clientOptions.jsonMapper)
+
+        override fun regenerate(params: InvoiceRegenerateParams, requestOptions: RequestOptions): HttpResponseFor<InvoiceRegenerateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "invoices", "regenerate")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
             )
-
-        private val regenerateHandler: Handler<InvoiceRegenerateResponse> =
-            jsonHandler<InvoiceRegenerateResponse>(clientOptions.jsonMapper)
-
-        override fun regenerate(
-            params: InvoiceRegenerateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<InvoiceRegenerateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "invoices", "regenerate")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { regenerateHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  regenerateHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val voidHandler: Handler<InvoiceVoidResponse> =
-            jsonHandler<InvoiceVoidResponse>(clientOptions.jsonMapper)
+        private val voidHandler: Handler<InvoiceVoidResponse> = jsonHandler<InvoiceVoidResponse>(clientOptions.jsonMapper)
 
-        override fun void_(
-            params: InvoiceVoidParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<InvoiceVoidResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "invoices", "void")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { voidHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun void_(params: InvoiceVoidParams, requestOptions: RequestOptions): HttpResponseFor<InvoiceVoidResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "invoices", "void")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  voidHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

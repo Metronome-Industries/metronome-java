@@ -13,26 +13,20 @@ internal class SettingServiceTest {
 
     @Test
     fun upsertAvalaraCredentials() {
-        val client =
-            MetronomeOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val settingService = client.v1().settings()
+      val client = MetronomeOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val settingService = client.v1().settings()
 
-        val response =
-            settingService.upsertAvalaraCredentials(
-                SettingUpsertAvalaraCredentialsParams.builder()
-                    .avalaraEnvironment(
-                        SettingUpsertAvalaraCredentialsParams.AvalaraEnvironment.PRODUCTION
-                    )
-                    .avalaraPassword("my_password_123")
-                    .avalaraUsername("test@metronome.com")
-                    .addDeliveryMethodId("9a906ebb-fbc7-42e8-8e29-53bfd2db3aca")
-                    .commitTransactions(true)
-                    .build()
-            )
+      val response = settingService.upsertAvalaraCredentials(SettingUpsertAvalaraCredentialsParams.builder()
+          .avalaraEnvironment(SettingUpsertAvalaraCredentialsParams.AvalaraEnvironment.PRODUCTION)
+          .avalaraPassword("my_password_123")
+          .avalaraUsername("test@metronome.com")
+          .addDeliveryMethodId("9a906ebb-fbc7-42e8-8e29-53bfd2db3aca")
+          .commitTransactions(true)
+          .build())
 
-        response.validate()
+      response.validate()
     }
 }

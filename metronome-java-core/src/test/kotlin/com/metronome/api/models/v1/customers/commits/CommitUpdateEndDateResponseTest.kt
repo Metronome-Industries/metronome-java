@@ -5,6 +5,7 @@ package com.metronome.api.models.v1.customers.commits
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.Id
+import com.metronome.api.models.v1.customers.commits.CommitUpdateEndDateResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,29 +13,28 @@ internal class CommitUpdateEndDateResponseTest {
 
     @Test
     fun create() {
-        val commitUpdateEndDateResponse =
-            CommitUpdateEndDateResponse.builder()
-                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
-                .build()
+      val commitUpdateEndDateResponse = CommitUpdateEndDateResponse.builder()
+          .data(Id.builder()
+              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+              .build())
+          .build()
 
-        assertThat(commitUpdateEndDateResponse.data())
-            .isEqualTo(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+      assertThat(commitUpdateEndDateResponse.data()).isEqualTo(Id.builder()
+          .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+          .build())
     }
 
     @Test
     fun roundtrip() {
-        val jsonMapper = jsonMapper()
-        val commitUpdateEndDateResponse =
-            CommitUpdateEndDateResponse.builder()
-                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
-                .build()
+      val jsonMapper = jsonMapper()
+      val commitUpdateEndDateResponse = CommitUpdateEndDateResponse.builder()
+          .data(Id.builder()
+              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+              .build())
+          .build()
 
-        val roundtrippedCommitUpdateEndDateResponse =
-            jsonMapper.readValue(
-                jsonMapper.writeValueAsString(commitUpdateEndDateResponse),
-                jacksonTypeRef<CommitUpdateEndDateResponse>(),
-            )
+      val roundtrippedCommitUpdateEndDateResponse = jsonMapper.readValue(jsonMapper.writeValueAsString(commitUpdateEndDateResponse), jacksonTypeRef<CommitUpdateEndDateResponse>())
 
-        assertThat(roundtrippedCommitUpdateEndDateResponse).isEqualTo(commitUpdateEndDateResponse)
+      assertThat(roundtrippedCommitUpdateEndDateResponse).isEqualTo(commitUpdateEndDateResponse)
     }
 }

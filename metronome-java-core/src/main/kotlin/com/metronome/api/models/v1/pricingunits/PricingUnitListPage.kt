@@ -5,17 +5,20 @@ package com.metronome.api.models.v1.pricingunits
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.pricingunits.PricingUnitListPageResponse
+import com.metronome.api.models.v1.pricingunits.PricingUnitListParams
+import com.metronome.api.models.v1.pricingunits.PricingUnitListResponse
 import com.metronome.api.services.blocking.v1.PricingUnitService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see PricingUnitService.list */
-class PricingUnitListPage
-private constructor(
+class PricingUnitListPage private constructor(
     private val service: PricingUnitService,
     private val params: PricingUnitListParams,
     private val response: PricingUnitListPageResponse,
+
 ) : Page<PricingUnitListResponse> {
 
     /**
@@ -30,18 +33,17 @@ private constructor(
      *
      * @see PricingUnitListPageResponse.data
      */
-    fun data(): List<PricingUnitListResponse> =
-        response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<PricingUnitListResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<PricingUnitListResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): PricingUnitListParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
     override fun nextPage(): PricingUnitListPage = service.list(nextPageParams())
@@ -62,13 +64,15 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [PricingUnitListPage].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [PricingUnitListPage]. */
@@ -79,19 +83,29 @@ private constructor(
         private var response: PricingUnitListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(pricingUnitListPage: PricingUnitListPage) = apply {
-            service = pricingUnitListPage.service
-            params = pricingUnitListPage.params
-            response = pricingUnitListPage.response
-        }
+        internal fun from(pricingUnitListPage: PricingUnitListPage) =
+            apply {
+                service = pricingUnitListPage.service
+                params = pricingUnitListPage.params
+                response = pricingUnitListPage.response
+            }
 
-        fun service(service: PricingUnitService) = apply { this.service = service }
+        fun service(service: PricingUnitService) =
+            apply {
+                this.service = service
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: PricingUnitListParams) = apply { this.params = params }
+        fun params(params: PricingUnitListParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: PricingUnitListPageResponse) = apply { this.response = response }
+        fun response(response: PricingUnitListPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [PricingUnitListPage].
@@ -99,6 +113,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
@@ -109,25 +124,27 @@ private constructor(
          */
         fun build(): PricingUnitListPage =
             PricingUnitListPage(
-                checkRequired("service", service),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is PricingUnitListPage &&
-            service == other.service &&
-            params == other.params &&
-            response == other.response
+      return other is PricingUnitListPage && service == other.service && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() =
-        "PricingUnitListPage{service=$service, params=$params, response=$response}"
+    override fun toString() = "PricingUnitListPage{service=$service, params=$params, response=$response}"
 }

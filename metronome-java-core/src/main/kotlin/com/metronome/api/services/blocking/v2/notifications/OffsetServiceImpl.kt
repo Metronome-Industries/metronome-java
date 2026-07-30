@@ -26,31 +26,26 @@ import com.metronome.api.models.v2.notifications.offset.OffsetListPageResponse
 import com.metronome.api.models.v2.notifications.offset.OffsetListParams
 import com.metronome.api.models.v2.notifications.offset.OffsetRetrieveParams
 import com.metronome.api.models.v2.notifications.offset.OffsetRetrieveResponse
+import com.metronome.api.services.blocking.v2.notifications.OffsetService
+import com.metronome.api.services.blocking.v2.notifications.OffsetServiceImpl
 import java.util.function.Consumer
 
-class OffsetServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    OffsetService {
+class OffsetServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: OffsetService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : OffsetService {
+
+    private val withRawResponse: OffsetService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): OffsetService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): OffsetService =
-        OffsetServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): OffsetService = OffsetServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun create(
-        params: OffsetCreateParams,
-        requestOptions: RequestOptions,
-    ): OffsetCreateResponse =
+    override fun create(params: OffsetCreateParams, requestOptions: RequestOptions): OffsetCreateResponse =
         // post /v2/notifications/create
         withRawResponse().create(params, requestOptions).parse()
 
-    override fun retrieve(
-        params: OffsetRetrieveParams,
-        requestOptions: RequestOptions,
-    ): OffsetRetrieveResponse =
+    override fun retrieve(params: OffsetRetrieveParams, requestOptions: RequestOptions): OffsetRetrieveResponse =
         // post /v2/notifications/get
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -58,178 +53,173 @@ class OffsetServiceImpl internal constructor(private val clientOptions: ClientOp
         // post /v2/notifications/offset/list
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun archive(
-        params: OffsetArchiveParams,
-        requestOptions: RequestOptions,
-    ): OffsetArchiveResponse =
+    override fun archive(params: OffsetArchiveParams, requestOptions: RequestOptions): OffsetArchiveResponse =
         // post /v2/notifications/archive
         withRawResponse().archive(params, requestOptions).parse()
 
-    override fun edit(
-        params: OffsetEditParams,
-        requestOptions: RequestOptions,
-    ): OffsetEditResponse =
+    override fun edit(params: OffsetEditParams, requestOptions: RequestOptions): OffsetEditResponse =
         // post /v2/notifications/edit
         withRawResponse().edit(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        OffsetService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : OffsetService.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): OffsetService.WithRawResponse =
-            OffsetServiceImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): OffsetService.WithRawResponse = OffsetServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val createHandler: Handler<OffsetCreateResponse> = jsonHandler<OffsetCreateResponse>(clientOptions.jsonMapper)
+
+        override fun create(params: OffsetCreateParams, requestOptions: RequestOptions): HttpResponseFor<OffsetCreateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v2", "notifications", "create")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
             )
-
-        private val createHandler: Handler<OffsetCreateResponse> =
-            jsonHandler<OffsetCreateResponse>(clientOptions.jsonMapper)
-
-        override fun create(
-            params: OffsetCreateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<OffsetCreateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v2", "notifications", "create")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { createHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  createHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val retrieveHandler: Handler<OffsetRetrieveResponse> =
-            jsonHandler<OffsetRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<OffsetRetrieveResponse> = jsonHandler<OffsetRetrieveResponse>(clientOptions.jsonMapper)
 
-        override fun retrieve(
-            params: OffsetRetrieveParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<OffsetRetrieveResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v2", "notifications", "get")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { retrieveHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun retrieve(params: OffsetRetrieveParams, requestOptions: RequestOptions): HttpResponseFor<OffsetRetrieveResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v2", "notifications", "get")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  retrieveHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val listHandler: Handler<OffsetListPageResponse> =
-            jsonHandler<OffsetListPageResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<OffsetListPageResponse> = jsonHandler<OffsetListPageResponse>(clientOptions.jsonMapper)
 
-        override fun list(
-            params: OffsetListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<OffsetListPage> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v2", "notifications", "offset", "list")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-                    .let {
-                        OffsetListPage.builder()
-                            .service(OffsetServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
-                    }
-            }
+        override fun list(params: OffsetListParams, requestOptions: RequestOptions): HttpResponseFor<OffsetListPage> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v2", "notifications", "offset", "list")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  OffsetListPage.builder()
+                      .service(OffsetServiceImpl(clientOptions))
+                      .params(params)
+                      .response(it)
+                      .build()
+              }
+          }
         }
 
-        private val archiveHandler: Handler<OffsetArchiveResponse> =
-            jsonHandler<OffsetArchiveResponse>(clientOptions.jsonMapper)
+        private val archiveHandler: Handler<OffsetArchiveResponse> = jsonHandler<OffsetArchiveResponse>(clientOptions.jsonMapper)
 
-        override fun archive(
-            params: OffsetArchiveParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<OffsetArchiveResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v2", "notifications", "archive")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { archiveHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun archive(params: OffsetArchiveParams, requestOptions: RequestOptions): HttpResponseFor<OffsetArchiveResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v2", "notifications", "archive")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  archiveHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val editHandler: Handler<OffsetEditResponse> =
-            jsonHandler<OffsetEditResponse>(clientOptions.jsonMapper)
+        private val editHandler: Handler<OffsetEditResponse> = jsonHandler<OffsetEditResponse>(clientOptions.jsonMapper)
 
-        override fun edit(
-            params: OffsetEditParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<OffsetEditResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v2", "notifications", "edit")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { editHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun edit(params: OffsetEditParams, requestOptions: RequestOptions): HttpResponseFor<OffsetEditResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v2", "notifications", "edit")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  editHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

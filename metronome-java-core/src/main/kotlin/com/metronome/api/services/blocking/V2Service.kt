@@ -3,15 +3,14 @@
 package com.metronome.api.services.blocking
 
 import com.metronome.api.core.ClientOptions
+import com.metronome.api.services.blocking.V2Service
 import com.metronome.api.services.blocking.v2.ContractService
 import com.metronome.api.services.blocking.v2.NotificationService
 import java.util.function.Consumer
 
 interface V2Service {
 
-    /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
-     */
+    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
     fun withRawResponse(): WithRawResponse
 
     /**

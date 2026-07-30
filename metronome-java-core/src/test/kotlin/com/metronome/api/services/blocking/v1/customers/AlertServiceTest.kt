@@ -15,96 +15,69 @@ internal class AlertServiceTest {
 
     @Test
     fun retrieve() {
-        val client =
-            MetronomeOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val alertService = client.v1().customers().alerts()
+      val client = MetronomeOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val alertService = client.v1().customers().alerts()
 
-        val alert =
-            alertService.retrieve(
-                AlertRetrieveParams.builder()
-                    .alertId("8deed800-1b7a-495d-a207-6c52bac54dc9")
-                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
-                    .addAlertSpecifier(
-                        AlertRetrieveParams.AlertSpecifier.builder()
-                            .addCustomFieldFilter(
-                                AlertRetrieveParams.AlertSpecifier.CustomFieldFilter.builder()
-                                    .entity(
-                                        AlertRetrieveParams.AlertSpecifier.CustomFieldFilter.Entity
-                                            .CONTRACT
-                                    )
-                                    .key("key")
-                                    .value("value")
-                                    .build()
-                            )
-                            .addExclude(
-                                AlertRetrieveParams.AlertSpecifier.Exclude.builder()
-                                    .addCustomFieldFilter(
-                                        AlertRetrieveParams.AlertSpecifier.Exclude.CustomFieldFilter
-                                            .builder()
-                                            .entity(
-                                                AlertRetrieveParams.AlertSpecifier.Exclude
-                                                    .CustomFieldFilter
-                                                    .Entity
-                                                    .CONTRACT
-                                            )
-                                            .key("key")
-                                            .value("value")
-                                            .build()
-                                    )
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .addGroupValue(
-                        AlertRetrieveParams.GroupValue.builder().key("key").value("value").build()
-                    )
-                    .plansOrContracts(AlertRetrieveParams.PlansOrContracts.PLANS)
-                    .seatFilter(
-                        AlertRetrieveParams.SeatFilter.builder()
-                            .seatGroupKey("seat_group_key")
-                            .seatGroupValue("seat_group_value")
-                            .build()
-                    )
-                    .build()
-            )
+      val alert = alertService.retrieve(AlertRetrieveParams.builder()
+          .alertId("8deed800-1b7a-495d-a207-6c52bac54dc9")
+          .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+          .addAlertSpecifier(AlertRetrieveParams.AlertSpecifier.builder()
+              .addCustomFieldFilter(AlertRetrieveParams.AlertSpecifier.CustomFieldFilter.builder()
+                  .entity(AlertRetrieveParams.AlertSpecifier.CustomFieldFilter.Entity.CONTRACT)
+                  .key("key")
+                  .value("value")
+                  .build())
+              .addExclude(AlertRetrieveParams.AlertSpecifier.Exclude.builder()
+                  .addCustomFieldFilter(AlertRetrieveParams.AlertSpecifier.Exclude.CustomFieldFilter.builder()
+                      .entity(AlertRetrieveParams.AlertSpecifier.Exclude.CustomFieldFilter.Entity.CONTRACT)
+                      .key("key")
+                      .value("value")
+                      .build())
+                  .build())
+              .build())
+          .addGroupValue(AlertRetrieveParams.GroupValue.builder()
+              .key("key")
+              .value("value")
+              .build())
+          .plansOrContracts(AlertRetrieveParams.PlansOrContracts.PLANS)
+          .seatFilter(AlertRetrieveParams.SeatFilter.builder()
+              .seatGroupKey("seat_group_key")
+              .seatGroupValue("seat_group_value")
+              .build())
+          .build())
 
-        alert.validate()
+      alert.validate()
     }
 
     @Test
     fun list() {
-        val client =
-            MetronomeOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val alertService = client.v1().customers().alerts()
+      val client = MetronomeOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val alertService = client.v1().customers().alerts()
 
-        val page =
-            alertService.list(
-                AlertListParams.builder().customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1").build()
-            )
+      val page = alertService.list(AlertListParams.builder()
+          .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+          .build())
 
-        page.response().validate()
+      page.response().validate()
     }
 
     @Test
     fun reset() {
-        val client =
-            MetronomeOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val alertService = client.v1().customers().alerts()
+      val client = MetronomeOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val alertService = client.v1().customers().alerts()
 
-        alertService.reset(
-            AlertResetParams.builder()
-                .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
-                .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
-                .build()
-        )
+      alertService.reset(AlertResetParams.builder()
+          .alertId("5e8691bf-b22a-4672-922d-f80eee940f01")
+          .customerId("4c83caf3-8af4-44e2-9aeb-e290531726d9")
+          .build())
     }
 }

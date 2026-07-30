@@ -5,17 +5,20 @@ package com.metronome.api.models.v1.billablemetrics
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.billablemetrics.BillableMetricListPageResponse
+import com.metronome.api.models.v1.billablemetrics.BillableMetricListParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricListResponse
 import com.metronome.api.services.blocking.v1.BillableMetricService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see BillableMetricService.list */
-class BillableMetricListPage
-private constructor(
+class BillableMetricListPage private constructor(
     private val service: BillableMetricService,
     private val params: BillableMetricListParams,
     private val response: BillableMetricListPageResponse,
+
 ) : Page<BillableMetricListResponse> {
 
     /**
@@ -30,18 +33,17 @@ private constructor(
      *
      * @see BillableMetricListPageResponse.data
      */
-    fun data(): List<BillableMetricListResponse> =
-        response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<BillableMetricListResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<BillableMetricListResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): BillableMetricListParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
     override fun nextPage(): BillableMetricListPage = service.list(nextPageParams())
@@ -62,13 +64,15 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [BillableMetricListPage].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [BillableMetricListPage]. */
@@ -79,19 +83,29 @@ private constructor(
         private var response: BillableMetricListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(billableMetricListPage: BillableMetricListPage) = apply {
-            service = billableMetricListPage.service
-            params = billableMetricListPage.params
-            response = billableMetricListPage.response
-        }
+        internal fun from(billableMetricListPage: BillableMetricListPage) =
+            apply {
+                service = billableMetricListPage.service
+                params = billableMetricListPage.params
+                response = billableMetricListPage.response
+            }
 
-        fun service(service: BillableMetricService) = apply { this.service = service }
+        fun service(service: BillableMetricService) =
+            apply {
+                this.service = service
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: BillableMetricListParams) = apply { this.params = params }
+        fun params(params: BillableMetricListParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: BillableMetricListPageResponse) = apply { this.response = response }
+        fun response(response: BillableMetricListPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [BillableMetricListPage].
@@ -99,6 +113,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
@@ -109,25 +124,27 @@ private constructor(
          */
         fun build(): BillableMetricListPage =
             BillableMetricListPage(
-                checkRequired("service", service),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is BillableMetricListPage &&
-            service == other.service &&
-            params == other.params &&
-            response == other.response
+      return other is BillableMetricListPage && service == other.service && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() =
-        "BillableMetricListPage{service=$service, params=$params, response=$response}"
+    override fun toString() = "BillableMetricListPage{service=$service, params=$params, response=$response}"
 }

@@ -22,25 +22,23 @@ import com.metronome.api.models.v1.customers.commits.CommitListPageResponse
 import com.metronome.api.models.v1.customers.commits.CommitListParams
 import com.metronome.api.models.v1.customers.commits.CommitUpdateEndDateParams
 import com.metronome.api.models.v1.customers.commits.CommitUpdateEndDateResponse
+import com.metronome.api.services.blocking.v1.customers.CommitService
+import com.metronome.api.services.blocking.v1.customers.CommitServiceImpl
 import java.util.function.Consumer
 
 /** Credits and commits are used to manage customer balances. */
-class CommitServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    CommitService {
+class CommitServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: CommitService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : CommitService {
+
+    private val withRawResponse: CommitService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): CommitService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CommitService =
-        CommitServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CommitService = CommitServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun create(
-        params: CommitCreateParams,
-        requestOptions: RequestOptions,
-    ): CommitCreateResponse =
+    override fun create(params: CommitCreateParams, requestOptions: RequestOptions): CommitCreateResponse =
         // post /v1/contracts/customerCommits/create
         withRawResponse().create(params, requestOptions).parse()
 
@@ -48,115 +46,111 @@ class CommitServiceImpl internal constructor(private val clientOptions: ClientOp
         // post /v1/contracts/customerCommits/list
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun updateEndDate(
-        params: CommitUpdateEndDateParams,
-        requestOptions: RequestOptions,
-    ): CommitUpdateEndDateResponse =
+    override fun updateEndDate(params: CommitUpdateEndDateParams, requestOptions: RequestOptions): CommitUpdateEndDateResponse =
         // post /v1/contracts/customerCommits/updateEndDate
         withRawResponse().updateEndDate(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        CommitService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : CommitService.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): CommitService.WithRawResponse =
-            CommitServiceImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CommitService.WithRawResponse = CommitServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val createHandler: Handler<CommitCreateResponse> = jsonHandler<CommitCreateResponse>(clientOptions.jsonMapper)
+
+        override fun create(params: CommitCreateParams, requestOptions: RequestOptions): HttpResponseFor<CommitCreateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contracts", "customerCommits", "create")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
             )
-
-        private val createHandler: Handler<CommitCreateResponse> =
-            jsonHandler<CommitCreateResponse>(clientOptions.jsonMapper)
-
-        override fun create(
-            params: CommitCreateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<CommitCreateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contracts", "customerCommits", "create")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { createHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  createHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val listHandler: Handler<CommitListPageResponse> =
-            jsonHandler<CommitListPageResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<CommitListPageResponse> = jsonHandler<CommitListPageResponse>(clientOptions.jsonMapper)
 
-        override fun list(
-            params: CommitListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<CommitListPage> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contracts", "customerCommits", "list")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-                    .let {
-                        CommitListPage.builder()
-                            .service(CommitServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
-                    }
-            }
+        override fun list(params: CommitListParams, requestOptions: RequestOptions): HttpResponseFor<CommitListPage> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contracts", "customerCommits", "list")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  CommitListPage.builder()
+                      .service(CommitServiceImpl(clientOptions))
+                      .params(params)
+                      .response(it)
+                      .build()
+              }
+          }
         }
 
-        private val updateEndDateHandler: Handler<CommitUpdateEndDateResponse> =
-            jsonHandler<CommitUpdateEndDateResponse>(clientOptions.jsonMapper)
+        private val updateEndDateHandler: Handler<CommitUpdateEndDateResponse> = jsonHandler<CommitUpdateEndDateResponse>(clientOptions.jsonMapper)
 
-        override fun updateEndDate(
-            params: CommitUpdateEndDateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<CommitUpdateEndDateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contracts", "customerCommits", "updateEndDate")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { updateEndDateHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun updateEndDate(params: CommitUpdateEndDateParams, requestOptions: RequestOptions): HttpResponseFor<CommitUpdateEndDateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contracts", "customerCommits", "updateEndDate")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  updateEndDateHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

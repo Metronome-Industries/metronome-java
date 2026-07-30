@@ -14,37 +14,33 @@ import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.v1.creditgrants.CreditGrantListResponse
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class CreditGrantListPageResponse
-@JsonCreator(mode = JsonCreator.Mode.DISABLED)
-private constructor(
+class CreditGrantListPageResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
     private val data: JsonField<List<CreditGrantListResponse>>,
     private val nextPage: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
+
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("data")
-        @ExcludeMissing
-        data: JsonField<List<CreditGrantListResponse>> = JsonMissing.of(),
-        @JsonProperty("next_page") @ExcludeMissing nextPage: JsonField<String> = JsonMissing.of(),
-    ) : this(data, nextPage, mutableMapOf())
+        @JsonProperty("data") @ExcludeMissing data: JsonField<List<CreditGrantListResponse>> = JsonMissing.of(),
+        @JsonProperty("next_page") @ExcludeMissing nextPage: JsonField<String> = JsonMissing.of()
+    ) : this(
+      data,
+      nextPage,
+      mutableMapOf(),
+    )
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun data(): List<CreditGrantListResponse> = data.getRequired("data")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
     fun nextPage(): Optional<String> = nextPage.getOptional("next_page")
 
     /**
@@ -61,17 +57,18 @@ private constructor(
      *
      * Unlike [nextPage], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("next_page") @ExcludeMissing fun _nextPage(): JsonField<String> = nextPage
+    @JsonProperty("next_page")
+    @ExcludeMissing
+    fun _nextPage(): JsonField<String> = nextPage
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-        additionalProperties.put(key, value)
+      additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -81,12 +78,14 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [CreditGrantListPageResponse].
          *
          * The following fields are required:
+         *
          * ```java
          * .data()
          * .nextPage()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [CreditGrantListPageResponse]. */
@@ -97,36 +96,37 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(creditGrantListPageResponse: CreditGrantListPageResponse) = apply {
-            data = creditGrantListPageResponse.data.map { it.toMutableList() }
-            nextPage = creditGrantListPageResponse.nextPage
-            additionalProperties = creditGrantListPageResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(creditGrantListPageResponse: CreditGrantListPageResponse) =
+            apply {
+                data = creditGrantListPageResponse.data.map { it.toMutableList() }
+                nextPage = creditGrantListPageResponse.nextPage
+                additionalProperties = creditGrantListPageResponse.additionalProperties.toMutableMap()
+            }
 
         fun data(data: List<CreditGrantListResponse>) = data(JsonField.of(data))
 
         /**
          * Sets [Builder.data] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.data] with a well-typed `List<CreditGrantListResponse>`
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.data] with a well-typed `List<CreditGrantListResponse>` value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun data(data: JsonField<List<CreditGrantListResponse>>) = apply {
-            this.data = data.map { it.toMutableList() }
-        }
+        fun data(data: JsonField<List<CreditGrantListResponse>>) =
+            apply {
+                this.data = data.map { it.toMutableList() }
+            }
 
         /**
          * Adds a single [CreditGrantListResponse] to [Builder.data].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addData(data: CreditGrantListResponse) = apply {
-            this.data =
-                (this.data ?: JsonField.of(mutableListOf())).also {
+        fun addData(data: CreditGrantListResponse) =
+            apply {
+                this.data = (this.data ?: JsonField.of(mutableListOf())).also {
                     checkKnown("data", it).add(data)
                 }
-        }
+            }
 
         fun nextPage(nextPage: String?) = nextPage(JsonField.ofNullable(nextPage))
 
@@ -136,29 +136,39 @@ private constructor(
         /**
          * Sets [Builder.nextPage] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.nextPage] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.nextPage] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
+        fun nextPage(nextPage: JsonField<String>) =
+            apply {
+                this.nextPage = nextPage
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         /**
          * Returns an immutable instance of [CreditGrantListPageResponse].
@@ -166,6 +176,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .data()
          * .nextPage()
@@ -175,9 +186,13 @@ private constructor(
          */
         fun build(): CreditGrantListPageResponse =
             CreditGrantListPageResponse(
-                checkRequired("data", data).map { it.toImmutable() },
-                checkRequired("nextPage", nextPage),
-                additionalProperties.toMutableMap(),
+              checkRequired(
+                "data", data
+              ).map { it.toImmutable() },
+              checkRequired(
+                "nextPage", nextPage
+              ),
+              additionalProperties.toMutableMap(),
             )
     }
 
@@ -191,15 +206,16 @@ private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): CreditGrantListPageResponse = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): CreditGrantListPageResponse =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        data().forEach { it.validate() }
-        nextPage()
-        validated = true
-    }
+            data().forEach { it.validate() }
+            nextPage()
+            validated = true
+        }
 
     fun isValid(): Boolean =
         try {
@@ -215,25 +231,19 @@ private constructor(
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int =
-        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (if (nextPage.asKnown().isPresent) 1 else 0)
+    internal fun validity(): Int = (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (if (nextPage.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is CreditGrantListPageResponse &&
-            data == other.data &&
-            nextPage == other.nextPage &&
-            additionalProperties == other.additionalProperties
+      return other is CreditGrantListPageResponse && data == other.data && nextPage == other.nextPage && additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy { Objects.hash(data, nextPage, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "CreditGrantListPageResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
+    override fun toString() = "CreditGrantListPageResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
 }

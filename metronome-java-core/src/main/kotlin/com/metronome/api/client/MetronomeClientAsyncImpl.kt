@@ -2,6 +2,10 @@
 
 package com.metronome.api.client
 
+import com.metronome.api.client.MetronomeClient
+import com.metronome.api.client.MetronomeClientAsync
+import com.metronome.api.client.MetronomeClientAsyncImpl
+import com.metronome.api.client.MetronomeClientImpl
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.getPackageVersion
 import com.metronome.api.services.async.V1ServiceAsync
@@ -10,22 +14,21 @@ import com.metronome.api.services.async.V2ServiceAsync
 import com.metronome.api.services.async.V2ServiceAsyncImpl
 import java.util.function.Consumer
 
-class MetronomeClientAsyncImpl(private val clientOptions: ClientOptions) : MetronomeClientAsync {
+class MetronomeClientAsyncImpl(
+    private val clientOptions: ClientOptions,
+
+) : MetronomeClientAsync {
 
     private val clientOptionsWithUserAgent =
-        if (clientOptions.headers.names().contains("User-Agent")) clientOptions
-        else
-            clientOptions
-                .toBuilder()
-                .putHeader("User-Agent", "${javaClass.simpleName}/Java ${getPackageVersion()}")
-                .build()
+
+      if (clientOptions.headers.names().contains("User-Agent")) clientOptions
+
+      else clientOptions.toBuilder().putHeader("User-Agent", "${javaClass.simpleName}/Java ${getPackageVersion()}").build()
 
     // Pass the original clientOptions so that this client sets its own User-Agent.
     private val sync: MetronomeClient by lazy { MetronomeClientImpl(clientOptions) }
 
-    private val withRawResponse: MetronomeClientAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+    private val withRawResponse: MetronomeClientAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     private val v2: V2ServiceAsync by lazy { V2ServiceAsyncImpl(clientOptionsWithUserAgent) }
 
@@ -35,8 +38,7 @@ class MetronomeClientAsyncImpl(private val clientOptions: ClientOptions) : Metro
 
     override fun withRawResponse(): MetronomeClientAsync.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetronomeClientAsync =
-        MetronomeClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetronomeClientAsync = MetronomeClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun v2(): V2ServiceAsync = v2
 
@@ -44,23 +46,16 @@ class MetronomeClientAsyncImpl(private val clientOptions: ClientOptions) : Metro
 
     override fun close() = clientOptions.close()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        MetronomeClientAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val v2: V2ServiceAsync.WithRawResponse by lazy {
-            V2ServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+    ) : MetronomeClientAsync.WithRawResponse {
 
-        private val v1: V1ServiceAsync.WithRawResponse by lazy {
-            V1ServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val v2: V2ServiceAsync.WithRawResponse by lazy { V2ServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): MetronomeClientAsync.WithRawResponse =
-            MetronomeClientAsyncImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
-            )
+        private val v1: V1ServiceAsync.WithRawResponse by lazy { V1ServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MetronomeClientAsync.WithRawResponse = MetronomeClientAsyncImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
         override fun v2(): V2ServiceAsync.WithRawResponse = v2
 

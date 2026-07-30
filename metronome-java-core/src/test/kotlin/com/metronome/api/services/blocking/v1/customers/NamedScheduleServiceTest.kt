@@ -16,42 +16,35 @@ internal class NamedScheduleServiceTest {
 
     @Test
     fun retrieve() {
-        val client =
-            MetronomeOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val namedScheduleService = client.v1().customers().namedSchedules()
+      val client = MetronomeOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val namedScheduleService = client.v1().customers().namedSchedules()
 
-        val namedSchedule =
-            namedScheduleService.retrieve(
-                NamedScheduleRetrieveParams.builder()
-                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
-                    .scheduleName("my-schedule")
-                    .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
-                    .build()
-            )
+      val namedSchedule = namedScheduleService.retrieve(NamedScheduleRetrieveParams.builder()
+          .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+          .scheduleName("my-schedule")
+          .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+          .build())
 
-        namedSchedule.validate()
+      namedSchedule.validate()
     }
 
     @Test
     fun update() {
-        val client =
-            MetronomeOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val namedScheduleService = client.v1().customers().namedSchedules()
+      val client = MetronomeOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val namedScheduleService = client.v1().customers().namedSchedules()
 
-        namedScheduleService.update(
-            NamedScheduleUpdateParams.builder()
-                .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
-                .scheduleName("my-schedule")
-                .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-                .value(JsonValue.from(mapOf("my_key" to "my_value")))
-                .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
-                .build()
-        )
+      namedScheduleService.update(NamedScheduleUpdateParams.builder()
+          .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+          .scheduleName("my-schedule")
+          .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+          .value(JsonValue.from(mapOf("my_key" to "my_value")))
+          .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+          .build())
     }
 }

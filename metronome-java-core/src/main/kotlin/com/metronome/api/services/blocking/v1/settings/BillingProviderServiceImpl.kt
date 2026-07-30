@@ -19,105 +19,95 @@ import com.metronome.api.models.v1.settings.billingproviders.BillingProviderCrea
 import com.metronome.api.models.v1.settings.billingproviders.BillingProviderCreateResponse
 import com.metronome.api.models.v1.settings.billingproviders.BillingProviderListParams
 import com.metronome.api.models.v1.settings.billingproviders.BillingProviderListResponse
+import com.metronome.api.services.blocking.v1.settings.BillingProviderService
+import com.metronome.api.services.blocking.v1.settings.BillingProviderServiceImpl
 import java.util.function.Consumer
 
-/**
- * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
- * behavior.
- */
-class BillingProviderServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    BillingProviderService {
+/** Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization behavior. */
+class BillingProviderServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: BillingProviderService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : BillingProviderService {
+
+    private val withRawResponse: BillingProviderService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): BillingProviderService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BillingProviderService =
-        BillingProviderServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BillingProviderService = BillingProviderServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun create(
-        params: BillingProviderCreateParams,
-        requestOptions: RequestOptions,
-    ): BillingProviderCreateResponse =
+    override fun create(params: BillingProviderCreateParams, requestOptions: RequestOptions): BillingProviderCreateResponse =
         // post /v1/setUpBillingProvider
         withRawResponse().create(params, requestOptions).parse()
 
-    override fun list(
-        params: BillingProviderListParams,
-        requestOptions: RequestOptions,
-    ): BillingProviderListResponse =
+    override fun list(params: BillingProviderListParams, requestOptions: RequestOptions): BillingProviderListResponse =
         // post /v1/listConfiguredBillingProviders
         withRawResponse().list(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        BillingProviderService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : BillingProviderService.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): BillingProviderService.WithRawResponse =
-            BillingProviderServiceImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BillingProviderService.WithRawResponse = BillingProviderServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val createHandler: Handler<BillingProviderCreateResponse> = jsonHandler<BillingProviderCreateResponse>(clientOptions.jsonMapper)
+
+        override fun create(params: BillingProviderCreateParams, requestOptions: RequestOptions): HttpResponseFor<BillingProviderCreateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "setUpBillingProvider")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
             )
-
-        private val createHandler: Handler<BillingProviderCreateResponse> =
-            jsonHandler<BillingProviderCreateResponse>(clientOptions.jsonMapper)
-
-        override fun create(
-            params: BillingProviderCreateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<BillingProviderCreateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "setUpBillingProvider")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { createHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  createHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val listHandler: Handler<BillingProviderListResponse> =
-            jsonHandler<BillingProviderListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<BillingProviderListResponse> = jsonHandler<BillingProviderListResponse>(clientOptions.jsonMapper)
 
-        override fun list(
-            params: BillingProviderListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<BillingProviderListResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "listConfiguredBillingProviders")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun list(params: BillingProviderListParams, requestOptions: RequestOptions): HttpResponseFor<BillingProviderListResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "listConfiguredBillingProviders")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

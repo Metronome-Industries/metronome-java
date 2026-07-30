@@ -15,15 +15,14 @@ import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.Subscription
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class Subscription
-@JsonCreator(mode = JsonCreator.Mode.DISABLED)
-private constructor(
+class Subscription @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
     private val billingPeriods: JsonField<BillingPeriods>,
     private val collectionSchedule: JsonField<CollectionSchedule>,
     private val proration: JsonField<Proration>,
@@ -40,178 +39,104 @@ private constructor(
     private val name: JsonField<String>,
     private val seatConfig: JsonField<SeatConfig>,
     private val additionalProperties: MutableMap<String, JsonValue>,
+
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("billing_periods")
-        @ExcludeMissing
-        billingPeriods: JsonField<BillingPeriods> = JsonMissing.of(),
-        @JsonProperty("collection_schedule")
-        @ExcludeMissing
-        collectionSchedule: JsonField<CollectionSchedule> = JsonMissing.of(),
-        @JsonProperty("proration")
-        @ExcludeMissing
-        proration: JsonField<Proration> = JsonMissing.of(),
-        @JsonProperty("quantity_management_mode")
-        @ExcludeMissing
-        quantityManagementMode: JsonField<QuantityManagementMode> = JsonMissing.of(),
-        @JsonProperty("quantity_schedule")
-        @ExcludeMissing
-        quantitySchedule: JsonField<List<QuantitySchedule>> = JsonMissing.of(),
-        @JsonProperty("starting_at")
-        @ExcludeMissing
-        startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("subscription_rate")
-        @ExcludeMissing
-        subscriptionRate: JsonField<SubscriptionRate> = JsonMissing.of(),
+        @JsonProperty("billing_periods") @ExcludeMissing billingPeriods: JsonField<BillingPeriods> = JsonMissing.of(),
+        @JsonProperty("collection_schedule") @ExcludeMissing collectionSchedule: JsonField<CollectionSchedule> = JsonMissing.of(),
+        @JsonProperty("proration") @ExcludeMissing proration: JsonField<Proration> = JsonMissing.of(),
+        @JsonProperty("quantity_management_mode") @ExcludeMissing quantityManagementMode: JsonField<QuantityManagementMode> = JsonMissing.of(),
+        @JsonProperty("quantity_schedule") @ExcludeMissing quantitySchedule: JsonField<List<QuantitySchedule>> = JsonMissing.of(),
+        @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("subscription_rate") @ExcludeMissing subscriptionRate: JsonField<SubscriptionRate> = JsonMissing.of(),
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("billing_cycle_config")
-        @ExcludeMissing
-        billingCycleConfig: JsonField<BillingCycleConfig> = JsonMissing.of(),
-        @JsonProperty("custom_fields")
-        @ExcludeMissing
-        customFields: JsonField<CustomFields> = JsonMissing.of(),
-        @JsonProperty("description")
-        @ExcludeMissing
-        description: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("ending_before")
-        @ExcludeMissing
-        endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("fiat_credit_type_id")
-        @ExcludeMissing
-        fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("billing_cycle_config") @ExcludeMissing billingCycleConfig: JsonField<BillingCycleConfig> = JsonMissing.of(),
+        @JsonProperty("custom_fields") @ExcludeMissing customFields: JsonField<CustomFields> = JsonMissing.of(),
+        @JsonProperty("description") @ExcludeMissing description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("ending_before") @ExcludeMissing endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("fiat_credit_type_id") @ExcludeMissing fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("seat_config")
-        @ExcludeMissing
-        seatConfig: JsonField<SeatConfig> = JsonMissing.of(),
+        @JsonProperty("seat_config") @ExcludeMissing seatConfig: JsonField<SeatConfig> = JsonMissing.of()
     ) : this(
-        billingPeriods,
-        collectionSchedule,
-        proration,
-        quantityManagementMode,
-        quantitySchedule,
-        startingAt,
-        subscriptionRate,
-        id,
-        billingCycleConfig,
-        customFields,
-        description,
-        endingBefore,
-        fiatCreditTypeId,
-        name,
-        seatConfig,
-        mutableMapOf(),
+      billingPeriods,
+      collectionSchedule,
+      proration,
+      quantityManagementMode,
+      quantitySchedule,
+      startingAt,
+      subscriptionRate,
+      id,
+      billingCycleConfig,
+      customFields,
+      description,
+      endingBefore,
+      fiatCreditTypeId,
+      name,
+      seatConfig,
+      mutableMapOf(),
     )
 
     /**
      * Previous, current, and next billing periods for the subscription.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun billingPeriods(): BillingPeriods = billingPeriods.getRequired("billing_periods")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun collectionSchedule(): CollectionSchedule =
-        collectionSchedule.getRequired("collection_schedule")
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    fun collectionSchedule(): CollectionSchedule = collectionSchedule.getRequired("collection_schedule")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun proration(): Proration = proration.getRequired("proration")
 
     /**
-     * Determines how the subscription's quantity is controlled. Defaults to QUANTITY_ONLY.
-     * **QUANTITY_ONLY**: The subscription quantity is specified directly on the subscription.
-     * `initial_quantity` must be provided with this option. Compatible with recurring
-     * commits/credits that use POOLED allocation. **SEAT_BASED**: Use when you want to pass
-     * specific seat identifiers (e.g. add user_123) to increment and decrement a subscription
-     * quantity, rather than directly providing the quantity. You must use a **SEAT_BASED**
-     * subscription to use a linked recurring credit with an allocation per seat. `seat_config` must
-     * be provided with this option.
+     * Determines how the subscription's quantity is controlled. Defaults to QUANTITY_ONLY. **QUANTITY_ONLY**: The subscription quantity is specified directly on the subscription. `initial_quantity` must be provided with this option. Compatible with recurring commits/credits that use POOLED allocation. **SEAT_BASED**: Use when you want to pass specific seat identifiers (e.g. add user_123) to increment and decrement a subscription quantity, rather than directly providing the quantity. You must use a **SEAT_BASED** subscription to use a linked recurring credit with an allocation per seat. `seat_config` must be provided with this option.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun quantityManagementMode(): QuantityManagementMode =
-        quantityManagementMode.getRequired("quantity_management_mode")
+    fun quantityManagementMode(): QuantityManagementMode = quantityManagementMode.getRequired("quantity_management_mode")
 
     /**
-     * List of quantity schedule items for the subscription. Only includes the current quantity and
-     * future quantity changes.
+     * List of quantity schedule items for the subscription. Only includes the current quantity and future quantity changes.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun quantitySchedule(): List<QuantitySchedule> =
-        quantitySchedule.getRequired("quantity_schedule")
+    fun quantitySchedule(): List<QuantitySchedule> = quantitySchedule.getRequired("quantity_schedule")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun subscriptionRate(): SubscriptionRate = subscriptionRate.getRequired("subscription_rate")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
     fun id(): Optional<String> = id.getOptional("id")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun billingCycleConfig(): Optional<BillingCycleConfig> =
-        billingCycleConfig.getOptional("billing_cycle_config")
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    fun billingCycleConfig(): Optional<BillingCycleConfig> = billingCycleConfig.getOptional("billing_cycle_config")
 
     /**
      * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
      */
     fun customFields(): Optional<CustomFields> = customFields.getOptional("custom_fields")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
     fun description(): Optional<String> = description.getOptional("description")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
     fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
     fun fiatCreditTypeId(): Optional<String> = fiatCreditTypeId.getOptional("fiat_credit_type_id")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
     fun name(): Optional<String> = name.getOptional("name")
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
     fun seatConfig(): Optional<SeatConfig> = seatConfig.getOptional("seat_config")
 
     /**
@@ -226,8 +151,7 @@ private constructor(
     /**
      * Returns the raw JSON value of [collectionSchedule].
      *
-     * Unlike [collectionSchedule], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [collectionSchedule], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("collection_schedule")
     @ExcludeMissing
@@ -238,13 +162,14 @@ private constructor(
      *
      * Unlike [proration], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("proration") @ExcludeMissing fun _proration(): JsonField<Proration> = proration
+    @JsonProperty("proration")
+    @ExcludeMissing
+    fun _proration(): JsonField<Proration> = proration
 
     /**
      * Returns the raw JSON value of [quantityManagementMode].
      *
-     * Unlike [quantityManagementMode], this method doesn't throw if the JSON field has an
-     * unexpected type.
+     * Unlike [quantityManagementMode], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("quantity_management_mode")
     @ExcludeMissing
@@ -253,8 +178,7 @@ private constructor(
     /**
      * Returns the raw JSON value of [quantitySchedule].
      *
-     * Unlike [quantitySchedule], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [quantitySchedule], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("quantity_schedule")
     @ExcludeMissing
@@ -272,8 +196,7 @@ private constructor(
     /**
      * Returns the raw JSON value of [subscriptionRate].
      *
-     * Unlike [subscriptionRate], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [subscriptionRate], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("subscription_rate")
     @ExcludeMissing
@@ -284,13 +207,14 @@ private constructor(
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+    @JsonProperty("id")
+    @ExcludeMissing
+    fun _id(): JsonField<String> = id
 
     /**
      * Returns the raw JSON value of [billingCycleConfig].
      *
-     * Unlike [billingCycleConfig], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [billingCycleConfig], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("billing_cycle_config")
     @ExcludeMissing
@@ -310,7 +234,9 @@ private constructor(
      *
      * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
+    @JsonProperty("description")
+    @ExcludeMissing
+    fun _description(): JsonField<String> = description
 
     /**
      * Returns the raw JSON value of [endingBefore].
@@ -324,8 +250,7 @@ private constructor(
     /**
      * Returns the raw JSON value of [fiatCreditTypeId].
      *
-     * Unlike [fiatCreditTypeId], this method doesn't throw if the JSON field has an unexpected
-     * type.
+     * Unlike [fiatCreditTypeId], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("fiat_credit_type_id")
     @ExcludeMissing
@@ -336,7 +261,9 @@ private constructor(
      *
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+    @JsonProperty("name")
+    @ExcludeMissing
+    fun _name(): JsonField<String> = name
 
     /**
      * Returns the raw JSON value of [seatConfig].
@@ -349,13 +276,12 @@ private constructor(
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-        additionalProperties.put(key, value)
+      additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -365,6 +291,7 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [Subscription].
          *
          * The following fields are required:
+         *
          * ```java
          * .billingPeriods()
          * .collectionSchedule()
@@ -375,7 +302,8 @@ private constructor(
          * .subscriptionRate()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [Subscription]. */
@@ -399,170 +327,157 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(subscription: Subscription) = apply {
-            billingPeriods = subscription.billingPeriods
-            collectionSchedule = subscription.collectionSchedule
-            proration = subscription.proration
-            quantityManagementMode = subscription.quantityManagementMode
-            quantitySchedule = subscription.quantitySchedule.map { it.toMutableList() }
-            startingAt = subscription.startingAt
-            subscriptionRate = subscription.subscriptionRate
-            id = subscription.id
-            billingCycleConfig = subscription.billingCycleConfig
-            customFields = subscription.customFields
-            description = subscription.description
-            endingBefore = subscription.endingBefore
-            fiatCreditTypeId = subscription.fiatCreditTypeId
-            name = subscription.name
-            seatConfig = subscription.seatConfig
-            additionalProperties = subscription.additionalProperties.toMutableMap()
-        }
+        internal fun from(subscription: Subscription) =
+            apply {
+                billingPeriods = subscription.billingPeriods
+                collectionSchedule = subscription.collectionSchedule
+                proration = subscription.proration
+                quantityManagementMode = subscription.quantityManagementMode
+                quantitySchedule = subscription.quantitySchedule.map { it.toMutableList() }
+                startingAt = subscription.startingAt
+                subscriptionRate = subscription.subscriptionRate
+                id = subscription.id
+                billingCycleConfig = subscription.billingCycleConfig
+                customFields = subscription.customFields
+                description = subscription.description
+                endingBefore = subscription.endingBefore
+                fiatCreditTypeId = subscription.fiatCreditTypeId
+                name = subscription.name
+                seatConfig = subscription.seatConfig
+                additionalProperties = subscription.additionalProperties.toMutableMap()
+            }
 
         /** Previous, current, and next billing periods for the subscription. */
-        fun billingPeriods(billingPeriods: BillingPeriods) =
-            billingPeriods(JsonField.of(billingPeriods))
+        fun billingPeriods(billingPeriods: BillingPeriods) = billingPeriods(JsonField.of(billingPeriods))
 
         /**
          * Sets [Builder.billingPeriods] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.billingPeriods] with a well-typed [BillingPeriods] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.billingPeriods] with a well-typed [BillingPeriods] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun billingPeriods(billingPeriods: JsonField<BillingPeriods>) = apply {
-            this.billingPeriods = billingPeriods
-        }
+        fun billingPeriods(billingPeriods: JsonField<BillingPeriods>) =
+            apply {
+                this.billingPeriods = billingPeriods
+            }
 
-        fun collectionSchedule(collectionSchedule: CollectionSchedule) =
-            collectionSchedule(JsonField.of(collectionSchedule))
+        fun collectionSchedule(collectionSchedule: CollectionSchedule) = collectionSchedule(JsonField.of(collectionSchedule))
 
         /**
          * Sets [Builder.collectionSchedule] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.collectionSchedule] with a well-typed
-         * [CollectionSchedule] value instead. This method is primarily for setting the field to an
-         * undocumented or not yet supported value.
+         * You should usually call [Builder.collectionSchedule] with a well-typed [CollectionSchedule] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun collectionSchedule(collectionSchedule: JsonField<CollectionSchedule>) = apply {
-            this.collectionSchedule = collectionSchedule
-        }
+        fun collectionSchedule(collectionSchedule: JsonField<CollectionSchedule>) =
+            apply {
+                this.collectionSchedule = collectionSchedule
+            }
 
         fun proration(proration: Proration) = proration(JsonField.of(proration))
 
         /**
          * Sets [Builder.proration] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.proration] with a well-typed [Proration] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.proration] with a well-typed [Proration] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun proration(proration: JsonField<Proration>) = apply { this.proration = proration }
+        fun proration(proration: JsonField<Proration>) =
+            apply {
+                this.proration = proration
+            }
 
-        /**
-         * Determines how the subscription's quantity is controlled. Defaults to QUANTITY_ONLY.
-         * **QUANTITY_ONLY**: The subscription quantity is specified directly on the subscription.
-         * `initial_quantity` must be provided with this option. Compatible with recurring
-         * commits/credits that use POOLED allocation. **SEAT_BASED**: Use when you want to pass
-         * specific seat identifiers (e.g. add user_123) to increment and decrement a subscription
-         * quantity, rather than directly providing the quantity. You must use a **SEAT_BASED**
-         * subscription to use a linked recurring credit with an allocation per seat. `seat_config`
-         * must be provided with this option.
-         */
-        fun quantityManagementMode(quantityManagementMode: QuantityManagementMode) =
-            quantityManagementMode(JsonField.of(quantityManagementMode))
+        /** Determines how the subscription's quantity is controlled. Defaults to QUANTITY_ONLY. **QUANTITY_ONLY**: The subscription quantity is specified directly on the subscription. `initial_quantity` must be provided with this option. Compatible with recurring commits/credits that use POOLED allocation. **SEAT_BASED**: Use when you want to pass specific seat identifiers (e.g. add user_123) to increment and decrement a subscription quantity, rather than directly providing the quantity. You must use a **SEAT_BASED** subscription to use a linked recurring credit with an allocation per seat. `seat_config` must be provided with this option. */
+        fun quantityManagementMode(quantityManagementMode: QuantityManagementMode) = quantityManagementMode(JsonField.of(quantityManagementMode))
 
         /**
          * Sets [Builder.quantityManagementMode] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.quantityManagementMode] with a well-typed
-         * [QuantityManagementMode] value instead. This method is primarily for setting the field to
-         * an undocumented or not yet supported value.
+         * You should usually call [Builder.quantityManagementMode] with a well-typed [QuantityManagementMode] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun quantityManagementMode(quantityManagementMode: JsonField<QuantityManagementMode>) =
             apply {
                 this.quantityManagementMode = quantityManagementMode
             }
 
-        /**
-         * List of quantity schedule items for the subscription. Only includes the current quantity
-         * and future quantity changes.
-         */
-        fun quantitySchedule(quantitySchedule: List<QuantitySchedule>) =
-            quantitySchedule(JsonField.of(quantitySchedule))
+        /** List of quantity schedule items for the subscription. Only includes the current quantity and future quantity changes. */
+        fun quantitySchedule(quantitySchedule: List<QuantitySchedule>) = quantitySchedule(JsonField.of(quantitySchedule))
 
         /**
          * Sets [Builder.quantitySchedule] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.quantitySchedule] with a well-typed
-         * `List<QuantitySchedule>` value instead. This method is primarily for setting the field to
-         * an undocumented or not yet supported value.
+         * You should usually call [Builder.quantitySchedule] with a well-typed `List<QuantitySchedule>` value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun quantitySchedule(quantitySchedule: JsonField<List<QuantitySchedule>>) = apply {
-            this.quantitySchedule = quantitySchedule.map { it.toMutableList() }
-        }
+        fun quantitySchedule(quantitySchedule: JsonField<List<QuantitySchedule>>) =
+            apply {
+                this.quantitySchedule = quantitySchedule.map { it.toMutableList() }
+            }
 
         /**
          * Adds a single [QuantitySchedule] to [Builder.quantitySchedule].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addQuantitySchedule(quantitySchedule: QuantitySchedule) = apply {
-            this.quantitySchedule =
-                (this.quantitySchedule ?: JsonField.of(mutableListOf())).also {
+        fun addQuantitySchedule(quantitySchedule: QuantitySchedule) =
+            apply {
+                this.quantitySchedule = (this.quantitySchedule ?: JsonField.of(mutableListOf())).also {
                     checkKnown("quantitySchedule", it).add(quantitySchedule)
                 }
-        }
+            }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
         /**
          * Sets [Builder.startingAt] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-            this.startingAt = startingAt
-        }
+        fun startingAt(startingAt: JsonField<OffsetDateTime>) =
+            apply {
+                this.startingAt = startingAt
+            }
 
-        fun subscriptionRate(subscriptionRate: SubscriptionRate) =
-            subscriptionRate(JsonField.of(subscriptionRate))
+        fun subscriptionRate(subscriptionRate: SubscriptionRate) = subscriptionRate(JsonField.of(subscriptionRate))
 
         /**
          * Sets [Builder.subscriptionRate] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.subscriptionRate] with a well-typed [SubscriptionRate]
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.subscriptionRate] with a well-typed [SubscriptionRate] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun subscriptionRate(subscriptionRate: JsonField<SubscriptionRate>) = apply {
-            this.subscriptionRate = subscriptionRate
-        }
+        fun subscriptionRate(subscriptionRate: JsonField<SubscriptionRate>) =
+            apply {
+                this.subscriptionRate = subscriptionRate
+            }
 
         fun id(id: String) = id(JsonField.of(id))
 
         /**
          * Sets [Builder.id] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.id] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) =
+            apply {
+                this.id = id
+            }
 
-        fun billingCycleConfig(billingCycleConfig: BillingCycleConfig) =
-            billingCycleConfig(JsonField.of(billingCycleConfig))
+        fun billingCycleConfig(billingCycleConfig: BillingCycleConfig) = billingCycleConfig(JsonField.of(billingCycleConfig))
 
         /**
          * Sets [Builder.billingCycleConfig] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.billingCycleConfig] with a well-typed
-         * [BillingCycleConfig] value instead. This method is primarily for setting the field to an
-         * undocumented or not yet supported value.
+         * You should usually call [Builder.billingCycleConfig] with a well-typed [BillingCycleConfig] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun billingCycleConfig(billingCycleConfig: JsonField<BillingCycleConfig>) = apply {
-            this.billingCycleConfig = billingCycleConfig
-        }
+        fun billingCycleConfig(billingCycleConfig: JsonField<BillingCycleConfig>) =
+            apply {
+                this.billingCycleConfig = billingCycleConfig
+            }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
@@ -570,91 +485,104 @@ private constructor(
         /**
          * Sets [Builder.customFields] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.customFields] with a well-typed [CustomFields] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.customFields] with a well-typed [CustomFields] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun customFields(customFields: JsonField<CustomFields>) = apply {
-            this.customFields = customFields
-        }
+        fun customFields(customFields: JsonField<CustomFields>) =
+            apply {
+                this.customFields = customFields
+            }
 
         fun description(description: String) = description(JsonField.of(description))
 
         /**
          * Sets [Builder.description] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.description] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.description] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun description(description: JsonField<String>) = apply { this.description = description }
+        fun description(description: JsonField<String>) =
+            apply {
+                this.description = description
+            }
 
         fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
         /**
          * Sets [Builder.endingBefore] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
-            this.endingBefore = endingBefore
-        }
+        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) =
+            apply {
+                this.endingBefore = endingBefore
+            }
 
-        fun fiatCreditTypeId(fiatCreditTypeId: String) =
-            fiatCreditTypeId(JsonField.of(fiatCreditTypeId))
+        fun fiatCreditTypeId(fiatCreditTypeId: String) = fiatCreditTypeId(JsonField.of(fiatCreditTypeId))
 
         /**
          * Sets [Builder.fiatCreditTypeId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.fiatCreditTypeId] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.fiatCreditTypeId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun fiatCreditTypeId(fiatCreditTypeId: JsonField<String>) = apply {
-            this.fiatCreditTypeId = fiatCreditTypeId
-        }
+        fun fiatCreditTypeId(fiatCreditTypeId: JsonField<String>) =
+            apply {
+                this.fiatCreditTypeId = fiatCreditTypeId
+            }
 
         fun name(name: String) = name(JsonField.of(name))
 
         /**
          * Sets [Builder.name] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.name] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun name(name: JsonField<String>) = apply { this.name = name }
+        fun name(name: JsonField<String>) =
+            apply {
+                this.name = name
+            }
 
         fun seatConfig(seatConfig: SeatConfig) = seatConfig(JsonField.of(seatConfig))
 
         /**
          * Sets [Builder.seatConfig] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.seatConfig] with a well-typed [SeatConfig] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.seatConfig] with a well-typed [SeatConfig] value instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun seatConfig(seatConfig: JsonField<SeatConfig>) = apply { this.seatConfig = seatConfig }
+        fun seatConfig(seatConfig: JsonField<SeatConfig>) =
+            apply {
+                this.seatConfig = seatConfig
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         /**
          * Returns an immutable instance of [Subscription].
@@ -662,6 +590,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .billingPeriods()
          * .collectionSchedule()
@@ -676,22 +605,36 @@ private constructor(
          */
         fun build(): Subscription =
             Subscription(
-                checkRequired("billingPeriods", billingPeriods),
-                checkRequired("collectionSchedule", collectionSchedule),
-                checkRequired("proration", proration),
-                checkRequired("quantityManagementMode", quantityManagementMode),
-                checkRequired("quantitySchedule", quantitySchedule).map { it.toImmutable() },
-                checkRequired("startingAt", startingAt),
-                checkRequired("subscriptionRate", subscriptionRate),
-                id,
-                billingCycleConfig,
-                customFields,
-                description,
-                endingBefore,
-                fiatCreditTypeId,
-                name,
-                seatConfig,
-                additionalProperties.toMutableMap(),
+              checkRequired(
+                "billingPeriods", billingPeriods
+              ),
+              checkRequired(
+                "collectionSchedule", collectionSchedule
+              ),
+              checkRequired(
+                "proration", proration
+              ),
+              checkRequired(
+                "quantityManagementMode", quantityManagementMode
+              ),
+              checkRequired(
+                "quantitySchedule", quantitySchedule
+              ).map { it.toImmutable() },
+              checkRequired(
+                "startingAt", startingAt
+              ),
+              checkRequired(
+                "subscriptionRate", subscriptionRate
+              ),
+              id,
+              billingCycleConfig,
+              customFields,
+              description,
+              endingBefore,
+              fiatCreditTypeId,
+              name,
+              seatConfig,
+              additionalProperties.toMutableMap(),
             )
     }
 
@@ -705,28 +648,29 @@ private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): Subscription = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): Subscription =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        billingPeriods().validate()
-        collectionSchedule().validate()
-        proration().validate()
-        quantityManagementMode().validate()
-        quantitySchedule().forEach { it.validate() }
-        startingAt()
-        subscriptionRate().validate()
-        id()
-        billingCycleConfig().ifPresent { it.validate() }
-        customFields().ifPresent { it.validate() }
-        description()
-        endingBefore()
-        fiatCreditTypeId()
-        name()
-        seatConfig().ifPresent { it.validate() }
-        validated = true
-    }
+            billingPeriods().validate()
+            collectionSchedule().validate()
+            proration().validate()
+            quantityManagementMode().validate()
+            quantitySchedule().forEach { it.validate() }
+            startingAt()
+            subscriptionRate().validate()
+            id()
+            billingCycleConfig().ifPresent { it.validate() }
+            customFields().ifPresent { it.validate() }
+            description()
+            endingBefore()
+            fiatCreditTypeId()
+            name()
+            seatConfig().ifPresent { it.validate() }
+            validated = true
+        }
 
     fun isValid(): Boolean =
         try {
@@ -742,58 +686,36 @@ private constructor(
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int =
-        (billingPeriods.asKnown().getOrNull()?.validity() ?: 0) +
-            (collectionSchedule.asKnown().getOrNull()?.validity() ?: 0) +
-            (proration.asKnown().getOrNull()?.validity() ?: 0) +
-            (quantityManagementMode.asKnown().getOrNull()?.validity() ?: 0) +
-            (quantitySchedule.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (if (startingAt.asKnown().isPresent) 1 else 0) +
-            (subscriptionRate.asKnown().getOrNull()?.validity() ?: 0) +
-            (if (id.asKnown().isPresent) 1 else 0) +
-            (billingCycleConfig.asKnown().getOrNull()?.validity() ?: 0) +
-            (customFields.asKnown().getOrNull()?.validity() ?: 0) +
-            (if (description.asKnown().isPresent) 1 else 0) +
-            (if (endingBefore.asKnown().isPresent) 1 else 0) +
-            (if (fiatCreditTypeId.asKnown().isPresent) 1 else 0) +
-            (if (name.asKnown().isPresent) 1 else 0) +
-            (seatConfig.asKnown().getOrNull()?.validity() ?: 0)
+    internal fun validity(): Int = (billingPeriods.asKnown().getOrNull()?.validity() ?: 0) + (collectionSchedule.asKnown().getOrNull()?.validity() ?: 0) + (proration.asKnown().getOrNull()?.validity() ?: 0) + (quantityManagementMode.asKnown().getOrNull()?.validity() ?: 0) + (quantitySchedule.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (if (startingAt.asKnown().isPresent) 1 else 0) + (subscriptionRate.asKnown().getOrNull()?.validity() ?: 0) + (if (id.asKnown().isPresent) 1 else 0) + (billingCycleConfig.asKnown().getOrNull()?.validity() ?: 0) + (customFields.asKnown().getOrNull()?.validity() ?: 0) + (if (description.asKnown().isPresent) 1 else 0) + (if (endingBefore.asKnown().isPresent) 1 else 0) + (if (fiatCreditTypeId.asKnown().isPresent) 1 else 0) + (if (name.asKnown().isPresent) 1 else 0) + (seatConfig.asKnown().getOrNull()?.validity() ?: 0)
 
     /** Previous, current, and next billing periods for the subscription. */
-    class BillingPeriods
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class BillingPeriods @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val current: JsonField<Current>,
         private val next: JsonField<Next>,
         private val previous: JsonField<Previous>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("current") @ExcludeMissing current: JsonField<Current> = JsonMissing.of(),
             @JsonProperty("next") @ExcludeMissing next: JsonField<Next> = JsonMissing.of(),
-            @JsonProperty("previous")
-            @ExcludeMissing
-            previous: JsonField<Previous> = JsonMissing.of(),
-        ) : this(current, next, previous, mutableMapOf())
+            @JsonProperty("previous") @ExcludeMissing previous: JsonField<Previous> = JsonMissing.of()
+        ) : this(
+          current,
+          next,
+          previous,
+          mutableMapOf(),
+        )
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
         fun current(): Optional<Current> = current.getOptional("current")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
         fun next(): Optional<Next> = next.getOptional("next")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
         fun previous(): Optional<Previous> = previous.getOptional("previous")
 
         /**
@@ -801,38 +723,44 @@ private constructor(
          *
          * Unlike [current], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("current") @ExcludeMissing fun _current(): JsonField<Current> = current
+        @JsonProperty("current")
+        @ExcludeMissing
+        fun _current(): JsonField<Current> = current
 
         /**
          * Returns the raw JSON value of [next].
          *
          * Unlike [next], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("next") @ExcludeMissing fun _next(): JsonField<Next> = next
+        @JsonProperty("next")
+        @ExcludeMissing
+        fun _next(): JsonField<Next> = next
 
         /**
          * Returns the raw JSON value of [previous].
          *
          * Unlike [previous], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("previous") @ExcludeMissing fun _previous(): JsonField<Previous> = previous
+        @JsonProperty("previous")
+        @ExcludeMissing
+        fun _previous(): JsonField<Previous> = previous
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [BillingPeriods]. */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [BillingPeriods]. */
@@ -844,64 +772,78 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(billingPeriods: BillingPeriods) = apply {
-                current = billingPeriods.current
-                next = billingPeriods.next
-                previous = billingPeriods.previous
-                additionalProperties = billingPeriods.additionalProperties.toMutableMap()
-            }
+            internal fun from(billingPeriods: BillingPeriods) =
+                apply {
+                    current = billingPeriods.current
+                    next = billingPeriods.next
+                    previous = billingPeriods.previous
+                    additionalProperties = billingPeriods.additionalProperties.toMutableMap()
+                }
 
             fun current(current: Current) = current(JsonField.of(current))
 
             /**
              * Sets [Builder.current] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.current] with a well-typed [Current] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.current] with a well-typed [Current] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun current(current: JsonField<Current>) = apply { this.current = current }
+            fun current(current: JsonField<Current>) =
+                apply {
+                    this.current = current
+                }
 
             fun next(next: Next) = next(JsonField.of(next))
 
             /**
              * Sets [Builder.next] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.next] with a well-typed [Next] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
+             * You should usually call [Builder.next] with a well-typed [Next] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun next(next: JsonField<Next>) = apply { this.next = next }
+            fun next(next: JsonField<Next>) =
+                apply {
+                    this.next = next
+                }
 
             fun previous(previous: Previous) = previous(JsonField.of(previous))
 
             /**
              * Sets [Builder.previous] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.previous] with a well-typed [Previous] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.previous] with a well-typed [Previous] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun previous(previous: JsonField<Previous>) = apply { this.previous = previous }
+            fun previous(previous: JsonField<Previous>) =
+                apply {
+                    this.previous = previous
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [BillingPeriods].
@@ -909,30 +851,35 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): BillingPeriods =
-                BillingPeriods(current, next, previous, additionalProperties.toMutableMap())
+                BillingPeriods(
+                  current,
+                  next,
+                  previous,
+                  additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): BillingPeriods = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): BillingPeriods =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            current().ifPresent { it.validate() }
-            next().ifPresent { it.validate() }
-            previous().ifPresent { it.validate() }
-            validated = true
-        }
+                current().ifPresent { it.validate() }
+                next().ifPresent { it.validate() }
+                previous().ifPresent { it.validate() }
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -943,54 +890,40 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (current.asKnown().getOrNull()?.validity() ?: 0) +
-                (next.asKnown().getOrNull()?.validity() ?: 0) +
-                (previous.asKnown().getOrNull()?.validity() ?: 0)
+        internal fun validity(): Int = (current.asKnown().getOrNull()?.validity() ?: 0) + (next.asKnown().getOrNull()?.validity() ?: 0) + (previous.asKnown().getOrNull()?.validity() ?: 0)
 
-        class Current
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
+        class Current @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
             private val endingBefore: JsonField<OffsetDateTime>,
             private val startingAt: JsonField<OffsetDateTime>,
             private val additionalProperties: MutableMap<String, JsonValue>,
+
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("ending_before")
-                @ExcludeMissing
-                endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-                @JsonProperty("starting_at")
-                @ExcludeMissing
-                startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            ) : this(endingBefore, startingAt, mutableMapOf())
+                @JsonProperty("ending_before") @ExcludeMissing endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            ) : this(
+              endingBefore,
+              startingAt,
+              mutableMapOf(),
+            )
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
             /**
              * Returns the raw JSON value of [endingBefore].
              *
-             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
-             * type.
+             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("ending_before")
             @ExcludeMissing
@@ -999,8 +932,7 @@ private constructor(
             /**
              * Returns the raw JSON value of [startingAt].
              *
-             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected
-             * type.
+             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("starting_at")
             @ExcludeMissing
@@ -1008,13 +940,12 @@ private constructor(
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
+              additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -1024,12 +955,14 @@ private constructor(
                  * Returns a mutable builder for constructing an instance of [Current].
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .endingBefore()
                  * .startingAt()
                  * ```
                  */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [Current]. */
@@ -1040,60 +973,64 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(current: Current) = apply {
-                    endingBefore = current.endingBefore
-                    startingAt = current.startingAt
-                    additionalProperties = current.additionalProperties.toMutableMap()
-                }
+                internal fun from(current: Current) =
+                    apply {
+                        endingBefore = current.endingBefore
+                        startingAt = current.startingAt
+                        additionalProperties = current.additionalProperties.toMutableMap()
+                    }
 
-                fun endingBefore(endingBefore: OffsetDateTime) =
-                    endingBefore(JsonField.of(endingBefore))
+                fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
                 /**
                  * Sets [Builder.endingBefore] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
-                    this.endingBefore = endingBefore
-                }
+                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) =
+                    apply {
+                        this.endingBefore = endingBefore
+                    }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
                 /**
                  * Sets [Builder.startingAt] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-                    this.startingAt = startingAt
-                }
+                fun startingAt(startingAt: JsonField<OffsetDateTime>) =
+                    apply {
+                        this.startingAt = startingAt
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 /**
                  * Returns an immutable instance of [Current].
@@ -1101,6 +1038,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .endingBefore()
                  * .startingAt()
@@ -1110,33 +1048,36 @@ private constructor(
                  */
                 fun build(): Current =
                     Current(
-                        checkRequired("endingBefore", endingBefore),
-                        checkRequired("startingAt", startingAt),
-                        additionalProperties.toMutableMap(),
+                      checkRequired(
+                        "endingBefore", endingBefore
+                      ),
+                      checkRequired(
+                        "startingAt", startingAt
+                      ),
+                      additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): Current = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Current =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                endingBefore()
-                startingAt()
-                validated = true
-            }
+                    endingBefore()
+                    startingAt()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -1147,74 +1088,55 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int =
-                (if (endingBefore.asKnown().isPresent) 1 else 0) +
-                    (if (startingAt.asKnown().isPresent) 1 else 0)
+            internal fun validity(): Int = (if (endingBefore.asKnown().isPresent) 1 else 0) + (if (startingAt.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is Current &&
-                    endingBefore == other.endingBefore &&
-                    startingAt == other.startingAt &&
-                    additionalProperties == other.additionalProperties
+              return other is Current && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy {
-                Objects.hash(endingBefore, startingAt, additionalProperties)
-            }
+            private val hashCode: Int by lazy { Objects.hash(endingBefore, startingAt, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "Current{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            override fun toString() = "Current{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
         }
 
-        class Next
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
+        class Next @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
             private val endingBefore: JsonField<OffsetDateTime>,
             private val startingAt: JsonField<OffsetDateTime>,
             private val additionalProperties: MutableMap<String, JsonValue>,
+
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("ending_before")
-                @ExcludeMissing
-                endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-                @JsonProperty("starting_at")
-                @ExcludeMissing
-                startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            ) : this(endingBefore, startingAt, mutableMapOf())
+                @JsonProperty("ending_before") @ExcludeMissing endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            ) : this(
+              endingBefore,
+              startingAt,
+              mutableMapOf(),
+            )
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
             /**
              * Returns the raw JSON value of [endingBefore].
              *
-             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
-             * type.
+             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("ending_before")
             @ExcludeMissing
@@ -1223,8 +1145,7 @@ private constructor(
             /**
              * Returns the raw JSON value of [startingAt].
              *
-             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected
-             * type.
+             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("starting_at")
             @ExcludeMissing
@@ -1232,13 +1153,12 @@ private constructor(
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
+              additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -1248,12 +1168,14 @@ private constructor(
                  * Returns a mutable builder for constructing an instance of [Next].
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .endingBefore()
                  * .startingAt()
                  * ```
                  */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [Next]. */
@@ -1264,60 +1186,64 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(next: Next) = apply {
-                    endingBefore = next.endingBefore
-                    startingAt = next.startingAt
-                    additionalProperties = next.additionalProperties.toMutableMap()
-                }
+                internal fun from(next: Next) =
+                    apply {
+                        endingBefore = next.endingBefore
+                        startingAt = next.startingAt
+                        additionalProperties = next.additionalProperties.toMutableMap()
+                    }
 
-                fun endingBefore(endingBefore: OffsetDateTime) =
-                    endingBefore(JsonField.of(endingBefore))
+                fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
                 /**
                  * Sets [Builder.endingBefore] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
-                    this.endingBefore = endingBefore
-                }
+                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) =
+                    apply {
+                        this.endingBefore = endingBefore
+                    }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
                 /**
                  * Sets [Builder.startingAt] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-                    this.startingAt = startingAt
-                }
+                fun startingAt(startingAt: JsonField<OffsetDateTime>) =
+                    apply {
+                        this.startingAt = startingAt
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 /**
                  * Returns an immutable instance of [Next].
@@ -1325,6 +1251,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .endingBefore()
                  * .startingAt()
@@ -1334,33 +1261,36 @@ private constructor(
                  */
                 fun build(): Next =
                     Next(
-                        checkRequired("endingBefore", endingBefore),
-                        checkRequired("startingAt", startingAt),
-                        additionalProperties.toMutableMap(),
+                      checkRequired(
+                        "endingBefore", endingBefore
+                      ),
+                      checkRequired(
+                        "startingAt", startingAt
+                      ),
+                      additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): Next = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Next =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                endingBefore()
-                startingAt()
-                validated = true
-            }
+                    endingBefore()
+                    startingAt()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -1371,74 +1301,55 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int =
-                (if (endingBefore.asKnown().isPresent) 1 else 0) +
-                    (if (startingAt.asKnown().isPresent) 1 else 0)
+            internal fun validity(): Int = (if (endingBefore.asKnown().isPresent) 1 else 0) + (if (startingAt.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is Next &&
-                    endingBefore == other.endingBefore &&
-                    startingAt == other.startingAt &&
-                    additionalProperties == other.additionalProperties
+              return other is Next && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy {
-                Objects.hash(endingBefore, startingAt, additionalProperties)
-            }
+            private val hashCode: Int by lazy { Objects.hash(endingBefore, startingAt, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "Next{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            override fun toString() = "Next{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
         }
 
-        class Previous
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
+        class Previous @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
             private val endingBefore: JsonField<OffsetDateTime>,
             private val startingAt: JsonField<OffsetDateTime>,
             private val additionalProperties: MutableMap<String, JsonValue>,
+
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("ending_before")
-                @ExcludeMissing
-                endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-                @JsonProperty("starting_at")
-                @ExcludeMissing
-                startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            ) : this(endingBefore, startingAt, mutableMapOf())
+                @JsonProperty("ending_before") @ExcludeMissing endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            ) : this(
+              endingBefore,
+              startingAt,
+              mutableMapOf(),
+            )
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
             /**
              * Returns the raw JSON value of [endingBefore].
              *
-             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
-             * type.
+             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("ending_before")
             @ExcludeMissing
@@ -1447,8 +1358,7 @@ private constructor(
             /**
              * Returns the raw JSON value of [startingAt].
              *
-             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected
-             * type.
+             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("starting_at")
             @ExcludeMissing
@@ -1456,13 +1366,12 @@ private constructor(
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
+              additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -1472,12 +1381,14 @@ private constructor(
                  * Returns a mutable builder for constructing an instance of [Previous].
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .endingBefore()
                  * .startingAt()
                  * ```
                  */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [Previous]. */
@@ -1488,60 +1399,64 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(previous: Previous) = apply {
-                    endingBefore = previous.endingBefore
-                    startingAt = previous.startingAt
-                    additionalProperties = previous.additionalProperties.toMutableMap()
-                }
+                internal fun from(previous: Previous) =
+                    apply {
+                        endingBefore = previous.endingBefore
+                        startingAt = previous.startingAt
+                        additionalProperties = previous.additionalProperties.toMutableMap()
+                    }
 
-                fun endingBefore(endingBefore: OffsetDateTime) =
-                    endingBefore(JsonField.of(endingBefore))
+                fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
                 /**
                  * Sets [Builder.endingBefore] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
-                    this.endingBefore = endingBefore
-                }
+                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) =
+                    apply {
+                        this.endingBefore = endingBefore
+                    }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
                 /**
                  * Sets [Builder.startingAt] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-                    this.startingAt = startingAt
-                }
+                fun startingAt(startingAt: JsonField<OffsetDateTime>) =
+                    apply {
+                        this.startingAt = startingAt
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 /**
                  * Returns an immutable instance of [Previous].
@@ -1549,6 +1464,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .endingBefore()
                  * .startingAt()
@@ -1558,33 +1474,36 @@ private constructor(
                  */
                 fun build(): Previous =
                     Previous(
-                        checkRequired("endingBefore", endingBefore),
-                        checkRequired("startingAt", startingAt),
-                        additionalProperties.toMutableMap(),
+                      checkRequired(
+                        "endingBefore", endingBefore
+                      ),
+                      checkRequired(
+                        "startingAt", startingAt
+                      ),
+                      additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): Previous = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Previous =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                endingBefore()
-                startingAt()
-                validated = true
-            }
+                    endingBefore()
+                    startingAt()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -1595,72 +1514,57 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int =
-                (if (endingBefore.asKnown().isPresent) 1 else 0) +
-                    (if (startingAt.asKnown().isPresent) 1 else 0)
+            internal fun validity(): Int = (if (endingBefore.asKnown().isPresent) 1 else 0) + (if (startingAt.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is Previous &&
-                    endingBefore == other.endingBefore &&
-                    startingAt == other.startingAt &&
-                    additionalProperties == other.additionalProperties
+              return other is Previous && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy {
-                Objects.hash(endingBefore, startingAt, additionalProperties)
-            }
+            private val hashCode: Int by lazy { Objects.hash(endingBefore, startingAt, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "Previous{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            override fun toString() = "Previous{endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is BillingPeriods &&
-                current == other.current &&
-                next == other.next &&
-                previous == other.previous &&
-                additionalProperties == other.additionalProperties
+          return other is BillingPeriods && current == other.current && next == other.next && previous == other.previous && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(current, next, previous, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(current, next, previous, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "BillingPeriods{current=$current, next=$next, previous=$previous, additionalProperties=$additionalProperties}"
+        override fun toString() = "BillingPeriods{current=$current, next=$next, previous=$previous, additionalProperties=$additionalProperties}"
     }
 
-    class CollectionSchedule
-    @JsonCreator
-    private constructor(private val value: JsonField<String>) : Enum {
+    class CollectionSchedule @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't match any known
+         * member, and you want to know that value. For example, if the SDK is on an older version than the
+         * API, then the API may respond with new members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -1681,27 +1585,26 @@ private constructor(
          * An enum containing [CollectionSchedule]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [CollectionSchedule] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+         *   an older version than the API, then the API may respond with new members that the SDK is unaware
+         *   of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
             ADVANCE,
             ARREARS,
-            /**
-             * An enum member indicating that [CollectionSchedule] was instantiated with an unknown
-             * value.
-             */
+            /** An enum member indicating that [CollectionSchedule] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+         * class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want to throw
+         * for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -1713,11 +1616,10 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+         * for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
-         *   member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
          */
         fun known(): Known =
             when (this) {
@@ -1729,36 +1631,33 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging and generally
+         * doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow {
-                MetronomeInvalidDataException("Value is not a String")
-            }
+        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): CollectionSchedule = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): CollectionSchedule =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            known()
-            validated = true
-        }
+                known()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -1769,19 +1668,19 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is CollectionSchedule && value == other.value
+          return other is CollectionSchedule && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1789,51 +1688,39 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    class Proration
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class Proration @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val invoiceBehavior: JsonField<InvoiceBehavior>,
         private val isProrated: JsonField<Boolean>,
         private val rounding: JsonField<Rounding>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("invoice_behavior")
-            @ExcludeMissing
-            invoiceBehavior: JsonField<InvoiceBehavior> = JsonMissing.of(),
-            @JsonProperty("is_prorated")
-            @ExcludeMissing
-            isProrated: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("rounding")
-            @ExcludeMissing
-            rounding: JsonField<Rounding> = JsonMissing.of(),
-        ) : this(invoiceBehavior, isProrated, rounding, mutableMapOf())
+            @JsonProperty("invoice_behavior") @ExcludeMissing invoiceBehavior: JsonField<InvoiceBehavior> = JsonMissing.of(),
+            @JsonProperty("is_prorated") @ExcludeMissing isProrated: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("rounding") @ExcludeMissing rounding: JsonField<Rounding> = JsonMissing.of()
+        ) : this(
+          invoiceBehavior,
+          isProrated,
+          rounding,
+          mutableMapOf(),
+        )
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun invoiceBehavior(): InvoiceBehavior = invoiceBehavior.getRequired("invoice_behavior")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun isProrated(): Boolean = isProrated.getRequired("is_prorated")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
         fun rounding(): Optional<Rounding> = rounding.getOptional("rounding")
 
         /**
          * Returns the raw JSON value of [invoiceBehavior].
          *
-         * Unlike [invoiceBehavior], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [invoiceBehavior], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("invoice_behavior")
         @ExcludeMissing
@@ -1853,17 +1740,18 @@ private constructor(
          *
          * Unlike [rounding], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("rounding") @ExcludeMissing fun _rounding(): JsonField<Rounding> = rounding
+        @JsonProperty("rounding")
+        @ExcludeMissing
+        fun _rounding(): JsonField<Rounding> = rounding
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -1873,12 +1761,14 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [Proration].
              *
              * The following fields are required:
+             *
              * ```java
              * .invoiceBehavior()
              * .isProrated()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [Proration]. */
@@ -1890,67 +1780,78 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(proration: Proration) = apply {
-                invoiceBehavior = proration.invoiceBehavior
-                isProrated = proration.isProrated
-                rounding = proration.rounding
-                additionalProperties = proration.additionalProperties.toMutableMap()
-            }
+            internal fun from(proration: Proration) =
+                apply {
+                    invoiceBehavior = proration.invoiceBehavior
+                    isProrated = proration.isProrated
+                    rounding = proration.rounding
+                    additionalProperties = proration.additionalProperties.toMutableMap()
+                }
 
-            fun invoiceBehavior(invoiceBehavior: InvoiceBehavior) =
-                invoiceBehavior(JsonField.of(invoiceBehavior))
+            fun invoiceBehavior(invoiceBehavior: InvoiceBehavior) = invoiceBehavior(JsonField.of(invoiceBehavior))
 
             /**
              * Sets [Builder.invoiceBehavior] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.invoiceBehavior] with a well-typed [InvoiceBehavior]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.invoiceBehavior] with a well-typed [InvoiceBehavior] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun invoiceBehavior(invoiceBehavior: JsonField<InvoiceBehavior>) = apply {
-                this.invoiceBehavior = invoiceBehavior
-            }
+            fun invoiceBehavior(invoiceBehavior: JsonField<InvoiceBehavior>) =
+                apply {
+                    this.invoiceBehavior = invoiceBehavior
+                }
 
             fun isProrated(isProrated: Boolean) = isProrated(JsonField.of(isProrated))
 
             /**
              * Sets [Builder.isProrated] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.isProrated] with a well-typed [Boolean] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.isProrated] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun isProrated(isProrated: JsonField<Boolean>) = apply { this.isProrated = isProrated }
+            fun isProrated(isProrated: JsonField<Boolean>) =
+                apply {
+                    this.isProrated = isProrated
+                }
 
             fun rounding(rounding: Rounding) = rounding(JsonField.of(rounding))
 
             /**
              * Sets [Builder.rounding] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.rounding] with a well-typed [Rounding] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.rounding] with a well-typed [Rounding] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun rounding(rounding: JsonField<Rounding>) = apply { this.rounding = rounding }
+            fun rounding(rounding: JsonField<Rounding>) =
+                apply {
+                    this.rounding = rounding
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [Proration].
@@ -1958,6 +1859,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .invoiceBehavior()
              * .isProrated()
@@ -1967,34 +1869,38 @@ private constructor(
              */
             fun build(): Proration =
                 Proration(
-                    checkRequired("invoiceBehavior", invoiceBehavior),
-                    checkRequired("isProrated", isProrated),
-                    rounding,
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "invoiceBehavior", invoiceBehavior
+                  ),
+                  checkRequired(
+                    "isProrated", isProrated
+                  ),
+                  rounding,
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Proration = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Proration =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            invoiceBehavior().validate()
-            isProrated()
-            rounding().ifPresent { it.validate() }
-            validated = true
-        }
+                invoiceBehavior().validate()
+                isProrated()
+                rounding().ifPresent { it.validate() }
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -2005,30 +1911,27 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (invoiceBehavior.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (isProrated.asKnown().isPresent) 1 else 0) +
-                (rounding.asKnown().getOrNull()?.validity() ?: 0)
+        internal fun validity(): Int = (invoiceBehavior.asKnown().getOrNull()?.validity() ?: 0) + (if (isProrated.asKnown().isPresent) 1 else 0) + (rounding.asKnown().getOrNull()?.validity() ?: 0)
 
-        class InvoiceBehavior
-        @JsonCreator
-        private constructor(private val value: JsonField<String>) : Enum {
+        class InvoiceBehavior @JsonCreator private constructor(
+            private val value: JsonField<String>,
+
+        ) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't match any known
+             * member, and you want to know that value. For example, if the SDK is on an older version than the
+             * API, then the API may respond with new members that the SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -2049,27 +1952,26 @@ private constructor(
              * An enum containing [InvoiceBehavior]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [InvoiceBehavior] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
+             *
+             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+             *   an older version than the API, then the API may respond with new members that the SDK is unaware
+             *   of.
+             *
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
                 BILL_IMMEDIATELY,
                 BILL_ON_NEXT_COLLECTION_DATE,
-                /**
-                 * An enum member indicating that [InvoiceBehavior] was instantiated with an unknown
-                 * value.
-                 */
+                /** An enum member indicating that [InvoiceBehavior] was instantiated with an unknown value. */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+             * class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you want to throw
+             * for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -2081,11 +1983,10 @@ private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+             * for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
-             *   member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
              */
             fun known(): Known =
                 when (this) {
@@ -2097,37 +1998,33 @@ private constructor(
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
+             * This differs from the [toString] method because that method is primarily for debugging and generally
+             * doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have
-             *   the expected primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+             *   primitive type.
              */
-            fun asString(): String =
-                _value().asString().orElseThrow {
-                    MetronomeInvalidDataException("Value is not a String")
-                }
+            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): InvoiceBehavior = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): InvoiceBehavior =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                known()
-                validated = true
-            }
+                    known()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -2138,19 +2035,19 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is InvoiceBehavior && value == other.value
+              return other is InvoiceBehavior && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -2158,47 +2055,37 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        class Rounding
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
+        class Rounding @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
             private val decimalPlaces: JsonField<Double>,
             private val roundingMethod: JsonField<RoundingMethod>,
             private val additionalProperties: MutableMap<String, JsonValue>,
+
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("decimal_places")
-                @ExcludeMissing
-                decimalPlaces: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("rounding_method")
-                @ExcludeMissing
-                roundingMethod: JsonField<RoundingMethod> = JsonMissing.of(),
-            ) : this(decimalPlaces, roundingMethod, mutableMapOf())
+                @JsonProperty("decimal_places") @ExcludeMissing decimalPlaces: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("rounding_method") @ExcludeMissing roundingMethod: JsonField<RoundingMethod> = JsonMissing.of()
+            ) : this(
+              decimalPlaces,
+              roundingMethod,
+              mutableMapOf(),
+            )
 
             /**
-             * Number of decimal places to round to. Applied directly to the stored monetary
-             * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest 100
-             * in the stored unit. For USD, this means rounding to the nearest dollar).
+             * Number of decimal places to round to. Applied directly to the stored monetary representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest 100 in the stored unit. For USD, this means rounding to the nearest dollar).
              *
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
              */
             fun decimalPlaces(): Double = decimalPlaces.getRequired("decimal_places")
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun roundingMethod(): RoundingMethod = roundingMethod.getRequired("rounding_method")
 
             /**
              * Returns the raw JSON value of [decimalPlaces].
              *
-             * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an unexpected
-             * type.
+             * Unlike [decimalPlaces], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("decimal_places")
             @ExcludeMissing
@@ -2207,8 +2094,7 @@ private constructor(
             /**
              * Returns the raw JSON value of [roundingMethod].
              *
-             * Unlike [roundingMethod], this method doesn't throw if the JSON field has an
-             * unexpected type.
+             * Unlike [roundingMethod], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("rounding_method")
             @ExcludeMissing
@@ -2216,13 +2102,12 @@ private constructor(
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
+              additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -2232,12 +2117,14 @@ private constructor(
                  * Returns a mutable builder for constructing an instance of [Rounding].
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .decimalPlaces()
                  * .roundingMethod()
                  * ```
                  */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [Rounding]. */
@@ -2248,66 +2135,65 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(rounding: Rounding) = apply {
-                    decimalPlaces = rounding.decimalPlaces
-                    roundingMethod = rounding.roundingMethod
-                    additionalProperties = rounding.additionalProperties.toMutableMap()
-                }
+                internal fun from(rounding: Rounding) =
+                    apply {
+                        decimalPlaces = rounding.decimalPlaces
+                        roundingMethod = rounding.roundingMethod
+                        additionalProperties = rounding.additionalProperties.toMutableMap()
+                    }
 
-                /**
-                 * Number of decimal places to round to. Applied directly to the stored monetary
-                 * representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest
-                 * 100 in the stored unit. For USD, this means rounding to the nearest dollar).
-                 */
-                fun decimalPlaces(decimalPlaces: Double) =
-                    decimalPlaces(JsonField.of(decimalPlaces))
+                /** Number of decimal places to round to. Applied directly to the stored monetary representation. Negative values round to powers of 10 (e.g., -2 rounds to nearest 100 in the stored unit. For USD, this means rounding to the nearest dollar). */
+                fun decimalPlaces(decimalPlaces: Double) = decimalPlaces(JsonField.of(decimalPlaces))
 
                 /**
                  * Sets [Builder.decimalPlaces] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.decimalPlaces] with a well-typed [Double] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * You should usually call [Builder.decimalPlaces] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun decimalPlaces(decimalPlaces: JsonField<Double>) = apply {
-                    this.decimalPlaces = decimalPlaces
-                }
+                fun decimalPlaces(decimalPlaces: JsonField<Double>) =
+                    apply {
+                        this.decimalPlaces = decimalPlaces
+                    }
 
-                fun roundingMethod(roundingMethod: RoundingMethod) =
-                    roundingMethod(JsonField.of(roundingMethod))
+                fun roundingMethod(roundingMethod: RoundingMethod) = roundingMethod(JsonField.of(roundingMethod))
 
                 /**
                  * Sets [Builder.roundingMethod] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.roundingMethod] with a well-typed
-                 * [RoundingMethod] value instead. This method is primarily for setting the field to
-                 * an undocumented or not yet supported value.
+                 * You should usually call [Builder.roundingMethod] with a well-typed [RoundingMethod] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) = apply {
-                    this.roundingMethod = roundingMethod
-                }
+                fun roundingMethod(roundingMethod: JsonField<RoundingMethod>) =
+                    apply {
+                        this.roundingMethod = roundingMethod
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 /**
                  * Returns an immutable instance of [Rounding].
@@ -2315,6 +2201,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .decimalPlaces()
                  * .roundingMethod()
@@ -2324,33 +2211,36 @@ private constructor(
                  */
                 fun build(): Rounding =
                     Rounding(
-                        checkRequired("decimalPlaces", decimalPlaces),
-                        checkRequired("roundingMethod", roundingMethod),
-                        additionalProperties.toMutableMap(),
+                      checkRequired(
+                        "decimalPlaces", decimalPlaces
+                      ),
+                      checkRequired(
+                        "roundingMethod", roundingMethod
+                      ),
+                      additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): Rounding = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Rounding =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                decimalPlaces()
-                roundingMethod().validate()
-                validated = true
-            }
+                    decimalPlaces()
+                    roundingMethod().validate()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -2361,29 +2251,27 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int =
-                (if (decimalPlaces.asKnown().isPresent) 1 else 0) +
-                    (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
+            internal fun validity(): Int = (if (decimalPlaces.asKnown().isPresent) 1 else 0) + (roundingMethod.asKnown().getOrNull()?.validity() ?: 0)
 
-            class RoundingMethod
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
+            class RoundingMethod @JsonCreator private constructor(
+                private val value: JsonField<String>,
+
+            ) : Enum {
 
                 /**
                  * Returns this class instance's raw value.
                  *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
+                 * This is usually only useful if this instance was deserialized from data that doesn't match any known
+                 * member, and you want to know that value. For example, if the SDK is on an older version than the
+                 * API, then the API may respond with new members that the SDK is unaware of.
                  */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+                @com.fasterxml.jackson.annotation.JsonValue
+                fun _value(): JsonField<String> = value
 
                 companion object {
 
@@ -2404,33 +2292,30 @@ private constructor(
                 }
 
                 /**
-                 * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN]
-                 * member.
+                 * An enum containing [RoundingMethod]'s known values, as well as an [_UNKNOWN] member.
                  *
-                 * An instance of [RoundingMethod] can contain an unknown value in a couple of
-                 * cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
+                 * An instance of [RoundingMethod] can contain an unknown value in a couple of cases:
+                 *
+                 * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+                 *   an older version than the API, then the API may respond with new members that the SDK is unaware
+                 *   of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
                     HALF_UP,
                     FLOOR,
                     CEILING,
-                    /**
-                     * An enum member indicating that [RoundingMethod] was instantiated with an
-                     * unknown value.
-                     */
+                    /** An enum member indicating that [RoundingMethod] was instantiated with an unknown value. */
                     _UNKNOWN,
                 }
 
                 /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+                 * class was instantiated with an unknown value.
                  *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
+                 * Use the [known] method instead if you're certain the value is always known or if you want to throw
+                 * for the unknown case.
                  */
                 fun value(): Value =
                     when (this) {
@@ -2443,55 +2328,49 @@ private constructor(
                 /**
                  * Returns an enum member corresponding to this class instance's value.
                  *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
+                 * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+                 * for the unknown case.
                  *
-                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
-                 *   known member.
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
                  */
                 fun known(): Known =
                     when (this) {
                         HALF_UP -> Known.HALF_UP
                         FLOOR -> Known.FLOOR
                         CEILING -> Known.CEILING
-                        else ->
-                            throw MetronomeInvalidDataException("Unknown RoundingMethod: $value")
+                        else -> throw MetronomeInvalidDataException("Unknown RoundingMethod: $value")
                     }
 
                 /**
                  * Returns this class instance's primitive wire representation.
                  *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
+                 * This differs from the [toString] method because that method is primarily for debugging and generally
+                 * doesn't throw.
                  *
-                 * @throws MetronomeInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
+                 * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+                 *   primitive type.
                  */
-                fun asString(): String =
-                    _value().asString().orElseThrow {
-                        MetronomeInvalidDataException("Value is not a String")
-                    }
+                fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
                 private var validated: Boolean = false
 
                 /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
+                 * Validates that the types of all values in this object match their expected types recursively.
                  *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
+                 * This method is _not_ forwards compatible with new types from the API for existing fields.
                  *
-                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+                 *   expected type.
                  */
-                fun validate(): RoundingMethod = apply {
-                    if (validated) {
-                        return@apply
-                    }
+                fun validate(): RoundingMethod =
+                    apply {
+                        if (validated) {
+                          return@apply
+                        }
 
-                    known()
-                    validated = true
-                }
+                        known()
+                        validated = true
+                    }
 
                 fun isValid(): Boolean =
                     try {
@@ -2502,19 +2381,19 @@ private constructor(
                     }
 
                 /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
+                 * Returns a score indicating how many valid values are contained in this object recursively.
                  *
                  * Used for best match union deserialization.
                  */
-                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+                @JvmSynthetic
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return other is RoundingMethod && value == other.value
+                  return other is RoundingMethod && value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -2523,71 +2402,50 @@ private constructor(
             }
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is Rounding &&
-                    decimalPlaces == other.decimalPlaces &&
-                    roundingMethod == other.roundingMethod &&
-                    additionalProperties == other.additionalProperties
+              return other is Rounding && decimalPlaces == other.decimalPlaces && roundingMethod == other.roundingMethod && additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy {
-                Objects.hash(decimalPlaces, roundingMethod, additionalProperties)
-            }
+            private val hashCode: Int by lazy { Objects.hash(decimalPlaces, roundingMethod, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "Rounding{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
+            override fun toString() = "Rounding{decimalPlaces=$decimalPlaces, roundingMethod=$roundingMethod, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Proration &&
-                invoiceBehavior == other.invoiceBehavior &&
-                isProrated == other.isProrated &&
-                rounding == other.rounding &&
-                additionalProperties == other.additionalProperties
+          return other is Proration && invoiceBehavior == other.invoiceBehavior && isProrated == other.isProrated && rounding == other.rounding && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(invoiceBehavior, isProrated, rounding, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(invoiceBehavior, isProrated, rounding, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Proration{invoiceBehavior=$invoiceBehavior, isProrated=$isProrated, rounding=$rounding, additionalProperties=$additionalProperties}"
+        override fun toString() = "Proration{invoiceBehavior=$invoiceBehavior, isProrated=$isProrated, rounding=$rounding, additionalProperties=$additionalProperties}"
     }
 
-    /**
-     * Determines how the subscription's quantity is controlled. Defaults to QUANTITY_ONLY.
-     * **QUANTITY_ONLY**: The subscription quantity is specified directly on the subscription.
-     * `initial_quantity` must be provided with this option. Compatible with recurring
-     * commits/credits that use POOLED allocation. **SEAT_BASED**: Use when you want to pass
-     * specific seat identifiers (e.g. add user_123) to increment and decrement a subscription
-     * quantity, rather than directly providing the quantity. You must use a **SEAT_BASED**
-     * subscription to use a linked recurring credit with an allocation per seat. `seat_config` must
-     * be provided with this option.
-     */
-    class QuantityManagementMode
-    @JsonCreator
-    private constructor(private val value: JsonField<String>) : Enum {
+    /** Determines how the subscription's quantity is controlled. Defaults to QUANTITY_ONLY. **QUANTITY_ONLY**: The subscription quantity is specified directly on the subscription. `initial_quantity` must be provided with this option. Compatible with recurring commits/credits that use POOLED allocation. **SEAT_BASED**: Use when you want to pass specific seat identifiers (e.g. add user_123) to increment and decrement a subscription quantity, rather than directly providing the quantity. You must use a **SEAT_BASED** subscription to use a linked recurring credit with an allocation per seat. `seat_config` must be provided with this option. */
+    class QuantityManagementMode @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't match any known
+         * member, and you want to know that value. For example, if the SDK is on an older version than the
+         * API, then the API may respond with new members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -2605,32 +2463,29 @@ private constructor(
         }
 
         /**
-         * An enum containing [QuantityManagementMode]'s known values, as well as an [_UNKNOWN]
-         * member.
+         * An enum containing [QuantityManagementMode]'s known values, as well as an [_UNKNOWN] member.
          *
-         * An instance of [QuantityManagementMode] can contain an unknown value in a couple of
-         * cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         * An instance of [QuantityManagementMode] can contain an unknown value in a couple of cases:
+         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+         *   an older version than the API, then the API may respond with new members that the SDK is unaware
+         *   of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
             SEAT_BASED,
             QUANTITY_ONLY,
-            /**
-             * An enum member indicating that [QuantityManagementMode] was instantiated with an
-             * unknown value.
-             */
+            /** An enum member indicating that [QuantityManagementMode] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+         * class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want to throw
+         * for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -2642,53 +2497,48 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+         * for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
-         *   member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
          */
         fun known(): Known =
             when (this) {
                 SEAT_BASED -> Known.SEAT_BASED
                 QUANTITY_ONLY -> Known.QUANTITY_ONLY
-                else ->
-                    throw MetronomeInvalidDataException("Unknown QuantityManagementMode: $value")
+                else -> throw MetronomeInvalidDataException("Unknown QuantityManagementMode: $value")
             }
 
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging and generally
+         * doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+         *   primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow {
-                MetronomeInvalidDataException("Value is not a String")
-            }
+        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): QuantityManagementMode = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): QuantityManagementMode =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            known()
-            validated = true
-        }
+                known()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -2699,19 +2549,19 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is QuantityManagementMode && value == other.value
+          return other is QuantityManagementMode && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -2719,44 +2569,33 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    class QuantitySchedule
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class QuantitySchedule @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val quantity: JsonField<Double>,
         private val startingAt: JsonField<OffsetDateTime>,
         private val endingBefore: JsonField<OffsetDateTime>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("quantity")
-            @ExcludeMissing
-            quantity: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("starting_at")
-            @ExcludeMissing
-            startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("ending_before")
-            @ExcludeMissing
-            endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-        ) : this(quantity, startingAt, endingBefore, mutableMapOf())
+            @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("ending_before") @ExcludeMissing endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+        ) : this(
+          quantity,
+          startingAt,
+          endingBefore,
+          mutableMapOf(),
+        )
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun quantity(): Double = quantity.getRequired("quantity")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
-         *   the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
         fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
 
         /**
@@ -2764,7 +2603,9 @@ private constructor(
          *
          * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
+        @JsonProperty("quantity")
+        @ExcludeMissing
+        fun _quantity(): JsonField<Double> = quantity
 
         /**
          * Returns the raw JSON value of [startingAt].
@@ -2778,8 +2619,7 @@ private constructor(
         /**
          * Returns the raw JSON value of [endingBefore].
          *
-         * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("ending_before")
         @ExcludeMissing
@@ -2787,13 +2627,12 @@ private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -2803,12 +2642,14 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [QuantitySchedule].
              *
              * The following fields are required:
+             *
              * ```java
              * .quantity()
              * .startingAt()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [QuantitySchedule]. */
@@ -2820,69 +2661,78 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(quantitySchedule: QuantitySchedule) = apply {
-                quantity = quantitySchedule.quantity
-                startingAt = quantitySchedule.startingAt
-                endingBefore = quantitySchedule.endingBefore
-                additionalProperties = quantitySchedule.additionalProperties.toMutableMap()
-            }
+            internal fun from(quantitySchedule: QuantitySchedule) =
+                apply {
+                    quantity = quantitySchedule.quantity
+                    startingAt = quantitySchedule.startingAt
+                    endingBefore = quantitySchedule.endingBefore
+                    additionalProperties = quantitySchedule.additionalProperties.toMutableMap()
+                }
 
             fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
             /**
              * Sets [Builder.quantity] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.quantity] with a well-typed [Double] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.quantity] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
+            fun quantity(quantity: JsonField<Double>) =
+                apply {
+                    this.quantity = quantity
+                }
 
             fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
             /**
              * Sets [Builder.startingAt] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
-                this.startingAt = startingAt
-            }
+            fun startingAt(startingAt: JsonField<OffsetDateTime>) =
+                apply {
+                    this.startingAt = startingAt
+                }
 
-            fun endingBefore(endingBefore: OffsetDateTime) =
-                endingBefore(JsonField.of(endingBefore))
+            fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
             /**
              * Sets [Builder.endingBefore] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
-                this.endingBefore = endingBefore
-            }
+            fun endingBefore(endingBefore: JsonField<OffsetDateTime>) =
+                apply {
+                    this.endingBefore = endingBefore
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [QuantitySchedule].
@@ -2890,6 +2740,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .quantity()
              * .startingAt()
@@ -2899,34 +2750,38 @@ private constructor(
              */
             fun build(): QuantitySchedule =
                 QuantitySchedule(
-                    checkRequired("quantity", quantity),
-                    checkRequired("startingAt", startingAt),
-                    endingBefore,
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "quantity", quantity
+                  ),
+                  checkRequired(
+                    "startingAt", startingAt
+                  ),
+                  endingBefore,
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): QuantitySchedule = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): QuantitySchedule =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            quantity()
-            startingAt()
-            endingBefore()
-            validated = true
-        }
+                quantity()
+                startingAt()
+                endingBefore()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -2937,72 +2792,55 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (if (quantity.asKnown().isPresent) 1 else 0) +
-                (if (startingAt.asKnown().isPresent) 1 else 0) +
-                (if (endingBefore.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int = (if (quantity.asKnown().isPresent) 1 else 0) + (if (startingAt.asKnown().isPresent) 1 else 0) + (if (endingBefore.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is QuantitySchedule &&
-                quantity == other.quantity &&
-                startingAt == other.startingAt &&
-                endingBefore == other.endingBefore &&
-                additionalProperties == other.additionalProperties
+          return other is QuantitySchedule && quantity == other.quantity && startingAt == other.startingAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(quantity, startingAt, endingBefore, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(quantity, startingAt, endingBefore, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "QuantitySchedule{quantity=$quantity, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+        override fun toString() = "QuantitySchedule{quantity=$quantity, startingAt=$startingAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
     }
 
-    class SubscriptionRate
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class SubscriptionRate @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val billingFrequency: JsonField<BillingFrequency>,
         private val product: JsonField<Product>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("billing_frequency")
-            @ExcludeMissing
-            billingFrequency: JsonField<BillingFrequency> = JsonMissing.of(),
-            @JsonProperty("product") @ExcludeMissing product: JsonField<Product> = JsonMissing.of(),
-        ) : this(billingFrequency, product, mutableMapOf())
+            @JsonProperty("billing_frequency") @ExcludeMissing billingFrequency: JsonField<BillingFrequency> = JsonMissing.of(),
+            @JsonProperty("product") @ExcludeMissing product: JsonField<Product> = JsonMissing.of()
+        ) : this(
+          billingFrequency,
+          product,
+          mutableMapOf(),
+        )
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun billingFrequency(): BillingFrequency = billingFrequency.getRequired("billing_frequency")
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun product(): Product = product.getRequired("product")
 
         /**
          * Returns the raw JSON value of [billingFrequency].
          *
-         * Unlike [billingFrequency], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [billingFrequency], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("billing_frequency")
         @ExcludeMissing
@@ -3013,17 +2851,18 @@ private constructor(
          *
          * Unlike [product], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("product") @ExcludeMissing fun _product(): JsonField<Product> = product
+        @JsonProperty("product")
+        @ExcludeMissing
+        fun _product(): JsonField<Product> = product
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -3033,12 +2872,14 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [SubscriptionRate].
              *
              * The following fields are required:
+             *
              * ```java
              * .billingFrequency()
              * .product()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [SubscriptionRate]. */
@@ -3049,55 +2890,64 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(subscriptionRate: SubscriptionRate) = apply {
-                billingFrequency = subscriptionRate.billingFrequency
-                product = subscriptionRate.product
-                additionalProperties = subscriptionRate.additionalProperties.toMutableMap()
-            }
+            internal fun from(subscriptionRate: SubscriptionRate) =
+                apply {
+                    billingFrequency = subscriptionRate.billingFrequency
+                    product = subscriptionRate.product
+                    additionalProperties = subscriptionRate.additionalProperties.toMutableMap()
+                }
 
-            fun billingFrequency(billingFrequency: BillingFrequency) =
-                billingFrequency(JsonField.of(billingFrequency))
+            fun billingFrequency(billingFrequency: BillingFrequency) = billingFrequency(JsonField.of(billingFrequency))
 
             /**
              * Sets [Builder.billingFrequency] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.billingFrequency] with a well-typed
-             * [BillingFrequency] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
+             * You should usually call [Builder.billingFrequency] with a well-typed [BillingFrequency] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun billingFrequency(billingFrequency: JsonField<BillingFrequency>) = apply {
-                this.billingFrequency = billingFrequency
-            }
+            fun billingFrequency(billingFrequency: JsonField<BillingFrequency>) =
+                apply {
+                    this.billingFrequency = billingFrequency
+                }
 
             fun product(product: Product) = product(JsonField.of(product))
 
             /**
              * Sets [Builder.product] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.product] with a well-typed [Product] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.product] with a well-typed [Product] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun product(product: JsonField<Product>) = apply { this.product = product }
+            fun product(product: JsonField<Product>) =
+                apply {
+                    this.product = product
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [SubscriptionRate].
@@ -3105,6 +2955,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .billingFrequency()
              * .product()
@@ -3114,32 +2965,36 @@ private constructor(
              */
             fun build(): SubscriptionRate =
                 SubscriptionRate(
-                    checkRequired("billingFrequency", billingFrequency),
-                    checkRequired("product", product),
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "billingFrequency", billingFrequency
+                  ),
+                  checkRequired(
+                    "product", product
+                  ),
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): SubscriptionRate = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): SubscriptionRate =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            billingFrequency().validate()
-            product().validate()
-            validated = true
-        }
+                billingFrequency().validate()
+                product().validate()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -3150,29 +3005,27 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (billingFrequency.asKnown().getOrNull()?.validity() ?: 0) +
-                (product.asKnown().getOrNull()?.validity() ?: 0)
+        internal fun validity(): Int = (billingFrequency.asKnown().getOrNull()?.validity() ?: 0) + (product.asKnown().getOrNull()?.validity() ?: 0)
 
-        class BillingFrequency
-        @JsonCreator
-        private constructor(private val value: JsonField<String>) : Enum {
+        class BillingFrequency @JsonCreator private constructor(
+            private val value: JsonField<String>,
+
+        ) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't match any known
+             * member, and you want to know that value. For example, if the SDK is on an older version than the
+             * API, then the API may respond with new members that the SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -3196,13 +3049,14 @@ private constructor(
             }
 
             /**
-             * An enum containing [BillingFrequency]'s known values, as well as an [_UNKNOWN]
-             * member.
+             * An enum containing [BillingFrequency]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [BillingFrequency] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
+             *
+             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+             *   an older version than the API, then the API may respond with new members that the SDK is unaware
+             *   of.
+             *
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
@@ -3210,19 +3064,16 @@ private constructor(
                 QUARTERLY,
                 ANNUAL,
                 WEEKLY,
-                /**
-                 * An enum member indicating that [BillingFrequency] was instantiated with an
-                 * unknown value.
-                 */
+                /** An enum member indicating that [BillingFrequency] was instantiated with an unknown value. */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+             * class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you want to throw
+             * for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -3236,11 +3087,10 @@ private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+             * for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
-             *   member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
              */
             fun known(): Known =
                 when (this) {
@@ -3254,37 +3104,33 @@ private constructor(
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
+             * This differs from the [toString] method because that method is primarily for debugging and generally
+             * doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have
-             *   the expected primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+             *   primitive type.
              */
-            fun asString(): String =
-                _value().asString().orElseThrow {
-                    MetronomeInvalidDataException("Value is not a String")
-                }
+            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): BillingFrequency = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): BillingFrequency =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                known()
-                validated = true
-            }
+                    known()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -3295,19 +3141,19 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is BillingFrequency && value == other.value
+              return other is BillingFrequency && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3315,32 +3161,27 @@ private constructor(
             override fun toString() = value.toString()
         }
 
-        class Product
-        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-        private constructor(
+        class Product @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
             private val id: JsonField<String>,
             private val name: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
+
         ) {
 
             @JsonCreator
             private constructor(
                 @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            ) : this(id, name, mutableMapOf())
+                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of()
+            ) : this(
+              id,
+              name,
+              mutableMapOf(),
+            )
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun id(): String = id.getRequired("id")
 
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
+            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
             fun name(): String = name.getRequired("name")
 
             /**
@@ -3348,24 +3189,27 @@ private constructor(
              *
              * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+            @JsonProperty("id")
+            @ExcludeMissing
+            fun _id(): JsonField<String> = id
 
             /**
              * Returns the raw JSON value of [name].
              *
              * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+            @JsonProperty("name")
+            @ExcludeMissing
+            fun _name(): JsonField<String> = name
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
+              additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -3375,12 +3219,14 @@ private constructor(
                  * Returns a mutable builder for constructing an instance of [Product].
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .id()
                  * .name()
                  * ```
                  */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [Product]. */
@@ -3391,55 +3237,64 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(product: Product) = apply {
-                    id = product.id
-                    name = product.name
-                    additionalProperties = product.additionalProperties.toMutableMap()
-                }
+                internal fun from(product: Product) =
+                    apply {
+                        id = product.id
+                        name = product.name
+                        additionalProperties = product.additionalProperties.toMutableMap()
+                    }
 
                 fun id(id: String) = id(JsonField.of(id))
 
                 /**
                  * Sets [Builder.id] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.id] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
+                 * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun id(id: JsonField<String>) = apply { this.id = id }
+                fun id(id: JsonField<String>) =
+                    apply {
+                        this.id = id
+                    }
 
                 fun name(name: String) = name(JsonField.of(name))
 
                 /**
                  * Sets [Builder.name] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.name] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
+                 * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun name(name: JsonField<String>) = apply { this.name = name }
+                fun name(name: JsonField<String>) =
+                    apply {
+                        this.name = name
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 /**
                  * Returns an immutable instance of [Product].
@@ -3447,6 +3302,7 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
+                 *
                  * ```java
                  * .id()
                  * .name()
@@ -3456,33 +3312,36 @@ private constructor(
                  */
                 fun build(): Product =
                     Product(
-                        checkRequired("id", id),
-                        checkRequired("name", name),
-                        additionalProperties.toMutableMap(),
+                      checkRequired(
+                        "id", id
+                      ),
+                      checkRequired(
+                        "name", name
+                      ),
+                      additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): Product = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Product =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                id()
-                name()
-                validated = true
-            }
+                    id()
+                    name()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -3493,87 +3352,71 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int =
-                (if (id.asKnown().isPresent) 1 else 0) + (if (name.asKnown().isPresent) 1 else 0)
+            internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0) + (if (name.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is Product &&
-                    id == other.id &&
-                    name == other.name &&
-                    additionalProperties == other.additionalProperties
+              return other is Product && id == other.id && name == other.name && additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(id, name, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() =
-                "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
+            override fun toString() = "Product{id=$id, name=$name, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is SubscriptionRate &&
-                billingFrequency == other.billingFrequency &&
-                product == other.product &&
-                additionalProperties == other.additionalProperties
+          return other is SubscriptionRate && billingFrequency == other.billingFrequency && product == other.product && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(billingFrequency, product, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(billingFrequency, product, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "SubscriptionRate{billingFrequency=$billingFrequency, product=$product, additionalProperties=$additionalProperties}"
+        override fun toString() = "SubscriptionRate{billingFrequency=$billingFrequency, product=$product, additionalProperties=$additionalProperties}"
     }
 
-    class BillingCycleConfig
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class BillingCycleConfig @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val anchorDate: JsonField<OffsetDateTime>,
         private val invoicePlacement: JsonField<InvoicePlacement>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("anchor_date")
-            @ExcludeMissing
-            anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("invoice_placement")
-            @ExcludeMissing
-            invoicePlacement: JsonField<InvoicePlacement> = JsonMissing.of(),
-        ) : this(anchorDate, invoicePlacement, mutableMapOf())
+            @JsonProperty("anchor_date") @ExcludeMissing anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("invoice_placement") @ExcludeMissing invoicePlacement: JsonField<InvoicePlacement> = JsonMissing.of()
+        ) : this(
+          anchorDate,
+          invoicePlacement,
+          mutableMapOf(),
+        )
 
         /**
          * The date this subscription's billing cycle is anchored to.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun anchorDate(): OffsetDateTime = anchorDate.getRequired("anchor_date")
 
         /**
-         * Controls whether this subscription consolidates onto usage invoices or gets its own
-         * scheduled invoice.
+         * Controls whether this subscription consolidates onto usage invoices or gets its own scheduled invoice.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun invoicePlacement(): InvoicePlacement = invoicePlacement.getRequired("invoice_placement")
 
@@ -3589,8 +3432,7 @@ private constructor(
         /**
          * Returns the raw JSON value of [invoicePlacement].
          *
-         * Unlike [invoicePlacement], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [invoicePlacement], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("invoice_placement")
         @ExcludeMissing
@@ -3598,13 +3440,12 @@ private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -3614,12 +3455,14 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [BillingCycleConfig].
              *
              * The following fields are required:
+             *
              * ```java
              * .anchorDate()
              * .invoicePlacement()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [BillingCycleConfig]. */
@@ -3630,11 +3473,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(billingCycleConfig: BillingCycleConfig) = apply {
-                anchorDate = billingCycleConfig.anchorDate
-                invoicePlacement = billingCycleConfig.invoicePlacement
-                additionalProperties = billingCycleConfig.additionalProperties.toMutableMap()
-            }
+            internal fun from(billingCycleConfig: BillingCycleConfig) =
+                apply {
+                    anchorDate = billingCycleConfig.anchorDate
+                    invoicePlacement = billingCycleConfig.invoicePlacement
+                    additionalProperties = billingCycleConfig.additionalProperties.toMutableMap()
+                }
 
             /** The date this subscription's billing cycle is anchored to. */
             fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
@@ -3642,50 +3486,53 @@ private constructor(
             /**
              * Sets [Builder.anchorDate] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
-                this.anchorDate = anchorDate
-            }
+            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) =
+                apply {
+                    this.anchorDate = anchorDate
+                }
 
-            /**
-             * Controls whether this subscription consolidates onto usage invoices or gets its own
-             * scheduled invoice.
-             */
-            fun invoicePlacement(invoicePlacement: InvoicePlacement) =
-                invoicePlacement(JsonField.of(invoicePlacement))
+            /** Controls whether this subscription consolidates onto usage invoices or gets its own scheduled invoice. */
+            fun invoicePlacement(invoicePlacement: InvoicePlacement) = invoicePlacement(JsonField.of(invoicePlacement))
 
             /**
              * Sets [Builder.invoicePlacement] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.invoicePlacement] with a well-typed
-             * [InvoicePlacement] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
+             * You should usually call [Builder.invoicePlacement] with a well-typed [InvoicePlacement] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun invoicePlacement(invoicePlacement: JsonField<InvoicePlacement>) = apply {
-                this.invoicePlacement = invoicePlacement
-            }
+            fun invoicePlacement(invoicePlacement: JsonField<InvoicePlacement>) =
+                apply {
+                    this.invoicePlacement = invoicePlacement
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [BillingCycleConfig].
@@ -3693,6 +3540,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .anchorDate()
              * .invoicePlacement()
@@ -3702,32 +3550,36 @@ private constructor(
              */
             fun build(): BillingCycleConfig =
                 BillingCycleConfig(
-                    checkRequired("anchorDate", anchorDate),
-                    checkRequired("invoicePlacement", invoicePlacement),
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "anchorDate", anchorDate
+                  ),
+                  checkRequired(
+                    "invoicePlacement", invoicePlacement
+                  ),
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): BillingCycleConfig = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): BillingCycleConfig =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            anchorDate()
-            invoicePlacement().validate()
-            validated = true
-        }
+                anchorDate()
+                invoicePlacement().validate()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -3738,33 +3590,28 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (if (anchorDate.asKnown().isPresent) 1 else 0) +
-                (invoicePlacement.asKnown().getOrNull()?.validity() ?: 0)
+        internal fun validity(): Int = (if (anchorDate.asKnown().isPresent) 1 else 0) + (invoicePlacement.asKnown().getOrNull()?.validity() ?: 0)
 
-        /**
-         * Controls whether this subscription consolidates onto usage invoices or gets its own
-         * scheduled invoice.
-         */
-        class InvoicePlacement
-        @JsonCreator
-        private constructor(private val value: JsonField<String>) : Enum {
+        /** Controls whether this subscription consolidates onto usage invoices or gets its own scheduled invoice. */
+        class InvoicePlacement @JsonCreator private constructor(
+            private val value: JsonField<String>,
+
+        ) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't match any known
+             * member, and you want to know that value. For example, if the SDK is on an older version than the
+             * API, then the API may respond with new members that the SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -3782,31 +3629,29 @@ private constructor(
             }
 
             /**
-             * An enum containing [InvoicePlacement]'s known values, as well as an [_UNKNOWN]
-             * member.
+             * An enum containing [InvoicePlacement]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [InvoicePlacement] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
+             *
+             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
+             *   an older version than the API, then the API may respond with new members that the SDK is unaware
+             *   of.
+             *
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
                 ON_SCHEDULED_INVOICE,
                 ON_USAGE_INVOICE,
-                /**
-                 * An enum member indicating that [InvoicePlacement] was instantiated with an
-                 * unknown value.
-                 */
+                /** An enum member indicating that [InvoicePlacement] was instantiated with an unknown value. */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
+             * class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you want to throw
+             * for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -3818,11 +3663,10 @@ private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
+             * for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
-             *   member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
              */
             fun known(): Known =
                 when (this) {
@@ -3834,37 +3678,33 @@ private constructor(
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
+             * This differs from the [toString] method because that method is primarily for debugging and generally
+             * doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have
-             *   the expected primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
+             *   primitive type.
              */
-            fun asString(): String =
-                _value().asString().orElseThrow {
-                    MetronomeInvalidDataException("Value is not a String")
-                }
+            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types
-             * recursively.
+             * Validates that the types of all values in this object match their expected types recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing
-             * fields.
+             * This method is _not_ forwards compatible with new types from the API for existing fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
-             *   its expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+             *   expected type.
              */
-            fun validate(): InvoicePlacement = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): InvoicePlacement =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                known()
-                validated = true
-            }
+                    known()
+                    validated = true
+                }
 
             fun isValid(): Boolean =
                 try {
@@ -3875,19 +3715,19 @@ private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
+             * Returns a score indicating how many valid values are contained in this object recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return other is InvoicePlacement && value == other.value
+              return other is InvoicePlacement && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3896,32 +3736,24 @@ private constructor(
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is BillingCycleConfig &&
-                anchorDate == other.anchorDate &&
-                invoicePlacement == other.invoicePlacement &&
-                additionalProperties == other.additionalProperties
+          return other is BillingCycleConfig && anchorDate == other.anchorDate && invoicePlacement == other.invoicePlacement && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(anchorDate, invoicePlacement, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(anchorDate, invoicePlacement, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "BillingCycleConfig{anchorDate=$anchorDate, invoicePlacement=$invoicePlacement, additionalProperties=$additionalProperties}"
+        override fun toString() = "BillingCycleConfig{anchorDate=$anchorDate, invoicePlacement=$invoicePlacement, additionalProperties=$additionalProperties}"
     }
 
     /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
-    class CustomFields
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
+    class CustomFields @JsonCreator private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
+
     ) {
 
         @JsonAnyGetter
@@ -3933,7 +3765,8 @@ private constructor(
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [CustomFields]. */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [CustomFields]. */
@@ -3942,28 +3775,36 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customFields: CustomFields) = apply {
-                additionalProperties = customFields.additionalProperties.toMutableMap()
-            }
+            internal fun from(customFields: CustomFields) =
+                apply {
+                    additionalProperties = customFields.additionalProperties.toMutableMap()
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [CustomFields].
@@ -3976,21 +3817,21 @@ private constructor(
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): CustomFields = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): CustomFields =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            validated = true
-        }
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -4001,21 +3842,19 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is CustomFields && additionalProperties == other.additionalProperties
+          return other is CustomFields && additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -4025,37 +3864,30 @@ private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    class SeatConfig
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class SeatConfig @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val seatGroupKey: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("seat_group_key")
-            @ExcludeMissing
-            seatGroupKey: JsonField<String> = JsonMissing.of()
-        ) : this(seatGroupKey, mutableMapOf())
+            @JsonProperty("seat_group_key") @ExcludeMissing seatGroupKey: JsonField<String> = JsonMissing.of()
+        ) : this(
+          seatGroupKey, mutableMapOf()
+        )
 
         /**
-         * The property name, sent on usage events, that identifies the seat ID associated with the
-         * usage event. For example, the property name might be seat_id or user_id. The property
-         * must be set as a group key on billable metrics and a presentation/pricing group key on
-         * contract products. This allows linked recurring credits with an allocation per seat to be
-         * consumed by only one seat's usage.
+         * The property name, sent on usage events, that identifies the seat ID associated with the usage event.  For example, the property name might be seat_id or user_id. The property must be set as a group key on billable metrics and a presentation/pricing group key on contract products.  This allows linked recurring credits with an allocation per seat to be consumed by only one seat's usage.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun seatGroupKey(): String = seatGroupKey.getRequired("seat_group_key")
 
         /**
          * Returns the raw JSON value of [seatGroupKey].
          *
-         * Unlike [seatGroupKey], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [seatGroupKey], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("seat_group_key")
         @ExcludeMissing
@@ -4063,13 +3895,12 @@ private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -4079,11 +3910,13 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [SeatConfig].
              *
              * The following fields are required:
+             *
              * ```java
              * .seatGroupKey()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [SeatConfig]. */
@@ -4093,49 +3926,51 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(seatConfig: SeatConfig) = apply {
-                seatGroupKey = seatConfig.seatGroupKey
-                additionalProperties = seatConfig.additionalProperties.toMutableMap()
-            }
+            internal fun from(seatConfig: SeatConfig) =
+                apply {
+                    seatGroupKey = seatConfig.seatGroupKey
+                    additionalProperties = seatConfig.additionalProperties.toMutableMap()
+                }
 
-            /**
-             * The property name, sent on usage events, that identifies the seat ID associated with
-             * the usage event. For example, the property name might be seat_id or user_id. The
-             * property must be set as a group key on billable metrics and a presentation/pricing
-             * group key on contract products. This allows linked recurring credits with an
-             * allocation per seat to be consumed by only one seat's usage.
-             */
+            /** The property name, sent on usage events, that identifies the seat ID associated with the usage event.  For example, the property name might be seat_id or user_id. The property must be set as a group key on billable metrics and a presentation/pricing group key on contract products.  This allows linked recurring credits with an allocation per seat to be consumed by only one seat's usage. */
             fun seatGroupKey(seatGroupKey: String) = seatGroupKey(JsonField.of(seatGroupKey))
 
             /**
              * Sets [Builder.seatGroupKey] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.seatGroupKey] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.seatGroupKey] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun seatGroupKey(seatGroupKey: JsonField<String>) = apply {
-                this.seatGroupKey = seatGroupKey
-            }
+            fun seatGroupKey(seatGroupKey: JsonField<String>) =
+                apply {
+                    this.seatGroupKey = seatGroupKey
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [SeatConfig].
@@ -4143,6 +3978,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .seatGroupKey()
              * ```
@@ -4151,30 +3987,31 @@ private constructor(
              */
             fun build(): SeatConfig =
                 SeatConfig(
-                    checkRequired("seatGroupKey", seatGroupKey),
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "seatGroupKey", seatGroupKey
+                  ), additionalProperties.toMutableMap()
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): SeatConfig = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): SeatConfig =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            seatGroupKey()
-            validated = true
-        }
+                seatGroupKey()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -4185,8 +4022,7 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
@@ -4194,70 +4030,31 @@ private constructor(
         internal fun validity(): Int = (if (seatGroupKey.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is SeatConfig &&
-                seatGroupKey == other.seatGroupKey &&
-                additionalProperties == other.additionalProperties
+          return other is SeatConfig && seatGroupKey == other.seatGroupKey && additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy { Objects.hash(seatGroupKey, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "SeatConfig{seatGroupKey=$seatGroupKey, additionalProperties=$additionalProperties}"
+        override fun toString() = "SeatConfig{seatGroupKey=$seatGroupKey, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is Subscription &&
-            billingPeriods == other.billingPeriods &&
-            collectionSchedule == other.collectionSchedule &&
-            proration == other.proration &&
-            quantityManagementMode == other.quantityManagementMode &&
-            quantitySchedule == other.quantitySchedule &&
-            startingAt == other.startingAt &&
-            subscriptionRate == other.subscriptionRate &&
-            id == other.id &&
-            billingCycleConfig == other.billingCycleConfig &&
-            customFields == other.customFields &&
-            description == other.description &&
-            endingBefore == other.endingBefore &&
-            fiatCreditTypeId == other.fiatCreditTypeId &&
-            name == other.name &&
-            seatConfig == other.seatConfig &&
-            additionalProperties == other.additionalProperties
+      return other is Subscription && billingPeriods == other.billingPeriods && collectionSchedule == other.collectionSchedule && proration == other.proration && quantityManagementMode == other.quantityManagementMode && quantitySchedule == other.quantitySchedule && startingAt == other.startingAt && subscriptionRate == other.subscriptionRate && id == other.id && billingCycleConfig == other.billingCycleConfig && customFields == other.customFields && description == other.description && endingBefore == other.endingBefore && fiatCreditTypeId == other.fiatCreditTypeId && name == other.name && seatConfig == other.seatConfig && additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy {
-        Objects.hash(
-            billingPeriods,
-            collectionSchedule,
-            proration,
-            quantityManagementMode,
-            quantitySchedule,
-            startingAt,
-            subscriptionRate,
-            id,
-            billingCycleConfig,
-            customFields,
-            description,
-            endingBefore,
-            fiatCreditTypeId,
-            name,
-            seatConfig,
-            additionalProperties,
-        )
-    }
+    private val hashCode: Int by lazy { Objects.hash(billingPeriods, collectionSchedule, proration, quantityManagementMode, quantitySchedule, startingAt, subscriptionRate, id, billingCycleConfig, customFields, description, endingBefore, fiatCreditTypeId, name, seatConfig, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "Subscription{billingPeriods=$billingPeriods, collectionSchedule=$collectionSchedule, proration=$proration, quantityManagementMode=$quantityManagementMode, quantitySchedule=$quantitySchedule, startingAt=$startingAt, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, endingBefore=$endingBefore, fiatCreditTypeId=$fiatCreditTypeId, name=$name, seatConfig=$seatConfig, additionalProperties=$additionalProperties}"
+    override fun toString() = "Subscription{billingPeriods=$billingPeriods, collectionSchedule=$collectionSchedule, proration=$proration, quantityManagementMode=$quantityManagementMode, quantitySchedule=$quantitySchedule, startingAt=$startingAt, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, endingBefore=$endingBefore, fiatCreditTypeId=$fiatCreditTypeId, name=$name, seatConfig=$seatConfig, additionalProperties=$additionalProperties}"
 }

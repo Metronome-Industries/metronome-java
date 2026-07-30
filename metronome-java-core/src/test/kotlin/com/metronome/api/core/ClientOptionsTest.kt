@@ -2,6 +2,7 @@
 
 package com.metronome.api.core
 
+import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.http.HttpClient
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -18,31 +19,35 @@ internal class ClientOptionsTest {
 
     @Test
     fun putHeader_canOverwriteDefaultHeader() {
-        val clientOptions =
-            ClientOptions.builder()
-                .httpClient(httpClient)
-                .putHeader("User-Agent", "My User Agent")
-                .bearerToken("My Bearer Token")
-                .build()
+        val clientOptions = ClientOptions.builder()
+        .httpClient(httpClient)
+        .putHeader("User-Agent", "My User Agent")
+        .bearerToken("My Bearer Token")
+        .build()
 
         assertThat(clientOptions.headers.values("User-Agent")).containsExactly("My User Agent")
     }
 
     @Test
     fun toBuilder_bearerAuthCanBeUpdated() {
-        var clientOptions =
-            ClientOptions.builder().httpClient(httpClient).bearerToken("My Bearer Token").build()
+        var clientOptions = ClientOptions.builder()
+        .httpClient(httpClient)
+        .bearerToken("My Bearer Token")
+        .build()
 
-        clientOptions = clientOptions.toBuilder().bearerToken("another My Bearer Token").build()
+        clientOptions = clientOptions.toBuilder()
+        .bearerToken("another My Bearer Token")
+        .build()
 
-        assertThat(clientOptions.headers.values("Authorization"))
-            .containsExactly("Bearer another My Bearer Token")
+        assertThat(clientOptions.headers.values("Authorization")).containsExactly("Bearer another My Bearer Token")
     }
 
     @Test
     fun toBuilder_whenOriginalClientOptionsGarbageCollected_doesNotCloseOriginalClient() {
-        var clientOptions =
-            ClientOptions.builder().httpClient(httpClient).bearerToken("My Bearer Token").build()
+        var clientOptions = ClientOptions.builder()
+        .httpClient(httpClient)
+        .bearerToken("My Bearer Token")
+        .build()
         verify(httpClient, never()).close()
 
         // Overwrite the `clientOptions` variable so that the original `ClientOptions` is GC'd.

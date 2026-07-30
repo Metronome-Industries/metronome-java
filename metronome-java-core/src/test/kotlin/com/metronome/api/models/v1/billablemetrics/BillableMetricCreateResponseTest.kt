@@ -5,6 +5,7 @@ package com.metronome.api.models.v1.billablemetrics
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.Id
+import com.metronome.api.models.v1.billablemetrics.BillableMetricCreateResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,29 +13,28 @@ internal class BillableMetricCreateResponseTest {
 
     @Test
     fun create() {
-        val billableMetricCreateResponse =
-            BillableMetricCreateResponse.builder()
-                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
-                .build()
+      val billableMetricCreateResponse = BillableMetricCreateResponse.builder()
+          .data(Id.builder()
+              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+              .build())
+          .build()
 
-        assertThat(billableMetricCreateResponse.data())
-            .isEqualTo(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+      assertThat(billableMetricCreateResponse.data()).isEqualTo(Id.builder()
+          .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+          .build())
     }
 
     @Test
     fun roundtrip() {
-        val jsonMapper = jsonMapper()
-        val billableMetricCreateResponse =
-            BillableMetricCreateResponse.builder()
-                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
-                .build()
+      val jsonMapper = jsonMapper()
+      val billableMetricCreateResponse = BillableMetricCreateResponse.builder()
+          .data(Id.builder()
+              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+              .build())
+          .build()
 
-        val roundtrippedBillableMetricCreateResponse =
-            jsonMapper.readValue(
-                jsonMapper.writeValueAsString(billableMetricCreateResponse),
-                jacksonTypeRef<BillableMetricCreateResponse>(),
-            )
+      val roundtrippedBillableMetricCreateResponse = jsonMapper.readValue(jsonMapper.writeValueAsString(billableMetricCreateResponse), jacksonTypeRef<BillableMetricCreateResponse>())
 
-        assertThat(roundtrippedBillableMetricCreateResponse).isEqualTo(billableMetricCreateResponse)
+      assertThat(roundtrippedBillableMetricCreateResponse).isEqualTo(billableMetricCreateResponse)
     }
 }

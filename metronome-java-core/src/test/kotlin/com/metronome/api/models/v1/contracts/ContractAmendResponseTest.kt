@@ -5,6 +5,7 @@ package com.metronome.api.models.v1.contracts
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.Id
+import com.metronome.api.models.v1.contracts.ContractAmendResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,29 +13,28 @@ internal class ContractAmendResponseTest {
 
     @Test
     fun create() {
-        val contractAmendResponse =
-            ContractAmendResponse.builder()
-                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
-                .build()
+      val contractAmendResponse = ContractAmendResponse.builder()
+          .data(Id.builder()
+              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+              .build())
+          .build()
 
-        assertThat(contractAmendResponse.data())
-            .isEqualTo(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+      assertThat(contractAmendResponse.data()).isEqualTo(Id.builder()
+          .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+          .build())
     }
 
     @Test
     fun roundtrip() {
-        val jsonMapper = jsonMapper()
-        val contractAmendResponse =
-            ContractAmendResponse.builder()
-                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
-                .build()
+      val jsonMapper = jsonMapper()
+      val contractAmendResponse = ContractAmendResponse.builder()
+          .data(Id.builder()
+              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+              .build())
+          .build()
 
-        val roundtrippedContractAmendResponse =
-            jsonMapper.readValue(
-                jsonMapper.writeValueAsString(contractAmendResponse),
-                jacksonTypeRef<ContractAmendResponse>(),
-            )
+      val roundtrippedContractAmendResponse = jsonMapper.readValue(jsonMapper.writeValueAsString(contractAmendResponse), jacksonTypeRef<ContractAmendResponse>())
 
-        assertThat(roundtrippedContractAmendResponse).isEqualTo(contractAmendResponse)
+      assertThat(roundtrippedContractAmendResponse).isEqualTo(contractAmendResponse)
     }
 }

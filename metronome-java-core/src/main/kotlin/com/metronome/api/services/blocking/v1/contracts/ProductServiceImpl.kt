@@ -26,39 +26,31 @@ import com.metronome.api.models.v1.contracts.products.ProductRetrieveParams
 import com.metronome.api.models.v1.contracts.products.ProductRetrieveResponse
 import com.metronome.api.models.v1.contracts.products.ProductUpdateParams
 import com.metronome.api.models.v1.contracts.products.ProductUpdateResponse
+import com.metronome.api.services.blocking.v1.contracts.ProductService
+import com.metronome.api.services.blocking.v1.contracts.ProductServiceImpl
 import java.util.function.Consumer
 
 /** Products are the items that customers purchase. */
-class ProductServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    ProductService {
+class ProductServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: ProductService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : ProductService {
+
+    private val withRawResponse: ProductService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): ProductService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProductService =
-        ProductServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProductService = ProductServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun create(
-        params: ProductCreateParams,
-        requestOptions: RequestOptions,
-    ): ProductCreateResponse =
+    override fun create(params: ProductCreateParams, requestOptions: RequestOptions): ProductCreateResponse =
         // post /v1/contract-pricing/products/create
         withRawResponse().create(params, requestOptions).parse()
 
-    override fun retrieve(
-        params: ProductRetrieveParams,
-        requestOptions: RequestOptions,
-    ): ProductRetrieveResponse =
+    override fun retrieve(params: ProductRetrieveParams, requestOptions: RequestOptions): ProductRetrieveResponse =
         // post /v1/contract-pricing/products/get
         withRawResponse().retrieve(params, requestOptions).parse()
 
-    override fun update(
-        params: ProductUpdateParams,
-        requestOptions: RequestOptions,
-    ): ProductUpdateResponse =
+    override fun update(params: ProductUpdateParams, requestOptions: RequestOptions): ProductUpdateResponse =
         // post /v1/contract-pricing/products/update
         withRawResponse().update(params, requestOptions).parse()
 
@@ -66,171 +58,169 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
         // post /v1/contract-pricing/products/list
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun archive(
-        params: ProductArchiveParams,
-        requestOptions: RequestOptions,
-    ): ProductArchiveResponse =
+    override fun archive(params: ProductArchiveParams, requestOptions: RequestOptions): ProductArchiveResponse =
         // post /v1/contract-pricing/products/archive
         withRawResponse().archive(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        ProductService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : ProductService.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): ProductService.WithRawResponse =
-            ProductServiceImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProductService.WithRawResponse = ProductServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val createHandler: Handler<ProductCreateResponse> = jsonHandler<ProductCreateResponse>(clientOptions.jsonMapper)
+
+        override fun create(params: ProductCreateParams, requestOptions: RequestOptions): HttpResponseFor<ProductCreateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contract-pricing", "products", "create")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
             )
-
-        private val createHandler: Handler<ProductCreateResponse> =
-            jsonHandler<ProductCreateResponse>(clientOptions.jsonMapper)
-
-        override fun create(
-            params: ProductCreateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ProductCreateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contract-pricing", "products", "create")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { createHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  createHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val retrieveHandler: Handler<ProductRetrieveResponse> =
-            jsonHandler<ProductRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<ProductRetrieveResponse> = jsonHandler<ProductRetrieveResponse>(clientOptions.jsonMapper)
 
-        override fun retrieve(
-            params: ProductRetrieveParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ProductRetrieveResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contract-pricing", "products", "get")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { retrieveHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun retrieve(params: ProductRetrieveParams, requestOptions: RequestOptions): HttpResponseFor<ProductRetrieveResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contract-pricing", "products", "get")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  retrieveHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val updateHandler: Handler<ProductUpdateResponse> =
-            jsonHandler<ProductUpdateResponse>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<ProductUpdateResponse> = jsonHandler<ProductUpdateResponse>(clientOptions.jsonMapper)
 
-        override fun update(
-            params: ProductUpdateParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ProductUpdateResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contract-pricing", "products", "update")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { updateHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun update(params: ProductUpdateParams, requestOptions: RequestOptions): HttpResponseFor<ProductUpdateResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contract-pricing", "products", "update")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  updateHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val listHandler: Handler<ProductListPageResponse> =
-            jsonHandler<ProductListPageResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ProductListPageResponse> = jsonHandler<ProductListPageResponse>(clientOptions.jsonMapper)
 
-        override fun list(
-            params: ProductListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ProductListPage> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contract-pricing", "products", "list")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-                    .let {
-                        ProductListPage.builder()
-                            .service(ProductServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
-                    }
-            }
+        override fun list(params: ProductListParams, requestOptions: RequestOptions): HttpResponseFor<ProductListPage> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contract-pricing", "products", "list")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  ProductListPage.builder()
+                      .service(ProductServiceImpl(clientOptions))
+                      .params(params)
+                      .response(it)
+                      .build()
+              }
+          }
         }
 
-        private val archiveHandler: Handler<ProductArchiveResponse> =
-            jsonHandler<ProductArchiveResponse>(clientOptions.jsonMapper)
+        private val archiveHandler: Handler<ProductArchiveResponse> = jsonHandler<ProductArchiveResponse>(clientOptions.jsonMapper)
 
-        override fun archive(
-            params: ProductArchiveParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ProductArchiveResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contract-pricing", "products", "archive")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return errorHandler.handle(response).parseable {
-                response
-                    .use { archiveHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun archive(params: ProductArchiveParams, requestOptions: RequestOptions): HttpResponseFor<ProductArchiveResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contract-pricing", "products", "archive")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return errorHandler.handle(response).parseable {
+              response.use {
+                  archiveHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

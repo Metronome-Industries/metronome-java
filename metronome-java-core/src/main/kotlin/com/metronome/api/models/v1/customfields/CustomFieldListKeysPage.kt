@@ -5,17 +5,20 @@ package com.metronome.api.models.v1.customfields
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.customfields.CustomFieldListKeysPageResponse
+import com.metronome.api.models.v1.customfields.CustomFieldListKeysParams
+import com.metronome.api.models.v1.customfields.CustomFieldListKeysResponse
 import com.metronome.api.services.blocking.v1.CustomFieldService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see CustomFieldService.listKeys */
-class CustomFieldListKeysPage
-private constructor(
+class CustomFieldListKeysPage private constructor(
     private val service: CustomFieldService,
     private val params: CustomFieldListKeysParams,
     private val response: CustomFieldListKeysPageResponse,
+
 ) : Page<CustomFieldListKeysResponse> {
 
     /**
@@ -30,18 +33,17 @@ private constructor(
      *
      * @see CustomFieldListKeysPageResponse.data
      */
-    fun data(): List<CustomFieldListKeysResponse> =
-        response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<CustomFieldListKeysResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<CustomFieldListKeysResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): CustomFieldListKeysParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
     override fun nextPage(): CustomFieldListKeysPage = service.listKeys(nextPageParams())
@@ -62,13 +64,15 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [CustomFieldListKeysPage].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [CustomFieldListKeysPage]. */
@@ -79,19 +83,29 @@ private constructor(
         private var response: CustomFieldListKeysPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(customFieldListKeysPage: CustomFieldListKeysPage) = apply {
-            service = customFieldListKeysPage.service
-            params = customFieldListKeysPage.params
-            response = customFieldListKeysPage.response
-        }
+        internal fun from(customFieldListKeysPage: CustomFieldListKeysPage) =
+            apply {
+                service = customFieldListKeysPage.service
+                params = customFieldListKeysPage.params
+                response = customFieldListKeysPage.response
+            }
 
-        fun service(service: CustomFieldService) = apply { this.service = service }
+        fun service(service: CustomFieldService) =
+            apply {
+                this.service = service
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: CustomFieldListKeysParams) = apply { this.params = params }
+        fun params(params: CustomFieldListKeysParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: CustomFieldListKeysPageResponse) = apply { this.response = response }
+        fun response(response: CustomFieldListKeysPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [CustomFieldListKeysPage].
@@ -99,6 +113,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
@@ -109,25 +124,27 @@ private constructor(
          */
         fun build(): CustomFieldListKeysPage =
             CustomFieldListKeysPage(
-                checkRequired("service", service),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is CustomFieldListKeysPage &&
-            service == other.service &&
-            params == other.params &&
-            response == other.response
+      return other is CustomFieldListKeysPage && service == other.service && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() =
-        "CustomFieldListKeysPage{service=$service, params=$params, response=$response}"
+    override fun toString() = "CustomFieldListKeysPage{service=$service, params=$params, response=$response}"
 }

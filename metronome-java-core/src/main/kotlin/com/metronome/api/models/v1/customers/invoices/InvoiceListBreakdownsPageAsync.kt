@@ -5,6 +5,9 @@ package com.metronome.api.models.v1.customers.invoices
 import com.metronome.api.core.AutoPagerAsync
 import com.metronome.api.core.PageAsync
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.customers.invoices.InvoiceListBreakdownsPageResponse
+import com.metronome.api.models.v1.customers.invoices.InvoiceListBreakdownsParams
+import com.metronome.api.models.v1.customers.invoices.InvoiceListBreakdownsResponse
 import com.metronome.api.services.async.v1.customers.InvoiceServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -13,12 +16,12 @@ import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
 /** @see InvoiceServiceAsync.listBreakdowns */
-class InvoiceListBreakdownsPageAsync
-private constructor(
+class InvoiceListBreakdownsPageAsync private constructor(
     private val service: InvoiceServiceAsync,
     private val streamHandlerExecutor: Executor,
     private val params: InvoiceListBreakdownsParams,
     private val response: InvoiceListBreakdownsPageResponse,
+
 ) : PageAsync<InvoiceListBreakdownsResponse> {
 
     /**
@@ -33,25 +36,25 @@ private constructor(
      *
      * @see InvoiceListBreakdownsPageResponse.data
      */
-    fun data(): List<InvoiceListBreakdownsResponse> =
-        response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<InvoiceListBreakdownsResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<InvoiceListBreakdownsResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): InvoiceListBreakdownsParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
-    override fun nextPage(): CompletableFuture<InvoiceListBreakdownsPageAsync> =
-        service.listBreakdowns(nextPageParams())
+    override fun nextPage(): CompletableFuture<InvoiceListBreakdownsPageAsync> = service.listBreakdowns(nextPageParams())
 
     fun autoPager(): AutoPagerAsync<InvoiceListBreakdownsResponse> =
-        AutoPagerAsync.from(this, streamHandlerExecutor)
+        AutoPagerAsync.from(
+          this, streamHandlerExecutor
+        )
 
     /** The parameters that were used to request this page. */
     fun params(): InvoiceListBreakdownsParams = params
@@ -64,10 +67,10 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [InvoiceListBreakdownsPageAsync].
+         * Returns a mutable builder for constructing an instance of [InvoiceListBreakdownsPageAsync].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -75,7 +78,8 @@ private constructor(
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [InvoiceListBreakdownsPageAsync]. */
@@ -87,26 +91,35 @@ private constructor(
         private var response: InvoiceListBreakdownsPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(invoiceListBreakdownsPageAsync: InvoiceListBreakdownsPageAsync) = apply {
-            service = invoiceListBreakdownsPageAsync.service
-            streamHandlerExecutor = invoiceListBreakdownsPageAsync.streamHandlerExecutor
-            params = invoiceListBreakdownsPageAsync.params
-            response = invoiceListBreakdownsPageAsync.response
-        }
+        internal fun from(invoiceListBreakdownsPageAsync: InvoiceListBreakdownsPageAsync) =
+            apply {
+                service = invoiceListBreakdownsPageAsync.service
+                streamHandlerExecutor = invoiceListBreakdownsPageAsync.streamHandlerExecutor
+                params = invoiceListBreakdownsPageAsync.params
+                response = invoiceListBreakdownsPageAsync.response
+            }
 
-        fun service(service: InvoiceServiceAsync) = apply { this.service = service }
+        fun service(service: InvoiceServiceAsync) =
+            apply {
+                this.service = service
+            }
 
-        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
-            this.streamHandlerExecutor = streamHandlerExecutor
-        }
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) =
+            apply {
+                this.streamHandlerExecutor = streamHandlerExecutor
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: InvoiceListBreakdownsParams) = apply { this.params = params }
+        fun params(params: InvoiceListBreakdownsParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: InvoiceListBreakdownsPageResponse) = apply {
-            this.response = response
-        }
+        fun response(response: InvoiceListBreakdownsPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [InvoiceListBreakdownsPageAsync].
@@ -114,6 +127,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -125,27 +139,30 @@ private constructor(
          */
         fun build(): InvoiceListBreakdownsPageAsync =
             InvoiceListBreakdownsPageAsync(
-                checkRequired("service", service),
-                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "streamHandlerExecutor", streamHandlerExecutor
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is InvoiceListBreakdownsPageAsync &&
-            service == other.service &&
-            streamHandlerExecutor == other.streamHandlerExecutor &&
-            params == other.params &&
-            response == other.response
+      return other is InvoiceListBreakdownsPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, streamHandlerExecutor, params, response)
 
-    override fun toString() =
-        "InvoiceListBreakdownsPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
+    override fun toString() = "InvoiceListBreakdownsPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

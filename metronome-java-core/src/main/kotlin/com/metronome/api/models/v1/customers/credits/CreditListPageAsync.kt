@@ -6,6 +6,8 @@ import com.metronome.api.core.AutoPagerAsync
 import com.metronome.api.core.PageAsync
 import com.metronome.api.core.checkRequired
 import com.metronome.api.models.Credit
+import com.metronome.api.models.v1.customers.credits.CreditListPageResponse
+import com.metronome.api.models.v1.customers.credits.CreditListParams
 import com.metronome.api.services.async.v1.customers.CreditServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -14,12 +16,12 @@ import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
 /** @see CreditServiceAsync.list */
-class CreditListPageAsync
-private constructor(
+class CreditListPageAsync private constructor(
     private val service: CreditServiceAsync,
     private val streamHandlerExecutor: Executor,
     private val params: CreditListParams,
     private val response: CreditListPageResponse,
+
 ) : PageAsync<Credit> {
 
     /**
@@ -41,15 +43,18 @@ private constructor(
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): CreditListParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
     override fun nextPage(): CompletableFuture<CreditListPageAsync> = service.list(nextPageParams())
 
-    fun autoPager(): AutoPagerAsync<Credit> = AutoPagerAsync.from(this, streamHandlerExecutor)
+    fun autoPager(): AutoPagerAsync<Credit> =
+        AutoPagerAsync.from(
+          this, streamHandlerExecutor
+        )
 
     /** The parameters that were used to request this page. */
     fun params(): CreditListParams = params
@@ -65,6 +70,7 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [CreditListPageAsync].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -72,7 +78,8 @@ private constructor(
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [CreditListPageAsync]. */
@@ -84,24 +91,35 @@ private constructor(
         private var response: CreditListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(creditListPageAsync: CreditListPageAsync) = apply {
-            service = creditListPageAsync.service
-            streamHandlerExecutor = creditListPageAsync.streamHandlerExecutor
-            params = creditListPageAsync.params
-            response = creditListPageAsync.response
-        }
+        internal fun from(creditListPageAsync: CreditListPageAsync) =
+            apply {
+                service = creditListPageAsync.service
+                streamHandlerExecutor = creditListPageAsync.streamHandlerExecutor
+                params = creditListPageAsync.params
+                response = creditListPageAsync.response
+            }
 
-        fun service(service: CreditServiceAsync) = apply { this.service = service }
+        fun service(service: CreditServiceAsync) =
+            apply {
+                this.service = service
+            }
 
-        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
-            this.streamHandlerExecutor = streamHandlerExecutor
-        }
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) =
+            apply {
+                this.streamHandlerExecutor = streamHandlerExecutor
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: CreditListParams) = apply { this.params = params }
+        fun params(params: CreditListParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: CreditListPageResponse) = apply { this.response = response }
+        fun response(response: CreditListPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [CreditListPageAsync].
@@ -109,6 +127,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -120,27 +139,30 @@ private constructor(
          */
         fun build(): CreditListPageAsync =
             CreditListPageAsync(
-                checkRequired("service", service),
-                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "streamHandlerExecutor", streamHandlerExecutor
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is CreditListPageAsync &&
-            service == other.service &&
-            streamHandlerExecutor == other.streamHandlerExecutor &&
-            params == other.params &&
-            response == other.response
+      return other is CreditListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, streamHandlerExecutor, params, response)
 
-    override fun toString() =
-        "CreditListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
+    override fun toString() = "CreditListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

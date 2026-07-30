@@ -19,105 +19,89 @@ import com.metronome.api.core.prepareAsync
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveResponse
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleUpdateParams
+import com.metronome.api.services.async.v1.contracts.ratecards.NamedScheduleServiceAsync
+import com.metronome.api.services.async.v1.contracts.ratecards.NamedScheduleServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-/**
- * Named schedules are used for storing custom data that can change over time. Named schedules are
- * often used in custom pricing logic.
- */
-class NamedScheduleServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    NamedScheduleServiceAsync {
+/** Named schedules are used for storing custom data that can change over time. Named schedules are often used in custom pricing logic. */
+class NamedScheduleServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: NamedScheduleServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : NamedScheduleServiceAsync {
+
+    private val withRawResponse: NamedScheduleServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): NamedScheduleServiceAsync.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleServiceAsync =
-        NamedScheduleServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleServiceAsync = NamedScheduleServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun retrieve(
-        params: NamedScheduleRetrieveParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<NamedScheduleRetrieveResponse> =
+    override fun retrieve(params: NamedScheduleRetrieveParams, requestOptions: RequestOptions): CompletableFuture<NamedScheduleRetrieveResponse> =
         // post /v1/contracts/getNamedSchedule
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
 
-    override fun update(
-        params: NamedScheduleUpdateParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<Void?> =
+    override fun update(params: NamedScheduleUpdateParams, requestOptions: RequestOptions): CompletableFuture<Void?> =
         // post /v1/contracts/updateNamedSchedule
         withRawResponse().update(params, requestOptions).thenAccept {}
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        NamedScheduleServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val errorHandler: Handler<HttpResponse> =
-            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+    ) : NamedScheduleServiceAsync.WithRawResponse {
 
-        override fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): NamedScheduleServiceAsync.WithRawResponse =
-            NamedScheduleServiceAsyncImpl.WithRawResponseImpl(
-                clientOptions.toBuilder().apply(modifier::accept).build()
+        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleServiceAsync.WithRawResponse = NamedScheduleServiceAsyncImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
+        private val retrieveHandler: Handler<NamedScheduleRetrieveResponse> = jsonHandler<NamedScheduleRetrieveResponse>(clientOptions.jsonMapper)
+
+        override fun retrieve(params: NamedScheduleRetrieveParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<NamedScheduleRetrieveResponse>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contracts", "getNamedSchedule")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepareAsync(
+              clientOptions, params
             )
-
-        private val retrieveHandler: Handler<NamedScheduleRetrieveResponse> =
-            jsonHandler<NamedScheduleRetrieveResponse>(clientOptions.jsonMapper)
-
-        override fun retrieve(
-            params: NamedScheduleRetrieveParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<NamedScheduleRetrieveResponse>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contracts", "getNamedSchedule")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response
-                            .use { retrieveHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> errorHandler.handle(response).parseable {
+              response.use {
+                  retrieveHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          } }
         }
 
         private val updateHandler: Handler<Void?> = emptyHandler()
 
-        override fun update(
-            params: NamedScheduleUpdateParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("v1", "contracts", "updateNamedSchedule")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response.use { updateHandler.handle(it) }
-                    }
-                }
+        override fun update(params: NamedScheduleUpdateParams, requestOptions: RequestOptions): CompletableFuture<HttpResponse> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .baseUrl(clientOptions.baseUrl())
+            .addPathSegments("v1", "contracts", "updateNamedSchedule")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepareAsync(
+              clientOptions, params
+            )
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> errorHandler.handle(response).parseable {
+              response.use {
+                  updateHandler.handle(it)
+              }
+          } }
         }
     }
 }

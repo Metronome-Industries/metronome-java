@@ -11,20 +11,14 @@ import com.metronome.api.models.v1.customers.alerts.AlertListParams
 import com.metronome.api.models.v1.customers.alerts.AlertResetParams
 import com.metronome.api.models.v1.customers.alerts.AlertRetrieveParams
 import com.metronome.api.models.v1.customers.alerts.AlertRetrieveResponse
+import com.metronome.api.services.async.v1.customers.AlertServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-/**
- * [Alerts](https://docs.metronome.com/connecting-metronome/alerts/) monitor customer spending,
- * balances, and other billing factors. Use these endpoints to create, retrieve, and archive
- * customer alerts. To view sample alert payloads by alert type, navigate
- * [here.](https://docs.metronome.com/manage-product-access/create-manage-alerts/#webhook-notifications)
- */
+/** [Alerts](https://docs.metronome.com/connecting-metronome/alerts/) monitor customer spending, balances, and other billing factors. Use these endpoints to create, retrieve, and archive customer alerts. To view sample alert payloads by alert type, navigate [here.](https://docs.metronome.com/manage-product-access/create-manage-alerts/#webhook-notifications) */
 interface AlertServiceAsync {
 
-    /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
-     */
+    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -35,65 +29,52 @@ interface AlertServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AlertServiceAsync
 
     /**
-     * Retrieve the real-time evaluation status for a specific threshold notification-customer pair.
-     * This endpoint provides instant visibility into whether a customer has triggered a threshold
-     * notification condition, enabling you to monitor account health and take proactive action
-     * based on current threshold notification states.
+     * Retrieve the real-time evaluation status for a specific threshold notification-customer pair. This endpoint provides instant visibility into whether a customer has triggered a threshold notification condition, enabling you to monitor account health and take proactive action based on current threshold notification states.
      *
      * ### Use this endpoint to:
-     * - Check if a specific customer is currently violating an threshold notification (`in_alarm`
-     *   status)
+     * - Check if a specific customer is currently violating an threshold notification (`in_alarm` status)
      * - Verify threshold notification configuration details and threshold values for a customer
      * - Monitor the evaluation state of newly created or recently modified threshold notification
-     * - Build dashboards or automated workflows that respond to specific threshold notification
-     *   conditions
+     * - Build dashboards or automated workflows that respond to specific threshold notification conditions
      * - Validate threshold notification behavior before deploying to production customers
-     * - Integrate threshold notification status checks into customer support tools or admin
-     *   interfaces
+     * - Integrate threshold notification status checks into customer support tools or admin interfaces
      *
      * ### Key response fields:
      * A CustomerAlert object containing:
+     *
      * - `customer_status`: The current evaluation state
+     *
      * - `ok` - Customer is within acceptable thresholds
      * - `in_alarm` - Customer has breached the threshold for the notification
      * - `evaluating` - Notification is currently being evaluated (typically during initial setup)
      * - `null` - Notification has been archived
-     * - `triggered_by`: Additional context about what caused the notification to trigger (when
-     *   applicable)
+     * - `triggered_by`: Additional context about what caused the notification to trigger (when applicable)
      * - `updated_at`: Timestamp of when the `customer_status` was last updated
      * - alert: Complete threshold notification configuration including:
-     *     - Notification ID, name, and type
-     *     - Current threshold values and credit type information
-     *     - Notification status (enabled, disabled, or archived)
-     *     - Any applied filters (credit grant types, custom fields, group values)
+     *   - Notification ID, name, and type
+     *   - Current threshold values and credit type information
+     *   - Notification status (enabled, disabled, or archived)
+     *   - Any applied filters (credit grant types, custom fields, group values)
      *
      * ### Usage guidelines:
-     * - Customer status: Returns the current evaluation state, not historical data. For threshold
-     *   notification history, use webhook notifications or event logs
-     * - Required parameters: Both customer_id and alert_id must be valid UUIDs that exist in your
-     *   organization
-     * - Archived notifications: Returns null for customer_status if the notification has been
-     *   archived, but still includes the notification configuration details
-     * - Performance considerations: This endpoint queries live evaluation state, making it ideal
-     *   for real-time monitoring but not for bulk status checks
-     * - Integration patterns: Best used for on-demand status checks in response to user actions or
-     *   as part of targeted monitoring workflows
-     * - Error handling: Returns 404 if either the customer or alert_id doesn't exist or isn't
-     *   accessible to your organization
+     * - Customer status: Returns the current evaluation state, not historical data. For threshold notification history, use webhook notifications or event logs
+     * - Required parameters: Both customer_id and alert_id must be valid UUIDs that exist in your organization
+     * - Archived notifications: Returns null for customer_status if the notification has been archived, but still includes the notification configuration details
+     * - Performance considerations: This endpoint queries live evaluation state, making it ideal for real-time monitoring but not for bulk status checks
+     * - Integration patterns: Best used for on-demand status checks in response to user actions or as part of targeted monitoring workflows
+     * - Error handling: Returns 404 if either the customer or alert_id doesn't exist or isn't accessible to your organization
+     *
      */
     fun retrieve(params: AlertRetrieveParams): CompletableFuture<AlertRetrieveResponse> =
-        retrieve(params, RequestOptions.none())
+        retrieve(
+          params, RequestOptions.none()
+        )
 
     /** @see retrieve */
-    fun retrieve(
-        params: AlertRetrieveParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<AlertRetrieveResponse>
+    fun retrieve(params: AlertRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<AlertRetrieveResponse>
 
     /**
-     * Retrieve all threshold notification configurations and their current statuses for a specific
-     * customer in a single API call. This endpoint provides a comprehensive view of all threshold
-     * notification monitoring a customer account.
+     * Retrieve all threshold notification configurations and their current statuses for a specific customer in a single API call. This endpoint provides a comprehensive view of all threshold notification monitoring a customer account.
      *
      * ### Use this endpoint to:
      * - Display all active threshold notifications for a customer in dashboards or admin panels
@@ -103,35 +84,28 @@ interface AlertServiceAsync {
      *
      * ### Key response fields:
      * - data: Array of CustomerAlert objects, each containing:
-     *     - Current evaluation status (`ok`, `in_alarm`, `evaluating`, or `null`)
-     *     - Complete threshold notification configuration and threshold details
-     *     - Threshold notification metadata including type, name, and last update time
+     *   - Current evaluation status (`ok`, `in_alarm`, `evaluating`, or `null`)
+     *   - Complete threshold notification configuration and threshold details
+     *   - Threshold notification metadata including type, name, and last update time
      * - next_page: Pagination cursor for retrieving additional results
      *
      * ### Usage guidelines:
-     * - Default behavior: Returns only enabled threshold notifications unless `alert_statuses`
-     *   filter is specified
-     * - Pagination: Use the `next_page` cursor to retrieve all results for customers with many
-     *   notifications
-     * - Performance: Efficiently retrieves multiple threshold notification statuses in a single
-     *   request instead of making individual calls
-     * - Filtering: Pass the `alert_statuses` array to include disabled or archived threshold
-     *   notifications in results
+     * - Default behavior: Returns only enabled threshold notifications unless `alert_statuses` filter is specified
+     * - Pagination: Use the `next_page` cursor to retrieve all results for customers with many notifications
+     * - Performance: Efficiently retrieves multiple threshold notification statuses in a single request instead of making individual calls
+     * - Filtering: Pass the `alert_statuses` array to include disabled or archived threshold notifications in results
+     *
      */
     fun list(params: AlertListParams): CompletableFuture<AlertListPageAsync> =
-        list(params, RequestOptions.none())
+        list(
+          params, RequestOptions.none()
+        )
 
     /** @see list */
-    fun list(
-        params: AlertListParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<AlertListPageAsync>
+    fun list(params: AlertListParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<AlertListPageAsync>
 
     /**
-     * Force an immediate re-evaluation of a specific threshold notification for a customer,
-     * clearing any previous state and triggering a fresh assessment against current thresholds.
-     * This endpoint ensures threshold notification accuracy after configuration changes or data
-     * corrections.
+     * Force an immediate re-evaluation of a specific threshold notification for a customer, clearing any previous state and triggering a fresh assessment against current thresholds. This endpoint ensures threshold notification accuracy after configuration changes or data corrections.
      *
      * ### Use this endpoint to:
      * - Clear false positive threshold notifications after fixing data issues
@@ -141,26 +115,23 @@ interface AlertServiceAsync {
      * - Trigger immediate evaluation after threshold modifications
      *
      * ### Key response fields:
-     * - 200 Success: Confirmation that the threshold notification has been reset and re-evaluation
-     *   initiated
+     * - 200 Success: Confirmation that the threshold notification has been reset and re-evaluation initiated
      * - No response body is returned - the operation completes asynchronously
      *
      * ### Usage guidelines:
-     * - Immediate effect: Triggers re-evaluation instantly, which may result in new webhook
-     *   notifications if thresholds are breached
+     * - Immediate effect: Triggers re-evaluation instantly, which may result in new webhook notifications if thresholds are breached
      * - State clearing: Removes any cached evaluation state, ensuring a fresh assessment
      * - Use sparingly: Intended for exceptional cases, not routine operations
-     * - Asynchronous processing: The reset completes immediately, but re-evaluation happens in the
-     *   background
+     * - Asynchronous processing: The reset completes immediately, but re-evaluation happens in the background
+     *
      */
     fun reset(params: AlertResetParams): CompletableFuture<Void?> =
-        reset(params, RequestOptions.none())
+        reset(
+          params, RequestOptions.none()
+        )
 
     /** @see reset */
-    fun reset(
-        params: AlertResetParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Void?>
+    fun reset(params: AlertResetParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<Void?>
 
     /** A view of [AlertServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -170,49 +141,33 @@ interface AlertServiceAsync {
          *
          * The original service is not modified.
          */
-        fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): AlertServiceAsync.WithRawResponse
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): AlertServiceAsync.WithRawResponse
 
-        /**
-         * Returns a raw HTTP response for `post /v1/customer-alerts/get`, but is otherwise the same
-         * as [AlertServiceAsync.retrieve].
-         */
-        fun retrieve(
-            params: AlertRetrieveParams
-        ): CompletableFuture<HttpResponseFor<AlertRetrieveResponse>> =
-            retrieve(params, RequestOptions.none())
+        /** Returns a raw HTTP response for `post /v1/customer-alerts/get`, but is otherwise the             same as [AlertServiceAsync.retrieve]. */
+        fun retrieve(params: AlertRetrieveParams): CompletableFuture<HttpResponseFor<AlertRetrieveResponse>> =
+            retrieve(
+              params, RequestOptions.none()
+            )
 
         /** @see retrieve */
-        fun retrieve(
-            params: AlertRetrieveParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<AlertRetrieveResponse>>
+        fun retrieve(params: AlertRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<AlertRetrieveResponse>>
 
-        /**
-         * Returns a raw HTTP response for `post /v1/customer-alerts/list`, but is otherwise the
-         * same as [AlertServiceAsync.list].
-         */
+        /** Returns a raw HTTP response for `post /v1/customer-alerts/list`, but is otherwise the             same as [AlertServiceAsync.list]. */
         fun list(params: AlertListParams): CompletableFuture<HttpResponseFor<AlertListPageAsync>> =
-            list(params, RequestOptions.none())
+            list(
+              params, RequestOptions.none()
+            )
 
         /** @see list */
-        fun list(
-            params: AlertListParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<AlertListPageAsync>>
+        fun list(params: AlertListParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<AlertListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `post /v1/customer-alerts/reset`, but is otherwise the
-         * same as [AlertServiceAsync.reset].
-         */
+        /** Returns a raw HTTP response for `post /v1/customer-alerts/reset`, but is otherwise the             same as [AlertServiceAsync.reset]. */
         fun reset(params: AlertResetParams): CompletableFuture<HttpResponse> =
-            reset(params, RequestOptions.none())
+            reset(
+              params, RequestOptions.none()
+            )
 
         /** @see reset */
-        fun reset(
-            params: AlertResetParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponse>
+        fun reset(params: AlertResetParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponse>
     }
 }

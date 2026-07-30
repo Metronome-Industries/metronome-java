@@ -10,18 +10,13 @@ import com.metronome.api.models.v1.invoices.InvoiceRegenerateParams
 import com.metronome.api.models.v1.invoices.InvoiceRegenerateResponse
 import com.metronome.api.models.v1.invoices.InvoiceVoidParams
 import com.metronome.api.models.v1.invoices.InvoiceVoidResponse
+import com.metronome.api.services.blocking.v1.InvoiceService
 import java.util.function.Consumer
 
-/**
- * [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent during a
- * period, which is the basis for billing. Metronome automatically generates invoices based upon
- * your pricing, packaging, and usage events. Use these endpoints to retrieve invoices.
- */
+/** [Invoices](https://docs.metronome.com/invoicing/) reflect how much a customer spent during a period, which is the basis for billing. Metronome automatically generates invoices based upon your pricing, packaging, and usage events. Use these endpoints to retrieve invoices. */
 interface InvoiceService {
 
-    /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
-     */
+    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -32,42 +27,37 @@ interface InvoiceService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvoiceService
 
     /**
-     * This endpoint regenerates a voided invoice and recalculates the invoice based on up-to-date
-     * rates, available balances, and other fees regardless of the billing period.
+     * This endpoint regenerates a voided invoice and recalculates the invoice based on up-to-date rates, available balances, and other fees regardless of the billing period.
      *
      * ### Use this endpoint to:
-     * Recalculate an invoice with updated rate terms, available balance, and fees to correct
-     * billing disputes or discrepancies
+     * Recalculate an invoice with updated rate terms, available balance, and fees to correct billing disputes or discrepancies
      *
      * ### Key response fields:
      * The regenerated invoice id, which is distinct from the previously voided invoice.
      *
      * ### Usage guidelines:
-     * If an invoice is attached to a contract with a billing provider on it, the regenerated
-     * invoice will be distributed based on the configuration.
+     * If an invoice is attached to a contract with a billing provider on it, the regenerated invoice will be distributed based on the configuration.
+     *
      */
     fun regenerate(params: InvoiceRegenerateParams): InvoiceRegenerateResponse =
-        regenerate(params, RequestOptions.none())
+        regenerate(
+          params, RequestOptions.none()
+        )
 
     /** @see regenerate */
-    fun regenerate(
-        params: InvoiceRegenerateParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): InvoiceRegenerateResponse
+    fun regenerate(params: InvoiceRegenerateParams, requestOptions: RequestOptions = RequestOptions.none()): InvoiceRegenerateResponse
 
     /**
-     * Permanently cancels an invoice by setting its status to voided, preventing collection and
-     * removing it from customer billing. Use this to correct billing errors, cancel incorrect
-     * charges, or handle disputed invoices that should not be collected. Returns the voided invoice
-     * ID with the status change applied immediately to stop any payment processing.
+     * Permanently cancels an invoice by setting its status to voided, preventing collection and removing it from customer billing. Use this to correct billing errors, cancel incorrect charges, or handle disputed invoices that should not be collected. Returns the voided invoice ID with the status change applied immediately to stop any payment processing.
+     *
      */
-    fun void_(params: InvoiceVoidParams): InvoiceVoidResponse = void_(params, RequestOptions.none())
+    fun void_(params: InvoiceVoidParams): InvoiceVoidResponse =
+        void_(
+          params, RequestOptions.none()
+        )
 
     /** @see void_ */
-    fun void_(
-        params: InvoiceVoidParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): InvoiceVoidResponse
+    fun void_(params: InvoiceVoidParams, requestOptions: RequestOptions = RequestOptions.none()): InvoiceVoidResponse
 
     /** A view of [InvoiceService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -79,35 +69,26 @@ interface InvoiceService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): InvoiceService.WithRawResponse
 
-        /**
-         * Returns a raw HTTP response for `post /v1/invoices/regenerate`, but is otherwise the same
-         * as [InvoiceService.regenerate].
-         */
+        /** Returns a raw HTTP response for `post /v1/invoices/regenerate`, but is otherwise the             same as [InvoiceService.regenerate]. */
         @MustBeClosed
-        fun regenerate(
-            params: InvoiceRegenerateParams
-        ): HttpResponseFor<InvoiceRegenerateResponse> = regenerate(params, RequestOptions.none())
+        fun regenerate(params: InvoiceRegenerateParams): HttpResponseFor<InvoiceRegenerateResponse> =
+            regenerate(
+              params, RequestOptions.none()
+            )
 
         /** @see regenerate */
         @MustBeClosed
-        fun regenerate(
-            params: InvoiceRegenerateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<InvoiceRegenerateResponse>
+        fun regenerate(params: InvoiceRegenerateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<InvoiceRegenerateResponse>
 
-        /**
-         * Returns a raw HTTP response for `post /v1/invoices/void`, but is otherwise the same as
-         * [InvoiceService.void_].
-         */
+        /** Returns a raw HTTP response for `post /v1/invoices/void`, but is otherwise the             same as [InvoiceService.void_]. */
         @MustBeClosed
         fun void_(params: InvoiceVoidParams): HttpResponseFor<InvoiceVoidResponse> =
-            void_(params, RequestOptions.none())
+            void_(
+              params, RequestOptions.none()
+            )
 
         /** @see void_ */
         @MustBeClosed
-        fun void_(
-            params: InvoiceVoidParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<InvoiceVoidResponse>
+        fun void_(params: InvoiceVoidParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<InvoiceVoidResponse>
     }
 }

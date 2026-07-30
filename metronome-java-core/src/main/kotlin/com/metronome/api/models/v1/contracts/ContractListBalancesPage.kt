@@ -5,17 +5,20 @@ package com.metronome.api.models.v1.contracts
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.contracts.ContractListBalancesPageResponse
+import com.metronome.api.models.v1.contracts.ContractListBalancesParams
+import com.metronome.api.models.v1.contracts.ContractListBalancesResponse
 import com.metronome.api.services.blocking.v1.ContractService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see ContractService.listBalances */
-class ContractListBalancesPage
-private constructor(
+class ContractListBalancesPage private constructor(
     private val service: ContractService,
     private val params: ContractListBalancesParams,
     private val response: ContractListBalancesPageResponse,
+
 ) : Page<ContractListBalancesResponse> {
 
     /**
@@ -30,18 +33,17 @@ private constructor(
      *
      * @see ContractListBalancesPageResponse.data
      */
-    fun data(): List<ContractListBalancesResponse> =
-        response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<ContractListBalancesResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<ContractListBalancesResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): ContractListBalancesParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
     override fun nextPage(): ContractListBalancesPage = service.listBalances(nextPageParams())
@@ -62,13 +64,15 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [ContractListBalancesPage].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [ContractListBalancesPage]. */
@@ -79,21 +83,29 @@ private constructor(
         private var response: ContractListBalancesPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(contractListBalancesPage: ContractListBalancesPage) = apply {
-            service = contractListBalancesPage.service
-            params = contractListBalancesPage.params
-            response = contractListBalancesPage.response
-        }
+        internal fun from(contractListBalancesPage: ContractListBalancesPage) =
+            apply {
+                service = contractListBalancesPage.service
+                params = contractListBalancesPage.params
+                response = contractListBalancesPage.response
+            }
 
-        fun service(service: ContractService) = apply { this.service = service }
+        fun service(service: ContractService) =
+            apply {
+                this.service = service
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: ContractListBalancesParams) = apply { this.params = params }
+        fun params(params: ContractListBalancesParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: ContractListBalancesPageResponse) = apply {
-            this.response = response
-        }
+        fun response(response: ContractListBalancesPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [ContractListBalancesPage].
@@ -101,6 +113,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .params()
@@ -111,25 +124,27 @@ private constructor(
          */
         fun build(): ContractListBalancesPage =
             ContractListBalancesPage(
-                checkRequired("service", service),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is ContractListBalancesPage &&
-            service == other.service &&
-            params == other.params &&
-            response == other.response
+      return other is ContractListBalancesPage && service == other.service && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() =
-        "ContractListBalancesPage{service=$service, params=$params, response=$response}"
+    override fun toString() = "ContractListBalancesPage{service=$service, params=$params, response=$response}"
 }

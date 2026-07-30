@@ -17,33 +17,29 @@ import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
+import com.metronome.api.models.v1.contracts.ratecards.productorders.ProductOrderUpdateParams
 import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * The ordering of products on a rate card determines the order in which the products will appear on
- * customers' invoices. Use this endpoint to set the order of specific products on the rate card by
- * moving them relative to their current location.
+ * The ordering of products on a rate card determines the order in which the products will appear on customers' invoices. Use this endpoint to set the order of specific products on the rate card by moving them relative to their current location.
+ *
  */
-class ProductOrderUpdateParams
-private constructor(
+class ProductOrderUpdateParams private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+
 ) : Params {
 
-    /**
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
+    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
     fun productMoves(): List<ProductMove> = body.productMoves()
 
     /**
      * ID of the rate card to update
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun rateCardId(): String = body.rateCardId()
 
@@ -77,12 +73,14 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [ProductOrderUpdateParams].
          *
          * The following fields are required:
+         *
          * ```java
          * .productMoves()
          * .rateCardId()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [ProductOrderUpdateParams]. */
@@ -93,172 +91,219 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(productOrderUpdateParams: ProductOrderUpdateParams) = apply {
-            body = productOrderUpdateParams.body.toBuilder()
-            additionalHeaders = productOrderUpdateParams.additionalHeaders.toBuilder()
-            additionalQueryParams = productOrderUpdateParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(productOrderUpdateParams: ProductOrderUpdateParams) =
+            apply {
+                body = productOrderUpdateParams.body.toBuilder()
+                additionalHeaders = productOrderUpdateParams.additionalHeaders.toBuilder()
+                additionalQueryParams = productOrderUpdateParams.additionalQueryParams.toBuilder()
+            }
 
         /**
          * Sets the entire request body.
          *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
+         * This is generally only useful if you are already constructing the body separately. Otherwise,
+         * it's more convenient to use the top-level setters instead:
          * - [productMoves]
          * - [rateCardId]
          */
-        fun body(body: Body) = apply { this.body = body.toBuilder() }
+        fun body(body: Body) =
+            apply {
+                this.body = body.toBuilder()
+            }
 
-        fun productMoves(productMoves: List<ProductMove>) = apply {
-            body.productMoves(productMoves)
-        }
+        fun productMoves(productMoves: List<ProductMove>) =
+            apply {
+                body.productMoves(productMoves)
+            }
 
         /**
          * Sets [Builder.productMoves] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.productMoves] with a well-typed `List<ProductMove>`
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.productMoves] with a well-typed `List<ProductMove>` value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun productMoves(productMoves: JsonField<List<ProductMove>>) = apply {
-            body.productMoves(productMoves)
-        }
+        fun productMoves(productMoves: JsonField<List<ProductMove>>) =
+            apply {
+                body.productMoves(productMoves)
+            }
 
         /**
          * Adds a single [ProductMove] to [productMoves].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addProductMove(productMove: ProductMove) = apply { body.addProductMove(productMove) }
+        fun addProductMove(productMove: ProductMove) =
+            apply {
+                body.addProductMove(productMove)
+            }
 
         /** ID of the rate card to update */
-        fun rateCardId(rateCardId: String) = apply { body.rateCardId(rateCardId) }
+        fun rateCardId(rateCardId: String) =
+            apply {
+                body.rateCardId(rateCardId)
+            }
 
         /**
          * Sets [Builder.rateCardId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.rateCardId] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.rateCardId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun rateCardId(rateCardId: JsonField<String>) = apply { body.rateCardId(rateCardId) }
+        fun rateCardId(rateCardId: JsonField<String>) =
+            apply {
+                body.rateCardId(rateCardId)
+            }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.additionalProperties(additionalBodyProperties)
+            }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
+            apply {
+                body.putAdditionalProperty(
+                  key, value
+                )
+            }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+        fun removeAdditionalBodyProperty(key: String) =
+            apply {
+                body.removeAdditionalProperty(key)
+            }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
+            apply {
+                body.removeAllAdditionalProperties(keys)
+            }
 
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
+        fun putAdditionalHeader(name: String, value: String) =
+            apply {
+                additionalHeaders.put(name, value)
+            }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.put(name, values)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
+        fun replaceAdditionalHeaders(name: String, value: String) =
+            apply {
+                additionalHeaders.replace(name, value)
+            }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.replace(name, values)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) =
+            apply {
+                additionalHeaders.remove(name)
+            }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
+        fun removeAllAdditionalHeaders(names: Set<String>) =
+            apply {
+                additionalHeaders.removeAll(names)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
+        fun putAdditionalQueryParam(key: String, value: String) =
+            apply {
+                additionalQueryParams.put(key, value)
+            }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.put(key, values)
+            }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
+        fun replaceAdditionalQueryParams(key: String, value: String) =
+            apply {
+                additionalQueryParams.replace(key, value)
+            }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.replace(key, values)
+            }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+        fun removeAdditionalQueryParams(key: String) =
+            apply {
+                additionalQueryParams.remove(key)
+            }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) =
+            apply {
+                additionalQueryParams.removeAll(keys)
+            }
 
         /**
          * Returns an immutable instance of [ProductOrderUpdateParams].
@@ -266,6 +311,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .productMoves()
          * .rateCardId()
@@ -275,9 +321,9 @@ private constructor(
          */
         fun build(): ProductOrderUpdateParams =
             ProductOrderUpdateParams(
-                body.build(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
+              body.build(),
+              additionalHeaders.build(),
+              additionalQueryParams.build(),
             )
     }
 
@@ -287,43 +333,37 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    class Body
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class Body @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val productMoves: JsonField<List<ProductMove>>,
         private val rateCardId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("product_moves")
-            @ExcludeMissing
-            productMoves: JsonField<List<ProductMove>> = JsonMissing.of(),
-            @JsonProperty("rate_card_id")
-            @ExcludeMissing
-            rateCardId: JsonField<String> = JsonMissing.of(),
-        ) : this(productMoves, rateCardId, mutableMapOf())
+            @JsonProperty("product_moves") @ExcludeMissing productMoves: JsonField<List<ProductMove>> = JsonMissing.of(),
+            @JsonProperty("rate_card_id") @ExcludeMissing rateCardId: JsonField<String> = JsonMissing.of()
+        ) : this(
+          productMoves,
+          rateCardId,
+          mutableMapOf(),
+        )
 
-        /**
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
+        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
         fun productMoves(): List<ProductMove> = productMoves.getRequired("product_moves")
 
         /**
          * ID of the rate card to update
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun rateCardId(): String = rateCardId.getRequired("rate_card_id")
 
         /**
          * Returns the raw JSON value of [productMoves].
          *
-         * Unlike [productMoves], this method doesn't throw if the JSON field has an unexpected
-         * type.
+         * Unlike [productMoves], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("product_moves")
         @ExcludeMissing
@@ -340,13 +380,12 @@ private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -356,12 +395,14 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [Body].
              *
              * The following fields are required:
+             *
              * ```java
              * .productMoves()
              * .rateCardId()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
@@ -372,37 +413,37 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                productMoves = body.productMoves.map { it.toMutableList() }
-                rateCardId = body.rateCardId
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
+            internal fun from(body: Body) =
+                apply {
+                    productMoves = body.productMoves.map { it.toMutableList() }
+                    rateCardId = body.rateCardId
+                    additionalProperties = body.additionalProperties.toMutableMap()
+                }
 
-            fun productMoves(productMoves: List<ProductMove>) =
-                productMoves(JsonField.of(productMoves))
+            fun productMoves(productMoves: List<ProductMove>) = productMoves(JsonField.of(productMoves))
 
             /**
              * Sets [Builder.productMoves] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.productMoves] with a well-typed `List<ProductMove>`
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.productMoves] with a well-typed `List<ProductMove>` value instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun productMoves(productMoves: JsonField<List<ProductMove>>) = apply {
-                this.productMoves = productMoves.map { it.toMutableList() }
-            }
+            fun productMoves(productMoves: JsonField<List<ProductMove>>) =
+                apply {
+                    this.productMoves = productMoves.map { it.toMutableList() }
+                }
 
             /**
              * Adds a single [ProductMove] to [productMoves].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addProductMove(productMove: ProductMove) = apply {
-                productMoves =
-                    (productMoves ?: JsonField.of(mutableListOf())).also {
+            fun addProductMove(productMove: ProductMove) =
+                apply {
+                    productMoves = (productMoves ?: JsonField.of(mutableListOf())).also {
                         checkKnown("productMoves", it).add(productMove)
                     }
-            }
+                }
 
             /** ID of the rate card to update */
             fun rateCardId(rateCardId: String) = rateCardId(JsonField.of(rateCardId))
@@ -410,30 +451,39 @@ private constructor(
             /**
              * Sets [Builder.rateCardId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.rateCardId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.rateCardId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun rateCardId(rateCardId: JsonField<String>) = apply { this.rateCardId = rateCardId }
+            fun rateCardId(rateCardId: JsonField<String>) =
+                apply {
+                    this.rateCardId = rateCardId
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [Body].
@@ -441,6 +491,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .productMoves()
              * .rateCardId()
@@ -450,32 +501,36 @@ private constructor(
              */
             fun build(): Body =
                 Body(
-                    checkRequired("productMoves", productMoves).map { it.toImmutable() },
-                    checkRequired("rateCardId", rateCardId),
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "productMoves", productMoves
+                  ).map { it.toImmutable() },
+                  checkRequired(
+                    "rateCardId", rateCardId
+                  ),
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Body =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            productMoves().forEach { it.validate() }
-            rateCardId()
-            validated = true
-        }
+                productMoves().forEach { it.validate() }
+                rateCardId()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -486,68 +541,56 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (productMoves.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-                (if (rateCardId.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int = (productMoves.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (if (rateCardId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is Body &&
-                productMoves == other.productMoves &&
-                rateCardId == other.rateCardId &&
-                additionalProperties == other.additionalProperties
+          return other is Body && productMoves == other.productMoves && rateCardId == other.rateCardId && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(productMoves, rateCardId, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(productMoves, rateCardId, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Body{productMoves=$productMoves, rateCardId=$rateCardId, additionalProperties=$additionalProperties}"
+        override fun toString() = "Body{productMoves=$productMoves, rateCardId=$rateCardId, additionalProperties=$additionalProperties}"
     }
 
-    class ProductMove
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
+    class ProductMove @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
         private val position: JsonField<Double>,
         private val productId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
+
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("position")
-            @ExcludeMissing
-            position: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("product_id")
-            @ExcludeMissing
-            productId: JsonField<String> = JsonMissing.of(),
-        ) : this(position, productId, mutableMapOf())
+            @JsonProperty("position") @ExcludeMissing position: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of()
+        ) : this(
+          position,
+          productId,
+          mutableMapOf(),
+        )
 
         /**
          * 0-based index of the new position of the product
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun position(): Double = position.getRequired("position")
 
         /**
          * ID of the product to move
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun productId(): String = productId.getRequired("product_id")
 
@@ -556,24 +599,27 @@ private constructor(
          *
          * Unlike [position], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("position") @ExcludeMissing fun _position(): JsonField<Double> = position
+        @JsonProperty("position")
+        @ExcludeMissing
+        fun _position(): JsonField<Double> = position
 
         /**
          * Returns the raw JSON value of [productId].
          *
          * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
+        @JsonProperty("product_id")
+        @ExcludeMissing
+        fun _productId(): JsonField<String> = productId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
+          additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -583,12 +629,14 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [ProductMove].
              *
              * The following fields are required:
+             *
              * ```java
              * .position()
              * .productId()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [ProductMove]. */
@@ -599,11 +647,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(productMove: ProductMove) = apply {
-                position = productMove.position
-                productId = productMove.productId
-                additionalProperties = productMove.additionalProperties.toMutableMap()
-            }
+            internal fun from(productMove: ProductMove) =
+                apply {
+                    position = productMove.position
+                    productId = productMove.productId
+                    additionalProperties = productMove.additionalProperties.toMutableMap()
+                }
 
             /** 0-based index of the new position of the product */
             fun position(position: Double) = position(JsonField.of(position))
@@ -611,11 +660,13 @@ private constructor(
             /**
              * Sets [Builder.position] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.position] with a well-typed [Double] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.position] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun position(position: JsonField<Double>) = apply { this.position = position }
+            fun position(position: JsonField<Double>) =
+                apply {
+                    this.position = position
+                }
 
             /** ID of the product to move */
             fun productId(productId: String) = productId(JsonField.of(productId))
@@ -623,30 +674,39 @@ private constructor(
             /**
              * Sets [Builder.productId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.productId] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.productId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
+            fun productId(productId: JsonField<String>) =
+                apply {
+                    this.productId = productId
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             /**
              * Returns an immutable instance of [ProductMove].
@@ -654,6 +714,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
+             *
              * ```java
              * .position()
              * .productId()
@@ -663,32 +724,36 @@ private constructor(
              */
             fun build(): ProductMove =
                 ProductMove(
-                    checkRequired("position", position),
-                    checkRequired("productId", productId),
-                    additionalProperties.toMutableMap(),
+                  checkRequired(
+                    "position", position
+                  ),
+                  checkRequired(
+                    "productId", productId
+                  ),
+                  additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types
-         * recursively.
+         * Validates that the types of all values in this object match their expected types recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): ProductMove = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): ProductMove =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            position()
-            productId()
-            validated = true
-        }
+                position()
+                productId()
+                validated = true
+            }
 
         fun isValid(): Boolean =
             try {
@@ -699,50 +764,37 @@ private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
+         * Returns a score indicating how many valid values are contained in this object recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int =
-            (if (position.asKnown().isPresent) 1 else 0) +
-                (if (productId.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int = (if (position.asKnown().isPresent) 1 else 0) + (if (productId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return other is ProductMove &&
-                position == other.position &&
-                productId == other.productId &&
-                additionalProperties == other.additionalProperties
+          return other is ProductMove && position == other.position && productId == other.productId && additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy {
-            Objects.hash(position, productId, additionalProperties)
-        }
+        private val hashCode: Int by lazy { Objects.hash(position, productId, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "ProductMove{position=$position, productId=$productId, additionalProperties=$additionalProperties}"
+        override fun toString() = "ProductMove{position=$position, productId=$productId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is ProductOrderUpdateParams &&
-            body == other.body &&
-            additionalHeaders == other.additionalHeaders &&
-            additionalQueryParams == other.additionalQueryParams
+      return other is ProductOrderUpdateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
-    override fun toString() =
-        "ProductOrderUpdateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() = "ProductOrderUpdateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -7,18 +7,14 @@ import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.models.v1.auditlogs.AuditLogListPageAsync
 import com.metronome.api.models.v1.auditlogs.AuditLogListParams
+import com.metronome.api.services.async.v1.AuditLogServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-/**
- * [Security](https://docs.metronome.com/developer-resources/security/) endpoints allow you to
- * retrieve security-related data.
- */
+/** [Security](https://docs.metronome.com/developer-resources/security/) endpoints allow you to retrieve security-related data. */
 interface AuditLogServiceAsync {
 
-    /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
-     */
+    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -29,10 +25,7 @@ interface AuditLogServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AuditLogServiceAsync
 
     /**
-     * Get a comprehensive audit trail of all operations performed in your Metronome account,
-     * whether initiated through the API, web interface, or automated processes. This endpoint
-     * provides detailed logs of who did what and when, enabling compliance reporting, security
-     * monitoring, and operational troubleshooting across all interaction channels.
+     * Get a comprehensive audit trail of all operations performed in your Metronome account, whether initiated through the API, web interface, or automated processes. This endpoint provides detailed logs of who did what and when, enabling compliance reporting, security monitoring, and operational troubleshooting across all interaction channels.
      *
      * ### Use this endpoint to:
      * - Monitor all account activity for security and compliance purposes
@@ -51,37 +44,34 @@ interface AuditLogServiceAsync {
      * - `next_page`: Cursor for continuous log retrieval
      *
      * ### Usage guidelines:
-     * - Continuous retrieval: The next_page token enables uninterrupted log streaming—save it
-     *   between requests to ensure no logs are missed
-     * - Empty responses: An empty data array means no new logs yet; continue polling with the same
-     *   next_page token
+     * - Continuous retrieval: The next_page token enables uninterrupted log streaming—save it between requests to ensure no logs are missed
+     * - Empty responses: An empty data array means no new logs yet; continue polling with the same next_page token
      * - Date filtering:
      *     - `starting_on`: Earliest logs to return (inclusive)
      *     - `ending_before`: Latest logs to return (exclusive)
      *     - Cannot be used with `next_page`
      * - Resource filtering: Must specify both `resource_type` and `resource_id` together
      * - Sort order: Default is `date_asc`; use `date_desc` for newest first
+     *
      */
     fun list(): CompletableFuture<AuditLogListPageAsync> = list(AuditLogListParams.none())
 
     /** @see list */
-    fun list(
-        params: AuditLogListParams = AuditLogListParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<AuditLogListPageAsync>
+    fun list(params: AuditLogListParams = AuditLogListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<AuditLogListPageAsync>
 
     /** @see list */
-    fun list(
-        params: AuditLogListParams = AuditLogListParams.none()
-    ): CompletableFuture<AuditLogListPageAsync> = list(params, RequestOptions.none())
+    fun list(params: AuditLogListParams = AuditLogListParams.none()): CompletableFuture<AuditLogListPageAsync> =
+        list(
+          params, RequestOptions.none()
+        )
 
     /** @see list */
     fun list(requestOptions: RequestOptions): CompletableFuture<AuditLogListPageAsync> =
-        list(AuditLogListParams.none(), requestOptions)
+        list(
+          AuditLogListParams.none(), requestOptions
+        )
 
-    /**
-     * A view of [AuditLogServiceAsync] that provides access to raw HTTP responses for each method.
-     */
+    /** A view of [AuditLogServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         /**
@@ -89,33 +79,24 @@ interface AuditLogServiceAsync {
          *
          * The original service is not modified.
          */
-        fun withOptions(
-            modifier: Consumer<ClientOptions.Builder>
-        ): AuditLogServiceAsync.WithRawResponse
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): AuditLogServiceAsync.WithRawResponse
 
-        /**
-         * Returns a raw HTTP response for `get /v1/auditLogs`, but is otherwise the same as
-         * [AuditLogServiceAsync.list].
-         */
-        fun list(): CompletableFuture<HttpResponseFor<AuditLogListPageAsync>> =
-            list(AuditLogListParams.none())
+        /** Returns a raw HTTP response for `get /v1/auditLogs`, but is otherwise the             same as [AuditLogServiceAsync.list]. */
+        fun list(): CompletableFuture<HttpResponseFor<AuditLogListPageAsync>> = list(AuditLogListParams.none())
 
         /** @see list */
-        fun list(
-            params: AuditLogListParams = AuditLogListParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<AuditLogListPageAsync>>
+        fun list(params: AuditLogListParams = AuditLogListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<AuditLogListPageAsync>>
 
         /** @see list */
-        fun list(
-            params: AuditLogListParams = AuditLogListParams.none()
-        ): CompletableFuture<HttpResponseFor<AuditLogListPageAsync>> =
-            list(params, RequestOptions.none())
+        fun list(params: AuditLogListParams = AuditLogListParams.none()): CompletableFuture<HttpResponseFor<AuditLogListPageAsync>> =
+            list(
+              params, RequestOptions.none()
+            )
 
         /** @see list */
-        fun list(
-            requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<AuditLogListPageAsync>> =
-            list(AuditLogListParams.none(), requestOptions)
+        fun list(requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<AuditLogListPageAsync>> =
+            list(
+              AuditLogListParams.none(), requestOptions
+            )
     }
 }

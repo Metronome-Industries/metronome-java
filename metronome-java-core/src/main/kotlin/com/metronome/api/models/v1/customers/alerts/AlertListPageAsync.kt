@@ -5,6 +5,9 @@ package com.metronome.api.models.v1.customers.alerts
 import com.metronome.api.core.AutoPagerAsync
 import com.metronome.api.core.PageAsync
 import com.metronome.api.core.checkRequired
+import com.metronome.api.models.v1.customers.alerts.AlertListPageResponse
+import com.metronome.api.models.v1.customers.alerts.AlertListParams
+import com.metronome.api.models.v1.customers.alerts.CustomerAlert
 import com.metronome.api.services.async.v1.customers.AlertServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -13,12 +16,12 @@ import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
 /** @see AlertServiceAsync.list */
-class AlertListPageAsync
-private constructor(
+class AlertListPageAsync private constructor(
     private val service: AlertServiceAsync,
     private val streamHandlerExecutor: Executor,
     private val params: AlertListParams,
     private val response: AlertListPageResponse,
+
 ) : PageAsync<CustomerAlert> {
 
     /**
@@ -33,24 +36,25 @@ private constructor(
      *
      * @see AlertListPageResponse.data
      */
-    fun data(): List<CustomerAlert> =
-        response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<CustomerAlert> = response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<CustomerAlert> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): AlertListParams {
-        val nextCursor =
-            nextPageRaw().getOrNull()
-                ?: throw IllegalStateException("Cannot construct next page params")
-        return params.toBuilder().nextPage(nextCursor).build()
+      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
+      return params.toBuilder()
+          .nextPage(nextCursor)
+          .build()
     }
 
     override fun nextPage(): CompletableFuture<AlertListPageAsync> = service.list(nextPageParams())
 
     fun autoPager(): AutoPagerAsync<CustomerAlert> =
-        AutoPagerAsync.from(this, streamHandlerExecutor)
+        AutoPagerAsync.from(
+          this, streamHandlerExecutor
+        )
 
     /** The parameters that were used to request this page. */
     fun params(): AlertListParams = params
@@ -66,6 +70,7 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [AlertListPageAsync].
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -73,7 +78,8 @@ private constructor(
          * .response()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [AlertListPageAsync]. */
@@ -85,24 +91,35 @@ private constructor(
         private var response: AlertListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(alertListPageAsync: AlertListPageAsync) = apply {
-            service = alertListPageAsync.service
-            streamHandlerExecutor = alertListPageAsync.streamHandlerExecutor
-            params = alertListPageAsync.params
-            response = alertListPageAsync.response
-        }
+        internal fun from(alertListPageAsync: AlertListPageAsync) =
+            apply {
+                service = alertListPageAsync.service
+                streamHandlerExecutor = alertListPageAsync.streamHandlerExecutor
+                params = alertListPageAsync.params
+                response = alertListPageAsync.response
+            }
 
-        fun service(service: AlertServiceAsync) = apply { this.service = service }
+        fun service(service: AlertServiceAsync) =
+            apply {
+                this.service = service
+            }
 
-        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
-            this.streamHandlerExecutor = streamHandlerExecutor
-        }
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) =
+            apply {
+                this.streamHandlerExecutor = streamHandlerExecutor
+            }
 
         /** The parameters that were used to request this page. */
-        fun params(params: AlertListParams) = apply { this.params = params }
+        fun params(params: AlertListParams) =
+            apply {
+                this.params = params
+            }
 
         /** The response that this page was parsed from. */
-        fun response(response: AlertListPageResponse) = apply { this.response = response }
+        fun response(response: AlertListPageResponse) =
+            apply {
+                this.response = response
+            }
 
         /**
          * Returns an immutable instance of [AlertListPageAsync].
@@ -110,6 +127,7 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
+         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -121,27 +139,30 @@ private constructor(
          */
         fun build(): AlertListPageAsync =
             AlertListPageAsync(
-                checkRequired("service", service),
-                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
-                checkRequired("params", params),
-                checkRequired("response", response),
+              checkRequired(
+                "service", service
+              ),
+              checkRequired(
+                "streamHandlerExecutor", streamHandlerExecutor
+              ),
+              checkRequired(
+                "params", params
+              ),
+              checkRequired(
+                "response", response
+              ),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return other is AlertListPageAsync &&
-            service == other.service &&
-            streamHandlerExecutor == other.streamHandlerExecutor &&
-            params == other.params &&
-            response == other.response
+      return other is AlertListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, streamHandlerExecutor, params, response)
 
-    override fun toString() =
-        "AlertListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
+    override fun toString() = "AlertListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }
