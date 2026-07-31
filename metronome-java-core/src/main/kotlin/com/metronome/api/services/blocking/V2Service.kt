@@ -4,6 +4,7 @@ package com.metronome.api.services.blocking
 
 import com.metronome.api.core.ClientOptions
 import com.metronome.api.services.blocking.v2.ContractService
+import com.metronome.api.services.blocking.v2.NotificationService
 import java.util.function.Consumer
 
 interface V2Service {
@@ -22,6 +23,8 @@ interface V2Service {
 
     fun contracts(): ContractService
 
+    fun notifications(): NotificationService
+
     /** A view of [V2Service] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
@@ -33,5 +36,7 @@ interface V2Service {
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): V2Service.WithRawResponse
 
         fun contracts(): ContractService.WithRawResponse
+
+        fun notifications(): NotificationService.WithRawResponse
     }
 }
