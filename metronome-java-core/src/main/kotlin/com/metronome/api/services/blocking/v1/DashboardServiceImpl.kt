@@ -17,62 +17,71 @@ import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
 import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlParams
 import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlResponse
-import com.metronome.api.services.blocking.v1.DashboardService
-import com.metronome.api.services.blocking.v1.DashboardServiceImpl
 import java.util.function.Consumer
 
-/** [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent your users for all billing and reporting. Use these endpoints to create, retrieve, update, and archive customers and their billing configuration. */
-class DashboardServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+/**
+ * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent
+ * your users for all billing and reporting. Use these endpoints to create, retrieve, update, and
+ * archive customers and their billing configuration.
+ */
+class DashboardServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    DashboardService {
 
-) : DashboardService {
-
-    private val withRawResponse: DashboardService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: DashboardService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): DashboardService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): DashboardService = DashboardServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): DashboardService =
+        DashboardServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun getEmbeddableUrl(params: DashboardGetEmbeddableUrlParams, requestOptions: RequestOptions): DashboardGetEmbeddableUrlResponse =
+    override fun getEmbeddableUrl(
+        params: DashboardGetEmbeddableUrlParams,
+        requestOptions: RequestOptions,
+    ): DashboardGetEmbeddableUrlResponse =
         // post /v1/dashboards/getEmbeddableUrl
         withRawResponse().getEmbeddableUrl(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        DashboardService.WithRawResponse {
 
-    ) : DashboardService.WithRawResponse {
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
-
-        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): DashboardService.WithRawResponse = DashboardServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
-
-        private val getEmbeddableUrlHandler: Handler<DashboardGetEmbeddableUrlResponse> = jsonHandler<DashboardGetEmbeddableUrlResponse>(clientOptions.jsonMapper)
-
-        override fun getEmbeddableUrl(params: DashboardGetEmbeddableUrlParams, requestOptions: RequestOptions): HttpResponseFor<DashboardGetEmbeddableUrlResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "dashboards", "getEmbeddableUrl")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): DashboardService.WithRawResponse =
+            DashboardServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
             )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  getEmbeddableUrlHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+
+        private val getEmbeddableUrlHandler: Handler<DashboardGetEmbeddableUrlResponse> =
+            jsonHandler<DashboardGetEmbeddableUrlResponse>(clientOptions.jsonMapper)
+
+        override fun getEmbeddableUrl(
+            params: DashboardGetEmbeddableUrlParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<DashboardGetEmbeddableUrlResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "dashboards", "getEmbeddableUrl")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { getEmbeddableUrlHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }

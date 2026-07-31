@@ -5,10 +5,7 @@ package com.metronome.api.core
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 
-class AutoPager <T> private constructor(
-    private val firstPage: Page<T>,
-
-) : Iterable<T> {
+class AutoPager<T> private constructor(private val firstPage: Page<T>) : Iterable<T> {
 
     companion object {
 

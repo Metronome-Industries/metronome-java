@@ -15,26 +15,27 @@ import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.v1.customers.CustomerSetBillingConfigurationsResponse
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+class CustomerSetBillingConfigurationsResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
     private val data: JsonField<List<Data>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
-
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("data") @ExcludeMissing data: JsonField<List<Data>> = JsonMissing.of()
-    ) : this(
-      data, mutableMapOf()
-    )
+    ) : this(data, mutableMapOf())
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): List<Data> = data.getRequired("data")
 
     /**
@@ -42,34 +43,32 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
      *
      * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<List<Data>> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Data>> = data
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-      additionalProperties.put(key, value)
+        additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [CustomerSetBillingConfigurationsResponse].
+         * Returns a mutable builder for constructing an instance of
+         * [CustomerSetBillingConfigurationsResponse].
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [CustomerSetBillingConfigurationsResponse]. */
@@ -79,62 +78,56 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(customerSetBillingConfigurationsResponse: CustomerSetBillingConfigurationsResponse) =
-            apply {
-                data = customerSetBillingConfigurationsResponse.data.map { it.toMutableList() }
-                additionalProperties = customerSetBillingConfigurationsResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(
+            customerSetBillingConfigurationsResponse: CustomerSetBillingConfigurationsResponse
+        ) = apply {
+            data = customerSetBillingConfigurationsResponse.data.map { it.toMutableList() }
+            additionalProperties =
+                customerSetBillingConfigurationsResponse.additionalProperties.toMutableMap()
+        }
 
         fun data(data: List<Data>) = data(JsonField.of(data))
 
         /**
          * Sets [Builder.data] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.data] with a well-typed `List<Data>` value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.data] with a well-typed `List<Data>` value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun data(data: JsonField<List<Data>>) =
-            apply {
-                this.data = data.map { it.toMutableList() }
-            }
+        fun data(data: JsonField<List<Data>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
 
         /**
          * Adds a single [Data] to [Builder.data].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addData(data: Data) =
-            apply {
-                this.data = (this.data ?: JsonField.of(mutableListOf())).also {
+        fun addData(data: Data) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).also {
                     checkKnown("data", it).add(data)
                 }
-            }
+        }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         /**
          * Returns an immutable instance of [CustomerSetBillingConfigurationsResponse].
@@ -142,7 +135,6 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * ```
@@ -151,9 +143,8 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
          */
         fun build(): CustomerSetBillingConfigurationsResponse =
             CustomerSetBillingConfigurationsResponse(
-              checkRequired(
-                "data", data
-              ).map { it.toImmutable() }, additionalProperties.toMutableMap()
+                checkRequired("data", data).map { it.toImmutable() },
+                additionalProperties.toMutableMap(),
             )
     }
 
@@ -167,15 +158,14 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): CustomerSetBillingConfigurationsResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().forEach { it.validate() }
-            validated = true
+    fun validate(): CustomerSetBillingConfigurationsResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -191,9 +181,12 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int = (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+    internal fun validity(): Int =
+        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
-    class Data @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class Data
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val id: JsonField<String>,
         private val billingProvider: JsonField<BillingProvider>,
         private val configuration: JsonField<Configuration>,
@@ -201,66 +194,84 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
         private val deliveryMethodId: JsonField<String>,
         private val taxProvider: JsonField<TaxProvider>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("billing_provider") @ExcludeMissing billingProvider: JsonField<BillingProvider> = JsonMissing.of(),
-            @JsonProperty("configuration") @ExcludeMissing configuration: JsonField<Configuration> = JsonMissing.of(),
-            @JsonProperty("customer_id") @ExcludeMissing customerId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("delivery_method_id") @ExcludeMissing deliveryMethodId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("tax_provider") @ExcludeMissing taxProvider: JsonField<TaxProvider> = JsonMissing.of()
+            @JsonProperty("billing_provider")
+            @ExcludeMissing
+            billingProvider: JsonField<BillingProvider> = JsonMissing.of(),
+            @JsonProperty("configuration")
+            @ExcludeMissing
+            configuration: JsonField<Configuration> = JsonMissing.of(),
+            @JsonProperty("customer_id")
+            @ExcludeMissing
+            customerId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("delivery_method_id")
+            @ExcludeMissing
+            deliveryMethodId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("tax_provider")
+            @ExcludeMissing
+            taxProvider: JsonField<TaxProvider> = JsonMissing.of(),
         ) : this(
-          id,
-          billingProvider,
-          configuration,
-          customerId,
-          deliveryMethodId,
-          taxProvider,
-          mutableMapOf(),
+            id,
+            billingProvider,
+            configuration,
+            customerId,
+            deliveryMethodId,
+            taxProvider,
+            mutableMapOf(),
         )
 
         /**
          * ID of the created configuration
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun id(): Optional<String> = id.getOptional("id")
 
         /**
          * The billing provider set for this configuration.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun billingProvider(): Optional<BillingProvider> = billingProvider.getOptional("billing_provider")
+        fun billingProvider(): Optional<BillingProvider> =
+            billingProvider.getOptional("billing_provider")
 
         /**
-         * Configuration for the billing provider. The structure of this object is specific to the billing provider and delivery method combination.
+         * Configuration for the billing provider. The structure of this object is specific to the
+         * billing provider and delivery method combination.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun configuration(): Optional<Configuration> = configuration.getOptional("configuration")
 
         /**
          * ID of the customer this configuration is associated with.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun customerId(): Optional<String> = customerId.getOptional("customer_id")
 
         /**
          * ID of the delivery method used for this customer configuration.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun deliveryMethodId(): Optional<String> = deliveryMethodId.getOptional("delivery_method_id")
+        fun deliveryMethodId(): Optional<String> =
+            deliveryMethodId.getOptional("delivery_method_id")
 
         /**
          * The tax provider set for this configuration.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun taxProvider(): Optional<TaxProvider> = taxProvider.getOptional("tax_provider")
 
@@ -269,14 +280,13 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
          *
          * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("id")
-        @ExcludeMissing
-        fun _id(): JsonField<String> = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [billingProvider].
          *
-         * Unlike [billingProvider], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [billingProvider], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("billing_provider")
         @ExcludeMissing
@@ -285,7 +295,8 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
         /**
          * Returns the raw JSON value of [configuration].
          *
-         * Unlike [configuration], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [configuration], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("configuration")
         @ExcludeMissing
@@ -303,7 +314,8 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
         /**
          * Returns the raw JSON value of [deliveryMethodId].
          *
-         * Unlike [deliveryMethodId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [deliveryMethodId], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("delivery_method_id")
         @ExcludeMissing
@@ -320,20 +332,20 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Data]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Data]. */
@@ -348,16 +360,15 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(data: Data) =
-                apply {
-                    id = data.id
-                    billingProvider = data.billingProvider
-                    configuration = data.configuration
-                    customerId = data.customerId
-                    deliveryMethodId = data.deliveryMethodId
-                    taxProvider = data.taxProvider
-                    additionalProperties = data.additionalProperties.toMutableMap()
-                }
+            internal fun from(data: Data) = apply {
+                id = data.id
+                billingProvider = data.billingProvider
+                configuration = data.configuration
+                customerId = data.customerId
+                deliveryMethodId = data.deliveryMethodId
+                taxProvider = data.taxProvider
+                additionalProperties = data.additionalProperties.toMutableMap()
+            }
 
             /** ID of the created configuration */
             fun id(id: String) = id(JsonField.of(id))
@@ -365,41 +376,44 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             /**
              * Sets [Builder.id] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun id(id: JsonField<String>) =
-                apply {
-                    this.id = id
-                }
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             /** The billing provider set for this configuration. */
-            fun billingProvider(billingProvider: BillingProvider) = billingProvider(JsonField.of(billingProvider))
+            fun billingProvider(billingProvider: BillingProvider) =
+                billingProvider(JsonField.of(billingProvider))
 
             /**
              * Sets [Builder.billingProvider] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.billingProvider] with a well-typed [BillingProvider] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.billingProvider] with a well-typed [BillingProvider]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun billingProvider(billingProvider: JsonField<BillingProvider>) =
-                apply {
-                    this.billingProvider = billingProvider
-                }
+            fun billingProvider(billingProvider: JsonField<BillingProvider>) = apply {
+                this.billingProvider = billingProvider
+            }
 
-            /** Configuration for the billing provider. The structure of this object is specific to the billing provider and delivery method combination. */
-            fun configuration(configuration: Configuration) = configuration(JsonField.of(configuration))
+            /**
+             * Configuration for the billing provider. The structure of this object is specific to
+             * the billing provider and delivery method combination.
+             */
+            fun configuration(configuration: Configuration) =
+                configuration(JsonField.of(configuration))
 
             /**
              * Sets [Builder.configuration] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.configuration] with a well-typed [Configuration] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.configuration] with a well-typed [Configuration]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun configuration(configuration: JsonField<Configuration>) =
-                apply {
-                    this.configuration = configuration
-                }
+            fun configuration(configuration: JsonField<Configuration>) = apply {
+                this.configuration = configuration
+            }
 
             /** ID of the customer this configuration is associated with. */
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
@@ -407,27 +421,26 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             /**
              * Sets [Builder.customerId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.customerId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.customerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun customerId(customerId: JsonField<String>) =
-                apply {
-                    this.customerId = customerId
-                }
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /** ID of the delivery method used for this customer configuration. */
-            fun deliveryMethodId(deliveryMethodId: String) = deliveryMethodId(JsonField.of(deliveryMethodId))
+            fun deliveryMethodId(deliveryMethodId: String) =
+                deliveryMethodId(JsonField.of(deliveryMethodId))
 
             /**
              * Sets [Builder.deliveryMethodId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.deliveryMethodId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.deliveryMethodId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun deliveryMethodId(deliveryMethodId: JsonField<String>) =
-                apply {
-                    this.deliveryMethodId = deliveryMethodId
-                }
+            fun deliveryMethodId(deliveryMethodId: JsonField<String>) = apply {
+                this.deliveryMethodId = deliveryMethodId
+            }
 
             /** The tax provider set for this configuration. */
             fun taxProvider(taxProvider: TaxProvider) = taxProvider(JsonField.of(taxProvider))
@@ -435,39 +448,32 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             /**
              * Sets [Builder.taxProvider] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.taxProvider] with a well-typed [TaxProvider] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.taxProvider] with a well-typed [TaxProvider] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun taxProvider(taxProvider: JsonField<TaxProvider>) =
-                apply {
-                    this.taxProvider = taxProvider
-                }
+            fun taxProvider(taxProvider: JsonField<TaxProvider>) = apply {
+                this.taxProvider = taxProvider
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [Data].
@@ -476,40 +482,40 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
              */
             fun build(): Data =
                 Data(
-                  id,
-                  billingProvider,
-                  configuration,
-                  customerId,
-                  deliveryMethodId,
-                  taxProvider,
-                  additionalProperties.toMutableMap(),
+                    id,
+                    billingProvider,
+                    configuration,
+                    customerId,
+                    deliveryMethodId,
+                    taxProvider,
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Data =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                id()
-                billingProvider().ifPresent { it.validate() }
-                configuration().ifPresent { it.validate() }
-                customerId()
-                deliveryMethodId()
-                taxProvider().ifPresent { it.validate() }
-                validated = true
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
             }
+
+            id()
+            billingProvider().ifPresent { it.validate() }
+            configuration().ifPresent { it.validate() }
+            customerId()
+            deliveryMethodId()
+            taxProvider().ifPresent { it.validate() }
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -520,28 +526,34 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0) + (billingProvider.asKnown().getOrNull()?.validity() ?: 0) + (configuration.asKnown().getOrNull()?.validity() ?: 0) + (if (customerId.asKnown().isPresent) 1 else 0) + (if (deliveryMethodId.asKnown().isPresent) 1 else 0) + (taxProvider.asKnown().getOrNull()?.validity() ?: 0)
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (billingProvider.asKnown().getOrNull()?.validity() ?: 0) +
+                (configuration.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (customerId.asKnown().isPresent) 1 else 0) +
+                (if (deliveryMethodId.asKnown().isPresent) 1 else 0) +
+                (taxProvider.asKnown().getOrNull()?.validity() ?: 0)
 
         /** The billing provider set for this configuration. */
-        class BillingProvider @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        class BillingProvider
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -583,11 +595,9 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
              * An enum containing [BillingProvider]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [BillingProvider] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
@@ -600,16 +610,19 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
                 WORKDAY,
                 GCP_MARKETPLACE,
                 METRONOME,
-                /** An enum member indicating that [BillingProvider] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [BillingProvider] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -628,10 +641,11 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -650,33 +664,37 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): BillingProvider =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): BillingProvider = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -687,19 +705,19 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is BillingProvider && value == other.value
+                return other is BillingProvider && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -707,10 +725,15 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             override fun toString() = value.toString()
         }
 
-        /** Configuration for the billing provider. The structure of this object is specific to the billing provider and delivery method combination. */
-        class Configuration @JsonCreator private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
-
+        /**
+         * Configuration for the billing provider. The structure of this object is specific to the
+         * billing provider and delivery method combination.
+         */
+        class Configuration
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
 
             @JsonAnyGetter
@@ -722,8 +745,7 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             companion object {
 
                 /** Returns a mutable builder for constructing an instance of [Configuration]. */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [Configuration]. */
@@ -732,36 +754,31 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(configuration: Configuration) =
-                    apply {
-                        additionalProperties = configuration.additionalProperties.toMutableMap()
-                    }
+                internal fun from(configuration: Configuration) = apply {
+                    additionalProperties = configuration.additionalProperties.toMutableMap()
+                }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [Configuration].
@@ -774,21 +791,22 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): Configuration =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    validated = true
+            fun validate(): Configuration = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -799,19 +817,21 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is Configuration && additionalProperties == other.additionalProperties
+                return other is Configuration && additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -822,20 +842,18 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
         }
 
         /** The tax provider set for this configuration. */
-        class TaxProvider @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        class TaxProvider @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -859,27 +877,28 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
              * An enum containing [TaxProvider]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [TaxProvider] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
                 ANROK,
                 AVALARA,
                 STRIPE,
-                /** An enum member indicating that [TaxProvider] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [TaxProvider] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -892,10 +911,11 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -908,33 +928,37 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): TaxProvider =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): TaxProvider = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -945,19 +969,19 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is TaxProvider && value == other.value
+                return other is TaxProvider && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -966,31 +990,52 @@ class CustomerSetBillingConfigurationsResponse @JsonCreator(mode = JsonCreator.M
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Data && id == other.id && billingProvider == other.billingProvider && configuration == other.configuration && customerId == other.customerId && deliveryMethodId == other.deliveryMethodId && taxProvider == other.taxProvider && additionalProperties == other.additionalProperties
+            return other is Data &&
+                id == other.id &&
+                billingProvider == other.billingProvider &&
+                configuration == other.configuration &&
+                customerId == other.customerId &&
+                deliveryMethodId == other.deliveryMethodId &&
+                taxProvider == other.taxProvider &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(id, billingProvider, configuration, customerId, deliveryMethodId, taxProvider, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                billingProvider,
+                configuration,
+                customerId,
+                deliveryMethodId,
+                taxProvider,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Data{id=$id, billingProvider=$billingProvider, configuration=$configuration, customerId=$customerId, deliveryMethodId=$deliveryMethodId, taxProvider=$taxProvider, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Data{id=$id, billingProvider=$billingProvider, configuration=$configuration, customerId=$customerId, deliveryMethodId=$deliveryMethodId, taxProvider=$taxProvider, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is CustomerSetBillingConfigurationsResponse && data == other.data && additionalProperties == other.additionalProperties
+        return other is CustomerSetBillingConfigurationsResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "CustomerSetBillingConfigurationsResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "CustomerSetBillingConfigurationsResponse{data=$data, additionalProperties=$additionalProperties}"
 }

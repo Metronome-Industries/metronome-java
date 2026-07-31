@@ -15,41 +15,44 @@ import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.v2.notifications.offset.OffsetCreateParams
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Create an offset lifecycle event notification configuration. The lifecycle event type is inferred from the policy.type field.
- *
+ * Create an offset lifecycle event notification configuration. The lifecycle event type is inferred
+ * from the policy.type field.
  */
-class OffsetCreateParams private constructor(
+class OffsetCreateParams
+private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-
 ) : Params {
 
     /**
      * The name for this offset notification configuration.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun name(): String = body.name()
 
     /**
-     * The offset lifecycle event policy that defines when and how this notification should be triggered. The lifecycle event type is inferred from the policy.type field.
+     * The offset lifecycle event policy that defines when and how this notification should be
+     * triggered. The lifecycle event type is inferred from the policy.type field.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun policy(): Policy = body.policy()
 
     /**
      * Optional uniqueness key to prevent duplicate notification configurations.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun uniquenessKey(): Optional<String> = body.uniquenessKey()
 
@@ -90,14 +93,12 @@ class OffsetCreateParams private constructor(
          * Returns a mutable builder for constructing an instance of [OffsetCreateParams].
          *
          * The following fields are required:
-         *
          * ```java
          * .name()
          * .policy()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [OffsetCreateParams]. */
@@ -108,237 +109,178 @@ class OffsetCreateParams private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(offsetCreateParams: OffsetCreateParams) =
-            apply {
-                body = offsetCreateParams.body.toBuilder()
-                additionalHeaders = offsetCreateParams.additionalHeaders.toBuilder()
-                additionalQueryParams = offsetCreateParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(offsetCreateParams: OffsetCreateParams) = apply {
+            body = offsetCreateParams.body.toBuilder()
+            additionalHeaders = offsetCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = offsetCreateParams.additionalQueryParams.toBuilder()
+        }
 
         /**
          * Sets the entire request body.
          *
-         * This is generally only useful if you are already constructing the body separately. Otherwise,
-         * it's more convenient to use the top-level setters instead:
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
          * - [name]
          * - [policy]
          * - [uniquenessKey]
          */
-        fun body(body: Body) =
-            apply {
-                this.body = body.toBuilder()
-            }
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /**
-         * The name for this offset notification configuration.
-         *
-         */
-        fun name(name: String) =
-            apply {
-                body.name(name)
-            }
+        /** The name for this offset notification configuration. */
+        fun name(name: String) = apply { body.name(name) }
 
         /**
          * Sets [Builder.name] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun name(name: JsonField<String>) =
-            apply {
-                body.name(name)
-            }
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
         /**
-         * The offset lifecycle event policy that defines when and how this notification should be triggered. The lifecycle event type is inferred from the policy.type field.
-         *
+         * The offset lifecycle event policy that defines when and how this notification should be
+         * triggered. The lifecycle event type is inferred from the policy.type field.
          */
-        fun policy(policy: Policy) =
-            apply {
-                body.policy(policy)
-            }
+        fun policy(policy: Policy) = apply { body.policy(policy) }
 
         /**
          * Sets [Builder.policy] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.policy] with a well-typed [Policy] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.policy] with a well-typed [Policy] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun policy(policy: JsonField<Policy>) =
-            apply {
-                body.policy(policy)
-            }
+        fun policy(policy: JsonField<Policy>) = apply { body.policy(policy) }
 
-        /**
-         * Optional uniqueness key to prevent duplicate notification configurations.
-         *
-         */
-        fun uniquenessKey(uniquenessKey: String) =
-            apply {
-                body.uniquenessKey(uniquenessKey)
-            }
+        /** Optional uniqueness key to prevent duplicate notification configurations. */
+        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
 
         /**
          * Sets [Builder.uniquenessKey] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.uniquenessKey] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.uniquenessKey] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun uniquenessKey(uniquenessKey: JsonField<String>) =
-            apply {
-                body.uniquenessKey(uniquenessKey)
-            }
+        fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+            body.uniquenessKey(uniquenessKey)
+        }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.additionalProperties(additionalBodyProperties)
-            }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
-            apply {
-                body.putAdditionalProperty(
-                  key, value
-                )
-            }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) =
-            apply {
-                body.removeAdditionalProperty(key)
-            }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
-            apply {
-                body.removeAllAdditionalProperties(keys)
-            }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
-        fun additionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun putAdditionalHeader(name: String, value: String) =
-            apply {
-                additionalHeaders.put(name, value)
-            }
+        fun putAdditionalHeader(name: String, value: String) = apply {
+            additionalHeaders.put(name, value)
+        }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.put(name, values)
-            }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.put(name, values)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun replaceAdditionalHeaders(name: String, value: String) =
-            apply {
-                additionalHeaders.replace(name, value)
-            }
+        fun replaceAdditionalHeaders(name: String, value: String) = apply {
+            additionalHeaders.replace(name, value)
+        }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.replace(name, values)
-            }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.replace(name, values)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun removeAdditionalHeaders(name: String) =
-            apply {
-                additionalHeaders.remove(name)
-            }
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) =
-            apply {
-                additionalHeaders.removeAll(names)
-            }
+        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
+            additionalHeaders.removeAll(names)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun putAdditionalQueryParam(key: String, value: String) =
-            apply {
-                additionalQueryParams.put(key, value)
-            }
+        fun putAdditionalQueryParam(key: String, value: String) = apply {
+            additionalQueryParams.put(key, value)
+        }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.put(key, values)
-            }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.put(key, values)
+        }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.putAll(additionalQueryParams)
-            }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.putAll(additionalQueryParams)
+        }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) =
-            apply {
-                additionalQueryParams.replace(key, value)
-            }
+        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
+            additionalQueryParams.replace(key, value)
+        }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.replace(key, values)
-            }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.replace(key, values)
+        }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.replaceAll(additionalQueryParams)
-            }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.replaceAll(additionalQueryParams)
+        }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) =
-            apply {
-                additionalQueryParams.remove(key)
-            }
+        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) =
-            apply {
-                additionalQueryParams.removeAll(keys)
-            }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
+            additionalQueryParams.removeAll(keys)
+        }
 
         /**
          * Returns an immutable instance of [OffsetCreateParams].
@@ -346,7 +288,6 @@ class OffsetCreateParams private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .name()
          * .policy()
@@ -356,9 +297,9 @@ class OffsetCreateParams private constructor(
          */
         fun build(): OffsetCreateParams =
             OffsetCreateParams(
-              body.build(),
-              additionalHeaders.build(),
-              additionalQueryParams.build(),
+                body.build(),
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
             )
     }
 
@@ -368,44 +309,46 @@ class OffsetCreateParams private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    class Body @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val name: JsonField<String>,
         private val policy: JsonField<Policy>,
         private val uniquenessKey: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("policy") @ExcludeMissing policy: JsonField<Policy> = JsonMissing.of(),
-            @JsonProperty("uniqueness_key") @ExcludeMissing uniquenessKey: JsonField<String> = JsonMissing.of()
-        ) : this(
-          name,
-          policy,
-          uniquenessKey,
-          mutableMapOf(),
-        )
+            @JsonProperty("uniqueness_key")
+            @ExcludeMissing
+            uniquenessKey: JsonField<String> = JsonMissing.of(),
+        ) : this(name, policy, uniquenessKey, mutableMapOf())
 
         /**
          * The name for this offset notification configuration.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun name(): String = name.getRequired("name")
 
         /**
-         * The offset lifecycle event policy that defines when and how this notification should be triggered. The lifecycle event type is inferred from the policy.type field.
+         * The offset lifecycle event policy that defines when and how this notification should be
+         * triggered. The lifecycle event type is inferred from the policy.type field.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun policy(): Policy = policy.getRequired("policy")
 
         /**
          * Optional uniqueness key to prevent duplicate notification configurations.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun uniquenessKey(): Optional<String> = uniquenessKey.getOptional("uniqueness_key")
 
@@ -414,23 +357,20 @@ class OffsetCreateParams private constructor(
          *
          * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("name")
-        @ExcludeMissing
-        fun _name(): JsonField<String> = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
          * Returns the raw JSON value of [policy].
          *
          * Unlike [policy], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("policy")
-        @ExcludeMissing
-        fun _policy(): JsonField<Policy> = policy
+        @JsonProperty("policy") @ExcludeMissing fun _policy(): JsonField<Policy> = policy
 
         /**
          * Returns the raw JSON value of [uniquenessKey].
          *
-         * Unlike [uniquenessKey], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [uniquenessKey], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("uniqueness_key")
         @ExcludeMissing
@@ -438,12 +378,13 @@ class OffsetCreateParams private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -453,14 +394,12 @@ class OffsetCreateParams private constructor(
              * Returns a mutable builder for constructing an instance of [Body].
              *
              * The following fields are required:
-             *
              * ```java
              * .name()
              * .policy()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
@@ -472,90 +411,72 @@ class OffsetCreateParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(body: Body) =
-                apply {
-                    name = body.name
-                    policy = body.policy
-                    uniquenessKey = body.uniquenessKey
-                    additionalProperties = body.additionalProperties.toMutableMap()
-                }
+            internal fun from(body: Body) = apply {
+                name = body.name
+                policy = body.policy
+                uniquenessKey = body.uniquenessKey
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
 
-            /**
-             * The name for this offset notification configuration.
-             *
-             */
+            /** The name for this offset notification configuration. */
             fun name(name: String) = name(JsonField.of(name))
 
             /**
              * Sets [Builder.name] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun name(name: JsonField<String>) =
-                apply {
-                    this.name = name
-                }
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /**
-             * The offset lifecycle event policy that defines when and how this notification should be triggered. The lifecycle event type is inferred from the policy.type field.
-             *
+             * The offset lifecycle event policy that defines when and how this notification should
+             * be triggered. The lifecycle event type is inferred from the policy.type field.
              */
             fun policy(policy: Policy) = policy(JsonField.of(policy))
 
             /**
              * Sets [Builder.policy] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.policy] with a well-typed [Policy] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.policy] with a well-typed [Policy] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun policy(policy: JsonField<Policy>) =
-                apply {
-                    this.policy = policy
-                }
+            fun policy(policy: JsonField<Policy>) = apply { this.policy = policy }
 
-            /**
-             * Optional uniqueness key to prevent duplicate notification configurations.
-             *
-             */
+            /** Optional uniqueness key to prevent duplicate notification configurations. */
             fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
 
             /**
              * Sets [Builder.uniquenessKey] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.uniquenessKey] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.uniquenessKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun uniquenessKey(uniquenessKey: JsonField<String>) =
-                apply {
-                    this.uniquenessKey = uniquenessKey
-                }
+            fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+                this.uniquenessKey = uniquenessKey
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [Body].
@@ -563,7 +484,6 @@ class OffsetCreateParams private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .name()
              * .policy()
@@ -573,38 +493,34 @@ class OffsetCreateParams private constructor(
              */
             fun build(): Body =
                 Body(
-                  checkRequired(
-                    "name", name
-                  ),
-                  checkRequired(
-                    "policy", policy
-                  ),
-                  uniquenessKey,
-                  additionalProperties.toMutableMap(),
+                    checkRequired("name", name),
+                    checkRequired("policy", policy),
+                    uniquenessKey,
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Body =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                name()
-                policy().validate()
-                uniquenessKey()
-                validated = true
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
             }
+
+            name()
+            policy().validate()
+            uniquenessKey()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -615,60 +531,73 @@ class OffsetCreateParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (if (name.asKnown().isPresent) 1 else 0) + (policy.asKnown().getOrNull()?.validity() ?: 0) + (if (uniquenessKey.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int =
+            (if (name.asKnown().isPresent) 1 else 0) +
+                (policy.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (uniquenessKey.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Body && name == other.name && policy == other.policy && uniquenessKey == other.uniquenessKey && additionalProperties == other.additionalProperties
+            return other is Body &&
+                name == other.name &&
+                policy == other.policy &&
+                uniquenessKey == other.uniquenessKey &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(name, policy, uniquenessKey, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(name, policy, uniquenessKey, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Body{name=$name, policy=$policy, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Body{name=$name, policy=$policy, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     /**
-     * The offset lifecycle event policy that defines when and how this notification should be triggered. The lifecycle event type is inferred from the policy.type field.
-     *
+     * The offset lifecycle event policy that defines when and how this notification should be
+     * triggered. The lifecycle event type is inferred from the policy.type field.
      */
-    class Policy @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class Policy
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val offset: JsonField<String>,
         private val type: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("offset") @ExcludeMissing offset: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("type") @ExcludeMissing type: JsonField<String> = JsonMissing.of()
-        ) : this(
-          offset,
-          type,
-          mutableMapOf(),
-        )
+            @JsonProperty("type") @ExcludeMissing type: JsonField<String> = JsonMissing.of(),
+        ) : this(offset, type, mutableMapOf())
 
         /**
-         * ISO-8601 duration string indicating how much time before or after the base event this notification should be sent. Positive values indicate notifications after the event, negative values indicate notifications before the event. Examples: "P1D" (1 day after), "-PT2H" (2 hours before)
+         * ISO-8601 duration string indicating how much time before or after the base event this
+         * notification should be sent. Positive values indicate notifications after the event,
+         * negative values indicate notifications before the event. Examples: "P1D" (1 day after),
+         * "-PT2H" (2 hours before)
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun offset(): String = offset.getRequired("offset")
 
         /**
          * The type of lifecycle event that this offset is based on.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun type(): String = type.getRequired("type")
 
@@ -677,27 +606,24 @@ class OffsetCreateParams private constructor(
          *
          * Unlike [offset], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("offset")
-        @ExcludeMissing
-        fun _offset(): JsonField<String> = offset
+        @JsonProperty("offset") @ExcludeMissing fun _offset(): JsonField<String> = offset
 
         /**
          * Returns the raw JSON value of [type].
          *
          * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("type")
-        @ExcludeMissing
-        fun _type(): JsonField<String> = type
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<String> = type
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -707,14 +633,12 @@ class OffsetCreateParams private constructor(
              * Returns a mutable builder for constructing an instance of [Policy].
              *
              * The following fields are required:
-             *
              * ```java
              * .offset()
              * .type()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Policy]. */
@@ -725,72 +649,59 @@ class OffsetCreateParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(policy: Policy) =
-                apply {
-                    offset = policy.offset
-                    type = policy.type
-                    additionalProperties = policy.additionalProperties.toMutableMap()
-                }
+            internal fun from(policy: Policy) = apply {
+                offset = policy.offset
+                type = policy.type
+                additionalProperties = policy.additionalProperties.toMutableMap()
+            }
 
             /**
-             * ISO-8601 duration string indicating how much time before or after the base event this notification should be sent. Positive values indicate notifications after the event, negative values indicate notifications before the event. Examples: "P1D" (1 day after), "-PT2H" (2 hours before)
-             *
+             * ISO-8601 duration string indicating how much time before or after the base event this
+             * notification should be sent. Positive values indicate notifications after the event,
+             * negative values indicate notifications before the event. Examples: "P1D" (1 day
+             * after), "-PT2H" (2 hours before)
              */
             fun offset(offset: String) = offset(JsonField.of(offset))
 
             /**
              * Sets [Builder.offset] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.offset] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.offset] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun offset(offset: JsonField<String>) =
-                apply {
-                    this.offset = offset
-                }
+            fun offset(offset: JsonField<String>) = apply { this.offset = offset }
 
-            /**
-             * The type of lifecycle event that this offset is based on.
-             *
-             */
+            /** The type of lifecycle event that this offset is based on. */
             fun type(type: String) = type(JsonField.of(type))
 
             /**
              * Sets [Builder.type] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.type] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.type] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun type(type: JsonField<String>) =
-                apply {
-                    this.type = type
-                }
+            fun type(type: JsonField<String>) = apply { this.type = type }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [Policy].
@@ -798,7 +709,6 @@ class OffsetCreateParams private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .offset()
              * .type()
@@ -808,36 +718,32 @@ class OffsetCreateParams private constructor(
              */
             fun build(): Policy =
                 Policy(
-                  checkRequired(
-                    "offset", offset
-                  ),
-                  checkRequired(
-                    "type", type
-                  ),
-                  additionalProperties.toMutableMap(),
+                    checkRequired("offset", offset),
+                    checkRequired("type", type),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Policy =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                offset()
-                type()
-                validated = true
+        fun validate(): Policy = apply {
+            if (validated) {
+                return@apply
             }
+
+            offset()
+            type()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -848,37 +754,47 @@ class OffsetCreateParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (if (offset.asKnown().isPresent) 1 else 0) + (if (type.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int =
+            (if (offset.asKnown().isPresent) 1 else 0) + (if (type.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Policy && offset == other.offset && type == other.type && additionalProperties == other.additionalProperties
+            return other is Policy &&
+                offset == other.offset &&
+                type == other.type &&
+                additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy { Objects.hash(offset, type, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Policy{offset=$offset, type=$type, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Policy{offset=$offset, type=$type, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is OffsetCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
+        return other is OffsetCreateParams &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
-    override fun toString() = "OffsetCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() =
+        "OffsetCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -29,94 +29,114 @@ internal class InvoiceServiceAsyncTest {
 
     @Test
     fun retrieve() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val invoiceServiceAsync = client.v1().customers().invoices()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceServiceAsync = client.v1().customers().invoices()
 
-      val invoiceFuture = invoiceServiceAsync.retrieve(InvoiceRetrieveParams.builder()
-          .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
-          .skipZeroQtyLineItems(true)
-          .build())
+        val invoiceFuture =
+            invoiceServiceAsync.retrieve(
+                InvoiceRetrieveParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
+                    .skipZeroQtyLineItems(true)
+                    .build()
+            )
 
-      val invoice = invoiceFuture.get()
-      invoice.validate()
+        val invoice = invoiceFuture.get()
+        invoice.validate()
     }
 
     @Test
     fun list() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val invoiceServiceAsync = client.v1().customers().invoices()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceServiceAsync = client.v1().customers().invoices()
 
-      val pageFuture = invoiceServiceAsync.list(InvoiceListParams.builder()
-          .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .build())
+        val pageFuture =
+            invoiceServiceAsync.list(
+                InvoiceListParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .build()
+            )
 
-      val page = pageFuture.get()
-      page.response().validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Test
     fun addCharge() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val invoiceServiceAsync = client.v1().customers().invoices()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceServiceAsync = client.v1().customers().invoices()
 
-      val responseFuture = invoiceServiceAsync.addCharge(InvoiceAddChargeParams.builder()
-          .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")
-          .customerPlanId("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
-          .description("One time charge")
-          .invoiceStartTimestamp(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
-          .price(250.0)
-          .quantity(1.0)
-          .build())
+        val responseFuture =
+            invoiceServiceAsync.addCharge(
+                InvoiceAddChargeParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .chargeId("5ae4b726-1ebe-439c-9190-9831760ba195")
+                    .customerPlanId("a23b3cf4-47fb-4c3f-bb3d-9e64f7704015")
+                    .description("One time charge")
+                    .invoiceStartTimestamp(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+                    .price(250.0)
+                    .quantity(1.0)
+                    .build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Test
     fun listBreakdowns() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val invoiceServiceAsync = client.v1().customers().invoices()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceServiceAsync = client.v1().customers().invoices()
 
-      val pageFuture = invoiceServiceAsync.listBreakdowns(InvoiceListBreakdownsParams.builder()
-          .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-          .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-          .build())
+        val pageFuture =
+            invoiceServiceAsync.listBreakdowns(
+                InvoiceListBreakdownsParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .startingOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
 
-      val page = pageFuture.get()
-      page.response().validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Disabled("prism mocking library in JS SDK doesnt support application/pdf")
     @Test
     fun retrievePdf(wmRuntimeInfo: WireMockRuntimeInfo) {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(wmRuntimeInfo.httpBaseUrl)
-          .bearerToken("My Bearer Token")
-          .build()
-      val invoiceServiceAsync = client.v1().customers().invoices()
-      stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceServiceAsync = client.v1().customers().invoices()
+        stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-      val responseFuture = invoiceServiceAsync.retrievePdf(InvoiceRetrievePdfParams.builder()
-          .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
-          .build())
+        val responseFuture =
+            invoiceServiceAsync.retrievePdf(
+                InvoiceRetrievePdfParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .invoiceId("6a37bb88-8538-48c5-b37b-a41c836328bd")
+                    .build()
+            )
 
-      val response = responseFuture.get()
-      assertThat(response.body()).hasContent("abc")
+        val response = responseFuture.get()
+        assertThat(response.body()).hasContent("abc")
     }
 }

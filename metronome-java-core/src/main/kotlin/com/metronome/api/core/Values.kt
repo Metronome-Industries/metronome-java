@@ -1,6 +1,5 @@
 package com.metronome.api.core
 
-import com.metronome.api.errors.MetronomeInvalidDataException
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonInclude
@@ -25,6 +24,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeType.OBJECT
 import com.fasterxml.jackson.databind.node.JsonNodeType.POJO
 import com.fasterxml.jackson.databind.node.JsonNodeType.STRING
 import com.fasterxml.jackson.databind.ser.std.NullSerializer
+import com.metronome.api.errors.MetronomeInvalidDataException
 import java.io.InputStream
 import java.util.Objects
 import java.util.Optional
@@ -111,8 +111,8 @@ sealed class JsonField<out T : Any> {
         asString().orElseThrow { MetronomeInvalidDataException("Value is not a string") }
 
     /**
-     * Returns an [Optional] containing this field's list value, or an empty [Optional] if it doesn't
-     * contain a list.
+     * Returns an [Optional] containing this field's list value, or an empty [Optional] if it
+     * doesn't contain a list.
      *
      * This method checks for both a [KnownValue] containing a list and for [JsonArray].
      */

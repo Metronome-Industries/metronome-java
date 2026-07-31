@@ -5,20 +5,17 @@ package com.metronome.api.models.v1.plans
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
-import com.metronome.api.models.v1.plans.PlanListChargesPageResponse
-import com.metronome.api.models.v1.plans.PlanListChargesParams
-import com.metronome.api.models.v1.plans.PlanListChargesResponse
 import com.metronome.api.services.blocking.v1.PlanService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see PlanService.listCharges */
-class PlanListChargesPage private constructor(
+class PlanListChargesPage
+private constructor(
     private val service: PlanService,
     private val params: PlanListChargesParams,
     private val response: PlanListChargesPageResponse,
-
 ) : Page<PlanListChargesResponse> {
 
     /**
@@ -33,17 +30,18 @@ class PlanListChargesPage private constructor(
      *
      * @see PlanListChargesPageResponse.data
      */
-    fun data(): List<PlanListChargesResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<PlanListChargesResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<PlanListChargesResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): PlanListChargesParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
     override fun nextPage(): PlanListChargesPage = service.listCharges(nextPageParams())
@@ -64,15 +62,13 @@ class PlanListChargesPage private constructor(
          * Returns a mutable builder for constructing an instance of [PlanListChargesPage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PlanListChargesPage]. */
@@ -83,29 +79,19 @@ class PlanListChargesPage private constructor(
         private var response: PlanListChargesPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(planListChargesPage: PlanListChargesPage) =
-            apply {
-                service = planListChargesPage.service
-                params = planListChargesPage.params
-                response = planListChargesPage.response
-            }
+        internal fun from(planListChargesPage: PlanListChargesPage) = apply {
+            service = planListChargesPage.service
+            params = planListChargesPage.params
+            response = planListChargesPage.response
+        }
 
-        fun service(service: PlanService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: PlanService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: PlanListChargesParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: PlanListChargesParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: PlanListChargesPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: PlanListChargesPageResponse) = apply { this.response = response }
 
         /**
          * Returns an immutable instance of [PlanListChargesPage].
@@ -113,7 +99,6 @@ class PlanListChargesPage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,27 +109,25 @@ class PlanListChargesPage private constructor(
          */
         fun build(): PlanListChargesPage =
             PlanListChargesPage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PlanListChargesPage && service == other.service && params == other.params && response == other.response
+        return other is PlanListChargesPage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() = "PlanListChargesPage{service=$service, params=$params, response=$response}"
+    override fun toString() =
+        "PlanListChargesPage{service=$service, params=$params, response=$response}"
 }

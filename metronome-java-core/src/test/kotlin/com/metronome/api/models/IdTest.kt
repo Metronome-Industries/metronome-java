@@ -4,7 +4,6 @@ package com.metronome.api.models
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.jsonMapper
-import com.metronome.api.models.Id
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,22 +11,19 @@ internal class IdTest {
 
     @Test
     fun create() {
-      val id = Id.builder()
-          .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .build()
+        val id = Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
 
-      assertThat(id.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(id.id()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
     }
 
     @Test
     fun roundtrip() {
-      val jsonMapper = jsonMapper()
-      val id = Id.builder()
-          .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .build()
+        val jsonMapper = jsonMapper()
+        val id = Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
 
-      val roundtrippedId = jsonMapper.readValue(jsonMapper.writeValueAsString(id), jacksonTypeRef<Id>())
+        val roundtrippedId =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(id), jacksonTypeRef<Id>())
 
-      assertThat(roundtrippedId).isEqualTo(id)
+        assertThat(roundtrippedId).isEqualTo(id)
     }
 }

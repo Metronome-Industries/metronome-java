@@ -18,71 +18,98 @@ import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.v1.customers.CustomerCreateParams
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Create a new customer in Metronome and optionally the billing configuration (recommended) which dictates where invoices for the customer will be sent or where payment will be collected.
+ * Create a new customer in Metronome and optionally the billing configuration (recommended) which
+ * dictates where invoices for the customer will be sent or where payment will be collected.
  *
  * ### Use this endpoint to:
- * Execute your customer provisioning workflows for either PLG motions, where customers originate in your platform, or SLG motions, where customers originate in your sales system.
+ * Execute your customer provisioning workflows for either PLG motions, where customers originate in
+ * your platform, or SLG motions, where customers originate in your sales system.
  *
  * ### Key response fields:
- * This end-point returns the `customer_id` created by the request. This id can be used to fetch relevant billing configurations and create contracts.
+ * This end-point returns the `customer_id` created by the request. This id can be used to fetch
+ * relevant billing configurations and create contracts.
  *
  * ### Example workflow:
- * - Generally, Metronome recommends first creating the customer in the downstream payment / ERP system when payment method is collected and then creating the customer in Metronome using the response (i.e. `customer_id`) from the downstream system. If you do not create a billing configuration on customer creation, you can add it later.
- * - Once a customer is created, you can then create a contract for the customer. In the contract creation process, you will need to add the customer billing configuration to the contract to ensure Metronome invoices the customer correctly. This is because a customer can have multiple configurations.
- * - As part of the customer creation process, set the ingest alias for the customer which will ensure usage is accurately mapped to the customer. Ingest aliases can be added or changed after the creation process as well.
+ * - Generally, Metronome recommends first creating the customer in the downstream payment / ERP
+ *   system when payment method is collected and then creating the customer in Metronome using the
+ *   response (i.e. `customer_id`) from the downstream system. If you do not create a billing
+ *   configuration on customer creation, you can add it later.
+ * - Once a customer is created, you can then create a contract for the customer. In the contract
+ *   creation process, you will need to add the customer billing configuration to the contract to
+ *   ensure Metronome invoices the customer correctly. This is because a customer can have multiple
+ *   configurations.
+ * - As part of the customer creation process, set the ingest alias for the customer which will
+ *   ensure usage is accurately mapped to the customer. Ingest aliases can be added or changed after
+ *   the creation process as well.
  *
  * ### Usage guidelines:
- * For details on different billing configurations for different systems, review the `/setCustomerBillingConfiguration` end-point.
- *
+ * For details on different billing configurations for different systems, review the
+ * `/setCustomerBillingConfiguration` end-point.
  */
-class CustomerCreateParams private constructor(
+class CustomerCreateParams
+private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-
 ) : Params {
 
     /**
      * This will be truncated to 160 characters if the provided name is longer.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun name(): String = body.name()
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun billingConfig(): Optional<BillingConfig> = body.billingConfig()
 
     /**
      * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun customFields(): Optional<CustomFields> = body.customFields()
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-    fun customerBillingProviderConfigurations(): Optional<List<CustomerBillingProviderConfiguration>> = body.customerBillingProviderConfigurations()
-
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-    fun customerRevenueSystemConfigurations(): Optional<List<CustomerRevenueSystemConfiguration>> = body.customerRevenueSystemConfigurations()
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun customerBillingProviderConfigurations():
+        Optional<List<CustomerBillingProviderConfiguration>> =
+        body.customerBillingProviderConfigurations()
 
     /**
-     * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this customer in usage events
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun customerRevenueSystemConfigurations(): Optional<List<CustomerRevenueSystemConfiguration>> =
+        body.customerRevenueSystemConfigurations()
+
+    /**
+     * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this customer
+     * in usage events
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun externalId(): Optional<String> = body.externalId()
 
     /**
      * Aliases that can be used to refer to this customer in usage events
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun ingestAliases(): Optional<List<String>> = body.ingestAliases()
 
@@ -110,16 +137,22 @@ class CustomerCreateParams private constructor(
     /**
      * Returns the raw JSON value of [customerBillingProviderConfigurations].
      *
-     * Unlike [customerBillingProviderConfigurations], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [customerBillingProviderConfigurations], this method doesn't throw if the JSON field
+     * has an unexpected type.
      */
-    fun _customerBillingProviderConfigurations(): JsonField<List<CustomerBillingProviderConfiguration>> = body._customerBillingProviderConfigurations()
+    fun _customerBillingProviderConfigurations():
+        JsonField<List<CustomerBillingProviderConfiguration>> =
+        body._customerBillingProviderConfigurations()
 
     /**
      * Returns the raw JSON value of [customerRevenueSystemConfigurations].
      *
-     * Unlike [customerRevenueSystemConfigurations], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [customerRevenueSystemConfigurations], this method doesn't throw if the JSON field has
+     * an unexpected type.
      */
-    fun _customerRevenueSystemConfigurations(): JsonField<List<CustomerRevenueSystemConfiguration>> = body._customerRevenueSystemConfigurations()
+    fun _customerRevenueSystemConfigurations():
+        JsonField<List<CustomerRevenueSystemConfiguration>> =
+        body._customerRevenueSystemConfigurations()
 
     /**
      * Returns the raw JSON value of [externalId].
@@ -151,13 +184,11 @@ class CustomerCreateParams private constructor(
          * Returns a mutable builder for constructing an instance of [CustomerCreateParams].
          *
          * The following fields are required:
-         *
          * ```java
          * .name()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [CustomerCreateParams]. */
@@ -168,18 +199,17 @@ class CustomerCreateParams private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(customerCreateParams: CustomerCreateParams) =
-            apply {
-                body = customerCreateParams.body.toBuilder()
-                additionalHeaders = customerCreateParams.additionalHeaders.toBuilder()
-                additionalQueryParams = customerCreateParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(customerCreateParams: CustomerCreateParams) = apply {
+            body = customerCreateParams.body.toBuilder()
+            additionalHeaders = customerCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = customerCreateParams.additionalQueryParams.toBuilder()
+        }
 
         /**
          * Sets the entire request body.
          *
-         * This is generally only useful if you are already constructing the body separately. Otherwise,
-         * it's more convenient to use the top-level setters instead:
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
          * - [name]
          * - [billingConfig]
          * - [customFields]
@@ -187,307 +217,257 @@ class CustomerCreateParams private constructor(
          * - [customerRevenueSystemConfigurations]
          * - etc.
          */
-        fun body(body: Body) =
-            apply {
-                this.body = body.toBuilder()
-            }
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** This will be truncated to 160 characters if the provided name is longer. */
-        fun name(name: String) =
-            apply {
-                body.name(name)
-            }
+        fun name(name: String) = apply { body.name(name) }
 
         /**
          * Sets [Builder.name] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun name(name: JsonField<String>) =
-            apply {
-                body.name(name)
-            }
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
-        fun billingConfig(billingConfig: BillingConfig) =
-            apply {
-                body.billingConfig(billingConfig)
-            }
+        fun billingConfig(billingConfig: BillingConfig) = apply {
+            body.billingConfig(billingConfig)
+        }
 
         /**
          * Sets [Builder.billingConfig] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.billingConfig] with a well-typed [BillingConfig] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.billingConfig] with a well-typed [BillingConfig] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun billingConfig(billingConfig: JsonField<BillingConfig>) =
-            apply {
-                body.billingConfig(billingConfig)
-            }
+        fun billingConfig(billingConfig: JsonField<BillingConfig>) = apply {
+            body.billingConfig(billingConfig)
+        }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
-        fun customFields(customFields: CustomFields) =
-            apply {
-                body.customFields(customFields)
-            }
+        fun customFields(customFields: CustomFields) = apply { body.customFields(customFields) }
 
         /**
          * Sets [Builder.customFields] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.customFields] with a well-typed [CustomFields] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.customFields] with a well-typed [CustomFields] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun customFields(customFields: JsonField<CustomFields>) =
-            apply {
-                body.customFields(customFields)
-            }
+        fun customFields(customFields: JsonField<CustomFields>) = apply {
+            body.customFields(customFields)
+        }
 
-        fun customerBillingProviderConfigurations(customerBillingProviderConfigurations: List<CustomerBillingProviderConfiguration>) =
-            apply {
-                body.customerBillingProviderConfigurations(customerBillingProviderConfigurations)
-            }
+        fun customerBillingProviderConfigurations(
+            customerBillingProviderConfigurations: List<CustomerBillingProviderConfiguration>
+        ) = apply {
+            body.customerBillingProviderConfigurations(customerBillingProviderConfigurations)
+        }
 
         /**
          * Sets [Builder.customerBillingProviderConfigurations] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.customerBillingProviderConfigurations] with a well-typed `List<CustomerBillingProviderConfiguration>` value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.customerBillingProviderConfigurations] with a well-typed
+         * `List<CustomerBillingProviderConfiguration>` value instead. This method is primarily for
+         * setting the field to an undocumented or not yet supported value.
          */
-        fun customerBillingProviderConfigurations(customerBillingProviderConfigurations: JsonField<List<CustomerBillingProviderConfiguration>>) =
-            apply {
-                body.customerBillingProviderConfigurations(customerBillingProviderConfigurations)
-            }
+        fun customerBillingProviderConfigurations(
+            customerBillingProviderConfigurations:
+                JsonField<List<CustomerBillingProviderConfiguration>>
+        ) = apply {
+            body.customerBillingProviderConfigurations(customerBillingProviderConfigurations)
+        }
 
         /**
-         * Adds a single [CustomerBillingProviderConfiguration] to [customerBillingProviderConfigurations].
+         * Adds a single [CustomerBillingProviderConfiguration] to
+         * [customerBillingProviderConfigurations].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addCustomerBillingProviderConfiguration(customerBillingProviderConfiguration: CustomerBillingProviderConfiguration) =
-            apply {
-                body.addCustomerBillingProviderConfiguration(customerBillingProviderConfiguration)
-            }
+        fun addCustomerBillingProviderConfiguration(
+            customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
+        ) = apply {
+            body.addCustomerBillingProviderConfiguration(customerBillingProviderConfiguration)
+        }
 
-        fun customerRevenueSystemConfigurations(customerRevenueSystemConfigurations: List<CustomerRevenueSystemConfiguration>) =
-            apply {
-                body.customerRevenueSystemConfigurations(customerRevenueSystemConfigurations)
-            }
+        fun customerRevenueSystemConfigurations(
+            customerRevenueSystemConfigurations: List<CustomerRevenueSystemConfiguration>
+        ) = apply { body.customerRevenueSystemConfigurations(customerRevenueSystemConfigurations) }
 
         /**
          * Sets [Builder.customerRevenueSystemConfigurations] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.customerRevenueSystemConfigurations] with a well-typed `List<CustomerRevenueSystemConfiguration>` value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.customerRevenueSystemConfigurations] with a well-typed
+         * `List<CustomerRevenueSystemConfiguration>` value instead. This method is primarily for
+         * setting the field to an undocumented or not yet supported value.
          */
-        fun customerRevenueSystemConfigurations(customerRevenueSystemConfigurations: JsonField<List<CustomerRevenueSystemConfiguration>>) =
-            apply {
-                body.customerRevenueSystemConfigurations(customerRevenueSystemConfigurations)
-            }
+        fun customerRevenueSystemConfigurations(
+            customerRevenueSystemConfigurations: JsonField<List<CustomerRevenueSystemConfiguration>>
+        ) = apply { body.customerRevenueSystemConfigurations(customerRevenueSystemConfigurations) }
 
         /**
-         * Adds a single [CustomerRevenueSystemConfiguration] to [customerRevenueSystemConfigurations].
+         * Adds a single [CustomerRevenueSystemConfiguration] to
+         * [customerRevenueSystemConfigurations].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addCustomerRevenueSystemConfiguration(customerRevenueSystemConfiguration: CustomerRevenueSystemConfiguration) =
-            apply {
-                body.addCustomerRevenueSystemConfiguration(customerRevenueSystemConfiguration)
-            }
+        fun addCustomerRevenueSystemConfiguration(
+            customerRevenueSystemConfiguration: CustomerRevenueSystemConfiguration
+        ) = apply { body.addCustomerRevenueSystemConfiguration(customerRevenueSystemConfiguration) }
 
-        /** (deprecated, use ingest_aliases instead) an alias that can be used to refer to this customer in usage events */
-        fun externalId(externalId: String) =
-            apply {
-                body.externalId(externalId)
-            }
+        /**
+         * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+         * customer in usage events
+         */
+        fun externalId(externalId: String) = apply { body.externalId(externalId) }
 
         /**
          * Sets [Builder.externalId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.externalId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.externalId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun externalId(externalId: JsonField<String>) =
-            apply {
-                body.externalId(externalId)
-            }
+        fun externalId(externalId: JsonField<String>) = apply { body.externalId(externalId) }
 
         /** Aliases that can be used to refer to this customer in usage events */
-        fun ingestAliases(ingestAliases: List<String>) =
-            apply {
-                body.ingestAliases(ingestAliases)
-            }
+        fun ingestAliases(ingestAliases: List<String>) = apply { body.ingestAliases(ingestAliases) }
 
         /**
          * Sets [Builder.ingestAliases] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.ingestAliases] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.ingestAliases] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun ingestAliases(ingestAliases: JsonField<List<String>>) =
-            apply {
-                body.ingestAliases(ingestAliases)
-            }
+        fun ingestAliases(ingestAliases: JsonField<List<String>>) = apply {
+            body.ingestAliases(ingestAliases)
+        }
 
         /**
          * Adds a single [String] to [ingestAliases].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addIngestAlias(ingestAlias: String) =
-            apply {
-                body.addIngestAlias(ingestAlias)
-            }
+        fun addIngestAlias(ingestAlias: String) = apply { body.addIngestAlias(ingestAlias) }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.additionalProperties(additionalBodyProperties)
-            }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
-            apply {
-                body.putAdditionalProperty(
-                  key, value
-                )
-            }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) =
-            apply {
-                body.removeAdditionalProperty(key)
-            }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
-            apply {
-                body.removeAllAdditionalProperties(keys)
-            }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
-        fun additionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun putAdditionalHeader(name: String, value: String) =
-            apply {
-                additionalHeaders.put(name, value)
-            }
+        fun putAdditionalHeader(name: String, value: String) = apply {
+            additionalHeaders.put(name, value)
+        }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.put(name, values)
-            }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.put(name, values)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun replaceAdditionalHeaders(name: String, value: String) =
-            apply {
-                additionalHeaders.replace(name, value)
-            }
+        fun replaceAdditionalHeaders(name: String, value: String) = apply {
+            additionalHeaders.replace(name, value)
+        }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.replace(name, values)
-            }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.replace(name, values)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun removeAdditionalHeaders(name: String) =
-            apply {
-                additionalHeaders.remove(name)
-            }
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) =
-            apply {
-                additionalHeaders.removeAll(names)
-            }
+        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
+            additionalHeaders.removeAll(names)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun putAdditionalQueryParam(key: String, value: String) =
-            apply {
-                additionalQueryParams.put(key, value)
-            }
+        fun putAdditionalQueryParam(key: String, value: String) = apply {
+            additionalQueryParams.put(key, value)
+        }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.put(key, values)
-            }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.put(key, values)
+        }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.putAll(additionalQueryParams)
-            }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.putAll(additionalQueryParams)
+        }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) =
-            apply {
-                additionalQueryParams.replace(key, value)
-            }
+        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
+            additionalQueryParams.replace(key, value)
+        }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.replace(key, values)
-            }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.replace(key, values)
+        }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.replaceAll(additionalQueryParams)
-            }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.replaceAll(additionalQueryParams)
+        }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) =
-            apply {
-                additionalQueryParams.remove(key)
-            }
+        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) =
-            apply {
-                additionalQueryParams.removeAll(keys)
-            }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
+            additionalQueryParams.removeAll(keys)
+        }
 
         /**
          * Returns an immutable instance of [CustomerCreateParams].
@@ -495,7 +475,6 @@ class CustomerCreateParams private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .name()
          * ```
@@ -504,9 +483,9 @@ class CustomerCreateParams private constructor(
          */
         fun build(): CustomerCreateParams =
             CustomerCreateParams(
-              body.build(),
-              additionalHeaders.build(),
-              additionalQueryParams.build(),
+                body.build(),
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
             )
     }
 
@@ -516,72 +495,113 @@ class CustomerCreateParams private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    class Body @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val name: JsonField<String>,
         private val billingConfig: JsonField<BillingConfig>,
         private val customFields: JsonField<CustomFields>,
-        private val customerBillingProviderConfigurations: JsonField<List<CustomerBillingProviderConfiguration>>,
-        private val customerRevenueSystemConfigurations: JsonField<List<CustomerRevenueSystemConfiguration>>,
+        private val customerBillingProviderConfigurations:
+            JsonField<List<CustomerBillingProviderConfiguration>>,
+        private val customerRevenueSystemConfigurations:
+            JsonField<List<CustomerRevenueSystemConfiguration>>,
         private val externalId: JsonField<String>,
         private val ingestAliases: JsonField<List<String>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("billing_config") @ExcludeMissing billingConfig: JsonField<BillingConfig> = JsonMissing.of(),
-            @JsonProperty("custom_fields") @ExcludeMissing customFields: JsonField<CustomFields> = JsonMissing.of(),
-            @JsonProperty("customer_billing_provider_configurations") @ExcludeMissing customerBillingProviderConfigurations: JsonField<List<CustomerBillingProviderConfiguration>> = JsonMissing.of(),
-            @JsonProperty("customer_revenue_system_configurations") @ExcludeMissing customerRevenueSystemConfigurations: JsonField<List<CustomerRevenueSystemConfiguration>> = JsonMissing.of(),
-            @JsonProperty("external_id") @ExcludeMissing externalId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("ingest_aliases") @ExcludeMissing ingestAliases: JsonField<List<String>> = JsonMissing.of()
+            @JsonProperty("billing_config")
+            @ExcludeMissing
+            billingConfig: JsonField<BillingConfig> = JsonMissing.of(),
+            @JsonProperty("custom_fields")
+            @ExcludeMissing
+            customFields: JsonField<CustomFields> = JsonMissing.of(),
+            @JsonProperty("customer_billing_provider_configurations")
+            @ExcludeMissing
+            customerBillingProviderConfigurations:
+                JsonField<List<CustomerBillingProviderConfiguration>> =
+                JsonMissing.of(),
+            @JsonProperty("customer_revenue_system_configurations")
+            @ExcludeMissing
+            customerRevenueSystemConfigurations:
+                JsonField<List<CustomerRevenueSystemConfiguration>> =
+                JsonMissing.of(),
+            @JsonProperty("external_id")
+            @ExcludeMissing
+            externalId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("ingest_aliases")
+            @ExcludeMissing
+            ingestAliases: JsonField<List<String>> = JsonMissing.of(),
         ) : this(
-          name,
-          billingConfig,
-          customFields,
-          customerBillingProviderConfigurations,
-          customerRevenueSystemConfigurations,
-          externalId,
-          ingestAliases,
-          mutableMapOf(),
+            name,
+            billingConfig,
+            customFields,
+            customerBillingProviderConfigurations,
+            customerRevenueSystemConfigurations,
+            externalId,
+            ingestAliases,
+            mutableMapOf(),
         )
 
         /**
          * This will be truncated to 160 characters if the provided name is longer.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun name(): String = name.getRequired("name")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun billingConfig(): Optional<BillingConfig> = billingConfig.getOptional("billing_config")
 
         /**
          * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun customFields(): Optional<CustomFields> = customFields.getOptional("custom_fields")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun customerBillingProviderConfigurations(): Optional<List<CustomerBillingProviderConfiguration>> = customerBillingProviderConfigurations.getOptional("customer_billing_provider_configurations")
-
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun customerRevenueSystemConfigurations(): Optional<List<CustomerRevenueSystemConfiguration>> = customerRevenueSystemConfigurations.getOptional("customer_revenue_system_configurations")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun customerBillingProviderConfigurations():
+            Optional<List<CustomerBillingProviderConfiguration>> =
+            customerBillingProviderConfigurations.getOptional(
+                "customer_billing_provider_configurations"
+            )
 
         /**
-         * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this customer in usage events
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun customerRevenueSystemConfigurations():
+            Optional<List<CustomerRevenueSystemConfiguration>> =
+            customerRevenueSystemConfigurations.getOptional(
+                "customer_revenue_system_configurations"
+            )
+
+        /**
+         * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+         * customer in usage events
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun externalId(): Optional<String> = externalId.getOptional("external_id")
 
         /**
          * Aliases that can be used to refer to this customer in usage events
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun ingestAliases(): Optional<List<String>> = ingestAliases.getOptional("ingest_aliases")
 
@@ -590,14 +610,13 @@ class CustomerCreateParams private constructor(
          *
          * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("name")
-        @ExcludeMissing
-        fun _name(): JsonField<String> = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
          * Returns the raw JSON value of [billingConfig].
          *
-         * Unlike [billingConfig], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [billingConfig], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("billing_config")
         @ExcludeMissing
@@ -606,7 +625,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [customFields].
          *
-         * Unlike [customFields], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [customFields], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("custom_fields")
         @ExcludeMissing
@@ -615,20 +635,26 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [customerBillingProviderConfigurations].
          *
-         * Unlike [customerBillingProviderConfigurations], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [customerBillingProviderConfigurations], this method doesn't throw if the JSON
+         * field has an unexpected type.
          */
         @JsonProperty("customer_billing_provider_configurations")
         @ExcludeMissing
-        fun _customerBillingProviderConfigurations(): JsonField<List<CustomerBillingProviderConfiguration>> = customerBillingProviderConfigurations
+        fun _customerBillingProviderConfigurations():
+            JsonField<List<CustomerBillingProviderConfiguration>> =
+            customerBillingProviderConfigurations
 
         /**
          * Returns the raw JSON value of [customerRevenueSystemConfigurations].
          *
-         * Unlike [customerRevenueSystemConfigurations], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [customerRevenueSystemConfigurations], this method doesn't throw if the JSON field
+         * has an unexpected type.
          */
         @JsonProperty("customer_revenue_system_configurations")
         @ExcludeMissing
-        fun _customerRevenueSystemConfigurations(): JsonField<List<CustomerRevenueSystemConfiguration>> = customerRevenueSystemConfigurations
+        fun _customerRevenueSystemConfigurations():
+            JsonField<List<CustomerRevenueSystemConfiguration>> =
+            customerRevenueSystemConfigurations
 
         /**
          * Returns the raw JSON value of [externalId].
@@ -642,7 +668,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [ingestAliases].
          *
-         * Unlike [ingestAliases], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [ingestAliases], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("ingest_aliases")
         @ExcludeMissing
@@ -650,12 +677,13 @@ class CustomerCreateParams private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -665,13 +693,11 @@ class CustomerCreateParams private constructor(
              * Returns a mutable builder for constructing an instance of [Body].
              *
              * The following fields are required:
-             *
              * ```java
              * .name()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
@@ -680,24 +706,29 @@ class CustomerCreateParams private constructor(
             private var name: JsonField<String>? = null
             private var billingConfig: JsonField<BillingConfig> = JsonMissing.of()
             private var customFields: JsonField<CustomFields> = JsonMissing.of()
-            private var customerBillingProviderConfigurations: JsonField<MutableList<CustomerBillingProviderConfiguration>>? = null
-            private var customerRevenueSystemConfigurations: JsonField<MutableList<CustomerRevenueSystemConfiguration>>? = null
+            private var customerBillingProviderConfigurations:
+                JsonField<MutableList<CustomerBillingProviderConfiguration>>? =
+                null
+            private var customerRevenueSystemConfigurations:
+                JsonField<MutableList<CustomerRevenueSystemConfiguration>>? =
+                null
             private var externalId: JsonField<String> = JsonMissing.of()
             private var ingestAliases: JsonField<MutableList<String>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(body: Body) =
-                apply {
-                    name = body.name
-                    billingConfig = body.billingConfig
-                    customFields = body.customFields
-                    customerBillingProviderConfigurations = body.customerBillingProviderConfigurations.map { it.toMutableList() }
-                    customerRevenueSystemConfigurations = body.customerRevenueSystemConfigurations.map { it.toMutableList() }
-                    externalId = body.externalId
-                    ingestAliases = body.ingestAliases.map { it.toMutableList() }
-                    additionalProperties = body.additionalProperties.toMutableMap()
-                }
+            internal fun from(body: Body) = apply {
+                name = body.name
+                billingConfig = body.billingConfig
+                customFields = body.customFields
+                customerBillingProviderConfigurations =
+                    body.customerBillingProviderConfigurations.map { it.toMutableList() }
+                customerRevenueSystemConfigurations =
+                    body.customerRevenueSystemConfigurations.map { it.toMutableList() }
+                externalId = body.externalId
+                ingestAliases = body.ingestAliases.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
 
             /** This will be truncated to 160 characters if the provided name is longer. */
             fun name(name: String) = name(JsonField.of(name))
@@ -705,26 +736,25 @@ class CustomerCreateParams private constructor(
             /**
              * Sets [Builder.name] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun name(name: JsonField<String>) =
-                apply {
-                    this.name = name
-                }
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
-            fun billingConfig(billingConfig: BillingConfig) = billingConfig(JsonField.of(billingConfig))
+            fun billingConfig(billingConfig: BillingConfig) =
+                billingConfig(JsonField.of(billingConfig))
 
             /**
              * Sets [Builder.billingConfig] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.billingConfig] with a well-typed [BillingConfig] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.billingConfig] with a well-typed [BillingConfig]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun billingConfig(billingConfig: JsonField<BillingConfig>) =
-                apply {
-                    this.billingConfig = billingConfig
-                }
+            fun billingConfig(billingConfig: JsonField<BillingConfig>) = apply {
+                this.billingConfig = billingConfig
+            }
 
             /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
             fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
@@ -732,129 +762,150 @@ class CustomerCreateParams private constructor(
             /**
              * Sets [Builder.customFields] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.customFields] with a well-typed [CustomFields] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.customFields] with a well-typed [CustomFields] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun customFields(customFields: JsonField<CustomFields>) =
-                apply {
-                    this.customFields = customFields
-                }
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
+                this.customFields = customFields
+            }
 
-            fun customerBillingProviderConfigurations(customerBillingProviderConfigurations: List<CustomerBillingProviderConfiguration>) = customerBillingProviderConfigurations(JsonField.of(customerBillingProviderConfigurations))
+            fun customerBillingProviderConfigurations(
+                customerBillingProviderConfigurations: List<CustomerBillingProviderConfiguration>
+            ) =
+                customerBillingProviderConfigurations(
+                    JsonField.of(customerBillingProviderConfigurations)
+                )
 
             /**
              * Sets [Builder.customerBillingProviderConfigurations] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.customerBillingProviderConfigurations] with a well-typed `List<CustomerBillingProviderConfiguration>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.customerBillingProviderConfigurations] with a
+             * well-typed `List<CustomerBillingProviderConfiguration>` value instead. This method is
+             * primarily for setting the field to an undocumented or not yet supported value.
              */
-            fun customerBillingProviderConfigurations(customerBillingProviderConfigurations: JsonField<List<CustomerBillingProviderConfiguration>>) =
-                apply {
-                    this.customerBillingProviderConfigurations = customerBillingProviderConfigurations.map { it.toMutableList() }
-                }
+            fun customerBillingProviderConfigurations(
+                customerBillingProviderConfigurations:
+                    JsonField<List<CustomerBillingProviderConfiguration>>
+            ) = apply {
+                this.customerBillingProviderConfigurations =
+                    customerBillingProviderConfigurations.map { it.toMutableList() }
+            }
 
             /**
-             * Adds a single [CustomerBillingProviderConfiguration] to [customerBillingProviderConfigurations].
+             * Adds a single [CustomerBillingProviderConfiguration] to
+             * [customerBillingProviderConfigurations].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addCustomerBillingProviderConfiguration(customerBillingProviderConfiguration: CustomerBillingProviderConfiguration) =
-                apply {
-                    customerBillingProviderConfigurations = (customerBillingProviderConfigurations ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("customerBillingProviderConfigurations", it).add(customerBillingProviderConfiguration)
+            fun addCustomerBillingProviderConfiguration(
+                customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
+            ) = apply {
+                customerBillingProviderConfigurations =
+                    (customerBillingProviderConfigurations ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("customerBillingProviderConfigurations", it)
+                            .add(customerBillingProviderConfiguration)
                     }
-                }
+            }
 
-            fun customerRevenueSystemConfigurations(customerRevenueSystemConfigurations: List<CustomerRevenueSystemConfiguration>) = customerRevenueSystemConfigurations(JsonField.of(customerRevenueSystemConfigurations))
+            fun customerRevenueSystemConfigurations(
+                customerRevenueSystemConfigurations: List<CustomerRevenueSystemConfiguration>
+            ) =
+                customerRevenueSystemConfigurations(
+                    JsonField.of(customerRevenueSystemConfigurations)
+                )
 
             /**
              * Sets [Builder.customerRevenueSystemConfigurations] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.customerRevenueSystemConfigurations] with a well-typed `List<CustomerRevenueSystemConfiguration>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.customerRevenueSystemConfigurations] with a
+             * well-typed `List<CustomerRevenueSystemConfiguration>` value instead. This method is
+             * primarily for setting the field to an undocumented or not yet supported value.
              */
-            fun customerRevenueSystemConfigurations(customerRevenueSystemConfigurations: JsonField<List<CustomerRevenueSystemConfiguration>>) =
-                apply {
-                    this.customerRevenueSystemConfigurations = customerRevenueSystemConfigurations.map { it.toMutableList() }
-                }
+            fun customerRevenueSystemConfigurations(
+                customerRevenueSystemConfigurations:
+                    JsonField<List<CustomerRevenueSystemConfiguration>>
+            ) = apply {
+                this.customerRevenueSystemConfigurations =
+                    customerRevenueSystemConfigurations.map { it.toMutableList() }
+            }
 
             /**
-             * Adds a single [CustomerRevenueSystemConfiguration] to [customerRevenueSystemConfigurations].
+             * Adds a single [CustomerRevenueSystemConfiguration] to
+             * [customerRevenueSystemConfigurations].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addCustomerRevenueSystemConfiguration(customerRevenueSystemConfiguration: CustomerRevenueSystemConfiguration) =
-                apply {
-                    customerRevenueSystemConfigurations = (customerRevenueSystemConfigurations ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("customerRevenueSystemConfigurations", it).add(customerRevenueSystemConfiguration)
+            fun addCustomerRevenueSystemConfiguration(
+                customerRevenueSystemConfiguration: CustomerRevenueSystemConfiguration
+            ) = apply {
+                customerRevenueSystemConfigurations =
+                    (customerRevenueSystemConfigurations ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("customerRevenueSystemConfigurations", it)
+                            .add(customerRevenueSystemConfiguration)
                     }
-                }
+            }
 
-            /** (deprecated, use ingest_aliases instead) an alias that can be used to refer to this customer in usage events */
+            /**
+             * (deprecated, use ingest_aliases instead) an alias that can be used to refer to this
+             * customer in usage events
+             */
             fun externalId(externalId: String) = externalId(JsonField.of(externalId))
 
             /**
              * Sets [Builder.externalId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.externalId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.externalId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun externalId(externalId: JsonField<String>) =
-                apply {
-                    this.externalId = externalId
-                }
+            fun externalId(externalId: JsonField<String>) = apply { this.externalId = externalId }
 
             /** Aliases that can be used to refer to this customer in usage events */
-            fun ingestAliases(ingestAliases: List<String>) = ingestAliases(JsonField.of(ingestAliases))
+            fun ingestAliases(ingestAliases: List<String>) =
+                ingestAliases(JsonField.of(ingestAliases))
 
             /**
              * Sets [Builder.ingestAliases] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.ingestAliases] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.ingestAliases] with a well-typed `List<String>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun ingestAliases(ingestAliases: JsonField<List<String>>) =
-                apply {
-                    this.ingestAliases = ingestAliases.map { it.toMutableList() }
-                }
+            fun ingestAliases(ingestAliases: JsonField<List<String>>) = apply {
+                this.ingestAliases = ingestAliases.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [String] to [ingestAliases].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addIngestAlias(ingestAlias: String) =
-                apply {
-                    ingestAliases = (ingestAliases ?: JsonField.of(mutableListOf())).also {
+            fun addIngestAlias(ingestAlias: String) = apply {
+                ingestAliases =
+                    (ingestAliases ?: JsonField.of(mutableListOf())).also {
                         checkKnown("ingestAliases", it).add(ingestAlias)
                     }
-                }
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [Body].
@@ -862,7 +913,6 @@ class CustomerCreateParams private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .name()
              * ```
@@ -871,44 +921,46 @@ class CustomerCreateParams private constructor(
              */
             fun build(): Body =
                 Body(
-                  checkRequired(
-                    "name", name
-                  ),
-                  billingConfig,
-                  customFields,
-                  (customerBillingProviderConfigurations?: JsonMissing.of()).map { it.toImmutable() },
-                  (customerRevenueSystemConfigurations?: JsonMissing.of()).map { it.toImmutable() },
-                  externalId,
-                  (ingestAliases?: JsonMissing.of()).map { it.toImmutable() },
-                  additionalProperties.toMutableMap(),
+                    checkRequired("name", name),
+                    billingConfig,
+                    customFields,
+                    (customerBillingProviderConfigurations ?: JsonMissing.of()).map {
+                        it.toImmutable()
+                    },
+                    (customerRevenueSystemConfigurations ?: JsonMissing.of()).map {
+                        it.toImmutable()
+                    },
+                    externalId,
+                    (ingestAliases ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Body =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                name()
-                billingConfig().ifPresent { it.validate() }
-                customFields().ifPresent { it.validate() }
-                customerBillingProviderConfigurations().ifPresent { it.forEach { it.validate() } }
-                customerRevenueSystemConfigurations().ifPresent { it.forEach { it.validate() } }
-                externalId()
-                ingestAliases()
-                validated = true
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
             }
+
+            name()
+            billingConfig().ifPresent { it.validate() }
+            customFields().ifPresent { it.validate() }
+            customerBillingProviderConfigurations().ifPresent { it.forEach { it.validate() } }
+            customerRevenueSystemConfigurations().ifPresent { it.forEach { it.validate() } }
+            externalId()
+            ingestAliases()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -919,29 +971,64 @@ class CustomerCreateParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (if (name.asKnown().isPresent) 1 else 0) + (billingConfig.asKnown().getOrNull()?.validity() ?: 0) + (customFields.asKnown().getOrNull()?.validity() ?: 0) + (customerBillingProviderConfigurations.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (customerRevenueSystemConfigurations.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (if (externalId.asKnown().isPresent) 1 else 0) + (ingestAliases.asKnown().getOrNull()?.size ?: 0)
+        internal fun validity(): Int =
+            (if (name.asKnown().isPresent) 1 else 0) +
+                (billingConfig.asKnown().getOrNull()?.validity() ?: 0) +
+                (customFields.asKnown().getOrNull()?.validity() ?: 0) +
+                (customerBillingProviderConfigurations.asKnown().getOrNull()?.sumOf {
+                    it.validity().toInt()
+                } ?: 0) +
+                (customerRevenueSystemConfigurations.asKnown().getOrNull()?.sumOf {
+                    it.validity().toInt()
+                } ?: 0) +
+                (if (externalId.asKnown().isPresent) 1 else 0) +
+                (ingestAliases.asKnown().getOrNull()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Body && name == other.name && billingConfig == other.billingConfig && customFields == other.customFields && customerBillingProviderConfigurations == other.customerBillingProviderConfigurations && customerRevenueSystemConfigurations == other.customerRevenueSystemConfigurations && externalId == other.externalId && ingestAliases == other.ingestAliases && additionalProperties == other.additionalProperties
+            return other is Body &&
+                name == other.name &&
+                billingConfig == other.billingConfig &&
+                customFields == other.customFields &&
+                customerBillingProviderConfigurations ==
+                    other.customerBillingProviderConfigurations &&
+                customerRevenueSystemConfigurations == other.customerRevenueSystemConfigurations &&
+                externalId == other.externalId &&
+                ingestAliases == other.ingestAliases &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(name, billingConfig, customFields, customerBillingProviderConfigurations, customerRevenueSystemConfigurations, externalId, ingestAliases, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                name,
+                billingConfig,
+                customFields,
+                customerBillingProviderConfigurations,
+                customerRevenueSystemConfigurations,
+                externalId,
+                ingestAliases,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Body{name=$name, billingConfig=$billingConfig, customFields=$customFields, customerBillingProviderConfigurations=$customerBillingProviderConfigurations, customerRevenueSystemConfigurations=$customerRevenueSystemConfigurations, externalId=$externalId, ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Body{name=$name, billingConfig=$billingConfig, customFields=$customFields, customerBillingProviderConfigurations=$customerBillingProviderConfigurations, customerRevenueSystemConfigurations=$customerRevenueSystemConfigurations, externalId=$externalId, ingestAliases=$ingestAliases, additionalProperties=$additionalProperties}"
     }
 
-    class BillingConfig @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class BillingConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val billingProviderCustomerId: JsonField<String>,
         private val billingProviderType: JsonField<BillingProviderType>,
         private val awsCustomerAccountId: JsonField<String>,
@@ -951,68 +1038,109 @@ class CustomerCreateParams private constructor(
         private val awsRegion: JsonField<AwsRegion>,
         private val stripeCollectionMethod: JsonField<StripeCollectionMethod>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("billing_provider_customer_id") @ExcludeMissing billingProviderCustomerId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("billing_provider_type") @ExcludeMissing billingProviderType: JsonField<BillingProviderType> = JsonMissing.of(),
-            @JsonProperty("aws_customer_account_id") @ExcludeMissing awsCustomerAccountId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("aws_customer_id") @ExcludeMissing awsCustomerId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("aws_is_subscription_product") @ExcludeMissing awsIsSubscriptionProduct: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("aws_product_code") @ExcludeMissing awsProductCode: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("aws_region") @ExcludeMissing awsRegion: JsonField<AwsRegion> = JsonMissing.of(),
-            @JsonProperty("stripe_collection_method") @ExcludeMissing stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of()
+            @JsonProperty("billing_provider_customer_id")
+            @ExcludeMissing
+            billingProviderCustomerId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("billing_provider_type")
+            @ExcludeMissing
+            billingProviderType: JsonField<BillingProviderType> = JsonMissing.of(),
+            @JsonProperty("aws_customer_account_id")
+            @ExcludeMissing
+            awsCustomerAccountId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aws_customer_id")
+            @ExcludeMissing
+            awsCustomerId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aws_is_subscription_product")
+            @ExcludeMissing
+            awsIsSubscriptionProduct: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("aws_product_code")
+            @ExcludeMissing
+            awsProductCode: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aws_region")
+            @ExcludeMissing
+            awsRegion: JsonField<AwsRegion> = JsonMissing.of(),
+            @JsonProperty("stripe_collection_method")
+            @ExcludeMissing
+            stripeCollectionMethod: JsonField<StripeCollectionMethod> = JsonMissing.of(),
         ) : this(
-          billingProviderCustomerId,
-          billingProviderType,
-          awsCustomerAccountId,
-          awsCustomerId,
-          awsIsSubscriptionProduct,
-          awsProductCode,
-          awsRegion,
-          stripeCollectionMethod,
-          mutableMapOf(),
+            billingProviderCustomerId,
+            billingProviderType,
+            awsCustomerAccountId,
+            awsCustomerId,
+            awsIsSubscriptionProduct,
+            awsProductCode,
+            awsRegion,
+            stripeCollectionMethod,
+            mutableMapOf(),
         )
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
-        fun billingProviderCustomerId(): String = billingProviderCustomerId.getRequired("billing_provider_customer_id")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun billingProviderCustomerId(): String =
+            billingProviderCustomerId.getRequired("billing_provider_customer_id")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
-        fun billingProviderType(): BillingProviderType = billingProviderType.getRequired("billing_provider_type")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun billingProviderType(): BillingProviderType =
+            billingProviderType.getRequired("billing_provider_type")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun awsCustomerAccountId(): Optional<String> = awsCustomerAccountId.getOptional("aws_customer_account_id")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun awsCustomerAccountId(): Optional<String> =
+            awsCustomerAccountId.getOptional("aws_customer_account_id")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun awsCustomerId(): Optional<String> = awsCustomerId.getOptional("aws_customer_id")
 
         /**
          * True if the aws_product_code is a SAAS subscription product, false otherwise.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun awsIsSubscriptionProduct(): Optional<Boolean> = awsIsSubscriptionProduct.getOptional("aws_is_subscription_product")
+        fun awsIsSubscriptionProduct(): Optional<Boolean> =
+            awsIsSubscriptionProduct.getOptional("aws_is_subscription_product")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun awsProductCode(): Optional<String> = awsProductCode.getOptional("aws_product_code")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun awsRegion(): Optional<AwsRegion> = awsRegion.getOptional("aws_region")
 
         /**
-         * The collection method for the customer's invoices.
-         * NOTE: `auto_charge_payment_intent` and `manually_charge_payment_intent` are in beta.
+         * The collection method for the customer's invoices. NOTE: `auto_charge_payment_intent` and
+         * `manually_charge_payment_intent` are in beta.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> = stripeCollectionMethod.getOptional("stripe_collection_method")
+        fun stripeCollectionMethod(): Optional<StripeCollectionMethod> =
+            stripeCollectionMethod.getOptional("stripe_collection_method")
 
         /**
          * Returns the raw JSON value of [billingProviderCustomerId].
          *
-         * Unlike [billingProviderCustomerId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [billingProviderCustomerId], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("billing_provider_customer_id")
         @ExcludeMissing
@@ -1021,7 +1149,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [billingProviderType].
          *
-         * Unlike [billingProviderType], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [billingProviderType], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("billing_provider_type")
         @ExcludeMissing
@@ -1030,7 +1159,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [awsCustomerAccountId].
          *
-         * Unlike [awsCustomerAccountId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [awsCustomerAccountId], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("aws_customer_account_id")
         @ExcludeMissing
@@ -1039,7 +1169,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [awsCustomerId].
          *
-         * Unlike [awsCustomerId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [awsCustomerId], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("aws_customer_id")
         @ExcludeMissing
@@ -1048,7 +1179,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [awsIsSubscriptionProduct].
          *
-         * Unlike [awsIsSubscriptionProduct], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [awsIsSubscriptionProduct], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("aws_is_subscription_product")
         @ExcludeMissing
@@ -1057,7 +1189,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [awsProductCode].
          *
-         * Unlike [awsProductCode], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [awsProductCode], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("aws_product_code")
         @ExcludeMissing
@@ -1075,7 +1208,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [stripeCollectionMethod].
          *
-         * Unlike [stripeCollectionMethod], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [stripeCollectionMethod], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("stripe_collection_method")
         @ExcludeMissing
@@ -1083,12 +1217,13 @@ class CustomerCreateParams private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -1098,14 +1233,12 @@ class CustomerCreateParams private constructor(
              * Returns a mutable builder for constructing an instance of [BillingConfig].
              *
              * The following fields are required:
-             *
              * ```java
              * .billingProviderCustomerId()
              * .billingProviderType()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [BillingConfig]. */
@@ -1122,154 +1255,150 @@ class CustomerCreateParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(billingConfig: BillingConfig) =
-                apply {
-                    billingProviderCustomerId = billingConfig.billingProviderCustomerId
-                    billingProviderType = billingConfig.billingProviderType
-                    awsCustomerAccountId = billingConfig.awsCustomerAccountId
-                    awsCustomerId = billingConfig.awsCustomerId
-                    awsIsSubscriptionProduct = billingConfig.awsIsSubscriptionProduct
-                    awsProductCode = billingConfig.awsProductCode
-                    awsRegion = billingConfig.awsRegion
-                    stripeCollectionMethod = billingConfig.stripeCollectionMethod
-                    additionalProperties = billingConfig.additionalProperties.toMutableMap()
-                }
+            internal fun from(billingConfig: BillingConfig) = apply {
+                billingProviderCustomerId = billingConfig.billingProviderCustomerId
+                billingProviderType = billingConfig.billingProviderType
+                awsCustomerAccountId = billingConfig.awsCustomerAccountId
+                awsCustomerId = billingConfig.awsCustomerId
+                awsIsSubscriptionProduct = billingConfig.awsIsSubscriptionProduct
+                awsProductCode = billingConfig.awsProductCode
+                awsRegion = billingConfig.awsRegion
+                stripeCollectionMethod = billingConfig.stripeCollectionMethod
+                additionalProperties = billingConfig.additionalProperties.toMutableMap()
+            }
 
-            fun billingProviderCustomerId(billingProviderCustomerId: String) = billingProviderCustomerId(JsonField.of(billingProviderCustomerId))
+            fun billingProviderCustomerId(billingProviderCustomerId: String) =
+                billingProviderCustomerId(JsonField.of(billingProviderCustomerId))
 
             /**
              * Sets [Builder.billingProviderCustomerId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.billingProviderCustomerId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.billingProviderCustomerId] with a well-typed
+             * [String] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
              */
-            fun billingProviderCustomerId(billingProviderCustomerId: JsonField<String>) =
-                apply {
-                    this.billingProviderCustomerId = billingProviderCustomerId
-                }
+            fun billingProviderCustomerId(billingProviderCustomerId: JsonField<String>) = apply {
+                this.billingProviderCustomerId = billingProviderCustomerId
+            }
 
-            fun billingProviderType(billingProviderType: BillingProviderType) = billingProviderType(JsonField.of(billingProviderType))
+            fun billingProviderType(billingProviderType: BillingProviderType) =
+                billingProviderType(JsonField.of(billingProviderType))
 
             /**
              * Sets [Builder.billingProviderType] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.billingProviderType] with a well-typed [BillingProviderType] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.billingProviderType] with a well-typed
+             * [BillingProviderType] value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
              */
-            fun billingProviderType(billingProviderType: JsonField<BillingProviderType>) =
-                apply {
-                    this.billingProviderType = billingProviderType
-                }
+            fun billingProviderType(billingProviderType: JsonField<BillingProviderType>) = apply {
+                this.billingProviderType = billingProviderType
+            }
 
-            fun awsCustomerAccountId(awsCustomerAccountId: String) = awsCustomerAccountId(JsonField.of(awsCustomerAccountId))
+            fun awsCustomerAccountId(awsCustomerAccountId: String) =
+                awsCustomerAccountId(JsonField.of(awsCustomerAccountId))
 
             /**
              * Sets [Builder.awsCustomerAccountId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.awsCustomerAccountId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.awsCustomerAccountId] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun awsCustomerAccountId(awsCustomerAccountId: JsonField<String>) =
-                apply {
-                    this.awsCustomerAccountId = awsCustomerAccountId
-                }
+            fun awsCustomerAccountId(awsCustomerAccountId: JsonField<String>) = apply {
+                this.awsCustomerAccountId = awsCustomerAccountId
+            }
 
             fun awsCustomerId(awsCustomerId: String) = awsCustomerId(JsonField.of(awsCustomerId))
 
             /**
              * Sets [Builder.awsCustomerId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.awsCustomerId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.awsCustomerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun awsCustomerId(awsCustomerId: JsonField<String>) =
-                apply {
-                    this.awsCustomerId = awsCustomerId
-                }
+            fun awsCustomerId(awsCustomerId: JsonField<String>) = apply {
+                this.awsCustomerId = awsCustomerId
+            }
 
             /** True if the aws_product_code is a SAAS subscription product, false otherwise. */
-            fun awsIsSubscriptionProduct(awsIsSubscriptionProduct: Boolean) = awsIsSubscriptionProduct(JsonField.of(awsIsSubscriptionProduct))
+            fun awsIsSubscriptionProduct(awsIsSubscriptionProduct: Boolean) =
+                awsIsSubscriptionProduct(JsonField.of(awsIsSubscriptionProduct))
 
             /**
              * Sets [Builder.awsIsSubscriptionProduct] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.awsIsSubscriptionProduct] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.awsIsSubscriptionProduct] with a well-typed
+             * [Boolean] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
              */
-            fun awsIsSubscriptionProduct(awsIsSubscriptionProduct: JsonField<Boolean>) =
-                apply {
-                    this.awsIsSubscriptionProduct = awsIsSubscriptionProduct
-                }
+            fun awsIsSubscriptionProduct(awsIsSubscriptionProduct: JsonField<Boolean>) = apply {
+                this.awsIsSubscriptionProduct = awsIsSubscriptionProduct
+            }
 
-            fun awsProductCode(awsProductCode: String) = awsProductCode(JsonField.of(awsProductCode))
+            fun awsProductCode(awsProductCode: String) =
+                awsProductCode(JsonField.of(awsProductCode))
 
             /**
              * Sets [Builder.awsProductCode] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.awsProductCode] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.awsProductCode] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun awsProductCode(awsProductCode: JsonField<String>) =
-                apply {
-                    this.awsProductCode = awsProductCode
-                }
+            fun awsProductCode(awsProductCode: JsonField<String>) = apply {
+                this.awsProductCode = awsProductCode
+            }
 
             fun awsRegion(awsRegion: AwsRegion) = awsRegion(JsonField.of(awsRegion))
 
             /**
              * Sets [Builder.awsRegion] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.awsRegion] with a well-typed [AwsRegion] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.awsRegion] with a well-typed [AwsRegion] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun awsRegion(awsRegion: JsonField<AwsRegion>) =
-                apply {
-                    this.awsRegion = awsRegion
-                }
+            fun awsRegion(awsRegion: JsonField<AwsRegion>) = apply { this.awsRegion = awsRegion }
 
             /**
-             * The collection method for the customer's invoices.
-             * NOTE: `auto_charge_payment_intent` and `manually_charge_payment_intent` are in beta.
-             *
+             * The collection method for the customer's invoices. NOTE: `auto_charge_payment_intent`
+             * and `manually_charge_payment_intent` are in beta.
              */
-            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = stripeCollectionMethod(JsonField.of(stripeCollectionMethod))
+            fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) =
+                stripeCollectionMethod(JsonField.of(stripeCollectionMethod))
 
             /**
              * Sets [Builder.stripeCollectionMethod] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.stripeCollectionMethod] with a well-typed [StripeCollectionMethod] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.stripeCollectionMethod] with a well-typed
+             * [StripeCollectionMethod] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
             fun stripeCollectionMethod(stripeCollectionMethod: JsonField<StripeCollectionMethod>) =
                 apply {
                     this.stripeCollectionMethod = stripeCollectionMethod
                 }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [BillingConfig].
@@ -1277,7 +1406,6 @@ class CustomerCreateParams private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .billingProviderCustomerId()
              * .billingProviderType()
@@ -1287,48 +1415,44 @@ class CustomerCreateParams private constructor(
              */
             fun build(): BillingConfig =
                 BillingConfig(
-                  checkRequired(
-                    "billingProviderCustomerId", billingProviderCustomerId
-                  ),
-                  checkRequired(
-                    "billingProviderType", billingProviderType
-                  ),
-                  awsCustomerAccountId,
-                  awsCustomerId,
-                  awsIsSubscriptionProduct,
-                  awsProductCode,
-                  awsRegion,
-                  stripeCollectionMethod,
-                  additionalProperties.toMutableMap(),
+                    checkRequired("billingProviderCustomerId", billingProviderCustomerId),
+                    checkRequired("billingProviderType", billingProviderType),
+                    awsCustomerAccountId,
+                    awsCustomerId,
+                    awsIsSubscriptionProduct,
+                    awsProductCode,
+                    awsRegion,
+                    stripeCollectionMethod,
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): BillingConfig =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                billingProviderCustomerId()
-                billingProviderType().validate()
-                awsCustomerAccountId()
-                awsCustomerId()
-                awsIsSubscriptionProduct()
-                awsProductCode()
-                awsRegion().ifPresent { it.validate() }
-                stripeCollectionMethod().ifPresent { it.validate() }
-                validated = true
+        fun validate(): BillingConfig = apply {
+            if (validated) {
+                return@apply
             }
+
+            billingProviderCustomerId()
+            billingProviderType().validate()
+            awsCustomerAccountId()
+            awsCustomerId()
+            awsIsSubscriptionProduct()
+            awsProductCode()
+            awsRegion().ifPresent { it.validate() }
+            stripeCollectionMethod().ifPresent { it.validate() }
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -1339,27 +1463,35 @@ class CustomerCreateParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (if (billingProviderCustomerId.asKnown().isPresent) 1 else 0) + (billingProviderType.asKnown().getOrNull()?.validity() ?: 0) + (if (awsCustomerAccountId.asKnown().isPresent) 1 else 0) + (if (awsCustomerId.asKnown().isPresent) 1 else 0) + (if (awsIsSubscriptionProduct.asKnown().isPresent) 1 else 0) + (if (awsProductCode.asKnown().isPresent) 1 else 0) + (awsRegion.asKnown().getOrNull()?.validity() ?: 0) + (stripeCollectionMethod.asKnown().getOrNull()?.validity() ?: 0)
+        internal fun validity(): Int =
+            (if (billingProviderCustomerId.asKnown().isPresent) 1 else 0) +
+                (billingProviderType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (awsCustomerAccountId.asKnown().isPresent) 1 else 0) +
+                (if (awsCustomerId.asKnown().isPresent) 1 else 0) +
+                (if (awsIsSubscriptionProduct.asKnown().isPresent) 1 else 0) +
+                (if (awsProductCode.asKnown().isPresent) 1 else 0) +
+                (awsRegion.asKnown().getOrNull()?.validity() ?: 0) +
+                (stripeCollectionMethod.asKnown().getOrNull()?.validity() ?: 0)
 
-        class BillingProviderType @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        class BillingProviderType
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -1398,14 +1530,14 @@ class CustomerCreateParams private constructor(
             }
 
             /**
-             * An enum containing [BillingProviderType]'s known values, as well as an [_UNKNOWN] member.
+             * An enum containing [BillingProviderType]'s known values, as well as an [_UNKNOWN]
+             * member.
              *
-             * An instance of [BillingProviderType] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * An instance of [BillingProviderType] can contain an unknown value in a couple of
+             * cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
@@ -1418,16 +1550,19 @@ class CustomerCreateParams private constructor(
                 WORKDAY,
                 GCP_MARKETPLACE,
                 METRONOME,
-                /** An enum member indicating that [BillingProviderType] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [BillingProviderType] was instantiated with an
+                 * unknown value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -1446,10 +1581,11 @@ class CustomerCreateParams private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -1462,39 +1598,44 @@ class CustomerCreateParams private constructor(
                     WORKDAY -> Known.WORKDAY
                     GCP_MARKETPLACE -> Known.GCP_MARKETPLACE
                     METRONOME -> Known.METRONOME
-                    else -> throw MetronomeInvalidDataException("Unknown BillingProviderType: $value")
+                    else ->
+                        throw MetronomeInvalidDataException("Unknown BillingProviderType: $value")
                 }
 
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): BillingProviderType =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): BillingProviderType = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -1505,19 +1646,19 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is BillingProviderType && value == other.value
+                return other is BillingProviderType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1525,20 +1666,18 @@ class CustomerCreateParams private constructor(
             override fun toString() = value.toString()
         }
 
-        class AwsRegion @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        class AwsRegion @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -1628,11 +1767,9 @@ class CustomerCreateParams private constructor(
              * An enum containing [AwsRegion]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [AwsRegion] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
@@ -1661,16 +1798,19 @@ class CustomerCreateParams private constructor(
                 US_GOV_WEST_1,
                 US_WEST_1,
                 US_WEST_2,
-                /** An enum member indicating that [AwsRegion] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [AwsRegion] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -1705,10 +1845,11 @@ class CustomerCreateParams private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -1743,33 +1884,37 @@ class CustomerCreateParams private constructor(
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): AwsRegion =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): AwsRegion = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -1780,19 +1925,19 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is AwsRegion && value == other.value
+                return other is AwsRegion && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1801,24 +1946,22 @@ class CustomerCreateParams private constructor(
         }
 
         /**
-         * The collection method for the customer's invoices.
-         * NOTE: `auto_charge_payment_intent` and `manually_charge_payment_intent` are in beta.
-         *
+         * The collection method for the customer's invoices. NOTE: `auto_charge_payment_intent` and
+         * `manually_charge_payment_intent` are in beta.
          */
-        class StripeCollectionMethod @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        class StripeCollectionMethod
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -1842,14 +1985,14 @@ class CustomerCreateParams private constructor(
             }
 
             /**
-             * An enum containing [StripeCollectionMethod]'s known values, as well as an [_UNKNOWN] member.
+             * An enum containing [StripeCollectionMethod]'s known values, as well as an [_UNKNOWN]
+             * member.
              *
-             * An instance of [StripeCollectionMethod] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * An instance of [StripeCollectionMethod] can contain an unknown value in a couple of
+             * cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
@@ -1857,16 +2000,19 @@ class CustomerCreateParams private constructor(
                 SEND_INVOICE,
                 AUTO_CHARGE_PAYMENT_INTENT,
                 MANUALLY_CHARGE_PAYMENT_INTENT,
-                /** An enum member indicating that [StripeCollectionMethod] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [StripeCollectionMethod] was instantiated with an
+                 * unknown value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -1880,10 +2026,11 @@ class CustomerCreateParams private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -1891,39 +2038,46 @@ class CustomerCreateParams private constructor(
                     SEND_INVOICE -> Known.SEND_INVOICE
                     AUTO_CHARGE_PAYMENT_INTENT -> Known.AUTO_CHARGE_PAYMENT_INTENT
                     MANUALLY_CHARGE_PAYMENT_INTENT -> Known.MANUALLY_CHARGE_PAYMENT_INTENT
-                    else -> throw MetronomeInvalidDataException("Unknown StripeCollectionMethod: $value")
+                    else ->
+                        throw MetronomeInvalidDataException(
+                            "Unknown StripeCollectionMethod: $value"
+                        )
                 }
 
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): StripeCollectionMethod =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): StripeCollectionMethod = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -1934,19 +2088,19 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is StripeCollectionMethod && value == other.value
+                return other is StripeCollectionMethod && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1955,24 +2109,48 @@ class CustomerCreateParams private constructor(
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is BillingConfig && billingProviderCustomerId == other.billingProviderCustomerId && billingProviderType == other.billingProviderType && awsCustomerAccountId == other.awsCustomerAccountId && awsCustomerId == other.awsCustomerId && awsIsSubscriptionProduct == other.awsIsSubscriptionProduct && awsProductCode == other.awsProductCode && awsRegion == other.awsRegion && stripeCollectionMethod == other.stripeCollectionMethod && additionalProperties == other.additionalProperties
+            return other is BillingConfig &&
+                billingProviderCustomerId == other.billingProviderCustomerId &&
+                billingProviderType == other.billingProviderType &&
+                awsCustomerAccountId == other.awsCustomerAccountId &&
+                awsCustomerId == other.awsCustomerId &&
+                awsIsSubscriptionProduct == other.awsIsSubscriptionProduct &&
+                awsProductCode == other.awsProductCode &&
+                awsRegion == other.awsRegion &&
+                stripeCollectionMethod == other.stripeCollectionMethod &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(billingProviderCustomerId, billingProviderType, awsCustomerAccountId, awsCustomerId, awsIsSubscriptionProduct, awsProductCode, awsRegion, stripeCollectionMethod, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                billingProviderCustomerId,
+                billingProviderType,
+                awsCustomerAccountId,
+                awsCustomerId,
+                awsIsSubscriptionProduct,
+                awsProductCode,
+                awsRegion,
+                stripeCollectionMethod,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "BillingConfig{billingProviderCustomerId=$billingProviderCustomerId, billingProviderType=$billingProviderType, awsCustomerAccountId=$awsCustomerAccountId, awsCustomerId=$awsCustomerId, awsIsSubscriptionProduct=$awsIsSubscriptionProduct, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "BillingConfig{billingProviderCustomerId=$billingProviderCustomerId, billingProviderType=$billingProviderType, awsCustomerAccountId=$awsCustomerAccountId, awsCustomerId=$awsCustomerId, awsIsSubscriptionProduct=$awsIsSubscriptionProduct, awsProductCode=$awsProductCode, awsRegion=$awsRegion, stripeCollectionMethod=$stripeCollectionMethod, additionalProperties=$additionalProperties}"
     }
 
     /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
-    class CustomFields @JsonCreator private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
-
+    class CustomFields
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
     ) {
 
         @JsonAnyGetter
@@ -1984,8 +2162,7 @@ class CustomerCreateParams private constructor(
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [CustomFields]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [CustomFields]. */
@@ -1994,36 +2171,28 @@ class CustomerCreateParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customFields: CustomFields) =
-                apply {
-                    additionalProperties = customFields.additionalProperties.toMutableMap()
-                }
+            internal fun from(customFields: CustomFields) = apply {
+                additionalProperties = customFields.additionalProperties.toMutableMap()
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [CustomFields].
@@ -2036,21 +2205,21 @@ class CustomerCreateParams private constructor(
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): CustomFields =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                validated = true
+        fun validate(): CustomFields = apply {
+            if (validated) {
+                return@apply
             }
+
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -2061,19 +2230,21 @@ class CustomerCreateParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is CustomFields && additionalProperties == other.additionalProperties
+            return other is CustomFields && additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -2083,71 +2254,97 @@ class CustomerCreateParams private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
-    class CustomerBillingProviderConfiguration @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class CustomerBillingProviderConfiguration
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val billingProvider: JsonField<BillingProvider>,
         private val configuration: JsonField<Configuration>,
         private val deliveryMethod: JsonField<DeliveryMethod>,
         private val deliveryMethodId: JsonField<String>,
         private val taxProvider: JsonField<TaxProvider>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("billing_provider") @ExcludeMissing billingProvider: JsonField<BillingProvider> = JsonMissing.of(),
-            @JsonProperty("configuration") @ExcludeMissing configuration: JsonField<Configuration> = JsonMissing.of(),
-            @JsonProperty("delivery_method") @ExcludeMissing deliveryMethod: JsonField<DeliveryMethod> = JsonMissing.of(),
-            @JsonProperty("delivery_method_id") @ExcludeMissing deliveryMethodId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("tax_provider") @ExcludeMissing taxProvider: JsonField<TaxProvider> = JsonMissing.of()
+            @JsonProperty("billing_provider")
+            @ExcludeMissing
+            billingProvider: JsonField<BillingProvider> = JsonMissing.of(),
+            @JsonProperty("configuration")
+            @ExcludeMissing
+            configuration: JsonField<Configuration> = JsonMissing.of(),
+            @JsonProperty("delivery_method")
+            @ExcludeMissing
+            deliveryMethod: JsonField<DeliveryMethod> = JsonMissing.of(),
+            @JsonProperty("delivery_method_id")
+            @ExcludeMissing
+            deliveryMethodId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("tax_provider")
+            @ExcludeMissing
+            taxProvider: JsonField<TaxProvider> = JsonMissing.of(),
         ) : this(
-          billingProvider,
-          configuration,
-          deliveryMethod,
-          deliveryMethodId,
-          taxProvider,
-          mutableMapOf(),
+            billingProvider,
+            configuration,
+            deliveryMethod,
+            deliveryMethodId,
+            taxProvider,
+            mutableMapOf(),
         )
 
         /**
          * The billing provider set for this configuration.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun billingProvider(): BillingProvider = billingProvider.getRequired("billing_provider")
 
         /**
-         * Configuration for the billing provider. The structure of this object is specific to the billing provider and delivery provider combination. Defaults to an empty object, however, for most billing provider + delivery method combinations, it will not be a valid configuration.
+         * Configuration for the billing provider. The structure of this object is specific to the
+         * billing provider and delivery provider combination. Defaults to an empty object, however,
+         * for most billing provider + delivery method combinations, it will not be a valid
+         * configuration.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun configuration(): Optional<Configuration> = configuration.getOptional("configuration")
 
         /**
-         * The method to use for delivering invoices to this customer. If not provided, the `delivery_method_id` must be provided.
+         * The method to use for delivering invoices to this customer. If not provided, the
+         * `delivery_method_id` must be provided.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun deliveryMethod(): Optional<DeliveryMethod> = deliveryMethod.getOptional("delivery_method")
+        fun deliveryMethod(): Optional<DeliveryMethod> =
+            deliveryMethod.getOptional("delivery_method")
 
         /**
-         * ID of the delivery method to use for this customer. If not provided, the `delivery_method` must be provided.
+         * ID of the delivery method to use for this customer. If not provided, the
+         * `delivery_method` must be provided.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun deliveryMethodId(): Optional<String> = deliveryMethodId.getOptional("delivery_method_id")
+        fun deliveryMethodId(): Optional<String> =
+            deliveryMethodId.getOptional("delivery_method_id")
 
         /**
-         * Specifies which tax provider Metronome should use for tax calculation when billing through Stripe. This is only supported for Stripe billing provider configurations with auto_charge_payment_intent or manual_charge_payment_intent collection methods.
+         * Specifies which tax provider Metronome should use for tax calculation when billing
+         * through Stripe. This is only supported for Stripe billing provider configurations with
+         * auto_charge_payment_intent or manual_charge_payment_intent collection methods.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun taxProvider(): Optional<TaxProvider> = taxProvider.getOptional("tax_provider")
 
         /**
          * Returns the raw JSON value of [billingProvider].
          *
-         * Unlike [billingProvider], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [billingProvider], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("billing_provider")
         @ExcludeMissing
@@ -2156,7 +2353,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [configuration].
          *
-         * Unlike [configuration], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [configuration], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("configuration")
         @ExcludeMissing
@@ -2165,7 +2363,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [deliveryMethod].
          *
-         * Unlike [deliveryMethod], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [deliveryMethod], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("delivery_method")
         @ExcludeMissing
@@ -2174,7 +2373,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [deliveryMethodId].
          *
-         * Unlike [deliveryMethodId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [deliveryMethodId], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("delivery_method_id")
         @ExcludeMissing
@@ -2191,28 +2391,28 @@ class CustomerCreateParams private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [CustomerBillingProviderConfiguration].
+             * Returns a mutable builder for constructing an instance of
+             * [CustomerBillingProviderConfiguration].
              *
              * The following fields are required:
-             *
              * ```java
              * .billingProvider()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [CustomerBillingProviderConfiguration]. */
@@ -2226,111 +2426,125 @@ class CustomerCreateParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerBillingProviderConfiguration: CustomerBillingProviderConfiguration) =
-                apply {
-                    billingProvider = customerBillingProviderConfiguration.billingProvider
-                    configuration = customerBillingProviderConfiguration.configuration
-                    deliveryMethod = customerBillingProviderConfiguration.deliveryMethod
-                    deliveryMethodId = customerBillingProviderConfiguration.deliveryMethodId
-                    taxProvider = customerBillingProviderConfiguration.taxProvider
-                    additionalProperties = customerBillingProviderConfiguration.additionalProperties.toMutableMap()
-                }
+            internal fun from(
+                customerBillingProviderConfiguration: CustomerBillingProviderConfiguration
+            ) = apply {
+                billingProvider = customerBillingProviderConfiguration.billingProvider
+                configuration = customerBillingProviderConfiguration.configuration
+                deliveryMethod = customerBillingProviderConfiguration.deliveryMethod
+                deliveryMethodId = customerBillingProviderConfiguration.deliveryMethodId
+                taxProvider = customerBillingProviderConfiguration.taxProvider
+                additionalProperties =
+                    customerBillingProviderConfiguration.additionalProperties.toMutableMap()
+            }
 
             /** The billing provider set for this configuration. */
-            fun billingProvider(billingProvider: BillingProvider) = billingProvider(JsonField.of(billingProvider))
+            fun billingProvider(billingProvider: BillingProvider) =
+                billingProvider(JsonField.of(billingProvider))
 
             /**
              * Sets [Builder.billingProvider] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.billingProvider] with a well-typed [BillingProvider] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.billingProvider] with a well-typed [BillingProvider]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun billingProvider(billingProvider: JsonField<BillingProvider>) =
-                apply {
-                    this.billingProvider = billingProvider
-                }
+            fun billingProvider(billingProvider: JsonField<BillingProvider>) = apply {
+                this.billingProvider = billingProvider
+            }
 
-            /** Configuration for the billing provider. The structure of this object is specific to the billing provider and delivery provider combination. Defaults to an empty object, however, for most billing provider + delivery method combinations, it will not be a valid configuration. */
-            fun configuration(configuration: Configuration) = configuration(JsonField.of(configuration))
+            /**
+             * Configuration for the billing provider. The structure of this object is specific to
+             * the billing provider and delivery provider combination. Defaults to an empty object,
+             * however, for most billing provider + delivery method combinations, it will not be a
+             * valid configuration.
+             */
+            fun configuration(configuration: Configuration) =
+                configuration(JsonField.of(configuration))
 
             /**
              * Sets [Builder.configuration] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.configuration] with a well-typed [Configuration] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.configuration] with a well-typed [Configuration]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun configuration(configuration: JsonField<Configuration>) =
-                apply {
-                    this.configuration = configuration
-                }
+            fun configuration(configuration: JsonField<Configuration>) = apply {
+                this.configuration = configuration
+            }
 
-            /** The method to use for delivering invoices to this customer. If not provided, the `delivery_method_id` must be provided. */
-            fun deliveryMethod(deliveryMethod: DeliveryMethod) = deliveryMethod(JsonField.of(deliveryMethod))
+            /**
+             * The method to use for delivering invoices to this customer. If not provided, the
+             * `delivery_method_id` must be provided.
+             */
+            fun deliveryMethod(deliveryMethod: DeliveryMethod) =
+                deliveryMethod(JsonField.of(deliveryMethod))
 
             /**
              * Sets [Builder.deliveryMethod] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.deliveryMethod] with a well-typed [DeliveryMethod] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.deliveryMethod] with a well-typed [DeliveryMethod]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun deliveryMethod(deliveryMethod: JsonField<DeliveryMethod>) =
-                apply {
-                    this.deliveryMethod = deliveryMethod
-                }
+            fun deliveryMethod(deliveryMethod: JsonField<DeliveryMethod>) = apply {
+                this.deliveryMethod = deliveryMethod
+            }
 
-            /** ID of the delivery method to use for this customer. If not provided, the `delivery_method` must be provided. */
-            fun deliveryMethodId(deliveryMethodId: String) = deliveryMethodId(JsonField.of(deliveryMethodId))
+            /**
+             * ID of the delivery method to use for this customer. If not provided, the
+             * `delivery_method` must be provided.
+             */
+            fun deliveryMethodId(deliveryMethodId: String) =
+                deliveryMethodId(JsonField.of(deliveryMethodId))
 
             /**
              * Sets [Builder.deliveryMethodId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.deliveryMethodId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.deliveryMethodId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun deliveryMethodId(deliveryMethodId: JsonField<String>) =
-                apply {
-                    this.deliveryMethodId = deliveryMethodId
-                }
+            fun deliveryMethodId(deliveryMethodId: JsonField<String>) = apply {
+                this.deliveryMethodId = deliveryMethodId
+            }
 
-            /** Specifies which tax provider Metronome should use for tax calculation when billing through Stripe. This is only supported for Stripe billing provider configurations with auto_charge_payment_intent or manual_charge_payment_intent collection methods. */
+            /**
+             * Specifies which tax provider Metronome should use for tax calculation when billing
+             * through Stripe. This is only supported for Stripe billing provider configurations
+             * with auto_charge_payment_intent or manual_charge_payment_intent collection methods.
+             */
             fun taxProvider(taxProvider: TaxProvider) = taxProvider(JsonField.of(taxProvider))
 
             /**
              * Sets [Builder.taxProvider] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.taxProvider] with a well-typed [TaxProvider] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.taxProvider] with a well-typed [TaxProvider] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun taxProvider(taxProvider: JsonField<TaxProvider>) =
-                apply {
-                    this.taxProvider = taxProvider
-                }
+            fun taxProvider(taxProvider: JsonField<TaxProvider>) = apply {
+                this.taxProvider = taxProvider
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [CustomerBillingProviderConfiguration].
@@ -2338,7 +2552,6 @@ class CustomerCreateParams private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .billingProvider()
              * ```
@@ -2347,40 +2560,38 @@ class CustomerCreateParams private constructor(
              */
             fun build(): CustomerBillingProviderConfiguration =
                 CustomerBillingProviderConfiguration(
-                  checkRequired(
-                    "billingProvider", billingProvider
-                  ),
-                  configuration,
-                  deliveryMethod,
-                  deliveryMethodId,
-                  taxProvider,
-                  additionalProperties.toMutableMap(),
+                    checkRequired("billingProvider", billingProvider),
+                    configuration,
+                    deliveryMethod,
+                    deliveryMethodId,
+                    taxProvider,
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): CustomerBillingProviderConfiguration =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                billingProvider().validate()
-                configuration().ifPresent { it.validate() }
-                deliveryMethod().ifPresent { it.validate() }
-                deliveryMethodId()
-                taxProvider().ifPresent { it.validate() }
-                validated = true
+        fun validate(): CustomerBillingProviderConfiguration = apply {
+            if (validated) {
+                return@apply
             }
+
+            billingProvider().validate()
+            configuration().ifPresent { it.validate() }
+            deliveryMethod().ifPresent { it.validate() }
+            deliveryMethodId()
+            taxProvider().ifPresent { it.validate() }
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -2391,28 +2602,33 @@ class CustomerCreateParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (billingProvider.asKnown().getOrNull()?.validity() ?: 0) + (configuration.asKnown().getOrNull()?.validity() ?: 0) + (deliveryMethod.asKnown().getOrNull()?.validity() ?: 0) + (if (deliveryMethodId.asKnown().isPresent) 1 else 0) + (taxProvider.asKnown().getOrNull()?.validity() ?: 0)
+        internal fun validity(): Int =
+            (billingProvider.asKnown().getOrNull()?.validity() ?: 0) +
+                (configuration.asKnown().getOrNull()?.validity() ?: 0) +
+                (deliveryMethod.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (deliveryMethodId.asKnown().isPresent) 1 else 0) +
+                (taxProvider.asKnown().getOrNull()?.validity() ?: 0)
 
         /** The billing provider set for this configuration. */
-        class BillingProvider @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        class BillingProvider
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -2442,11 +2658,9 @@ class CustomerCreateParams private constructor(
              * An enum containing [BillingProvider]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [BillingProvider] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
@@ -2455,16 +2669,19 @@ class CustomerCreateParams private constructor(
                 GCP_MARKETPLACE,
                 STRIPE,
                 NETSUITE,
-                /** An enum member indicating that [BillingProvider] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [BillingProvider] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -2479,10 +2696,11 @@ class CustomerCreateParams private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -2497,33 +2715,37 @@ class CustomerCreateParams private constructor(
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): BillingProvider =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): BillingProvider = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -2534,19 +2756,19 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is BillingProvider && value == other.value
+                return other is BillingProvider && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -2554,10 +2776,17 @@ class CustomerCreateParams private constructor(
             override fun toString() = value.toString()
         }
 
-        /** Configuration for the billing provider. The structure of this object is specific to the billing provider and delivery provider combination. Defaults to an empty object, however, for most billing provider + delivery method combinations, it will not be a valid configuration. */
-        class Configuration @JsonCreator private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
-
+        /**
+         * Configuration for the billing provider. The structure of this object is specific to the
+         * billing provider and delivery provider combination. Defaults to an empty object, however,
+         * for most billing provider + delivery method combinations, it will not be a valid
+         * configuration.
+         */
+        class Configuration
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
 
             @JsonAnyGetter
@@ -2569,8 +2798,7 @@ class CustomerCreateParams private constructor(
             companion object {
 
                 /** Returns a mutable builder for constructing an instance of [Configuration]. */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [Configuration]. */
@@ -2579,36 +2807,31 @@ class CustomerCreateParams private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(configuration: Configuration) =
-                    apply {
-                        additionalProperties = configuration.additionalProperties.toMutableMap()
-                    }
+                internal fun from(configuration: Configuration) = apply {
+                    additionalProperties = configuration.additionalProperties.toMutableMap()
+                }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [Configuration].
@@ -2621,21 +2844,22 @@ class CustomerCreateParams private constructor(
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): Configuration =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    validated = true
+            fun validate(): Configuration = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -2646,19 +2870,21 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is Configuration && additionalProperties == other.additionalProperties
+                return other is Configuration && additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -2668,21 +2894,23 @@ class CustomerCreateParams private constructor(
             override fun toString() = "Configuration{additionalProperties=$additionalProperties}"
         }
 
-        /** The method to use for delivering invoices to this customer. If not provided, the `delivery_method_id` must be provided. */
-        class DeliveryMethod @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        /**
+         * The method to use for delivering invoices to this customer. If not provided, the
+         * `delivery_method_id` must be provided.
+         */
+        class DeliveryMethod
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -2709,11 +2937,9 @@ class CustomerCreateParams private constructor(
              * An enum containing [DeliveryMethod]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [DeliveryMethod] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
@@ -2721,16 +2947,19 @@ class CustomerCreateParams private constructor(
                 AWS_SQS,
                 TACKLE,
                 AWS_SNS,
-                /** An enum member indicating that [DeliveryMethod] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [DeliveryMethod] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -2744,10 +2973,11 @@ class CustomerCreateParams private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -2761,33 +2991,37 @@ class CustomerCreateParams private constructor(
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): DeliveryMethod =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): DeliveryMethod = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -2798,19 +3032,19 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is DeliveryMethod && value == other.value
+                return other is DeliveryMethod && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -2818,21 +3052,23 @@ class CustomerCreateParams private constructor(
             override fun toString() = value.toString()
         }
 
-        /** Specifies which tax provider Metronome should use for tax calculation when billing through Stripe. This is only supported for Stripe billing provider configurations with auto_charge_payment_intent or manual_charge_payment_intent collection methods. */
-        class TaxProvider @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        /**
+         * Specifies which tax provider Metronome should use for tax calculation when billing
+         * through Stripe. This is only supported for Stripe billing provider configurations with
+         * auto_charge_payment_intent or manual_charge_payment_intent collection methods.
+         */
+        class TaxProvider @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -2856,27 +3092,28 @@ class CustomerCreateParams private constructor(
              * An enum containing [TaxProvider]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [TaxProvider] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
                 ANROK,
                 AVALARA,
                 STRIPE,
-                /** An enum member indicating that [TaxProvider] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [TaxProvider] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -2889,10 +3126,11 @@ class CustomerCreateParams private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -2905,33 +3143,37 @@ class CustomerCreateParams private constructor(
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): TaxProvider =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): TaxProvider = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -2942,19 +3184,19 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is TaxProvider && value == other.value
+                return other is TaxProvider && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -2963,84 +3205,111 @@ class CustomerCreateParams private constructor(
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is CustomerBillingProviderConfiguration && billingProvider == other.billingProvider && configuration == other.configuration && deliveryMethod == other.deliveryMethod && deliveryMethodId == other.deliveryMethodId && taxProvider == other.taxProvider && additionalProperties == other.additionalProperties
+            return other is CustomerBillingProviderConfiguration &&
+                billingProvider == other.billingProvider &&
+                configuration == other.configuration &&
+                deliveryMethod == other.deliveryMethod &&
+                deliveryMethodId == other.deliveryMethodId &&
+                taxProvider == other.taxProvider &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(billingProvider, configuration, deliveryMethod, deliveryMethodId, taxProvider, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                billingProvider,
+                configuration,
+                deliveryMethod,
+                deliveryMethodId,
+                taxProvider,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "CustomerBillingProviderConfiguration{billingProvider=$billingProvider, configuration=$configuration, deliveryMethod=$deliveryMethod, deliveryMethodId=$deliveryMethodId, taxProvider=$taxProvider, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "CustomerBillingProviderConfiguration{billingProvider=$billingProvider, configuration=$configuration, deliveryMethod=$deliveryMethod, deliveryMethodId=$deliveryMethodId, taxProvider=$taxProvider, additionalProperties=$additionalProperties}"
     }
 
-    class CustomerRevenueSystemConfiguration @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class CustomerRevenueSystemConfiguration
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val provider: JsonField<Provider>,
         private val configuration: JsonField<Configuration>,
         private val deliveryMethod: JsonField<DeliveryMethod>,
         private val deliveryMethodId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("provider") @ExcludeMissing provider: JsonField<Provider> = JsonMissing.of(),
-            @JsonProperty("configuration") @ExcludeMissing configuration: JsonField<Configuration> = JsonMissing.of(),
-            @JsonProperty("delivery_method") @ExcludeMissing deliveryMethod: JsonField<DeliveryMethod> = JsonMissing.of(),
-            @JsonProperty("delivery_method_id") @ExcludeMissing deliveryMethodId: JsonField<String> = JsonMissing.of()
-        ) : this(
-          provider,
-          configuration,
-          deliveryMethod,
-          deliveryMethodId,
-          mutableMapOf(),
-        )
+            @JsonProperty("provider")
+            @ExcludeMissing
+            provider: JsonField<Provider> = JsonMissing.of(),
+            @JsonProperty("configuration")
+            @ExcludeMissing
+            configuration: JsonField<Configuration> = JsonMissing.of(),
+            @JsonProperty("delivery_method")
+            @ExcludeMissing
+            deliveryMethod: JsonField<DeliveryMethod> = JsonMissing.of(),
+            @JsonProperty("delivery_method_id")
+            @ExcludeMissing
+            deliveryMethodId: JsonField<String> = JsonMissing.of(),
+        ) : this(provider, configuration, deliveryMethod, deliveryMethodId, mutableMapOf())
 
         /**
          * The revenue system provider set for this configuration.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun provider(): Provider = provider.getRequired("provider")
 
         /**
-         * Configuration for the revenue system provider. The structure of this object is specific to the revenue system provider. For NetSuite, this should contain `netsuite_customer_id`.
+         * Configuration for the revenue system provider. The structure of this object is specific
+         * to the revenue system provider. For NetSuite, this should contain `netsuite_customer_id`.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun configuration(): Optional<Configuration> = configuration.getOptional("configuration")
 
         /**
-         * The method to use for delivering invoices to this customer. If not provided, the `delivery_method_id` must be provided.
+         * The method to use for delivering invoices to this customer. If not provided, the
+         * `delivery_method_id` must be provided.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun deliveryMethod(): Optional<DeliveryMethod> = deliveryMethod.getOptional("delivery_method")
+        fun deliveryMethod(): Optional<DeliveryMethod> =
+            deliveryMethod.getOptional("delivery_method")
 
         /**
-         * ID of the delivery method to use for this customer. If not provided, the `delivery_method` must be provided.
+         * ID of the delivery method to use for this customer. If not provided, the
+         * `delivery_method` must be provided.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun deliveryMethodId(): Optional<String> = deliveryMethodId.getOptional("delivery_method_id")
+        fun deliveryMethodId(): Optional<String> =
+            deliveryMethodId.getOptional("delivery_method_id")
 
         /**
          * Returns the raw JSON value of [provider].
          *
          * Unlike [provider], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("provider")
-        @ExcludeMissing
-        fun _provider(): JsonField<Provider> = provider
+        @JsonProperty("provider") @ExcludeMissing fun _provider(): JsonField<Provider> = provider
 
         /**
          * Returns the raw JSON value of [configuration].
          *
-         * Unlike [configuration], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [configuration], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("configuration")
         @ExcludeMissing
@@ -3049,7 +3318,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [deliveryMethod].
          *
-         * Unlike [deliveryMethod], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [deliveryMethod], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("delivery_method")
         @ExcludeMissing
@@ -3058,7 +3328,8 @@ class CustomerCreateParams private constructor(
         /**
          * Returns the raw JSON value of [deliveryMethodId].
          *
-         * Unlike [deliveryMethodId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [deliveryMethodId], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("delivery_method_id")
         @ExcludeMissing
@@ -3066,28 +3337,28 @@ class CustomerCreateParams private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of [CustomerRevenueSystemConfiguration].
+             * Returns a mutable builder for constructing an instance of
+             * [CustomerRevenueSystemConfiguration].
              *
              * The following fields are required:
-             *
              * ```java
              * .provider()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [CustomerRevenueSystemConfiguration]. */
@@ -3100,14 +3371,16 @@ class CustomerCreateParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(customerRevenueSystemConfiguration: CustomerRevenueSystemConfiguration) =
-                apply {
-                    provider = customerRevenueSystemConfiguration.provider
-                    configuration = customerRevenueSystemConfiguration.configuration
-                    deliveryMethod = customerRevenueSystemConfiguration.deliveryMethod
-                    deliveryMethodId = customerRevenueSystemConfiguration.deliveryMethodId
-                    additionalProperties = customerRevenueSystemConfiguration.additionalProperties.toMutableMap()
-                }
+            internal fun from(
+                customerRevenueSystemConfiguration: CustomerRevenueSystemConfiguration
+            ) = apply {
+                provider = customerRevenueSystemConfiguration.provider
+                configuration = customerRevenueSystemConfiguration.configuration
+                deliveryMethod = customerRevenueSystemConfiguration.deliveryMethod
+                deliveryMethodId = customerRevenueSystemConfiguration.deliveryMethodId
+                additionalProperties =
+                    customerRevenueSystemConfiguration.additionalProperties.toMutableMap()
+            }
 
             /** The revenue system provider set for this configuration. */
             fun provider(provider: Provider) = provider(JsonField.of(provider))
@@ -3115,81 +3388,85 @@ class CustomerCreateParams private constructor(
             /**
              * Sets [Builder.provider] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.provider] with a well-typed [Provider] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.provider] with a well-typed [Provider] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun provider(provider: JsonField<Provider>) =
-                apply {
-                    this.provider = provider
-                }
+            fun provider(provider: JsonField<Provider>) = apply { this.provider = provider }
 
-            /** Configuration for the revenue system provider. The structure of this object is specific to the revenue system provider. For NetSuite, this should contain `netsuite_customer_id`. */
-            fun configuration(configuration: Configuration) = configuration(JsonField.of(configuration))
+            /**
+             * Configuration for the revenue system provider. The structure of this object is
+             * specific to the revenue system provider. For NetSuite, this should contain
+             * `netsuite_customer_id`.
+             */
+            fun configuration(configuration: Configuration) =
+                configuration(JsonField.of(configuration))
 
             /**
              * Sets [Builder.configuration] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.configuration] with a well-typed [Configuration] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.configuration] with a well-typed [Configuration]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun configuration(configuration: JsonField<Configuration>) =
-                apply {
-                    this.configuration = configuration
-                }
+            fun configuration(configuration: JsonField<Configuration>) = apply {
+                this.configuration = configuration
+            }
 
-            /** The method to use for delivering invoices to this customer. If not provided, the `delivery_method_id` must be provided. */
-            fun deliveryMethod(deliveryMethod: DeliveryMethod) = deliveryMethod(JsonField.of(deliveryMethod))
+            /**
+             * The method to use for delivering invoices to this customer. If not provided, the
+             * `delivery_method_id` must be provided.
+             */
+            fun deliveryMethod(deliveryMethod: DeliveryMethod) =
+                deliveryMethod(JsonField.of(deliveryMethod))
 
             /**
              * Sets [Builder.deliveryMethod] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.deliveryMethod] with a well-typed [DeliveryMethod] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.deliveryMethod] with a well-typed [DeliveryMethod]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun deliveryMethod(deliveryMethod: JsonField<DeliveryMethod>) =
-                apply {
-                    this.deliveryMethod = deliveryMethod
-                }
+            fun deliveryMethod(deliveryMethod: JsonField<DeliveryMethod>) = apply {
+                this.deliveryMethod = deliveryMethod
+            }
 
-            /** ID of the delivery method to use for this customer. If not provided, the `delivery_method` must be provided. */
-            fun deliveryMethodId(deliveryMethodId: String) = deliveryMethodId(JsonField.of(deliveryMethodId))
+            /**
+             * ID of the delivery method to use for this customer. If not provided, the
+             * `delivery_method` must be provided.
+             */
+            fun deliveryMethodId(deliveryMethodId: String) =
+                deliveryMethodId(JsonField.of(deliveryMethodId))
 
             /**
              * Sets [Builder.deliveryMethodId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.deliveryMethodId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.deliveryMethodId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun deliveryMethodId(deliveryMethodId: JsonField<String>) =
-                apply {
-                    this.deliveryMethodId = deliveryMethodId
-                }
+            fun deliveryMethodId(deliveryMethodId: JsonField<String>) = apply {
+                this.deliveryMethodId = deliveryMethodId
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [CustomerRevenueSystemConfiguration].
@@ -3197,7 +3474,6 @@ class CustomerCreateParams private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .provider()
              * ```
@@ -3206,38 +3482,36 @@ class CustomerCreateParams private constructor(
              */
             fun build(): CustomerRevenueSystemConfiguration =
                 CustomerRevenueSystemConfiguration(
-                  checkRequired(
-                    "provider", provider
-                  ),
-                  configuration,
-                  deliveryMethod,
-                  deliveryMethodId,
-                  additionalProperties.toMutableMap(),
+                    checkRequired("provider", provider),
+                    configuration,
+                    deliveryMethod,
+                    deliveryMethodId,
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): CustomerRevenueSystemConfiguration =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                provider().validate()
-                configuration().ifPresent { it.validate() }
-                deliveryMethod().ifPresent { it.validate() }
-                deliveryMethodId()
-                validated = true
+        fun validate(): CustomerRevenueSystemConfiguration = apply {
+            if (validated) {
+                return@apply
             }
+
+            provider().validate()
+            configuration().ifPresent { it.validate() }
+            deliveryMethod().ifPresent { it.validate() }
+            deliveryMethodId()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -3248,28 +3522,31 @@ class CustomerCreateParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (provider.asKnown().getOrNull()?.validity() ?: 0) + (configuration.asKnown().getOrNull()?.validity() ?: 0) + (deliveryMethod.asKnown().getOrNull()?.validity() ?: 0) + (if (deliveryMethodId.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int =
+            (provider.asKnown().getOrNull()?.validity() ?: 0) +
+                (configuration.asKnown().getOrNull()?.validity() ?: 0) +
+                (deliveryMethod.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (deliveryMethodId.asKnown().isPresent) 1 else 0)
 
         /** The revenue system provider set for this configuration. */
-        class Provider @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        class Provider @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -3280,32 +3557,32 @@ class CustomerCreateParams private constructor(
 
             /** An enum containing [Provider]'s known values. */
             enum class Known {
-                NETSUITE,
+                NETSUITE
             }
 
             /**
              * An enum containing [Provider]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [Provider] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
                 NETSUITE,
-                /** An enum member indicating that [Provider] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [Provider] was instantiated with an unknown value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -3316,10 +3593,11 @@ class CustomerCreateParams private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -3330,33 +3608,37 @@ class CustomerCreateParams private constructor(
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): Provider =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): Provider = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -3367,19 +3649,19 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is Provider && value == other.value
+                return other is Provider && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3387,10 +3669,15 @@ class CustomerCreateParams private constructor(
             override fun toString() = value.toString()
         }
 
-        /** Configuration for the revenue system provider. The structure of this object is specific to the revenue system provider. For NetSuite, this should contain `netsuite_customer_id`. */
-        class Configuration @JsonCreator private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
-
+        /**
+         * Configuration for the revenue system provider. The structure of this object is specific
+         * to the revenue system provider. For NetSuite, this should contain `netsuite_customer_id`.
+         */
+        class Configuration
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
 
             @JsonAnyGetter
@@ -3402,8 +3689,7 @@ class CustomerCreateParams private constructor(
             companion object {
 
                 /** Returns a mutable builder for constructing an instance of [Configuration]. */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [Configuration]. */
@@ -3412,36 +3698,31 @@ class CustomerCreateParams private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(configuration: Configuration) =
-                    apply {
-                        additionalProperties = configuration.additionalProperties.toMutableMap()
-                    }
+                internal fun from(configuration: Configuration) = apply {
+                    additionalProperties = configuration.additionalProperties.toMutableMap()
+                }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [Configuration].
@@ -3454,21 +3735,22 @@ class CustomerCreateParams private constructor(
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): Configuration =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    validated = true
+            fun validate(): Configuration = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -3479,19 +3761,21 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is Configuration && additionalProperties == other.additionalProperties
+                return other is Configuration && additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -3501,21 +3785,23 @@ class CustomerCreateParams private constructor(
             override fun toString() = "Configuration{additionalProperties=$additionalProperties}"
         }
 
-        /** The method to use for delivering invoices to this customer. If not provided, the `delivery_method_id` must be provided. */
-        class DeliveryMethod @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        /**
+         * The method to use for delivering invoices to this customer. If not provided, the
+         * `delivery_method_id` must be provided.
+         */
+        class DeliveryMethod
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -3526,32 +3812,33 @@ class CustomerCreateParams private constructor(
 
             /** An enum containing [DeliveryMethod]'s known values. */
             enum class Known {
-                DIRECT_TO_BILLING_PROVIDER,
+                DIRECT_TO_BILLING_PROVIDER
             }
 
             /**
              * An enum containing [DeliveryMethod]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [DeliveryMethod] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
                 DIRECT_TO_BILLING_PROVIDER,
-                /** An enum member indicating that [DeliveryMethod] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [DeliveryMethod] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -3562,10 +3849,11 @@ class CustomerCreateParams private constructor(
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -3576,33 +3864,37 @@ class CustomerCreateParams private constructor(
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): DeliveryMethod =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): DeliveryMethod = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -3613,19 +3905,19 @@ class CustomerCreateParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is DeliveryMethod && value == other.value
+                return other is DeliveryMethod && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -3634,29 +3926,47 @@ class CustomerCreateParams private constructor(
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is CustomerRevenueSystemConfiguration && provider == other.provider && configuration == other.configuration && deliveryMethod == other.deliveryMethod && deliveryMethodId == other.deliveryMethodId && additionalProperties == other.additionalProperties
+            return other is CustomerRevenueSystemConfiguration &&
+                provider == other.provider &&
+                configuration == other.configuration &&
+                deliveryMethod == other.deliveryMethod &&
+                deliveryMethodId == other.deliveryMethodId &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(provider, configuration, deliveryMethod, deliveryMethodId, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                provider,
+                configuration,
+                deliveryMethod,
+                deliveryMethodId,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "CustomerRevenueSystemConfiguration{provider=$provider, configuration=$configuration, deliveryMethod=$deliveryMethod, deliveryMethodId=$deliveryMethodId, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "CustomerRevenueSystemConfiguration{provider=$provider, configuration=$configuration, deliveryMethod=$deliveryMethod, deliveryMethodId=$deliveryMethodId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is CustomerCreateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
+        return other is CustomerCreateParams &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
-    override fun toString() = "CustomerCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() =
+        "CustomerCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

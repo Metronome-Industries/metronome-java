@@ -9,7 +9,6 @@ import com.metronome.api.models.EventTypeFilter
 import com.metronome.api.models.Id
 import com.metronome.api.models.PropertyFilter
 import com.metronome.api.models.v1.billablemetrics.BillableMetricCreateParams
-import com.metronome.api.models.v1.billablemetrics.BillableMetricListParams
 import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -19,97 +18,114 @@ internal class BillableMetricServiceAsyncTest {
 
     @Test
     fun create() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val billableMetricServiceAsync = client.v1().billableMetrics()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val billableMetricServiceAsync = client.v1().billableMetrics()
 
-      val billableMetricFuture = billableMetricServiceAsync.create(BillableMetricCreateParams.builder()
-          .name("CPU Hours")
-          .aggregationKey("cpu_hours")
-          .aggregationType(BillableMetricCreateParams.AggregationType.SUM)
-          .customFields(BillableMetricCreateParams.CustomFields.builder()
-              .putAdditionalProperty("foo", JsonValue.from("string"))
-              .build())
-          .eventTypeFilter(EventTypeFilter.builder()
-              .addInValue("cpu_usage")
-              .addNotInValue("string")
-              .build())
-          .addGroupKey(listOf("region"))
-          .addGroupKey(listOf("machine_type"))
-          .propertyFilters(listOf(
-            PropertyFilter.builder()
-                .name("cpu_hours")
-                .exists(true)
-                .addInValue("string")
-                .addNotInValue("string")
-                .build(),
-            PropertyFilter.builder()
-                .name("region")
-                .exists(true)
-                .addInValue("EU")
-                .addInValue("NA")
-                .addNotInValue("string")
-                .build(),
-            PropertyFilter.builder()
-                .name("machine_type")
-                .exists(true)
-                .addInValue("slow")
-                .addInValue("fast")
-                .addNotInValue("string")
-                .build(),
-          ))
-          .sql("sql")
-          .build())
+        val billableMetricFuture =
+            billableMetricServiceAsync.create(
+                BillableMetricCreateParams.builder()
+                    .name("CPU Hours")
+                    .aggregationKey("cpu_hours")
+                    .aggregationType(BillableMetricCreateParams.AggregationType.SUM)
+                    .customFields(
+                        BillableMetricCreateParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .eventTypeFilter(
+                        EventTypeFilter.builder()
+                            .addInValue("cpu_usage")
+                            .addNotInValue("string")
+                            .build()
+                    )
+                    .addGroupKey(listOf("region"))
+                    .addGroupKey(listOf("machine_type"))
+                    .propertyFilters(
+                        listOf(
+                            PropertyFilter.builder()
+                                .name("cpu_hours")
+                                .exists(true)
+                                .addInValue("string")
+                                .addNotInValue("string")
+                                .build(),
+                            PropertyFilter.builder()
+                                .name("region")
+                                .exists(true)
+                                .addInValue("EU")
+                                .addInValue("NA")
+                                .addNotInValue("string")
+                                .build(),
+                            PropertyFilter.builder()
+                                .name("machine_type")
+                                .exists(true)
+                                .addInValue("slow")
+                                .addInValue("fast")
+                                .addNotInValue("string")
+                                .build(),
+                        )
+                    )
+                    .sql("sql")
+                    .build()
+            )
 
-      val billableMetric = billableMetricFuture.get()
-      billableMetric.validate()
+        val billableMetric = billableMetricFuture.get()
+        billableMetric.validate()
     }
 
     @Test
     fun retrieve() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val billableMetricServiceAsync = client.v1().billableMetrics()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val billableMetricServiceAsync = client.v1().billableMetrics()
 
-      val billableMetricFuture = billableMetricServiceAsync.retrieve(BillableMetricRetrieveParams.builder()
-          .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-          .build())
+        val billableMetricFuture =
+            billableMetricServiceAsync.retrieve(
+                BillableMetricRetrieveParams.builder()
+                    .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .build()
+            )
 
-      val billableMetric = billableMetricFuture.get()
-      billableMetric.validate()
+        val billableMetric = billableMetricFuture.get()
+        billableMetric.validate()
     }
 
     @Test
     fun list() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val billableMetricServiceAsync = client.v1().billableMetrics()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val billableMetricServiceAsync = client.v1().billableMetrics()
 
-      val pageFuture = billableMetricServiceAsync.list()
+        val pageFuture = billableMetricServiceAsync.list()
 
-      val page = pageFuture.get()
-      page.response().validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Test
     fun archive() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val billableMetricServiceAsync = client.v1().billableMetrics()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val billableMetricServiceAsync = client.v1().billableMetrics()
 
-      val responseFuture = billableMetricServiceAsync.archive(Id.builder()
-          .id("8deed800-1b7a-495d-a207-6c52bac54dc9")
-          .build())
+        val responseFuture =
+            billableMetricServiceAsync.archive(
+                Id.builder().id("8deed800-1b7a-495d-a207-6c52bac54dc9").build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 }

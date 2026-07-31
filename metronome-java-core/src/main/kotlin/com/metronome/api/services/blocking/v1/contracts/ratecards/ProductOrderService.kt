@@ -10,13 +10,14 @@ import com.metronome.api.models.v1.contracts.ratecards.productorders.ProductOrde
 import com.metronome.api.models.v1.contracts.ratecards.productorders.ProductOrderSetResponse
 import com.metronome.api.models.v1.contracts.ratecards.productorders.ProductOrderUpdateParams
 import com.metronome.api.models.v1.contracts.ratecards.productorders.ProductOrderUpdateResponse
-import com.metronome.api.services.blocking.v1.contracts.ratecards.ProductOrderService
 import java.util.function.Consumer
 
 /** Rate cards are used to define default pricing for products. */
 interface ProductOrderService {
 
-    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -27,30 +28,36 @@ interface ProductOrderService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProductOrderService
 
     /**
-     * The ordering of products on a rate card determines the order in which the products will appear on customers' invoices. Use this endpoint to set the order of specific products on the rate card by moving them relative to their current location.
-     *
+     * The ordering of products on a rate card determines the order in which the products will
+     * appear on customers' invoices. Use this endpoint to set the order of specific products on the
+     * rate card by moving them relative to their current location.
      */
     fun update(params: ProductOrderUpdateParams): ProductOrderUpdateResponse =
-        update(
-          params, RequestOptions.none()
-        )
+        update(params, RequestOptions.none())
 
     /** @see update */
-    fun update(params: ProductOrderUpdateParams, requestOptions: RequestOptions = RequestOptions.none()): ProductOrderUpdateResponse
+    fun update(
+        params: ProductOrderUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ProductOrderUpdateResponse
 
     /**
-     * The ordering of products on a rate card determines the order in which the products will appear on customers' invoices. Use this endpoint to set the order of products on the rate card.
-     *
+     * The ordering of products on a rate card determines the order in which the products will
+     * appear on customers' invoices. Use this endpoint to set the order of products on the rate
+     * card.
      */
     fun set(params: ProductOrderSetParams): ProductOrderSetResponse =
-        set(
-          params, RequestOptions.none()
-        )
+        set(params, RequestOptions.none())
 
     /** @see set */
-    fun set(params: ProductOrderSetParams, requestOptions: RequestOptions = RequestOptions.none()): ProductOrderSetResponse
+    fun set(
+        params: ProductOrderSetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ProductOrderSetResponse
 
-    /** A view of [ProductOrderService] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [ProductOrderService] that provides access to raw HTTP responses for each method.
+     */
     interface WithRawResponse {
 
         /**
@@ -58,28 +65,40 @@ interface ProductOrderService {
          *
          * The original service is not modified.
          */
-        fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProductOrderService.WithRawResponse
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ProductOrderService.WithRawResponse
 
-        /** Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/moveRateCardProducts`, but is otherwise the             same as [ProductOrderService.update]. */
+        /**
+         * Returns a raw HTTP response for `post
+         * /v1/contract-pricing/rate-cards/moveRateCardProducts`, but is otherwise the same as
+         * [ProductOrderService.update].
+         */
         @MustBeClosed
         fun update(params: ProductOrderUpdateParams): HttpResponseFor<ProductOrderUpdateResponse> =
-            update(
-              params, RequestOptions.none()
-            )
+            update(params, RequestOptions.none())
 
         /** @see update */
         @MustBeClosed
-        fun update(params: ProductOrderUpdateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ProductOrderUpdateResponse>
+        fun update(
+            params: ProductOrderUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ProductOrderUpdateResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/setRateCardProductsOrder`, but is otherwise the             same as [ProductOrderService.set]. */
+        /**
+         * Returns a raw HTTP response for `post
+         * /v1/contract-pricing/rate-cards/setRateCardProductsOrder`, but is otherwise the same as
+         * [ProductOrderService.set].
+         */
         @MustBeClosed
         fun set(params: ProductOrderSetParams): HttpResponseFor<ProductOrderSetResponse> =
-            set(
-              params, RequestOptions.none()
-            )
+            set(params, RequestOptions.none())
 
         /** @see set */
         @MustBeClosed
-        fun set(params: ProductOrderSetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ProductOrderSetResponse>
+        fun set(
+            params: ProductOrderSetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ProductOrderSetResponse>
     }
 }

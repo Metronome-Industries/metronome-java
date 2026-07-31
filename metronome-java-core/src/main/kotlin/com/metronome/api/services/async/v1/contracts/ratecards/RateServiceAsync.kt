@@ -11,14 +11,15 @@ import com.metronome.api.models.v1.contracts.ratecards.rates.RateAddParams
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateAddResponse
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateListPageAsync
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateListParams
-import com.metronome.api.services.async.v1.contracts.ratecards.RateServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
 /** Rate cards are used to define default pricing for products. */
 interface RateServiceAsync {
 
-    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -29,44 +30,48 @@ interface RateServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateServiceAsync
 
     /**
-     * Understand the rate schedule at a given timestamp, optionally filtering the list of rates returned based on properties such as `product_id` and `pricing_group_values`. For example, you may want to display the current price for a given product in your product experience - use this endpoint to fetch that information from its source of truth in Metronome.
+     * Understand the rate schedule at a given timestamp, optionally filtering the list of rates
+     * returned based on properties such as `product_id` and `pricing_group_values`. For example,
+     * you may want to display the current price for a given product in your product experience -
+     * use this endpoint to fetch that information from its source of truth in Metronome.
      *
-     * If you want to understand the rates for a specific customer's contract, inclusive of contract-level overrides, use the `getContractRateSchedule` endpoint.
-     *
+     * If you want to understand the rates for a specific customer's contract, inclusive of
+     * contract-level overrides, use the `getContractRateSchedule` endpoint.
      */
     fun list(params: RateListParams): CompletableFuture<RateListPageAsync> =
-        list(
-          params, RequestOptions.none()
-        )
+        list(params, RequestOptions.none())
 
     /** @see list */
-    fun list(params: RateListParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<RateListPageAsync>
+    fun list(
+        params: RateListParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<RateListPageAsync>
 
     /**
      * Add a new rate
      *
-     * This endpoint is heavily rate limited. For adding multiple rates, using the [addRates](https://docs.metronome.com/api-reference/rate-cards/add-rates) endpoint is strongly encouraged.
-     *
+     * This endpoint is heavily rate limited. For adding multiple rates, using the
+     * [addRates](https://docs.metronome.com/api-reference/rate-cards/add-rates) endpoint is
+     * strongly encouraged.
      */
     fun add(params: RateAddParams): CompletableFuture<RateAddResponse> =
-        add(
-          params, RequestOptions.none()
-        )
+        add(params, RequestOptions.none())
 
     /** @see add */
-    fun add(params: RateAddParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<RateAddResponse>
+    fun add(
+        params: RateAddParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<RateAddResponse>
 
-    /**
-     * Add new rates
-     *
-     */
+    /** Add new rates */
     fun addMany(params: RateAddManyParams): CompletableFuture<RateAddManyResponse> =
-        addMany(
-          params, RequestOptions.none()
-        )
+        addMany(params, RequestOptions.none())
 
     /** @see addMany */
-    fun addMany(params: RateAddManyParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<RateAddManyResponse>
+    fun addMany(
+        params: RateAddManyParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<RateAddManyResponse>
 
     /** A view of [RateServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -78,31 +83,45 @@ interface RateServiceAsync {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateServiceAsync.WithRawResponse
 
-        /** Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/getRates`, but is otherwise the             same as [RateServiceAsync.list]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/getRates`, but is
+         * otherwise the same as [RateServiceAsync.list].
+         */
         fun list(params: RateListParams): CompletableFuture<HttpResponseFor<RateListPageAsync>> =
-            list(
-              params, RequestOptions.none()
-            )
+            list(params, RequestOptions.none())
 
         /** @see list */
-        fun list(params: RateListParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<RateListPageAsync>>
+        fun list(
+            params: RateListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateListPageAsync>>
 
-        /** Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/addRate`, but is otherwise the             same as [RateServiceAsync.add]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/addRate`, but is
+         * otherwise the same as [RateServiceAsync.add].
+         */
         fun add(params: RateAddParams): CompletableFuture<HttpResponseFor<RateAddResponse>> =
-            add(
-              params, RequestOptions.none()
-            )
+            add(params, RequestOptions.none())
 
         /** @see add */
-        fun add(params: RateAddParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<RateAddResponse>>
+        fun add(
+            params: RateAddParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateAddResponse>>
 
-        /** Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/addRates`, but is otherwise the             same as [RateServiceAsync.addMany]. */
-        fun addMany(params: RateAddManyParams): CompletableFuture<HttpResponseFor<RateAddManyResponse>> =
-            addMany(
-              params, RequestOptions.none()
-            )
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/addRates`, but is
+         * otherwise the same as [RateServiceAsync.addMany].
+         */
+        fun addMany(
+            params: RateAddManyParams
+        ): CompletableFuture<HttpResponseFor<RateAddManyResponse>> =
+            addMany(params, RequestOptions.none())
 
         /** @see addMany */
-        fun addMany(params: RateAddManyParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<RateAddManyResponse>>
+        fun addMany(
+            params: RateAddManyParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<RateAddManyResponse>>
     }
 }

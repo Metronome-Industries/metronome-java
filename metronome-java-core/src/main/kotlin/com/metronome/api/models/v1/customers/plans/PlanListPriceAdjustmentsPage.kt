@@ -5,20 +5,17 @@ package com.metronome.api.models.v1.customers.plans
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
-import com.metronome.api.models.v1.customers.plans.PlanListPriceAdjustmentsPageResponse
-import com.metronome.api.models.v1.customers.plans.PlanListPriceAdjustmentsParams
-import com.metronome.api.models.v1.customers.plans.PlanListPriceAdjustmentsResponse
 import com.metronome.api.services.blocking.v1.customers.PlanService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see PlanService.listPriceAdjustments */
-class PlanListPriceAdjustmentsPage private constructor(
+class PlanListPriceAdjustmentsPage
+private constructor(
     private val service: PlanService,
     private val params: PlanListPriceAdjustmentsParams,
     private val response: PlanListPriceAdjustmentsPageResponse,
-
 ) : Page<PlanListPriceAdjustmentsResponse> {
 
     /**
@@ -33,20 +30,22 @@ class PlanListPriceAdjustmentsPage private constructor(
      *
      * @see PlanListPriceAdjustmentsPageResponse.data
      */
-    fun data(): List<PlanListPriceAdjustmentsResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<PlanListPriceAdjustmentsResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<PlanListPriceAdjustmentsResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): PlanListPriceAdjustmentsParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
-    override fun nextPage(): PlanListPriceAdjustmentsPage = service.listPriceAdjustments(nextPageParams())
+    override fun nextPage(): PlanListPriceAdjustmentsPage =
+        service.listPriceAdjustments(nextPageParams())
 
     fun autoPager(): AutoPager<PlanListPriceAdjustmentsResponse> = AutoPager.from(this)
 
@@ -64,15 +63,13 @@ class PlanListPriceAdjustmentsPage private constructor(
          * Returns a mutable builder for constructing an instance of [PlanListPriceAdjustmentsPage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PlanListPriceAdjustmentsPage]. */
@@ -83,29 +80,21 @@ class PlanListPriceAdjustmentsPage private constructor(
         private var response: PlanListPriceAdjustmentsPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(planListPriceAdjustmentsPage: PlanListPriceAdjustmentsPage) =
-            apply {
-                service = planListPriceAdjustmentsPage.service
-                params = planListPriceAdjustmentsPage.params
-                response = planListPriceAdjustmentsPage.response
-            }
+        internal fun from(planListPriceAdjustmentsPage: PlanListPriceAdjustmentsPage) = apply {
+            service = planListPriceAdjustmentsPage.service
+            params = planListPriceAdjustmentsPage.params
+            response = planListPriceAdjustmentsPage.response
+        }
 
-        fun service(service: PlanService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: PlanService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: PlanListPriceAdjustmentsParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: PlanListPriceAdjustmentsParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: PlanListPriceAdjustmentsPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: PlanListPriceAdjustmentsPageResponse) = apply {
+            this.response = response
+        }
 
         /**
          * Returns an immutable instance of [PlanListPriceAdjustmentsPage].
@@ -113,7 +102,6 @@ class PlanListPriceAdjustmentsPage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,27 +112,25 @@ class PlanListPriceAdjustmentsPage private constructor(
          */
         fun build(): PlanListPriceAdjustmentsPage =
             PlanListPriceAdjustmentsPage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PlanListPriceAdjustmentsPage && service == other.service && params == other.params && response == other.response
+        return other is PlanListPriceAdjustmentsPage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() = "PlanListPriceAdjustmentsPage{service=$service, params=$params, response=$response}"
+    override fun toString() =
+        "PlanListPriceAdjustmentsPage{service=$service, params=$params, response=$response}"
 }

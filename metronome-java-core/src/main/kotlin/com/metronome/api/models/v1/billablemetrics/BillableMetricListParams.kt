@@ -10,17 +10,18 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Retrieves all billable metrics with their complete configurations. Use this for programmatic discovery and management of billable metrics, such as associating metrics to products and auditing for orphaned or archived metrics.
- * Important: Archived metrics are excluded by default; use `include_archived`=`true` parameter to include them.
- *
+ * Retrieves all billable metrics with their complete configurations. Use this for programmatic
+ * discovery and management of billable metrics, such as associating metrics to products and
+ * auditing for orphaned or archived metrics. Important: Archived metrics are excluded by default;
+ * use `include_archived`=`true` parameter to include them.
  */
-class BillableMetricListParams private constructor(
+class BillableMetricListParams
+private constructor(
     private val includeArchived: Boolean?,
     private val limit: Long?,
     private val nextPage: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-
 ) : Params {
 
     /** If true, the list of returned metrics will include archived metrics */
@@ -42,12 +43,10 @@ class BillableMetricListParams private constructor(
 
     companion object {
 
-        @JvmStatic
-        fun none(): BillableMetricListParams = builder().build()
+        @JvmStatic fun none(): BillableMetricListParams = builder().build()
 
         /** Returns a mutable builder for constructing an instance of [BillableMetricListParams]. */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [BillableMetricListParams]. */
@@ -60,20 +59,18 @@ class BillableMetricListParams private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(billableMetricListParams: BillableMetricListParams) =
-            apply {
-                includeArchived = billableMetricListParams.includeArchived
-                limit = billableMetricListParams.limit
-                nextPage = billableMetricListParams.nextPage
-                additionalHeaders = billableMetricListParams.additionalHeaders.toBuilder()
-                additionalQueryParams = billableMetricListParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(billableMetricListParams: BillableMetricListParams) = apply {
+            includeArchived = billableMetricListParams.includeArchived
+            limit = billableMetricListParams.limit
+            nextPage = billableMetricListParams.nextPage
+            additionalHeaders = billableMetricListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = billableMetricListParams.additionalQueryParams.toBuilder()
+        }
 
         /** If true, the list of returned metrics will include archived metrics */
-        fun includeArchived(includeArchived: Boolean?) =
-            apply {
-                this.includeArchived = includeArchived
-            }
+        fun includeArchived(includeArchived: Boolean?) = apply {
+            this.includeArchived = includeArchived
+        }
 
         /**
          * Alias for [Builder.includeArchived].
@@ -83,13 +80,11 @@ class BillableMetricListParams private constructor(
         fun includeArchived(includeArchived: Boolean) = includeArchived(includeArchived as Boolean?)
 
         /** Alias for calling [Builder.includeArchived] with `includeArchived.orElse(null)`. */
-        fun includeArchived(includeArchived: Optional<Boolean>) = includeArchived(includeArchived.getOrNull())
+        fun includeArchived(includeArchived: Optional<Boolean>) =
+            includeArchived(includeArchived.getOrNull())
 
         /** Max number of results that should be returned */
-        fun limit(limit: Long?) =
-            apply {
-                this.limit = limit
-            }
+        fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**
          * Alias for [Builder.limit].
@@ -102,137 +97,108 @@ class BillableMetricListParams private constructor(
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String?) =
-            apply {
-                this.nextPage = nextPage
-            }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
 
         /** Alias for calling [Builder.nextPage] with `nextPage.orElse(null)`. */
         fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.getOrNull())
 
-        fun additionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun putAdditionalHeader(name: String, value: String) =
-            apply {
-                additionalHeaders.put(name, value)
-            }
+        fun putAdditionalHeader(name: String, value: String) = apply {
+            additionalHeaders.put(name, value)
+        }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.put(name, values)
-            }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.put(name, values)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun replaceAdditionalHeaders(name: String, value: String) =
-            apply {
-                additionalHeaders.replace(name, value)
-            }
+        fun replaceAdditionalHeaders(name: String, value: String) = apply {
+            additionalHeaders.replace(name, value)
+        }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.replace(name, values)
-            }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.replace(name, values)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun removeAdditionalHeaders(name: String) =
-            apply {
-                additionalHeaders.remove(name)
-            }
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) =
-            apply {
-                additionalHeaders.removeAll(names)
-            }
+        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
+            additionalHeaders.removeAll(names)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun putAdditionalQueryParam(key: String, value: String) =
-            apply {
-                additionalQueryParams.put(key, value)
-            }
+        fun putAdditionalQueryParam(key: String, value: String) = apply {
+            additionalQueryParams.put(key, value)
+        }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.put(key, values)
-            }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.put(key, values)
+        }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.putAll(additionalQueryParams)
-            }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.putAll(additionalQueryParams)
+        }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) =
-            apply {
-                additionalQueryParams.replace(key, value)
-            }
+        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
+            additionalQueryParams.replace(key, value)
+        }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.replace(key, values)
-            }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.replace(key, values)
+        }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.replaceAll(additionalQueryParams)
-            }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.replaceAll(additionalQueryParams)
+        }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) =
-            apply {
-                additionalQueryParams.remove(key)
-            }
+        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) =
-            apply {
-                additionalQueryParams.removeAll(keys)
-            }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
+            additionalQueryParams.removeAll(keys)
+        }
 
         /**
          * Returns an immutable instance of [BillableMetricListParams].
@@ -241,11 +207,11 @@ class BillableMetricListParams private constructor(
          */
         fun build(): BillableMetricListParams =
             BillableMetricListParams(
-              includeArchived,
-              limit,
-              nextPage,
-              additionalHeaders.build(),
-              additionalQueryParams.build(),
+                includeArchived,
+                limit,
+                nextPage,
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
             )
     }
 
@@ -262,14 +228,21 @@ class BillableMetricListParams private constructor(
             .build()
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is BillableMetricListParams && includeArchived == other.includeArchived && limit == other.limit && nextPage == other.nextPage && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
+        return other is BillableMetricListParams &&
+            includeArchived == other.includeArchived &&
+            limit == other.limit &&
+            nextPage == other.nextPage &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(includeArchived, limit, nextPage, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(includeArchived, limit, nextPage, additionalHeaders, additionalQueryParams)
 
-    override fun toString() = "BillableMetricListParams{includeArchived=$includeArchived, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() =
+        "BillableMetricListParams{includeArchived=$includeArchived, limit=$limit, nextPage=$nextPage, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

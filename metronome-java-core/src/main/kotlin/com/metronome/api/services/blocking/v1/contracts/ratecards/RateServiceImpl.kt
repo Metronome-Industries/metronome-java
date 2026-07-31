@@ -22,21 +22,19 @@ import com.metronome.api.models.v1.contracts.ratecards.rates.RateAddResponse
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateListPage
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateListPageResponse
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateListParams
-import com.metronome.api.services.blocking.v1.contracts.ratecards.RateService
-import com.metronome.api.services.blocking.v1.contracts.ratecards.RateServiceImpl
 import java.util.function.Consumer
 
 /** Rate cards are used to define default pricing for products. */
-class RateServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class RateServiceImpl internal constructor(private val clientOptions: ClientOptions) : RateService {
 
-) : RateService {
-
-    private val withRawResponse: RateService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: RateService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): RateService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateService = RateServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateService =
+        RateServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun list(params: RateListParams, requestOptions: RequestOptions): RateListPage =
         // post /v1/contract-pricing/rate-cards/getRates
@@ -46,111 +44,115 @@ class RateServiceImpl internal constructor(
         // post /v1/contract-pricing/rate-cards/addRate
         withRawResponse().add(params, requestOptions).parse()
 
-    override fun addMany(params: RateAddManyParams, requestOptions: RequestOptions): RateAddManyResponse =
+    override fun addMany(
+        params: RateAddManyParams,
+        requestOptions: RequestOptions,
+    ): RateAddManyResponse =
         // post /v1/contract-pricing/rate-cards/addRates
         withRawResponse().addMany(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        RateService.WithRawResponse {
 
-    ) : RateService.WithRawResponse {
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
-
-        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateService.WithRawResponse = RateServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
-
-        private val listHandler: Handler<RateListPageResponse> = jsonHandler<RateListPageResponse>(clientOptions.jsonMapper)
-
-        override fun list(params: RateListParams, requestOptions: RequestOptions): HttpResponseFor<RateListPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "contract-pricing", "rate-cards", "getRates")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): RateService.WithRawResponse =
+            RateServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
             )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  RateListPage.builder()
-                      .service(RateServiceImpl(clientOptions))
-                      .params(params)
-                      .response(it)
-                      .build()
-              }
-          }
+
+        private val listHandler: Handler<RateListPageResponse> =
+            jsonHandler<RateListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: RateListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<RateListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contract-pricing", "rate-cards", "getRates")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        RateListPage.builder()
+                            .service(RateServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
+            }
         }
 
-        private val addHandler: Handler<RateAddResponse> = jsonHandler<RateAddResponse>(clientOptions.jsonMapper)
+        private val addHandler: Handler<RateAddResponse> =
+            jsonHandler<RateAddResponse>(clientOptions.jsonMapper)
 
-        override fun add(params: RateAddParams, requestOptions: RequestOptions): HttpResponseFor<RateAddResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "contract-pricing", "rate-cards", "addRate")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  addHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun add(
+            params: RateAddParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<RateAddResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contract-pricing", "rate-cards", "addRate")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { addHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val addManyHandler: Handler<RateAddManyResponse> = jsonHandler<RateAddManyResponse>(clientOptions.jsonMapper)
+        private val addManyHandler: Handler<RateAddManyResponse> =
+            jsonHandler<RateAddManyResponse>(clientOptions.jsonMapper)
 
-        override fun addMany(params: RateAddManyParams, requestOptions: RequestOptions): HttpResponseFor<RateAddManyResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "contract-pricing", "rate-cards", "addRates")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  addManyHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun addMany(
+            params: RateAddManyParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<RateAddManyResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contract-pricing", "rate-cards", "addRates")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { addManyHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }

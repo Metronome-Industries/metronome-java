@@ -1,29 +1,22 @@
 package com.metronome.api.core.http
 
-import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
 internal class HttpRequestTest {
 
-    enum class UrlTestCase(
-        val request: HttpRequest,
-        val expectedUrl: String
-    ) {
+    enum class UrlTestCase(val request: HttpRequest, val expectedUrl: String) {
         BASE_URL_ONLY(
-            HttpRequest.builder()
-                .method(HttpMethod.GET)
-                .baseUrl("https://api.example.com")
-                .build(),
-            expectedUrl = "https://api.example.com"
+            HttpRequest.builder().method(HttpMethod.GET).baseUrl("https://api.example.com").build(),
+            expectedUrl = "https://api.example.com",
         ),
         BASE_URL_WITH_TRAILING_SLASH(
             HttpRequest.builder()
                 .method(HttpMethod.GET)
                 .baseUrl("https://api.example.com/")
                 .build(),
-            expectedUrl = "https://api.example.com/"
+            expectedUrl = "https://api.example.com/",
         ),
         SINGLE_PATH_SEGMENT(
             HttpRequest.builder()
@@ -31,7 +24,7 @@ internal class HttpRequestTest {
                 .baseUrl("https://api.example.com")
                 .addPathSegment("users")
                 .build(),
-            expectedUrl = "https://api.example.com/users"
+            expectedUrl = "https://api.example.com/users",
         ),
         MULTIPLE_PATH_SEGMENTS(
             HttpRequest.builder()
@@ -39,7 +32,7 @@ internal class HttpRequestTest {
                 .baseUrl("https://api.example.com")
                 .addPathSegments("users", "123", "profile")
                 .build(),
-            expectedUrl = "https://api.example.com/users/123/profile"
+            expectedUrl = "https://api.example.com/users/123/profile",
         ),
         PATH_SEGMENT_WITH_SPECIAL_CHARS(
             HttpRequest.builder()
@@ -47,7 +40,7 @@ internal class HttpRequestTest {
                 .baseUrl("https://api.example.com")
                 .addPathSegment("user name")
                 .build(),
-            expectedUrl = "https://api.example.com/user+name"
+            expectedUrl = "https://api.example.com/user+name",
         ),
         SINGLE_QUERY_PARAM(
             HttpRequest.builder()
@@ -56,7 +49,7 @@ internal class HttpRequestTest {
                 .addPathSegment("users")
                 .putQueryParam("limit", "10")
                 .build(),
-            expectedUrl = "https://api.example.com/users?limit=10"
+            expectedUrl = "https://api.example.com/users?limit=10",
         ),
         MULTIPLE_QUERY_PARAMS(
             HttpRequest.builder()
@@ -66,7 +59,7 @@ internal class HttpRequestTest {
                 .putQueryParam("limit", "10")
                 .putQueryParam("offset", "20")
                 .build(),
-            expectedUrl = "https://api.example.com/users?limit=10&offset=20"
+            expectedUrl = "https://api.example.com/users?limit=10&offset=20",
         ),
         QUERY_PARAM_WITH_SPECIAL_CHARS(
             HttpRequest.builder()
@@ -75,7 +68,7 @@ internal class HttpRequestTest {
                 .addPathSegment("search")
                 .putQueryParam("q", "hello world")
                 .build(),
-            expectedUrl = "https://api.example.com/search?q=hello+world"
+            expectedUrl = "https://api.example.com/search?q=hello+world",
         ),
         MULTIPLE_VALUES_SAME_PARAM(
             HttpRequest.builder()
@@ -84,7 +77,7 @@ internal class HttpRequestTest {
                 .addPathSegment("users")
                 .putQueryParams("tags", listOf("admin", "user"))
                 .build(),
-            expectedUrl = "https://api.example.com/users?tags=admin&tags=user"
+            expectedUrl = "https://api.example.com/users?tags=admin&tags=user",
         ),
         BASE_URL_WITH_TRAILING_SLASH_AND_PATH(
             HttpRequest.builder()
@@ -92,7 +85,7 @@ internal class HttpRequestTest {
                 .baseUrl("https://api.example.com/")
                 .addPathSegment("users")
                 .build(),
-            expectedUrl = "https://api.example.com/users"
+            expectedUrl = "https://api.example.com/users",
         ),
         COMPLEX_URL(
             HttpRequest.builder()
@@ -102,8 +95,9 @@ internal class HttpRequestTest {
                 .putQueryParams("include", listOf("profile", "settings"))
                 .putQueryParam("format", "json")
                 .build(),
-            expectedUrl = "https://api.example.com/v1/users/123?include=profile&include=settings&format=json"
-        )
+            expectedUrl =
+                "https://api.example.com/v1/users/123?include=profile&include=settings&format=json",
+        ),
     }
 
     @ParameterizedTest

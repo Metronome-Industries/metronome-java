@@ -5,20 +5,17 @@ package com.metronome.api.models.v1.plans
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
-import com.metronome.api.models.v1.plans.PlanListCustomersPageResponse
-import com.metronome.api.models.v1.plans.PlanListCustomersParams
-import com.metronome.api.models.v1.plans.PlanListCustomersResponse
 import com.metronome.api.services.blocking.v1.PlanService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see PlanService.listCustomers */
-class PlanListCustomersPage private constructor(
+class PlanListCustomersPage
+private constructor(
     private val service: PlanService,
     private val params: PlanListCustomersParams,
     private val response: PlanListCustomersPageResponse,
-
 ) : Page<PlanListCustomersResponse> {
 
     /**
@@ -33,17 +30,18 @@ class PlanListCustomersPage private constructor(
      *
      * @see PlanListCustomersPageResponse.data
      */
-    fun data(): List<PlanListCustomersResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<PlanListCustomersResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<PlanListCustomersResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): PlanListCustomersParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
     override fun nextPage(): PlanListCustomersPage = service.listCustomers(nextPageParams())
@@ -64,15 +62,13 @@ class PlanListCustomersPage private constructor(
          * Returns a mutable builder for constructing an instance of [PlanListCustomersPage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PlanListCustomersPage]. */
@@ -83,29 +79,19 @@ class PlanListCustomersPage private constructor(
         private var response: PlanListCustomersPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(planListCustomersPage: PlanListCustomersPage) =
-            apply {
-                service = planListCustomersPage.service
-                params = planListCustomersPage.params
-                response = planListCustomersPage.response
-            }
+        internal fun from(planListCustomersPage: PlanListCustomersPage) = apply {
+            service = planListCustomersPage.service
+            params = planListCustomersPage.params
+            response = planListCustomersPage.response
+        }
 
-        fun service(service: PlanService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: PlanService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: PlanListCustomersParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: PlanListCustomersParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: PlanListCustomersPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: PlanListCustomersPageResponse) = apply { this.response = response }
 
         /**
          * Returns an immutable instance of [PlanListCustomersPage].
@@ -113,7 +99,6 @@ class PlanListCustomersPage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,27 +109,25 @@ class PlanListCustomersPage private constructor(
          */
         fun build(): PlanListCustomersPage =
             PlanListCustomersPage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PlanListCustomersPage && service == other.service && params == other.params && response == other.response
+        return other is PlanListCustomersPage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() = "PlanListCustomersPage{service=$service, params=$params, response=$response}"
+    override fun toString() =
+        "PlanListCustomersPage{service=$service, params=$params, response=$response}"
 }

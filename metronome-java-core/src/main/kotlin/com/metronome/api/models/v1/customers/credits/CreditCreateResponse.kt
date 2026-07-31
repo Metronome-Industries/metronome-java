@@ -17,20 +17,22 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-class CreditCreateResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+class CreditCreateResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
     private val data: JsonField<Id>,
     private val additionalProperties: MutableMap<String, JsonValue>,
-
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("data") @ExcludeMissing data: JsonField<Id> = JsonMissing.of()
-    ) : this(
-      data, mutableMapOf()
-    )
+    ) : this(data, mutableMapOf())
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): Id = data.getRequired("data")
 
     /**
@@ -38,18 +40,17 @@ class CreditCreateResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) privat
      *
      * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<Id> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Id> = data
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-      additionalProperties.put(key, value)
+        additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -59,13 +60,11 @@ class CreditCreateResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) privat
          * Returns a mutable builder for constructing an instance of [CreditCreateResponse].
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [CreditCreateResponse]. */
@@ -75,50 +74,39 @@ class CreditCreateResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) privat
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(creditCreateResponse: CreditCreateResponse) =
-            apply {
-                data = creditCreateResponse.data
-                additionalProperties = creditCreateResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(creditCreateResponse: CreditCreateResponse) = apply {
+            data = creditCreateResponse.data
+            additionalProperties = creditCreateResponse.additionalProperties.toMutableMap()
+        }
 
         fun data(data: Id) = data(JsonField.of(data))
 
         /**
          * Sets [Builder.data] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.data] with a well-typed [Id] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.data] with a well-typed [Id] value instead. This method
+         * is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun data(data: JsonField<Id>) =
-            apply {
-                this.data = data
-            }
+        fun data(data: JsonField<Id>) = apply { this.data = data }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         /**
          * Returns an immutable instance of [CreditCreateResponse].
@@ -126,7 +114,6 @@ class CreditCreateResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) privat
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * ```
@@ -134,11 +121,7 @@ class CreditCreateResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) privat
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CreditCreateResponse =
-            CreditCreateResponse(
-              checkRequired(
-                "data", data
-              ), additionalProperties.toMutableMap()
-            )
+            CreditCreateResponse(checkRequired("data", data), additionalProperties.toMutableMap())
     }
 
     private var validated: Boolean = false
@@ -151,15 +134,14 @@ class CreditCreateResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) privat
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): CreditCreateResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().validate()
-            validated = true
+    fun validate(): CreditCreateResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -174,20 +156,22 @@ class CreditCreateResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) privat
      *
      * Used for best match union deserialization.
      */
-    @JvmSynthetic
-    internal fun validity(): Int = (data.asKnown().getOrNull()?.validity() ?: 0)
+    @JvmSynthetic internal fun validity(): Int = (data.asKnown().getOrNull()?.validity() ?: 0)
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is CreditCreateResponse && data == other.data && additionalProperties == other.additionalProperties
+        return other is CreditCreateResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "CreditCreateResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "CreditCreateResponse{data=$data, additionalProperties=$additionalProperties}"
 }

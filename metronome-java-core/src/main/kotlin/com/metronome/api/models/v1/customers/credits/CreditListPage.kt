@@ -6,19 +6,17 @@ import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
 import com.metronome.api.models.Credit
-import com.metronome.api.models.v1.customers.credits.CreditListPageResponse
-import com.metronome.api.models.v1.customers.credits.CreditListParams
 import com.metronome.api.services.blocking.v1.customers.CreditService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see CreditService.list */
-class CreditListPage private constructor(
+class CreditListPage
+private constructor(
     private val service: CreditService,
     private val params: CreditListParams,
     private val response: CreditListPageResponse,
-
 ) : Page<Credit> {
 
     /**
@@ -40,10 +38,10 @@ class CreditListPage private constructor(
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): CreditListParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
     override fun nextPage(): CreditListPage = service.list(nextPageParams())
@@ -64,15 +62,13 @@ class CreditListPage private constructor(
          * Returns a mutable builder for constructing an instance of [CreditListPage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [CreditListPage]. */
@@ -83,29 +79,19 @@ class CreditListPage private constructor(
         private var response: CreditListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(creditListPage: CreditListPage) =
-            apply {
-                service = creditListPage.service
-                params = creditListPage.params
-                response = creditListPage.response
-            }
+        internal fun from(creditListPage: CreditListPage) = apply {
+            service = creditListPage.service
+            params = creditListPage.params
+            response = creditListPage.response
+        }
 
-        fun service(service: CreditService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: CreditService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: CreditListParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: CreditListParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: CreditListPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: CreditListPageResponse) = apply { this.response = response }
 
         /**
          * Returns an immutable instance of [CreditListPage].
@@ -113,7 +99,6 @@ class CreditListPage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,24 +109,21 @@ class CreditListPage private constructor(
          */
         fun build(): CreditListPage =
             CreditListPage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is CreditListPage && service == other.service && params == other.params && response == other.response
+        return other is CreditListPage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)

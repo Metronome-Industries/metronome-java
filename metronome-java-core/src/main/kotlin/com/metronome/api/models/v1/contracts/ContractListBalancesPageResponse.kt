@@ -16,33 +16,37 @@ import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.Commit
 import com.metronome.api.models.Credit
-import com.metronome.api.models.v1.contracts.ContractListBalancesResponse
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class ContractListBalancesPageResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+class ContractListBalancesPageResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
     private val data: JsonField<List<ContractListBalancesResponse>>,
     private val nextPage: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
-
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("data") @ExcludeMissing data: JsonField<List<ContractListBalancesResponse>> = JsonMissing.of(),
-        @JsonProperty("next_page") @ExcludeMissing nextPage: JsonField<String> = JsonMissing.of()
-    ) : this(
-      data,
-      nextPage,
-      mutableMapOf(),
-    )
+        @JsonProperty("data")
+        @ExcludeMissing
+        data: JsonField<List<ContractListBalancesResponse>> = JsonMissing.of(),
+        @JsonProperty("next_page") @ExcludeMissing nextPage: JsonField<String> = JsonMissing.of(),
+    ) : this(data, nextPage, mutableMapOf())
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): List<ContractListBalancesResponse> = data.getRequired("data")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun nextPage(): Optional<String> = nextPage.getOptional("next_page")
 
     /**
@@ -59,35 +63,33 @@ class ContractListBalancesPageResponse @JsonCreator(mode = JsonCreator.Mode.DISA
      *
      * Unlike [nextPage], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("next_page")
-    @ExcludeMissing
-    fun _nextPage(): JsonField<String> = nextPage
+    @JsonProperty("next_page") @ExcludeMissing fun _nextPage(): JsonField<String> = nextPage
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-      additionalProperties.put(key, value)
+        additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ContractListBalancesPageResponse].
+         * Returns a mutable builder for constructing an instance of
+         * [ContractListBalancesPageResponse].
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * .nextPage()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [ContractListBalancesPageResponse]. */
@@ -102,7 +104,8 @@ class ContractListBalancesPageResponse @JsonCreator(mode = JsonCreator.Mode.DISA
             apply {
                 data = contractListBalancesPageResponse.data.map { it.toMutableList() }
                 nextPage = contractListBalancesPageResponse.nextPage
-                additionalProperties = contractListBalancesPageResponse.additionalProperties.toMutableMap()
+                additionalProperties =
+                    contractListBalancesPageResponse.additionalProperties.toMutableMap()
             }
 
         fun data(data: List<ContractListBalancesResponse>) = data(JsonField.of(data))
@@ -110,25 +113,25 @@ class ContractListBalancesPageResponse @JsonCreator(mode = JsonCreator.Mode.DISA
         /**
          * Sets [Builder.data] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.data] with a well-typed `List<ContractListBalancesResponse>` value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.data] with a well-typed
+         * `List<ContractListBalancesResponse>` value instead. This method is primarily for setting
+         * the field to an undocumented or not yet supported value.
          */
-        fun data(data: JsonField<List<ContractListBalancesResponse>>) =
-            apply {
-                this.data = data.map { it.toMutableList() }
-            }
+        fun data(data: JsonField<List<ContractListBalancesResponse>>) = apply {
+            this.data = data.map { it.toMutableList() }
+        }
 
         /**
          * Adds a single [ContractListBalancesResponse] to [Builder.data].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addData(data: ContractListBalancesResponse) =
-            apply {
-                this.data = (this.data ?: JsonField.of(mutableListOf())).also {
+        fun addData(data: ContractListBalancesResponse) = apply {
+            this.data =
+                (this.data ?: JsonField.of(mutableListOf())).also {
                     checkKnown("data", it).add(data)
                 }
-            }
+        }
 
         /** Alias for calling [addData] with `ContractListBalancesResponse.ofCommit(commit)`. */
         fun addData(commit: Commit) = addData(ContractListBalancesResponse.ofCommit(commit))
@@ -144,39 +147,29 @@ class ContractListBalancesPageResponse @JsonCreator(mode = JsonCreator.Mode.DISA
         /**
          * Sets [Builder.nextPage] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.nextPage] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.nextPage] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun nextPage(nextPage: JsonField<String>) =
-            apply {
-                this.nextPage = nextPage
-            }
+        fun nextPage(nextPage: JsonField<String>) = apply { this.nextPage = nextPage }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         /**
          * Returns an immutable instance of [ContractListBalancesPageResponse].
@@ -184,7 +177,6 @@ class ContractListBalancesPageResponse @JsonCreator(mode = JsonCreator.Mode.DISA
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * .nextPage()
@@ -194,13 +186,9 @@ class ContractListBalancesPageResponse @JsonCreator(mode = JsonCreator.Mode.DISA
          */
         fun build(): ContractListBalancesPageResponse =
             ContractListBalancesPageResponse(
-              checkRequired(
-                "data", data
-              ).map { it.toImmutable() },
-              checkRequired(
-                "nextPage", nextPage
-              ),
-              additionalProperties.toMutableMap(),
+                checkRequired("data", data).map { it.toImmutable() },
+                checkRequired("nextPage", nextPage),
+                additionalProperties.toMutableMap(),
             )
     }
 
@@ -214,16 +202,15 @@ class ContractListBalancesPageResponse @JsonCreator(mode = JsonCreator.Mode.DISA
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): ContractListBalancesPageResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().forEach { it.validate() }
-            nextPage()
-            validated = true
+    fun validate(): ContractListBalancesPageResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().forEach { it.validate() }
+        nextPage()
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -239,19 +226,25 @@ class ContractListBalancesPageResponse @JsonCreator(mode = JsonCreator.Mode.DISA
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int = (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (if (nextPage.asKnown().isPresent) 1 else 0)
+    internal fun validity(): Int =
+        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (nextPage.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is ContractListBalancesPageResponse && data == other.data && nextPage == other.nextPage && additionalProperties == other.additionalProperties
+        return other is ContractListBalancesPageResponse &&
+            data == other.data &&
+            nextPage == other.nextPage &&
+            additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy { Objects.hash(data, nextPage, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "ContractListBalancesPageResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "ContractListBalancesPageResponse{data=$data, nextPage=$nextPage, additionalProperties=$additionalProperties}"
 }

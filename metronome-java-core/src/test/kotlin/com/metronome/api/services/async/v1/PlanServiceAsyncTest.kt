@@ -7,7 +7,6 @@ import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.models.v1.plans.PlanGetDetailsParams
 import com.metronome.api.models.v1.plans.PlanListChargesParams
 import com.metronome.api.models.v1.plans.PlanListCustomersParams
-import com.metronome.api.models.v1.plans.PlanListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -16,63 +15,76 @@ internal class PlanServiceAsyncTest {
 
     @Test
     fun list() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val planServiceAsync = client.v1().plans()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val planServiceAsync = client.v1().plans()
 
-      val pageFuture = planServiceAsync.list()
+        val pageFuture = planServiceAsync.list()
 
-      val page = pageFuture.get()
-      page.response().validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Test
     fun getDetails() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val planServiceAsync = client.v1().plans()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val planServiceAsync = client.v1().plans()
 
-      val responseFuture = planServiceAsync.getDetails(PlanGetDetailsParams.builder()
-          .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .build())
+        val responseFuture =
+            planServiceAsync.getDetails(
+                PlanGetDetailsParams.builder()
+                    .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Test
     fun listCharges() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val planServiceAsync = client.v1().plans()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val planServiceAsync = client.v1().plans()
 
-      val pageFuture = planServiceAsync.listCharges(PlanListChargesParams.builder()
-          .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .build())
+        val pageFuture =
+            planServiceAsync.listCharges(
+                PlanListChargesParams.builder()
+                    .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .build()
+            )
 
-      val page = pageFuture.get()
-      page.response().validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Test
     fun listCustomers() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val planServiceAsync = client.v1().plans()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val planServiceAsync = client.v1().plans()
 
-      val pageFuture = planServiceAsync.listCustomers(PlanListCustomersParams.builder()
-          .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .build())
+        val pageFuture =
+            planServiceAsync.listCustomers(
+                PlanListCustomersParams.builder()
+                    .planId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .build()
+            )
 
-      val page = pageFuture.get()
-      page.response().validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 }

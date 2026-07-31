@@ -16,35 +16,42 @@ internal class NamedScheduleServiceTest {
 
     @Test
     fun retrieve() {
-      val client = MetronomeOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val namedScheduleService = client.v1().contracts().namedSchedules()
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val namedScheduleService = client.v1().contracts().namedSchedules()
 
-      val namedSchedule = namedScheduleService.retrieve(NamedScheduleRetrieveParams.builder()
-          .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .scheduleName("my-schedule")
-          .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
-          .build())
+        val namedSchedule =
+            namedScheduleService.retrieve(
+                NamedScheduleRetrieveParams.builder()
+                    .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .scheduleName("my-schedule")
+                    .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+                    .build()
+            )
 
-      namedSchedule.validate()
+        namedSchedule.validate()
     }
 
     @Test
     fun update() {
-      val client = MetronomeOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val namedScheduleService = client.v1().contracts().namedSchedules()
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val namedScheduleService = client.v1().contracts().namedSchedules()
 
-      namedScheduleService.update(NamedScheduleUpdateParams.builder()
-          .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .scheduleName("my-schedule")
-          .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
-          .value(JsonValue.from(mapOf("my_key" to "my_value")))
-          .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
-          .build())
+        namedScheduleService.update(
+            NamedScheduleUpdateParams.builder()
+                .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .scheduleName("my-schedule")
+                .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
+                .value(JsonValue.from(mapOf("my_key" to "my_value")))
+                .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+                .build()
+        )
     }
 }

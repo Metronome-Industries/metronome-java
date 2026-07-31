@@ -4,7 +4,6 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.v1.auditlogs.AuditLogListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -13,14 +12,15 @@ internal class AuditLogServiceTest {
 
     @Test
     fun list() {
-      val client = MetronomeOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val auditLogService = client.v1().auditLogs()
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val auditLogService = client.v1().auditLogs()
 
-      val page = auditLogService.list()
+        val page = auditLogService.list()
 
-      page.response().validate()
+        page.response().validate()
     }
 }

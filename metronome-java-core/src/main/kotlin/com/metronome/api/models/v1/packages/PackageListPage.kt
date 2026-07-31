@@ -5,20 +5,17 @@ package com.metronome.api.models.v1.packages
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
-import com.metronome.api.models.v1.packages.PackageListPageResponse
-import com.metronome.api.models.v1.packages.PackageListParams
-import com.metronome.api.models.v1.packages.PackageListResponse
 import com.metronome.api.services.blocking.v1.PackageService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see PackageService.list */
-class PackageListPage private constructor(
+class PackageListPage
+private constructor(
     private val service: PackageService,
     private val params: PackageListParams,
     private val response: PackageListPageResponse,
-
 ) : Page<PackageListResponse> {
 
     /**
@@ -33,17 +30,18 @@ class PackageListPage private constructor(
      *
      * @see PackageListPageResponse.data
      */
-    fun data(): List<PackageListResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<PackageListResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<PackageListResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): PackageListParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
     override fun nextPage(): PackageListPage = service.list(nextPageParams())
@@ -64,15 +62,13 @@ class PackageListPage private constructor(
          * Returns a mutable builder for constructing an instance of [PackageListPage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PackageListPage]. */
@@ -83,29 +79,19 @@ class PackageListPage private constructor(
         private var response: PackageListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(packageListPage: PackageListPage) =
-            apply {
-                service = packageListPage.service
-                params = packageListPage.params
-                response = packageListPage.response
-            }
+        internal fun from(packageListPage: PackageListPage) = apply {
+            service = packageListPage.service
+            params = packageListPage.params
+            response = packageListPage.response
+        }
 
-        fun service(service: PackageService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: PackageService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: PackageListParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: PackageListParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: PackageListPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: PackageListPageResponse) = apply { this.response = response }
 
         /**
          * Returns an immutable instance of [PackageListPage].
@@ -113,7 +99,6 @@ class PackageListPage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,27 +109,25 @@ class PackageListPage private constructor(
          */
         fun build(): PackageListPage =
             PackageListPage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PackageListPage && service == other.service && params == other.params && response == other.response
+        return other is PackageListPage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() = "PackageListPage{service=$service, params=$params, response=$response}"
+    override fun toString() =
+        "PackageListPage{service=$service, params=$params, response=$response}"
 }

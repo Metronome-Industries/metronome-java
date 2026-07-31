@@ -13,44 +13,51 @@ import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.checkRequired
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.v1.customfields.CustomFieldListKeysResponse
 import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+class CustomFieldListKeysResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
     private val enforceUniqueness: JsonField<Boolean>,
     private val entity: JsonField<Entity>,
     private val key: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
-
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("enforce_uniqueness") @ExcludeMissing enforceUniqueness: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("enforce_uniqueness")
+        @ExcludeMissing
+        enforceUniqueness: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("entity") @ExcludeMissing entity: JsonField<Entity> = JsonMissing.of(),
-        @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of()
-    ) : this(
-      enforceUniqueness,
-      entity,
-      key,
-      mutableMapOf(),
-    )
+        @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
+    ) : this(enforceUniqueness, entity, key, mutableMapOf())
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun enforceUniqueness(): Boolean = enforceUniqueness.getRequired("enforce_uniqueness")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun entity(): Entity = entity.getRequired("entity")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun key(): String = key.getRequired("key")
 
     /**
      * Returns the raw JSON value of [enforceUniqueness].
      *
-     * Unlike [enforceUniqueness], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [enforceUniqueness], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     @JsonProperty("enforce_uniqueness")
     @ExcludeMissing
@@ -61,27 +68,24 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
      *
      * Unlike [entity], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("entity")
-    @ExcludeMissing
-    fun _entity(): JsonField<Entity> = entity
+    @JsonProperty("entity") @ExcludeMissing fun _entity(): JsonField<Entity> = entity
 
     /**
      * Returns the raw JSON value of [key].
      *
      * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("key")
-    @ExcludeMissing
-    fun _key(): JsonField<String> = key
+    @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-      additionalProperties.put(key, value)
+        additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -91,15 +95,13 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
          * Returns a mutable builder for constructing an instance of [CustomFieldListKeysResponse].
          *
          * The following fields are required:
-         *
          * ```java
          * .enforceUniqueness()
          * .entity()
          * .key()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [CustomFieldListKeysResponse]. */
@@ -111,78 +113,65 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(customFieldListKeysResponse: CustomFieldListKeysResponse) =
-            apply {
-                enforceUniqueness = customFieldListKeysResponse.enforceUniqueness
-                entity = customFieldListKeysResponse.entity
-                key = customFieldListKeysResponse.key
-                additionalProperties = customFieldListKeysResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(customFieldListKeysResponse: CustomFieldListKeysResponse) = apply {
+            enforceUniqueness = customFieldListKeysResponse.enforceUniqueness
+            entity = customFieldListKeysResponse.entity
+            key = customFieldListKeysResponse.key
+            additionalProperties = customFieldListKeysResponse.additionalProperties.toMutableMap()
+        }
 
-        fun enforceUniqueness(enforceUniqueness: Boolean) = enforceUniqueness(JsonField.of(enforceUniqueness))
+        fun enforceUniqueness(enforceUniqueness: Boolean) =
+            enforceUniqueness(JsonField.of(enforceUniqueness))
 
         /**
          * Sets [Builder.enforceUniqueness] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.enforceUniqueness] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.enforceUniqueness] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun enforceUniqueness(enforceUniqueness: JsonField<Boolean>) =
-            apply {
-                this.enforceUniqueness = enforceUniqueness
-            }
+        fun enforceUniqueness(enforceUniqueness: JsonField<Boolean>) = apply {
+            this.enforceUniqueness = enforceUniqueness
+        }
 
         fun entity(entity: Entity) = entity(JsonField.of(entity))
 
         /**
          * Sets [Builder.entity] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.entity] with a well-typed [Entity] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.entity] with a well-typed [Entity] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun entity(entity: JsonField<Entity>) =
-            apply {
-                this.entity = entity
-            }
+        fun entity(entity: JsonField<Entity>) = apply { this.entity = entity }
 
         fun key(key: String) = key(JsonField.of(key))
 
         /**
          * Sets [Builder.key] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.key] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.key] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun key(key: JsonField<String>) =
-            apply {
-                this.key = key
-            }
+        fun key(key: JsonField<String>) = apply { this.key = key }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         /**
          * Returns an immutable instance of [CustomFieldListKeysResponse].
@@ -190,7 +179,6 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .enforceUniqueness()
          * .entity()
@@ -201,16 +189,10 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
          */
         fun build(): CustomFieldListKeysResponse =
             CustomFieldListKeysResponse(
-              checkRequired(
-                "enforceUniqueness", enforceUniqueness
-              ),
-              checkRequired(
-                "entity", entity
-              ),
-              checkRequired(
-                "key", key
-              ),
-              additionalProperties.toMutableMap(),
+                checkRequired("enforceUniqueness", enforceUniqueness),
+                checkRequired("entity", entity),
+                checkRequired("key", key),
+                additionalProperties.toMutableMap(),
             )
     }
 
@@ -224,17 +206,16 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): CustomFieldListKeysResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            enforceUniqueness()
-            entity().validate()
-            key()
-            validated = true
+    fun validate(): CustomFieldListKeysResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        enforceUniqueness()
+        entity().validate()
+        key()
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -250,22 +231,22 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int = (if (enforceUniqueness.asKnown().isPresent) 1 else 0) + (entity.asKnown().getOrNull()?.validity() ?: 0) + (if (key.asKnown().isPresent) 1 else 0)
+    internal fun validity(): Int =
+        (if (enforceUniqueness.asKnown().isPresent) 1 else 0) +
+            (entity.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (key.asKnown().isPresent) 1 else 0)
 
-    class Entity @JsonCreator private constructor(
-        private val value: JsonField<String>,
-
-    ) : Enum {
+    class Entity @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't match any known
-         * member, and you want to know that value. For example, if the SDK is on an older version than the
-         * API, then the API may respond with new members that the SDK is unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -346,11 +327,9 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
          * An enum containing [Entity]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Entity] can contain an unknown value in a couple of cases:
-         *
-         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-         *   an older version than the API, then the API may respond with new members that the SDK is unaware
-         *   of.
-         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -381,11 +360,11 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-         * class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want to throw
-         * for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -417,10 +396,11 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-         * for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+         *   member.
          */
         fun known(): Known =
             when (this) {
@@ -452,33 +432,36 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging and generally
-         * doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-         *   primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
          */
-        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Entity =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                known()
-                validated = true
+        fun validate(): Entity = apply {
+            if (validated) {
+                return@apply
             }
+
+            known()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -489,19 +472,19 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic
-        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Entity && value == other.value
+            return other is Entity && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -510,16 +493,23 @@ class CustomFieldListKeysResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is CustomFieldListKeysResponse && enforceUniqueness == other.enforceUniqueness && entity == other.entity && key == other.key && additionalProperties == other.additionalProperties
+        return other is CustomFieldListKeysResponse &&
+            enforceUniqueness == other.enforceUniqueness &&
+            entity == other.entity &&
+            key == other.key &&
+            additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(enforceUniqueness, entity, key, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(enforceUniqueness, entity, key, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "CustomFieldListKeysResponse{enforceUniqueness=$enforceUniqueness, entity=$entity, key=$key, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "CustomFieldListKeysResponse{enforceUniqueness=$enforceUniqueness, entity=$entity, key=$key, additionalProperties=$additionalProperties}"
 }

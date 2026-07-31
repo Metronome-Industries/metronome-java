@@ -17,14 +17,15 @@ import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.EventTypeFilter
 import com.metronome.api.models.PropertyFilter
-import com.metronome.api.models.v1.usage.UsageSearchResponse
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+class UsageSearchResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
     private val id: JsonField<String>,
     private val customerId: JsonField<String>,
     private val eventType: JsonField<String>,
@@ -36,71 +37,114 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
     private val processedAt: JsonField<OffsetDateTime>,
     private val properties: JsonField<Properties>,
     private val additionalProperties: MutableMap<String, JsonValue>,
-
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("customer_id") @ExcludeMissing customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        customerId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("event_type") @ExcludeMissing eventType: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("timestamp") @ExcludeMissing timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("transaction_id") @ExcludeMissing transactionId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("is_duplicate") @ExcludeMissing isDuplicate: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("matched_billable_metrics") @ExcludeMissing matchedBillableMetrics: JsonField<List<MatchedBillableMetric>> = JsonMissing.of(),
-        @JsonProperty("matched_customer") @ExcludeMissing matchedCustomer: JsonField<MatchedCustomer> = JsonMissing.of(),
-        @JsonProperty("processed_at") @ExcludeMissing processedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("properties") @ExcludeMissing properties: JsonField<Properties> = JsonMissing.of()
+        @JsonProperty("timestamp")
+        @ExcludeMissing
+        timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("transaction_id")
+        @ExcludeMissing
+        transactionId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("is_duplicate")
+        @ExcludeMissing
+        isDuplicate: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("matched_billable_metrics")
+        @ExcludeMissing
+        matchedBillableMetrics: JsonField<List<MatchedBillableMetric>> = JsonMissing.of(),
+        @JsonProperty("matched_customer")
+        @ExcludeMissing
+        matchedCustomer: JsonField<MatchedCustomer> = JsonMissing.of(),
+        @JsonProperty("processed_at")
+        @ExcludeMissing
+        processedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("properties")
+        @ExcludeMissing
+        properties: JsonField<Properties> = JsonMissing.of(),
     ) : this(
-      id,
-      customerId,
-      eventType,
-      timestamp,
-      transactionId,
-      isDuplicate,
-      matchedBillableMetrics,
-      matchedCustomer,
-      processedAt,
-      properties,
-      mutableMapOf(),
+        id,
+        customerId,
+        eventType,
+        timestamp,
+        transactionId,
+        isDuplicate,
+        matchedBillableMetrics,
+        matchedCustomer,
+        processedAt,
+        properties,
+        mutableMapOf(),
     )
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
     /**
      * The ID of the customer in the ingest event body
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun customerId(): String = customerId.getRequired("customer_id")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun eventType(): String = eventType.getRequired("event_type")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun transactionId(): String = transactionId.getRequired("transaction_id")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun isDuplicate(): Optional<Boolean> = isDuplicate.getOptional("is_duplicate")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-    fun matchedBillableMetrics(): Optional<List<MatchedBillableMetric>> = matchedBillableMetrics.getOptional("matched_billable_metrics")
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun matchedBillableMetrics(): Optional<List<MatchedBillableMetric>> =
+        matchedBillableMetrics.getOptional("matched_billable_metrics")
 
     /**
      * The customer the event was matched to if a match was found
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun matchedCustomer(): Optional<MatchedCustomer> = matchedCustomer.getOptional("matched_customer")
+    fun matchedCustomer(): Optional<MatchedCustomer> =
+        matchedCustomer.getOptional("matched_customer")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun processedAt(): Optional<OffsetDateTime> = processedAt.getOptional("processed_at")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun properties(): Optional<Properties> = properties.getOptional("properties")
 
     /**
@@ -108,27 +152,21 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("id")
-    @ExcludeMissing
-    fun _id(): JsonField<String> = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /**
      * Returns the raw JSON value of [customerId].
      *
      * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("customer_id")
-    @ExcludeMissing
-    fun _customerId(): JsonField<String> = customerId
+    @JsonProperty("customer_id") @ExcludeMissing fun _customerId(): JsonField<String> = customerId
 
     /**
      * Returns the raw JSON value of [eventType].
      *
      * Unlike [eventType], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("event_type")
-    @ExcludeMissing
-    fun _eventType(): JsonField<String> = eventType
+    @JsonProperty("event_type") @ExcludeMissing fun _eventType(): JsonField<String> = eventType
 
     /**
      * Returns the raw JSON value of [timestamp].
@@ -160,7 +198,8 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
     /**
      * Returns the raw JSON value of [matchedBillableMetrics].
      *
-     * Unlike [matchedBillableMetrics], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [matchedBillableMetrics], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
     @JsonProperty("matched_billable_metrics")
     @ExcludeMissing
@@ -195,12 +234,13 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-      additionalProperties.put(key, value)
+        additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -210,7 +250,6 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          * Returns a mutable builder for constructing an instance of [UsageSearchResponse].
          *
          * The following fields are required:
-         *
          * ```java
          * .id()
          * .customerId()
@@ -219,8 +258,7 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          * .transactionId()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [UsageSearchResponse]. */
@@ -239,33 +277,30 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(usageSearchResponse: UsageSearchResponse) =
-            apply {
-                id = usageSearchResponse.id
-                customerId = usageSearchResponse.customerId
-                eventType = usageSearchResponse.eventType
-                timestamp = usageSearchResponse.timestamp
-                transactionId = usageSearchResponse.transactionId
-                isDuplicate = usageSearchResponse.isDuplicate
-                matchedBillableMetrics = usageSearchResponse.matchedBillableMetrics.map { it.toMutableList() }
-                matchedCustomer = usageSearchResponse.matchedCustomer
-                processedAt = usageSearchResponse.processedAt
-                properties = usageSearchResponse.properties
-                additionalProperties = usageSearchResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(usageSearchResponse: UsageSearchResponse) = apply {
+            id = usageSearchResponse.id
+            customerId = usageSearchResponse.customerId
+            eventType = usageSearchResponse.eventType
+            timestamp = usageSearchResponse.timestamp
+            transactionId = usageSearchResponse.transactionId
+            isDuplicate = usageSearchResponse.isDuplicate
+            matchedBillableMetrics =
+                usageSearchResponse.matchedBillableMetrics.map { it.toMutableList() }
+            matchedCustomer = usageSearchResponse.matchedCustomer
+            processedAt = usageSearchResponse.processedAt
+            properties = usageSearchResponse.properties
+            additionalProperties = usageSearchResponse.additionalProperties.toMutableMap()
+        }
 
         fun id(id: String) = id(JsonField.of(id))
 
         /**
          * Sets [Builder.id] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun id(id: JsonField<String>) =
-            apply {
-                this.id = id
-            }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** The ID of the customer in the ingest event body */
         fun customerId(customerId: String) = customerId(JsonField.of(customerId))
@@ -273,73 +308,67 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Sets [Builder.customerId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.customerId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.customerId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun customerId(customerId: JsonField<String>) =
-            apply {
-                this.customerId = customerId
-            }
+        fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
         fun eventType(eventType: String) = eventType(JsonField.of(eventType))
 
         /**
          * Sets [Builder.eventType] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.eventType] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.eventType] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun eventType(eventType: JsonField<String>) =
-            apply {
-                this.eventType = eventType
-            }
+        fun eventType(eventType: JsonField<String>) = apply { this.eventType = eventType }
 
         fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
 
         /**
          * Sets [Builder.timestamp] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.timestamp] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.timestamp] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun timestamp(timestamp: JsonField<OffsetDateTime>) =
-            apply {
-                this.timestamp = timestamp
-            }
+        fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply { this.timestamp = timestamp }
 
         fun transactionId(transactionId: String) = transactionId(JsonField.of(transactionId))
 
         /**
          * Sets [Builder.transactionId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.transactionId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.transactionId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun transactionId(transactionId: JsonField<String>) =
-            apply {
-                this.transactionId = transactionId
-            }
+        fun transactionId(transactionId: JsonField<String>) = apply {
+            this.transactionId = transactionId
+        }
 
         fun isDuplicate(isDuplicate: Boolean) = isDuplicate(JsonField.of(isDuplicate))
 
         /**
          * Sets [Builder.isDuplicate] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.isDuplicate] with a well-typed [Boolean] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.isDuplicate] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun isDuplicate(isDuplicate: JsonField<Boolean>) =
-            apply {
-                this.isDuplicate = isDuplicate
-            }
+        fun isDuplicate(isDuplicate: JsonField<Boolean>) = apply { this.isDuplicate = isDuplicate }
 
-        fun matchedBillableMetrics(matchedBillableMetrics: List<MatchedBillableMetric>) = matchedBillableMetrics(JsonField.of(matchedBillableMetrics))
+        fun matchedBillableMetrics(matchedBillableMetrics: List<MatchedBillableMetric>) =
+            matchedBillableMetrics(JsonField.of(matchedBillableMetrics))
 
         /**
          * Sets [Builder.matchedBillableMetrics] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.matchedBillableMetrics] with a well-typed `List<MatchedBillableMetric>` value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.matchedBillableMetrics] with a well-typed
+         * `List<MatchedBillableMetric>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
          */
         fun matchedBillableMetrics(matchedBillableMetrics: JsonField<List<MatchedBillableMetric>>) =
             apply {
@@ -351,78 +380,70 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addMatchedBillableMetric(matchedBillableMetric: MatchedBillableMetric) =
-            apply {
-                matchedBillableMetrics = (matchedBillableMetrics ?: JsonField.of(mutableListOf())).also {
+        fun addMatchedBillableMetric(matchedBillableMetric: MatchedBillableMetric) = apply {
+            matchedBillableMetrics =
+                (matchedBillableMetrics ?: JsonField.of(mutableListOf())).also {
                     checkKnown("matchedBillableMetrics", it).add(matchedBillableMetric)
                 }
-            }
+        }
 
         /** The customer the event was matched to if a match was found */
-        fun matchedCustomer(matchedCustomer: MatchedCustomer) = matchedCustomer(JsonField.of(matchedCustomer))
+        fun matchedCustomer(matchedCustomer: MatchedCustomer) =
+            matchedCustomer(JsonField.of(matchedCustomer))
 
         /**
          * Sets [Builder.matchedCustomer] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.matchedCustomer] with a well-typed [MatchedCustomer] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.matchedCustomer] with a well-typed [MatchedCustomer]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun matchedCustomer(matchedCustomer: JsonField<MatchedCustomer>) =
-            apply {
-                this.matchedCustomer = matchedCustomer
-            }
+        fun matchedCustomer(matchedCustomer: JsonField<MatchedCustomer>) = apply {
+            this.matchedCustomer = matchedCustomer
+        }
 
         fun processedAt(processedAt: OffsetDateTime) = processedAt(JsonField.of(processedAt))
 
         /**
          * Sets [Builder.processedAt] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.processedAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.processedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun processedAt(processedAt: JsonField<OffsetDateTime>) =
-            apply {
-                this.processedAt = processedAt
-            }
+        fun processedAt(processedAt: JsonField<OffsetDateTime>) = apply {
+            this.processedAt = processedAt
+        }
 
         fun properties(properties: Properties) = properties(JsonField.of(properties))
 
         /**
          * Sets [Builder.properties] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.properties] with a well-typed [Properties] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.properties] with a well-typed [Properties] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun properties(properties: JsonField<Properties>) =
-            apply {
-                this.properties = properties
-            }
+        fun properties(properties: JsonField<Properties>) = apply { this.properties = properties }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         /**
          * Returns an immutable instance of [UsageSearchResponse].
@@ -430,7 +451,6 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .id()
          * .customerId()
@@ -443,27 +463,17 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          */
         fun build(): UsageSearchResponse =
             UsageSearchResponse(
-              checkRequired(
-                "id", id
-              ),
-              checkRequired(
-                "customerId", customerId
-              ),
-              checkRequired(
-                "eventType", eventType
-              ),
-              checkRequired(
-                "timestamp", timestamp
-              ),
-              checkRequired(
-                "transactionId", transactionId
-              ),
-              isDuplicate,
-              (matchedBillableMetrics?: JsonMissing.of()).map { it.toImmutable() },
-              matchedCustomer,
-              processedAt,
-              properties,
-              additionalProperties.toMutableMap(),
+                checkRequired("id", id),
+                checkRequired("customerId", customerId),
+                checkRequired("eventType", eventType),
+                checkRequired("timestamp", timestamp),
+                checkRequired("transactionId", transactionId),
+                isDuplicate,
+                (matchedBillableMetrics ?: JsonMissing.of()).map { it.toImmutable() },
+                matchedCustomer,
+                processedAt,
+                properties,
+                additionalProperties.toMutableMap(),
             )
     }
 
@@ -477,24 +487,23 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): UsageSearchResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            id()
-            customerId()
-            eventType()
-            timestamp()
-            transactionId()
-            isDuplicate()
-            matchedBillableMetrics().ifPresent { it.forEach { it.validate() } }
-            matchedCustomer().ifPresent { it.validate() }
-            processedAt()
-            properties().ifPresent { it.validate() }
-            validated = true
+    fun validate(): UsageSearchResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        id()
+        customerId()
+        eventType()
+        timestamp()
+        transactionId()
+        isDuplicate()
+        matchedBillableMetrics().ifPresent { it.forEach { it.validate() } }
+        matchedCustomer().ifPresent { it.validate() }
+        processedAt()
+        properties().ifPresent { it.validate() }
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -510,9 +519,21 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0) + (if (customerId.asKnown().isPresent) 1 else 0) + (if (eventType.asKnown().isPresent) 1 else 0) + (if (timestamp.asKnown().isPresent) 1 else 0) + (if (transactionId.asKnown().isPresent) 1 else 0) + (if (isDuplicate.asKnown().isPresent) 1 else 0) + (matchedBillableMetrics.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (matchedCustomer.asKnown().getOrNull()?.validity() ?: 0) + (if (processedAt.asKnown().isPresent) 1 else 0) + (properties.asKnown().getOrNull()?.validity() ?: 0)
+    internal fun validity(): Int =
+        (if (id.asKnown().isPresent) 1 else 0) +
+            (if (customerId.asKnown().isPresent) 1 else 0) +
+            (if (eventType.asKnown().isPresent) 1 else 0) +
+            (if (timestamp.asKnown().isPresent) 1 else 0) +
+            (if (transactionId.asKnown().isPresent) 1 else 0) +
+            (if (isDuplicate.asKnown().isPresent) 1 else 0) +
+            (matchedBillableMetrics.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (matchedCustomer.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (processedAt.asKnown().isPresent) 1 else 0) +
+            (properties.asKnown().getOrNull()?.validity() ?: 0)
 
-    class MatchedBillableMetric @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class MatchedBillableMetric
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val id: JsonField<String>,
         private val name: JsonField<String>,
         private val aggregate: JsonField<String>,
@@ -528,130 +549,176 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         private val propertyFilters: JsonField<List<PropertyFilter>>,
         private val sql: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("aggregate") @ExcludeMissing aggregate: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("aggregate_keys") @ExcludeMissing aggregateKeys: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("aggregation_key") @ExcludeMissing aggregationKey: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("aggregation_type") @ExcludeMissing aggregationType: JsonField<AggregationType> = JsonMissing.of(),
-            @JsonProperty("archived_at") @ExcludeMissing archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("custom_fields") @ExcludeMissing customFields: JsonField<CustomFields> = JsonMissing.of(),
-            @JsonProperty("event_type_filter") @ExcludeMissing eventTypeFilter: JsonField<EventTypeFilter> = JsonMissing.of(),
+            @JsonProperty("aggregate")
+            @ExcludeMissing
+            aggregate: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aggregate_keys")
+            @ExcludeMissing
+            aggregateKeys: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("aggregation_key")
+            @ExcludeMissing
+            aggregationKey: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("aggregation_type")
+            @ExcludeMissing
+            aggregationType: JsonField<AggregationType> = JsonMissing.of(),
+            @JsonProperty("archived_at")
+            @ExcludeMissing
+            archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("custom_fields")
+            @ExcludeMissing
+            customFields: JsonField<CustomFields> = JsonMissing.of(),
+            @JsonProperty("event_type_filter")
+            @ExcludeMissing
+            eventTypeFilter: JsonField<EventTypeFilter> = JsonMissing.of(),
             @JsonProperty("filter") @ExcludeMissing filter: JsonField<Filter> = JsonMissing.of(),
-            @JsonProperty("group_by") @ExcludeMissing groupBy: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("group_keys") @ExcludeMissing groupKeys: JsonField<List<List<String>>> = JsonMissing.of(),
-            @JsonProperty("property_filters") @ExcludeMissing propertyFilters: JsonField<List<PropertyFilter>> = JsonMissing.of(),
-            @JsonProperty("sql") @ExcludeMissing sql: JsonField<String> = JsonMissing.of()
+            @JsonProperty("group_by")
+            @ExcludeMissing
+            groupBy: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("group_keys")
+            @ExcludeMissing
+            groupKeys: JsonField<List<List<String>>> = JsonMissing.of(),
+            @JsonProperty("property_filters")
+            @ExcludeMissing
+            propertyFilters: JsonField<List<PropertyFilter>> = JsonMissing.of(),
+            @JsonProperty("sql") @ExcludeMissing sql: JsonField<String> = JsonMissing.of(),
         ) : this(
-          id,
-          name,
-          aggregate,
-          aggregateKeys,
-          aggregationKey,
-          aggregationType,
-          archivedAt,
-          customFields,
-          eventTypeFilter,
-          filter,
-          groupBy,
-          groupKeys,
-          propertyFilters,
-          sql,
-          mutableMapOf(),
+            id,
+            name,
+            aggregate,
+            aggregateKeys,
+            aggregationKey,
+            aggregationType,
+            archivedAt,
+            customFields,
+            eventTypeFilter,
+            filter,
+            groupBy,
+            groupKeys,
+            propertyFilters,
+            sql,
+            mutableMapOf(),
         )
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun name(): String = name.getRequired("name")
 
         /**
          * (DEPRECATED) use aggregation_type instead
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun aggregate(): Optional<String> = aggregate.getOptional("aggregate")
 
         /**
          * (DEPRECATED) use aggregation_key instead
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun aggregateKeys(): Optional<List<String>> = aggregateKeys.getOptional("aggregate_keys")
 
         /**
-         * A key that specifies which property of the event is used to aggregate data. This key must be one of the property filter names and is not applicable when the aggregation type is 'count'.
+         * A key that specifies which property of the event is used to aggregate data. This key must
+         * be one of the property filter names and is not applicable when the aggregation type is
+         * 'count'.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun aggregationKey(): Optional<String> = aggregationKey.getOptional("aggregation_key")
 
         /**
-         * Specifies the type of aggregation performed on matching events. Includes "custom_sql" for events search endpoint responses.
+         * Specifies the type of aggregation performed on matching events. Includes "custom_sql" for
+         * events search endpoint responses.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun aggregationType(): Optional<AggregationType> = aggregationType.getOptional("aggregation_type")
+        fun aggregationType(): Optional<AggregationType> =
+            aggregationType.getOptional("aggregation_type")
 
         /**
-         * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the billable metric is not archived.
+         * RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the
+         * billable metric is not archived.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun archivedAt(): Optional<OffsetDateTime> = archivedAt.getOptional("archived_at")
 
         /**
          * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun customFields(): Optional<CustomFields> = customFields.getOptional("custom_fields")
 
         /**
          * An optional filtering rule to match the 'event_type' property of an event.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun eventTypeFilter(): Optional<EventTypeFilter> = eventTypeFilter.getOptional("event_type_filter")
+        fun eventTypeFilter(): Optional<EventTypeFilter> =
+            eventTypeFilter.getOptional("event_type_filter")
 
         /**
          * (DEPRECATED) use property_filters & event_type_filter instead
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun filter(): Optional<Filter> = filter.getOptional("filter")
 
         /**
          * (DEPRECATED) use group_keys instead
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun groupBy(): Optional<List<String>> = groupBy.getOptional("group_by")
 
         /**
-         * Property names that are used to group usage costs on an invoice. Each entry represents a set of properties used to slice events into distinct buckets.
+         * Property names that are used to group usage costs on an invoice. Each entry represents a
+         * set of properties used to slice events into distinct buckets.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun groupKeys(): Optional<List<List<String>>> = groupKeys.getOptional("group_keys")
 
         /**
-         * A list of filters to match events to this billable metric. Each filter defines a rule on an event property. All rules must pass for the event to match the billable metric.
+         * A list of filters to match events to this billable metric. Each filter defines a rule on
+         * an event property. All rules must pass for the event to match the billable metric.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun propertyFilters(): Optional<List<PropertyFilter>> = propertyFilters.getOptional("property_filters")
+        fun propertyFilters(): Optional<List<PropertyFilter>> =
+            propertyFilters.getOptional("property_filters")
 
         /**
          * The SQL query associated with the billable metric
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun sql(): Optional<String> = sql.getOptional("sql")
 
@@ -660,32 +727,27 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          *
          * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("id")
-        @ExcludeMissing
-        fun _id(): JsonField<String> = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [name].
          *
          * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("name")
-        @ExcludeMissing
-        fun _name(): JsonField<String> = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
          * Returns the raw JSON value of [aggregate].
          *
          * Unlike [aggregate], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("aggregate")
-        @ExcludeMissing
-        fun _aggregate(): JsonField<String> = aggregate
+        @JsonProperty("aggregate") @ExcludeMissing fun _aggregate(): JsonField<String> = aggregate
 
         /**
          * Returns the raw JSON value of [aggregateKeys].
          *
-         * Unlike [aggregateKeys], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [aggregateKeys], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("aggregate_keys")
         @ExcludeMissing
@@ -694,7 +756,8 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns the raw JSON value of [aggregationKey].
          *
-         * Unlike [aggregationKey], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [aggregationKey], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("aggregation_key")
         @ExcludeMissing
@@ -703,7 +766,8 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns the raw JSON value of [aggregationType].
          *
-         * Unlike [aggregationType], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [aggregationType], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("aggregation_type")
         @ExcludeMissing
@@ -721,7 +785,8 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns the raw JSON value of [customFields].
          *
-         * Unlike [customFields], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [customFields], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("custom_fields")
         @ExcludeMissing
@@ -730,7 +795,8 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns the raw JSON value of [eventTypeFilter].
          *
-         * Unlike [eventTypeFilter], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [eventTypeFilter], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("event_type_filter")
         @ExcludeMissing
@@ -741,18 +807,14 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          *
          * Unlike [filter], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("filter")
-        @ExcludeMissing
-        fun _filter(): JsonField<Filter> = filter
+        @JsonProperty("filter") @ExcludeMissing fun _filter(): JsonField<Filter> = filter
 
         /**
          * Returns the raw JSON value of [groupBy].
          *
          * Unlike [groupBy], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("group_by")
-        @ExcludeMissing
-        fun _groupBy(): JsonField<List<String>> = groupBy
+        @JsonProperty("group_by") @ExcludeMissing fun _groupBy(): JsonField<List<String>> = groupBy
 
         /**
          * Returns the raw JSON value of [groupKeys].
@@ -766,7 +828,8 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns the raw JSON value of [propertyFilters].
          *
-         * Unlike [propertyFilters], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [propertyFilters], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("property_filters")
         @ExcludeMissing
@@ -777,18 +840,17 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          *
          * Unlike [sql], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("sql")
-        @ExcludeMissing
-        fun _sql(): JsonField<String> = sql
+        @JsonProperty("sql") @ExcludeMissing fun _sql(): JsonField<String> = sql
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -798,14 +860,12 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              * Returns a mutable builder for constructing an instance of [MatchedBillableMetric].
              *
              * The following fields are required:
-             *
              * ```java
              * .id()
              * .name()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [MatchedBillableMetric]. */
@@ -828,50 +888,45 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(matchedBillableMetric: MatchedBillableMetric) =
-                apply {
-                    id = matchedBillableMetric.id
-                    name = matchedBillableMetric.name
-                    aggregate = matchedBillableMetric.aggregate
-                    aggregateKeys = matchedBillableMetric.aggregateKeys.map { it.toMutableList() }
-                    aggregationKey = matchedBillableMetric.aggregationKey
-                    aggregationType = matchedBillableMetric.aggregationType
-                    archivedAt = matchedBillableMetric.archivedAt
-                    customFields = matchedBillableMetric.customFields
-                    eventTypeFilter = matchedBillableMetric.eventTypeFilter
-                    filter = matchedBillableMetric.filter
-                    groupBy = matchedBillableMetric.groupBy.map { it.toMutableList() }
-                    groupKeys = matchedBillableMetric.groupKeys.map { it.toMutableList() }
-                    propertyFilters = matchedBillableMetric.propertyFilters.map { it.toMutableList() }
-                    sql = matchedBillableMetric.sql
-                    additionalProperties = matchedBillableMetric.additionalProperties.toMutableMap()
-                }
+            internal fun from(matchedBillableMetric: MatchedBillableMetric) = apply {
+                id = matchedBillableMetric.id
+                name = matchedBillableMetric.name
+                aggregate = matchedBillableMetric.aggregate
+                aggregateKeys = matchedBillableMetric.aggregateKeys.map { it.toMutableList() }
+                aggregationKey = matchedBillableMetric.aggregationKey
+                aggregationType = matchedBillableMetric.aggregationType
+                archivedAt = matchedBillableMetric.archivedAt
+                customFields = matchedBillableMetric.customFields
+                eventTypeFilter = matchedBillableMetric.eventTypeFilter
+                filter = matchedBillableMetric.filter
+                groupBy = matchedBillableMetric.groupBy.map { it.toMutableList() }
+                groupKeys = matchedBillableMetric.groupKeys.map { it.toMutableList() }
+                propertyFilters = matchedBillableMetric.propertyFilters.map { it.toMutableList() }
+                sql = matchedBillableMetric.sql
+                additionalProperties = matchedBillableMetric.additionalProperties.toMutableMap()
+            }
 
             fun id(id: String) = id(JsonField.of(id))
 
             /**
              * Sets [Builder.id] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun id(id: JsonField<String>) =
-                apply {
-                    this.id = id
-                }
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun name(name: String) = name(JsonField.of(name))
 
             /**
              * Sets [Builder.name] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun name(name: JsonField<String>) =
-                apply {
-                    this.name = name
-                }
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** (DEPRECATED) use aggregation_type instead */
             fun aggregate(aggregate: String) = aggregate(JsonField.of(aggregate))
@@ -879,81 +934,92 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Sets [Builder.aggregate] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.aggregate] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.aggregate] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun aggregate(aggregate: JsonField<String>) =
-                apply {
-                    this.aggregate = aggregate
-                }
+            fun aggregate(aggregate: JsonField<String>) = apply { this.aggregate = aggregate }
 
             /** (DEPRECATED) use aggregation_key instead */
-            fun aggregateKeys(aggregateKeys: List<String>) = aggregateKeys(JsonField.of(aggregateKeys))
+            fun aggregateKeys(aggregateKeys: List<String>) =
+                aggregateKeys(JsonField.of(aggregateKeys))
 
             /**
              * Sets [Builder.aggregateKeys] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.aggregateKeys] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.aggregateKeys] with a well-typed `List<String>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun aggregateKeys(aggregateKeys: JsonField<List<String>>) =
-                apply {
-                    this.aggregateKeys = aggregateKeys.map { it.toMutableList() }
-                }
+            fun aggregateKeys(aggregateKeys: JsonField<List<String>>) = apply {
+                this.aggregateKeys = aggregateKeys.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [String] to [aggregateKeys].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addAggregateKey(aggregateKey: String) =
-                apply {
-                    aggregateKeys = (aggregateKeys ?: JsonField.of(mutableListOf())).also {
+            fun addAggregateKey(aggregateKey: String) = apply {
+                aggregateKeys =
+                    (aggregateKeys ?: JsonField.of(mutableListOf())).also {
                         checkKnown("aggregateKeys", it).add(aggregateKey)
                     }
-                }
+            }
 
-            /** A key that specifies which property of the event is used to aggregate data. This key must be one of the property filter names and is not applicable when the aggregation type is 'count'. */
-            fun aggregationKey(aggregationKey: String) = aggregationKey(JsonField.of(aggregationKey))
+            /**
+             * A key that specifies which property of the event is used to aggregate data. This key
+             * must be one of the property filter names and is not applicable when the aggregation
+             * type is 'count'.
+             */
+            fun aggregationKey(aggregationKey: String) =
+                aggregationKey(JsonField.of(aggregationKey))
 
             /**
              * Sets [Builder.aggregationKey] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.aggregationKey] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.aggregationKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun aggregationKey(aggregationKey: JsonField<String>) =
-                apply {
-                    this.aggregationKey = aggregationKey
-                }
+            fun aggregationKey(aggregationKey: JsonField<String>) = apply {
+                this.aggregationKey = aggregationKey
+            }
 
-            /** Specifies the type of aggregation performed on matching events. Includes "custom_sql" for events search endpoint responses. */
-            fun aggregationType(aggregationType: AggregationType) = aggregationType(JsonField.of(aggregationType))
+            /**
+             * Specifies the type of aggregation performed on matching events. Includes "custom_sql"
+             * for events search endpoint responses.
+             */
+            fun aggregationType(aggregationType: AggregationType) =
+                aggregationType(JsonField.of(aggregationType))
 
             /**
              * Sets [Builder.aggregationType] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.aggregationType] with a well-typed [AggregationType] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.aggregationType] with a well-typed [AggregationType]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun aggregationType(aggregationType: JsonField<AggregationType>) =
-                apply {
-                    this.aggregationType = aggregationType
-                }
+            fun aggregationType(aggregationType: JsonField<AggregationType>) = apply {
+                this.aggregationType = aggregationType
+            }
 
-            /** RFC 3339 timestamp indicating when the billable metric was archived. If not provided, the billable metric is not archived. */
+            /**
+             * RFC 3339 timestamp indicating when the billable metric was archived. If not provided,
+             * the billable metric is not archived.
+             */
             fun archivedAt(archivedAt: OffsetDateTime) = archivedAt(JsonField.of(archivedAt))
 
             /**
              * Sets [Builder.archivedAt] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.archivedAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.archivedAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun archivedAt(archivedAt: JsonField<OffsetDateTime>) =
-                apply {
-                    this.archivedAt = archivedAt
-                }
+            fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
+                this.archivedAt = archivedAt
+            }
 
             /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
             fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
@@ -961,27 +1027,28 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Sets [Builder.customFields] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.customFields] with a well-typed [CustomFields] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.customFields] with a well-typed [CustomFields] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun customFields(customFields: JsonField<CustomFields>) =
-                apply {
-                    this.customFields = customFields
-                }
+            fun customFields(customFields: JsonField<CustomFields>) = apply {
+                this.customFields = customFields
+            }
 
             /** An optional filtering rule to match the 'event_type' property of an event. */
-            fun eventTypeFilter(eventTypeFilter: EventTypeFilter) = eventTypeFilter(JsonField.of(eventTypeFilter))
+            fun eventTypeFilter(eventTypeFilter: EventTypeFilter) =
+                eventTypeFilter(JsonField.of(eventTypeFilter))
 
             /**
              * Sets [Builder.eventTypeFilter] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.eventTypeFilter] with a well-typed [EventTypeFilter] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.eventTypeFilter] with a well-typed [EventTypeFilter]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun eventTypeFilter(eventTypeFilter: JsonField<EventTypeFilter>) =
-                apply {
-                    this.eventTypeFilter = eventTypeFilter
-                }
+            fun eventTypeFilter(eventTypeFilter: JsonField<EventTypeFilter>) = apply {
+                this.eventTypeFilter = eventTypeFilter
+            }
 
             /** (DEPRECATED) use property_filters & event_type_filter instead */
             fun filter(filter: Filter) = filter(JsonField.of(filter))
@@ -989,13 +1056,11 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Sets [Builder.filter] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.filter] with a well-typed [Filter] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.filter] with a well-typed [Filter] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun filter(filter: JsonField<Filter>) =
-                apply {
-                    this.filter = filter
-                }
+            fun filter(filter: JsonField<Filter>) = apply { this.filter = filter }
 
             /** (DEPRECATED) use group_keys instead */
             fun groupBy(groupBy: List<String>) = groupBy(JsonField.of(groupBy))
@@ -1003,77 +1068,84 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Sets [Builder.groupBy] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.groupBy] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.groupBy] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun groupBy(groupBy: JsonField<List<String>>) =
-                apply {
-                    this.groupBy = groupBy.map { it.toMutableList() }
-                }
+            fun groupBy(groupBy: JsonField<List<String>>) = apply {
+                this.groupBy = groupBy.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [String] to [Builder.groupBy].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addGroupBy(groupBy: String) =
-                apply {
-                    this.groupBy = (this.groupBy ?: JsonField.of(mutableListOf())).also {
+            fun addGroupBy(groupBy: String) = apply {
+                this.groupBy =
+                    (this.groupBy ?: JsonField.of(mutableListOf())).also {
                         checkKnown("groupBy", it).add(groupBy)
                     }
-                }
+            }
 
-            /** Property names that are used to group usage costs on an invoice. Each entry represents a set of properties used to slice events into distinct buckets. */
+            /**
+             * Property names that are used to group usage costs on an invoice. Each entry
+             * represents a set of properties used to slice events into distinct buckets.
+             */
             fun groupKeys(groupKeys: List<List<String>>) = groupKeys(JsonField.of(groupKeys))
 
             /**
              * Sets [Builder.groupKeys] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.groupKeys] with a well-typed `List<List<String>>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.groupKeys] with a well-typed `List<List<String>>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun groupKeys(groupKeys: JsonField<List<List<String>>>) =
-                apply {
-                    this.groupKeys = groupKeys.map { it.toMutableList() }
-                }
+            fun groupKeys(groupKeys: JsonField<List<List<String>>>) = apply {
+                this.groupKeys = groupKeys.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [List<String>] to [groupKeys].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addGroupKey(groupKey: List<String>) =
-                apply {
-                    groupKeys = (groupKeys ?: JsonField.of(mutableListOf())).also {
+            fun addGroupKey(groupKey: List<String>) = apply {
+                groupKeys =
+                    (groupKeys ?: JsonField.of(mutableListOf())).also {
                         checkKnown("groupKeys", it).add(groupKey)
                     }
-                }
+            }
 
-            /** A list of filters to match events to this billable metric. Each filter defines a rule on an event property. All rules must pass for the event to match the billable metric. */
-            fun propertyFilters(propertyFilters: List<PropertyFilter>) = propertyFilters(JsonField.of(propertyFilters))
+            /**
+             * A list of filters to match events to this billable metric. Each filter defines a rule
+             * on an event property. All rules must pass for the event to match the billable metric.
+             */
+            fun propertyFilters(propertyFilters: List<PropertyFilter>) =
+                propertyFilters(JsonField.of(propertyFilters))
 
             /**
              * Sets [Builder.propertyFilters] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.propertyFilters] with a well-typed `List<PropertyFilter>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.propertyFilters] with a well-typed
+             * `List<PropertyFilter>` value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
              */
-            fun propertyFilters(propertyFilters: JsonField<List<PropertyFilter>>) =
-                apply {
-                    this.propertyFilters = propertyFilters.map { it.toMutableList() }
-                }
+            fun propertyFilters(propertyFilters: JsonField<List<PropertyFilter>>) = apply {
+                this.propertyFilters = propertyFilters.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [PropertyFilter] to [propertyFilters].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addPropertyFilter(propertyFilter: PropertyFilter) =
-                apply {
-                    propertyFilters = (propertyFilters ?: JsonField.of(mutableListOf())).also {
+            fun addPropertyFilter(propertyFilter: PropertyFilter) = apply {
+                propertyFilters =
+                    (propertyFilters ?: JsonField.of(mutableListOf())).also {
                         checkKnown("propertyFilters", it).add(propertyFilter)
                     }
-                }
+            }
 
             /** The SQL query associated with the billable metric */
             fun sql(sql: String) = sql(JsonField.of(sql))
@@ -1081,39 +1153,30 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Sets [Builder.sql] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.sql] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.sql] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun sql(sql: JsonField<String>) =
-                apply {
-                    this.sql = sql
-                }
+            fun sql(sql: JsonField<String>) = apply { this.sql = sql }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [MatchedBillableMetric].
@@ -1121,7 +1184,6 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .id()
              * .name()
@@ -1131,60 +1193,56 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              */
             fun build(): MatchedBillableMetric =
                 MatchedBillableMetric(
-                  checkRequired(
-                    "id", id
-                  ),
-                  checkRequired(
-                    "name", name
-                  ),
-                  aggregate,
-                  (aggregateKeys?: JsonMissing.of()).map { it.toImmutable() },
-                  aggregationKey,
-                  aggregationType,
-                  archivedAt,
-                  customFields,
-                  eventTypeFilter,
-                  filter,
-                  (groupBy?: JsonMissing.of()).map { it.toImmutable() },
-                  (groupKeys?: JsonMissing.of()).map { it.toImmutable() },
-                  (propertyFilters?: JsonMissing.of()).map { it.toImmutable() },
-                  sql,
-                  additionalProperties.toMutableMap(),
+                    checkRequired("id", id),
+                    checkRequired("name", name),
+                    aggregate,
+                    (aggregateKeys ?: JsonMissing.of()).map { it.toImmutable() },
+                    aggregationKey,
+                    aggregationType,
+                    archivedAt,
+                    customFields,
+                    eventTypeFilter,
+                    filter,
+                    (groupBy ?: JsonMissing.of()).map { it.toImmutable() },
+                    (groupKeys ?: JsonMissing.of()).map { it.toImmutable() },
+                    (propertyFilters ?: JsonMissing.of()).map { it.toImmutable() },
+                    sql,
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): MatchedBillableMetric =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                id()
-                name()
-                aggregate()
-                aggregateKeys()
-                aggregationKey()
-                aggregationType().ifPresent { it.validate() }
-                archivedAt()
-                customFields().ifPresent { it.validate() }
-                eventTypeFilter().ifPresent { it.validate() }
-                filter().ifPresent { it.validate() }
-                groupBy()
-                groupKeys()
-                propertyFilters().ifPresent { it.forEach { it.validate() } }
-                sql()
-                validated = true
+        fun validate(): MatchedBillableMetric = apply {
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            aggregate()
+            aggregateKeys()
+            aggregationKey()
+            aggregationType().ifPresent { it.validate() }
+            archivedAt()
+            customFields().ifPresent { it.validate() }
+            eventTypeFilter().ifPresent { it.validate() }
+            filter().ifPresent { it.validate() }
+            groupBy()
+            groupKeys()
+            propertyFilters().ifPresent { it.forEach { it.validate() } }
+            sql()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -1195,28 +1253,45 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0) + (if (name.asKnown().isPresent) 1 else 0) + (if (aggregate.asKnown().isPresent) 1 else 0) + (aggregateKeys.asKnown().getOrNull()?.size ?: 0) + (if (aggregationKey.asKnown().isPresent) 1 else 0) + (aggregationType.asKnown().getOrNull()?.validity() ?: 0) + (if (archivedAt.asKnown().isPresent) 1 else 0) + (customFields.asKnown().getOrNull()?.validity() ?: 0) + (eventTypeFilter.asKnown().getOrNull()?.validity() ?: 0) + (filter.asKnown().getOrNull()?.validity() ?: 0) + (groupBy.asKnown().getOrNull()?.size ?: 0) + (groupKeys.asKnown().getOrNull()?.sumOf { it.size.toInt() } ?: 0) + (propertyFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (if (sql.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (if (name.asKnown().isPresent) 1 else 0) +
+                (if (aggregate.asKnown().isPresent) 1 else 0) +
+                (aggregateKeys.asKnown().getOrNull()?.size ?: 0) +
+                (if (aggregationKey.asKnown().isPresent) 1 else 0) +
+                (aggregationType.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (archivedAt.asKnown().isPresent) 1 else 0) +
+                (customFields.asKnown().getOrNull()?.validity() ?: 0) +
+                (eventTypeFilter.asKnown().getOrNull()?.validity() ?: 0) +
+                (filter.asKnown().getOrNull()?.validity() ?: 0) +
+                (groupBy.asKnown().getOrNull()?.size ?: 0) +
+                (groupKeys.asKnown().getOrNull()?.sumOf { it.size.toInt() } ?: 0) +
+                (propertyFilters.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (sql.asKnown().isPresent) 1 else 0)
 
-        /** Specifies the type of aggregation performed on matching events. Includes "custom_sql" for events search endpoint responses. */
-        class AggregationType @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        /**
+         * Specifies the type of aggregation performed on matching events. Includes "custom_sql" for
+         * events search endpoint responses.
+         */
+        class AggregationType
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -1249,11 +1324,9 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              * An enum containing [AggregationType]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [AggregationType] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
@@ -1263,16 +1336,19 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
                 SUM,
                 UNIQUE,
                 CUSTOM_SQL,
-                /** An enum member indicating that [AggregationType] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [AggregationType] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -1288,10 +1364,11 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -1307,33 +1384,37 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): AggregationType =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): AggregationType = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -1344,19 +1425,19 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is AggregationType && value == other.value
+                return other is AggregationType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1365,9 +1446,11 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
-        class CustomFields @JsonCreator private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
-
+        class CustomFields
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
 
             @JsonAnyGetter
@@ -1379,8 +1462,7 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             companion object {
 
                 /** Returns a mutable builder for constructing an instance of [CustomFields]. */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [CustomFields]. */
@@ -1389,36 +1471,31 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(customFields: CustomFields) =
-                    apply {
-                        additionalProperties = customFields.additionalProperties.toMutableMap()
-                    }
+                internal fun from(customFields: CustomFields) = apply {
+                    additionalProperties = customFields.additionalProperties.toMutableMap()
+                }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [CustomFields].
@@ -1431,21 +1508,22 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): CustomFields =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    validated = true
+            fun validate(): CustomFields = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -1456,19 +1534,21 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is CustomFields && additionalProperties == other.additionalProperties
+                return other is CustomFields && additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -1479,9 +1559,11 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         }
 
         /** (DEPRECATED) use property_filters & event_type_filter instead */
-        class Filter @JsonCreator private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
-
+        class Filter
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
 
             @JsonAnyGetter
@@ -1493,8 +1575,7 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             companion object {
 
                 /** Returns a mutable builder for constructing an instance of [Filter]. */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [Filter]. */
@@ -1503,36 +1584,31 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(filter: Filter) =
-                    apply {
-                        additionalProperties = filter.additionalProperties.toMutableMap()
-                    }
+                internal fun from(filter: Filter) = apply {
+                    additionalProperties = filter.additionalProperties.toMutableMap()
+                }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [Filter].
@@ -1545,21 +1621,22 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): Filter =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    validated = true
+            fun validate(): Filter = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -1570,19 +1647,21 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is Filter && additionalProperties == other.additionalProperties
+                return other is Filter && additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -1593,42 +1672,79 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is MatchedBillableMetric && id == other.id && name == other.name && aggregate == other.aggregate && aggregateKeys == other.aggregateKeys && aggregationKey == other.aggregationKey && aggregationType == other.aggregationType && archivedAt == other.archivedAt && customFields == other.customFields && eventTypeFilter == other.eventTypeFilter && filter == other.filter && groupBy == other.groupBy && groupKeys == other.groupKeys && propertyFilters == other.propertyFilters && sql == other.sql && additionalProperties == other.additionalProperties
+            return other is MatchedBillableMetric &&
+                id == other.id &&
+                name == other.name &&
+                aggregate == other.aggregate &&
+                aggregateKeys == other.aggregateKeys &&
+                aggregationKey == other.aggregationKey &&
+                aggregationType == other.aggregationType &&
+                archivedAt == other.archivedAt &&
+                customFields == other.customFields &&
+                eventTypeFilter == other.eventTypeFilter &&
+                filter == other.filter &&
+                groupBy == other.groupBy &&
+                groupKeys == other.groupKeys &&
+                propertyFilters == other.propertyFilters &&
+                sql == other.sql &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(id, name, aggregate, aggregateKeys, aggregationKey, aggregationType, archivedAt, customFields, eventTypeFilter, filter, groupBy, groupKeys, propertyFilters, sql, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                id,
+                name,
+                aggregate,
+                aggregateKeys,
+                aggregationKey,
+                aggregationType,
+                archivedAt,
+                customFields,
+                eventTypeFilter,
+                filter,
+                groupBy,
+                groupKeys,
+                propertyFilters,
+                sql,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "MatchedBillableMetric{id=$id, name=$name, aggregate=$aggregate, aggregateKeys=$aggregateKeys, aggregationKey=$aggregationKey, aggregationType=$aggregationType, archivedAt=$archivedAt, customFields=$customFields, eventTypeFilter=$eventTypeFilter, filter=$filter, groupBy=$groupBy, groupKeys=$groupKeys, propertyFilters=$propertyFilters, sql=$sql, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "MatchedBillableMetric{id=$id, name=$name, aggregate=$aggregate, aggregateKeys=$aggregateKeys, aggregationKey=$aggregationKey, aggregationType=$aggregationType, archivedAt=$archivedAt, customFields=$customFields, eventTypeFilter=$eventTypeFilter, filter=$filter, groupBy=$groupBy, groupKeys=$groupKeys, propertyFilters=$propertyFilters, sql=$sql, additionalProperties=$additionalProperties}"
     }
 
     /** The customer the event was matched to if a match was found */
-    class MatchedCustomer @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class MatchedCustomer
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val id: JsonField<String>,
         private val name: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of()
-        ) : this(
-          id,
-          name,
-          mutableMapOf(),
-        )
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        ) : this(id, name, mutableMapOf())
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun id(): Optional<String> = id.getOptional("id")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun name(): Optional<String> = name.getOptional("name")
 
         /**
@@ -1636,35 +1752,31 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          *
          * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("id")
-        @ExcludeMissing
-        fun _id(): JsonField<String> = id
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [name].
          *
          * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("name")
-        @ExcludeMissing
-        fun _name(): JsonField<String> = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [MatchedCustomer]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [MatchedCustomer]. */
@@ -1675,64 +1787,52 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(matchedCustomer: MatchedCustomer) =
-                apply {
-                    id = matchedCustomer.id
-                    name = matchedCustomer.name
-                    additionalProperties = matchedCustomer.additionalProperties.toMutableMap()
-                }
+            internal fun from(matchedCustomer: MatchedCustomer) = apply {
+                id = matchedCustomer.id
+                name = matchedCustomer.name
+                additionalProperties = matchedCustomer.additionalProperties.toMutableMap()
+            }
 
             fun id(id: String) = id(JsonField.of(id))
 
             /**
              * Sets [Builder.id] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun id(id: JsonField<String>) =
-                apply {
-                    this.id = id
-                }
+            fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun name(name: String) = name(JsonField.of(name))
 
             /**
              * Sets [Builder.name] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun name(name: JsonField<String>) =
-                apply {
-                    this.name = name
-                }
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [MatchedCustomer].
@@ -1740,33 +1840,29 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): MatchedCustomer =
-                MatchedCustomer(
-                  id,
-                  name,
-                  additionalProperties.toMutableMap(),
-                )
+                MatchedCustomer(id, name, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): MatchedCustomer =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                id()
-                name()
-                validated = true
+        fun validate(): MatchedCustomer = apply {
+            if (validated) {
+                return@apply
             }
+
+            id()
+            name()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -1777,31 +1873,39 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0) + (if (name.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) + (if (name.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is MatchedCustomer && id == other.id && name == other.name && additionalProperties == other.additionalProperties
+            return other is MatchedCustomer &&
+                id == other.id &&
+                name == other.name &&
+                additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy { Objects.hash(id, name, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "MatchedCustomer{id=$id, name=$name, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "MatchedCustomer{id=$id, name=$name, additionalProperties=$additionalProperties}"
     }
 
-    class Properties @JsonCreator private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
-
+    class Properties
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
     ) {
 
         @JsonAnyGetter
@@ -1813,8 +1917,7 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Properties]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Properties]. */
@@ -1823,36 +1926,28 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(properties: Properties) =
-                apply {
-                    additionalProperties = properties.additionalProperties.toMutableMap()
-                }
+            internal fun from(properties: Properties) = apply {
+                additionalProperties = properties.additionalProperties.toMutableMap()
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [Properties].
@@ -1865,21 +1960,21 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Properties =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                validated = true
+        fun validate(): Properties = apply {
+            if (validated) {
+                return@apply
             }
+
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -1890,19 +1985,21 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Properties && additionalProperties == other.additionalProperties
+            return other is Properties && additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -1913,16 +2010,42 @@ class UsageSearchResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is UsageSearchResponse && id == other.id && customerId == other.customerId && eventType == other.eventType && timestamp == other.timestamp && transactionId == other.transactionId && isDuplicate == other.isDuplicate && matchedBillableMetrics == other.matchedBillableMetrics && matchedCustomer == other.matchedCustomer && processedAt == other.processedAt && properties == other.properties && additionalProperties == other.additionalProperties
+        return other is UsageSearchResponse &&
+            id == other.id &&
+            customerId == other.customerId &&
+            eventType == other.eventType &&
+            timestamp == other.timestamp &&
+            transactionId == other.transactionId &&
+            isDuplicate == other.isDuplicate &&
+            matchedBillableMetrics == other.matchedBillableMetrics &&
+            matchedCustomer == other.matchedCustomer &&
+            processedAt == other.processedAt &&
+            properties == other.properties &&
+            additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(id, customerId, eventType, timestamp, transactionId, isDuplicate, matchedBillableMetrics, matchedCustomer, processedAt, properties, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            customerId,
+            eventType,
+            timestamp,
+            transactionId,
+            isDuplicate,
+            matchedBillableMetrics,
+            matchedCustomer,
+            processedAt,
+            properties,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "UsageSearchResponse{id=$id, customerId=$customerId, eventType=$eventType, timestamp=$timestamp, transactionId=$transactionId, isDuplicate=$isDuplicate, matchedBillableMetrics=$matchedBillableMetrics, matchedCustomer=$matchedCustomer, processedAt=$processedAt, properties=$properties, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "UsageSearchResponse{id=$id, customerId=$customerId, eventType=$eventType, timestamp=$timestamp, transactionId=$transactionId, isDuplicate=$isDuplicate, matchedBillableMetrics=$matchedBillableMetrics, matchedCustomer=$matchedCustomer, processedAt=$processedAt, properties=$properties, additionalProperties=$additionalProperties}"
 }

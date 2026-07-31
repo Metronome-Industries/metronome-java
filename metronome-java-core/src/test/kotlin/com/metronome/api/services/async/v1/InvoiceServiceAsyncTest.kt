@@ -14,33 +14,37 @@ internal class InvoiceServiceAsyncTest {
 
     @Test
     fun regenerate() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val invoiceServiceAsync = client.v1().invoices()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceServiceAsync = client.v1().invoices()
 
-      val responseFuture = invoiceServiceAsync.regenerate(InvoiceRegenerateParams.builder()
-          .id("6a37bb88-8538-48c5-b37b-a41c836328bd")
-          .build())
+        val responseFuture =
+            invoiceServiceAsync.regenerate(
+                InvoiceRegenerateParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Test
     fun void_() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val invoiceServiceAsync = client.v1().invoices()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val invoiceServiceAsync = client.v1().invoices()
 
-      val responseFuture = invoiceServiceAsync.void_(InvoiceVoidParams.builder()
-          .id("6a37bb88-8538-48c5-b37b-a41c836328bd")
-          .build())
+        val responseFuture =
+            invoiceServiceAsync.void_(
+                InvoiceVoidParams.builder().id("6a37bb88-8538-48c5-b37b-a41c836328bd").build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 }

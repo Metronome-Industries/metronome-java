@@ -5,20 +5,17 @@ package com.metronome.api.models.v1.creditgrants
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
-import com.metronome.api.models.v1.creditgrants.CreditGrantListEntriesPageResponse
-import com.metronome.api.models.v1.creditgrants.CreditGrantListEntriesParams
-import com.metronome.api.models.v1.creditgrants.CreditGrantListEntriesResponse
 import com.metronome.api.services.blocking.v1.CreditGrantService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see CreditGrantService.listEntries */
-class CreditGrantListEntriesPage private constructor(
+class CreditGrantListEntriesPage
+private constructor(
     private val service: CreditGrantService,
     private val params: CreditGrantListEntriesParams,
     private val response: CreditGrantListEntriesPageResponse,
-
 ) : Page<CreditGrantListEntriesResponse> {
 
     /**
@@ -33,17 +30,18 @@ class CreditGrantListEntriesPage private constructor(
      *
      * @see CreditGrantListEntriesPageResponse.data
      */
-    fun data(): List<CreditGrantListEntriesResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<CreditGrantListEntriesResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<CreditGrantListEntriesResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): CreditGrantListEntriesParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
     override fun nextPage(): CreditGrantListEntriesPage = service.listEntries(nextPageParams())
@@ -64,15 +62,13 @@ class CreditGrantListEntriesPage private constructor(
          * Returns a mutable builder for constructing an instance of [CreditGrantListEntriesPage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [CreditGrantListEntriesPage]. */
@@ -83,29 +79,21 @@ class CreditGrantListEntriesPage private constructor(
         private var response: CreditGrantListEntriesPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(creditGrantListEntriesPage: CreditGrantListEntriesPage) =
-            apply {
-                service = creditGrantListEntriesPage.service
-                params = creditGrantListEntriesPage.params
-                response = creditGrantListEntriesPage.response
-            }
+        internal fun from(creditGrantListEntriesPage: CreditGrantListEntriesPage) = apply {
+            service = creditGrantListEntriesPage.service
+            params = creditGrantListEntriesPage.params
+            response = creditGrantListEntriesPage.response
+        }
 
-        fun service(service: CreditGrantService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: CreditGrantService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: CreditGrantListEntriesParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: CreditGrantListEntriesParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: CreditGrantListEntriesPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: CreditGrantListEntriesPageResponse) = apply {
+            this.response = response
+        }
 
         /**
          * Returns an immutable instance of [CreditGrantListEntriesPage].
@@ -113,7 +101,6 @@ class CreditGrantListEntriesPage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,27 +111,25 @@ class CreditGrantListEntriesPage private constructor(
          */
         fun build(): CreditGrantListEntriesPage =
             CreditGrantListEntriesPage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is CreditGrantListEntriesPage && service == other.service && params == other.params && response == other.response
+        return other is CreditGrantListEntriesPage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() = "CreditGrantListEntriesPage{service=$service, params=$params, response=$response}"
+    override fun toString() =
+        "CreditGrantListEntriesPage{service=$service, params=$params, response=$response}"
 }

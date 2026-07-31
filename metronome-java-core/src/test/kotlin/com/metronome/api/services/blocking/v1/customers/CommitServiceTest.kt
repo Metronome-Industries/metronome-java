@@ -18,102 +18,140 @@ internal class CommitServiceTest {
 
     @Test
     fun create() {
-      val client = MetronomeOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val commitService = client.v1().customers().commits()
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val commitService = client.v1().customers().commits()
 
-      val commit = commitService.create(CommitCreateParams.builder()
-          .accessSchedule(CommitCreateParams.AccessSchedule.builder()
-              .addScheduleItem(CommitCreateParams.AccessSchedule.ScheduleItem.builder()
-                  .amount(1000.0)
-                  .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
-                  .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-                  .build())
-              .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
-              .build())
-          .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-          .priority(100.0)
-          .productId("f14d6729-6a44-4b13-9908-9387f1918790")
-          .type(CommitCreateParams.Type.PREPAID)
-          .addApplicableContractId("string")
-          .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .addApplicableProductTag("string")
-          .customFields(CommitCreateParams.CustomFields.builder()
-              .putAdditionalProperty("foo", JsonValue.from("string"))
-              .build())
-          .description("description")
-          .invoiceContractId("e57d6929-c2f1-4796-a9a8-63cedefe848d")
-          .invoiceSchedule(CommitCreateParams.InvoiceSchedule.builder()
-              .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
-              .doNotInvoice(false)
-              .recurringSchedule(CommitCreateParams.InvoiceSchedule.RecurringSchedule.builder()
-                  .amountDistribution(CommitCreateParams.InvoiceSchedule.RecurringSchedule.AmountDistribution.DIVIDED)
-                  .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                  .frequency(CommitCreateParams.InvoiceSchedule.RecurringSchedule.Frequency.MONTHLY)
-                  .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                  .amount(0.0)
-                  .quantity(0.0)
-                  .unitPrice(0.0)
-                  .build())
-              .addScheduleItem(CommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
-                  .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
-                  .amount(0.0)
-                  .quantity(1.0)
-                  .unitPrice(10000000.0)
-                  .build())
-              .build())
-          .name("My Commit")
-          .netsuiteSalesOrderId("netsuite_sales_order_id")
-          .rateType(CommitCreateParams.RateType.COMMIT_RATE)
-          .salesforceOpportunityId("salesforce_opportunity_id")
-          .addSpecifier(CommitSpecifierInput.builder()
-              .presentationGroupValues(CommitSpecifierInput.PresentationGroupValues.builder()
-                  .putAdditionalProperty("foo", JsonValue.from("string"))
-                  .build())
-              .pricingGroupValues(CommitSpecifierInput.PricingGroupValues.builder()
-                  .putAdditionalProperty("foo", JsonValue.from("string"))
-                  .build())
-              .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-              .addProductTag("string")
-              .build())
-          .uniquenessKey("x")
-          .build())
+        val commit =
+            commitService.create(
+                CommitCreateParams.builder()
+                    .accessSchedule(
+                        CommitCreateParams.AccessSchedule.builder()
+                            .addScheduleItem(
+                                CommitCreateParams.AccessSchedule.ScheduleItem.builder()
+                                    .amount(1000.0)
+                                    .endingBefore(OffsetDateTime.parse("2020-02-01T00:00:00.000Z"))
+                                    .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                                    .build()
+                            )
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .build()
+                    )
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .priority(100.0)
+                    .productId("f14d6729-6a44-4b13-9908-9387f1918790")
+                    .type(CommitCreateParams.Type.PREPAID)
+                    .addApplicableContractId("string")
+                    .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addApplicableProductTag("string")
+                    .customFields(
+                        CommitCreateParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .description("description")
+                    .invoiceContractId("e57d6929-c2f1-4796-a9a8-63cedefe848d")
+                    .invoiceSchedule(
+                        CommitCreateParams.InvoiceSchedule.builder()
+                            .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .doNotInvoice(false)
+                            .recurringSchedule(
+                                CommitCreateParams.InvoiceSchedule.RecurringSchedule.builder()
+                                    .amountDistribution(
+                                        CommitCreateParams.InvoiceSchedule.RecurringSchedule
+                                            .AmountDistribution
+                                            .DIVIDED
+                                    )
+                                    .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .frequency(
+                                        CommitCreateParams.InvoiceSchedule.RecurringSchedule
+                                            .Frequency
+                                            .MONTHLY
+                                    )
+                                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .amount(0.0)
+                                    .quantity(0.0)
+                                    .unitPrice(0.0)
+                                    .build()
+                            )
+                            .addScheduleItem(
+                                CommitCreateParams.InvoiceSchedule.ScheduleItem.builder()
+                                    .timestamp(OffsetDateTime.parse("2020-03-01T00:00:00.000Z"))
+                                    .amount(0.0)
+                                    .quantity(1.0)
+                                    .unitPrice(10000000.0)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .name("My Commit")
+                    .netsuiteSalesOrderId("netsuite_sales_order_id")
+                    .rateType(CommitCreateParams.RateType.COMMIT_RATE)
+                    .salesforceOpportunityId("salesforce_opportunity_id")
+                    .addSpecifier(
+                        CommitSpecifierInput.builder()
+                            .presentationGroupValues(
+                                CommitSpecifierInput.PresentationGroupValues.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .pricingGroupValues(
+                                CommitSpecifierInput.PricingGroupValues.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .addProductTag("string")
+                            .build()
+                    )
+                    .uniquenessKey("x")
+                    .build()
+            )
 
-      commit.validate()
+        commit.validate()
     }
 
     @Test
     fun list() {
-      val client = MetronomeOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val commitService = client.v1().customers().commits()
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val commitService = client.v1().customers().commits()
 
-      val page = commitService.list(CommitListParams.builder()
-          .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-          .build())
+        val page =
+            commitService.list(
+                CommitListParams.builder()
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .build()
+            )
 
-      page.response().validate()
+        page.response().validate()
     }
 
     @Test
     fun updateEndDate() {
-      val client = MetronomeOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val commitService = client.v1().customers().commits()
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val commitService = client.v1().customers().commits()
 
-      val response = commitService.updateEndDate(CommitUpdateEndDateParams.builder()
-          .commitId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
-          .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-          .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-          .invoicesEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-          .build())
+        val response =
+            commitService.updateEndDate(
+                CommitUpdateEndDateParams.builder()
+                    .commitId("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+                    .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .accessEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                    .invoicesEndingBefore(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                    .build()
+            )
 
-      response.validate()
+        response.validate()
     }
 }

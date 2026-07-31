@@ -5,7 +5,6 @@ package com.metronome.api.models.v1.alerts
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.Id
-import com.metronome.api.models.v1.alerts.AlertCreateResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,28 +12,29 @@ internal class AlertCreateResponseTest {
 
     @Test
     fun create() {
-      val alertCreateResponse = AlertCreateResponse.builder()
-          .data(Id.builder()
-              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-              .build())
-          .build()
+        val alertCreateResponse =
+            AlertCreateResponse.builder()
+                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+                .build()
 
-      assertThat(alertCreateResponse.data()).isEqualTo(Id.builder()
-          .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .build())
+        assertThat(alertCreateResponse.data())
+            .isEqualTo(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
     }
 
     @Test
     fun roundtrip() {
-      val jsonMapper = jsonMapper()
-      val alertCreateResponse = AlertCreateResponse.builder()
-          .data(Id.builder()
-              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-              .build())
-          .build()
+        val jsonMapper = jsonMapper()
+        val alertCreateResponse =
+            AlertCreateResponse.builder()
+                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+                .build()
 
-      val roundtrippedAlertCreateResponse = jsonMapper.readValue(jsonMapper.writeValueAsString(alertCreateResponse), jacksonTypeRef<AlertCreateResponse>())
+        val roundtrippedAlertCreateResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(alertCreateResponse),
+                jacksonTypeRef<AlertCreateResponse>(),
+            )
 
-      assertThat(roundtrippedAlertCreateResponse).isEqualTo(alertCreateResponse)
+        assertThat(roundtrippedAlertCreateResponse).isEqualTo(alertCreateResponse)
     }
 }

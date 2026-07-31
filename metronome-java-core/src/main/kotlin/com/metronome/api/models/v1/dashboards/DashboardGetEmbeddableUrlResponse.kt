@@ -12,26 +12,27 @@ import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.checkRequired
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlResponse
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+class DashboardGetEmbeddableUrlResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
     private val data: JsonField<Data>,
     private val additionalProperties: MutableMap<String, JsonValue>,
-
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of()
-    ) : this(
-      data, mutableMapOf()
-    )
+    ) : this(data, mutableMapOf())
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): Data = data.getRequired("data")
 
     /**
@@ -39,34 +40,32 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
      *
      * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<Data> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-      additionalProperties.put(key, value)
+        additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [DashboardGetEmbeddableUrlResponse].
+         * Returns a mutable builder for constructing an instance of
+         * [DashboardGetEmbeddableUrlResponse].
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [DashboardGetEmbeddableUrlResponse]. */
@@ -79,7 +78,8 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
         internal fun from(dashboardGetEmbeddableUrlResponse: DashboardGetEmbeddableUrlResponse) =
             apply {
                 data = dashboardGetEmbeddableUrlResponse.data
-                additionalProperties = dashboardGetEmbeddableUrlResponse.additionalProperties.toMutableMap()
+                additionalProperties =
+                    dashboardGetEmbeddableUrlResponse.additionalProperties.toMutableMap()
             }
 
         fun data(data: Data) = data(JsonField.of(data))
@@ -87,39 +87,29 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
         /**
          * Sets [Builder.data] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.data] with a well-typed [Data] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun data(data: JsonField<Data>) =
-            apply {
-                this.data = data
-            }
+        fun data(data: JsonField<Data>) = apply { this.data = data }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         /**
          * Returns an immutable instance of [DashboardGetEmbeddableUrlResponse].
@@ -127,7 +117,6 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * ```
@@ -136,9 +125,8 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
          */
         fun build(): DashboardGetEmbeddableUrlResponse =
             DashboardGetEmbeddableUrlResponse(
-              checkRequired(
-                "data", data
-              ), additionalProperties.toMutableMap()
+                checkRequired("data", data),
+                additionalProperties.toMutableMap(),
             )
     }
 
@@ -152,15 +140,14 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): DashboardGetEmbeddableUrlResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().validate()
-            validated = true
+    fun validate(): DashboardGetEmbeddableUrlResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -175,23 +162,24 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
      *
      * Used for best match union deserialization.
      */
-    @JvmSynthetic
-    internal fun validity(): Int = (data.asKnown().getOrNull()?.validity() ?: 0)
+    @JvmSynthetic internal fun validity(): Int = (data.asKnown().getOrNull()?.validity() ?: 0)
 
-    class Data @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class Data
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val url: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
             @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of()
-        ) : this(
-          url, mutableMapOf()
-        )
+        ) : this(url, mutableMapOf())
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun url(): Optional<String> = url.getOptional("url")
 
         /**
@@ -199,26 +187,24 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
          *
          * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("url")
-        @ExcludeMissing
-        fun _url(): JsonField<String> = url
+        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Data]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Data]. */
@@ -228,81 +214,68 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(data: Data) =
-                apply {
-                    url = data.url
-                    additionalProperties = data.additionalProperties.toMutableMap()
-                }
+            internal fun from(data: Data) = apply {
+                url = data.url
+                additionalProperties = data.additionalProperties.toMutableMap()
+            }
 
             fun url(url: String) = url(JsonField.of(url))
 
             /**
              * Sets [Builder.url] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.url] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.url] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun url(url: JsonField<String>) =
-                apply {
-                    this.url = url
-                }
+            fun url(url: JsonField<String>) = apply { this.url = url }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [Data].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Data =
-                Data(
-                  url, additionalProperties.toMutableMap()
-                )
+            fun build(): Data = Data(url, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Data =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                url()
-                validated = true
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
             }
+
+            url()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -313,19 +286,21 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic
-        internal fun validity(): Int = (if (url.asKnown().isPresent) 1 else 0)
+        @JvmSynthetic internal fun validity(): Int = (if (url.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Data && url == other.url && additionalProperties == other.additionalProperties
+            return other is Data &&
+                url == other.url &&
+                additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy { Objects.hash(url, additionalProperties) }
@@ -336,16 +311,19 @@ class DashboardGetEmbeddableUrlResponse @JsonCreator(mode = JsonCreator.Mode.DIS
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is DashboardGetEmbeddableUrlResponse && data == other.data && additionalProperties == other.additionalProperties
+        return other is DashboardGetEmbeddableUrlResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "DashboardGetEmbeddableUrlResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "DashboardGetEmbeddableUrlResponse{data=$data, additionalProperties=$additionalProperties}"
 }

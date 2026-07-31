@@ -5,48 +5,49 @@ package com.metronome.api.models.v1.packages
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
-import com.metronome.api.models.v1.packages.PackageListContractsOnPackagePageResponse
-import com.metronome.api.models.v1.packages.PackageListContractsOnPackageParams
-import com.metronome.api.models.v1.packages.PackageListContractsOnPackageResponse
 import com.metronome.api.services.blocking.v1.PackageService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see PackageService.listContractsOnPackage */
-class PackageListContractsOnPackagePage private constructor(
+class PackageListContractsOnPackagePage
+private constructor(
     private val service: PackageService,
     private val params: PackageListContractsOnPackageParams,
     private val response: PackageListContractsOnPackagePageResponse,
-
 ) : Page<PackageListContractsOnPackageResponse> {
 
     /**
-     * Delegates to [PackageListContractsOnPackagePageResponse], but gracefully handles missing data.
+     * Delegates to [PackageListContractsOnPackagePageResponse], but gracefully handles missing
+     * data.
      *
      * @see PackageListContractsOnPackagePageResponse.nextPage
      */
     fun nextPageRaw(): Optional<String> = response._nextPage().getOptional("next_page")
 
     /**
-     * Delegates to [PackageListContractsOnPackagePageResponse], but gracefully handles missing data.
+     * Delegates to [PackageListContractsOnPackagePageResponse], but gracefully handles missing
+     * data.
      *
      * @see PackageListContractsOnPackagePageResponse.data
      */
-    fun data(): List<PackageListContractsOnPackageResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<PackageListContractsOnPackageResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<PackageListContractsOnPackageResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): PackageListContractsOnPackageParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
-    override fun nextPage(): PackageListContractsOnPackagePage = service.listContractsOnPackage(nextPageParams())
+    override fun nextPage(): PackageListContractsOnPackagePage =
+        service.listContractsOnPackage(nextPageParams())
 
     fun autoPager(): AutoPager<PackageListContractsOnPackageResponse> = AutoPager.from(this)
 
@@ -61,18 +62,17 @@ class PackageListContractsOnPackagePage private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [PackageListContractsOnPackagePage].
+         * Returns a mutable builder for constructing an instance of
+         * [PackageListContractsOnPackagePage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PackageListContractsOnPackagePage]. */
@@ -90,22 +90,15 @@ class PackageListContractsOnPackagePage private constructor(
                 response = packageListContractsOnPackagePage.response
             }
 
-        fun service(service: PackageService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: PackageService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: PackageListContractsOnPackageParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: PackageListContractsOnPackageParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: PackageListContractsOnPackagePageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: PackageListContractsOnPackagePageResponse) = apply {
+            this.response = response
+        }
 
         /**
          * Returns an immutable instance of [PackageListContractsOnPackagePage].
@@ -113,7 +106,6 @@ class PackageListContractsOnPackagePage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,27 +116,25 @@ class PackageListContractsOnPackagePage private constructor(
          */
         fun build(): PackageListContractsOnPackagePage =
             PackageListContractsOnPackagePage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PackageListContractsOnPackagePage && service == other.service && params == other.params && response == other.response
+        return other is PackageListContractsOnPackagePage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)
 
-    override fun toString() = "PackageListContractsOnPackagePage{service=$service, params=$params, response=$response}"
+    override fun toString() =
+        "PackageListContractsOnPackagePage{service=$service, params=$params, response=$response}"
 }

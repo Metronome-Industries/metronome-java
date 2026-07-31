@@ -9,14 +9,12 @@ import com.metronome.api.core.jsonMapper
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class UnauthorizedException private constructor(
-    private val headers: Headers,
-    private val body: JsonValue,
-    cause: Throwable?,
-
-) : MetronomeServiceException(
-  "401: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}", cause
-) {
+class UnauthorizedException
+private constructor(private val headers: Headers, private val body: JsonValue, cause: Throwable?) :
+    MetronomeServiceException(
+        "401: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}",
+        cause,
+    ) {
 
     override fun statusCode(): Int = 401
 
@@ -32,14 +30,12 @@ class UnauthorizedException private constructor(
          * Returns a mutable builder for constructing an instance of [UnauthorizedException].
          *
          * The following fields are required:
-         *
          * ```java
          * .headers()
          * .body()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [UnauthorizedException]. */
@@ -50,27 +46,17 @@ class UnauthorizedException private constructor(
         private var cause: Throwable? = null
 
         @JvmSynthetic
-        internal fun from(unauthorizedException: UnauthorizedException) =
-            apply {
-                headers = unauthorizedException.headers
-                body = unauthorizedException.body
-                cause = unauthorizedException.cause
-            }
+        internal fun from(unauthorizedException: UnauthorizedException) = apply {
+            headers = unauthorizedException.headers
+            body = unauthorizedException.body
+            cause = unauthorizedException.cause
+        }
 
-        fun headers(headers: Headers) =
-            apply {
-                this.headers = headers
-            }
+        fun headers(headers: Headers) = apply { this.headers = headers }
 
-        fun body(body: JsonValue) =
-            apply {
-                this.body = body
-            }
+        fun body(body: JsonValue) = apply { this.body = body }
 
-        fun cause(cause: Throwable?) =
-            apply {
-                this.cause = cause
-            }
+        fun cause(cause: Throwable?) = apply { this.cause = cause }
 
         /** Alias for calling [Builder.cause] with `cause.orElse(null)`. */
         fun cause(cause: Optional<Throwable>) = cause(cause.getOrNull())
@@ -81,7 +67,6 @@ class UnauthorizedException private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .headers()
          * .body()
@@ -91,13 +76,9 @@ class UnauthorizedException private constructor(
          */
         fun build(): UnauthorizedException =
             UnauthorizedException(
-              checkRequired(
-                "headers", headers
-              ),
-              checkRequired(
-                "body", body
-              ),
-              cause,
+                checkRequired("headers", headers),
+                checkRequired("body", body),
+                cause,
             )
     }
 }

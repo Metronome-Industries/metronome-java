@@ -20,7 +20,6 @@ import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import com.metronome.api.models.CommitHierarchyConfiguration
 import com.metronome.api.models.CommitSpecifierInput
-import com.metronome.api.models.v2.contracts.ContractEditCommitParams
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
@@ -28,112 +27,149 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Edit specific details for a contract-level or customer-level commit. Use this endpoint to modify individual commit access schedules, invoice schedules, applicable products, invoicing contracts, or other fields.
+ * Edit specific details for a contract-level or customer-level commit. Use this endpoint to modify
+ * individual commit access schedules, invoice schedules, applicable products, invoicing contracts,
+ * or other fields.
  *
  * ### Usage guidelines:
- * - As with all edits in Metronome, draft invoices will reflect the edit immediately, while finalized invoices are untouched unless voided and regenerated.
- * - If a commit's invoice schedule item is associated with a finalized invoice, you cannot remove or update the invoice schedule item.
- * - If a commit's invoice schedule item is associated with a voided invoice, you cannot remove the invoice schedule item.
- * - You cannot remove an commit access schedule segment that was applied to a finalized invoice. You can void the invoice beforehand and then remove the access schedule segment.
- *
+ * - As with all edits in Metronome, draft invoices will reflect the edit immediately, while
+ *   finalized invoices are untouched unless voided and regenerated.
+ * - If a commit's invoice schedule item is associated with a finalized invoice, you cannot remove
+ *   or update the invoice schedule item.
+ * - If a commit's invoice schedule item is associated with a voided invoice, you cannot remove the
+ *   invoice schedule item.
+ * - You cannot remove an commit access schedule segment that was applied to a finalized invoice.
+ *   You can void the invoice beforehand and then remove the access schedule segment.
  */
-class ContractEditCommitParams private constructor(
+class ContractEditCommitParams
+private constructor(
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-
 ) : Params {
 
     /**
      * ID of the commit to edit
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun commitId(): String = body.commitId()
 
     /**
      * ID of the customer whose commit is being edited
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun customerId(): String = body.customerId()
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun accessSchedule(): Optional<AccessSchedule> = body.accessSchedule()
 
     /**
-     * Which contracts the customer-level commit applies to. If set to null, the commit applies to all of the customer's contracts. This field cannot be edited for POSTPAID commits or contract-level commits.
+     * Which contracts the customer-level commit applies to. If set to null, the commit applies to
+     * all of the customer's contracts. This field cannot be edited for POSTPAID commits or
+     * contract-level commits.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun applicableContractIds(): Optional<List<String>> = body.applicableContractIds()
 
     /**
-     * Which products the commit applies to. If applicable_product_ids, applicable_product_tags or specifiers are not provided, the commit applies to all products.
+     * Which products the commit applies to. If applicable_product_ids, applicable_product_tags or
+     * specifiers are not provided, the commit applies to all products.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun applicableProductIds(): Optional<List<String>> = body.applicableProductIds()
 
     /**
-     * Which tags the commit applies to. If applicable_product_ids, applicable_product_tags or specifiers are not provided, the commit applies to all products.
+     * Which tags the commit applies to. If applicable_product_ids, applicable_product_tags or
+     * specifiers are not provided, the commit applies to all products.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun applicableProductTags(): Optional<List<String>> = body.applicableProductTags()
 
     /**
      * Updated description for the commit
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun description(): Optional<String> = body.description()
 
     /**
      * Optional configuration for commit hierarchy access control
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun hierarchyConfiguration(): Optional<CommitHierarchyConfiguration> = body.hierarchyConfiguration()
+    fun hierarchyConfiguration(): Optional<CommitHierarchyConfiguration> =
+        body.hierarchyConfiguration()
 
     /**
      * ID of contract to use for invoicing
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun invoiceContractId(): Optional<String> = body.invoiceContractId()
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun invoiceSchedule(): Optional<InvoiceSchedule> = body.invoiceSchedule()
 
     /**
      * Updated name for the commit
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun name(): Optional<String> = body.name()
 
     /**
      * If multiple commits are applicable, the one with the lower priority will apply first.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun priority(): Optional<Double> = body.priority()
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun productId(): Optional<String> = body.productId()
 
     /**
-     * If provided, updates the commit to use the specified rate type for current and future invoices. Previously finalized invoices will need to be voided and regenerated to reflect the rate type change.
+     * If provided, updates the commit to use the specified rate type for current and future
+     * invoices. Previously finalized invoices will need to be voided and regenerated to reflect the
+     * rate type change.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun rateType(): Optional<RateType> = body.rateType()
 
     /**
-     * List of filters that determine what kind of customer usage draws down a commit or credit. A customer's usage needs to meet the condition of at least one of the specifiers to contribute to a commit's or credit's drawdown. This field cannot be used together with `applicable_product_ids` or `applicable_product_tags`. Instead, to target usage by product or product tag, pass those values in the body of `specifiers`.
+     * List of filters that determine what kind of customer usage draws down a commit or credit. A
+     * customer's usage needs to meet the condition of at least one of the specifiers to contribute
+     * to a commit's or credit's drawdown. This field cannot be used together with
+     * `applicable_product_ids` or `applicable_product_tags`. Instead, to target usage by product or
+     * product tag, pass those values in the body of `specifiers`.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun specifiers(): Optional<List<CommitSpecifierInput>> = body.specifiers()
 
@@ -161,21 +197,24 @@ class ContractEditCommitParams private constructor(
     /**
      * Returns the raw JSON value of [applicableContractIds].
      *
-     * Unlike [applicableContractIds], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [applicableContractIds], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     fun _applicableContractIds(): JsonField<List<String>> = body._applicableContractIds()
 
     /**
      * Returns the raw JSON value of [applicableProductIds].
      *
-     * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     fun _applicableProductIds(): JsonField<List<String>> = body._applicableProductIds()
 
     /**
      * Returns the raw JSON value of [applicableProductTags].
      *
-     * Unlike [applicableProductTags], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [applicableProductTags], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     fun _applicableProductTags(): JsonField<List<String>> = body._applicableProductTags()
 
@@ -189,14 +228,17 @@ class ContractEditCommitParams private constructor(
     /**
      * Returns the raw JSON value of [hierarchyConfiguration].
      *
-     * Unlike [hierarchyConfiguration], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [hierarchyConfiguration], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
-    fun _hierarchyConfiguration(): JsonField<CommitHierarchyConfiguration> = body._hierarchyConfiguration()
+    fun _hierarchyConfiguration(): JsonField<CommitHierarchyConfiguration> =
+        body._hierarchyConfiguration()
 
     /**
      * Returns the raw JSON value of [invoiceContractId].
      *
-     * Unlike [invoiceContractId], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [invoiceContractId], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     fun _invoiceContractId(): JsonField<String> = body._invoiceContractId()
 
@@ -258,14 +300,12 @@ class ContractEditCommitParams private constructor(
          * Returns a mutable builder for constructing an instance of [ContractEditCommitParams].
          *
          * The following fields are required:
-         *
          * ```java
          * .commitId()
          * .customerId()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [ContractEditCommitParams]. */
@@ -276,18 +316,17 @@ class ContractEditCommitParams private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(contractEditCommitParams: ContractEditCommitParams) =
-            apply {
-                body = contractEditCommitParams.body.toBuilder()
-                additionalHeaders = contractEditCommitParams.additionalHeaders.toBuilder()
-                additionalQueryParams = contractEditCommitParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(contractEditCommitParams: ContractEditCommitParams) = apply {
+            body = contractEditCommitParams.body.toBuilder()
+            additionalHeaders = contractEditCommitParams.additionalHeaders.toBuilder()
+            additionalQueryParams = contractEditCommitParams.additionalQueryParams.toBuilder()
+        }
 
         /**
          * Sets the entire request body.
          *
-         * This is generally only useful if you are already constructing the body separately. Otherwise,
-         * it's more convenient to use the top-level setters instead:
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
          * - [commitId]
          * - [customerId]
          * - [accessSchedule]
@@ -295,240 +334,224 @@ class ContractEditCommitParams private constructor(
          * - [applicableProductIds]
          * - etc.
          */
-        fun body(body: Body) =
-            apply {
-                this.body = body.toBuilder()
-            }
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** ID of the commit to edit */
-        fun commitId(commitId: String) =
-            apply {
-                body.commitId(commitId)
-            }
+        fun commitId(commitId: String) = apply { body.commitId(commitId) }
 
         /**
          * Sets [Builder.commitId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.commitId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.commitId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun commitId(commitId: JsonField<String>) =
-            apply {
-                body.commitId(commitId)
-            }
+        fun commitId(commitId: JsonField<String>) = apply { body.commitId(commitId) }
 
         /** ID of the customer whose commit is being edited */
-        fun customerId(customerId: String) =
-            apply {
-                body.customerId(customerId)
-            }
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
 
         /**
          * Sets [Builder.customerId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.customerId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.customerId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun customerId(customerId: JsonField<String>) =
-            apply {
-                body.customerId(customerId)
-            }
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
-        fun accessSchedule(accessSchedule: AccessSchedule) =
-            apply {
-                body.accessSchedule(accessSchedule)
-            }
+        fun accessSchedule(accessSchedule: AccessSchedule) = apply {
+            body.accessSchedule(accessSchedule)
+        }
 
         /**
          * Sets [Builder.accessSchedule] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.accessSchedule] with a well-typed [AccessSchedule] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.accessSchedule] with a well-typed [AccessSchedule] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun accessSchedule(accessSchedule: JsonField<AccessSchedule>) =
-            apply {
-                body.accessSchedule(accessSchedule)
-            }
+        fun accessSchedule(accessSchedule: JsonField<AccessSchedule>) = apply {
+            body.accessSchedule(accessSchedule)
+        }
 
-        /** Which contracts the customer-level commit applies to. If set to null, the commit applies to all of the customer's contracts. This field cannot be edited for POSTPAID commits or contract-level commits. */
-        fun applicableContractIds(applicableContractIds: List<String>?) =
-            apply {
-                body.applicableContractIds(applicableContractIds)
-            }
+        /**
+         * Which contracts the customer-level commit applies to. If set to null, the commit applies
+         * to all of the customer's contracts. This field cannot be edited for POSTPAID commits or
+         * contract-level commits.
+         */
+        fun applicableContractIds(applicableContractIds: List<String>?) = apply {
+            body.applicableContractIds(applicableContractIds)
+        }
 
-        /** Alias for calling [Builder.applicableContractIds] with `applicableContractIds.orElse(null)`. */
-        fun applicableContractIds(applicableContractIds: Optional<List<String>>) = applicableContractIds(applicableContractIds.getOrNull())
+        /**
+         * Alias for calling [Builder.applicableContractIds] with
+         * `applicableContractIds.orElse(null)`.
+         */
+        fun applicableContractIds(applicableContractIds: Optional<List<String>>) =
+            applicableContractIds(applicableContractIds.getOrNull())
 
         /**
          * Sets [Builder.applicableContractIds] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.applicableContractIds] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.applicableContractIds] with a well-typed `List<String>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun applicableContractIds(applicableContractIds: JsonField<List<String>>) =
-            apply {
-                body.applicableContractIds(applicableContractIds)
-            }
+        fun applicableContractIds(applicableContractIds: JsonField<List<String>>) = apply {
+            body.applicableContractIds(applicableContractIds)
+        }
 
         /**
          * Adds a single [String] to [applicableContractIds].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addApplicableContractId(applicableContractId: String) =
-            apply {
-                body.addApplicableContractId(applicableContractId)
-            }
+        fun addApplicableContractId(applicableContractId: String) = apply {
+            body.addApplicableContractId(applicableContractId)
+        }
 
-        /** Which products the commit applies to. If applicable_product_ids, applicable_product_tags or specifiers are not provided, the commit applies to all products. */
-        fun applicableProductIds(applicableProductIds: List<String>?) =
-            apply {
-                body.applicableProductIds(applicableProductIds)
-            }
+        /**
+         * Which products the commit applies to. If applicable_product_ids, applicable_product_tags
+         * or specifiers are not provided, the commit applies to all products.
+         */
+        fun applicableProductIds(applicableProductIds: List<String>?) = apply {
+            body.applicableProductIds(applicableProductIds)
+        }
 
-        /** Alias for calling [Builder.applicableProductIds] with `applicableProductIds.orElse(null)`. */
-        fun applicableProductIds(applicableProductIds: Optional<List<String>>) = applicableProductIds(applicableProductIds.getOrNull())
+        /**
+         * Alias for calling [Builder.applicableProductIds] with
+         * `applicableProductIds.orElse(null)`.
+         */
+        fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
+            applicableProductIds(applicableProductIds.getOrNull())
 
         /**
          * Sets [Builder.applicableProductIds] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.applicableProductIds] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.applicableProductIds] with a well-typed `List<String>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun applicableProductIds(applicableProductIds: JsonField<List<String>>) =
-            apply {
-                body.applicableProductIds(applicableProductIds)
-            }
+        fun applicableProductIds(applicableProductIds: JsonField<List<String>>) = apply {
+            body.applicableProductIds(applicableProductIds)
+        }
 
         /**
          * Adds a single [String] to [applicableProductIds].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addApplicableProductId(applicableProductId: String) =
-            apply {
-                body.addApplicableProductId(applicableProductId)
-            }
+        fun addApplicableProductId(applicableProductId: String) = apply {
+            body.addApplicableProductId(applicableProductId)
+        }
 
-        /** Which tags the commit applies to. If applicable_product_ids, applicable_product_tags or specifiers are not provided, the commit applies to all products. */
-        fun applicableProductTags(applicableProductTags: List<String>?) =
-            apply {
-                body.applicableProductTags(applicableProductTags)
-            }
+        /**
+         * Which tags the commit applies to. If applicable_product_ids, applicable_product_tags or
+         * specifiers are not provided, the commit applies to all products.
+         */
+        fun applicableProductTags(applicableProductTags: List<String>?) = apply {
+            body.applicableProductTags(applicableProductTags)
+        }
 
-        /** Alias for calling [Builder.applicableProductTags] with `applicableProductTags.orElse(null)`. */
-        fun applicableProductTags(applicableProductTags: Optional<List<String>>) = applicableProductTags(applicableProductTags.getOrNull())
+        /**
+         * Alias for calling [Builder.applicableProductTags] with
+         * `applicableProductTags.orElse(null)`.
+         */
+        fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+            applicableProductTags(applicableProductTags.getOrNull())
 
         /**
          * Sets [Builder.applicableProductTags] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.applicableProductTags] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.applicableProductTags] with a well-typed `List<String>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun applicableProductTags(applicableProductTags: JsonField<List<String>>) =
-            apply {
-                body.applicableProductTags(applicableProductTags)
-            }
+        fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+            body.applicableProductTags(applicableProductTags)
+        }
 
         /**
          * Adds a single [String] to [applicableProductTags].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addApplicableProductTag(applicableProductTag: String) =
-            apply {
-                body.addApplicableProductTag(applicableProductTag)
-            }
+        fun addApplicableProductTag(applicableProductTag: String) = apply {
+            body.addApplicableProductTag(applicableProductTag)
+        }
 
         /** Updated description for the commit */
-        fun description(description: String) =
-            apply {
-                body.description(description)
-            }
+        fun description(description: String) = apply { body.description(description) }
 
         /**
          * Sets [Builder.description] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.description] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun description(description: JsonField<String>) =
-            apply {
-                body.description(description)
-            }
+        fun description(description: JsonField<String>) = apply { body.description(description) }
 
         /** Optional configuration for commit hierarchy access control */
-        fun hierarchyConfiguration(hierarchyConfiguration: CommitHierarchyConfiguration) =
-            apply {
-                body.hierarchyConfiguration(hierarchyConfiguration)
-            }
+        fun hierarchyConfiguration(hierarchyConfiguration: CommitHierarchyConfiguration) = apply {
+            body.hierarchyConfiguration(hierarchyConfiguration)
+        }
 
         /**
          * Sets [Builder.hierarchyConfiguration] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.hierarchyConfiguration] with a well-typed [CommitHierarchyConfiguration] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.hierarchyConfiguration] with a well-typed
+         * [CommitHierarchyConfiguration] value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
          */
-        fun hierarchyConfiguration(hierarchyConfiguration: JsonField<CommitHierarchyConfiguration>) =
-            apply {
-                body.hierarchyConfiguration(hierarchyConfiguration)
-            }
+        fun hierarchyConfiguration(
+            hierarchyConfiguration: JsonField<CommitHierarchyConfiguration>
+        ) = apply { body.hierarchyConfiguration(hierarchyConfiguration) }
 
         /** ID of contract to use for invoicing */
-        fun invoiceContractId(invoiceContractId: String) =
-            apply {
-                body.invoiceContractId(invoiceContractId)
-            }
+        fun invoiceContractId(invoiceContractId: String) = apply {
+            body.invoiceContractId(invoiceContractId)
+        }
 
         /**
          * Sets [Builder.invoiceContractId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.invoiceContractId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.invoiceContractId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun invoiceContractId(invoiceContractId: JsonField<String>) =
-            apply {
-                body.invoiceContractId(invoiceContractId)
-            }
+        fun invoiceContractId(invoiceContractId: JsonField<String>) = apply {
+            body.invoiceContractId(invoiceContractId)
+        }
 
-        fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) =
-            apply {
-                body.invoiceSchedule(invoiceSchedule)
-            }
+        fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) = apply {
+            body.invoiceSchedule(invoiceSchedule)
+        }
 
         /**
          * Sets [Builder.invoiceSchedule] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.invoiceSchedule] with a well-typed [InvoiceSchedule] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.invoiceSchedule] with a well-typed [InvoiceSchedule]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun invoiceSchedule(invoiceSchedule: JsonField<InvoiceSchedule>) =
-            apply {
-                body.invoiceSchedule(invoiceSchedule)
-            }
+        fun invoiceSchedule(invoiceSchedule: JsonField<InvoiceSchedule>) = apply {
+            body.invoiceSchedule(invoiceSchedule)
+        }
 
         /** Updated name for the commit */
-        fun name(name: String) =
-            apply {
-                body.name(name)
-            }
+        fun name(name: String) = apply { body.name(name) }
 
         /**
          * Sets [Builder.name] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun name(name: JsonField<String>) =
-            apply {
-                body.name(name)
-            }
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
         /** If multiple commits are applicable, the one with the lower priority will apply first. */
-        fun priority(priority: Double?) =
-            apply {
-                body.priority(priority)
-            }
+        fun priority(priority: Double?) = apply { body.priority(priority) }
 
         /**
          * Alias for [Builder.priority].
@@ -543,227 +566,187 @@ class ContractEditCommitParams private constructor(
         /**
          * Sets [Builder.priority] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.priority] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.priority] with a well-typed [Double] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun priority(priority: JsonField<Double>) =
-            apply {
-                body.priority(priority)
-            }
+        fun priority(priority: JsonField<Double>) = apply { body.priority(priority) }
 
-        fun productId(productId: String) =
-            apply {
-                body.productId(productId)
-            }
+        fun productId(productId: String) = apply { body.productId(productId) }
 
         /**
          * Sets [Builder.productId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.productId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.productId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun productId(productId: JsonField<String>) =
-            apply {
-                body.productId(productId)
-            }
+        fun productId(productId: JsonField<String>) = apply { body.productId(productId) }
 
-        /** If provided, updates the commit to use the specified rate type for current and future invoices. Previously finalized invoices will need to be voided and regenerated to reflect the rate type change. */
-        fun rateType(rateType: RateType) =
-            apply {
-                body.rateType(rateType)
-            }
+        /**
+         * If provided, updates the commit to use the specified rate type for current and future
+         * invoices. Previously finalized invoices will need to be voided and regenerated to reflect
+         * the rate type change.
+         */
+        fun rateType(rateType: RateType) = apply { body.rateType(rateType) }
 
         /**
          * Sets [Builder.rateType] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.rateType] with a well-typed [RateType] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.rateType] with a well-typed [RateType] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun rateType(rateType: JsonField<RateType>) =
-            apply {
-                body.rateType(rateType)
-            }
+        fun rateType(rateType: JsonField<RateType>) = apply { body.rateType(rateType) }
 
-        /** List of filters that determine what kind of customer usage draws down a commit or credit. A customer's usage needs to meet the condition of at least one of the specifiers to contribute to a commit's or credit's drawdown. This field cannot be used together with `applicable_product_ids` or `applicable_product_tags`. Instead, to target usage by product or product tag, pass those values in the body of `specifiers`. */
-        fun specifiers(specifiers: List<CommitSpecifierInput>?) =
-            apply {
-                body.specifiers(specifiers)
-            }
+        /**
+         * List of filters that determine what kind of customer usage draws down a commit or credit.
+         * A customer's usage needs to meet the condition of at least one of the specifiers to
+         * contribute to a commit's or credit's drawdown. This field cannot be used together with
+         * `applicable_product_ids` or `applicable_product_tags`. Instead, to target usage by
+         * product or product tag, pass those values in the body of `specifiers`.
+         */
+        fun specifiers(specifiers: List<CommitSpecifierInput>?) = apply {
+            body.specifiers(specifiers)
+        }
 
         /** Alias for calling [Builder.specifiers] with `specifiers.orElse(null)`. */
-        fun specifiers(specifiers: Optional<List<CommitSpecifierInput>>) = specifiers(specifiers.getOrNull())
+        fun specifiers(specifiers: Optional<List<CommitSpecifierInput>>) =
+            specifiers(specifiers.getOrNull())
 
         /**
          * Sets [Builder.specifiers] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.specifiers] with a well-typed `List<CommitSpecifierInput>` value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.specifiers] with a well-typed
+         * `List<CommitSpecifierInput>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
          */
-        fun specifiers(specifiers: JsonField<List<CommitSpecifierInput>>) =
-            apply {
-                body.specifiers(specifiers)
-            }
+        fun specifiers(specifiers: JsonField<List<CommitSpecifierInput>>) = apply {
+            body.specifiers(specifiers)
+        }
 
         /**
          * Adds a single [CommitSpecifierInput] to [specifiers].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addSpecifier(specifier: CommitSpecifierInput) =
-            apply {
-                body.addSpecifier(specifier)
-            }
+        fun addSpecifier(specifier: CommitSpecifierInput) = apply { body.addSpecifier(specifier) }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.additionalProperties(additionalBodyProperties)
-            }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
-            apply {
-                body.putAdditionalProperty(
-                  key, value
-                )
-            }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) =
-            apply {
-                body.removeAdditionalProperty(key)
-            }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
-            apply {
-                body.removeAllAdditionalProperties(keys)
-            }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
-        fun additionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun putAdditionalHeader(name: String, value: String) =
-            apply {
-                additionalHeaders.put(name, value)
-            }
+        fun putAdditionalHeader(name: String, value: String) = apply {
+            additionalHeaders.put(name, value)
+        }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.put(name, values)
-            }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.put(name, values)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun replaceAdditionalHeaders(name: String, value: String) =
-            apply {
-                additionalHeaders.replace(name, value)
-            }
+        fun replaceAdditionalHeaders(name: String, value: String) = apply {
+            additionalHeaders.replace(name, value)
+        }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.replace(name, values)
-            }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.replace(name, values)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun removeAdditionalHeaders(name: String) =
-            apply {
-                additionalHeaders.remove(name)
-            }
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) =
-            apply {
-                additionalHeaders.removeAll(names)
-            }
+        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
+            additionalHeaders.removeAll(names)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun putAdditionalQueryParam(key: String, value: String) =
-            apply {
-                additionalQueryParams.put(key, value)
-            }
+        fun putAdditionalQueryParam(key: String, value: String) = apply {
+            additionalQueryParams.put(key, value)
+        }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.put(key, values)
-            }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.put(key, values)
+        }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.putAll(additionalQueryParams)
-            }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.putAll(additionalQueryParams)
+        }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) =
-            apply {
-                additionalQueryParams.replace(key, value)
-            }
+        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
+            additionalQueryParams.replace(key, value)
+        }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.replace(key, values)
-            }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.replace(key, values)
+        }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.replaceAll(additionalQueryParams)
-            }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.replaceAll(additionalQueryParams)
+        }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) =
-            apply {
-                additionalQueryParams.remove(key)
-            }
+        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) =
-            apply {
-                additionalQueryParams.removeAll(keys)
-            }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
+            additionalQueryParams.removeAll(keys)
+        }
 
         /**
          * Returns an immutable instance of [ContractEditCommitParams].
@@ -771,7 +754,6 @@ class ContractEditCommitParams private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .commitId()
          * .customerId()
@@ -781,9 +763,9 @@ class ContractEditCommitParams private constructor(
          */
         fun build(): ContractEditCommitParams =
             ContractEditCommitParams(
-              body.build(),
-              additionalHeaders.build(),
-              additionalQueryParams.build(),
+                body.build(),
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
             )
     }
 
@@ -793,7 +775,9 @@ class ContractEditCommitParams private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    class Body @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val commitId: JsonField<String>,
         private val customerId: JsonField<String>,
         private val accessSchedule: JsonField<AccessSchedule>,
@@ -810,146 +794,210 @@ class ContractEditCommitParams private constructor(
         private val rateType: JsonField<RateType>,
         private val specifiers: JsonField<List<CommitSpecifierInput>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("commit_id") @ExcludeMissing commitId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("customer_id") @ExcludeMissing customerId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("access_schedule") @ExcludeMissing accessSchedule: JsonField<AccessSchedule> = JsonMissing.of(),
-            @JsonProperty("applicable_contract_ids") @ExcludeMissing applicableContractIds: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("applicable_product_ids") @ExcludeMissing applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("applicable_product_tags") @ExcludeMissing applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("description") @ExcludeMissing description: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("hierarchy_configuration") @ExcludeMissing hierarchyConfiguration: JsonField<CommitHierarchyConfiguration> = JsonMissing.of(),
-            @JsonProperty("invoice_contract_id") @ExcludeMissing invoiceContractId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("invoice_schedule") @ExcludeMissing invoiceSchedule: JsonField<InvoiceSchedule> = JsonMissing.of(),
+            @JsonProperty("commit_id")
+            @ExcludeMissing
+            commitId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("customer_id")
+            @ExcludeMissing
+            customerId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("access_schedule")
+            @ExcludeMissing
+            accessSchedule: JsonField<AccessSchedule> = JsonMissing.of(),
+            @JsonProperty("applicable_contract_ids")
+            @ExcludeMissing
+            applicableContractIds: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("applicable_product_ids")
+            @ExcludeMissing
+            applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("applicable_product_tags")
+            @ExcludeMissing
+            applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("hierarchy_configuration")
+            @ExcludeMissing
+            hierarchyConfiguration: JsonField<CommitHierarchyConfiguration> = JsonMissing.of(),
+            @JsonProperty("invoice_contract_id")
+            @ExcludeMissing
+            invoiceContractId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("invoice_schedule")
+            @ExcludeMissing
+            invoiceSchedule: JsonField<InvoiceSchedule> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("priority") @ExcludeMissing priority: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("rate_type") @ExcludeMissing rateType: JsonField<RateType> = JsonMissing.of(),
-            @JsonProperty("specifiers") @ExcludeMissing specifiers: JsonField<List<CommitSpecifierInput>> = JsonMissing.of()
+            @JsonProperty("priority")
+            @ExcludeMissing
+            priority: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("product_id")
+            @ExcludeMissing
+            productId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("rate_type")
+            @ExcludeMissing
+            rateType: JsonField<RateType> = JsonMissing.of(),
+            @JsonProperty("specifiers")
+            @ExcludeMissing
+            specifiers: JsonField<List<CommitSpecifierInput>> = JsonMissing.of(),
         ) : this(
-          commitId,
-          customerId,
-          accessSchedule,
-          applicableContractIds,
-          applicableProductIds,
-          applicableProductTags,
-          description,
-          hierarchyConfiguration,
-          invoiceContractId,
-          invoiceSchedule,
-          name,
-          priority,
-          productId,
-          rateType,
-          specifiers,
-          mutableMapOf(),
+            commitId,
+            customerId,
+            accessSchedule,
+            applicableContractIds,
+            applicableProductIds,
+            applicableProductTags,
+            description,
+            hierarchyConfiguration,
+            invoiceContractId,
+            invoiceSchedule,
+            name,
+            priority,
+            productId,
+            rateType,
+            specifiers,
+            mutableMapOf(),
         )
 
         /**
          * ID of the commit to edit
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun commitId(): String = commitId.getRequired("commit_id")
 
         /**
          * ID of the customer whose commit is being edited
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun customerId(): String = customerId.getRequired("customer_id")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun accessSchedule(): Optional<AccessSchedule> = accessSchedule.getOptional("access_schedule")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun accessSchedule(): Optional<AccessSchedule> =
+            accessSchedule.getOptional("access_schedule")
 
         /**
-         * Which contracts the customer-level commit applies to. If set to null, the commit applies to all of the customer's contracts. This field cannot be edited for POSTPAID commits or contract-level commits.
+         * Which contracts the customer-level commit applies to. If set to null, the commit applies
+         * to all of the customer's contracts. This field cannot be edited for POSTPAID commits or
+         * contract-level commits.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun applicableContractIds(): Optional<List<String>> = applicableContractIds.getOptional("applicable_contract_ids")
+        fun applicableContractIds(): Optional<List<String>> =
+            applicableContractIds.getOptional("applicable_contract_ids")
 
         /**
-         * Which products the commit applies to. If applicable_product_ids, applicable_product_tags or specifiers are not provided, the commit applies to all products.
+         * Which products the commit applies to. If applicable_product_ids, applicable_product_tags
+         * or specifiers are not provided, the commit applies to all products.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun applicableProductIds(): Optional<List<String>> = applicableProductIds.getOptional("applicable_product_ids")
+        fun applicableProductIds(): Optional<List<String>> =
+            applicableProductIds.getOptional("applicable_product_ids")
 
         /**
-         * Which tags the commit applies to. If applicable_product_ids, applicable_product_tags or specifiers are not provided, the commit applies to all products.
+         * Which tags the commit applies to. If applicable_product_ids, applicable_product_tags or
+         * specifiers are not provided, the commit applies to all products.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun applicableProductTags(): Optional<List<String>> = applicableProductTags.getOptional("applicable_product_tags")
+        fun applicableProductTags(): Optional<List<String>> =
+            applicableProductTags.getOptional("applicable_product_tags")
 
         /**
          * Updated description for the commit
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun description(): Optional<String> = description.getOptional("description")
 
         /**
          * Optional configuration for commit hierarchy access control
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun hierarchyConfiguration(): Optional<CommitHierarchyConfiguration> = hierarchyConfiguration.getOptional("hierarchy_configuration")
+        fun hierarchyConfiguration(): Optional<CommitHierarchyConfiguration> =
+            hierarchyConfiguration.getOptional("hierarchy_configuration")
 
         /**
          * ID of contract to use for invoicing
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun invoiceContractId(): Optional<String> = invoiceContractId.getOptional("invoice_contract_id")
+        fun invoiceContractId(): Optional<String> =
+            invoiceContractId.getOptional("invoice_contract_id")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun invoiceSchedule(): Optional<InvoiceSchedule> = invoiceSchedule.getOptional("invoice_schedule")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun invoiceSchedule(): Optional<InvoiceSchedule> =
+            invoiceSchedule.getOptional("invoice_schedule")
 
         /**
          * Updated name for the commit
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun name(): Optional<String> = name.getOptional("name")
 
         /**
          * If multiple commits are applicable, the one with the lower priority will apply first.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun priority(): Optional<Double> = priority.getOptional("priority")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
         fun productId(): Optional<String> = productId.getOptional("product_id")
 
         /**
-         * If provided, updates the commit to use the specified rate type for current and future invoices. Previously finalized invoices will need to be voided and regenerated to reflect the rate type change.
+         * If provided, updates the commit to use the specified rate type for current and future
+         * invoices. Previously finalized invoices will need to be voided and regenerated to reflect
+         * the rate type change.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun rateType(): Optional<RateType> = rateType.getOptional("rate_type")
 
         /**
-         * List of filters that determine what kind of customer usage draws down a commit or credit. A customer's usage needs to meet the condition of at least one of the specifiers to contribute to a commit's or credit's drawdown. This field cannot be used together with `applicable_product_ids` or `applicable_product_tags`. Instead, to target usage by product or product tag, pass those values in the body of `specifiers`.
+         * List of filters that determine what kind of customer usage draws down a commit or credit.
+         * A customer's usage needs to meet the condition of at least one of the specifiers to
+         * contribute to a commit's or credit's drawdown. This field cannot be used together with
+         * `applicable_product_ids` or `applicable_product_tags`. Instead, to target usage by
+         * product or product tag, pass those values in the body of `specifiers`.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun specifiers(): Optional<List<CommitSpecifierInput>> = specifiers.getOptional("specifiers")
+        fun specifiers(): Optional<List<CommitSpecifierInput>> =
+            specifiers.getOptional("specifiers")
 
         /**
          * Returns the raw JSON value of [commitId].
          *
          * Unlike [commitId], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("commit_id")
-        @ExcludeMissing
-        fun _commitId(): JsonField<String> = commitId
+        @JsonProperty("commit_id") @ExcludeMissing fun _commitId(): JsonField<String> = commitId
 
         /**
          * Returns the raw JSON value of [customerId].
@@ -963,7 +1011,8 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [accessSchedule].
          *
-         * Unlike [accessSchedule], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [accessSchedule], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("access_schedule")
         @ExcludeMissing
@@ -972,7 +1021,8 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [applicableContractIds].
          *
-         * Unlike [applicableContractIds], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [applicableContractIds], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("applicable_contract_ids")
         @ExcludeMissing
@@ -981,7 +1031,8 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [applicableProductIds].
          *
-         * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("applicable_product_ids")
         @ExcludeMissing
@@ -990,7 +1041,8 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [applicableProductTags].
          *
-         * Unlike [applicableProductTags], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [applicableProductTags], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("applicable_product_tags")
         @ExcludeMissing
@@ -1008,16 +1060,19 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [hierarchyConfiguration].
          *
-         * Unlike [hierarchyConfiguration], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [hierarchyConfiguration], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("hierarchy_configuration")
         @ExcludeMissing
-        fun _hierarchyConfiguration(): JsonField<CommitHierarchyConfiguration> = hierarchyConfiguration
+        fun _hierarchyConfiguration(): JsonField<CommitHierarchyConfiguration> =
+            hierarchyConfiguration
 
         /**
          * Returns the raw JSON value of [invoiceContractId].
          *
-         * Unlike [invoiceContractId], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [invoiceContractId], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("invoice_contract_id")
         @ExcludeMissing
@@ -1026,7 +1081,8 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [invoiceSchedule].
          *
-         * Unlike [invoiceSchedule], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [invoiceSchedule], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("invoice_schedule")
         @ExcludeMissing
@@ -1037,36 +1093,28 @@ class ContractEditCommitParams private constructor(
          *
          * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("name")
-        @ExcludeMissing
-        fun _name(): JsonField<String> = name
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
          * Returns the raw JSON value of [priority].
          *
          * Unlike [priority], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("priority")
-        @ExcludeMissing
-        fun _priority(): JsonField<Double> = priority
+        @JsonProperty("priority") @ExcludeMissing fun _priority(): JsonField<Double> = priority
 
         /**
          * Returns the raw JSON value of [productId].
          *
          * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("product_id")
-        @ExcludeMissing
-        fun _productId(): JsonField<String> = productId
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
         /**
          * Returns the raw JSON value of [rateType].
          *
          * Unlike [rateType], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("rate_type")
-        @ExcludeMissing
-        fun _rateType(): JsonField<RateType> = rateType
+        @JsonProperty("rate_type") @ExcludeMissing fun _rateType(): JsonField<RateType> = rateType
 
         /**
          * Returns the raw JSON value of [specifiers].
@@ -1079,12 +1127,13 @@ class ContractEditCommitParams private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -1094,14 +1143,12 @@ class ContractEditCommitParams private constructor(
              * Returns a mutable builder for constructing an instance of [Body].
              *
              * The following fields are required:
-             *
              * ```java
              * .commitId()
              * .customerId()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
@@ -1114,7 +1161,8 @@ class ContractEditCommitParams private constructor(
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
-            private var hierarchyConfiguration: JsonField<CommitHierarchyConfiguration> = JsonMissing.of()
+            private var hierarchyConfiguration: JsonField<CommitHierarchyConfiguration> =
+                JsonMissing.of()
             private var invoiceContractId: JsonField<String> = JsonMissing.of()
             private var invoiceSchedule: JsonField<InvoiceSchedule> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
@@ -1125,25 +1173,24 @@ class ContractEditCommitParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(body: Body) =
-                apply {
-                    commitId = body.commitId
-                    customerId = body.customerId
-                    accessSchedule = body.accessSchedule
-                    applicableContractIds = body.applicableContractIds.map { it.toMutableList() }
-                    applicableProductIds = body.applicableProductIds.map { it.toMutableList() }
-                    applicableProductTags = body.applicableProductTags.map { it.toMutableList() }
-                    description = body.description
-                    hierarchyConfiguration = body.hierarchyConfiguration
-                    invoiceContractId = body.invoiceContractId
-                    invoiceSchedule = body.invoiceSchedule
-                    name = body.name
-                    priority = body.priority
-                    productId = body.productId
-                    rateType = body.rateType
-                    specifiers = body.specifiers.map { it.toMutableList() }
-                    additionalProperties = body.additionalProperties.toMutableMap()
-                }
+            internal fun from(body: Body) = apply {
+                commitId = body.commitId
+                customerId = body.customerId
+                accessSchedule = body.accessSchedule
+                applicableContractIds = body.applicableContractIds.map { it.toMutableList() }
+                applicableProductIds = body.applicableProductIds.map { it.toMutableList() }
+                applicableProductTags = body.applicableProductTags.map { it.toMutableList() }
+                description = body.description
+                hierarchyConfiguration = body.hierarchyConfiguration
+                invoiceContractId = body.invoiceContractId
+                invoiceSchedule = body.invoiceSchedule
+                name = body.name
+                priority = body.priority
+                productId = body.productId
+                rateType = body.rateType
+                specifiers = body.specifiers.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
 
             /** ID of the commit to edit */
             fun commitId(commitId: String) = commitId(JsonField.of(commitId))
@@ -1151,13 +1198,11 @@ class ContractEditCommitParams private constructor(
             /**
              * Sets [Builder.commitId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.commitId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.commitId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun commitId(commitId: JsonField<String>) =
-                apply {
-                    this.commitId = commitId
-                }
+            fun commitId(commitId: JsonField<String>) = apply { this.commitId = commitId }
 
             /** ID of the customer whose commit is being edited */
             fun customerId(customerId: String) = customerId(JsonField.of(customerId))
@@ -1165,113 +1210,138 @@ class ContractEditCommitParams private constructor(
             /**
              * Sets [Builder.customerId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.customerId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.customerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun customerId(customerId: JsonField<String>) =
-                apply {
-                    this.customerId = customerId
-                }
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
-            fun accessSchedule(accessSchedule: AccessSchedule) = accessSchedule(JsonField.of(accessSchedule))
+            fun accessSchedule(accessSchedule: AccessSchedule) =
+                accessSchedule(JsonField.of(accessSchedule))
 
             /**
              * Sets [Builder.accessSchedule] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.accessSchedule] with a well-typed [AccessSchedule] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.accessSchedule] with a well-typed [AccessSchedule]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun accessSchedule(accessSchedule: JsonField<AccessSchedule>) =
-                apply {
-                    this.accessSchedule = accessSchedule
-                }
+            fun accessSchedule(accessSchedule: JsonField<AccessSchedule>) = apply {
+                this.accessSchedule = accessSchedule
+            }
 
-            /** Which contracts the customer-level commit applies to. If set to null, the commit applies to all of the customer's contracts. This field cannot be edited for POSTPAID commits or contract-level commits. */
-            fun applicableContractIds(applicableContractIds: List<String>?) = applicableContractIds(JsonField.ofNullable(applicableContractIds))
+            /**
+             * Which contracts the customer-level commit applies to. If set to null, the commit
+             * applies to all of the customer's contracts. This field cannot be edited for POSTPAID
+             * commits or contract-level commits.
+             */
+            fun applicableContractIds(applicableContractIds: List<String>?) =
+                applicableContractIds(JsonField.ofNullable(applicableContractIds))
 
-            /** Alias for calling [Builder.applicableContractIds] with `applicableContractIds.orElse(null)`. */
-            fun applicableContractIds(applicableContractIds: Optional<List<String>>) = applicableContractIds(applicableContractIds.getOrNull())
+            /**
+             * Alias for calling [Builder.applicableContractIds] with
+             * `applicableContractIds.orElse(null)`.
+             */
+            fun applicableContractIds(applicableContractIds: Optional<List<String>>) =
+                applicableContractIds(applicableContractIds.getOrNull())
 
             /**
              * Sets [Builder.applicableContractIds] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.applicableContractIds] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.applicableContractIds] with a well-typed
+             * `List<String>` value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
              */
-            fun applicableContractIds(applicableContractIds: JsonField<List<String>>) =
-                apply {
-                    this.applicableContractIds = applicableContractIds.map { it.toMutableList() }
-                }
+            fun applicableContractIds(applicableContractIds: JsonField<List<String>>) = apply {
+                this.applicableContractIds = applicableContractIds.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [String] to [applicableContractIds].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addApplicableContractId(applicableContractId: String) =
-                apply {
-                    applicableContractIds = (applicableContractIds ?: JsonField.of(mutableListOf())).also {
+            fun addApplicableContractId(applicableContractId: String) = apply {
+                applicableContractIds =
+                    (applicableContractIds ?: JsonField.of(mutableListOf())).also {
                         checkKnown("applicableContractIds", it).add(applicableContractId)
                     }
-                }
+            }
 
-            /** Which products the commit applies to. If applicable_product_ids, applicable_product_tags or specifiers are not provided, the commit applies to all products. */
-            fun applicableProductIds(applicableProductIds: List<String>?) = applicableProductIds(JsonField.ofNullable(applicableProductIds))
+            /**
+             * Which products the commit applies to. If applicable_product_ids,
+             * applicable_product_tags or specifiers are not provided, the commit applies to all
+             * products.
+             */
+            fun applicableProductIds(applicableProductIds: List<String>?) =
+                applicableProductIds(JsonField.ofNullable(applicableProductIds))
 
-            /** Alias for calling [Builder.applicableProductIds] with `applicableProductIds.orElse(null)`. */
-            fun applicableProductIds(applicableProductIds: Optional<List<String>>) = applicableProductIds(applicableProductIds.getOrNull())
+            /**
+             * Alias for calling [Builder.applicableProductIds] with
+             * `applicableProductIds.orElse(null)`.
+             */
+            fun applicableProductIds(applicableProductIds: Optional<List<String>>) =
+                applicableProductIds(applicableProductIds.getOrNull())
 
             /**
              * Sets [Builder.applicableProductIds] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.applicableProductIds] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.applicableProductIds] with a well-typed
+             * `List<String>` value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
              */
-            fun applicableProductIds(applicableProductIds: JsonField<List<String>>) =
-                apply {
-                    this.applicableProductIds = applicableProductIds.map { it.toMutableList() }
-                }
+            fun applicableProductIds(applicableProductIds: JsonField<List<String>>) = apply {
+                this.applicableProductIds = applicableProductIds.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [String] to [applicableProductIds].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addApplicableProductId(applicableProductId: String) =
-                apply {
-                    applicableProductIds = (applicableProductIds ?: JsonField.of(mutableListOf())).also {
+            fun addApplicableProductId(applicableProductId: String) = apply {
+                applicableProductIds =
+                    (applicableProductIds ?: JsonField.of(mutableListOf())).also {
                         checkKnown("applicableProductIds", it).add(applicableProductId)
                     }
-                }
+            }
 
-            /** Which tags the commit applies to. If applicable_product_ids, applicable_product_tags or specifiers are not provided, the commit applies to all products. */
-            fun applicableProductTags(applicableProductTags: List<String>?) = applicableProductTags(JsonField.ofNullable(applicableProductTags))
+            /**
+             * Which tags the commit applies to. If applicable_product_ids, applicable_product_tags
+             * or specifiers are not provided, the commit applies to all products.
+             */
+            fun applicableProductTags(applicableProductTags: List<String>?) =
+                applicableProductTags(JsonField.ofNullable(applicableProductTags))
 
-            /** Alias for calling [Builder.applicableProductTags] with `applicableProductTags.orElse(null)`. */
-            fun applicableProductTags(applicableProductTags: Optional<List<String>>) = applicableProductTags(applicableProductTags.getOrNull())
+            /**
+             * Alias for calling [Builder.applicableProductTags] with
+             * `applicableProductTags.orElse(null)`.
+             */
+            fun applicableProductTags(applicableProductTags: Optional<List<String>>) =
+                applicableProductTags(applicableProductTags.getOrNull())
 
             /**
              * Sets [Builder.applicableProductTags] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.applicableProductTags] with a well-typed `List<String>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.applicableProductTags] with a well-typed
+             * `List<String>` value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
              */
-            fun applicableProductTags(applicableProductTags: JsonField<List<String>>) =
-                apply {
-                    this.applicableProductTags = applicableProductTags.map { it.toMutableList() }
-                }
+            fun applicableProductTags(applicableProductTags: JsonField<List<String>>) = apply {
+                this.applicableProductTags = applicableProductTags.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [String] to [applicableProductTags].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addApplicableProductTag(applicableProductTag: String) =
-                apply {
-                    applicableProductTags = (applicableProductTags ?: JsonField.of(mutableListOf())).also {
+            fun addApplicableProductTag(applicableProductTag: String) = apply {
+                applicableProductTags =
+                    (applicableProductTags ?: JsonField.of(mutableListOf())).also {
                         checkKnown("applicableProductTags", it).add(applicableProductTag)
                     }
-                }
+            }
 
             /** Updated description for the commit */
             fun description(description: String) = description(JsonField.of(description))
@@ -1279,54 +1349,57 @@ class ContractEditCommitParams private constructor(
             /**
              * Sets [Builder.description] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.description] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun description(description: JsonField<String>) =
-                apply {
-                    this.description = description
-                }
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
+            }
 
             /** Optional configuration for commit hierarchy access control */
-            fun hierarchyConfiguration(hierarchyConfiguration: CommitHierarchyConfiguration) = hierarchyConfiguration(JsonField.of(hierarchyConfiguration))
+            fun hierarchyConfiguration(hierarchyConfiguration: CommitHierarchyConfiguration) =
+                hierarchyConfiguration(JsonField.of(hierarchyConfiguration))
 
             /**
              * Sets [Builder.hierarchyConfiguration] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.hierarchyConfiguration] with a well-typed [CommitHierarchyConfiguration] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.hierarchyConfiguration] with a well-typed
+             * [CommitHierarchyConfiguration] value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
              */
-            fun hierarchyConfiguration(hierarchyConfiguration: JsonField<CommitHierarchyConfiguration>) =
-                apply {
-                    this.hierarchyConfiguration = hierarchyConfiguration
-                }
+            fun hierarchyConfiguration(
+                hierarchyConfiguration: JsonField<CommitHierarchyConfiguration>
+            ) = apply { this.hierarchyConfiguration = hierarchyConfiguration }
 
             /** ID of contract to use for invoicing */
-            fun invoiceContractId(invoiceContractId: String) = invoiceContractId(JsonField.of(invoiceContractId))
+            fun invoiceContractId(invoiceContractId: String) =
+                invoiceContractId(JsonField.of(invoiceContractId))
 
             /**
              * Sets [Builder.invoiceContractId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.invoiceContractId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.invoiceContractId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun invoiceContractId(invoiceContractId: JsonField<String>) =
-                apply {
-                    this.invoiceContractId = invoiceContractId
-                }
+            fun invoiceContractId(invoiceContractId: JsonField<String>) = apply {
+                this.invoiceContractId = invoiceContractId
+            }
 
-            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) = invoiceSchedule(JsonField.of(invoiceSchedule))
+            fun invoiceSchedule(invoiceSchedule: InvoiceSchedule) =
+                invoiceSchedule(JsonField.of(invoiceSchedule))
 
             /**
              * Sets [Builder.invoiceSchedule] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.invoiceSchedule] with a well-typed [InvoiceSchedule] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.invoiceSchedule] with a well-typed [InvoiceSchedule]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun invoiceSchedule(invoiceSchedule: JsonField<InvoiceSchedule>) =
-                apply {
-                    this.invoiceSchedule = invoiceSchedule
-                }
+            fun invoiceSchedule(invoiceSchedule: JsonField<InvoiceSchedule>) = apply {
+                this.invoiceSchedule = invoiceSchedule
+            }
 
             /** Updated name for the commit */
             fun name(name: String) = name(JsonField.of(name))
@@ -1334,15 +1407,15 @@ class ContractEditCommitParams private constructor(
             /**
              * Sets [Builder.name] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun name(name: JsonField<String>) =
-                apply {
-                    this.name = name
-                }
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
-            /** If multiple commits are applicable, the one with the lower priority will apply first. */
+            /**
+             * If multiple commits are applicable, the one with the lower priority will apply first.
+             */
             fun priority(priority: Double?) = priority(JsonField.ofNullable(priority))
 
             /**
@@ -1358,95 +1431,95 @@ class ContractEditCommitParams private constructor(
             /**
              * Sets [Builder.priority] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.priority] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.priority] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun priority(priority: JsonField<Double>) =
-                apply {
-                    this.priority = priority
-                }
+            fun priority(priority: JsonField<Double>) = apply { this.priority = priority }
 
             fun productId(productId: String) = productId(JsonField.of(productId))
 
             /**
              * Sets [Builder.productId] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.productId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.productId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun productId(productId: JsonField<String>) =
-                apply {
-                    this.productId = productId
-                }
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
-            /** If provided, updates the commit to use the specified rate type for current and future invoices. Previously finalized invoices will need to be voided and regenerated to reflect the rate type change. */
+            /**
+             * If provided, updates the commit to use the specified rate type for current and future
+             * invoices. Previously finalized invoices will need to be voided and regenerated to
+             * reflect the rate type change.
+             */
             fun rateType(rateType: RateType) = rateType(JsonField.of(rateType))
 
             /**
              * Sets [Builder.rateType] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.rateType] with a well-typed [RateType] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.rateType] with a well-typed [RateType] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun rateType(rateType: JsonField<RateType>) =
-                apply {
-                    this.rateType = rateType
-                }
+            fun rateType(rateType: JsonField<RateType>) = apply { this.rateType = rateType }
 
-            /** List of filters that determine what kind of customer usage draws down a commit or credit. A customer's usage needs to meet the condition of at least one of the specifiers to contribute to a commit's or credit's drawdown. This field cannot be used together with `applicable_product_ids` or `applicable_product_tags`. Instead, to target usage by product or product tag, pass those values in the body of `specifiers`. */
-            fun specifiers(specifiers: List<CommitSpecifierInput>?) = specifiers(JsonField.ofNullable(specifiers))
+            /**
+             * List of filters that determine what kind of customer usage draws down a commit or
+             * credit. A customer's usage needs to meet the condition of at least one of the
+             * specifiers to contribute to a commit's or credit's drawdown. This field cannot be
+             * used together with `applicable_product_ids` or `applicable_product_tags`. Instead, to
+             * target usage by product or product tag, pass those values in the body of
+             * `specifiers`.
+             */
+            fun specifiers(specifiers: List<CommitSpecifierInput>?) =
+                specifiers(JsonField.ofNullable(specifiers))
 
             /** Alias for calling [Builder.specifiers] with `specifiers.orElse(null)`. */
-            fun specifiers(specifiers: Optional<List<CommitSpecifierInput>>) = specifiers(specifiers.getOrNull())
+            fun specifiers(specifiers: Optional<List<CommitSpecifierInput>>) =
+                specifiers(specifiers.getOrNull())
 
             /**
              * Sets [Builder.specifiers] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.specifiers] with a well-typed `List<CommitSpecifierInput>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.specifiers] with a well-typed
+             * `List<CommitSpecifierInput>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
-            fun specifiers(specifiers: JsonField<List<CommitSpecifierInput>>) =
-                apply {
-                    this.specifiers = specifiers.map { it.toMutableList() }
-                }
+            fun specifiers(specifiers: JsonField<List<CommitSpecifierInput>>) = apply {
+                this.specifiers = specifiers.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [CommitSpecifierInput] to [specifiers].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addSpecifier(specifier: CommitSpecifierInput) =
-                apply {
-                    specifiers = (specifiers ?: JsonField.of(mutableListOf())).also {
+            fun addSpecifier(specifier: CommitSpecifierInput) = apply {
+                specifiers =
+                    (specifiers ?: JsonField.of(mutableListOf())).also {
                         checkKnown("specifiers", it).add(specifier)
                     }
-                }
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [Body].
@@ -1454,7 +1527,6 @@ class ContractEditCommitParams private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .commitId()
              * .customerId()
@@ -1464,62 +1536,58 @@ class ContractEditCommitParams private constructor(
              */
             fun build(): Body =
                 Body(
-                  checkRequired(
-                    "commitId", commitId
-                  ),
-                  checkRequired(
-                    "customerId", customerId
-                  ),
-                  accessSchedule,
-                  (applicableContractIds?: JsonMissing.of()).map { it.toImmutable() },
-                  (applicableProductIds?: JsonMissing.of()).map { it.toImmutable() },
-                  (applicableProductTags?: JsonMissing.of()).map { it.toImmutable() },
-                  description,
-                  hierarchyConfiguration,
-                  invoiceContractId,
-                  invoiceSchedule,
-                  name,
-                  priority,
-                  productId,
-                  rateType,
-                  (specifiers?: JsonMissing.of()).map { it.toImmutable() },
-                  additionalProperties.toMutableMap(),
+                    checkRequired("commitId", commitId),
+                    checkRequired("customerId", customerId),
+                    accessSchedule,
+                    (applicableContractIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
+                    description,
+                    hierarchyConfiguration,
+                    invoiceContractId,
+                    invoiceSchedule,
+                    name,
+                    priority,
+                    productId,
+                    rateType,
+                    (specifiers ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Body =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                commitId()
-                customerId()
-                accessSchedule().ifPresent { it.validate() }
-                applicableContractIds()
-                applicableProductIds()
-                applicableProductTags()
-                description()
-                hierarchyConfiguration().ifPresent { it.validate() }
-                invoiceContractId()
-                invoiceSchedule().ifPresent { it.validate() }
-                name()
-                priority()
-                productId()
-                rateType().ifPresent { it.validate() }
-                specifiers().ifPresent { it.forEach { it.validate() } }
-                validated = true
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
             }
+
+            commitId()
+            customerId()
+            accessSchedule().ifPresent { it.validate() }
+            applicableContractIds()
+            applicableProductIds()
+            applicableProductTags()
+            description()
+            hierarchyConfiguration().ifPresent { it.validate() }
+            invoiceContractId()
+            invoiceSchedule().ifPresent { it.validate() }
+            name()
+            priority()
+            productId()
+            rateType().ifPresent { it.validate() }
+            specifiers().ifPresent { it.forEach { it.validate() } }
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -1530,61 +1598,128 @@ class ContractEditCommitParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (if (commitId.asKnown().isPresent) 1 else 0) + (if (customerId.asKnown().isPresent) 1 else 0) + (accessSchedule.asKnown().getOrNull()?.validity() ?: 0) + (applicableContractIds.asKnown().getOrNull()?.size ?: 0) + (applicableProductIds.asKnown().getOrNull()?.size ?: 0) + (applicableProductTags.asKnown().getOrNull()?.size ?: 0) + (if (description.asKnown().isPresent) 1 else 0) + (hierarchyConfiguration.asKnown().getOrNull()?.validity() ?: 0) + (if (invoiceContractId.asKnown().isPresent) 1 else 0) + (invoiceSchedule.asKnown().getOrNull()?.validity() ?: 0) + (if (name.asKnown().isPresent) 1 else 0) + (if (priority.asKnown().isPresent) 1 else 0) + (if (productId.asKnown().isPresent) 1 else 0) + (rateType.asKnown().getOrNull()?.validity() ?: 0) + (specifiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+        internal fun validity(): Int =
+            (if (commitId.asKnown().isPresent) 1 else 0) +
+                (if (customerId.asKnown().isPresent) 1 else 0) +
+                (accessSchedule.asKnown().getOrNull()?.validity() ?: 0) +
+                (applicableContractIds.asKnown().getOrNull()?.size ?: 0) +
+                (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
+                (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
+                (if (description.asKnown().isPresent) 1 else 0) +
+                (hierarchyConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (invoiceContractId.asKnown().isPresent) 1 else 0) +
+                (invoiceSchedule.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (name.asKnown().isPresent) 1 else 0) +
+                (if (priority.asKnown().isPresent) 1 else 0) +
+                (if (productId.asKnown().isPresent) 1 else 0) +
+                (rateType.asKnown().getOrNull()?.validity() ?: 0) +
+                (specifiers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Body && commitId == other.commitId && customerId == other.customerId && accessSchedule == other.accessSchedule && applicableContractIds == other.applicableContractIds && applicableProductIds == other.applicableProductIds && applicableProductTags == other.applicableProductTags && description == other.description && hierarchyConfiguration == other.hierarchyConfiguration && invoiceContractId == other.invoiceContractId && invoiceSchedule == other.invoiceSchedule && name == other.name && priority == other.priority && productId == other.productId && rateType == other.rateType && specifiers == other.specifiers && additionalProperties == other.additionalProperties
+            return other is Body &&
+                commitId == other.commitId &&
+                customerId == other.customerId &&
+                accessSchedule == other.accessSchedule &&
+                applicableContractIds == other.applicableContractIds &&
+                applicableProductIds == other.applicableProductIds &&
+                applicableProductTags == other.applicableProductTags &&
+                description == other.description &&
+                hierarchyConfiguration == other.hierarchyConfiguration &&
+                invoiceContractId == other.invoiceContractId &&
+                invoiceSchedule == other.invoiceSchedule &&
+                name == other.name &&
+                priority == other.priority &&
+                productId == other.productId &&
+                rateType == other.rateType &&
+                specifiers == other.specifiers &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(commitId, customerId, accessSchedule, applicableContractIds, applicableProductIds, applicableProductTags, description, hierarchyConfiguration, invoiceContractId, invoiceSchedule, name, priority, productId, rateType, specifiers, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                commitId,
+                customerId,
+                accessSchedule,
+                applicableContractIds,
+                applicableProductIds,
+                applicableProductTags,
+                description,
+                hierarchyConfiguration,
+                invoiceContractId,
+                invoiceSchedule,
+                name,
+                priority,
+                productId,
+                rateType,
+                specifiers,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Body{commitId=$commitId, customerId=$customerId, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, priority=$priority, productId=$productId, rateType=$rateType, specifiers=$specifiers, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Body{commitId=$commitId, customerId=$customerId, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, hierarchyConfiguration=$hierarchyConfiguration, invoiceContractId=$invoiceContractId, invoiceSchedule=$invoiceSchedule, name=$name, priority=$priority, productId=$productId, rateType=$rateType, specifiers=$specifiers, additionalProperties=$additionalProperties}"
     }
 
-    class AccessSchedule @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class AccessSchedule
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val addScheduleItems: JsonField<List<AddScheduleItem>>,
         private val removeScheduleItems: JsonField<List<RemoveScheduleItem>>,
         private val updateScheduleItems: JsonField<List<UpdateScheduleItem>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("add_schedule_items") @ExcludeMissing addScheduleItems: JsonField<List<AddScheduleItem>> = JsonMissing.of(),
-            @JsonProperty("remove_schedule_items") @ExcludeMissing removeScheduleItems: JsonField<List<RemoveScheduleItem>> = JsonMissing.of(),
-            @JsonProperty("update_schedule_items") @ExcludeMissing updateScheduleItems: JsonField<List<UpdateScheduleItem>> = JsonMissing.of()
-        ) : this(
-          addScheduleItems,
-          removeScheduleItems,
-          updateScheduleItems,
-          mutableMapOf(),
-        )
+            @JsonProperty("add_schedule_items")
+            @ExcludeMissing
+            addScheduleItems: JsonField<List<AddScheduleItem>> = JsonMissing.of(),
+            @JsonProperty("remove_schedule_items")
+            @ExcludeMissing
+            removeScheduleItems: JsonField<List<RemoveScheduleItem>> = JsonMissing.of(),
+            @JsonProperty("update_schedule_items")
+            @ExcludeMissing
+            updateScheduleItems: JsonField<List<UpdateScheduleItem>> = JsonMissing.of(),
+        ) : this(addScheduleItems, removeScheduleItems, updateScheduleItems, mutableMapOf())
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun addScheduleItems(): Optional<List<AddScheduleItem>> = addScheduleItems.getOptional("add_schedule_items")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun addScheduleItems(): Optional<List<AddScheduleItem>> =
+            addScheduleItems.getOptional("add_schedule_items")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun removeScheduleItems(): Optional<List<RemoveScheduleItem>> = removeScheduleItems.getOptional("remove_schedule_items")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun removeScheduleItems(): Optional<List<RemoveScheduleItem>> =
+            removeScheduleItems.getOptional("remove_schedule_items")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun updateScheduleItems(): Optional<List<UpdateScheduleItem>> = updateScheduleItems.getOptional("update_schedule_items")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun updateScheduleItems(): Optional<List<UpdateScheduleItem>> =
+            updateScheduleItems.getOptional("update_schedule_items")
 
         /**
          * Returns the raw JSON value of [addScheduleItems].
          *
-         * Unlike [addScheduleItems], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [addScheduleItems], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("add_schedule_items")
         @ExcludeMissing
@@ -1593,7 +1728,8 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [removeScheduleItems].
          *
-         * Unlike [removeScheduleItems], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [removeScheduleItems], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("remove_schedule_items")
         @ExcludeMissing
@@ -1602,7 +1738,8 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [updateScheduleItems].
          *
-         * Unlike [updateScheduleItems], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [updateScheduleItems], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("update_schedule_items")
         @ExcludeMissing
@@ -1610,20 +1747,20 @@ class ContractEditCommitParams private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [AccessSchedule]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [AccessSchedule]. */
@@ -1635,46 +1772,48 @@ class ContractEditCommitParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(accessSchedule: AccessSchedule) =
-                apply {
-                    addScheduleItems = accessSchedule.addScheduleItems.map { it.toMutableList() }
-                    removeScheduleItems = accessSchedule.removeScheduleItems.map { it.toMutableList() }
-                    updateScheduleItems = accessSchedule.updateScheduleItems.map { it.toMutableList() }
-                    additionalProperties = accessSchedule.additionalProperties.toMutableMap()
-                }
+            internal fun from(accessSchedule: AccessSchedule) = apply {
+                addScheduleItems = accessSchedule.addScheduleItems.map { it.toMutableList() }
+                removeScheduleItems = accessSchedule.removeScheduleItems.map { it.toMutableList() }
+                updateScheduleItems = accessSchedule.updateScheduleItems.map { it.toMutableList() }
+                additionalProperties = accessSchedule.additionalProperties.toMutableMap()
+            }
 
-            fun addScheduleItems(addScheduleItems: List<AddScheduleItem>) = addScheduleItems(JsonField.of(addScheduleItems))
+            fun addScheduleItems(addScheduleItems: List<AddScheduleItem>) =
+                addScheduleItems(JsonField.of(addScheduleItems))
 
             /**
              * Sets [Builder.addScheduleItems] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.addScheduleItems] with a well-typed `List<AddScheduleItem>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.addScheduleItems] with a well-typed
+             * `List<AddScheduleItem>` value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
              */
-            fun addScheduleItems(addScheduleItems: JsonField<List<AddScheduleItem>>) =
-                apply {
-                    this.addScheduleItems = addScheduleItems.map { it.toMutableList() }
-                }
+            fun addScheduleItems(addScheduleItems: JsonField<List<AddScheduleItem>>) = apply {
+                this.addScheduleItems = addScheduleItems.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [AddScheduleItem] to [addScheduleItems].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addAddScheduleItem(addScheduleItem: AddScheduleItem) =
-                apply {
-                    addScheduleItems = (addScheduleItems ?: JsonField.of(mutableListOf())).also {
+            fun addAddScheduleItem(addScheduleItem: AddScheduleItem) = apply {
+                addScheduleItems =
+                    (addScheduleItems ?: JsonField.of(mutableListOf())).also {
                         checkKnown("addScheduleItems", it).add(addScheduleItem)
                     }
-                }
+            }
 
-            fun removeScheduleItems(removeScheduleItems: List<RemoveScheduleItem>) = removeScheduleItems(JsonField.of(removeScheduleItems))
+            fun removeScheduleItems(removeScheduleItems: List<RemoveScheduleItem>) =
+                removeScheduleItems(JsonField.of(removeScheduleItems))
 
             /**
              * Sets [Builder.removeScheduleItems] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.removeScheduleItems] with a well-typed `List<RemoveScheduleItem>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.removeScheduleItems] with a well-typed
+             * `List<RemoveScheduleItem>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
             fun removeScheduleItems(removeScheduleItems: JsonField<List<RemoveScheduleItem>>) =
                 apply {
@@ -1686,20 +1825,22 @@ class ContractEditCommitParams private constructor(
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addRemoveScheduleItem(removeScheduleItem: RemoveScheduleItem) =
-                apply {
-                    removeScheduleItems = (removeScheduleItems ?: JsonField.of(mutableListOf())).also {
+            fun addRemoveScheduleItem(removeScheduleItem: RemoveScheduleItem) = apply {
+                removeScheduleItems =
+                    (removeScheduleItems ?: JsonField.of(mutableListOf())).also {
                         checkKnown("removeScheduleItems", it).add(removeScheduleItem)
                     }
-                }
+            }
 
-            fun updateScheduleItems(updateScheduleItems: List<UpdateScheduleItem>) = updateScheduleItems(JsonField.of(updateScheduleItems))
+            fun updateScheduleItems(updateScheduleItems: List<UpdateScheduleItem>) =
+                updateScheduleItems(JsonField.of(updateScheduleItems))
 
             /**
              * Sets [Builder.updateScheduleItems] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.updateScheduleItems] with a well-typed `List<UpdateScheduleItem>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.updateScheduleItems] with a well-typed
+             * `List<UpdateScheduleItem>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
             fun updateScheduleItems(updateScheduleItems: JsonField<List<UpdateScheduleItem>>) =
                 apply {
@@ -1711,38 +1852,31 @@ class ContractEditCommitParams private constructor(
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addUpdateScheduleItem(updateScheduleItem: UpdateScheduleItem) =
-                apply {
-                    updateScheduleItems = (updateScheduleItems ?: JsonField.of(mutableListOf())).also {
+            fun addUpdateScheduleItem(updateScheduleItem: UpdateScheduleItem) = apply {
+                updateScheduleItems =
+                    (updateScheduleItems ?: JsonField.of(mutableListOf())).also {
                         checkKnown("updateScheduleItems", it).add(updateScheduleItem)
                     }
-                }
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [AccessSchedule].
@@ -1751,34 +1885,34 @@ class ContractEditCommitParams private constructor(
              */
             fun build(): AccessSchedule =
                 AccessSchedule(
-                  (addScheduleItems?: JsonMissing.of()).map { it.toImmutable() },
-                  (removeScheduleItems?: JsonMissing.of()).map { it.toImmutable() },
-                  (updateScheduleItems?: JsonMissing.of()).map { it.toImmutable() },
-                  additionalProperties.toMutableMap(),
+                    (addScheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
+                    (removeScheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
+                    (updateScheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): AccessSchedule =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                addScheduleItems().ifPresent { it.forEach { it.validate() } }
-                removeScheduleItems().ifPresent { it.forEach { it.validate() } }
-                updateScheduleItems().ifPresent { it.forEach { it.validate() } }
-                validated = true
+        fun validate(): AccessSchedule = apply {
+            if (validated) {
+                return@apply
             }
+
+            addScheduleItems().ifPresent { it.forEach { it.validate() } }
+            removeScheduleItems().ifPresent { it.forEach { it.validate() } }
+            updateScheduleItems().ifPresent { it.forEach { it.validate() } }
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -1789,40 +1923,58 @@ class ContractEditCommitParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (addScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (removeScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (updateScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+        internal fun validity(): Int =
+            (addScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (removeScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (updateScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
-        class AddScheduleItem @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+        class AddScheduleItem
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
             private val amount: JsonField<Double>,
             private val endingBefore: JsonField<OffsetDateTime>,
             private val startingAt: JsonField<OffsetDateTime>,
             private val additionalProperties: MutableMap<String, JsonValue>,
-
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("ending_before") @ExcludeMissing endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-                @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            ) : this(
-              amount,
-              endingBefore,
-              startingAt,
-              mutableMapOf(),
-            )
+                @JsonProperty("amount")
+                @ExcludeMissing
+                amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            ) : this(amount, endingBefore, startingAt, mutableMapOf())
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun amount(): Double = amount.getRequired("amount")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
             /**
@@ -1830,14 +1982,13 @@ class ContractEditCommitParams private constructor(
              *
              * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun _amount(): JsonField<Double> = amount
+            @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
             /**
              * Returns the raw JSON value of [endingBefore].
              *
-             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
             @JsonProperty("ending_before")
             @ExcludeMissing
@@ -1846,7 +1997,8 @@ class ContractEditCommitParams private constructor(
             /**
              * Returns the raw JSON value of [startingAt].
              *
-             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
             @JsonProperty("starting_at")
             @ExcludeMissing
@@ -1854,12 +2006,13 @@ class ContractEditCommitParams private constructor(
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-              additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -1869,15 +2022,13 @@ class ContractEditCommitParams private constructor(
                  * Returns a mutable builder for constructing an instance of [AddScheduleItem].
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .amount()
                  * .endingBefore()
                  * .startingAt()
                  * ```
                  */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [AddScheduleItem]. */
@@ -1889,78 +2040,72 @@ class ContractEditCommitParams private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(addScheduleItem: AddScheduleItem) =
-                    apply {
-                        amount = addScheduleItem.amount
-                        endingBefore = addScheduleItem.endingBefore
-                        startingAt = addScheduleItem.startingAt
-                        additionalProperties = addScheduleItem.additionalProperties.toMutableMap()
-                    }
+                internal fun from(addScheduleItem: AddScheduleItem) = apply {
+                    amount = addScheduleItem.amount
+                    endingBefore = addScheduleItem.endingBefore
+                    startingAt = addScheduleItem.startingAt
+                    additionalProperties = addScheduleItem.additionalProperties.toMutableMap()
+                }
 
                 fun amount(amount: Double) = amount(JsonField.of(amount))
 
                 /**
                  * Sets [Builder.amount] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.amount] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.amount] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun amount(amount: JsonField<Double>) =
-                    apply {
-                        this.amount = amount
-                    }
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
-                fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
+                fun endingBefore(endingBefore: OffsetDateTime) =
+                    endingBefore(JsonField.of(endingBefore))
 
                 /**
                  * Sets [Builder.endingBefore] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
                  */
-                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) =
-                    apply {
-                        this.endingBefore = endingBefore
-                    }
+                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+                    this.endingBefore = endingBefore
+                }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
                 /**
                  * Sets [Builder.startingAt] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
                  */
-                fun startingAt(startingAt: JsonField<OffsetDateTime>) =
-                    apply {
-                        this.startingAt = startingAt
-                    }
+                fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                    this.startingAt = startingAt
+                }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [AddScheduleItem].
@@ -1968,7 +2113,6 @@ class ContractEditCommitParams private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .amount()
                  * .endingBefore()
@@ -1979,40 +2123,35 @@ class ContractEditCommitParams private constructor(
                  */
                 fun build(): AddScheduleItem =
                     AddScheduleItem(
-                      checkRequired(
-                        "amount", amount
-                      ),
-                      checkRequired(
-                        "endingBefore", endingBefore
-                      ),
-                      checkRequired(
-                        "startingAt", startingAt
-                      ),
-                      additionalProperties.toMutableMap(),
+                        checkRequired("amount", amount),
+                        checkRequired("endingBefore", endingBefore),
+                        checkRequired("startingAt", startingAt),
+                        additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): AddScheduleItem =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    amount()
-                    endingBefore()
-                    startingAt()
-                    validated = true
+            fun validate(): AddScheduleItem = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                amount()
+                endingBefore()
+                startingAt()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -2023,42 +2162,56 @@ class ContractEditCommitParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = (if (amount.asKnown().isPresent) 1 else 0) + (if (endingBefore.asKnown().isPresent) 1 else 0) + (if (startingAt.asKnown().isPresent) 1 else 0)
+            internal fun validity(): Int =
+                (if (amount.asKnown().isPresent) 1 else 0) +
+                    (if (endingBefore.asKnown().isPresent) 1 else 0) +
+                    (if (startingAt.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is AddScheduleItem && amount == other.amount && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties
+                return other is AddScheduleItem &&
+                    amount == other.amount &&
+                    endingBefore == other.endingBefore &&
+                    startingAt == other.startingAt &&
+                    additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy { Objects.hash(amount, endingBefore, startingAt, additionalProperties) }
+            private val hashCode: Int by lazy {
+                Objects.hash(amount, endingBefore, startingAt, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "AddScheduleItem{amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "AddScheduleItem{amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
         }
 
-        class RemoveScheduleItem @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+        class RemoveScheduleItem
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
             private val id: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
-
         ) {
 
             @JsonCreator
             private constructor(
                 @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of()
-            ) : this(
-              id, mutableMapOf()
-            )
+            ) : this(id, mutableMapOf())
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
             /**
@@ -2066,18 +2219,17 @@ class ContractEditCommitParams private constructor(
              *
              * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun _id(): JsonField<String> = id
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-              additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -2087,13 +2239,11 @@ class ContractEditCommitParams private constructor(
                  * Returns a mutable builder for constructing an instance of [RemoveScheduleItem].
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .id()
                  * ```
                  */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [RemoveScheduleItem]. */
@@ -2103,50 +2253,43 @@ class ContractEditCommitParams private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(removeScheduleItem: RemoveScheduleItem) =
-                    apply {
-                        id = removeScheduleItem.id
-                        additionalProperties = removeScheduleItem.additionalProperties.toMutableMap()
-                    }
+                internal fun from(removeScheduleItem: RemoveScheduleItem) = apply {
+                    id = removeScheduleItem.id
+                    additionalProperties = removeScheduleItem.additionalProperties.toMutableMap()
+                }
 
                 fun id(id: String) = id(JsonField.of(id))
 
                 /**
                  * Sets [Builder.id] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun id(id: JsonField<String>) =
-                    apply {
-                        this.id = id
-                    }
+                fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [RemoveScheduleItem].
@@ -2154,7 +2297,6 @@ class ContractEditCommitParams private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .id()
                  * ```
@@ -2162,32 +2304,29 @@ class ContractEditCommitParams private constructor(
                  * @throws IllegalStateException if any required field is unset.
                  */
                 fun build(): RemoveScheduleItem =
-                    RemoveScheduleItem(
-                      checkRequired(
-                        "id", id
-                      ), additionalProperties.toMutableMap()
-                    )
+                    RemoveScheduleItem(checkRequired("id", id), additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): RemoveScheduleItem =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    id()
-                    validated = true
+            fun validate(): RemoveScheduleItem = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -2198,61 +2337,78 @@ class ContractEditCommitParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0)
+            @JvmSynthetic internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is RemoveScheduleItem && id == other.id && additionalProperties == other.additionalProperties
+                return other is RemoveScheduleItem &&
+                    id == other.id &&
+                    additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "RemoveScheduleItem{id=$id, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "RemoveScheduleItem{id=$id, additionalProperties=$additionalProperties}"
         }
 
-        class UpdateScheduleItem @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+        class UpdateScheduleItem
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
             private val id: JsonField<String>,
             private val amount: JsonField<Double>,
             private val endingBefore: JsonField<OffsetDateTime>,
             private val startingAt: JsonField<OffsetDateTime>,
             private val additionalProperties: MutableMap<String, JsonValue>,
-
         ) {
 
             @JsonCreator
             private constructor(
                 @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("ending_before") @ExcludeMissing endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
-                @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            ) : this(
-              id,
-              amount,
-              endingBefore,
-              startingAt,
-              mutableMapOf(),
-            )
+                @JsonProperty("amount")
+                @ExcludeMissing
+                amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("ending_before")
+                @ExcludeMissing
+                endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("starting_at")
+                @ExcludeMissing
+                startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            ) : this(id, amount, endingBefore, startingAt, mutableMapOf())
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun amount(): Optional<Double> = amount.getOptional("amount")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun startingAt(): Optional<OffsetDateTime> = startingAt.getOptional("starting_at")
 
             /**
@@ -2260,23 +2416,20 @@ class ContractEditCommitParams private constructor(
              *
              * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun _id(): JsonField<String> = id
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             /**
              * Returns the raw JSON value of [amount].
              *
              * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun _amount(): JsonField<Double> = amount
+            @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
             /**
              * Returns the raw JSON value of [endingBefore].
              *
-             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
             @JsonProperty("ending_before")
             @ExcludeMissing
@@ -2285,7 +2438,8 @@ class ContractEditCommitParams private constructor(
             /**
              * Returns the raw JSON value of [startingAt].
              *
-             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [startingAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
             @JsonProperty("starting_at")
             @ExcludeMissing
@@ -2293,12 +2447,13 @@ class ContractEditCommitParams private constructor(
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-              additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -2308,13 +2463,11 @@ class ContractEditCommitParams private constructor(
                  * Returns a mutable builder for constructing an instance of [UpdateScheduleItem].
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .id()
                  * ```
                  */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [UpdateScheduleItem]. */
@@ -2327,92 +2480,84 @@ class ContractEditCommitParams private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(updateScheduleItem: UpdateScheduleItem) =
-                    apply {
-                        id = updateScheduleItem.id
-                        amount = updateScheduleItem.amount
-                        endingBefore = updateScheduleItem.endingBefore
-                        startingAt = updateScheduleItem.startingAt
-                        additionalProperties = updateScheduleItem.additionalProperties.toMutableMap()
-                    }
+                internal fun from(updateScheduleItem: UpdateScheduleItem) = apply {
+                    id = updateScheduleItem.id
+                    amount = updateScheduleItem.amount
+                    endingBefore = updateScheduleItem.endingBefore
+                    startingAt = updateScheduleItem.startingAt
+                    additionalProperties = updateScheduleItem.additionalProperties.toMutableMap()
+                }
 
                 fun id(id: String) = id(JsonField.of(id))
 
                 /**
                  * Sets [Builder.id] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun id(id: JsonField<String>) =
-                    apply {
-                        this.id = id
-                    }
+                fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun amount(amount: Double) = amount(JsonField.of(amount))
 
                 /**
                  * Sets [Builder.amount] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.amount] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.amount] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun amount(amount: JsonField<Double>) =
-                    apply {
-                        this.amount = amount
-                    }
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
-                fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
+                fun endingBefore(endingBefore: OffsetDateTime) =
+                    endingBefore(JsonField.of(endingBefore))
 
                 /**
                  * Sets [Builder.endingBefore] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
                  */
-                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) =
-                    apply {
-                        this.endingBefore = endingBefore
-                    }
+                fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+                    this.endingBefore = endingBefore
+                }
 
                 fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
                 /**
                  * Sets [Builder.startingAt] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
                  */
-                fun startingAt(startingAt: JsonField<OffsetDateTime>) =
-                    apply {
-                        this.startingAt = startingAt
-                    }
+                fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+                    this.startingAt = startingAt
+                }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [UpdateScheduleItem].
@@ -2420,7 +2565,6 @@ class ContractEditCommitParams private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .id()
                  * ```
@@ -2429,38 +2573,37 @@ class ContractEditCommitParams private constructor(
                  */
                 fun build(): UpdateScheduleItem =
                     UpdateScheduleItem(
-                      checkRequired(
-                        "id", id
-                      ),
-                      amount,
-                      endingBefore,
-                      startingAt,
-                      additionalProperties.toMutableMap(),
+                        checkRequired("id", id),
+                        amount,
+                        endingBefore,
+                        startingAt,
+                        additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): UpdateScheduleItem =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    id()
-                    amount()
-                    endingBefore()
-                    startingAt()
-                    validated = true
+            fun validate(): UpdateScheduleItem = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                amount()
+                endingBefore()
+                startingAt()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -2471,76 +2614,116 @@ class ContractEditCommitParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0) + (if (amount.asKnown().isPresent) 1 else 0) + (if (endingBefore.asKnown().isPresent) 1 else 0) + (if (startingAt.asKnown().isPresent) 1 else 0)
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (amount.asKnown().isPresent) 1 else 0) +
+                    (if (endingBefore.asKnown().isPresent) 1 else 0) +
+                    (if (startingAt.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is UpdateScheduleItem && id == other.id && amount == other.amount && endingBefore == other.endingBefore && startingAt == other.startingAt && additionalProperties == other.additionalProperties
+                return other is UpdateScheduleItem &&
+                    id == other.id &&
+                    amount == other.amount &&
+                    endingBefore == other.endingBefore &&
+                    startingAt == other.startingAt &&
+                    additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy { Objects.hash(id, amount, endingBefore, startingAt, additionalProperties) }
+            private val hashCode: Int by lazy {
+                Objects.hash(id, amount, endingBefore, startingAt, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "UpdateScheduleItem{id=$id, amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "UpdateScheduleItem{id=$id, amount=$amount, endingBefore=$endingBefore, startingAt=$startingAt, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is AccessSchedule && addScheduleItems == other.addScheduleItems && removeScheduleItems == other.removeScheduleItems && updateScheduleItems == other.updateScheduleItems && additionalProperties == other.additionalProperties
+            return other is AccessSchedule &&
+                addScheduleItems == other.addScheduleItems &&
+                removeScheduleItems == other.removeScheduleItems &&
+                updateScheduleItems == other.updateScheduleItems &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(addScheduleItems, removeScheduleItems, updateScheduleItems, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                addScheduleItems,
+                removeScheduleItems,
+                updateScheduleItems,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "AccessSchedule{addScheduleItems=$addScheduleItems, removeScheduleItems=$removeScheduleItems, updateScheduleItems=$updateScheduleItems, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "AccessSchedule{addScheduleItems=$addScheduleItems, removeScheduleItems=$removeScheduleItems, updateScheduleItems=$updateScheduleItems, additionalProperties=$additionalProperties}"
     }
 
-    class InvoiceSchedule @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class InvoiceSchedule
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val addScheduleItems: JsonField<List<AddScheduleItem>>,
         private val removeScheduleItems: JsonField<List<RemoveScheduleItem>>,
         private val updateScheduleItems: JsonField<List<UpdateScheduleItem>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("add_schedule_items") @ExcludeMissing addScheduleItems: JsonField<List<AddScheduleItem>> = JsonMissing.of(),
-            @JsonProperty("remove_schedule_items") @ExcludeMissing removeScheduleItems: JsonField<List<RemoveScheduleItem>> = JsonMissing.of(),
-            @JsonProperty("update_schedule_items") @ExcludeMissing updateScheduleItems: JsonField<List<UpdateScheduleItem>> = JsonMissing.of()
-        ) : this(
-          addScheduleItems,
-          removeScheduleItems,
-          updateScheduleItems,
-          mutableMapOf(),
-        )
+            @JsonProperty("add_schedule_items")
+            @ExcludeMissing
+            addScheduleItems: JsonField<List<AddScheduleItem>> = JsonMissing.of(),
+            @JsonProperty("remove_schedule_items")
+            @ExcludeMissing
+            removeScheduleItems: JsonField<List<RemoveScheduleItem>> = JsonMissing.of(),
+            @JsonProperty("update_schedule_items")
+            @ExcludeMissing
+            updateScheduleItems: JsonField<List<UpdateScheduleItem>> = JsonMissing.of(),
+        ) : this(addScheduleItems, removeScheduleItems, updateScheduleItems, mutableMapOf())
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun addScheduleItems(): Optional<List<AddScheduleItem>> = addScheduleItems.getOptional("add_schedule_items")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun addScheduleItems(): Optional<List<AddScheduleItem>> =
+            addScheduleItems.getOptional("add_schedule_items")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun removeScheduleItems(): Optional<List<RemoveScheduleItem>> = removeScheduleItems.getOptional("remove_schedule_items")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun removeScheduleItems(): Optional<List<RemoveScheduleItem>> =
+            removeScheduleItems.getOptional("remove_schedule_items")
 
-        /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
-        fun updateScheduleItems(): Optional<List<UpdateScheduleItem>> = updateScheduleItems.getOptional("update_schedule_items")
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun updateScheduleItems(): Optional<List<UpdateScheduleItem>> =
+            updateScheduleItems.getOptional("update_schedule_items")
 
         /**
          * Returns the raw JSON value of [addScheduleItems].
          *
-         * Unlike [addScheduleItems], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [addScheduleItems], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("add_schedule_items")
         @ExcludeMissing
@@ -2549,7 +2732,8 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [removeScheduleItems].
          *
-         * Unlike [removeScheduleItems], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [removeScheduleItems], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("remove_schedule_items")
         @ExcludeMissing
@@ -2558,7 +2742,8 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns the raw JSON value of [updateScheduleItems].
          *
-         * Unlike [updateScheduleItems], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [updateScheduleItems], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("update_schedule_items")
         @ExcludeMissing
@@ -2566,20 +2751,20 @@ class ContractEditCommitParams private constructor(
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [InvoiceSchedule]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [InvoiceSchedule]. */
@@ -2591,46 +2776,48 @@ class ContractEditCommitParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(invoiceSchedule: InvoiceSchedule) =
-                apply {
-                    addScheduleItems = invoiceSchedule.addScheduleItems.map { it.toMutableList() }
-                    removeScheduleItems = invoiceSchedule.removeScheduleItems.map { it.toMutableList() }
-                    updateScheduleItems = invoiceSchedule.updateScheduleItems.map { it.toMutableList() }
-                    additionalProperties = invoiceSchedule.additionalProperties.toMutableMap()
-                }
+            internal fun from(invoiceSchedule: InvoiceSchedule) = apply {
+                addScheduleItems = invoiceSchedule.addScheduleItems.map { it.toMutableList() }
+                removeScheduleItems = invoiceSchedule.removeScheduleItems.map { it.toMutableList() }
+                updateScheduleItems = invoiceSchedule.updateScheduleItems.map { it.toMutableList() }
+                additionalProperties = invoiceSchedule.additionalProperties.toMutableMap()
+            }
 
-            fun addScheduleItems(addScheduleItems: List<AddScheduleItem>) = addScheduleItems(JsonField.of(addScheduleItems))
+            fun addScheduleItems(addScheduleItems: List<AddScheduleItem>) =
+                addScheduleItems(JsonField.of(addScheduleItems))
 
             /**
              * Sets [Builder.addScheduleItems] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.addScheduleItems] with a well-typed `List<AddScheduleItem>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.addScheduleItems] with a well-typed
+             * `List<AddScheduleItem>` value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
              */
-            fun addScheduleItems(addScheduleItems: JsonField<List<AddScheduleItem>>) =
-                apply {
-                    this.addScheduleItems = addScheduleItems.map { it.toMutableList() }
-                }
+            fun addScheduleItems(addScheduleItems: JsonField<List<AddScheduleItem>>) = apply {
+                this.addScheduleItems = addScheduleItems.map { it.toMutableList() }
+            }
 
             /**
              * Adds a single [AddScheduleItem] to [addScheduleItems].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addAddScheduleItem(addScheduleItem: AddScheduleItem) =
-                apply {
-                    addScheduleItems = (addScheduleItems ?: JsonField.of(mutableListOf())).also {
+            fun addAddScheduleItem(addScheduleItem: AddScheduleItem) = apply {
+                addScheduleItems =
+                    (addScheduleItems ?: JsonField.of(mutableListOf())).also {
                         checkKnown("addScheduleItems", it).add(addScheduleItem)
                     }
-                }
+            }
 
-            fun removeScheduleItems(removeScheduleItems: List<RemoveScheduleItem>) = removeScheduleItems(JsonField.of(removeScheduleItems))
+            fun removeScheduleItems(removeScheduleItems: List<RemoveScheduleItem>) =
+                removeScheduleItems(JsonField.of(removeScheduleItems))
 
             /**
              * Sets [Builder.removeScheduleItems] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.removeScheduleItems] with a well-typed `List<RemoveScheduleItem>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.removeScheduleItems] with a well-typed
+             * `List<RemoveScheduleItem>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
             fun removeScheduleItems(removeScheduleItems: JsonField<List<RemoveScheduleItem>>) =
                 apply {
@@ -2642,20 +2829,22 @@ class ContractEditCommitParams private constructor(
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addRemoveScheduleItem(removeScheduleItem: RemoveScheduleItem) =
-                apply {
-                    removeScheduleItems = (removeScheduleItems ?: JsonField.of(mutableListOf())).also {
+            fun addRemoveScheduleItem(removeScheduleItem: RemoveScheduleItem) = apply {
+                removeScheduleItems =
+                    (removeScheduleItems ?: JsonField.of(mutableListOf())).also {
                         checkKnown("removeScheduleItems", it).add(removeScheduleItem)
                     }
-                }
+            }
 
-            fun updateScheduleItems(updateScheduleItems: List<UpdateScheduleItem>) = updateScheduleItems(JsonField.of(updateScheduleItems))
+            fun updateScheduleItems(updateScheduleItems: List<UpdateScheduleItem>) =
+                updateScheduleItems(JsonField.of(updateScheduleItems))
 
             /**
              * Sets [Builder.updateScheduleItems] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.updateScheduleItems] with a well-typed `List<UpdateScheduleItem>` value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.updateScheduleItems] with a well-typed
+             * `List<UpdateScheduleItem>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
             fun updateScheduleItems(updateScheduleItems: JsonField<List<UpdateScheduleItem>>) =
                 apply {
@@ -2667,38 +2856,31 @@ class ContractEditCommitParams private constructor(
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addUpdateScheduleItem(updateScheduleItem: UpdateScheduleItem) =
-                apply {
-                    updateScheduleItems = (updateScheduleItems ?: JsonField.of(mutableListOf())).also {
+            fun addUpdateScheduleItem(updateScheduleItem: UpdateScheduleItem) = apply {
+                updateScheduleItems =
+                    (updateScheduleItems ?: JsonField.of(mutableListOf())).also {
                         checkKnown("updateScheduleItems", it).add(updateScheduleItem)
                     }
-                }
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [InvoiceSchedule].
@@ -2707,34 +2889,34 @@ class ContractEditCommitParams private constructor(
              */
             fun build(): InvoiceSchedule =
                 InvoiceSchedule(
-                  (addScheduleItems?: JsonMissing.of()).map { it.toImmutable() },
-                  (removeScheduleItems?: JsonMissing.of()).map { it.toImmutable() },
-                  (updateScheduleItems?: JsonMissing.of()).map { it.toImmutable() },
-                  additionalProperties.toMutableMap(),
+                    (addScheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
+                    (removeScheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
+                    (updateScheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): InvoiceSchedule =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                addScheduleItems().ifPresent { it.forEach { it.validate() } }
-                removeScheduleItems().ifPresent { it.forEach { it.validate() } }
-                updateScheduleItems().ifPresent { it.forEach { it.validate() } }
-                validated = true
+        fun validate(): InvoiceSchedule = apply {
+            if (validated) {
+                return@apply
             }
+
+            addScheduleItems().ifPresent { it.forEach { it.validate() } }
+            removeScheduleItems().ifPresent { it.forEach { it.validate() } }
+            updateScheduleItems().ifPresent { it.forEach { it.validate() } }
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -2745,52 +2927,73 @@ class ContractEditCommitParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (addScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (removeScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) + (updateScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+        internal fun validity(): Int =
+            (addScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (removeScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (updateScheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
-        class AddScheduleItem @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+        class AddScheduleItem
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
             private val timestamp: JsonField<OffsetDateTime>,
             private val amount: JsonField<Double>,
             private val quantity: JsonField<Double>,
             private val unitPrice: JsonField<Double>,
             private val additionalProperties: MutableMap<String, JsonValue>,
-
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("timestamp") @ExcludeMissing timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-                @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("unit_price") @ExcludeMissing unitPrice: JsonField<Double> = JsonMissing.of()
-            ) : this(
-              timestamp,
-              amount,
-              quantity,
-              unitPrice,
-              mutableMapOf(),
-            )
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("amount")
+                @ExcludeMissing
+                amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("unit_price")
+                @ExcludeMissing
+                unitPrice: JsonField<Double> = JsonMissing.of(),
+            ) : this(timestamp, amount, quantity, unitPrice, mutableMapOf())
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun timestamp(): OffsetDateTime = timestamp.getRequired("timestamp")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun amount(): Optional<Double> = amount.getOptional("amount")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun quantity(): Optional<Double> = quantity.getOptional("quantity")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun unitPrice(): Optional<Double> = unitPrice.getOptional("unit_price")
 
             /**
              * Returns the raw JSON value of [timestamp].
              *
-             * Unlike [timestamp], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [timestamp], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
             @JsonProperty("timestamp")
             @ExcludeMissing
@@ -2801,23 +3004,21 @@ class ContractEditCommitParams private constructor(
              *
              * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun _amount(): JsonField<Double> = amount
+            @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
             /**
              * Returns the raw JSON value of [quantity].
              *
-             * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
-            @JsonProperty("quantity")
-            @ExcludeMissing
-            fun _quantity(): JsonField<Double> = quantity
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
             /**
              * Returns the raw JSON value of [unitPrice].
              *
-             * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
             @JsonProperty("unit_price")
             @ExcludeMissing
@@ -2825,12 +3026,13 @@ class ContractEditCommitParams private constructor(
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-              additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -2840,13 +3042,11 @@ class ContractEditCommitParams private constructor(
                  * Returns a mutable builder for constructing an instance of [AddScheduleItem].
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .timestamp()
                  * ```
                  */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [AddScheduleItem]. */
@@ -2859,92 +3059,81 @@ class ContractEditCommitParams private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(addScheduleItem: AddScheduleItem) =
-                    apply {
-                        timestamp = addScheduleItem.timestamp
-                        amount = addScheduleItem.amount
-                        quantity = addScheduleItem.quantity
-                        unitPrice = addScheduleItem.unitPrice
-                        additionalProperties = addScheduleItem.additionalProperties.toMutableMap()
-                    }
+                internal fun from(addScheduleItem: AddScheduleItem) = apply {
+                    timestamp = addScheduleItem.timestamp
+                    amount = addScheduleItem.amount
+                    quantity = addScheduleItem.quantity
+                    unitPrice = addScheduleItem.unitPrice
+                    additionalProperties = addScheduleItem.additionalProperties.toMutableMap()
+                }
 
                 fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
 
                 /**
                  * Sets [Builder.timestamp] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.timestamp] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.timestamp] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
                  */
-                fun timestamp(timestamp: JsonField<OffsetDateTime>) =
-                    apply {
-                        this.timestamp = timestamp
-                    }
+                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                    this.timestamp = timestamp
+                }
 
                 fun amount(amount: Double) = amount(JsonField.of(amount))
 
                 /**
                  * Sets [Builder.amount] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.amount] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.amount] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun amount(amount: JsonField<Double>) =
-                    apply {
-                        this.amount = amount
-                    }
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                 fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                 /**
                  * Sets [Builder.quantity] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.quantity] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.quantity] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun quantity(quantity: JsonField<Double>) =
-                    apply {
-                        this.quantity = quantity
-                    }
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                 fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                 /**
                  * Sets [Builder.unitPrice] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.unitPrice] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.unitPrice] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun unitPrice(unitPrice: JsonField<Double>) =
-                    apply {
-                        this.unitPrice = unitPrice
-                    }
+                fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [AddScheduleItem].
@@ -2952,7 +3141,6 @@ class ContractEditCommitParams private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .timestamp()
                  * ```
@@ -2961,38 +3149,37 @@ class ContractEditCommitParams private constructor(
                  */
                 fun build(): AddScheduleItem =
                     AddScheduleItem(
-                      checkRequired(
-                        "timestamp", timestamp
-                      ),
-                      amount,
-                      quantity,
-                      unitPrice,
-                      additionalProperties.toMutableMap(),
+                        checkRequired("timestamp", timestamp),
+                        amount,
+                        quantity,
+                        unitPrice,
+                        additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): AddScheduleItem =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    timestamp()
-                    amount()
-                    quantity()
-                    unitPrice()
-                    validated = true
+            fun validate(): AddScheduleItem = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                timestamp()
+                amount()
+                quantity()
+                unitPrice()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -3003,42 +3190,58 @@ class ContractEditCommitParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = (if (timestamp.asKnown().isPresent) 1 else 0) + (if (amount.asKnown().isPresent) 1 else 0) + (if (quantity.asKnown().isPresent) 1 else 0) + (if (unitPrice.asKnown().isPresent) 1 else 0)
+            internal fun validity(): Int =
+                (if (timestamp.asKnown().isPresent) 1 else 0) +
+                    (if (amount.asKnown().isPresent) 1 else 0) +
+                    (if (quantity.asKnown().isPresent) 1 else 0) +
+                    (if (unitPrice.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is AddScheduleItem && timestamp == other.timestamp && amount == other.amount && quantity == other.quantity && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties
+                return other is AddScheduleItem &&
+                    timestamp == other.timestamp &&
+                    amount == other.amount &&
+                    quantity == other.quantity &&
+                    unitPrice == other.unitPrice &&
+                    additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy { Objects.hash(timestamp, amount, quantity, unitPrice, additionalProperties) }
+            private val hashCode: Int by lazy {
+                Objects.hash(timestamp, amount, quantity, unitPrice, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "AddScheduleItem{timestamp=$timestamp, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "AddScheduleItem{timestamp=$timestamp, amount=$amount, quantity=$quantity, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
         }
 
-        class RemoveScheduleItem @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+        class RemoveScheduleItem
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
             private val id: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
-
         ) {
 
             @JsonCreator
             private constructor(
                 @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of()
-            ) : this(
-              id, mutableMapOf()
-            )
+            ) : this(id, mutableMapOf())
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
             /**
@@ -3046,18 +3249,17 @@ class ContractEditCommitParams private constructor(
              *
              * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun _id(): JsonField<String> = id
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-              additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -3067,13 +3269,11 @@ class ContractEditCommitParams private constructor(
                  * Returns a mutable builder for constructing an instance of [RemoveScheduleItem].
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .id()
                  * ```
                  */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [RemoveScheduleItem]. */
@@ -3083,50 +3283,43 @@ class ContractEditCommitParams private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(removeScheduleItem: RemoveScheduleItem) =
-                    apply {
-                        id = removeScheduleItem.id
-                        additionalProperties = removeScheduleItem.additionalProperties.toMutableMap()
-                    }
+                internal fun from(removeScheduleItem: RemoveScheduleItem) = apply {
+                    id = removeScheduleItem.id
+                    additionalProperties = removeScheduleItem.additionalProperties.toMutableMap()
+                }
 
                 fun id(id: String) = id(JsonField.of(id))
 
                 /**
                  * Sets [Builder.id] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun id(id: JsonField<String>) =
-                    apply {
-                        this.id = id
-                    }
+                fun id(id: JsonField<String>) = apply { this.id = id }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [RemoveScheduleItem].
@@ -3134,7 +3327,6 @@ class ContractEditCommitParams private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .id()
                  * ```
@@ -3142,32 +3334,29 @@ class ContractEditCommitParams private constructor(
                  * @throws IllegalStateException if any required field is unset.
                  */
                 fun build(): RemoveScheduleItem =
-                    RemoveScheduleItem(
-                      checkRequired(
-                        "id", id
-                      ), additionalProperties.toMutableMap()
-                    )
+                    RemoveScheduleItem(checkRequired("id", id), additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): RemoveScheduleItem =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    id()
-                    validated = true
+            fun validate(): RemoveScheduleItem = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -3178,67 +3367,88 @@ class ContractEditCommitParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0)
+            @JvmSynthetic internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is RemoveScheduleItem && id == other.id && additionalProperties == other.additionalProperties
+                return other is RemoveScheduleItem &&
+                    id == other.id &&
+                    additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "RemoveScheduleItem{id=$id, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "RemoveScheduleItem{id=$id, additionalProperties=$additionalProperties}"
         }
 
-        class UpdateScheduleItem @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+        class UpdateScheduleItem
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
             private val id: JsonField<String>,
             private val amount: JsonField<Double>,
             private val quantity: JsonField<Double>,
             private val timestamp: JsonField<OffsetDateTime>,
             private val unitPrice: JsonField<Double>,
             private val additionalProperties: MutableMap<String, JsonValue>,
-
         ) {
 
             @JsonCreator
             private constructor(
                 @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("amount") @ExcludeMissing amount: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Double> = JsonMissing.of(),
-                @JsonProperty("timestamp") @ExcludeMissing timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-                @JsonProperty("unit_price") @ExcludeMissing unitPrice: JsonField<Double> = JsonMissing.of()
-            ) : this(
-              id,
-              amount,
-              quantity,
-              timestamp,
-              unitPrice,
-              mutableMapOf(),
-            )
+                @JsonProperty("amount")
+                @ExcludeMissing
+                amount: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("quantity")
+                @ExcludeMissing
+                quantity: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("timestamp")
+                @ExcludeMissing
+                timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("unit_price")
+                @ExcludeMissing
+                unitPrice: JsonField<Double> = JsonMissing.of(),
+            ) : this(id, amount, quantity, timestamp, unitPrice, mutableMapOf())
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun amount(): Optional<Double> = amount.getOptional("amount")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun quantity(): Optional<Double> = quantity.getOptional("quantity")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun timestamp(): Optional<OffsetDateTime> = timestamp.getOptional("timestamp")
 
-            /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
             fun unitPrice(): Optional<Double> = unitPrice.getOptional("unit_price")
 
             /**
@@ -3246,32 +3456,28 @@ class ContractEditCommitParams private constructor(
              *
              * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun _id(): JsonField<String> = id
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             /**
              * Returns the raw JSON value of [amount].
              *
              * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("amount")
-            @ExcludeMissing
-            fun _amount(): JsonField<Double> = amount
+            @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Double> = amount
 
             /**
              * Returns the raw JSON value of [quantity].
              *
-             * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
-            @JsonProperty("quantity")
-            @ExcludeMissing
-            fun _quantity(): JsonField<Double> = quantity
+            @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
             /**
              * Returns the raw JSON value of [timestamp].
              *
-             * Unlike [timestamp], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [timestamp], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
             @JsonProperty("timestamp")
             @ExcludeMissing
@@ -3280,7 +3486,8 @@ class ContractEditCommitParams private constructor(
             /**
              * Returns the raw JSON value of [unitPrice].
              *
-             * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected
+             * type.
              */
             @JsonProperty("unit_price")
             @ExcludeMissing
@@ -3288,12 +3495,13 @@ class ContractEditCommitParams private constructor(
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
-              additionalProperties.put(key, value)
+                additionalProperties.put(key, value)
             }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -3303,13 +3511,11 @@ class ContractEditCommitParams private constructor(
                  * Returns a mutable builder for constructing an instance of [UpdateScheduleItem].
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .id()
                  * ```
                  */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [UpdateScheduleItem]. */
@@ -3323,106 +3529,93 @@ class ContractEditCommitParams private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(updateScheduleItem: UpdateScheduleItem) =
-                    apply {
-                        id = updateScheduleItem.id
-                        amount = updateScheduleItem.amount
-                        quantity = updateScheduleItem.quantity
-                        timestamp = updateScheduleItem.timestamp
-                        unitPrice = updateScheduleItem.unitPrice
-                        additionalProperties = updateScheduleItem.additionalProperties.toMutableMap()
-                    }
+                internal fun from(updateScheduleItem: UpdateScheduleItem) = apply {
+                    id = updateScheduleItem.id
+                    amount = updateScheduleItem.amount
+                    quantity = updateScheduleItem.quantity
+                    timestamp = updateScheduleItem.timestamp
+                    unitPrice = updateScheduleItem.unitPrice
+                    additionalProperties = updateScheduleItem.additionalProperties.toMutableMap()
+                }
 
                 fun id(id: String) = id(JsonField.of(id))
 
                 /**
                  * Sets [Builder.id] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.id] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun id(id: JsonField<String>) =
-                    apply {
-                        this.id = id
-                    }
+                fun id(id: JsonField<String>) = apply { this.id = id }
 
                 fun amount(amount: Double) = amount(JsonField.of(amount))
 
                 /**
                  * Sets [Builder.amount] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.amount] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.amount] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun amount(amount: JsonField<Double>) =
-                    apply {
-                        this.amount = amount
-                    }
+                fun amount(amount: JsonField<Double>) = apply { this.amount = amount }
 
                 fun quantity(quantity: Double) = quantity(JsonField.of(quantity))
 
                 /**
                  * Sets [Builder.quantity] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.quantity] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.quantity] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun quantity(quantity: JsonField<Double>) =
-                    apply {
-                        this.quantity = quantity
-                    }
+                fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
                 fun timestamp(timestamp: OffsetDateTime) = timestamp(JsonField.of(timestamp))
 
                 /**
                  * Sets [Builder.timestamp] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.timestamp] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.timestamp] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
                  */
-                fun timestamp(timestamp: JsonField<OffsetDateTime>) =
-                    apply {
-                        this.timestamp = timestamp
-                    }
+                fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply {
+                    this.timestamp = timestamp
+                }
 
                 fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
 
                 /**
                  * Sets [Builder.unitPrice] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.unitPrice] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.unitPrice] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun unitPrice(unitPrice: JsonField<Double>) =
-                    apply {
-                        this.unitPrice = unitPrice
-                    }
+                fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [UpdateScheduleItem].
@@ -3430,7 +3623,6 @@ class ContractEditCommitParams private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .id()
                  * ```
@@ -3439,40 +3631,39 @@ class ContractEditCommitParams private constructor(
                  */
                 fun build(): UpdateScheduleItem =
                     UpdateScheduleItem(
-                      checkRequired(
-                        "id", id
-                      ),
-                      amount,
-                      quantity,
-                      timestamp,
-                      unitPrice,
-                      additionalProperties.toMutableMap(),
+                        checkRequired("id", id),
+                        amount,
+                        quantity,
+                        timestamp,
+                        unitPrice,
+                        additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): UpdateScheduleItem =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    id()
-                    amount()
-                    quantity()
-                    timestamp()
-                    unitPrice()
-                    validated = true
+            fun validate(): UpdateScheduleItem = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                amount()
+                quantity()
+                timestamp()
+                unitPrice()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -3483,58 +3674,86 @@ class ContractEditCommitParams private constructor(
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0) + (if (amount.asKnown().isPresent) 1 else 0) + (if (quantity.asKnown().isPresent) 1 else 0) + (if (timestamp.asKnown().isPresent) 1 else 0) + (if (unitPrice.asKnown().isPresent) 1 else 0)
+            internal fun validity(): Int =
+                (if (id.asKnown().isPresent) 1 else 0) +
+                    (if (amount.asKnown().isPresent) 1 else 0) +
+                    (if (quantity.asKnown().isPresent) 1 else 0) +
+                    (if (timestamp.asKnown().isPresent) 1 else 0) +
+                    (if (unitPrice.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is UpdateScheduleItem && id == other.id && amount == other.amount && quantity == other.quantity && timestamp == other.timestamp && unitPrice == other.unitPrice && additionalProperties == other.additionalProperties
+                return other is UpdateScheduleItem &&
+                    id == other.id &&
+                    amount == other.amount &&
+                    quantity == other.quantity &&
+                    timestamp == other.timestamp &&
+                    unitPrice == other.unitPrice &&
+                    additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy { Objects.hash(id, amount, quantity, timestamp, unitPrice, additionalProperties) }
+            private val hashCode: Int by lazy {
+                Objects.hash(id, amount, quantity, timestamp, unitPrice, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "UpdateScheduleItem{id=$id, amount=$amount, quantity=$quantity, timestamp=$timestamp, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "UpdateScheduleItem{id=$id, amount=$amount, quantity=$quantity, timestamp=$timestamp, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is InvoiceSchedule && addScheduleItems == other.addScheduleItems && removeScheduleItems == other.removeScheduleItems && updateScheduleItems == other.updateScheduleItems && additionalProperties == other.additionalProperties
+            return other is InvoiceSchedule &&
+                addScheduleItems == other.addScheduleItems &&
+                removeScheduleItems == other.removeScheduleItems &&
+                updateScheduleItems == other.updateScheduleItems &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(addScheduleItems, removeScheduleItems, updateScheduleItems, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                addScheduleItems,
+                removeScheduleItems,
+                updateScheduleItems,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "InvoiceSchedule{addScheduleItems=$addScheduleItems, removeScheduleItems=$removeScheduleItems, updateScheduleItems=$updateScheduleItems, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "InvoiceSchedule{addScheduleItems=$addScheduleItems, removeScheduleItems=$removeScheduleItems, updateScheduleItems=$updateScheduleItems, additionalProperties=$additionalProperties}"
     }
 
-    /** If provided, updates the commit to use the specified rate type for current and future invoices. Previously finalized invoices will need to be voided and regenerated to reflect the rate type change. */
-    class RateType @JsonCreator private constructor(
-        private val value: JsonField<String>,
-
-    ) : Enum {
+    /**
+     * If provided, updates the commit to use the specified rate type for current and future
+     * invoices. Previously finalized invoices will need to be voided and regenerated to reflect the
+     * rate type change.
+     */
+    class RateType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't match any known
-         * member, and you want to know that value. For example, if the SDK is on an older version than the
-         * API, then the API may respond with new members that the SDK is unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -3555,11 +3774,9 @@ class ContractEditCommitParams private constructor(
          * An enum containing [RateType]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [RateType] can contain an unknown value in a couple of cases:
-         *
-         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-         *   an older version than the API, then the API may respond with new members that the SDK is unaware
-         *   of.
-         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -3570,11 +3787,11 @@ class ContractEditCommitParams private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-         * class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want to throw
-         * for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -3586,10 +3803,11 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-         * for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+         *   member.
          */
         fun known(): Known =
             when (this) {
@@ -3601,33 +3819,36 @@ class ContractEditCommitParams private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging and generally
-         * doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-         *   primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
          */
-        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): RateType =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                known()
-                validated = true
+        fun validate(): RateType = apply {
+            if (validated) {
+                return@apply
             }
+
+            known()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -3638,19 +3859,19 @@ class ContractEditCommitParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic
-        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is RateType && value == other.value
+            return other is RateType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -3659,14 +3880,18 @@ class ContractEditCommitParams private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is ContractEditCommitParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
+        return other is ContractEditCommitParams &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
-    override fun toString() = "ContractEditCommitParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() =
+        "ContractEditCommitParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

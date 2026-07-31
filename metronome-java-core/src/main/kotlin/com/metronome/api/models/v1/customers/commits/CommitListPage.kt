@@ -6,19 +6,17 @@ import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
 import com.metronome.api.models.Commit
-import com.metronome.api.models.v1.customers.commits.CommitListPageResponse
-import com.metronome.api.models.v1.customers.commits.CommitListParams
 import com.metronome.api.services.blocking.v1.customers.CommitService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see CommitService.list */
-class CommitListPage private constructor(
+class CommitListPage
+private constructor(
     private val service: CommitService,
     private val params: CommitListParams,
     private val response: CommitListPageResponse,
-
 ) : Page<Commit> {
 
     /**
@@ -40,10 +38,10 @@ class CommitListPage private constructor(
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): CommitListParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
     override fun nextPage(): CommitListPage = service.list(nextPageParams())
@@ -64,15 +62,13 @@ class CommitListPage private constructor(
          * Returns a mutable builder for constructing an instance of [CommitListPage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [CommitListPage]. */
@@ -83,29 +79,19 @@ class CommitListPage private constructor(
         private var response: CommitListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(commitListPage: CommitListPage) =
-            apply {
-                service = commitListPage.service
-                params = commitListPage.params
-                response = commitListPage.response
-            }
+        internal fun from(commitListPage: CommitListPage) = apply {
+            service = commitListPage.service
+            params = commitListPage.params
+            response = commitListPage.response
+        }
 
-        fun service(service: CommitService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: CommitService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: CommitListParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: CommitListParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: CommitListPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: CommitListPageResponse) = apply { this.response = response }
 
         /**
          * Returns an immutable instance of [CommitListPage].
@@ -113,7 +99,6 @@ class CommitListPage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,24 +109,21 @@ class CommitListPage private constructor(
          */
         fun build(): CommitListPage =
             CommitListPage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is CommitListPage && service == other.service && params == other.params && response == other.response
+        return other is CommitListPage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)

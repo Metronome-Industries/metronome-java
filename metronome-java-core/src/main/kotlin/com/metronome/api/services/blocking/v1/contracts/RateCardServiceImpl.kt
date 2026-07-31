@@ -28,8 +28,6 @@ import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveRateSched
 import com.metronome.api.models.v1.contracts.ratecards.RateCardRetrieveResponse
 import com.metronome.api.models.v1.contracts.ratecards.RateCardUpdateParams
 import com.metronome.api.models.v1.contracts.ratecards.RateCardUpdateResponse
-import com.metronome.api.services.blocking.v1.contracts.RateCardService
-import com.metronome.api.services.blocking.v1.contracts.RateCardServiceImpl
 import com.metronome.api.services.blocking.v1.contracts.ratecards.NamedScheduleService
 import com.metronome.api.services.blocking.v1.contracts.ratecards.NamedScheduleServiceImpl
 import com.metronome.api.services.blocking.v1.contracts.ratecards.ProductOrderService
@@ -39,22 +37,27 @@ import com.metronome.api.services.blocking.v1.contracts.ratecards.RateServiceImp
 import java.util.function.Consumer
 
 /** Rate cards are used to define default pricing for products. */
-class RateCardServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class RateCardServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    RateCardService {
 
-) : RateCardService {
+    private val withRawResponse: RateCardService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
-    private val withRawResponse: RateCardService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
-
-    private val productOrders: ProductOrderService by lazy { ProductOrderServiceImpl(clientOptions) }
+    private val productOrders: ProductOrderService by lazy {
+        ProductOrderServiceImpl(clientOptions)
+    }
 
     private val rates: RateService by lazy { RateServiceImpl(clientOptions) }
 
-    private val namedSchedules: NamedScheduleService by lazy { NamedScheduleServiceImpl(clientOptions) }
+    private val namedSchedules: NamedScheduleService by lazy {
+        NamedScheduleServiceImpl(clientOptions)
+    }
 
     override fun withRawResponse(): RateCardService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateCardService = RateCardServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateCardService =
+        RateCardServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     /** Rate cards are used to define default pricing for products. */
     override fun productOrders(): ProductOrderService = productOrders
@@ -62,47 +65,78 @@ class RateCardServiceImpl internal constructor(
     /** Rate cards are used to define default pricing for products. */
     override fun rates(): RateService = rates
 
-    /** Named schedules are used for storing custom data that can change over time. Named schedules are often used in custom pricing logic. */
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     override fun namedSchedules(): NamedScheduleService = namedSchedules
 
-    override fun create(params: RateCardCreateParams, requestOptions: RequestOptions): RateCardCreateResponse =
+    override fun create(
+        params: RateCardCreateParams,
+        requestOptions: RequestOptions,
+    ): RateCardCreateResponse =
         // post /v1/contract-pricing/rate-cards/create
         withRawResponse().create(params, requestOptions).parse()
 
-    override fun retrieve(params: RateCardRetrieveParams, requestOptions: RequestOptions): RateCardRetrieveResponse =
+    override fun retrieve(
+        params: RateCardRetrieveParams,
+        requestOptions: RequestOptions,
+    ): RateCardRetrieveResponse =
         // post /v1/contract-pricing/rate-cards/get
         withRawResponse().retrieve(params, requestOptions).parse()
 
-    override fun update(params: RateCardUpdateParams, requestOptions: RequestOptions): RateCardUpdateResponse =
+    override fun update(
+        params: RateCardUpdateParams,
+        requestOptions: RequestOptions,
+    ): RateCardUpdateResponse =
         // post /v1/contract-pricing/rate-cards/update
         withRawResponse().update(params, requestOptions).parse()
 
-    override fun list(params: RateCardListParams, requestOptions: RequestOptions): RateCardListPage =
+    override fun list(
+        params: RateCardListParams,
+        requestOptions: RequestOptions,
+    ): RateCardListPage =
         // post /v1/contract-pricing/rate-cards/list
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun archive(params: RateCardArchiveParams, requestOptions: RequestOptions): RateCardArchiveResponse =
+    override fun archive(
+        params: RateCardArchiveParams,
+        requestOptions: RequestOptions,
+    ): RateCardArchiveResponse =
         // post /v1/contract-pricing/rate-cards/archive
         withRawResponse().archive(params, requestOptions).parse()
 
-    override fun retrieveRateSchedule(params: RateCardRetrieveRateScheduleParams, requestOptions: RequestOptions): RateCardRetrieveRateScheduleResponse =
+    override fun retrieveRateSchedule(
+        params: RateCardRetrieveRateScheduleParams,
+        requestOptions: RequestOptions,
+    ): RateCardRetrieveRateScheduleResponse =
         // post /v1/contract-pricing/rate-cards/getRateSchedule
         withRawResponse().retrieveRateSchedule(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        RateCardService.WithRawResponse {
 
-    ) : RateCardService.WithRawResponse {
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+        private val productOrders: ProductOrderService.WithRawResponse by lazy {
+            ProductOrderServiceImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val productOrders: ProductOrderService.WithRawResponse by lazy { ProductOrderServiceImpl.WithRawResponseImpl(clientOptions) }
+        private val rates: RateService.WithRawResponse by lazy {
+            RateServiceImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val rates: RateService.WithRawResponse by lazy { RateServiceImpl.WithRawResponseImpl(clientOptions) }
+        private val namedSchedules: NamedScheduleService.WithRawResponse by lazy {
+            NamedScheduleServiceImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val namedSchedules: NamedScheduleService.WithRawResponse by lazy { NamedScheduleServiceImpl.WithRawResponseImpl(clientOptions) }
-
-        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateCardService.WithRawResponse = RateCardServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): RateCardService.WithRawResponse =
+            RateCardServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         /** Rate cards are used to define default pricing for products. */
         override fun productOrders(): ProductOrderService.WithRawResponse = productOrders
@@ -110,188 +144,185 @@ class RateCardServiceImpl internal constructor(
         /** Rate cards are used to define default pricing for products. */
         override fun rates(): RateService.WithRawResponse = rates
 
-        /** Named schedules are used for storing custom data that can change over time. Named schedules are often used in custom pricing logic. */
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         override fun namedSchedules(): NamedScheduleService.WithRawResponse = namedSchedules
 
-        private val createHandler: Handler<RateCardCreateResponse> = jsonHandler<RateCardCreateResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<RateCardCreateResponse> =
+            jsonHandler<RateCardCreateResponse>(clientOptions.jsonMapper)
 
-        override fun create(params: RateCardCreateParams, requestOptions: RequestOptions): HttpResponseFor<RateCardCreateResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "contract-pricing", "rate-cards", "create")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  createHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun create(
+            params: RateCardCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<RateCardCreateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contract-pricing", "rate-cards", "create")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val retrieveHandler: Handler<RateCardRetrieveResponse> = jsonHandler<RateCardRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<RateCardRetrieveResponse> =
+            jsonHandler<RateCardRetrieveResponse>(clientOptions.jsonMapper)
 
-        override fun retrieve(params: RateCardRetrieveParams, requestOptions: RequestOptions): HttpResponseFor<RateCardRetrieveResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "contract-pricing", "rate-cards", "get")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  retrieveHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun retrieve(
+            params: RateCardRetrieveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<RateCardRetrieveResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contract-pricing", "rate-cards", "get")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val updateHandler: Handler<RateCardUpdateResponse> = jsonHandler<RateCardUpdateResponse>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<RateCardUpdateResponse> =
+            jsonHandler<RateCardUpdateResponse>(clientOptions.jsonMapper)
 
-        override fun update(params: RateCardUpdateParams, requestOptions: RequestOptions): HttpResponseFor<RateCardUpdateResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "contract-pricing", "rate-cards", "update")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  updateHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun update(
+            params: RateCardUpdateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<RateCardUpdateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contract-pricing", "rate-cards", "update")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { updateHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val listHandler: Handler<RateCardListPageResponse> = jsonHandler<RateCardListPageResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<RateCardListPageResponse> =
+            jsonHandler<RateCardListPageResponse>(clientOptions.jsonMapper)
 
-        override fun list(params: RateCardListParams, requestOptions: RequestOptions): HttpResponseFor<RateCardListPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "contract-pricing", "rate-cards", "list")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  RateCardListPage.builder()
-                      .service(RateCardServiceImpl(clientOptions))
-                      .params(params)
-                      .response(it)
-                      .build()
-              }
-          }
+        override fun list(
+            params: RateCardListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<RateCardListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contract-pricing", "rate-cards", "list")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        RateCardListPage.builder()
+                            .service(RateCardServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
+            }
         }
 
-        private val archiveHandler: Handler<RateCardArchiveResponse> = jsonHandler<RateCardArchiveResponse>(clientOptions.jsonMapper)
+        private val archiveHandler: Handler<RateCardArchiveResponse> =
+            jsonHandler<RateCardArchiveResponse>(clientOptions.jsonMapper)
 
-        override fun archive(params: RateCardArchiveParams, requestOptions: RequestOptions): HttpResponseFor<RateCardArchiveResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "contract-pricing", "rate-cards", "archive")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  archiveHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun archive(
+            params: RateCardArchiveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<RateCardArchiveResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contract-pricing", "rate-cards", "archive")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { archiveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val retrieveRateScheduleHandler: Handler<RateCardRetrieveRateScheduleResponse> = jsonHandler<RateCardRetrieveRateScheduleResponse>(clientOptions.jsonMapper)
+        private val retrieveRateScheduleHandler: Handler<RateCardRetrieveRateScheduleResponse> =
+            jsonHandler<RateCardRetrieveRateScheduleResponse>(clientOptions.jsonMapper)
 
-        override fun retrieveRateSchedule(params: RateCardRetrieveRateScheduleParams, requestOptions: RequestOptions): HttpResponseFor<RateCardRetrieveRateScheduleResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "contract-pricing", "rate-cards", "getRateSchedule")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  retrieveRateScheduleHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun retrieveRateSchedule(
+            params: RateCardRetrieveRateScheduleParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<RateCardRetrieveRateScheduleResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contract-pricing", "rate-cards", "getRateSchedule")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveRateScheduleHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }

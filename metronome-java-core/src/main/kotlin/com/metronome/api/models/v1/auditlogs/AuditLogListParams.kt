@@ -9,7 +9,6 @@ import com.metronome.api.core.Params
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.v1.auditlogs.AuditLogListParams
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
@@ -17,7 +16,10 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Get a comprehensive audit trail of all operations performed in your Metronome account, whether initiated through the API, web interface, or automated processes. This endpoint provides detailed logs of who did what and when, enabling compliance reporting, security monitoring, and operational troubleshooting across all interaction channels.
+ * Get a comprehensive audit trail of all operations performed in your Metronome account, whether
+ * initiated through the API, web interface, or automated processes. This endpoint provides detailed
+ * logs of who did what and when, enabling compliance reporting, security monitoring, and
+ * operational troubleshooting across all interaction channels.
  *
  * ### Use this endpoint to:
  * - Monitor all account activity for security and compliance purposes
@@ -36,17 +38,19 @@ import kotlin.jvm.optionals.getOrNull
  * - `next_page`: Cursor for continuous log retrieval
  *
  * ### Usage guidelines:
- * - Continuous retrieval: The next_page token enables uninterrupted log streaming—save it between requests to ensure no logs are missed
- * - Empty responses: An empty data array means no new logs yet; continue polling with the same next_page token
+ * - Continuous retrieval: The next_page token enables uninterrupted log streaming—save it between
+ *   requests to ensure no logs are missed
+ * - Empty responses: An empty data array means no new logs yet; continue polling with the same
+ *   next_page token
  * - Date filtering:
  *     - `starting_on`: Earliest logs to return (inclusive)
  *     - `ending_before`: Latest logs to return (exclusive)
  *     - Cannot be used with `next_page`
  * - Resource filtering: Must specify both `resource_type` and `resource_id` together
  * - Sort order: Default is `date_asc`; use `date_desc` for newest first
- *
  */
-class AuditLogListParams private constructor(
+class AuditLogListParams
+private constructor(
     private val endingBefore: OffsetDateTime?,
     private val limit: Long?,
     private val nextPage: String?,
@@ -56,7 +60,6 @@ class AuditLogListParams private constructor(
     private val startingOn: OffsetDateTime?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-
 ) : Params {
 
     /** RFC 3339 timestamp (exclusive). Cannot be used with 'next_page'. */
@@ -68,10 +71,16 @@ class AuditLogListParams private constructor(
     /** Cursor that indicates where the next page of results should start. */
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
-    /** Optional parameter that can be used to filter which audit logs are returned. If you specify resource_id, you must also specify resource_type. */
+    /**
+     * Optional parameter that can be used to filter which audit logs are returned. If you specify
+     * resource_id, you must also specify resource_type.
+     */
     fun resourceId(): Optional<String> = Optional.ofNullable(resourceId)
 
-    /** Optional parameter that can be used to filter which audit logs are returned. If you specify resource_type, you must also specify resource_id. */
+    /**
+     * Optional parameter that can be used to filter which audit logs are returned. If you specify
+     * resource_type, you must also specify resource_id.
+     */
     fun resourceType(): Optional<String> = Optional.ofNullable(resourceType)
 
     /** Sort order by timestamp, e.g. date_asc or date_desc. Defaults to date_asc. */
@@ -90,12 +99,10 @@ class AuditLogListParams private constructor(
 
     companion object {
 
-        @JvmStatic
-        fun none(): AuditLogListParams = builder().build()
+        @JvmStatic fun none(): AuditLogListParams = builder().build()
 
         /** Returns a mutable builder for constructing an instance of [AuditLogListParams]. */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [AuditLogListParams]. */
@@ -112,33 +119,27 @@ class AuditLogListParams private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(auditLogListParams: AuditLogListParams) =
-            apply {
-                endingBefore = auditLogListParams.endingBefore
-                limit = auditLogListParams.limit
-                nextPage = auditLogListParams.nextPage
-                resourceId = auditLogListParams.resourceId
-                resourceType = auditLogListParams.resourceType
-                sort = auditLogListParams.sort
-                startingOn = auditLogListParams.startingOn
-                additionalHeaders = auditLogListParams.additionalHeaders.toBuilder()
-                additionalQueryParams = auditLogListParams.additionalQueryParams.toBuilder()
-            }
+        internal fun from(auditLogListParams: AuditLogListParams) = apply {
+            endingBefore = auditLogListParams.endingBefore
+            limit = auditLogListParams.limit
+            nextPage = auditLogListParams.nextPage
+            resourceId = auditLogListParams.resourceId
+            resourceType = auditLogListParams.resourceType
+            sort = auditLogListParams.sort
+            startingOn = auditLogListParams.startingOn
+            additionalHeaders = auditLogListParams.additionalHeaders.toBuilder()
+            additionalQueryParams = auditLogListParams.additionalQueryParams.toBuilder()
+        }
 
         /** RFC 3339 timestamp (exclusive). Cannot be used with 'next_page'. */
-        fun endingBefore(endingBefore: OffsetDateTime?) =
-            apply {
-                this.endingBefore = endingBefore
-            }
+        fun endingBefore(endingBefore: OffsetDateTime?) = apply { this.endingBefore = endingBefore }
 
         /** Alias for calling [Builder.endingBefore] with `endingBefore.orElse(null)`. */
-        fun endingBefore(endingBefore: Optional<OffsetDateTime>) = endingBefore(endingBefore.getOrNull())
+        fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
+            endingBefore(endingBefore.getOrNull())
 
         /** Max number of results that should be returned */
-        fun limit(limit: Long?) =
-            apply {
-                this.limit = limit
-            }
+        fun limit(limit: Long?) = apply { this.limit = limit }
 
         /**
          * Alias for [Builder.limit].
@@ -151,173 +152,140 @@ class AuditLogListParams private constructor(
         fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
         /** Cursor that indicates where the next page of results should start. */
-        fun nextPage(nextPage: String?) =
-            apply {
-                this.nextPage = nextPage
-            }
+        fun nextPage(nextPage: String?) = apply { this.nextPage = nextPage }
 
         /** Alias for calling [Builder.nextPage] with `nextPage.orElse(null)`. */
         fun nextPage(nextPage: Optional<String>) = nextPage(nextPage.getOrNull())
 
-        /** Optional parameter that can be used to filter which audit logs are returned. If you specify resource_id, you must also specify resource_type. */
-        fun resourceId(resourceId: String?) =
-            apply {
-                this.resourceId = resourceId
-            }
+        /**
+         * Optional parameter that can be used to filter which audit logs are returned. If you
+         * specify resource_id, you must also specify resource_type.
+         */
+        fun resourceId(resourceId: String?) = apply { this.resourceId = resourceId }
 
         /** Alias for calling [Builder.resourceId] with `resourceId.orElse(null)`. */
         fun resourceId(resourceId: Optional<String>) = resourceId(resourceId.getOrNull())
 
-        /** Optional parameter that can be used to filter which audit logs are returned. If you specify resource_type, you must also specify resource_id. */
-        fun resourceType(resourceType: String?) =
-            apply {
-                this.resourceType = resourceType
-            }
+        /**
+         * Optional parameter that can be used to filter which audit logs are returned. If you
+         * specify resource_type, you must also specify resource_id.
+         */
+        fun resourceType(resourceType: String?) = apply { this.resourceType = resourceType }
 
         /** Alias for calling [Builder.resourceType] with `resourceType.orElse(null)`. */
         fun resourceType(resourceType: Optional<String>) = resourceType(resourceType.getOrNull())
 
         /** Sort order by timestamp, e.g. date_asc or date_desc. Defaults to date_asc. */
-        fun sort(sort: Sort?) =
-            apply {
-                this.sort = sort
-            }
+        fun sort(sort: Sort?) = apply { this.sort = sort }
 
         /** Alias for calling [Builder.sort] with `sort.orElse(null)`. */
         fun sort(sort: Optional<Sort>) = sort(sort.getOrNull())
 
-        /** RFC 3339 timestamp of the earliest audit log to return. Cannot be used with 'next_page'. */
-        fun startingOn(startingOn: OffsetDateTime?) =
-            apply {
-                this.startingOn = startingOn
-            }
+        /**
+         * RFC 3339 timestamp of the earliest audit log to return. Cannot be used with 'next_page'.
+         */
+        fun startingOn(startingOn: OffsetDateTime?) = apply { this.startingOn = startingOn }
 
         /** Alias for calling [Builder.startingOn] with `startingOn.orElse(null)`. */
         fun startingOn(startingOn: Optional<OffsetDateTime>) = startingOn(startingOn.getOrNull())
 
-        fun additionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun putAdditionalHeader(name: String, value: String) =
-            apply {
-                additionalHeaders.put(name, value)
-            }
+        fun putAdditionalHeader(name: String, value: String) = apply {
+            additionalHeaders.put(name, value)
+        }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.put(name, values)
-            }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.put(name, values)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun replaceAdditionalHeaders(name: String, value: String) =
-            apply {
-                additionalHeaders.replace(name, value)
-            }
+        fun replaceAdditionalHeaders(name: String, value: String) = apply {
+            additionalHeaders.replace(name, value)
+        }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.replace(name, values)
-            }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.replace(name, values)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun removeAdditionalHeaders(name: String) =
-            apply {
-                additionalHeaders.remove(name)
-            }
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) =
-            apply {
-                additionalHeaders.removeAll(names)
-            }
+        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
+            additionalHeaders.removeAll(names)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun putAdditionalQueryParam(key: String, value: String) =
-            apply {
-                additionalQueryParams.put(key, value)
-            }
+        fun putAdditionalQueryParam(key: String, value: String) = apply {
+            additionalQueryParams.put(key, value)
+        }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.put(key, values)
-            }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.put(key, values)
+        }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.putAll(additionalQueryParams)
-            }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.putAll(additionalQueryParams)
+        }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) =
-            apply {
-                additionalQueryParams.replace(key, value)
-            }
+        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
+            additionalQueryParams.replace(key, value)
+        }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.replace(key, values)
-            }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.replace(key, values)
+        }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.replaceAll(additionalQueryParams)
-            }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.replaceAll(additionalQueryParams)
+        }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) =
-            apply {
-                additionalQueryParams.remove(key)
-            }
+        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) =
-            apply {
-                additionalQueryParams.removeAll(keys)
-            }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
+            additionalQueryParams.removeAll(keys)
+        }
 
         /**
          * Returns an immutable instance of [AuditLogListParams].
@@ -326,15 +294,15 @@ class AuditLogListParams private constructor(
          */
         fun build(): AuditLogListParams =
             AuditLogListParams(
-              endingBefore,
-              limit,
-              nextPage,
-              resourceId,
-              resourceType,
-              sort,
-              startingOn,
-              additionalHeaders.build(),
-              additionalQueryParams.build(),
+                endingBefore,
+                limit,
+                nextPage,
+                resourceId,
+                resourceType,
+                sort,
+                startingOn,
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
             )
     }
 
@@ -343,32 +311,33 @@ class AuditLogListParams private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
-                endingBefore?.let { put("ending_before", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)) }
+                endingBefore?.let {
+                    put("ending_before", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
                 limit?.let { put("limit", it.toString()) }
                 nextPage?.let { put("next_page", it) }
                 resourceId?.let { put("resource_id", it) }
                 resourceType?.let { put("resource_type", it) }
                 sort?.let { put("sort", it.toString()) }
-                startingOn?.let { put("starting_on", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)) }
+                startingOn?.let {
+                    put("starting_on", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
                 putAll(additionalQueryParams)
             }
             .build()
 
     /** Sort order by timestamp, e.g. date_asc or date_desc. Defaults to date_asc. */
-    class Sort @JsonCreator private constructor(
-        private val value: JsonField<String>,
-
-    ) : Enum {
+    class Sort @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't match any known
-         * member, and you want to know that value. For example, if the SDK is on an older version than the
-         * API, then the API may respond with new members that the SDK is unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -389,11 +358,9 @@ class AuditLogListParams private constructor(
          * An enum containing [Sort]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Sort] can contain an unknown value in a couple of cases:
-         *
-         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-         *   an older version than the API, then the API may respond with new members that the SDK is unaware
-         *   of.
-         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -404,11 +371,11 @@ class AuditLogListParams private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-         * class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want to throw
-         * for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -420,10 +387,11 @@ class AuditLogListParams private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-         * for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+         *   member.
          */
         fun known(): Known =
             when (this) {
@@ -435,33 +403,36 @@ class AuditLogListParams private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging and generally
-         * doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-         *   primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
          */
-        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): Sort =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                known()
-                validated = true
+        fun validate(): Sort = apply {
+            if (validated) {
+                return@apply
             }
+
+            known()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -472,19 +443,19 @@ class AuditLogListParams private constructor(
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic
-        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is Sort && value == other.value
+            return other is Sort && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -493,14 +464,35 @@ class AuditLogListParams private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is AuditLogListParams && endingBefore == other.endingBefore && limit == other.limit && nextPage == other.nextPage && resourceId == other.resourceId && resourceType == other.resourceType && sort == other.sort && startingOn == other.startingOn && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams
+        return other is AuditLogListParams &&
+            endingBefore == other.endingBefore &&
+            limit == other.limit &&
+            nextPage == other.nextPage &&
+            resourceId == other.resourceId &&
+            resourceType == other.resourceType &&
+            sort == other.sort &&
+            startingOn == other.startingOn &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(endingBefore, limit, nextPage, resourceId, resourceType, sort, startingOn, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(
+            endingBefore,
+            limit,
+            nextPage,
+            resourceId,
+            resourceType,
+            sort,
+            startingOn,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
-    override fun toString() = "AuditLogListParams{endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, resourceId=$resourceId, resourceType=$resourceType, sort=$sort, startingOn=$startingOn, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() =
+        "AuditLogListParams{endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, resourceId=$resourceId, resourceType=$resourceType, sort=$sort, startingOn=$startingOn, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

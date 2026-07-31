@@ -3,7 +3,6 @@
 package com.metronome.api.models.v1.dashboards
 
 import com.metronome.api.core.JsonValue
-import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlParams
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -12,91 +11,140 @@ internal class DashboardGetEmbeddableUrlParamsTest {
 
     @Test
     fun create() {
-      DashboardGetEmbeddableUrlParams.builder()
-          .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
-          .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
-          .addBmGroupKeyOverride(DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
-              .groupKeyName("group_key_name")
-              .displayName("display_name")
-              .valueDisplayNames(DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames.builder()
-                  .putAdditionalProperty("foo", JsonValue.from("bar"))
-                  .build())
-              .build())
-          .addColorOverride(DashboardGetEmbeddableUrlParams.ColorOverride.builder()
-              .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
-              .value("#ff0000")
-              .build())
-          .addDashboardOption(DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-              .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.SHOW_ZERO_USAGE_LINE_ITEMS)
-              .value("false")
-              .build())
-          .addDashboardOption(DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-              .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.INVOICE_STATUS_FILTER)
-              .value("FINALIZED")
-              .build())
-          .build()
+        DashboardGetEmbeddableUrlParams.builder()
+            .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
+            .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
+            .addBmGroupKeyOverride(
+                DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
+                    .groupKeyName("group_key_name")
+                    .displayName("display_name")
+                    .valueDisplayNames(
+                        DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .build()
+            )
+            .addColorOverride(
+                DashboardGetEmbeddableUrlParams.ColorOverride.builder()
+                    .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
+                    .value("#ff0000")
+                    .build()
+            )
+            .addDashboardOption(
+                DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                    .key(
+                        DashboardGetEmbeddableUrlParams.DashboardOption.Key
+                            .SHOW_ZERO_USAGE_LINE_ITEMS
+                    )
+                    .value("false")
+                    .build()
+            )
+            .addDashboardOption(
+                DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                    .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.INVOICE_STATUS_FILTER)
+                    .value("FINALIZED")
+                    .build()
+            )
+            .build()
     }
 
     @Test
     fun body() {
-      val params = DashboardGetEmbeddableUrlParams.builder()
-          .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
-          .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
-          .addBmGroupKeyOverride(DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
-              .groupKeyName("group_key_name")
-              .displayName("display_name")
-              .valueDisplayNames(DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames.builder()
-                  .putAdditionalProperty("foo", JsonValue.from("bar"))
-                  .build())
-              .build())
-          .addColorOverride(DashboardGetEmbeddableUrlParams.ColorOverride.builder()
-              .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
-              .value("#ff0000")
-              .build())
-          .addDashboardOption(DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-              .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.SHOW_ZERO_USAGE_LINE_ITEMS)
-              .value("false")
-              .build())
-          .addDashboardOption(DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-              .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.INVOICE_STATUS_FILTER)
-              .value("FINALIZED")
-              .build())
-          .build()
+        val params =
+            DashboardGetEmbeddableUrlParams.builder()
+                .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
+                .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
+                .addBmGroupKeyOverride(
+                    DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
+                        .groupKeyName("group_key_name")
+                        .displayName("display_name")
+                        .valueDisplayNames(
+                            DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
+                                .builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .build()
+                )
+                .addColorOverride(
+                    DashboardGetEmbeddableUrlParams.ColorOverride.builder()
+                        .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
+                        .value("#ff0000")
+                        .build()
+                )
+                .addDashboardOption(
+                    DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                        .key(
+                            DashboardGetEmbeddableUrlParams.DashboardOption.Key
+                                .SHOW_ZERO_USAGE_LINE_ITEMS
+                        )
+                        .value("false")
+                        .build()
+                )
+                .addDashboardOption(
+                    DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                        .key(
+                            DashboardGetEmbeddableUrlParams.DashboardOption.Key
+                                .INVOICE_STATUS_FILTER
+                        )
+                        .value("FINALIZED")
+                        .build()
+                )
+                .build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
-      assertThat(body.dashboard()).isEqualTo(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
-      assertThat(body.bmGroupKeyOverrides().getOrNull()).containsExactly(DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
-          .groupKeyName("group_key_name")
-          .displayName("display_name")
-          .valueDisplayNames(DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames.builder()
-              .putAdditionalProperty("foo", JsonValue.from("bar"))
-              .build())
-          .build())
-      assertThat(body.colorOverrides().getOrNull()).containsExactly(DashboardGetEmbeddableUrlParams.ColorOverride.builder()
-          .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
-          .value("#ff0000")
-          .build())
-      assertThat(body.dashboardOptions().getOrNull()).containsExactly(DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-          .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.SHOW_ZERO_USAGE_LINE_ITEMS)
-          .value("false")
-          .build(), DashboardGetEmbeddableUrlParams.DashboardOption.builder()
-          .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.INVOICE_STATUS_FILTER)
-          .value("FINALIZED")
-          .build())
+        assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
+        assertThat(body.dashboard()).isEqualTo(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
+        assertThat(body.bmGroupKeyOverrides().getOrNull())
+            .containsExactly(
+                DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.builder()
+                    .groupKeyName("group_key_name")
+                    .displayName("display_name")
+                    .valueDisplayNames(
+                        DashboardGetEmbeddableUrlParams.BmGroupKeyOverride.ValueDisplayNames
+                            .builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .build()
+            )
+        assertThat(body.colorOverrides().getOrNull())
+            .containsExactly(
+                DashboardGetEmbeddableUrlParams.ColorOverride.builder()
+                    .name(DashboardGetEmbeddableUrlParams.ColorOverride.Name.GRAY_DARK)
+                    .value("#ff0000")
+                    .build()
+            )
+        assertThat(body.dashboardOptions().getOrNull())
+            .containsExactly(
+                DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                    .key(
+                        DashboardGetEmbeddableUrlParams.DashboardOption.Key
+                            .SHOW_ZERO_USAGE_LINE_ITEMS
+                    )
+                    .value("false")
+                    .build(),
+                DashboardGetEmbeddableUrlParams.DashboardOption.builder()
+                    .key(DashboardGetEmbeddableUrlParams.DashboardOption.Key.INVOICE_STATUS_FILTER)
+                    .value("FINALIZED")
+                    .build(),
+            )
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-      val params = DashboardGetEmbeddableUrlParams.builder()
-          .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
-          .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
-          .build()
+        val params =
+            DashboardGetEmbeddableUrlParams.builder()
+                .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
+                .dashboard(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
+                .build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
-      assertThat(body.dashboard()).isEqualTo(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
+        assertThat(body.customerId()).isEqualTo("4db51251-61de-4bfe-b9ce-495e244f3491")
+        assertThat(body.dashboard()).isEqualTo(DashboardGetEmbeddableUrlParams.Dashboard.INVOICES)
     }
 }

@@ -5,9 +5,6 @@ package com.metronome.api.models.v1.plans
 import com.metronome.api.core.AutoPagerAsync
 import com.metronome.api.core.PageAsync
 import com.metronome.api.core.checkRequired
-import com.metronome.api.models.v1.plans.PlanListChargesPageResponse
-import com.metronome.api.models.v1.plans.PlanListChargesParams
-import com.metronome.api.models.v1.plans.PlanListChargesResponse
 import com.metronome.api.services.async.v1.PlanServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -16,12 +13,12 @@ import java.util.concurrent.Executor
 import kotlin.jvm.optionals.getOrNull
 
 /** @see PlanServiceAsync.listCharges */
-class PlanListChargesPageAsync private constructor(
+class PlanListChargesPageAsync
+private constructor(
     private val service: PlanServiceAsync,
     private val streamHandlerExecutor: Executor,
     private val params: PlanListChargesParams,
     private val response: PlanListChargesPageResponse,
-
 ) : PageAsync<PlanListChargesResponse> {
 
     /**
@@ -36,25 +33,25 @@ class PlanListChargesPageAsync private constructor(
      *
      * @see PlanListChargesPageResponse.data
      */
-    fun data(): List<PlanListChargesResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<PlanListChargesResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<PlanListChargesResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): PlanListChargesParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
-    override fun nextPage(): CompletableFuture<PlanListChargesPageAsync> = service.listCharges(nextPageParams())
+    override fun nextPage(): CompletableFuture<PlanListChargesPageAsync> =
+        service.listCharges(nextPageParams())
 
     fun autoPager(): AutoPagerAsync<PlanListChargesResponse> =
-        AutoPagerAsync.from(
-          this, streamHandlerExecutor
-        )
+        AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): PlanListChargesParams = params
@@ -70,7 +67,6 @@ class PlanListChargesPageAsync private constructor(
          * Returns a mutable builder for constructing an instance of [PlanListChargesPageAsync].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -78,8 +74,7 @@ class PlanListChargesPageAsync private constructor(
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PlanListChargesPageAsync]. */
@@ -91,35 +86,24 @@ class PlanListChargesPageAsync private constructor(
         private var response: PlanListChargesPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(planListChargesPageAsync: PlanListChargesPageAsync) =
-            apply {
-                service = planListChargesPageAsync.service
-                streamHandlerExecutor = planListChargesPageAsync.streamHandlerExecutor
-                params = planListChargesPageAsync.params
-                response = planListChargesPageAsync.response
-            }
+        internal fun from(planListChargesPageAsync: PlanListChargesPageAsync) = apply {
+            service = planListChargesPageAsync.service
+            streamHandlerExecutor = planListChargesPageAsync.streamHandlerExecutor
+            params = planListChargesPageAsync.params
+            response = planListChargesPageAsync.response
+        }
 
-        fun service(service: PlanServiceAsync) =
-            apply {
-                this.service = service
-            }
+        fun service(service: PlanServiceAsync) = apply { this.service = service }
 
-        fun streamHandlerExecutor(streamHandlerExecutor: Executor) =
-            apply {
-                this.streamHandlerExecutor = streamHandlerExecutor
-            }
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
-        fun params(params: PlanListChargesParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: PlanListChargesParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: PlanListChargesPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: PlanListChargesPageResponse) = apply { this.response = response }
 
         /**
          * Returns an immutable instance of [PlanListChargesPageAsync].
@@ -127,7 +111,6 @@ class PlanListChargesPageAsync private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .streamHandlerExecutor()
@@ -139,30 +122,27 @@ class PlanListChargesPageAsync private constructor(
          */
         fun build(): PlanListChargesPageAsync =
             PlanListChargesPageAsync(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "streamHandlerExecutor", streamHandlerExecutor
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PlanListChargesPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response
+        return other is PlanListChargesPageAsync &&
+            service == other.service &&
+            streamHandlerExecutor == other.streamHandlerExecutor &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, streamHandlerExecutor, params, response)
 
-    override fun toString() = "PlanListChargesPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
+    override fun toString() =
+        "PlanListChargesPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

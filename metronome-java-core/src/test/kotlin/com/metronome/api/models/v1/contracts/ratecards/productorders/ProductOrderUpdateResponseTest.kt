@@ -5,7 +5,6 @@ package com.metronome.api.models.v1.contracts.ratecards.productorders
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.jsonMapper
 import com.metronome.api.models.Id
-import com.metronome.api.models.v1.contracts.ratecards.productorders.ProductOrderUpdateResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,28 +12,29 @@ internal class ProductOrderUpdateResponseTest {
 
     @Test
     fun create() {
-      val productOrderUpdateResponse = ProductOrderUpdateResponse.builder()
-          .data(Id.builder()
-              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-              .build())
-          .build()
+        val productOrderUpdateResponse =
+            ProductOrderUpdateResponse.builder()
+                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+                .build()
 
-      assertThat(productOrderUpdateResponse.data()).isEqualTo(Id.builder()
-          .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .build())
+        assertThat(productOrderUpdateResponse.data())
+            .isEqualTo(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
     }
 
     @Test
     fun roundtrip() {
-      val jsonMapper = jsonMapper()
-      val productOrderUpdateResponse = ProductOrderUpdateResponse.builder()
-          .data(Id.builder()
-              .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-              .build())
-          .build()
+        val jsonMapper = jsonMapper()
+        val productOrderUpdateResponse =
+            ProductOrderUpdateResponse.builder()
+                .data(Id.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+                .build()
 
-      val roundtrippedProductOrderUpdateResponse = jsonMapper.readValue(jsonMapper.writeValueAsString(productOrderUpdateResponse), jacksonTypeRef<ProductOrderUpdateResponse>())
+        val roundtrippedProductOrderUpdateResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(productOrderUpdateResponse),
+                jacksonTypeRef<ProductOrderUpdateResponse>(),
+            )
 
-      assertThat(roundtrippedProductOrderUpdateResponse).isEqualTo(productOrderUpdateResponse)
+        assertThat(roundtrippedProductOrderUpdateResponse).isEqualTo(productOrderUpdateResponse)
     }
 }

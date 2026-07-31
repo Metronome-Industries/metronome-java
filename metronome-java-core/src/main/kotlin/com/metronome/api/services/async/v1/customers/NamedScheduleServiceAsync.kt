@@ -9,14 +9,18 @@ import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleRetrieveParams
 import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleRetrieveResponse
 import com.metronome.api.models.v1.customers.namedschedules.NamedScheduleUpdateParams
-import com.metronome.api.services.async.v1.customers.NamedScheduleServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-/** Named schedules are used for storing custom data that can change over time. Named schedules are often used in custom pricing logic. */
+/**
+ * Named schedules are used for storing custom data that can change over time. Named schedules are
+ * often used in custom pricing logic.
+ */
 interface NamedScheduleServiceAsync {
 
-    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -26,25 +30,37 @@ interface NamedScheduleServiceAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleServiceAsync
 
-    /** Get a named schedule for the given customer. This endpoint's availability is dependent on your client's configuration. */
-    fun retrieve(params: NamedScheduleRetrieveParams): CompletableFuture<NamedScheduleRetrieveResponse> =
-        retrieve(
-          params, RequestOptions.none()
-        )
+    /**
+     * Get a named schedule for the given customer. This endpoint's availability is dependent on
+     * your client's configuration.
+     */
+    fun retrieve(
+        params: NamedScheduleRetrieveParams
+    ): CompletableFuture<NamedScheduleRetrieveResponse> = retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
-    fun retrieve(params: NamedScheduleRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<NamedScheduleRetrieveResponse>
+    fun retrieve(
+        params: NamedScheduleRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NamedScheduleRetrieveResponse>
 
-    /** Update a named schedule for the given customer. This endpoint's availability is dependent on your client's configuration. */
+    /**
+     * Update a named schedule for the given customer. This endpoint's availability is dependent on
+     * your client's configuration.
+     */
     fun update(params: NamedScheduleUpdateParams): CompletableFuture<Void?> =
-        update(
-          params, RequestOptions.none()
-        )
+        update(params, RequestOptions.none())
 
     /** @see update */
-    fun update(params: NamedScheduleUpdateParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<Void?>
+    fun update(
+        params: NamedScheduleUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Void?>
 
-    /** A view of [NamedScheduleServiceAsync] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [NamedScheduleServiceAsync] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         /**
@@ -52,24 +68,36 @@ interface NamedScheduleServiceAsync {
          *
          * The original service is not modified.
          */
-        fun withOptions(modifier: Consumer<ClientOptions.Builder>): NamedScheduleServiceAsync.WithRawResponse
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): NamedScheduleServiceAsync.WithRawResponse
 
-        /** Returns a raw HTTP response for `post /v1/customers/getNamedSchedule`, but is otherwise the             same as [NamedScheduleServiceAsync.retrieve]. */
-        fun retrieve(params: NamedScheduleRetrieveParams): CompletableFuture<HttpResponseFor<NamedScheduleRetrieveResponse>> =
-            retrieve(
-              params, RequestOptions.none()
-            )
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/getNamedSchedule`, but is otherwise
+         * the same as [NamedScheduleServiceAsync.retrieve].
+         */
+        fun retrieve(
+            params: NamedScheduleRetrieveParams
+        ): CompletableFuture<HttpResponseFor<NamedScheduleRetrieveResponse>> =
+            retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
-        fun retrieve(params: NamedScheduleRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<NamedScheduleRetrieveResponse>>
+        fun retrieve(
+            params: NamedScheduleRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NamedScheduleRetrieveResponse>>
 
-        /** Returns a raw HTTP response for `post /v1/customers/updateNamedSchedule`, but is otherwise the             same as [NamedScheduleServiceAsync.update]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/customers/updateNamedSchedule`, but is
+         * otherwise the same as [NamedScheduleServiceAsync.update].
+         */
         fun update(params: NamedScheduleUpdateParams): CompletableFuture<HttpResponse> =
-            update(
-              params, RequestOptions.none()
-            )
+            update(params, RequestOptions.none())
 
         /** @see update */
-        fun update(params: NamedScheduleUpdateParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponse>
+        fun update(
+            params: NamedScheduleUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
     }
 }

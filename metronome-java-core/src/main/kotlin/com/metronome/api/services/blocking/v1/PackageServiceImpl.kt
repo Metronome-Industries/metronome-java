@@ -27,26 +27,31 @@ import com.metronome.api.models.v1.packages.PackageListPageResponse
 import com.metronome.api.models.v1.packages.PackageListParams
 import com.metronome.api.models.v1.packages.PackageRetrieveParams
 import com.metronome.api.models.v1.packages.PackageRetrieveResponse
-import com.metronome.api.services.blocking.v1.PackageService
-import com.metronome.api.services.blocking.v1.PackageServiceImpl
 import java.util.function.Consumer
 
-class PackageServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class PackageServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    PackageService {
 
-) : PackageService {
-
-    private val withRawResponse: PackageService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: PackageService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): PackageService.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PackageService = PackageServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PackageService =
+        PackageServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun create(params: PackageCreateParams, requestOptions: RequestOptions): PackageCreateResponse =
+    override fun create(
+        params: PackageCreateParams,
+        requestOptions: RequestOptions,
+    ): PackageCreateResponse =
         // post /v1/packages/create
         withRawResponse().create(params, requestOptions).parse()
 
-    override fun retrieve(params: PackageRetrieveParams, requestOptions: RequestOptions): PackageRetrieveResponse =
+    override fun retrieve(
+        params: PackageRetrieveParams,
+        requestOptions: RequestOptions,
+    ): PackageRetrieveResponse =
         // post /v1/packages/get
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -54,180 +59,186 @@ class PackageServiceImpl internal constructor(
         // post /v1/packages/list
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun archive(params: PackageArchiveParams, requestOptions: RequestOptions): PackageArchiveResponse =
+    override fun archive(
+        params: PackageArchiveParams,
+        requestOptions: RequestOptions,
+    ): PackageArchiveResponse =
         // post /v1/packages/archive
         withRawResponse().archive(params, requestOptions).parse()
 
-    override fun listContractsOnPackage(params: PackageListContractsOnPackageParams, requestOptions: RequestOptions): PackageListContractsOnPackagePage =
+    override fun listContractsOnPackage(
+        params: PackageListContractsOnPackageParams,
+        requestOptions: RequestOptions,
+    ): PackageListContractsOnPackagePage =
         // post /v1/packages/listContractsOnPackage
         withRawResponse().listContractsOnPackage(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        PackageService.WithRawResponse {
 
-    ) : PackageService.WithRawResponse {
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
-
-        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PackageService.WithRawResponse = PackageServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
-
-        private val createHandler: Handler<PackageCreateResponse> = jsonHandler<PackageCreateResponse>(clientOptions.jsonMapper)
-
-        override fun create(params: PackageCreateParams, requestOptions: RequestOptions): HttpResponseFor<PackageCreateResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "packages", "create")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PackageService.WithRawResponse =
+            PackageServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
             )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  createHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+
+        private val createHandler: Handler<PackageCreateResponse> =
+            jsonHandler<PackageCreateResponse>(clientOptions.jsonMapper)
+
+        override fun create(
+            params: PackageCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PackageCreateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "packages", "create")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val retrieveHandler: Handler<PackageRetrieveResponse> = jsonHandler<PackageRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<PackageRetrieveResponse> =
+            jsonHandler<PackageRetrieveResponse>(clientOptions.jsonMapper)
 
-        override fun retrieve(params: PackageRetrieveParams, requestOptions: RequestOptions): HttpResponseFor<PackageRetrieveResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "packages", "get")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  retrieveHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun retrieve(
+            params: PackageRetrieveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PackageRetrieveResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "packages", "get")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val listHandler: Handler<PackageListPageResponse> = jsonHandler<PackageListPageResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<PackageListPageResponse> =
+            jsonHandler<PackageListPageResponse>(clientOptions.jsonMapper)
 
-        override fun list(params: PackageListParams, requestOptions: RequestOptions): HttpResponseFor<PackageListPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "packages", "list")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  PackageListPage.builder()
-                      .service(PackageServiceImpl(clientOptions))
-                      .params(params)
-                      .response(it)
-                      .build()
-              }
-          }
+        override fun list(
+            params: PackageListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PackageListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "packages", "list")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        PackageListPage.builder()
+                            .service(PackageServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
+            }
         }
 
-        private val archiveHandler: Handler<PackageArchiveResponse> = jsonHandler<PackageArchiveResponse>(clientOptions.jsonMapper)
+        private val archiveHandler: Handler<PackageArchiveResponse> =
+            jsonHandler<PackageArchiveResponse>(clientOptions.jsonMapper)
 
-        override fun archive(params: PackageArchiveParams, requestOptions: RequestOptions): HttpResponseFor<PackageArchiveResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "packages", "archive")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  archiveHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun archive(
+            params: PackageArchiveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PackageArchiveResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "packages", "archive")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { archiveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val listContractsOnPackageHandler: Handler<PackageListContractsOnPackagePageResponse> = jsonHandler<PackageListContractsOnPackagePageResponse>(clientOptions.jsonMapper)
+        private val listContractsOnPackageHandler:
+            Handler<PackageListContractsOnPackagePageResponse> =
+            jsonHandler<PackageListContractsOnPackagePageResponse>(clientOptions.jsonMapper)
 
-        override fun listContractsOnPackage(params: PackageListContractsOnPackageParams, requestOptions: RequestOptions): HttpResponseFor<PackageListContractsOnPackagePage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "packages", "listContractsOnPackage")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(
-              clientOptions, params
-            )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return errorHandler.handle(response).parseable {
-              response.use {
-                  listContractsOnPackageHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  PackageListContractsOnPackagePage.builder()
-                      .service(PackageServiceImpl(clientOptions))
-                      .params(params)
-                      .response(it)
-                      .build()
-              }
-          }
+        override fun listContractsOnPackage(
+            params: PackageListContractsOnPackageParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PackageListContractsOnPackagePage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "packages", "listContractsOnPackage")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listContractsOnPackageHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        PackageListContractsOnPackagePage.builder()
+                            .service(PackageServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
+            }
         }
     }
 }

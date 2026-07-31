@@ -2,7 +2,6 @@
 
 package com.metronome.api.models.v1.contracts
 
-import com.metronome.api.models.v1.contracts.ContractRetrieveParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -10,41 +9,43 @@ internal class ContractRetrieveParamsTest {
 
     @Test
     fun create() {
-      ContractRetrieveParams.builder()
-          .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-          .includeBalance(true)
-          .includeLedgers(true)
-          .build()
+        ContractRetrieveParams.builder()
+            .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+            .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+            .includeBalance(true)
+            .includeLedgers(true)
+            .build()
     }
 
     @Test
     fun body() {
-      val params = ContractRetrieveParams.builder()
-          .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-          .includeBalance(true)
-          .includeLedgers(true)
-          .build()
+        val params =
+            ContractRetrieveParams.builder()
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .includeBalance(true)
+                .includeLedgers(true)
+                .build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-      assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
-      assertThat(body.includeBalance()).contains(true)
-      assertThat(body.includeLedgers()).contains(true)
+        assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.includeBalance()).contains(true)
+        assertThat(body.includeLedgers()).contains(true)
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-      val params = ContractRetrieveParams.builder()
-          .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-          .build()
+        val params =
+            ContractRetrieveParams.builder()
+                .contractId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-      assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.contractId()).isEqualTo("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+        assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
     }
 }

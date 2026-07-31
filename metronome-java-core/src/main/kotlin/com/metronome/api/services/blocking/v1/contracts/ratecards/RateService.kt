@@ -12,13 +12,14 @@ import com.metronome.api.models.v1.contracts.ratecards.rates.RateAddParams
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateAddResponse
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateListPage
 import com.metronome.api.models.v1.contracts.ratecards.rates.RateListParams
-import com.metronome.api.services.blocking.v1.contracts.ratecards.RateService
 import java.util.function.Consumer
 
 /** Rate cards are used to define default pricing for products. */
 interface RateService {
 
-    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -29,44 +30,46 @@ interface RateService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateService
 
     /**
-     * Understand the rate schedule at a given timestamp, optionally filtering the list of rates returned based on properties such as `product_id` and `pricing_group_values`. For example, you may want to display the current price for a given product in your product experience - use this endpoint to fetch that information from its source of truth in Metronome.
+     * Understand the rate schedule at a given timestamp, optionally filtering the list of rates
+     * returned based on properties such as `product_id` and `pricing_group_values`. For example,
+     * you may want to display the current price for a given product in your product experience -
+     * use this endpoint to fetch that information from its source of truth in Metronome.
      *
-     * If you want to understand the rates for a specific customer's contract, inclusive of contract-level overrides, use the `getContractRateSchedule` endpoint.
-     *
+     * If you want to understand the rates for a specific customer's contract, inclusive of
+     * contract-level overrides, use the `getContractRateSchedule` endpoint.
      */
-    fun list(params: RateListParams): RateListPage =
-        list(
-          params, RequestOptions.none()
-        )
+    fun list(params: RateListParams): RateListPage = list(params, RequestOptions.none())
 
     /** @see list */
-    fun list(params: RateListParams, requestOptions: RequestOptions = RequestOptions.none()): RateListPage
+    fun list(
+        params: RateListParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): RateListPage
 
     /**
      * Add a new rate
      *
-     * This endpoint is heavily rate limited. For adding multiple rates, using the [addRates](https://docs.metronome.com/api-reference/rate-cards/add-rates) endpoint is strongly encouraged.
-     *
+     * This endpoint is heavily rate limited. For adding multiple rates, using the
+     * [addRates](https://docs.metronome.com/api-reference/rate-cards/add-rates) endpoint is
+     * strongly encouraged.
      */
-    fun add(params: RateAddParams): RateAddResponse =
-        add(
-          params, RequestOptions.none()
-        )
+    fun add(params: RateAddParams): RateAddResponse = add(params, RequestOptions.none())
 
     /** @see add */
-    fun add(params: RateAddParams, requestOptions: RequestOptions = RequestOptions.none()): RateAddResponse
+    fun add(
+        params: RateAddParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): RateAddResponse
 
-    /**
-     * Add new rates
-     *
-     */
+    /** Add new rates */
     fun addMany(params: RateAddManyParams): RateAddManyResponse =
-        addMany(
-          params, RequestOptions.none()
-        )
+        addMany(params, RequestOptions.none())
 
     /** @see addMany */
-    fun addMany(params: RateAddManyParams, requestOptions: RequestOptions = RequestOptions.none()): RateAddManyResponse
+    fun addMany(
+        params: RateAddManyParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): RateAddManyResponse
 
     /** A view of [RateService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -78,37 +81,49 @@ interface RateService {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): RateService.WithRawResponse
 
-        /** Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/getRates`, but is otherwise the             same as [RateService.list]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/getRates`, but is
+         * otherwise the same as [RateService.list].
+         */
         @MustBeClosed
         fun list(params: RateListParams): HttpResponseFor<RateListPage> =
-            list(
-              params, RequestOptions.none()
-            )
+            list(params, RequestOptions.none())
 
         /** @see list */
         @MustBeClosed
-        fun list(params: RateListParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<RateListPage>
+        fun list(
+            params: RateListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateListPage>
 
-        /** Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/addRate`, but is otherwise the             same as [RateService.add]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/addRate`, but is
+         * otherwise the same as [RateService.add].
+         */
         @MustBeClosed
         fun add(params: RateAddParams): HttpResponseFor<RateAddResponse> =
-            add(
-              params, RequestOptions.none()
-            )
+            add(params, RequestOptions.none())
 
         /** @see add */
         @MustBeClosed
-        fun add(params: RateAddParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<RateAddResponse>
+        fun add(
+            params: RateAddParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateAddResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/addRates`, but is otherwise the             same as [RateService.addMany]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contract-pricing/rate-cards/addRates`, but is
+         * otherwise the same as [RateService.addMany].
+         */
         @MustBeClosed
         fun addMany(params: RateAddManyParams): HttpResponseFor<RateAddManyResponse> =
-            addMany(
-              params, RequestOptions.none()
-            )
+            addMany(params, RequestOptions.none())
 
         /** @see addMany */
         @MustBeClosed
-        fun addMany(params: RateAddManyParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<RateAddManyResponse>
+        fun addMany(
+            params: RateAddManyParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<RateAddManyResponse>
     }
 }

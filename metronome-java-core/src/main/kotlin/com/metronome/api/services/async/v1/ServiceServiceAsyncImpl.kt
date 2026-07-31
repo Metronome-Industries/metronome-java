@@ -16,61 +16,73 @@ import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepareAsync
 import com.metronome.api.models.v1.services.ServiceListParams
 import com.metronome.api.models.v1.services.ServiceListResponse
-import com.metronome.api.services.async.v1.ServiceServiceAsync
-import com.metronome.api.services.async.v1.ServiceServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-/** [Security](https://docs.metronome.com/developer-resources/security/) endpoints allow you to retrieve security-related data. */
-class ServiceServiceAsyncImpl internal constructor(
-    private val clientOptions: ClientOptions,
+/**
+ * [Security](https://docs.metronome.com/developer-resources/security/) endpoints allow you to
+ * retrieve security-related data.
+ */
+class ServiceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    ServiceServiceAsync {
 
-) : ServiceServiceAsync {
-
-    private val withRawResponse: ServiceServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: ServiceServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): ServiceServiceAsync.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ServiceServiceAsync = ServiceServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ServiceServiceAsync =
+        ServiceServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun list(params: ServiceListParams, requestOptions: RequestOptions): CompletableFuture<ServiceListResponse> =
+    override fun list(
+        params: ServiceListParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<ServiceListResponse> =
         // get /v1/services
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        ServiceServiceAsync.WithRawResponse {
 
-    ) : ServiceServiceAsync.WithRawResponse {
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
-
-        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ServiceServiceAsync.WithRawResponse = ServiceServiceAsyncImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
-
-        private val listHandler: Handler<ServiceListResponse> = jsonHandler<ServiceListResponse>(clientOptions.jsonMapper)
-
-        override fun list(params: ServiceListParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<ServiceListResponse>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "services")
-            .build()
-            .prepareAsync(
-              clientOptions, params
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ServiceServiceAsync.WithRawResponse =
+            ServiceServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
             )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> errorHandler.handle(response).parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+
+        private val listHandler: Handler<ServiceListResponse> =
+            jsonHandler<ServiceListResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: ServiceListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<ServiceListResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "services")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
     }
 }

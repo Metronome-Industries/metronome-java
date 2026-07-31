@@ -4,7 +4,6 @@ package com.metronome.api.models.v1.creditgrants
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.jsonMapper
-import com.metronome.api.models.v1.creditgrants.CreditLedgerEntry
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -13,40 +12,48 @@ internal class CreditLedgerEntryTest {
 
     @Test
     fun create() {
-      val creditLedgerEntry = CreditLedgerEntry.builder()
-          .amount(0.0)
-          .createdBy("created_by")
-          .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-          .reason("Automated invoice deduction")
-          .runningBalance(0.0)
-          .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .build()
+        val creditLedgerEntry =
+            CreditLedgerEntry.builder()
+                .amount(0.0)
+                .createdBy("created_by")
+                .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .reason("Automated invoice deduction")
+                .runningBalance(0.0)
+                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .build()
 
-      assertThat(creditLedgerEntry.amount()).isEqualTo(0.0)
-      assertThat(creditLedgerEntry.createdBy()).isEqualTo("created_by")
-      assertThat(creditLedgerEntry.creditGrantId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-      assertThat(creditLedgerEntry.effectiveAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-      assertThat(creditLedgerEntry.reason()).isEqualTo("Automated invoice deduction")
-      assertThat(creditLedgerEntry.runningBalance()).isEqualTo(0.0)
-      assertThat(creditLedgerEntry.invoiceId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(creditLedgerEntry.amount()).isEqualTo(0.0)
+        assertThat(creditLedgerEntry.createdBy()).isEqualTo("created_by")
+        assertThat(creditLedgerEntry.creditGrantId())
+            .isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(creditLedgerEntry.effectiveAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(creditLedgerEntry.reason()).isEqualTo("Automated invoice deduction")
+        assertThat(creditLedgerEntry.runningBalance()).isEqualTo(0.0)
+        assertThat(creditLedgerEntry.invoiceId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
     }
 
     @Test
     fun roundtrip() {
-      val jsonMapper = jsonMapper()
-      val creditLedgerEntry = CreditLedgerEntry.builder()
-          .amount(0.0)
-          .createdBy("created_by")
-          .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-          .reason("Automated invoice deduction")
-          .runningBalance(0.0)
-          .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .build()
+        val jsonMapper = jsonMapper()
+        val creditLedgerEntry =
+            CreditLedgerEntry.builder()
+                .amount(0.0)
+                .createdBy("created_by")
+                .creditGrantId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .reason("Automated invoice deduction")
+                .runningBalance(0.0)
+                .invoiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .build()
 
-      val roundtrippedCreditLedgerEntry = jsonMapper.readValue(jsonMapper.writeValueAsString(creditLedgerEntry), jacksonTypeRef<CreditLedgerEntry>())
+        val roundtrippedCreditLedgerEntry =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(creditLedgerEntry),
+                jacksonTypeRef<CreditLedgerEntry>(),
+            )
 
-      assertThat(roundtrippedCreditLedgerEntry).isEqualTo(creditLedgerEntry)
+        assertThat(roundtrippedCreditLedgerEntry).isEqualTo(creditLedgerEntry)
     }
 }

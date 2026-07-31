@@ -3,14 +3,15 @@
 package com.metronome.api.services.async
 
 import com.metronome.api.core.ClientOptions
-import com.metronome.api.services.async.V2ServiceAsync
 import com.metronome.api.services.async.v2.ContractServiceAsync
 import com.metronome.api.services.async.v2.NotificationServiceAsync
 import java.util.function.Consumer
 
 interface V2ServiceAsync {
 
-    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
     fun withRawResponse(): WithRawResponse
 
     /**

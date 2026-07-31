@@ -37,7 +37,6 @@ import com.metronome.api.models.v1.contracts.ContractScheduleProServicesInvoiceR
 import com.metronome.api.models.v1.contracts.ContractSetUsageFilterParams
 import com.metronome.api.models.v1.contracts.ContractUpdateEndDateParams
 import com.metronome.api.models.v1.contracts.ContractUpdateEndDateResponse
-import com.metronome.api.services.blocking.v1.ContractService
 import com.metronome.api.services.blocking.v1.contracts.NamedScheduleService
 import com.metronome.api.services.blocking.v1.contracts.ProductService
 import com.metronome.api.services.blocking.v1.contracts.RateCardService
@@ -45,7 +44,9 @@ import java.util.function.Consumer
 
 interface ContractService {
 
-    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -61,224 +62,331 @@ interface ContractService {
     /** Rate cards are used to define default pricing for products. */
     fun rateCards(): RateCardService
 
-    /** Named schedules are used for storing custom data that can change over time. Named schedules are often used in custom pricing logic. */
+    /**
+     * Named schedules are used for storing custom data that can change over time. Named schedules
+     * are often used in custom pricing logic.
+     */
     fun namedSchedules(): NamedScheduleService
 
     /**
-     * Contracts define a customer's products, pricing, discounts, access duration, and billing configuration. Contracts serve as the central billing agreement for both PLG and Enterprise customers. You can automatically grant customers access to your products and services directly from your product or CRM.
+     * Contracts define a customer's products, pricing, discounts, access duration, and billing
+     * configuration. Contracts serve as the central billing agreement for both PLG and Enterprise
+     * customers. You can automatically grant customers access to your products and services
+     * directly from your product or CRM.
      *
      * ### Use this endpoint to:
-     * - PLG onboarding: Automatically provision new self-serve customers with contracts when they sign up.
-     * - Enterprise sales: Push negotiated contracts from Salesforce with custom pricing and commitments
+     * - PLG onboarding: Automatically provision new self-serve customers with contracts when they
+     *   sign up.
+     * - Enterprise sales: Push negotiated contracts from Salesforce with custom pricing and
+     *   commitments
      * - Promotional pricing: Implement time-limited discounts and free trials through overrides
      *
      * ### Key components:
+     *
      * #### Contract Term and Billing Schedule
-     * - Set contract duration using `starting_at` and `ending_before` fields. PLG contracts typically use perpetual agreements (no end date), while Enterprise contracts have fixed end dates which can be edited over time in the case of co-term upsells.
+     * - Set contract duration using `starting_at` and `ending_before` fields. PLG contracts
+     *   typically use perpetual agreements (no end date), while Enterprise contracts have fixed end
+     *   dates which can be edited over time in the case of co-term upsells.
      *
      * #### Rate Card
-     * If you are offering usage based pricing, you can set a rate card for the contract to reference through `rate_card_id` or `rate_card_alias`. The rate card is a store of all of your usage based products and their centralized pricing. Any new products or price changes on the rate card can be set to automatically propagate to all associated contracts - this ensures consistent pricing and product launches flow to contracts without manual updates and migrations. The `usage_statement_schedule` determines the cadence on which Metronome will finalize a usage invoice for the customer. This defaults to monthly on the 1st, with options for custom dates, quarterly, or annual cadences. Note: Most usage based billing companies align usage statements to be evaluated aligned to the first of the month.
-     * Read more about [Rate Cards](https://docs.metronome.com/pricing-packaging/create-manage-rate-cards/).
+     * If you are offering usage based pricing, you can set a rate card for the contract to
+     * reference through `rate_card_id` or `rate_card_alias`. The rate card is a store of all of
+     * your usage based products and their centralized pricing. Any new products or price changes on
+     * the rate card can be set to automatically propagate to all associated contracts - this
+     * ensures consistent pricing and product launches flow to contracts without manual updates and
+     * migrations. The `usage_statement_schedule` determines the cadence on which Metronome will
+     * finalize a usage invoice for the customer. This defaults to monthly on the 1st, with options
+     * for custom dates, quarterly, or annual cadences. Note: Most usage based billing companies
+     * align usage statements to be evaluated aligned to the first of the month. Read more about
+     * [Rate Cards](https://docs.metronome.com/pricing-packaging/create-manage-rate-cards/).
      *
      * #### Overrides and discounts
-     * Customize pricing on the contract through time-bounded overrides that can target specific products, product families, or complex usage scenarios. Overrides enable two key capabilities:
-     * - Discounts: Apply percentage discounts, fixed rate reductions, or quantity-based pricing tiers
+     * Customize pricing on the contract through time-bounded overrides that can target specific
+     * products, product families, or complex usage scenarios. Overrides enable two key
+     * capabilities:
+     * - Discounts: Apply percentage discounts, fixed rate reductions, or quantity-based pricing
+     *   tiers
      * - Entitlements: Provide special pricing or access to specific products for negotiated deals
      *
-     * Read more about [Contract Overrides](https://docs.metronome.com/manage-product-access/add-contract-override/).
+     * Read more about
+     * [Contract Overrides](https://docs.metronome.com/manage-product-access/add-contract-override/).
      *
      * #### Commits and Credits
-     * Using commits, configure prepaid or postpaid spending commitments where customers promise to spend a certain amount over the contract period paid in advance or in arrears. Use credits to provide free spending allowances. Under the hood these are the same mechanisms, however, credits are typically offered for free (SLA or promotional) or as a part of an allotment associated with a Subscription.
+     * Using commits, configure prepaid or postpaid spending commitments where customers promise to
+     * spend a certain amount over the contract period paid in advance or in arrears. Use credits to
+     * provide free spending allowances. Under the hood these are the same mechanisms, however,
+     * credits are typically offered for free (SLA or promotional) or as a part of an allotment
+     * associated with a Subscription.
      *
-     * In Metronome, you can set commits and credits to only be applicable for a subset of usage. Use `applicable_product_ids` or `applicable_product_tags` to create product or product-family specific commits or credits, or you can build complex boolean logic specifiers to target usage based on pricing  and presentation group values using `override_specifiers`.
+     * In Metronome, you can set commits and credits to only be applicable for a subset of usage.
+     * Use `applicable_product_ids` or `applicable_product_tags` to create product or product-family
+     * specific commits or credits, or you can build complex boolean logic specifiers to target
+     * usage based on pricing and presentation group values using `override_specifiers`.
      *
-     * These objects can also also be configured to have a recurrence schedule to easily model customer packaging which includes recurring monthly or quarterly allotments.
+     * These objects can also also be configured to have a recurrence schedule to easily model
+     * customer packaging which includes recurring monthly or quarterly allotments.
      *
-     * Commits support rollover settings (`rollover_fraction`) to transfer unused balances between contract periods, either entirely or as a percentage.
+     * Commits support rollover settings (`rollover_fraction`) to transfer unused balances between
+     * contract periods, either entirely or as a percentage.
      *
-     * Read more about [Credits and Commits](https://docs.metronome.com/pricing-packaging/apply-credits-commits/).
+     * Read more about
+     * [Credits and Commits](https://docs.metronome.com/pricing-packaging/apply-credits-commits/).
      *
      * #### Subscriptions
-     * You can add a fixed recurring charge to a contract, like monthly licenses or seat-based fees, using the subscription charge. Subscription charges are defined on your rate card and you can select which subscription is applicable to add to each contract.         When you add a subscription to a contract you need to:
-     * - Define whether the subscription is paid for in-advance or in-arrears (`collection_schedule`)
+     * You can add a fixed recurring charge to a contract, like monthly licenses or seat-based fees,
+     * using the subscription charge. Subscription charges are defined on your rate card and you can
+     * select which subscription is applicable to add to each contract. When you add a subscription
+     * to a contract you need to:
+     * - Define whether the subscription is paid for in-advance or in-arrears
+     *   (`collection_schedule`)
      * - Define the proration behavior (`proration`)
      * - Specify an initial quantity (`initial_quantity`)
      * - Define which subscription rate on the rate card should be used (`subscription_rate`)
      *
-     * Read more about [Subscriptions](https://docs.metronome.com/manage-product-access/create-subscription/).
+     * Read more about
+     * [Subscriptions](https://docs.metronome.com/manage-product-access/create-subscription/).
      *
      * #### Scheduled Charges
-     * Set up one-time, recurring, or entirely custom charges that occur on specific dates, separate from usage-based billing or commitments. These can be used to model non-recurring platform charges or professional services.
+     * Set up one-time, recurring, or entirely custom charges that occur on specific dates, separate
+     * from usage-based billing or commitments. These can be used to model non-recurring platform
+     * charges or professional services.
      *
      * #### Threshold Billing
-     * Metronome allows you to configure automatic billing triggers when customers reach spending thresholds to prevent fraud and manage risk. You can use `spend_threshold_configuration` to trigger an invoice to cover current charges whenever the threshold is reached or you can ensure the customer maintains a minimum prepaid balance using the `prepaid_balance_configuration`.
+     * Metronome allows you to configure automatic billing triggers when customers reach spending
+     * thresholds to prevent fraud and manage risk. You can use `spend_threshold_configuration` to
+     * trigger an invoice to cover current charges whenever the threshold is reached or you can
+     * ensure the customer maintains a minimum prepaid balance using the
+     * `prepaid_balance_configuration`.
      *
-     * Read more about [Spend Threshold](https://docs.metronome.com/manage-product-access/spend-thresholds/) and [Prepaid Balance Thresholds](https://docs.metronome.com/manage-product-access/prepaid-balance-thresholds/).
+     * Read more about
+     * [Spend Threshold](https://docs.metronome.com/manage-product-access/spend-thresholds/) and
+     * [Prepaid Balance Thresholds](https://docs.metronome.com/manage-product-access/prepaid-balance-thresholds/).
      *
      * ### Usage guidelines:
-     * - You can always [Edit Contracts](https://docs.metronome.com/manage-product-access/edit-contract/) after it has been created, using the `editContract` endpoint. Metronome keeps track of all edits, both in the audit log and over the `getEditHistory` endpoint.
-     * - Customers in Metronome can have multiple concurrent contracts at one time. Use `usage_filters` to route the correct usage to each contract. [Read more about usage filters](https://docs.metronome.com/manage-product-access/provision-customer/#create-a-usage-filter).
-     *
+     * - You can always
+     *   [Edit Contracts](https://docs.metronome.com/manage-product-access/edit-contract/) after it
+     *   has been created, using the `editContract` endpoint. Metronome keeps track of all edits,
+     *   both in the audit log and over the `getEditHistory` endpoint.
+     * - Customers in Metronome can have multiple concurrent contracts at one time. Use
+     *   `usage_filters` to route the correct usage to each contract.
+     *   [Read more about usage filters](https://docs.metronome.com/manage-product-access/provision-customer/#create-a-usage-filter).
      */
     fun create(params: ContractCreateParams): ContractCreateResponse =
-        create(
-          params, RequestOptions.none()
-        )
+        create(params, RequestOptions.none())
 
     /** @see create */
-    fun create(params: ContractCreateParams, requestOptions: RequestOptions = RequestOptions.none()): ContractCreateResponse
+    fun create(
+        params: ContractCreateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractCreateResponse
 
     /**
-     * This is the v1 endpoint to get a contract. New clients should implement using the v2 endpoint.
-     *
+     * This is the v1 endpoint to get a contract. New clients should implement using the v2
+     * endpoint.
      */
     fun retrieve(params: ContractRetrieveParams): ContractRetrieveResponse =
-        retrieve(
-          params, RequestOptions.none()
-        )
+        retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
-    fun retrieve(params: ContractRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): ContractRetrieveResponse
+    fun retrieve(
+        params: ContractRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractRetrieveResponse
 
     /**
-     * Retrieves all contracts for a specific customer, including pricing, terms, credits, and commitments. Use this to view a customer's contract history and current agreements for billing management. Returns contract details with optional ledgers and balance information.
+     * Retrieves all contracts for a specific customer, including pricing, terms, credits, and
+     * commitments. Use this to view a customer's contract history and current agreements for
+     * billing management. Returns contract details with optional ledgers and balance information.
      *
-     * ⚠️ Note: This is the legacy v1 endpoint - new integrations should use the v2 endpoint for enhanced features.
-     *
+     * ⚠️ Note: This is the legacy v1 endpoint - new integrations should use the v2 endpoint for
+     * enhanced features.
      */
-    fun list(params: ContractListParams): ContractListResponse =
-        list(
-          params, RequestOptions.none()
-        )
+    fun list(params: ContractListParams): ContractListResponse = list(params, RequestOptions.none())
 
     /** @see list */
-    fun list(params: ContractListParams, requestOptions: RequestOptions = RequestOptions.none()): ContractListResponse
+    fun list(
+        params: ContractListParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractListResponse
 
     /**
-     * Manually adjust the available balance on a commit or credit. This entry is appended to the commit ledger as a new event. Optionally include a description that provides the reasoning for the entry.
+     * Manually adjust the available balance on a commit or credit. This entry is appended to the
+     * commit ledger as a new event. Optionally include a description that provides the reasoning
+     * for the entry.
      *
      * ### Use this endpoint to:
      * - Address incorrect usage burn-down caused by malformed usage or invalid config
-     * - Decrease available balance to account for outages where usage may have not been tracked or sent to Metronome
+     * - Decrease available balance to account for outages where usage may have not been tracked or
+     *   sent to Metronome
      * - Issue credits to customers in the form of increased balance on existing commit or credit
      *
      * ### Usage guidelines:
-     * Manual ledger entries can be extremely useful for resolving discrepancies in Metronome. However, most corrections to inaccurate billings can be modified upstream of the commit, whether that is via contract editing, rate editing, or other actions that cause an invoice to be recalculated.
-     *
+     * Manual ledger entries can be extremely useful for resolving discrepancies in Metronome.
+     * However, most corrections to inaccurate billings can be modified upstream of the commit,
+     * whether that is via contract editing, rate editing, or other actions that cause an invoice to
+     * be recalculated.
      */
     fun addManualBalanceEntry(params: ContractAddManualBalanceEntryParams) =
-        addManualBalanceEntry(
-          params, RequestOptions.none()
-        )
+        addManualBalanceEntry(params, RequestOptions.none())
 
     /** @see addManualBalanceEntry */
-    fun addManualBalanceEntry(params: ContractAddManualBalanceEntryParams, requestOptions: RequestOptions = RequestOptions.none())
+    fun addManualBalanceEntry(
+        params: ContractAddManualBalanceEntryParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
 
     /**
-     * Amendments will be replaced by Contract editing. New clients should implement using the `editContract` endpoint. Read more about the migration to contract editing [here](/guides/implement-metronome/migrate-amendments-to-edits/) and reach out to your Metronome representative for more details. Once contract editing is enabled, access to this endpoint will be removed.
-     *
+     * Amendments will be replaced by Contract editing. New clients should implement using the
+     * `editContract` endpoint. Read more about the migration to contract editing
+     * [here](/guides/implement-metronome/migrate-amendments-to-edits/) and reach out to your
+     * Metronome representative for more details. Once contract editing is enabled, access to this
+     * endpoint will be removed.
      */
     fun amend(params: ContractAmendParams): ContractAmendResponse =
-        amend(
-          params, RequestOptions.none()
-        )
+        amend(params, RequestOptions.none())
 
     /** @see amend */
-    fun amend(params: ContractAmendParams, requestOptions: RequestOptions = RequestOptions.none()): ContractAmendResponse
+    fun amend(
+        params: ContractAmendParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractAmendResponse
 
     /**
-     * Permanently end and archive a contract along with all its terms. Any draft invoices will be canceled, and all upcoming scheduled invoices will be voided–also all finalized invoices can optionally be voided. Use this in the event a contract was incorrectly created and needed to be removed from a customer.
+     * Permanently end and archive a contract along with all its terms. Any draft invoices will be
+     * canceled, and all upcoming scheduled invoices will be voided–also all finalized invoices can
+     * optionally be voided. Use this in the event a contract was incorrectly created and needed to
+     * be removed from a customer.
      *
      * #### Impact on commits and credits:
-     * When archiving a contract, all associated commits and credits are also archived. For prepaid commits with active segments, Metronome automatically generates expiration ledger entries to close out any remaining balances, ensuring accurate accounting of unused prepaid amounts. These ledger entries will appear in the commit's transaction history with type `PREPAID_COMMIT_EXPIRATION`.
+     * When archiving a contract, all associated commits and credits are also archived. For prepaid
+     * commits with active segments, Metronome automatically generates expiration ledger entries to
+     * close out any remaining balances, ensuring accurate accounting of unused prepaid amounts.
+     * These ledger entries will appear in the commit's transaction history with type
+     * `PREPAID_COMMIT_EXPIRATION`.
      *
      * #### Archived contract visibility:
-     * Archived contracts remain accessible for historical reporting and audit purposes. They can be retrieved using the `ListContracts` endpoint by setting the `include_archived` parameter to `true` or in the Metronome UI when the "Show archived" option is enabled.
-     *
+     * Archived contracts remain accessible for historical reporting and audit purposes. They can be
+     * retrieved using the `ListContracts` endpoint by setting the `include_archived` parameter to
+     * `true` or in the Metronome UI when the "Show archived" option is enabled.
      */
     fun archive(params: ContractArchiveParams): ContractArchiveResponse =
-        archive(
-          params, RequestOptions.none()
-        )
+        archive(params, RequestOptions.none())
 
     /** @see archive */
-    fun archive(params: ContractArchiveParams, requestOptions: RequestOptions = RequestOptions.none()): ContractArchiveResponse
+    fun archive(
+        params: ContractArchiveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractArchiveResponse
 
     /**
-     * Create historical usage invoices for past billing periods on specific contracts. Use this endpoint to generate retroactive invoices with custom usage line items, quantities, and date ranges. Supports preview mode to validate invoice data before creation. Ideal for billing migrations or correcting past billing periods.
-     *
+     * Create historical usage invoices for past billing periods on specific contracts. Use this
+     * endpoint to generate retroactive invoices with custom usage line items, quantities, and date
+     * ranges. Supports preview mode to validate invoice data before creation. Ideal for billing
+     * migrations or correcting past billing periods.
      */
-    fun createHistoricalInvoices(params: ContractCreateHistoricalInvoicesParams): ContractCreateHistoricalInvoicesResponse =
-        createHistoricalInvoices(
-          params, RequestOptions.none()
-        )
+    fun createHistoricalInvoices(
+        params: ContractCreateHistoricalInvoicesParams
+    ): ContractCreateHistoricalInvoicesResponse =
+        createHistoricalInvoices(params, RequestOptions.none())
 
     /** @see createHistoricalInvoices */
-    fun createHistoricalInvoices(params: ContractCreateHistoricalInvoicesParams, requestOptions: RequestOptions = RequestOptions.none()): ContractCreateHistoricalInvoicesResponse
+    fun createHistoricalInvoices(
+        params: ContractCreateHistoricalInvoicesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractCreateHistoricalInvoicesResponse
 
     /**
-     * Retrieve the combined current balance across any grouping of credits and commits for a customer in a single API call.
+     * Retrieve the combined current balance across any grouping of credits and commits for a
+     * customer in a single API call.
      * - Display real-time available balance to customers in billing dashboards
      * - Build finance dashboards showing credit utilization across customer segments
      * - Validate expected vs. actual balance during billing reconciliation
      *
      * ### Key response fields:
-     * - `balance`: The combined net balance available to use at this moment across all matching commits and credits
-     * - `credit_type_id`: The credit type (fiat or custom pricing unit) the balance is denominated in
+     * - `balance`: The combined net balance available to use at this moment across all matching
+     *   commits and credits
+     * - `credit_type_id`: The credit type (fiat or custom pricing unit) the balance is denominated
+     *   in
      *
      * ### Filtering options:
-     * Balance filters allow you to scope the calculation to specific subsets of commits and credits. When using multiple filter objects, they are OR'd together — if a commit or credit matches any filter, it's included in the net balance. Within a single filter object, all specified conditions are AND'd together.
-     * - **Balance types**: Include any combination of `PREPAID_COMMIT`, `POSTPAID_COMMIT`, and `CREDIT` (e.g., `["PREPAID_COMMIT", "CREDIT"]` to exclude postpaid commits). If not specified, all balance types are included.
+     * Balance filters allow you to scope the calculation to specific subsets of commits and
+     * credits. When using multiple filter objects, they are OR'd together — if a commit or credit
+     * matches any filter, it's included in the net balance. Within a single filter object, all
+     * specified conditions are AND'd together.
+     * - **Balance types**: Include any combination of `PREPAID_COMMIT`, `POSTPAID_COMMIT`, and
+     *   `CREDIT` (e.g., `["PREPAID_COMMIT", "CREDIT"]` to exclude postpaid commits). If not
+     *   specified, all balance types are included.
      * - **Specific IDs**: Target exact commit or credit IDs for precise balance queries
-     * - **Custom fields**: Filter by custom field key-value pairs; when multiple pairs are provided, commits must match all of them
+     * - **Custom fields**: Filter by custom field key-value pairs; when multiple pairs are
+     *   provided, commits must match all of them
      *
-     * **Example**: To get the balance of all free-trial credits OR all signup-promotion commits, you'd pass two filter objects — one filtering for CREDIT with custom field campaign: free-trial, and another filtering for PREPAID_COMMIT with custom field campaign: signup-promotion.
+     * **Example**: To get the balance of all free-trial credits OR all signup-promotion commits,
+     * you'd pass two filter objects — one filtering for CREDIT with custom field campaign:
+     * free-trial, and another filtering for PREPAID_COMMIT with custom field campaign:
+     * signup-promotion.
      *
      * ### Usage guidelines:
-     * - **Balance ledger details**: Use the [listBalances](https://docs.metronome.com/api-reference/credits-and-commits/list-balances) endpoint instead to understand detailed ledger drawdowns for each individual balance
-     * - **Draft invoice handling**: Use `invoice_inclusion_mode` to control whether pending draft invoice deductions are included (`FINALIZED_AND_DRAFT`, the default) or excluded (`FINALIZED`) from the balance calculation
-     * - **Account hierarchies**: When querying a child customer, shared commits from parent contracts are not included — query the parent customer directly to see shared commit balances
-     * - **Negative balances**: Manual ledger entries can cause negative segment balances; these are treated as zero when calculating the net balance
+     * - **Balance ledger details**: Use the
+     *   [listBalances](https://docs.metronome.com/api-reference/credits-and-commits/list-balances)
+     *   endpoint instead to understand detailed ledger drawdowns for each individual balance
+     * - **Draft invoice handling**: Use `invoice_inclusion_mode` to control whether pending draft
+     *   invoice deductions are included (`FINALIZED_AND_DRAFT`, the default) or excluded
+     *   (`FINALIZED`) from the balance calculation
+     * - **Account hierarchies**: When querying a child customer, shared commits from parent
+     *   contracts are not included — query the parent customer directly to see shared commit
+     *   balances
+     * - **Negative balances**: Manual ledger entries can cause negative segment balances; these are
+     *   treated as zero when calculating the net balance
      * - **Credit types**: If `credit_type_id` is not specified, the balance defaults to USD (cents)
-     *
      */
     fun getNetBalance(params: ContractGetNetBalanceParams): ContractGetNetBalanceResponse =
-        getNetBalance(
-          params, RequestOptions.none()
-        )
+        getNetBalance(params, RequestOptions.none())
 
     /** @see getNetBalance */
-    fun getNetBalance(params: ContractGetNetBalanceParams, requestOptions: RequestOptions = RequestOptions.none()): ContractGetNetBalanceResponse
+    fun getNetBalance(
+        params: ContractGetNetBalanceParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractGetNetBalanceResponse
 
     /**
-     * Get the history of subscription seats schedule over time for a given `subscription_id`. This endpoint provides information about seat assignments and total quantities for different time periods, allowing you to track how seat assignments have changed over time.
+     * Get the history of subscription seats schedule over time for a given `subscription_id`. This
+     * endpoint provides information about seat assignments and total quantities for different time
+     * periods, allowing you to track how seat assignments have changed over time.
      *
      * ### Use this endpoint to:
      * - Track changes to seat assignments over time
      * - Get seat schedule for a specific date using the `covering_date` parameter
-     * - Get seat schedule history with optional date range filtering using `starting_at` and `ending_before`
+     * - Get seat schedule history with optional date range filtering using `starting_at` and
+     *   `ending_before`
      *
      * ### Key response fields:
      * - data: array of seat schedule entries with time periods, quantity, and assignments
      * - next_page: cursor for pagination to retrieve additional results
      *
      * ### Usage guidelines:
-     * - Use `covering_date` to get the active seats for a specific point in time. `covering_date` cannot be used with `starting_at` or `ending_before`.
-     * - Use `starting_at` and `ending_before` to filter results by time range. `starting_at` and `ending_before` cannot be used with `covering_date`.
+     * - Use `covering_date` to get the active seats for a specific point in time. `covering_date`
+     *   cannot be used with `starting_at` or `ending_before`.
+     * - Use `starting_at` and `ending_before` to filter results by time range. `starting_at` and
+     *   `ending_before` cannot be used with `covering_date`.
      * - Maximum limit is 10 seat schedule entries per request
      * - Results are ordered by `starting_at` timestamp
-     *
      */
-    fun getSubscriptionSeatsHistory(params: ContractGetSubscriptionSeatsHistoryParams): ContractGetSubscriptionSeatsHistoryResponse =
-        getSubscriptionSeatsHistory(
-          params, RequestOptions.none()
-        )
+    fun getSubscriptionSeatsHistory(
+        params: ContractGetSubscriptionSeatsHistoryParams
+    ): ContractGetSubscriptionSeatsHistoryResponse =
+        getSubscriptionSeatsHistory(params, RequestOptions.none())
 
     /** @see getSubscriptionSeatsHistory */
-    fun getSubscriptionSeatsHistory(params: ContractGetSubscriptionSeatsHistoryParams, requestOptions: RequestOptions = RequestOptions.none()): ContractGetSubscriptionSeatsHistoryResponse
+    fun getSubscriptionSeatsHistory(
+        params: ContractGetSubscriptionSeatsHistoryParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractGetSubscriptionSeatsHistoryResponse
 
     /**
-     * Retrieve a comprehensive view of all available balances (commits and credits) for a customer. This endpoint provides real-time visibility into prepaid funds, postpaid commitments, promotional credits, and other balance types that can offset usage charges, helping you build transparent billing experiences.
+     * Retrieve a comprehensive view of all available balances (commits and credits) for a customer.
+     * This endpoint provides real-time visibility into prepaid funds, postpaid commitments,
+     * promotional credits, and other balance types that can offset usage charges, helping you build
+     * transparent billing experiences.
      *
      * ### Use this endpoint to:
      * - Display current available balances in customer dashboards
@@ -288,7 +396,6 @@ interface ContractService {
      *
      * ### Key response fields:
      * An array of balance objects (all credits and commits) containing:
-     *
      * - Balance details: Current available amount for each commit or credit
      * - Metadata: Product associations, priorities, applicable date ranges
      * - Optional ledger entries: Detailed transaction history (if `include_ledgers=true`)
@@ -296,25 +403,29 @@ interface ContractService {
      * - Custom fields: Any additional metadata attached to balances
      *
      * ### Usage guidelines:
-     * - Use the [getNetBalance](https://docs.metronome.com/api-reference/credits-and-commits/get-the-net-balance-of-a-customer) endpoint to retrieve a single combined current balance
-     * - Date filtering: Use `effective_before` to include only balances with access before a specific date (exclusive)
+     * - Use the
+     *   [getNetBalance](https://docs.metronome.com/api-reference/credits-and-commits/get-the-net-balance-of-a-customer)
+     *   endpoint to retrieve a single combined current balance
+     * - Date filtering: Use `effective_before` to include only balances with access before a
+     *   specific date (exclusive)
      * - Set `include_balance=true` for calculated balance amounts on each commit or credit
      * - Set `include_ledgers=true` for full transaction history
      * - Set `include_contract_balances = true` to see contract level balances
      * - Balance logic: Reflects currently accessible amounts, excluding expired/future segments
      * - Manual adjustments: Includes all manual ledger entries, even future-dated ones
-     *
      */
     fun listBalances(params: ContractListBalancesParams): ContractListBalancesPage =
-        listBalances(
-          params, RequestOptions.none()
-        )
+        listBalances(params, RequestOptions.none())
 
     /** @see listBalances */
-    fun listBalances(params: ContractListBalancesParams, requestOptions: RequestOptions = RequestOptions.none()): ContractListBalancesPage
+    fun listBalances(
+        params: ContractListBalancesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractListBalancesPage
 
     /**
-     * Retrieve detailed balance for seat-based credits and commits from the contract's subscriptions, broken down by individual seats.
+     * Retrieve detailed balance for seat-based credits and commits from the contract's
+     * subscriptions, broken down by individual seats.
      *
      * ### Use this endpoint to:
      * - Display per-seat balance information in customer dashboards
@@ -326,92 +437,118 @@ interface ContractService {
      * - Balance: current total balance across all commits and credits
      *
      * ### Usage guidelines:
-     * - Date filtering: use `covering_date` OR `starting_at`/`ending_before` to filter balance data by time range
+     * - Date filtering: use `covering_date` OR `starting_at`/`ending_before` to filter balance data
+     *   by time range
      * - Set `include_credits_and_commits=true` for detailed commits and credits breakdown per seat
      * - Set `include_ledgers=true` for detailed transaction history per commit/credit per seat
-     *
      */
     fun listSeatBalances(params: ContractListSeatBalancesParams): ContractListSeatBalancesResponse =
-        listSeatBalances(
-          params, RequestOptions.none()
-        )
+        listSeatBalances(params, RequestOptions.none())
 
     /** @see listSeatBalances */
-    fun listSeatBalances(params: ContractListSeatBalancesParams, requestOptions: RequestOptions = RequestOptions.none()): ContractListSeatBalancesResponse
+    fun listSeatBalances(
+        params: ContractListSeatBalancesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractListSeatBalancesResponse
 
     /**
-     * For a specific customer and contract, get the rates at a specific point in time. This endpoint takes the contract's rate card into consideration, including scheduled changes. It also takes into account overrides on the contract.
+     * For a specific customer and contract, get the rates at a specific point in time. This
+     * endpoint takes the contract's rate card into consideration, including scheduled changes. It
+     * also takes into account overrides on the contract.
      *
-     * For example, if you want to show your customer a summary of the prices they are paying, inclusive of any negotiated discounts or promotions, use this endpoint. This endpoint only returns rates that are entitled.
-     *
+     * For example, if you want to show your customer a summary of the prices they are paying,
+     * inclusive of any negotiated discounts or promotions, use this endpoint. This endpoint only
+     * returns rates that are entitled.
      */
-    fun retrieveRateSchedule(params: ContractRetrieveRateScheduleParams): ContractRetrieveRateScheduleResponse =
-        retrieveRateSchedule(
-          params, RequestOptions.none()
-        )
+    fun retrieveRateSchedule(
+        params: ContractRetrieveRateScheduleParams
+    ): ContractRetrieveRateScheduleResponse = retrieveRateSchedule(params, RequestOptions.none())
 
     /** @see retrieveRateSchedule */
-    fun retrieveRateSchedule(params: ContractRetrieveRateScheduleParams, requestOptions: RequestOptions = RequestOptions.none()): ContractRetrieveRateScheduleResponse
+    fun retrieveRateSchedule(
+        params: ContractRetrieveRateScheduleParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractRetrieveRateScheduleResponse
 
     /**
-     * Get the history of subscription quantities and prices over time for a given `subscription_id`. This endpoint can be used to power an in-product experience where you show a customer their historical changes to seat count. Future changes are not included in this endpoint - use the `getContract` endpoint to view the future scheduled changes to a subscription's quantity.
+     * Get the history of subscription quantities and prices over time for a given
+     * `subscription_id`. This endpoint can be used to power an in-product experience where you show
+     * a customer their historical changes to seat count. Future changes are not included in this
+     * endpoint - use the `getContract` endpoint to view the future scheduled changes to a
+     * subscription's quantity.
      *
-     * Subscriptions are used to model fixed recurring fees as well as seat-based recurring fees. To model changes to the number of seats in Metronome, you can increment or decrement the quantity on a subscription at any point in the past or future.
-     *
+     * Subscriptions are used to model fixed recurring fees as well as seat-based recurring fees. To
+     * model changes to the number of seats in Metronome, you can increment or decrement the
+     * quantity on a subscription at any point in the past or future.
      */
-    fun retrieveSubscriptionQuantityHistory(params: ContractRetrieveSubscriptionQuantityHistoryParams): ContractRetrieveSubscriptionQuantityHistoryResponse =
-        retrieveSubscriptionQuantityHistory(
-          params, RequestOptions.none()
-        )
+    fun retrieveSubscriptionQuantityHistory(
+        params: ContractRetrieveSubscriptionQuantityHistoryParams
+    ): ContractRetrieveSubscriptionQuantityHistoryResponse =
+        retrieveSubscriptionQuantityHistory(params, RequestOptions.none())
 
     /** @see retrieveSubscriptionQuantityHistory */
-    fun retrieveSubscriptionQuantityHistory(params: ContractRetrieveSubscriptionQuantityHistoryParams, requestOptions: RequestOptions = RequestOptions.none()): ContractRetrieveSubscriptionQuantityHistoryResponse
+    fun retrieveSubscriptionQuantityHistory(
+        params: ContractRetrieveSubscriptionQuantityHistoryParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractRetrieveSubscriptionQuantityHistoryResponse
 
     /**
-     * Create a new scheduled invoice for Professional Services terms on a contract. This endpoint's availability is dependent on your client's configuration.
-     *
+     * Create a new scheduled invoice for Professional Services terms on a contract. This endpoint's
+     * availability is dependent on your client's configuration.
      */
-    fun scheduleProServicesInvoice(params: ContractScheduleProServicesInvoiceParams): ContractScheduleProServicesInvoiceResponse =
-        scheduleProServicesInvoice(
-          params, RequestOptions.none()
-        )
+    fun scheduleProServicesInvoice(
+        params: ContractScheduleProServicesInvoiceParams
+    ): ContractScheduleProServicesInvoiceResponse =
+        scheduleProServicesInvoice(params, RequestOptions.none())
 
     /** @see scheduleProServicesInvoice */
-    fun scheduleProServicesInvoice(params: ContractScheduleProServicesInvoiceParams, requestOptions: RequestOptions = RequestOptions.none()): ContractScheduleProServicesInvoiceResponse
+    fun scheduleProServicesInvoice(
+        params: ContractScheduleProServicesInvoiceParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractScheduleProServicesInvoiceResponse
 
     /**
-     * If a customer has multiple contracts with overlapping rates, the usage filter routes usage to the appropriate contract based on a predefined group key.
+     * If a customer has multiple contracts with overlapping rates, the usage filter routes usage to
+     * the appropriate contract based on a predefined group key.
      *
-     * As an example, imagine you have a customer associated with two projects. Each project is associated with its own contract. You can create a usage filter with group key `project_id`
-     * on each contract, and route usage for `project_1` to the first contract and `project_2` to the second contract.
+     * As an example, imagine you have a customer associated with two projects. Each project is
+     * associated with its own contract. You can create a usage filter with group key `project_id`
+     * on each contract, and route usage for `project_1` to the first contract and `project_2` to
+     * the second contract.
      *
      * ### Use this endpoint to:
-     * - Support enterprise contracting scenarios where multiple contracts are associated to the same customer with the same rates.
+     * - Support enterprise contracting scenarios where multiple contracts are associated to the
+     *   same customer with the same rates.
      * - Update the usage filter associated with the contract over time.
      *
      * ### Usage guidelines:
-     * To use usage filters, the `group_key` must be defined on the billable metrics underlying the rate card on the contracts.
-     *
+     * To use usage filters, the `group_key` must be defined on the billable metrics underlying the
+     * rate card on the contracts.
      */
     fun setUsageFilter(params: ContractSetUsageFilterParams) =
-        setUsageFilter(
-          params, RequestOptions.none()
-        )
+        setUsageFilter(params, RequestOptions.none())
 
     /** @see setUsageFilter */
-    fun setUsageFilter(params: ContractSetUsageFilterParams, requestOptions: RequestOptions = RequestOptions.none())
+    fun setUsageFilter(
+        params: ContractSetUsageFilterParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
 
     /**
-     * Update or add an end date to a contract. Ending a contract early will impact draft usage statements, truncate any terms, and remove upcoming scheduled invoices. Moving the date into the future will only extend the contract length. Terms and scheduled invoices are not extended. In-advance subscriptions will not be extended. Use this if a contract's end date has changed or if a perpetual contract ends.
-     *
+     * Update or add an end date to a contract. Ending a contract early will impact draft usage
+     * statements, truncate any terms, and remove upcoming scheduled invoices. Moving the date into
+     * the future will only extend the contract length. Terms and scheduled invoices are not
+     * extended. In-advance subscriptions will not be extended. Use this if a contract's end date
+     * has changed or if a perpetual contract ends.
      */
     fun updateEndDate(params: ContractUpdateEndDateParams): ContractUpdateEndDateResponse =
-        updateEndDate(
-          params, RequestOptions.none()
-        )
+        updateEndDate(params, RequestOptions.none())
 
     /** @see updateEndDate */
-    fun updateEndDate(params: ContractUpdateEndDateParams, requestOptions: RequestOptions = RequestOptions.none()): ContractUpdateEndDateResponse
+    fun updateEndDate(
+        params: ContractUpdateEndDateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ContractUpdateEndDateResponse
 
     /** A view of [ContractService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -429,183 +566,267 @@ interface ContractService {
         /** Rate cards are used to define default pricing for products. */
         fun rateCards(): RateCardService.WithRawResponse
 
-        /** Named schedules are used for storing custom data that can change over time. Named schedules are often used in custom pricing logic. */
+        /**
+         * Named schedules are used for storing custom data that can change over time. Named
+         * schedules are often used in custom pricing logic.
+         */
         fun namedSchedules(): NamedScheduleService.WithRawResponse
 
-        /** Returns a raw HTTP response for `post /v1/contracts/create`, but is otherwise the             same as [ContractService.create]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/create`, but is otherwise the same as
+         * [ContractService.create].
+         */
         @MustBeClosed
         fun create(params: ContractCreateParams): HttpResponseFor<ContractCreateResponse> =
-            create(
-              params, RequestOptions.none()
-            )
+            create(params, RequestOptions.none())
 
         /** @see create */
         @MustBeClosed
-        fun create(params: ContractCreateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractCreateResponse>
+        fun create(
+            params: ContractCreateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractCreateResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/get`, but is otherwise the             same as [ContractService.retrieve]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/get`, but is otherwise the same as
+         * [ContractService.retrieve].
+         */
         @MustBeClosed
         fun retrieve(params: ContractRetrieveParams): HttpResponseFor<ContractRetrieveResponse> =
-            retrieve(
-              params, RequestOptions.none()
-            )
+            retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
         @MustBeClosed
-        fun retrieve(params: ContractRetrieveParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractRetrieveResponse>
+        fun retrieve(
+            params: ContractRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractRetrieveResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/list`, but is otherwise the             same as [ContractService.list]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/list`, but is otherwise the same as
+         * [ContractService.list].
+         */
         @MustBeClosed
         fun list(params: ContractListParams): HttpResponseFor<ContractListResponse> =
-            list(
-              params, RequestOptions.none()
-            )
+            list(params, RequestOptions.none())
 
         /** @see list */
         @MustBeClosed
-        fun list(params: ContractListParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractListResponse>
+        fun list(
+            params: ContractListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractListResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/addManualBalanceLedgerEntry`, but is otherwise the             same as [ContractService.addManualBalanceEntry]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/addManualBalanceLedgerEntry`, but is
+         * otherwise the same as [ContractService.addManualBalanceEntry].
+         */
         @MustBeClosed
         fun addManualBalanceEntry(params: ContractAddManualBalanceEntryParams): HttpResponse =
-            addManualBalanceEntry(
-              params, RequestOptions.none()
-            )
+            addManualBalanceEntry(params, RequestOptions.none())
 
         /** @see addManualBalanceEntry */
         @MustBeClosed
-        fun addManualBalanceEntry(params: ContractAddManualBalanceEntryParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponse
+        fun addManualBalanceEntry(
+            params: ContractAddManualBalanceEntryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
 
-        /** Returns a raw HTTP response for `post /v1/contracts/amend`, but is otherwise the             same as [ContractService.amend]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/amend`, but is otherwise the same as
+         * [ContractService.amend].
+         */
         @MustBeClosed
         fun amend(params: ContractAmendParams): HttpResponseFor<ContractAmendResponse> =
-            amend(
-              params, RequestOptions.none()
-            )
+            amend(params, RequestOptions.none())
 
         /** @see amend */
         @MustBeClosed
-        fun amend(params: ContractAmendParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractAmendResponse>
+        fun amend(
+            params: ContractAmendParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractAmendResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/archive`, but is otherwise the             same as [ContractService.archive]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/archive`, but is otherwise the same
+         * as [ContractService.archive].
+         */
         @MustBeClosed
         fun archive(params: ContractArchiveParams): HttpResponseFor<ContractArchiveResponse> =
-            archive(
-              params, RequestOptions.none()
-            )
+            archive(params, RequestOptions.none())
 
         /** @see archive */
         @MustBeClosed
-        fun archive(params: ContractArchiveParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractArchiveResponse>
+        fun archive(
+            params: ContractArchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractArchiveResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/createHistoricalInvoices`, but is otherwise the             same as [ContractService.createHistoricalInvoices]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/createHistoricalInvoices`, but is
+         * otherwise the same as [ContractService.createHistoricalInvoices].
+         */
         @MustBeClosed
-        fun createHistoricalInvoices(params: ContractCreateHistoricalInvoicesParams): HttpResponseFor<ContractCreateHistoricalInvoicesResponse> =
-            createHistoricalInvoices(
-              params, RequestOptions.none()
-            )
+        fun createHistoricalInvoices(
+            params: ContractCreateHistoricalInvoicesParams
+        ): HttpResponseFor<ContractCreateHistoricalInvoicesResponse> =
+            createHistoricalInvoices(params, RequestOptions.none())
 
         /** @see createHistoricalInvoices */
         @MustBeClosed
-        fun createHistoricalInvoices(params: ContractCreateHistoricalInvoicesParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractCreateHistoricalInvoicesResponse>
+        fun createHistoricalInvoices(
+            params: ContractCreateHistoricalInvoicesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractCreateHistoricalInvoicesResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/customerBalances/getNetBalance`, but is otherwise the             same as [ContractService.getNetBalance]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerBalances/getNetBalance`, but
+         * is otherwise the same as [ContractService.getNetBalance].
+         */
         @MustBeClosed
-        fun getNetBalance(params: ContractGetNetBalanceParams): HttpResponseFor<ContractGetNetBalanceResponse> =
-            getNetBalance(
-              params, RequestOptions.none()
-            )
+        fun getNetBalance(
+            params: ContractGetNetBalanceParams
+        ): HttpResponseFor<ContractGetNetBalanceResponse> =
+            getNetBalance(params, RequestOptions.none())
 
         /** @see getNetBalance */
         @MustBeClosed
-        fun getNetBalance(params: ContractGetNetBalanceParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractGetNetBalanceResponse>
+        fun getNetBalance(
+            params: ContractGetNetBalanceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractGetNetBalanceResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/getSubscriptionSeatsHistory`, but is otherwise the             same as [ContractService.getSubscriptionSeatsHistory]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/getSubscriptionSeatsHistory`, but is
+         * otherwise the same as [ContractService.getSubscriptionSeatsHistory].
+         */
         @MustBeClosed
-        fun getSubscriptionSeatsHistory(params: ContractGetSubscriptionSeatsHistoryParams): HttpResponseFor<ContractGetSubscriptionSeatsHistoryResponse> =
-            getSubscriptionSeatsHistory(
-              params, RequestOptions.none()
-            )
+        fun getSubscriptionSeatsHistory(
+            params: ContractGetSubscriptionSeatsHistoryParams
+        ): HttpResponseFor<ContractGetSubscriptionSeatsHistoryResponse> =
+            getSubscriptionSeatsHistory(params, RequestOptions.none())
 
         /** @see getSubscriptionSeatsHistory */
         @MustBeClosed
-        fun getSubscriptionSeatsHistory(params: ContractGetSubscriptionSeatsHistoryParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractGetSubscriptionSeatsHistoryResponse>
+        fun getSubscriptionSeatsHistory(
+            params: ContractGetSubscriptionSeatsHistoryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractGetSubscriptionSeatsHistoryResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/customerBalances/list`, but is otherwise the             same as [ContractService.listBalances]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/customerBalances/list`, but is
+         * otherwise the same as [ContractService.listBalances].
+         */
         @MustBeClosed
-        fun listBalances(params: ContractListBalancesParams): HttpResponseFor<ContractListBalancesPage> =
-            listBalances(
-              params, RequestOptions.none()
-            )
+        fun listBalances(
+            params: ContractListBalancesParams
+        ): HttpResponseFor<ContractListBalancesPage> = listBalances(params, RequestOptions.none())
 
         /** @see listBalances */
         @MustBeClosed
-        fun listBalances(params: ContractListBalancesParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractListBalancesPage>
+        fun listBalances(
+            params: ContractListBalancesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractListBalancesPage>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/seatBalances/list`, but is otherwise the             same as [ContractService.listSeatBalances]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/seatBalances/list`, but is otherwise
+         * the same as [ContractService.listSeatBalances].
+         */
         @MustBeClosed
-        fun listSeatBalances(params: ContractListSeatBalancesParams): HttpResponseFor<ContractListSeatBalancesResponse> =
-            listSeatBalances(
-              params, RequestOptions.none()
-            )
+        fun listSeatBalances(
+            params: ContractListSeatBalancesParams
+        ): HttpResponseFor<ContractListSeatBalancesResponse> =
+            listSeatBalances(params, RequestOptions.none())
 
         /** @see listSeatBalances */
         @MustBeClosed
-        fun listSeatBalances(params: ContractListSeatBalancesParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractListSeatBalancesResponse>
+        fun listSeatBalances(
+            params: ContractListSeatBalancesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractListSeatBalancesResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/getContractRateSchedule`, but is otherwise the             same as [ContractService.retrieveRateSchedule]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/getContractRateSchedule`, but is
+         * otherwise the same as [ContractService.retrieveRateSchedule].
+         */
         @MustBeClosed
-        fun retrieveRateSchedule(params: ContractRetrieveRateScheduleParams): HttpResponseFor<ContractRetrieveRateScheduleResponse> =
-            retrieveRateSchedule(
-              params, RequestOptions.none()
-            )
+        fun retrieveRateSchedule(
+            params: ContractRetrieveRateScheduleParams
+        ): HttpResponseFor<ContractRetrieveRateScheduleResponse> =
+            retrieveRateSchedule(params, RequestOptions.none())
 
         /** @see retrieveRateSchedule */
         @MustBeClosed
-        fun retrieveRateSchedule(params: ContractRetrieveRateScheduleParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractRetrieveRateScheduleResponse>
+        fun retrieveRateSchedule(
+            params: ContractRetrieveRateScheduleParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractRetrieveRateScheduleResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/getSubscriptionQuantityHistory`, but is otherwise the             same as [ContractService.retrieveSubscriptionQuantityHistory]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/getSubscriptionQuantityHistory`, but
+         * is otherwise the same as [ContractService.retrieveSubscriptionQuantityHistory].
+         */
         @MustBeClosed
-        fun retrieveSubscriptionQuantityHistory(params: ContractRetrieveSubscriptionQuantityHistoryParams): HttpResponseFor<ContractRetrieveSubscriptionQuantityHistoryResponse> =
-            retrieveSubscriptionQuantityHistory(
-              params, RequestOptions.none()
-            )
+        fun retrieveSubscriptionQuantityHistory(
+            params: ContractRetrieveSubscriptionQuantityHistoryParams
+        ): HttpResponseFor<ContractRetrieveSubscriptionQuantityHistoryResponse> =
+            retrieveSubscriptionQuantityHistory(params, RequestOptions.none())
 
         /** @see retrieveSubscriptionQuantityHistory */
         @MustBeClosed
-        fun retrieveSubscriptionQuantityHistory(params: ContractRetrieveSubscriptionQuantityHistoryParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractRetrieveSubscriptionQuantityHistoryResponse>
+        fun retrieveSubscriptionQuantityHistory(
+            params: ContractRetrieveSubscriptionQuantityHistoryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractRetrieveSubscriptionQuantityHistoryResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/scheduleProServicesInvoice`, but is otherwise the             same as [ContractService.scheduleProServicesInvoice]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/scheduleProServicesInvoice`, but is
+         * otherwise the same as [ContractService.scheduleProServicesInvoice].
+         */
         @MustBeClosed
-        fun scheduleProServicesInvoice(params: ContractScheduleProServicesInvoiceParams): HttpResponseFor<ContractScheduleProServicesInvoiceResponse> =
-            scheduleProServicesInvoice(
-              params, RequestOptions.none()
-            )
+        fun scheduleProServicesInvoice(
+            params: ContractScheduleProServicesInvoiceParams
+        ): HttpResponseFor<ContractScheduleProServicesInvoiceResponse> =
+            scheduleProServicesInvoice(params, RequestOptions.none())
 
         /** @see scheduleProServicesInvoice */
         @MustBeClosed
-        fun scheduleProServicesInvoice(params: ContractScheduleProServicesInvoiceParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractScheduleProServicesInvoiceResponse>
+        fun scheduleProServicesInvoice(
+            params: ContractScheduleProServicesInvoiceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractScheduleProServicesInvoiceResponse>
 
-        /** Returns a raw HTTP response for `post /v1/contracts/setUsageFilter`, but is otherwise the             same as [ContractService.setUsageFilter]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/setUsageFilter`, but is otherwise the
+         * same as [ContractService.setUsageFilter].
+         */
         @MustBeClosed
         fun setUsageFilter(params: ContractSetUsageFilterParams): HttpResponse =
-            setUsageFilter(
-              params, RequestOptions.none()
-            )
+            setUsageFilter(params, RequestOptions.none())
 
         /** @see setUsageFilter */
         @MustBeClosed
-        fun setUsageFilter(params: ContractSetUsageFilterParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponse
+        fun setUsageFilter(
+            params: ContractSetUsageFilterParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
 
-        /** Returns a raw HTTP response for `post /v1/contracts/updateEndDate`, but is otherwise the             same as [ContractService.updateEndDate]. */
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/updateEndDate`, but is otherwise the
+         * same as [ContractService.updateEndDate].
+         */
         @MustBeClosed
-        fun updateEndDate(params: ContractUpdateEndDateParams): HttpResponseFor<ContractUpdateEndDateResponse> =
-            updateEndDate(
-              params, RequestOptions.none()
-            )
+        fun updateEndDate(
+            params: ContractUpdateEndDateParams
+        ): HttpResponseFor<ContractUpdateEndDateResponse> =
+            updateEndDate(params, RequestOptions.none())
 
         /** @see updateEndDate */
         @MustBeClosed
-        fun updateEndDate(params: ContractUpdateEndDateParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<ContractUpdateEndDateResponse>
+        fun updateEndDate(
+            params: ContractUpdateEndDateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ContractUpdateEndDateResponse>
     }
 }

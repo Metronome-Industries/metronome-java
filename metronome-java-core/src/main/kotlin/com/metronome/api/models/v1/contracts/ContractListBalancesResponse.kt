@@ -22,11 +22,11 @@ import java.util.Optional
 
 @JsonDeserialize(using = ContractListBalancesResponse.Deserializer::class)
 @JsonSerialize(using = ContractListBalancesResponse.Serializer::class)
-class ContractListBalancesResponse private constructor(
+class ContractListBalancesResponse
+private constructor(
     private val commit: Commit? = null,
     private val credit: Credit? = null,
     private val _json: JsonValue? = null,
-
 ) {
 
     fun commit(): Optional<Commit> = Optional.ofNullable(commit)
@@ -47,9 +47,8 @@ class ContractListBalancesResponse private constructor(
      * Maps this instance's current variant to a value of type [T] using the given [visitor].
      *
      * Note that this method is _not_ forwards compatible with new variants from the API, unless
-     * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of the SDK
-     * gracefully, consider overriding [Visitor.unknown]:
-     *
+     * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of the
+     * SDK gracefully, consider overriding [Visitor.unknown]:
      * ```java
      * import com.metronome.api.core.JsonValue;
      * import java.util.Optional;
@@ -70,8 +69,8 @@ class ContractListBalancesResponse private constructor(
      * });
      * ```
      *
-     * @throws MetronomeInvalidDataException if [Visitor.unknown] is not overridden in
-     *   [visitor] and the current variant is unknown.
+     * @throws MetronomeInvalidDataException if [Visitor.unknown] is not overridden in [visitor] and
+     *   the current variant is unknown.
      */
     fun <T> accept(visitor: Visitor<T>): T =
         when {
@@ -90,23 +89,24 @@ class ContractListBalancesResponse private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): ContractListBalancesResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
+    fun validate(): ContractListBalancesResponse = apply {
+        if (validated) {
+            return@apply
+        }
 
-            accept(object : Visitor<Unit> {
+        accept(
+            object : Visitor<Unit> {
                 override fun visitCommit(commit: Commit) {
-                  commit.validate()
+                    commit.validate()
                 }
 
                 override fun visitCredit(credit: Credit) {
-                  credit.validate()
+                    credit.validate()
                 }
-            })
-            validated = true
-        }
+            }
+        )
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -123,20 +123,24 @@ class ContractListBalancesResponse private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        accept(object : Visitor<Int> {
-            override fun visitCommit(commit: Commit) = commit.validity()
+        accept(
+            object : Visitor<Int> {
+                override fun visitCommit(commit: Commit) = commit.validity()
 
-            override fun visitCredit(credit: Credit) = credit.validity()
+                override fun visitCredit(credit: Credit) = credit.validity()
 
-            override fun unknown(json: JsonValue?) = 0
-        })
+                override fun unknown(json: JsonValue?) = 0
+            }
+        )
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is ContractListBalancesResponse && commit == other.commit && credit == other.credit
+        return other is ContractListBalancesResponse &&
+            commit == other.commit &&
+            credit == other.credit
     }
 
     override fun hashCode(): Int = Objects.hash(commit, credit)
@@ -151,14 +155,15 @@ class ContractListBalancesResponse private constructor(
 
     companion object {
 
-        @JvmStatic
-        fun ofCommit(commit: Commit) = ContractListBalancesResponse(commit = commit)
+        @JvmStatic fun ofCommit(commit: Commit) = ContractListBalancesResponse(commit = commit)
 
-        @JvmStatic
-        fun ofCredit(credit: Credit) = ContractListBalancesResponse(credit = credit)
+        @JvmStatic fun ofCredit(credit: Credit) = ContractListBalancesResponse(credit = credit)
     }
 
-    /** An interface that defines how to map each variant of [ContractListBalancesResponse] to a value of type [T]. */
+    /**
+     * An interface that defines how to map each variant of [ContractListBalancesResponse] to a
+     * value of type [T].
+     */
     interface Visitor<out T> {
 
         fun visitCommit(commit: Commit): T
@@ -168,54 +173,62 @@ class ContractListBalancesResponse private constructor(
         /**
          * Maps an unknown variant of [ContractListBalancesResponse] to a value of type [T].
          *
-         * An instance of [ContractListBalancesResponse] can contain an unknown variant if it was deserialized from data
-         * that doesn't match any known variant. For example, if the SDK is on an older version than the
-         * API, then the API may respond with new variants that the SDK is unaware of.
+         * An instance of [ContractListBalancesResponse] can contain an unknown variant if it was
+         * deserialized from data that doesn't match any known variant. For example, if the SDK is
+         * on an older version than the API, then the API may respond with new variants that the SDK
+         * is unaware of.
          *
          * @throws MetronomeInvalidDataException in the default implementation.
          */
         fun unknown(json: JsonValue?): T {
-          throw MetronomeInvalidDataException("Unknown ContractListBalancesResponse: $json")
+            throw MetronomeInvalidDataException("Unknown ContractListBalancesResponse: $json")
         }
     }
 
-    internal class Deserializer : BaseDeserializer<ContractListBalancesResponse>(ContractListBalancesResponse::class) {
+    internal class Deserializer :
+        BaseDeserializer<ContractListBalancesResponse>(ContractListBalancesResponse::class) {
 
         override fun ObjectCodec.deserialize(node: JsonNode): ContractListBalancesResponse {
-          val json = JsonValue.fromJsonNode(node)
+            val json = JsonValue.fromJsonNode(node)
 
-          val bestMatches = sequenceOf(
-                  tryDeserialize(node, jacksonTypeRef<Commit>())
-                      ?.let {
-                          ContractListBalancesResponse(commit = it, _json = json)
-                      },
-                  tryDeserialize(node, jacksonTypeRef<Credit>())
-                      ?.let {
-                          ContractListBalancesResponse(credit = it, _json = json)
-                      }
-              )
-              .filterNotNull()
-              .allMaxBy { it.validity() }
-              .toList()
-          return when (bestMatches.size) {
-              // This can happen if what we're deserializing is completely incompatible with all the possible variants (e.g. deserializing from boolean).
-              0 -> ContractListBalancesResponse(_json = json)
-              1 -> bestMatches.single()
-              // If there's more than one match with the highest validity, then use the first completely valid match, or simply the first match if none are completely valid.
-              else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
-          }
+            val bestMatches =
+                sequenceOf(
+                        tryDeserialize(node, jacksonTypeRef<Commit>())?.let {
+                            ContractListBalancesResponse(commit = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<Credit>())?.let {
+                            ContractListBalancesResponse(credit = it, _json = json)
+                        },
+                    )
+                    .filterNotNull()
+                    .allMaxBy { it.validity() }
+                    .toList()
+            return when (bestMatches.size) {
+                // This can happen if what we're deserializing is completely incompatible with all
+                // the possible variants (e.g. deserializing from boolean).
+                0 -> ContractListBalancesResponse(_json = json)
+                1 -> bestMatches.single()
+                // If there's more than one match with the highest validity, then use the first
+                // completely valid match, or simply the first match if none are completely valid.
+                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+            }
         }
     }
 
-    internal class Serializer : BaseSerializer<ContractListBalancesResponse>(ContractListBalancesResponse::class) {
+    internal class Serializer :
+        BaseSerializer<ContractListBalancesResponse>(ContractListBalancesResponse::class) {
 
-        override fun serialize(value: ContractListBalancesResponse, generator: JsonGenerator, provider: SerializerProvider) {
-          when {
-              value.commit != null -> generator.writeObject(value.commit)
-              value.credit != null -> generator.writeObject(value.credit)
-              value._json != null -> generator.writeObject(value._json)
-              else -> throw IllegalStateException("Invalid ContractListBalancesResponse")
-          }
+        override fun serialize(
+            value: ContractListBalancesResponse,
+            generator: JsonGenerator,
+            provider: SerializerProvider,
+        ) {
+            when {
+                value.commit != null -> generator.writeObject(value.commit)
+                value.credit != null -> generator.writeObject(value.credit)
+                value._json != null -> generator.writeObject(value._json)
+                else -> throw IllegalStateException("Invalid ContractListBalancesResponse")
+            }
         }
     }
 }

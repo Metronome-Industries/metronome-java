@@ -12,25 +12,26 @@ import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
 import com.metronome.api.core.checkRequired
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.v1.customers.CustomerDetail
 import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-class CustomerRetrieveResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+class CustomerRetrieveResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
     private val data: JsonField<CustomerDetail>,
     private val additionalProperties: MutableMap<String, JsonValue>,
-
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("data") @ExcludeMissing data: JsonField<CustomerDetail> = JsonMissing.of()
-    ) : this(
-      data, mutableMapOf()
-    )
+    ) : this(data, mutableMapOf())
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): CustomerDetail = data.getRequired("data")
 
     /**
@@ -38,18 +39,17 @@ class CustomerRetrieveResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) pr
      *
      * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<CustomerDetail> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<CustomerDetail> = data
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-      additionalProperties.put(key, value)
+        additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -59,13 +59,11 @@ class CustomerRetrieveResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) pr
          * Returns a mutable builder for constructing an instance of [CustomerRetrieveResponse].
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [CustomerRetrieveResponse]. */
@@ -75,50 +73,40 @@ class CustomerRetrieveResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) pr
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(customerRetrieveResponse: CustomerRetrieveResponse) =
-            apply {
-                data = customerRetrieveResponse.data
-                additionalProperties = customerRetrieveResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(customerRetrieveResponse: CustomerRetrieveResponse) = apply {
+            data = customerRetrieveResponse.data
+            additionalProperties = customerRetrieveResponse.additionalProperties.toMutableMap()
+        }
 
         fun data(data: CustomerDetail) = data(JsonField.of(data))
 
         /**
          * Sets [Builder.data] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.data] with a well-typed [CustomerDetail] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.data] with a well-typed [CustomerDetail] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun data(data: JsonField<CustomerDetail>) =
-            apply {
-                this.data = data
-            }
+        fun data(data: JsonField<CustomerDetail>) = apply { this.data = data }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         /**
          * Returns an immutable instance of [CustomerRetrieveResponse].
@@ -126,7 +114,6 @@ class CustomerRetrieveResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) pr
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * ```
@@ -135,9 +122,8 @@ class CustomerRetrieveResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) pr
          */
         fun build(): CustomerRetrieveResponse =
             CustomerRetrieveResponse(
-              checkRequired(
-                "data", data
-              ), additionalProperties.toMutableMap()
+                checkRequired("data", data),
+                additionalProperties.toMutableMap(),
             )
     }
 
@@ -151,15 +137,14 @@ class CustomerRetrieveResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) pr
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): CustomerRetrieveResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().validate()
-            validated = true
+    fun validate(): CustomerRetrieveResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -174,20 +159,22 @@ class CustomerRetrieveResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) pr
      *
      * Used for best match union deserialization.
      */
-    @JvmSynthetic
-    internal fun validity(): Int = (data.asKnown().getOrNull()?.validity() ?: 0)
+    @JvmSynthetic internal fun validity(): Int = (data.asKnown().getOrNull()?.validity() ?: 0)
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is CustomerRetrieveResponse && data == other.data && additionalProperties == other.additionalProperties
+        return other is CustomerRetrieveResponse &&
+            data == other.data &&
+            additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "CustomerRetrieveResponse{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "CustomerRetrieveResponse{data=$data, additionalProperties=$additionalProperties}"
 }

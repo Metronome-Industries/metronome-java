@@ -4,7 +4,6 @@ package com.metronome.api.models.v1.services
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.jsonMapper
-import com.metronome.api.models.v1.services.ServiceListResponse
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,34 +11,47 @@ internal class ServiceListResponseTest {
 
     @Test
     fun create() {
-      val serviceListResponse = ServiceListResponse.builder()
-          .addService(ServiceListResponse.Service.builder()
-              .addIp("string")
-              .name("name")
-              .usage(ServiceListResponse.Service.Usage.MAKES_CONNECTIONS_FROM)
-              .build())
-          .build()
+        val serviceListResponse =
+            ServiceListResponse.builder()
+                .addService(
+                    ServiceListResponse.Service.builder()
+                        .addIp("string")
+                        .name("name")
+                        .usage(ServiceListResponse.Service.Usage.MAKES_CONNECTIONS_FROM)
+                        .build()
+                )
+                .build()
 
-      assertThat(serviceListResponse.services()).containsExactly(ServiceListResponse.Service.builder()
-          .addIp("string")
-          .name("name")
-          .usage(ServiceListResponse.Service.Usage.MAKES_CONNECTIONS_FROM)
-          .build())
+        assertThat(serviceListResponse.services())
+            .containsExactly(
+                ServiceListResponse.Service.builder()
+                    .addIp("string")
+                    .name("name")
+                    .usage(ServiceListResponse.Service.Usage.MAKES_CONNECTIONS_FROM)
+                    .build()
+            )
     }
 
     @Test
     fun roundtrip() {
-      val jsonMapper = jsonMapper()
-      val serviceListResponse = ServiceListResponse.builder()
-          .addService(ServiceListResponse.Service.builder()
-              .addIp("string")
-              .name("name")
-              .usage(ServiceListResponse.Service.Usage.MAKES_CONNECTIONS_FROM)
-              .build())
-          .build()
+        val jsonMapper = jsonMapper()
+        val serviceListResponse =
+            ServiceListResponse.builder()
+                .addService(
+                    ServiceListResponse.Service.builder()
+                        .addIp("string")
+                        .name("name")
+                        .usage(ServiceListResponse.Service.Usage.MAKES_CONNECTIONS_FROM)
+                        .build()
+                )
+                .build()
 
-      val roundtrippedServiceListResponse = jsonMapper.readValue(jsonMapper.writeValueAsString(serviceListResponse), jacksonTypeRef<ServiceListResponse>())
+        val roundtrippedServiceListResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(serviceListResponse),
+                jacksonTypeRef<ServiceListResponse>(),
+            )
 
-      assertThat(roundtrippedServiceListResponse).isEqualTo(serviceListResponse)
+        assertThat(roundtrippedServiceListResponse).isEqualTo(serviceListResponse)
     }
 }

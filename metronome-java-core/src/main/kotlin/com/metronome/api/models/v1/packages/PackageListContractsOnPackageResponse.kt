@@ -17,45 +17,64 @@ import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
-class PackageListContractsOnPackageResponse @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+class PackageListContractsOnPackageResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
     private val contractId: JsonField<String>,
     private val customerId: JsonField<String>,
     private val startingAt: JsonField<OffsetDateTime>,
     private val archivedAt: JsonField<OffsetDateTime>,
     private val endingBefore: JsonField<OffsetDateTime>,
     private val additionalProperties: MutableMap<String, JsonValue>,
-
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("contract_id") @ExcludeMissing contractId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("customer_id") @ExcludeMissing customerId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("starting_at") @ExcludeMissing startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("archived_at") @ExcludeMissing archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("ending_before") @ExcludeMissing endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
-    ) : this(
-      contractId,
-      customerId,
-      startingAt,
-      archivedAt,
-      endingBefore,
-      mutableMapOf(),
-    )
+        @JsonProperty("contract_id")
+        @ExcludeMissing
+        contractId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("starting_at")
+        @ExcludeMissing
+        startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("archived_at")
+        @ExcludeMissing
+        archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("ending_before")
+        @ExcludeMissing
+        endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+    ) : this(contractId, customerId, startingAt, archivedAt, endingBefore, mutableMapOf())
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun contractId(): String = contractId.getRequired("contract_id")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun customerId(): String = customerId.getRequired("customer_id")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun archivedAt(): Optional<OffsetDateTime> = archivedAt.getOptional("archived_at")
 
-    /** @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value). */
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
 
     /**
@@ -63,18 +82,14 @@ class PackageListContractsOnPackageResponse @JsonCreator(mode = JsonCreator.Mode
      *
      * Unlike [contractId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("contract_id")
-    @ExcludeMissing
-    fun _contractId(): JsonField<String> = contractId
+    @JsonProperty("contract_id") @ExcludeMissing fun _contractId(): JsonField<String> = contractId
 
     /**
      * Returns the raw JSON value of [customerId].
      *
      * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("customer_id")
-    @ExcludeMissing
-    fun _customerId(): JsonField<String> = customerId
+    @JsonProperty("customer_id") @ExcludeMissing fun _customerId(): JsonField<String> = customerId
 
     /**
      * Returns the raw JSON value of [startingAt].
@@ -105,30 +120,30 @@ class PackageListContractsOnPackageResponse @JsonCreator(mode = JsonCreator.Mode
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-      additionalProperties.put(key, value)
+        additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [PackageListContractsOnPackageResponse].
+         * Returns a mutable builder for constructing an instance of
+         * [PackageListContractsOnPackageResponse].
          *
          * The following fields are required:
-         *
          * ```java
          * .contractId()
          * .customerId()
          * .startingAt()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PackageListContractsOnPackageResponse]. */
@@ -142,106 +157,97 @@ class PackageListContractsOnPackageResponse @JsonCreator(mode = JsonCreator.Mode
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(packageListContractsOnPackageResponse: PackageListContractsOnPackageResponse) =
-            apply {
-                contractId = packageListContractsOnPackageResponse.contractId
-                customerId = packageListContractsOnPackageResponse.customerId
-                startingAt = packageListContractsOnPackageResponse.startingAt
-                archivedAt = packageListContractsOnPackageResponse.archivedAt
-                endingBefore = packageListContractsOnPackageResponse.endingBefore
-                additionalProperties = packageListContractsOnPackageResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(
+            packageListContractsOnPackageResponse: PackageListContractsOnPackageResponse
+        ) = apply {
+            contractId = packageListContractsOnPackageResponse.contractId
+            customerId = packageListContractsOnPackageResponse.customerId
+            startingAt = packageListContractsOnPackageResponse.startingAt
+            archivedAt = packageListContractsOnPackageResponse.archivedAt
+            endingBefore = packageListContractsOnPackageResponse.endingBefore
+            additionalProperties =
+                packageListContractsOnPackageResponse.additionalProperties.toMutableMap()
+        }
 
         fun contractId(contractId: String) = contractId(JsonField.of(contractId))
 
         /**
          * Sets [Builder.contractId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.contractId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.contractId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun contractId(contractId: JsonField<String>) =
-            apply {
-                this.contractId = contractId
-            }
+        fun contractId(contractId: JsonField<String>) = apply { this.contractId = contractId }
 
         fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
         /**
          * Sets [Builder.customerId] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.customerId] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.customerId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun customerId(customerId: JsonField<String>) =
-            apply {
-                this.customerId = customerId
-            }
+        fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
         fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
 
         /**
          * Sets [Builder.startingAt] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.startingAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun startingAt(startingAt: JsonField<OffsetDateTime>) =
-            apply {
-                this.startingAt = startingAt
-            }
+        fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
+            this.startingAt = startingAt
+        }
 
         fun archivedAt(archivedAt: OffsetDateTime) = archivedAt(JsonField.of(archivedAt))
 
         /**
          * Sets [Builder.archivedAt] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.archivedAt] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.archivedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun archivedAt(archivedAt: JsonField<OffsetDateTime>) =
-            apply {
-                this.archivedAt = archivedAt
-            }
+        fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
+            this.archivedAt = archivedAt
+        }
 
         fun endingBefore(endingBefore: OffsetDateTime) = endingBefore(JsonField.of(endingBefore))
 
         /**
          * Sets [Builder.endingBefore] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.endingBefore] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) =
-            apply {
-                this.endingBefore = endingBefore
-            }
+        fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
+            this.endingBefore = endingBefore
+        }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         /**
          * Returns an immutable instance of [PackageListContractsOnPackageResponse].
@@ -249,7 +255,6 @@ class PackageListContractsOnPackageResponse @JsonCreator(mode = JsonCreator.Mode
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .contractId()
          * .customerId()
@@ -260,18 +265,12 @@ class PackageListContractsOnPackageResponse @JsonCreator(mode = JsonCreator.Mode
          */
         fun build(): PackageListContractsOnPackageResponse =
             PackageListContractsOnPackageResponse(
-              checkRequired(
-                "contractId", contractId
-              ),
-              checkRequired(
-                "customerId", customerId
-              ),
-              checkRequired(
-                "startingAt", startingAt
-              ),
-              archivedAt,
-              endingBefore,
-              additionalProperties.toMutableMap(),
+                checkRequired("contractId", contractId),
+                checkRequired("customerId", customerId),
+                checkRequired("startingAt", startingAt),
+                archivedAt,
+                endingBefore,
+                additionalProperties.toMutableMap(),
             )
     }
 
@@ -285,19 +284,18 @@ class PackageListContractsOnPackageResponse @JsonCreator(mode = JsonCreator.Mode
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): PackageListContractsOnPackageResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            contractId()
-            customerId()
-            startingAt()
-            archivedAt()
-            endingBefore()
-            validated = true
+    fun validate(): PackageListContractsOnPackageResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        contractId()
+        customerId()
+        startingAt()
+        archivedAt()
+        endingBefore()
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -313,19 +311,40 @@ class PackageListContractsOnPackageResponse @JsonCreator(mode = JsonCreator.Mode
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int = (if (contractId.asKnown().isPresent) 1 else 0) + (if (customerId.asKnown().isPresent) 1 else 0) + (if (startingAt.asKnown().isPresent) 1 else 0) + (if (archivedAt.asKnown().isPresent) 1 else 0) + (if (endingBefore.asKnown().isPresent) 1 else 0)
+    internal fun validity(): Int =
+        (if (contractId.asKnown().isPresent) 1 else 0) +
+            (if (customerId.asKnown().isPresent) 1 else 0) +
+            (if (startingAt.asKnown().isPresent) 1 else 0) +
+            (if (archivedAt.asKnown().isPresent) 1 else 0) +
+            (if (endingBefore.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PackageListContractsOnPackageResponse && contractId == other.contractId && customerId == other.customerId && startingAt == other.startingAt && archivedAt == other.archivedAt && endingBefore == other.endingBefore && additionalProperties == other.additionalProperties
+        return other is PackageListContractsOnPackageResponse &&
+            contractId == other.contractId &&
+            customerId == other.customerId &&
+            startingAt == other.startingAt &&
+            archivedAt == other.archivedAt &&
+            endingBefore == other.endingBefore &&
+            additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(contractId, customerId, startingAt, archivedAt, endingBefore, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            contractId,
+            customerId,
+            startingAt,
+            archivedAt,
+            endingBefore,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "PackageListContractsOnPackageResponse{contractId=$contractId, customerId=$customerId, startingAt=$startingAt, archivedAt=$archivedAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "PackageListContractsOnPackageResponse{contractId=$contractId, customerId=$customerId, startingAt=$startingAt, archivedAt=$archivedAt, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
 }

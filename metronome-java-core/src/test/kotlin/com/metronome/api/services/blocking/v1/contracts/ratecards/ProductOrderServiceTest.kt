@@ -14,41 +14,53 @@ internal class ProductOrderServiceTest {
 
     @Test
     fun update() {
-      val client = MetronomeOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val productOrderService = client.v1().contracts().rateCards().productOrders()
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val productOrderService = client.v1().contracts().rateCards().productOrders()
 
-      val productOrder = productOrderService.update(ProductOrderUpdateParams.builder()
-          .addProductMove(ProductOrderUpdateParams.ProductMove.builder()
-              .position(0.0)
-              .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-              .build())
-          .addProductMove(ProductOrderUpdateParams.ProductMove.builder()
-              .position(1.0)
-              .productId("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
-              .build())
-          .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .build())
+        val productOrder =
+            productOrderService.update(
+                ProductOrderUpdateParams.builder()
+                    .addProductMove(
+                        ProductOrderUpdateParams.ProductMove.builder()
+                            .position(0.0)
+                            .productId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                            .build()
+                    )
+                    .addProductMove(
+                        ProductOrderUpdateParams.ProductMove.builder()
+                            .position(1.0)
+                            .productId("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
+                            .build()
+                    )
+                    .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .build()
+            )
 
-      productOrder.validate()
+        productOrder.validate()
     }
 
     @Test
     fun set() {
-      val client = MetronomeOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val productOrderService = client.v1().contracts().rateCards().productOrders()
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val productOrderService = client.v1().contracts().rateCards().productOrders()
 
-      val response = productOrderService.set(ProductOrderSetParams.builder()
-          .addProductOrder("13117714-3f05-48e5-a6e9-a66093f13b4d")
-          .addProductOrder("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
-          .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .build())
+        val response =
+            productOrderService.set(
+                ProductOrderSetParams.builder()
+                    .addProductOrder("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .addProductOrder("b086f2f4-9851-4466-9ca0-30d53e6a42ac")
+                    .rateCardId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .build()
+            )
 
-      response.validate()
+        response.validate()
     }
 }

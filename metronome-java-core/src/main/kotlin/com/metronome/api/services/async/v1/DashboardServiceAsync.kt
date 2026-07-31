@@ -7,14 +7,19 @@ import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlParams
 import com.metronome.api.models.v1.dashboards.DashboardGetEmbeddableUrlResponse
-import com.metronome.api.services.async.v1.DashboardServiceAsync
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-/** [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent your users for all billing and reporting. Use these endpoints to create, retrieve, update, and archive customers and their billing configuration. */
+/**
+ * [Customers](https://docs.metronome.com/provisioning/create-customers/) in Metronome represent
+ * your users for all billing and reporting. Use these endpoints to create, retrieve, update, and
+ * archive customers and their billing configuration.
+ */
 interface DashboardServiceAsync {
 
-    /** Returns a view of this service that provides access to raw HTTP responses for each method. */
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
     fun withRawResponse(): WithRawResponse
 
     /**
@@ -25,7 +30,10 @@ interface DashboardServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): DashboardServiceAsync
 
     /**
-     * Generate secure, embeddable dashboard URLs that allow you to seamlessly integrate Metronome's billing visualizations directly into your application. This endpoint creates authenticated iframe-ready URLs for customer-specific dashboards, providing a white-labeled billing experience without building custom UI.
+     * Generate secure, embeddable dashboard URLs that allow you to seamlessly integrate Metronome's
+     * billing visualizations directly into your application. This endpoint creates authenticated
+     * iframe-ready URLs for customer-specific dashboards, providing a white-labeled billing
+     * experience without building custom UI.
      *
      * ### Use this endpoint to:
      * - Embed billing dashboards directly in your customer portal or admin interface
@@ -40,21 +48,29 @@ interface DashboardServiceAsync {
      * ### Usage guidelines:
      * - Dashboard types: Choose from `invoices`, `usage`, or `commits_and_credits`
      * - Customization options:
-     *     - `dashboard_options`: Configure dashboard behavior. Supported for the invoices dashboard only. Available keys include: `show_zero_usage_line_items` ("true"/"false"), `contract_id` (UUID, filters invoices by contract), `invoice_type` ("USAGE" or "SCHEDULED", filters by invoice type), and `invoice_status_filter` ("VOID", "FINALIZED", "DRAFT", "FINALIZED_AND_DRAFT", or "ALL")
+     *     - `dashboard_options`: Configure dashboard behavior. Supported for the invoices dashboard
+     *       only. Available keys include: `show_zero_usage_line_items` ("true"/"false"),
+     *       `contract_id` (UUID, filters invoices by contract), `invoice_type` ("USAGE" or
+     *       "SCHEDULED", filters by invoice type), and `invoice_status_filter` ("VOID",
+     *       "FINALIZED", "DRAFT", "FINALIZED_AND_DRAFT", or "ALL")
      *     - `color_overrides`: Match your brand's color palette
      * - Iframe implementation: Embed the returned URL directly in an iframe element
      * - Responsive design: Dashboards automatically adapt to container dimensions
-     *
      */
-    fun getEmbeddableUrl(params: DashboardGetEmbeddableUrlParams): CompletableFuture<DashboardGetEmbeddableUrlResponse> =
-        getEmbeddableUrl(
-          params, RequestOptions.none()
-        )
+    fun getEmbeddableUrl(
+        params: DashboardGetEmbeddableUrlParams
+    ): CompletableFuture<DashboardGetEmbeddableUrlResponse> =
+        getEmbeddableUrl(params, RequestOptions.none())
 
     /** @see getEmbeddableUrl */
-    fun getEmbeddableUrl(params: DashboardGetEmbeddableUrlParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<DashboardGetEmbeddableUrlResponse>
+    fun getEmbeddableUrl(
+        params: DashboardGetEmbeddableUrlParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<DashboardGetEmbeddableUrlResponse>
 
-    /** A view of [DashboardServiceAsync] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [DashboardServiceAsync] that provides access to raw HTTP responses for each method.
+     */
     interface WithRawResponse {
 
         /**
@@ -62,15 +78,23 @@ interface DashboardServiceAsync {
          *
          * The original service is not modified.
          */
-        fun withOptions(modifier: Consumer<ClientOptions.Builder>): DashboardServiceAsync.WithRawResponse
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): DashboardServiceAsync.WithRawResponse
 
-        /** Returns a raw HTTP response for `post /v1/dashboards/getEmbeddableUrl`, but is otherwise the             same as [DashboardServiceAsync.getEmbeddableUrl]. */
-        fun getEmbeddableUrl(params: DashboardGetEmbeddableUrlParams): CompletableFuture<HttpResponseFor<DashboardGetEmbeddableUrlResponse>> =
-            getEmbeddableUrl(
-              params, RequestOptions.none()
-            )
+        /**
+         * Returns a raw HTTP response for `post /v1/dashboards/getEmbeddableUrl`, but is otherwise
+         * the same as [DashboardServiceAsync.getEmbeddableUrl].
+         */
+        fun getEmbeddableUrl(
+            params: DashboardGetEmbeddableUrlParams
+        ): CompletableFuture<HttpResponseFor<DashboardGetEmbeddableUrlResponse>> =
+            getEmbeddableUrl(params, RequestOptions.none())
 
         /** @see getEmbeddableUrl */
-        fun getEmbeddableUrl(params: DashboardGetEmbeddableUrlParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<DashboardGetEmbeddableUrlResponse>>
+        fun getEmbeddableUrl(
+            params: DashboardGetEmbeddableUrlParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<DashboardGetEmbeddableUrlResponse>>
     }
 }

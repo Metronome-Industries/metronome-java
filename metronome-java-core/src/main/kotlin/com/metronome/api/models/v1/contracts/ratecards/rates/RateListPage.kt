@@ -5,20 +5,17 @@ package com.metronome.api.models.v1.contracts.ratecards.rates
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
-import com.metronome.api.models.v1.contracts.ratecards.rates.RateListPageResponse
-import com.metronome.api.models.v1.contracts.ratecards.rates.RateListParams
-import com.metronome.api.models.v1.contracts.ratecards.rates.RateListResponse
 import com.metronome.api.services.blocking.v1.contracts.ratecards.RateService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see RateService.list */
-class RateListPage private constructor(
+class RateListPage
+private constructor(
     private val service: RateService,
     private val params: RateListParams,
     private val response: RateListPageResponse,
-
 ) : Page<RateListResponse> {
 
     /**
@@ -33,17 +30,18 @@ class RateListPage private constructor(
      *
      * @see RateListPageResponse.data
      */
-    fun data(): List<RateListResponse> = response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<RateListResponse> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<RateListResponse> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): RateListParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
     override fun nextPage(): RateListPage = service.list(nextPageParams())
@@ -64,15 +62,13 @@ class RateListPage private constructor(
          * Returns a mutable builder for constructing an instance of [RateListPage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [RateListPage]. */
@@ -83,29 +79,19 @@ class RateListPage private constructor(
         private var response: RateListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(rateListPage: RateListPage) =
-            apply {
-                service = rateListPage.service
-                params = rateListPage.params
-                response = rateListPage.response
-            }
+        internal fun from(rateListPage: RateListPage) = apply {
+            service = rateListPage.service
+            params = rateListPage.params
+            response = rateListPage.response
+        }
 
-        fun service(service: RateService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: RateService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: RateListParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: RateListParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: RateListPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: RateListPageResponse) = apply { this.response = response }
 
         /**
          * Returns an immutable instance of [RateListPage].
@@ -113,7 +99,6 @@ class RateListPage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,24 +109,21 @@ class RateListPage private constructor(
          */
         fun build(): RateListPage =
             RateListPage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is RateListPage && service == other.service && params == other.params && response == other.response
+        return other is RateListPage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)

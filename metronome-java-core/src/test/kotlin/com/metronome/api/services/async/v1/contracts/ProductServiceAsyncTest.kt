@@ -8,7 +8,6 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.models.Id
 import com.metronome.api.models.v1.contracts.products.ProductArchiveParams
 import com.metronome.api.models.v1.contracts.products.ProductCreateParams
-import com.metronome.api.models.v1.contracts.products.ProductListParams
 import com.metronome.api.models.v1.contracts.products.ProductUpdateParams
 import com.metronome.api.models.v1.contracts.products.QuantityConversion
 import com.metronome.api.models.v1.contracts.products.QuantityRounding
@@ -21,125 +20,150 @@ internal class ProductServiceAsyncTest {
 
     @Test
     fun create() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val productServiceAsync = client.v1().contracts().products()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val productServiceAsync = client.v1().contracts().products()
 
-      val productFuture = productServiceAsync.create(ProductCreateParams.builder()
-          .name("My Product")
-          .type(ProductCreateParams.Type.USAGE)
-          .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-          .addCompositeProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .addCompositeTag("string")
-          .customFields(ProductCreateParams.CustomFields.builder()
-              .putAdditionalProperty("foo", JsonValue.from("string"))
-              .build())
-          .excludeFreeUsage(true)
-          .isRefundable(true)
-          .netsuiteInternalItemId("netsuite_internal_item_id")
-          .netsuiteOverageItemId("netsuite_overage_item_id")
-          .addPresentationGroupKey("string")
-          .addPricingGroupKey("string")
-          .quantityConversion(QuantityConversion.builder()
-              .conversionFactor(0.0)
-              .operation(QuantityConversion.Operation.MULTIPLY)
-              .name("name")
-              .build())
-          .quantityRounding(QuantityRounding.builder()
-              .decimalPlaces(0.0)
-              .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
-              .build())
-          .sqlBreakdownGranularity(ProductCreateParams.SqlBreakdownGranularity.HOUR)
-          .addTag("string")
-          .build())
+        val productFuture =
+            productServiceAsync.create(
+                ProductCreateParams.builder()
+                    .name("My Product")
+                    .type(ProductCreateParams.Type.USAGE)
+                    .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .addCompositeProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addCompositeTag("string")
+                    .customFields(
+                        ProductCreateParams.CustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .excludeFreeUsage(true)
+                    .isRefundable(true)
+                    .netsuiteInternalItemId("netsuite_internal_item_id")
+                    .netsuiteOverageItemId("netsuite_overage_item_id")
+                    .addPresentationGroupKey("string")
+                    .addPricingGroupKey("string")
+                    .quantityConversion(
+                        QuantityConversion.builder()
+                            .conversionFactor(0.0)
+                            .operation(QuantityConversion.Operation.MULTIPLY)
+                            .name("name")
+                            .build()
+                    )
+                    .quantityRounding(
+                        QuantityRounding.builder()
+                            .decimalPlaces(0.0)
+                            .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
+                            .build()
+                    )
+                    .sqlBreakdownGranularity(ProductCreateParams.SqlBreakdownGranularity.HOUR)
+                    .addTag("string")
+                    .build()
+            )
 
-      val product = productFuture.get()
-      product.validate()
+        val product = productFuture.get()
+        product.validate()
     }
 
     @Test
     fun retrieve() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val productServiceAsync = client.v1().contracts().products()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val productServiceAsync = client.v1().contracts().products()
 
-      val productFuture = productServiceAsync.retrieve(Id.builder()
-          .id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc")
-          .build())
+        val productFuture =
+            productServiceAsync.retrieve(
+                Id.builder().id("d84e7f4e-7a70-4fe4-be02-7a5027beffcc").build()
+            )
 
-      val product = productFuture.get()
-      product.validate()
+        val product = productFuture.get()
+        product.validate()
     }
 
     @Test
     fun update() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val productServiceAsync = client.v1().contracts().products()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val productServiceAsync = client.v1().contracts().products()
 
-      val productFuture = productServiceAsync.update(ProductUpdateParams.builder()
-          .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
-          .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .addCompositeProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-          .addCompositeTag("string")
-          .excludeFreeUsage(true)
-          .isRefundable(true)
-          .name("My Updated Product")
-          .netsuiteInternalItemId("netsuite_internal_item_id")
-          .netsuiteOverageItemId("netsuite_overage_item_id")
-          .addPresentationGroupKey("string")
-          .addPricingGroupKey("string")
-          .quantityConversion(QuantityConversion.builder()
-              .conversionFactor(0.0)
-              .operation(QuantityConversion.Operation.MULTIPLY)
-              .name("name")
-              .build())
-          .quantityRounding(QuantityRounding.builder()
-              .decimalPlaces(0.0)
-              .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
-              .build())
-          .sqlBreakdownGranularity(ProductUpdateParams.SqlBreakdownGranularity.HOUR)
-          .addTag("string")
-          .build())
+        val productFuture =
+            productServiceAsync.update(
+                ProductUpdateParams.builder()
+                    .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
+                    .billableMetricId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addCompositeProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addCompositeTag("string")
+                    .excludeFreeUsage(true)
+                    .isRefundable(true)
+                    .name("My Updated Product")
+                    .netsuiteInternalItemId("netsuite_internal_item_id")
+                    .netsuiteOverageItemId("netsuite_overage_item_id")
+                    .addPresentationGroupKey("string")
+                    .addPricingGroupKey("string")
+                    .quantityConversion(
+                        QuantityConversion.builder()
+                            .conversionFactor(0.0)
+                            .operation(QuantityConversion.Operation.MULTIPLY)
+                            .name("name")
+                            .build()
+                    )
+                    .quantityRounding(
+                        QuantityRounding.builder()
+                            .decimalPlaces(0.0)
+                            .roundingMethod(QuantityRounding.RoundingMethod.ROUND_UP)
+                            .build()
+                    )
+                    .sqlBreakdownGranularity(ProductUpdateParams.SqlBreakdownGranularity.HOUR)
+                    .addTag("string")
+                    .build()
+            )
 
-      val product = productFuture.get()
-      product.validate()
+        val product = productFuture.get()
+        product.validate()
     }
 
     @Test
     fun list() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val productServiceAsync = client.v1().contracts().products()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val productServiceAsync = client.v1().contracts().products()
 
-      val pageFuture = productServiceAsync.list()
+        val pageFuture = productServiceAsync.list()
 
-      val page = pageFuture.get()
-      page.response().validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Test
     fun archive() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val productServiceAsync = client.v1().contracts().products()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val productServiceAsync = client.v1().contracts().products()
 
-      val responseFuture = productServiceAsync.archive(ProductArchiveParams.builder()
-          .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .build())
+        val responseFuture =
+            productServiceAsync.archive(
+                ProductArchiveParams.builder()
+                    .productId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 }

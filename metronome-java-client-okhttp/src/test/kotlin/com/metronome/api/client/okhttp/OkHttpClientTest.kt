@@ -1,10 +1,10 @@
 package com.metronome.api.client.okhttp
 
-import com.metronome.api.core.http.HttpMethod
-import com.metronome.api.core.http.HttpRequest
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
+import com.metronome.api.core.http.HttpMethod
+import com.metronome.api.core.http.HttpRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

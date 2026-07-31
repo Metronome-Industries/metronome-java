@@ -14,73 +14,84 @@ import com.metronome.api.core.http.HttpResponse.Handler
 import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepareAsync
-import com.metronome.api.models.v1.pricingunits.PricingUnitListPage
 import com.metronome.api.models.v1.pricingunits.PricingUnitListPageAsync
 import com.metronome.api.models.v1.pricingunits.PricingUnitListPageResponse
 import com.metronome.api.models.v1.pricingunits.PricingUnitListParams
-import com.metronome.api.services.async.v1.PricingUnitServiceAsync
-import com.metronome.api.services.async.v1.PricingUnitServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
-/** Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization behavior. */
-class PricingUnitServiceAsyncImpl internal constructor(
-    private val clientOptions: ClientOptions,
+/**
+ * Use these endpoints to configure a billing API key, a webhook secret, or invoice finalization
+ * behavior.
+ */
+class PricingUnitServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    PricingUnitServiceAsync {
 
-) : PricingUnitServiceAsync {
-
-    private val withRawResponse: PricingUnitServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: PricingUnitServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): PricingUnitServiceAsync.WithRawResponse = withRawResponse
 
-    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PricingUnitServiceAsync = PricingUnitServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PricingUnitServiceAsync =
+        PricingUnitServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun list(params: PricingUnitListParams, requestOptions: RequestOptions): CompletableFuture<PricingUnitListPageAsync> =
+    override fun list(
+        params: PricingUnitListParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PricingUnitListPageAsync> =
         // get /v1/credit-types/list
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        PricingUnitServiceAsync.WithRawResponse {
 
-    ) : PricingUnitServiceAsync.WithRawResponse {
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val errorHandler: Handler<HttpResponse> = errorHandler(errorBodyHandler(clientOptions.jsonMapper))
-
-        override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PricingUnitServiceAsync.WithRawResponse = PricingUnitServiceAsyncImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier::accept).build())
-
-        private val listHandler: Handler<PricingUnitListPageResponse> = jsonHandler<PricingUnitListPageResponse>(clientOptions.jsonMapper)
-
-        override fun list(params: PricingUnitListParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<PricingUnitListPageAsync>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .baseUrl(clientOptions.baseUrl())
-            .addPathSegments("v1", "credit-types", "list")
-            .build()
-            .prepareAsync(
-              clientOptions, params
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): PricingUnitServiceAsync.WithRawResponse =
+            PricingUnitServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
             )
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> errorHandler.handle(response).parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  PricingUnitListPageAsync.builder()
-                      .service(PricingUnitServiceAsyncImpl(clientOptions))
-                      .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
-                      .params(params)
-                      .response(it)
-                      .build()
-              }
-          } }
+
+        private val listHandler: Handler<PricingUnitListPageResponse> =
+            jsonHandler<PricingUnitListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: PricingUnitListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PricingUnitListPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "credit-types", "list")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                PricingUnitListPageAsync.builder()
+                                    .service(PricingUnitServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
+                            }
+                    }
+                }
         }
     }
 }

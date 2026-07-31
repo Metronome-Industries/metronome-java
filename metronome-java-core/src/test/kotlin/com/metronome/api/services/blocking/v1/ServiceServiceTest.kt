@@ -4,7 +4,6 @@ package com.metronome.api.services.blocking.v1
 
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
-import com.metronome.api.models.v1.services.ServiceListParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -13,14 +12,15 @@ internal class ServiceServiceTest {
 
     @Test
     fun list() {
-      val client = MetronomeOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val serviceService = client.v1().services()
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val serviceService = client.v1().services()
 
-      val services = serviceService.list()
+        val services = serviceService.list()
 
-      services.validate()
+        services.validate()
     }
 }

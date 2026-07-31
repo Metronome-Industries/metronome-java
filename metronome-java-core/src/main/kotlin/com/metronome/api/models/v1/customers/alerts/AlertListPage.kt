@@ -5,20 +5,17 @@ package com.metronome.api.models.v1.customers.alerts
 import com.metronome.api.core.AutoPager
 import com.metronome.api.core.Page
 import com.metronome.api.core.checkRequired
-import com.metronome.api.models.v1.customers.alerts.AlertListPageResponse
-import com.metronome.api.models.v1.customers.alerts.AlertListParams
-import com.metronome.api.models.v1.customers.alerts.CustomerAlert
 import com.metronome.api.services.blocking.v1.customers.AlertService
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** @see AlertService.list */
-class AlertListPage private constructor(
+class AlertListPage
+private constructor(
     private val service: AlertService,
     private val params: AlertListParams,
     private val response: AlertListPageResponse,
-
 ) : Page<CustomerAlert> {
 
     /**
@@ -33,17 +30,18 @@ class AlertListPage private constructor(
      *
      * @see AlertListPageResponse.data
      */
-    fun data(): List<CustomerAlert> = response._data().getOptional("data").getOrNull() ?: emptyList()
+    fun data(): List<CustomerAlert> =
+        response._data().getOptional("data").getOrNull() ?: emptyList()
 
     override fun items(): List<CustomerAlert> = data()
 
     override fun hasNextPage(): Boolean = nextPageRaw().isPresent
 
     fun nextPageParams(): AlertListParams {
-      val nextCursor = nextPageRaw().getOrNull() ?: throw IllegalStateException("Cannot construct next page params")
-      return params.toBuilder()
-          .nextPage(nextCursor)
-          .build()
+        val nextCursor =
+            nextPageRaw().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().nextPage(nextCursor).build()
     }
 
     override fun nextPage(): AlertListPage = service.list(nextPageParams())
@@ -64,15 +62,13 @@ class AlertListPage private constructor(
          * Returns a mutable builder for constructing an instance of [AlertListPage].
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
          * .response()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [AlertListPage]. */
@@ -83,29 +79,19 @@ class AlertListPage private constructor(
         private var response: AlertListPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(alertListPage: AlertListPage) =
-            apply {
-                service = alertListPage.service
-                params = alertListPage.params
-                response = alertListPage.response
-            }
+        internal fun from(alertListPage: AlertListPage) = apply {
+            service = alertListPage.service
+            params = alertListPage.params
+            response = alertListPage.response
+        }
 
-        fun service(service: AlertService) =
-            apply {
-                this.service = service
-            }
+        fun service(service: AlertService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: AlertListParams) =
-            apply {
-                this.params = params
-            }
+        fun params(params: AlertListParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: AlertListPageResponse) =
-            apply {
-                this.response = response
-            }
+        fun response(response: AlertListPageResponse) = apply { this.response = response }
 
         /**
          * Returns an immutable instance of [AlertListPage].
@@ -113,7 +99,6 @@ class AlertListPage private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .service()
          * .params()
@@ -124,24 +109,21 @@ class AlertListPage private constructor(
          */
         fun build(): AlertListPage =
             AlertListPage(
-              checkRequired(
-                "service", service
-              ),
-              checkRequired(
-                "params", params
-              ),
-              checkRequired(
-                "response", response
-              ),
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is AlertListPage && service == other.service && params == other.params && response == other.response
+        return other is AlertListPage &&
+            service == other.service &&
+            params == other.params &&
+            response == other.response
     }
 
     override fun hashCode(): Int = Objects.hash(service, params, response)

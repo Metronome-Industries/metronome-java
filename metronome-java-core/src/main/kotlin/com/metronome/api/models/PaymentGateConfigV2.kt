@@ -14,60 +14,69 @@ import com.metronome.api.core.JsonValue
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.PaymentGateConfigV2
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+class PaymentGateConfigV2
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
+private constructor(
     private val paymentGateType: JsonField<PaymentGateType>,
     private val precalculatedTaxConfig: JsonField<PrecalculatedTaxConfig>,
     private val stripeConfig: JsonField<StripeConfig>,
     private val taxType: JsonField<TaxType>,
     private val additionalProperties: MutableMap<String, JsonValue>,
-
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("payment_gate_type") @ExcludeMissing paymentGateType: JsonField<PaymentGateType> = JsonMissing.of(),
-        @JsonProperty("precalculated_tax_config") @ExcludeMissing precalculatedTaxConfig: JsonField<PrecalculatedTaxConfig> = JsonMissing.of(),
-        @JsonProperty("stripe_config") @ExcludeMissing stripeConfig: JsonField<StripeConfig> = JsonMissing.of(),
-        @JsonProperty("tax_type") @ExcludeMissing taxType: JsonField<TaxType> = JsonMissing.of()
-    ) : this(
-      paymentGateType,
-      precalculatedTaxConfig,
-      stripeConfig,
-      taxType,
-      mutableMapOf(),
-    )
+        @JsonProperty("payment_gate_type")
+        @ExcludeMissing
+        paymentGateType: JsonField<PaymentGateType> = JsonMissing.of(),
+        @JsonProperty("precalculated_tax_config")
+        @ExcludeMissing
+        precalculatedTaxConfig: JsonField<PrecalculatedTaxConfig> = JsonMissing.of(),
+        @JsonProperty("stripe_config")
+        @ExcludeMissing
+        stripeConfig: JsonField<StripeConfig> = JsonMissing.of(),
+        @JsonProperty("tax_type") @ExcludeMissing taxType: JsonField<TaxType> = JsonMissing.of(),
+    ) : this(paymentGateType, precalculatedTaxConfig, stripeConfig, taxType, mutableMapOf())
 
     /**
-     * Gate access to the commit balance based on successful collection of payment. Select STRIPE for Metronome to facilitate payment via Stripe. Select EXTERNAL to facilitate payment using your own payment integration. Select NONE if you do not wish to payment gate the commit balance.
+     * Gate access to the commit balance based on successful collection of payment. Select STRIPE
+     * for Metronome to facilitate payment via Stripe. Select EXTERNAL to facilitate payment using
+     * your own payment integration. Select NONE if you do not wish to payment gate the commit
+     * balance.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun paymentGateType(): PaymentGateType = paymentGateType.getRequired("payment_gate_type")
 
     /**
      * Only applicable if using PRECALCULATED as your tax type.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun precalculatedTaxConfig(): Optional<PrecalculatedTaxConfig> = precalculatedTaxConfig.getOptional("precalculated_tax_config")
+    fun precalculatedTaxConfig(): Optional<PrecalculatedTaxConfig> =
+        precalculatedTaxConfig.getOptional("precalculated_tax_config")
 
     /**
      * Only applicable if using STRIPE as your payment gateway type.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun stripeConfig(): Optional<StripeConfig> = stripeConfig.getOptional("stripe_config")
 
     /**
-     * Stripe tax is only supported for Stripe payment gateway. Select NONE if you do not wish  Metronome to calculate tax on your behalf. Leaving this field blank will default to NONE.
+     * Stripe tax is only supported for Stripe payment gateway. Select NONE if you do not wish
+     * Metronome to calculate tax on your behalf. Leaving this field blank will default to NONE.
      *
-     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun taxType(): Optional<TaxType> = taxType.getOptional("tax_type")
 
@@ -83,7 +92,8 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
     /**
      * Returns the raw JSON value of [precalculatedTaxConfig].
      *
-     * Unlike [precalculatedTaxConfig], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [precalculatedTaxConfig], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
     @JsonProperty("precalculated_tax_config")
     @ExcludeMissing
@@ -103,18 +113,17 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
      *
      * Unlike [taxType], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("tax_type")
-    @ExcludeMissing
-    fun _taxType(): JsonField<TaxType> = taxType
+    @JsonProperty("tax_type") @ExcludeMissing fun _taxType(): JsonField<TaxType> = taxType
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
-      additionalProperties.put(key, value)
+        additionalProperties.put(key, value)
     }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -124,13 +133,11 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          * Returns a mutable builder for constructing an instance of [PaymentGateConfigV2].
          *
          * The following fields are required:
-         *
          * ```java
          * .paymentGateType()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PaymentGateConfigV2]. */
@@ -143,37 +150,44 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(paymentGateConfigV2: PaymentGateConfigV2) =
-            apply {
-                paymentGateType = paymentGateConfigV2.paymentGateType
-                precalculatedTaxConfig = paymentGateConfigV2.precalculatedTaxConfig
-                stripeConfig = paymentGateConfigV2.stripeConfig
-                taxType = paymentGateConfigV2.taxType
-                additionalProperties = paymentGateConfigV2.additionalProperties.toMutableMap()
-            }
+        internal fun from(paymentGateConfigV2: PaymentGateConfigV2) = apply {
+            paymentGateType = paymentGateConfigV2.paymentGateType
+            precalculatedTaxConfig = paymentGateConfigV2.precalculatedTaxConfig
+            stripeConfig = paymentGateConfigV2.stripeConfig
+            taxType = paymentGateConfigV2.taxType
+            additionalProperties = paymentGateConfigV2.additionalProperties.toMutableMap()
+        }
 
-        /** Gate access to the commit balance based on successful collection of payment. Select STRIPE for Metronome to facilitate payment via Stripe. Select EXTERNAL to facilitate payment using your own payment integration. Select NONE if you do not wish to payment gate the commit balance. */
-        fun paymentGateType(paymentGateType: PaymentGateType) = paymentGateType(JsonField.of(paymentGateType))
+        /**
+         * Gate access to the commit balance based on successful collection of payment. Select
+         * STRIPE for Metronome to facilitate payment via Stripe. Select EXTERNAL to facilitate
+         * payment using your own payment integration. Select NONE if you do not wish to payment
+         * gate the commit balance.
+         */
+        fun paymentGateType(paymentGateType: PaymentGateType) =
+            paymentGateType(JsonField.of(paymentGateType))
 
         /**
          * Sets [Builder.paymentGateType] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.paymentGateType] with a well-typed [PaymentGateType] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.paymentGateType] with a well-typed [PaymentGateType]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun paymentGateType(paymentGateType: JsonField<PaymentGateType>) =
-            apply {
-                this.paymentGateType = paymentGateType
-            }
+        fun paymentGateType(paymentGateType: JsonField<PaymentGateType>) = apply {
+            this.paymentGateType = paymentGateType
+        }
 
         /** Only applicable if using PRECALCULATED as your tax type. */
-        fun precalculatedTaxConfig(precalculatedTaxConfig: PrecalculatedTaxConfig) = precalculatedTaxConfig(JsonField.of(precalculatedTaxConfig))
+        fun precalculatedTaxConfig(precalculatedTaxConfig: PrecalculatedTaxConfig) =
+            precalculatedTaxConfig(JsonField.of(precalculatedTaxConfig))
 
         /**
          * Sets [Builder.precalculatedTaxConfig] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.precalculatedTaxConfig] with a well-typed [PrecalculatedTaxConfig] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.precalculatedTaxConfig] with a well-typed
+         * [PrecalculatedTaxConfig] value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
          */
         fun precalculatedTaxConfig(precalculatedTaxConfig: JsonField<PrecalculatedTaxConfig>) =
             apply {
@@ -186,53 +200,46 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Sets [Builder.stripeConfig] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.stripeConfig] with a well-typed [StripeConfig] value instead. This method is primarily for setting the field to an undocumented or not yet
+         * You should usually call [Builder.stripeConfig] with a well-typed [StripeConfig] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun stripeConfig(stripeConfig: JsonField<StripeConfig>) =
-            apply {
-                this.stripeConfig = stripeConfig
-            }
+        fun stripeConfig(stripeConfig: JsonField<StripeConfig>) = apply {
+            this.stripeConfig = stripeConfig
+        }
 
-        /** Stripe tax is only supported for Stripe payment gateway. Select NONE if you do not wish  Metronome to calculate tax on your behalf. Leaving this field blank will default to NONE. */
+        /**
+         * Stripe tax is only supported for Stripe payment gateway. Select NONE if you do not wish
+         * Metronome to calculate tax on your behalf. Leaving this field blank will default to NONE.
+         */
         fun taxType(taxType: TaxType) = taxType(JsonField.of(taxType))
 
         /**
          * Sets [Builder.taxType] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.taxType] with a well-typed [TaxType] value instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.taxType] with a well-typed [TaxType] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun taxType(taxType: JsonField<TaxType>) =
-            apply {
-                this.taxType = taxType
-            }
+        fun taxType(taxType: JsonField<TaxType>) = apply { this.taxType = taxType }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         /**
          * Returns an immutable instance of [PaymentGateConfigV2].
@@ -240,7 +247,6 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
-         *
          * ```java
          * .paymentGateType()
          * ```
@@ -249,13 +255,11 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          */
         fun build(): PaymentGateConfigV2 =
             PaymentGateConfigV2(
-              checkRequired(
-                "paymentGateType", paymentGateType
-              ),
-              precalculatedTaxConfig,
-              stripeConfig,
-              taxType,
-              additionalProperties.toMutableMap(),
+                checkRequired("paymentGateType", paymentGateType),
+                precalculatedTaxConfig,
+                stripeConfig,
+                taxType,
+                additionalProperties.toMutableMap(),
             )
     }
 
@@ -269,18 +273,17 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): PaymentGateConfigV2 =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            paymentGateType().validate()
-            precalculatedTaxConfig().ifPresent { it.validate() }
-            stripeConfig().ifPresent { it.validate() }
-            taxType().ifPresent { it.validate() }
-            validated = true
+    fun validate(): PaymentGateConfigV2 = apply {
+        if (validated) {
+            return@apply
         }
+
+        paymentGateType().validate()
+        precalculatedTaxConfig().ifPresent { it.validate() }
+        stripeConfig().ifPresent { it.validate() }
+        taxType().ifPresent { it.validate() }
+        validated = true
+    }
 
     fun isValid(): Boolean =
         try {
@@ -296,23 +299,30 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
      * Used for best match union deserialization.
      */
     @JvmSynthetic
-    internal fun validity(): Int = (paymentGateType.asKnown().getOrNull()?.validity() ?: 0) + (precalculatedTaxConfig.asKnown().getOrNull()?.validity() ?: 0) + (stripeConfig.asKnown().getOrNull()?.validity() ?: 0) + (taxType.asKnown().getOrNull()?.validity() ?: 0)
+    internal fun validity(): Int =
+        (paymentGateType.asKnown().getOrNull()?.validity() ?: 0) +
+            (precalculatedTaxConfig.asKnown().getOrNull()?.validity() ?: 0) +
+            (stripeConfig.asKnown().getOrNull()?.validity() ?: 0) +
+            (taxType.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** Gate access to the commit balance based on successful collection of payment. Select STRIPE for Metronome to facilitate payment via Stripe. Select EXTERNAL to facilitate payment using your own payment integration. Select NONE if you do not wish to payment gate the commit balance. */
-    class PaymentGateType @JsonCreator private constructor(
-        private val value: JsonField<String>,
-
-    ) : Enum {
+    /**
+     * Gate access to the commit balance based on successful collection of payment. Select STRIPE
+     * for Metronome to facilitate payment via Stripe. Select EXTERNAL to facilitate payment using
+     * your own payment integration. Select NONE if you do not wish to payment gate the commit
+     * balance.
+     */
+    class PaymentGateType @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't match any known
-         * member, and you want to know that value. For example, if the SDK is on an older version than the
-         * API, then the API may respond with new members that the SDK is unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -336,27 +346,28 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          * An enum containing [PaymentGateType]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [PaymentGateType] can contain an unknown value in a couple of cases:
-         *
-         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-         *   an older version than the API, then the API may respond with new members that the SDK is unaware
-         *   of.
-         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
             NONE,
             STRIPE,
             EXTERNAL,
-            /** An enum member indicating that [PaymentGateType] was instantiated with an unknown value. */
+            /**
+             * An enum member indicating that [PaymentGateType] was instantiated with an unknown
+             * value.
+             */
             _UNKNOWN,
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-         * class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want to throw
-         * for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -369,10 +380,11 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-         * for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+         *   member.
          */
         fun known(): Known =
             when (this) {
@@ -385,33 +397,36 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging and generally
-         * doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-         *   primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
          */
-        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): PaymentGateType =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                known()
-                validated = true
+        fun validate(): PaymentGateType = apply {
+            if (validated) {
+                return@apply
             }
+
+            known()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -422,19 +437,19 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic
-        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is PaymentGateType && value == other.value
+            return other is PaymentGateType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -443,34 +458,36 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
     }
 
     /** Only applicable if using PRECALCULATED as your tax type. */
-    class PrecalculatedTaxConfig @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class PrecalculatedTaxConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val taxAmount: JsonField<Double>,
         private val taxName: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("tax_amount") @ExcludeMissing taxAmount: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("tax_name") @ExcludeMissing taxName: JsonField<String> = JsonMissing.of()
-        ) : this(
-          taxAmount,
-          taxName,
-          mutableMapOf(),
-        )
+            @JsonProperty("tax_amount")
+            @ExcludeMissing
+            taxAmount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("tax_name") @ExcludeMissing taxName: JsonField<String> = JsonMissing.of(),
+        ) : this(taxAmount, taxName, mutableMapOf())
 
         /**
-         * Amount of tax to be applied. This should be in the same currency and denomination  as the commit's invoice schedule
+         * Amount of tax to be applied. This should be in the same currency and denomination as the
+         * commit's invoice schedule
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun taxAmount(): Double = taxAmount.getRequired("tax_amount")
 
         /**
          * Name of the tax to be applied. This may be used in an invoice line item description.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
         fun taxName(): Optional<String> = taxName.getOptional("tax_name")
 
@@ -479,27 +496,24 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          *
          * Unlike [taxAmount], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("tax_amount")
-        @ExcludeMissing
-        fun _taxAmount(): JsonField<Double> = taxAmount
+        @JsonProperty("tax_amount") @ExcludeMissing fun _taxAmount(): JsonField<Double> = taxAmount
 
         /**
          * Returns the raw JSON value of [taxName].
          *
          * Unlike [taxName], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("tax_name")
-        @ExcludeMissing
-        fun _taxName(): JsonField<String> = taxName
+        @JsonProperty("tax_name") @ExcludeMissing fun _taxName(): JsonField<String> = taxName
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -509,13 +523,11 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              * Returns a mutable builder for constructing an instance of [PrecalculatedTaxConfig].
              *
              * The following fields are required:
-             *
              * ```java
              * .taxAmount()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [PrecalculatedTaxConfig]. */
@@ -526,66 +538,59 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(precalculatedTaxConfig: PrecalculatedTaxConfig) =
-                apply {
-                    taxAmount = precalculatedTaxConfig.taxAmount
-                    taxName = precalculatedTaxConfig.taxName
-                    additionalProperties = precalculatedTaxConfig.additionalProperties.toMutableMap()
-                }
+            internal fun from(precalculatedTaxConfig: PrecalculatedTaxConfig) = apply {
+                taxAmount = precalculatedTaxConfig.taxAmount
+                taxName = precalculatedTaxConfig.taxName
+                additionalProperties = precalculatedTaxConfig.additionalProperties.toMutableMap()
+            }
 
-            /** Amount of tax to be applied. This should be in the same currency and denomination  as the commit's invoice schedule */
+            /**
+             * Amount of tax to be applied. This should be in the same currency and denomination as
+             * the commit's invoice schedule
+             */
             fun taxAmount(taxAmount: Double) = taxAmount(JsonField.of(taxAmount))
 
             /**
              * Sets [Builder.taxAmount] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.taxAmount] with a well-typed [Double] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.taxAmount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun taxAmount(taxAmount: JsonField<Double>) =
-                apply {
-                    this.taxAmount = taxAmount
-                }
+            fun taxAmount(taxAmount: JsonField<Double>) = apply { this.taxAmount = taxAmount }
 
-            /** Name of the tax to be applied. This may be used in an invoice line item description. */
+            /**
+             * Name of the tax to be applied. This may be used in an invoice line item description.
+             */
             fun taxName(taxName: String) = taxName(JsonField.of(taxName))
 
             /**
              * Sets [Builder.taxName] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.taxName] with a well-typed [String] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.taxName] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun taxName(taxName: JsonField<String>) =
-                apply {
-                    this.taxName = taxName
-                }
+            fun taxName(taxName: JsonField<String>) = apply { this.taxName = taxName }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [PrecalculatedTaxConfig].
@@ -593,7 +598,6 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .taxAmount()
              * ```
@@ -602,34 +606,32 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              */
             fun build(): PrecalculatedTaxConfig =
                 PrecalculatedTaxConfig(
-                  checkRequired(
-                    "taxAmount", taxAmount
-                  ),
-                  taxName,
-                  additionalProperties.toMutableMap(),
+                    checkRequired("taxAmount", taxAmount),
+                    taxName,
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): PrecalculatedTaxConfig =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                taxAmount()
-                taxName()
-                validated = true
+        fun validate(): PrecalculatedTaxConfig = apply {
+            if (validated) {
+                return@apply
             }
+
+            taxAmount()
+            taxName()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -640,59 +642,71 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (if (taxAmount.asKnown().isPresent) 1 else 0) + (if (taxName.asKnown().isPresent) 1 else 0)
+        internal fun validity(): Int =
+            (if (taxAmount.asKnown().isPresent) 1 else 0) +
+                (if (taxName.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is PrecalculatedTaxConfig && taxAmount == other.taxAmount && taxName == other.taxName && additionalProperties == other.additionalProperties
+            return other is PrecalculatedTaxConfig &&
+                taxAmount == other.taxAmount &&
+                taxName == other.taxName &&
+                additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy { Objects.hash(taxAmount, taxName, additionalProperties) }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "PrecalculatedTaxConfig{taxAmount=$taxAmount, taxName=$taxName, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "PrecalculatedTaxConfig{taxAmount=$taxAmount, taxName=$taxName, additionalProperties=$additionalProperties}"
     }
 
     /** Only applicable if using STRIPE as your payment gateway type. */
-    class StripeConfig @JsonCreator(mode = JsonCreator.Mode.DISABLED) private constructor(
+    class StripeConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
         private val paymentType: JsonField<PaymentType>,
         private val invoiceMetadata: JsonField<InvoiceMetadata>,
         private val additionalProperties: MutableMap<String, JsonValue>,
-
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("payment_type") @ExcludeMissing paymentType: JsonField<PaymentType> = JsonMissing.of(),
-            @JsonProperty("invoice_metadata") @ExcludeMissing invoiceMetadata: JsonField<InvoiceMetadata> = JsonMissing.of()
-        ) : this(
-          paymentType,
-          invoiceMetadata,
-          mutableMapOf(),
-        )
+            @JsonProperty("payment_type")
+            @ExcludeMissing
+            paymentType: JsonField<PaymentType> = JsonMissing.of(),
+            @JsonProperty("invoice_metadata")
+            @ExcludeMissing
+            invoiceMetadata: JsonField<InvoiceMetadata> = JsonMissing.of(),
+        ) : this(paymentType, invoiceMetadata, mutableMapOf())
 
         /**
          * If left blank, will default to INVOICE
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun paymentType(): PaymentType = paymentType.getRequired("payment_type")
 
         /**
-         * Metadata to be added to the Stripe invoice. Only applicable if using INVOICE as your payment type.
+         * Metadata to be added to the Stripe invoice. Only applicable if using INVOICE as your
+         * payment type.
          *
-         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the server responded with an unexpected value).
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
          */
-        fun invoiceMetadata(): Optional<InvoiceMetadata> = invoiceMetadata.getOptional("invoice_metadata")
+        fun invoiceMetadata(): Optional<InvoiceMetadata> =
+            invoiceMetadata.getOptional("invoice_metadata")
 
         /**
          * Returns the raw JSON value of [paymentType].
@@ -706,7 +720,8 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns the raw JSON value of [invoiceMetadata].
          *
-         * Unlike [invoiceMetadata], this method doesn't throw if the JSON field has an unexpected type.
+         * Unlike [invoiceMetadata], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("invoice_metadata")
         @ExcludeMissing
@@ -714,12 +729,13 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
-          additionalProperties.put(key, value)
+            additionalProperties.put(key, value)
         }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -729,13 +745,11 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              * Returns a mutable builder for constructing an instance of [StripeConfig].
              *
              * The following fields are required:
-             *
              * ```java
              * .paymentType()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [StripeConfig]. */
@@ -746,12 +760,11 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(stripeConfig: StripeConfig) =
-                apply {
-                    paymentType = stripeConfig.paymentType
-                    invoiceMetadata = stripeConfig.invoiceMetadata
-                    additionalProperties = stripeConfig.additionalProperties.toMutableMap()
-                }
+            internal fun from(stripeConfig: StripeConfig) = apply {
+                paymentType = stripeConfig.paymentType
+                invoiceMetadata = stripeConfig.invoiceMetadata
+                additionalProperties = stripeConfig.additionalProperties.toMutableMap()
+            }
 
             /** If left blank, will default to INVOICE */
             fun paymentType(paymentType: PaymentType) = paymentType(JsonField.of(paymentType))
@@ -759,53 +772,50 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Sets [Builder.paymentType] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.paymentType] with a well-typed [PaymentType] value instead. This method is primarily for setting the field to an undocumented or not yet
+             * You should usually call [Builder.paymentType] with a well-typed [PaymentType] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun paymentType(paymentType: JsonField<PaymentType>) =
-                apply {
-                    this.paymentType = paymentType
-                }
+            fun paymentType(paymentType: JsonField<PaymentType>) = apply {
+                this.paymentType = paymentType
+            }
 
-            /** Metadata to be added to the Stripe invoice. Only applicable if using INVOICE as your payment type. */
-            fun invoiceMetadata(invoiceMetadata: InvoiceMetadata) = invoiceMetadata(JsonField.of(invoiceMetadata))
+            /**
+             * Metadata to be added to the Stripe invoice. Only applicable if using INVOICE as your
+             * payment type.
+             */
+            fun invoiceMetadata(invoiceMetadata: InvoiceMetadata) =
+                invoiceMetadata(JsonField.of(invoiceMetadata))
 
             /**
              * Sets [Builder.invoiceMetadata] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.invoiceMetadata] with a well-typed [InvoiceMetadata] value instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.invoiceMetadata] with a well-typed [InvoiceMetadata]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun invoiceMetadata(invoiceMetadata: JsonField<InvoiceMetadata>) =
-                apply {
-                    this.invoiceMetadata = invoiceMetadata
-                }
+            fun invoiceMetadata(invoiceMetadata: JsonField<InvoiceMetadata>) = apply {
+                this.invoiceMetadata = invoiceMetadata
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             /**
              * Returns an immutable instance of [StripeConfig].
@@ -813,7 +823,6 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              * Further updates to this [Builder] will not mutate the returned instance.
              *
              * The following fields are required:
-             *
              * ```java
              * .paymentType()
              * ```
@@ -822,34 +831,32 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              */
             fun build(): StripeConfig =
                 StripeConfig(
-                  checkRequired(
-                    "paymentType", paymentType
-                  ),
-                  invoiceMetadata,
-                  additionalProperties.toMutableMap(),
+                    checkRequired("paymentType", paymentType),
+                    invoiceMetadata,
+                    additionalProperties.toMutableMap(),
                 )
         }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): StripeConfig =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                paymentType().validate()
-                invoiceMetadata().ifPresent { it.validate() }
-                validated = true
+        fun validate(): StripeConfig = apply {
+            if (validated) {
+                return@apply
             }
+
+            paymentType().validate()
+            invoiceMetadata().ifPresent { it.validate() }
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -860,28 +867,29 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
         @JvmSynthetic
-        internal fun validity(): Int = (paymentType.asKnown().getOrNull()?.validity() ?: 0) + (invoiceMetadata.asKnown().getOrNull()?.validity() ?: 0)
+        internal fun validity(): Int =
+            (paymentType.asKnown().getOrNull()?.validity() ?: 0) +
+                (invoiceMetadata.asKnown().getOrNull()?.validity() ?: 0)
 
         /** If left blank, will default to INVOICE */
-        class PaymentType @JsonCreator private constructor(
-            private val value: JsonField<String>,
-
-        ) : Enum {
+        class PaymentType @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't match any known
-             * member, and you want to know that value. For example, if the SDK is on an older version than the
-             * API, then the API may respond with new members that the SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue
-            fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -902,26 +910,27 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
              * An enum containing [PaymentType]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [PaymentType] can contain an unknown value in a couple of cases:
-             *
-             * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-             *   an older version than the API, then the API may respond with new members that the SDK is unaware
-             *   of.
-             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
                 INVOICE,
                 PAYMENT_INTENT,
-                /** An enum member indicating that [PaymentType] was instantiated with an unknown value. */
+                /**
+                 * An enum member indicating that [PaymentType] was instantiated with an unknown
+                 * value.
+                 */
                 _UNKNOWN,
             }
 
             /**
-             * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-             * class was instantiated with an unknown value.
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you want to throw
-             * for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -933,10 +942,11 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Returns an enum member corresponding to this class instance's value.
              *
-             * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-             * for the unknown case.
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
              */
             fun known(): Known =
                 when (this) {
@@ -948,33 +958,37 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             /**
              * Returns this class instance's primitive wire representation.
              *
-             * This differs from the [toString] method because that method is primarily for debugging and generally
-             * doesn't throw.
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
              *
-             * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-             *   primitive type.
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
              */
-            fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
 
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): PaymentType =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    known()
-                    validated = true
+            fun validate(): PaymentType = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                known()
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -985,19 +999,19 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is PaymentType && value == other.value
+                return other is PaymentType && value == other.value
             }
 
             override fun hashCode() = value.hashCode()
@@ -1005,10 +1019,15 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             override fun toString() = value.toString()
         }
 
-        /** Metadata to be added to the Stripe invoice. Only applicable if using INVOICE as your payment type. */
-        class InvoiceMetadata @JsonCreator private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue private val additionalProperties: Map<String, JsonValue>,
-
+        /**
+         * Metadata to be added to the Stripe invoice. Only applicable if using INVOICE as your
+         * payment type.
+         */
+        class InvoiceMetadata
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
         ) {
 
             @JsonAnyGetter
@@ -1020,8 +1039,7 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             companion object {
 
                 /** Returns a mutable builder for constructing an instance of [InvoiceMetadata]. */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [InvoiceMetadata]. */
@@ -1030,36 +1048,31 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(invoiceMetadata: InvoiceMetadata) =
-                    apply {
-                        additionalProperties = invoiceMetadata.additionalProperties.toMutableMap()
-                    }
+                internal fun from(invoiceMetadata: InvoiceMetadata) = apply {
+                    additionalProperties = invoiceMetadata.additionalProperties.toMutableMap()
+                }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 /**
                  * Returns an immutable instance of [InvoiceMetadata].
@@ -1072,21 +1085,22 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             private var validated: Boolean = false
 
             /**
-             * Validates that the types of all values in this object match their expected types recursively.
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
              *
-             * This method is _not_ forwards compatible with new types from the API for existing fields.
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
              *
-             * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
-             *   expected type.
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
              */
-            fun validate(): InvoiceMetadata =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    validated = true
+            fun validate(): InvoiceMetadata = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                validated = true
+            }
 
             fun isValid(): Boolean =
                 try {
@@ -1097,19 +1111,22 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
                 }
 
             /**
-             * Returns a score indicating how many valid values are contained in this object recursively.
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
              *
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return other is InvoiceMetadata && additionalProperties == other.additionalProperties
+                return other is InvoiceMetadata &&
+                    additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
@@ -1120,35 +1137,41 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is StripeConfig && paymentType == other.paymentType && invoiceMetadata == other.invoiceMetadata && additionalProperties == other.additionalProperties
+            return other is StripeConfig &&
+                paymentType == other.paymentType &&
+                invoiceMetadata == other.invoiceMetadata &&
+                additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(paymentType, invoiceMetadata, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(paymentType, invoiceMetadata, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "StripeConfig{paymentType=$paymentType, invoiceMetadata=$invoiceMetadata, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "StripeConfig{paymentType=$paymentType, invoiceMetadata=$invoiceMetadata, additionalProperties=$additionalProperties}"
     }
 
-    /** Stripe tax is only supported for Stripe payment gateway. Select NONE if you do not wish  Metronome to calculate tax on your behalf. Leaving this field blank will default to NONE. */
-    class TaxType @JsonCreator private constructor(
-        private val value: JsonField<String>,
-
-    ) : Enum {
+    /**
+     * Stripe tax is only supported for Stripe payment gateway. Select NONE if you do not wish
+     * Metronome to calculate tax on your behalf. Leaving this field blank will default to NONE.
+     */
+    class TaxType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't match any known
-         * member, and you want to know that value. For example, if the SDK is on an older version than the
-         * API, then the API may respond with new members that the SDK is unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -1175,11 +1198,9 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
          * An enum containing [TaxType]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [TaxType] can contain an unknown value in a couple of cases:
-         *
-         * - It was deserialized from data that doesn't match any known member. For example, if the SDK is on
-         *   an older version than the API, then the API may respond with new members that the SDK is unaware
-         *   of.
-         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -1192,11 +1213,11 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN] if the
-         * class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want to throw
-         * for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -1210,10 +1231,11 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't want to throw
-         * for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value is a not a known member.
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+         *   member.
          */
         fun known(): Known =
             when (this) {
@@ -1227,33 +1249,36 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging and generally
-         * doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
          *
-         * @throws MetronomeInvalidDataException if this class instance's value does not have the expected
-         *   primitive type.
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
          */
-        fun asString(): String = _value().asString().orElseThrow { MetronomeInvalidDataException("Value is not a String") }
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
 
         private var validated: Boolean = false
 
         /**
-         * Validates that the types of all values in this object match their expected types recursively.
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
          *
          * This method is _not_ forwards compatible with new types from the API for existing fields.
          *
          * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
          *   expected type.
          */
-        fun validate(): TaxType =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                known()
-                validated = true
+        fun validate(): TaxType = apply {
+            if (validated) {
+                return@apply
             }
+
+            known()
+            validated = true
+        }
 
         fun isValid(): Boolean =
             try {
@@ -1264,19 +1289,19 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
             }
 
         /**
-         * Returns a score indicating how many valid values are contained in this object recursively.
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic
-        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return other is TaxType && value == other.value
+            return other is TaxType && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -1285,16 +1310,30 @@ class PaymentGateConfigV2 @JsonCreator(mode = JsonCreator.Mode.DISABLED) private
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return other is PaymentGateConfigV2 && paymentGateType == other.paymentGateType && precalculatedTaxConfig == other.precalculatedTaxConfig && stripeConfig == other.stripeConfig && taxType == other.taxType && additionalProperties == other.additionalProperties
+        return other is PaymentGateConfigV2 &&
+            paymentGateType == other.paymentGateType &&
+            precalculatedTaxConfig == other.precalculatedTaxConfig &&
+            stripeConfig == other.stripeConfig &&
+            taxType == other.taxType &&
+            additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(paymentGateType, precalculatedTaxConfig, stripeConfig, taxType, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            paymentGateType,
+            precalculatedTaxConfig,
+            stripeConfig,
+            taxType,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "PaymentGateConfigV2{paymentGateType=$paymentGateType, precalculatedTaxConfig=$precalculatedTaxConfig, stripeConfig=$stripeConfig, taxType=$taxType, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "PaymentGateConfigV2{paymentGateType=$paymentGateType, precalculatedTaxConfig=$precalculatedTaxConfig, stripeConfig=$stripeConfig, taxType=$taxType, additionalProperties=$additionalProperties}"
 }

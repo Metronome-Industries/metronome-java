@@ -15,56 +15,70 @@ internal class BillingConfigServiceAsyncTest {
 
     @Test
     fun create() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val billingConfigServiceAsync = client.v1().customers().billingConfig()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val billingConfigServiceAsync = client.v1().customers().billingConfig()
 
-      val future = billingConfigServiceAsync.create(BillingConfigCreateParams.builder()
-          .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .billingProviderType(BillingConfigCreateParams.BillingProviderType.STRIPE)
-          .billingProviderCustomerId("cus_AJ6y20bjkOOayM")
-          .awsCustomerAccountId("aws_customer_account_id")
-          .awsCustomerId("aws_customer_id")
-          .awsProductCode("aws_product_code")
-          .awsRegion(BillingConfigCreateParams.AwsRegion.AF_SOUTH_1)
-          .stripeCollectionMethod(BillingConfigCreateParams.StripeCollectionMethod.CHARGE_AUTOMATICALLY)
-          .build())
+        val future =
+            billingConfigServiceAsync.create(
+                BillingConfigCreateParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .billingProviderType(BillingConfigCreateParams.BillingProviderType.STRIPE)
+                    .billingProviderCustomerId("cus_AJ6y20bjkOOayM")
+                    .awsCustomerAccountId("aws_customer_account_id")
+                    .awsCustomerId("aws_customer_id")
+                    .awsProductCode("aws_product_code")
+                    .awsRegion(BillingConfigCreateParams.AwsRegion.AF_SOUTH_1)
+                    .stripeCollectionMethod(
+                        BillingConfigCreateParams.StripeCollectionMethod.CHARGE_AUTOMATICALLY
+                    )
+                    .build()
+            )
 
-      val response = future.get()
+        val response = future.get()
     }
 
     @Test
     fun retrieve() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val billingConfigServiceAsync = client.v1().customers().billingConfig()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val billingConfigServiceAsync = client.v1().customers().billingConfig()
 
-      val billingConfigFuture = billingConfigServiceAsync.retrieve(BillingConfigRetrieveParams.builder()
-          .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .billingProviderType(BillingConfigRetrieveParams.BillingProviderType.STRIPE)
-          .build())
+        val billingConfigFuture =
+            billingConfigServiceAsync.retrieve(
+                BillingConfigRetrieveParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .billingProviderType(BillingConfigRetrieveParams.BillingProviderType.STRIPE)
+                    .build()
+            )
 
-      val billingConfig = billingConfigFuture.get()
-      billingConfig.validate()
+        val billingConfig = billingConfigFuture.get()
+        billingConfig.validate()
     }
 
     @Test
     fun delete() {
-      val client = MetronomeOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val billingConfigServiceAsync = client.v1().customers().billingConfig()
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val billingConfigServiceAsync = client.v1().customers().billingConfig()
 
-      val future = billingConfigServiceAsync.delete(BillingConfigDeleteParams.builder()
-          .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
-          .billingProviderType(BillingConfigDeleteParams.BillingProviderType.STRIPE)
-          .build())
+        val future =
+            billingConfigServiceAsync.delete(
+                BillingConfigDeleteParams.builder()
+                    .customerId("d7abd0cd-4ae9-4db7-8676-e986a4ebd8dc")
+                    .billingProviderType(BillingConfigDeleteParams.BillingProviderType.STRIPE)
+                    .build()
+            )
 
-      val response = future.get()
+        val response = future.get()
     }
 }

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
-import com.metronome.api.errors.MetronomeException
 import com.metronome.api.errors.MetronomeInvalidDataException
 
 @JvmSynthetic
