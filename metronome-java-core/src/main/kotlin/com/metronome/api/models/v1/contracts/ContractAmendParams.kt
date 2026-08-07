@@ -29,9 +29,9 @@ import kotlin.jvm.optionals.getOrNull
 /**
  * Amendments will be replaced by Contract editing. New clients should implement using the
  * `editContract` endpoint. Read more about the migration to contract editing
- * [here](/guides/implement-metronome/migrate-amendments-to-edits/) and reach out to your Metronome
- * representative for more details. Once contract editing is enabled, access to this endpoint will
- * be removed.
+ * [here](/guides/implement-metronome/migrate-amendments-to-edits/) and contact us via the
+ * [Metronome support portal](https://support.metronome.com/) for more details. Once contract
+ * editing is enabled, access to this endpoint will be removed.
  */
 class ContractAmendParams
 private constructor(

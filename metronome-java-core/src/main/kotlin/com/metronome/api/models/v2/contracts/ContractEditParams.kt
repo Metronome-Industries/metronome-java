@@ -47,8 +47,8 @@ import kotlin.jvm.optionals.getOrNull
  * - When you edit a contract, any draft invoices update immediately to reflect that edit. Finalized
  *   invoices remain unchanged - you must void and regenerate them in the UI or API to reflect the
  *   edit.
- * - Contract editing must be enabled to use this endpoint. Reach out to your Metronome
- *   representative to learn more.
+ * - Contract editing must be enabled to use this endpoint. Contact us via the
+ *   [Metronome support portal](https://support.metronome.com/) to learn more.
  */
 class ContractEditParams
 private constructor(
