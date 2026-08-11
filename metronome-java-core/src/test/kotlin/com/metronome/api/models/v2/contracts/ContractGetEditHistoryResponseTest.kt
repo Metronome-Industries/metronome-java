@@ -387,6 +387,23 @@ internal class ContractGetEditHistoryResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.Duration
+                                                .builder()
+                                                .unit(
+                                                    PrepaidBalanceThresholdConfigurationV2.Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -1423,6 +1440,31 @@ internal class ContractGetEditHistoryResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .Commit
+                                                .Duration
+                                                .builder()
+                                                .unit(
+                                                    ContractGetEditHistoryResponse.Data
+                                                        .UpdatePrepaidBalanceThresholdConfiguration
+                                                        .Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .Commit
+                                                .RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -2167,6 +2209,23 @@ internal class ContractGetEditHistoryResponseTest {
                                     .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
+                                    .duration(
+                                        PrepaidBalanceThresholdConfigurationV2.Commit.Duration
+                                            .builder()
+                                            .unit(
+                                                PrepaidBalanceThresholdConfigurationV2.Commit
+                                                    .Duration
+                                                    .Unit
+                                                    .DAYS
+                                            )
+                                            .value(0L)
+                                            .build()
+                                    )
+                                    .rateType(
+                                        PrepaidBalanceThresholdConfigurationV2.Commit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .rolloverFraction(0.0)
                                     .addSpecifier(
                                         CommitSpecifierInput.builder()
                                             .presentationGroupValues(
@@ -3152,6 +3211,31 @@ internal class ContractGetEditHistoryResponseTest {
                                     .productId("product_id")
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
+                                    .duration(
+                                        ContractGetEditHistoryResponse.Data
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .Commit
+                                            .Duration
+                                            .builder()
+                                            .unit(
+                                                ContractGetEditHistoryResponse.Data
+                                                    .UpdatePrepaidBalanceThresholdConfiguration
+                                                    .Commit
+                                                    .Duration
+                                                    .Unit
+                                                    .DAYS
+                                            )
+                                            .value(0L)
+                                            .build()
+                                    )
+                                    .rateType(
+                                        ContractGetEditHistoryResponse.Data
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .Commit
+                                            .RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .rolloverFraction(0.0)
                                     .addSpecifier(
                                         CommitSpecifierInput.builder()
                                             .presentationGroupValues(
@@ -3913,6 +3997,23 @@ internal class ContractGetEditHistoryResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.Duration
+                                                .builder()
+                                                .unit(
+                                                    PrepaidBalanceThresholdConfigurationV2.Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -4949,6 +5050,31 @@ internal class ContractGetEditHistoryResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .Commit
+                                                .Duration
+                                                .builder()
+                                                .unit(
+                                                    ContractGetEditHistoryResponse.Data
+                                                        .UpdatePrepaidBalanceThresholdConfiguration
+                                                        .Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .Commit
+                                                .RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
