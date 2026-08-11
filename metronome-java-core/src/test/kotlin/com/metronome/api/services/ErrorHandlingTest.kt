@@ -483,23 +483,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -1587,23 +1570,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -2691,23 +2657,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -3795,23 +3744,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -4899,23 +4831,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -6003,23 +5918,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -7107,23 +7005,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -8211,23 +8092,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -9315,23 +9179,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -10419,23 +10266,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -11523,23 +11353,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -12627,23 +12440,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -13731,23 +13527,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -14835,23 +14614,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -15939,23 +15701,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -17043,23 +16788,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -18145,23 +17873,6 @@ internal class ErrorHandlingTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
-                                        .duration(
-                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
-                                                .builder()
-                                                .unit(
-                                                    PrepaidBalanceThresholdConfiguration.Commit
-                                                        .Duration
-                                                        .Unit
-                                                        .DAYS
-                                                )
-                                                .value(0L)
-                                                .build()
-                                        )
-                                        .rateType(
-                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
-                                                .COMMIT_RATE
-                                        )
-                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
