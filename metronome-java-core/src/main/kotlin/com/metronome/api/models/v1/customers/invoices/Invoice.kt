@@ -1465,6 +1465,7 @@ private constructor(
         private val professionalServiceCustomFields: JsonField<ProfessionalServiceCustomFields>,
         private val professionalServiceId: JsonField<String>,
         private val quantity: JsonField<Double>,
+        private val quantityConsumed: JsonField<Double>,
         private val resellerType: JsonField<ResellerType>,
         private val scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields>,
         private val scheduledChargeId: JsonField<String>,
@@ -1574,6 +1575,9 @@ private constructor(
             @JsonProperty("quantity")
             @ExcludeMissing
             quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("quantity_consumed")
+            @ExcludeMissing
+            quantityConsumed: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("reseller_type")
             @ExcludeMissing
             resellerType: JsonField<ResellerType> = JsonMissing.of(),
@@ -1634,6 +1638,7 @@ private constructor(
             professionalServiceCustomFields,
             professionalServiceId,
             quantity,
+            quantityConsumed,
             resellerType,
             scheduledChargeCustomFields,
             scheduledChargeId,
@@ -1941,6 +1946,15 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun quantity(): Optional<Double> = quantity.getOptional("quantity")
+
+        /**
+         * Present on applied commit line items for quantity-based commits. Represents the unit
+         * quantity deducted the commit.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun quantityConsumed(): Optional<Double> = quantityConsumed.getOptional("quantity_consumed")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -2319,6 +2333,16 @@ private constructor(
         @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
         /**
+         * Returns the raw JSON value of [quantityConsumed].
+         *
+         * Unlike [quantityConsumed], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("quantity_consumed")
+        @ExcludeMissing
+        fun _quantityConsumed(): JsonField<Double> = quantityConsumed
+
+        /**
          * Returns the raw JSON value of [resellerType].
          *
          * Unlike [resellerType], this method doesn't throw if the JSON field has an unexpected
@@ -2471,6 +2495,7 @@ private constructor(
                 JsonMissing.of()
             private var professionalServiceId: JsonField<String> = JsonMissing.of()
             private var quantity: JsonField<Double> = JsonMissing.of()
+            private var quantityConsumed: JsonField<Double> = JsonMissing.of()
             private var resellerType: JsonField<ResellerType> = JsonMissing.of()
             private var scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields> =
                 JsonMissing.of()
@@ -2520,6 +2545,7 @@ private constructor(
                 professionalServiceCustomFields = lineItem.professionalServiceCustomFields
                 professionalServiceId = lineItem.professionalServiceId
                 quantity = lineItem.quantity
+                quantityConsumed = lineItem.quantityConsumed
                 resellerType = lineItem.resellerType
                 scheduledChargeCustomFields = lineItem.scheduledChargeCustomFields
                 scheduledChargeId = lineItem.scheduledChargeId
@@ -3057,6 +3083,24 @@ private constructor(
              */
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
+            /**
+             * Present on applied commit line items for quantity-based commits. Represents the unit
+             * quantity deducted the commit.
+             */
+            fun quantityConsumed(quantityConsumed: Double) =
+                quantityConsumed(JsonField.of(quantityConsumed))
+
+            /**
+             * Sets [Builder.quantityConsumed] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantityConsumed] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun quantityConsumed(quantityConsumed: JsonField<Double>) = apply {
+                this.quantityConsumed = quantityConsumed
+            }
+
             fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
 
             /**
@@ -3268,6 +3312,7 @@ private constructor(
                     professionalServiceCustomFields,
                     professionalServiceId,
                     quantity,
+                    quantityConsumed,
                     resellerType,
                     scheduledChargeCustomFields,
                     scheduledChargeId,
@@ -3331,6 +3376,7 @@ private constructor(
             professionalServiceCustomFields().ifPresent { it.validate() }
             professionalServiceId()
             quantity()
+            quantityConsumed()
             resellerType().ifPresent { it.validate() }
             scheduledChargeCustomFields().ifPresent { it.validate() }
             scheduledChargeId()
@@ -3393,6 +3439,7 @@ private constructor(
                 (professionalServiceCustomFields.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (professionalServiceId.asKnown().isPresent) 1 else 0) +
                 (if (quantity.asKnown().isPresent) 1 else 0) +
+                (if (quantityConsumed.asKnown().isPresent) 1 else 0) +
                 (resellerType.asKnown().getOrNull()?.validity() ?: 0) +
                 (scheduledChargeCustomFields.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (scheduledChargeId.asKnown().isPresent) 1 else 0) +
@@ -7006,6 +7053,7 @@ private constructor(
                 professionalServiceCustomFields == other.professionalServiceCustomFields &&
                 professionalServiceId == other.professionalServiceId &&
                 quantity == other.quantity &&
+                quantityConsumed == other.quantityConsumed &&
                 resellerType == other.resellerType &&
                 scheduledChargeCustomFields == other.scheduledChargeCustomFields &&
                 scheduledChargeId == other.scheduledChargeId &&
@@ -7054,6 +7102,7 @@ private constructor(
                 professionalServiceCustomFields,
                 professionalServiceId,
                 quantity,
+                quantityConsumed,
                 resellerType,
                 scheduledChargeCustomFields,
                 scheduledChargeId,
@@ -7070,7 +7119,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "LineItem{creditType=$creditType, name=$name, total=$total, type=$type, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitId=$commitId, commitNetsuiteItemId=$commitNetsuiteItemId, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitSegmentId=$commitSegmentId, commitType=$commitType, customFields=$customFields, discountCustomFields=$discountCustomFields, discountId=$discountId, endingBefore=$endingBefore, groupKey=$groupKey, groupValue=$groupValue, isProrated=$isProrated, listPrice=$listPrice, metadata=$metadata, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteItemId=$netsuiteItemId, origin=$origin, postpaidCommit=$postpaidCommit, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productCustomFields=$productCustomFields, productId=$productId, productTags=$productTags, productType=$productType, professionalServiceCustomFields=$professionalServiceCustomFields, professionalServiceId=$professionalServiceId, quantity=$quantity, resellerType=$resellerType, scheduledChargeCustomFields=$scheduledChargeCustomFields, scheduledChargeId=$scheduledChargeId, startingAt=$startingAt, subLineItems=$subLineItems, subscriptionCustomFields=$subscriptionCustomFields, subscriptionId=$subscriptionId, tier=$tier, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+            "LineItem{creditType=$creditType, name=$name, total=$total, type=$type, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitId=$commitId, commitNetsuiteItemId=$commitNetsuiteItemId, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitSegmentId=$commitSegmentId, commitType=$commitType, customFields=$customFields, discountCustomFields=$discountCustomFields, discountId=$discountId, endingBefore=$endingBefore, groupKey=$groupKey, groupValue=$groupValue, isProrated=$isProrated, listPrice=$listPrice, metadata=$metadata, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteItemId=$netsuiteItemId, origin=$origin, postpaidCommit=$postpaidCommit, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productCustomFields=$productCustomFields, productId=$productId, productTags=$productTags, productType=$productType, professionalServiceCustomFields=$professionalServiceCustomFields, professionalServiceId=$professionalServiceId, quantity=$quantity, quantityConsumed=$quantityConsumed, resellerType=$resellerType, scheduledChargeCustomFields=$scheduledChargeCustomFields, scheduledChargeId=$scheduledChargeId, startingAt=$startingAt, subLineItems=$subLineItems, subscriptionCustomFields=$subscriptionCustomFields, subscriptionId=$subscriptionId, tier=$tier, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
     }
 
     class ConstituentInvoice
