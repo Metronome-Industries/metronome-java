@@ -1142,6 +1142,7 @@ internal class ContractServiceTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .uniquenessKey("x")
                 .build()
         )
     }
