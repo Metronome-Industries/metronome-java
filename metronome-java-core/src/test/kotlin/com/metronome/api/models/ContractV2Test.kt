@@ -345,6 +345,38 @@ internal class ContractV2Test {
                                         .build()
                                 )
                                 .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addUnbillableInvoicesConfiguration(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            ContractV2.BillingProviderConfigurationSchedule
+                                                .BillingProviderConfiguration
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build()
+                                )
+                                .addUnbillableInvoicesConfiguration(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            ContractV2.BillingProviderConfigurationSchedule
+                                                .BillingProviderConfiguration
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -500,6 +532,34 @@ internal class ContractV2Test {
                                 .build()
                         )
                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addUnbillableInvoicesConfiguration(
+                            ContractV2.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    ContractV2.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build()
+                        )
+                        .addUnbillableInvoicesConfiguration(
+                            ContractV2.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    ContractV2.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build()
+                        )
                         .build()
                 )
                 .addDiscount(
@@ -1523,6 +1583,38 @@ internal class ContractV2Test {
                                     .build()
                             )
                             .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                            .addUnbillableInvoicesConfiguration(
+                                ContractV2.BillingProviderConfigurationSchedule
+                                    .BillingProviderConfiguration
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        ContractV2.BillingProviderConfigurationSchedule
+                                            .BillingProviderConfiguration
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build()
+                            )
+                            .addUnbillableInvoicesConfiguration(
+                                ContractV2.BillingProviderConfigurationSchedule
+                                    .BillingProviderConfiguration
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        ContractV2.BillingProviderConfigurationSchedule
+                                            .BillingProviderConfiguration
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build()
+                            )
                             .build()
                     )
                     .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1675,6 +1767,34 @@ internal class ContractV2Test {
                             .build()
                     )
                     .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .addUnbillableInvoicesConfiguration(
+                        ContractV2.CustomerBillingProviderConfiguration
+                            .UnbillableInvoicesConfiguration
+                            .builder()
+                            .invoiceType(
+                                ContractV2.CustomerBillingProviderConfiguration
+                                    .UnbillableInvoicesConfiguration
+                                    .InvoiceType
+                                    .USAGE
+                            )
+                            .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .maxAmount(1000.0)
+                            .build()
+                    )
+                    .addUnbillableInvoicesConfiguration(
+                        ContractV2.CustomerBillingProviderConfiguration
+                            .UnbillableInvoicesConfiguration
+                            .builder()
+                            .invoiceType(
+                                ContractV2.CustomerBillingProviderConfiguration
+                                    .UnbillableInvoicesConfiguration
+                                    .InvoiceType
+                                    .USAGE
+                            )
+                            .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                            .maxAmount(1000.0)
+                            .build()
+                    )
                     .build()
             )
         assertThat(contractV2.discounts().getOrNull())
@@ -2679,6 +2799,38 @@ internal class ContractV2Test {
                                         .build()
                                 )
                                 .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .addUnbillableInvoicesConfiguration(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            ContractV2.BillingProviderConfigurationSchedule
+                                                .BillingProviderConfiguration
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build()
+                                )
+                                .addUnbillableInvoicesConfiguration(
+                                    ContractV2.BillingProviderConfigurationSchedule
+                                        .BillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            ContractV2.BillingProviderConfigurationSchedule
+                                                .BillingProviderConfiguration
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build()
+                                )
                                 .build()
                         )
                         .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2834,6 +2986,34 @@ internal class ContractV2Test {
                                 .build()
                         )
                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .addUnbillableInvoicesConfiguration(
+                            ContractV2.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    ContractV2.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build()
+                        )
+                        .addUnbillableInvoicesConfiguration(
+                            ContractV2.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    ContractV2.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build()
+                        )
                         .build()
                 )
                 .addDiscount(
