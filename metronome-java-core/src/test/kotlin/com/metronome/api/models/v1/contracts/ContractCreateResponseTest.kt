@@ -854,6 +854,9 @@ internal class ContractCreateResponseTest {
                                                 .quantity(0.0)
                                                 .build()
                                         )
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
                                         .commitDuration(
                                             ContractCreateResponse.Data.Contract.RecurringCommit
                                                 .CommitDuration
@@ -1036,6 +1039,9 @@ internal class ContractCreateResponseTest {
                                                 .unitPrice(0.0)
                                                 .quantity(0.0)
                                                 .build()
+                                        )
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .commitDuration(
                                             ContractCreateResponse.Data.Contract.RecurringCredit
@@ -2146,6 +2152,7 @@ internal class ContractCreateResponseTest {
                                             .quantity(0.0)
                                             .build()
                                     )
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .commitDuration(
                                         ContractCreateResponse.Data.Contract.RecurringCommit
                                             .CommitDuration
@@ -2312,6 +2319,7 @@ internal class ContractCreateResponseTest {
                                             .quantity(0.0)
                                             .build()
                                     )
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .commitDuration(
                                         ContractCreateResponse.Data.Contract.RecurringCredit
                                             .CommitDuration
@@ -3459,6 +3467,9 @@ internal class ContractCreateResponseTest {
                                                 .quantity(0.0)
                                                 .build()
                                         )
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                        )
                                         .commitDuration(
                                             ContractCreateResponse.Data.Contract.RecurringCommit
                                                 .CommitDuration
@@ -3641,6 +3652,9 @@ internal class ContractCreateResponseTest {
                                                 .unitPrice(0.0)
                                                 .quantity(0.0)
                                                 .build()
+                                        )
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .commitDuration(
                                             ContractCreateResponse.Data.Contract.RecurringCredit

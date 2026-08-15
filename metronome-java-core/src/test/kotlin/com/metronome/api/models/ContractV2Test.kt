@@ -784,6 +784,7 @@ internal class ContractV2Test {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractV2.RecurringCommit.CommitDuration.builder()
                                 .value(0.0)
@@ -900,6 +901,7 @@ internal class ContractV2Test {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractV2.RecurringCredit.CommitDuration.builder()
                                 .value(0.0)
@@ -2014,6 +2016,7 @@ internal class ContractV2Test {
                             .quantity(0.0)
                             .build()
                     )
+                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .commitDuration(
                         ContractV2.RecurringCommit.CommitDuration.builder()
                             .value(0.0)
@@ -2130,6 +2133,7 @@ internal class ContractV2Test {
                             .quantity(0.0)
                             .build()
                     )
+                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .commitDuration(
                         ContractV2.RecurringCredit.CommitDuration.builder()
                             .value(0.0)
@@ -3238,6 +3242,7 @@ internal class ContractV2Test {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractV2.RecurringCommit.CommitDuration.builder()
                                 .value(0.0)
@@ -3354,6 +3359,7 @@ internal class ContractV2Test {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractV2.RecurringCredit.CommitDuration.builder()
                                 .value(0.0)

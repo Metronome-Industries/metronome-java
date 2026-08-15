@@ -634,6 +634,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractWithoutAmendments.RecurringCommit.CommitDuration.builder()
                                 .value(0.0)
@@ -763,6 +764,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractWithoutAmendments.RecurringCredit.CommitDuration.builder()
                                 .value(0.0)
@@ -1608,6 +1610,7 @@ internal class ContractWithoutAmendmentsTest {
                             .quantity(0.0)
                             .build()
                     )
+                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .commitDuration(
                         ContractWithoutAmendments.RecurringCommit.CommitDuration.builder()
                             .value(0.0)
@@ -1733,6 +1736,7 @@ internal class ContractWithoutAmendmentsTest {
                             .quantity(0.0)
                             .build()
                     )
+                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .commitDuration(
                         ContractWithoutAmendments.RecurringCredit.CommitDuration.builder()
                             .value(0.0)
@@ -2586,6 +2590,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractWithoutAmendments.RecurringCommit.CommitDuration.builder()
                                 .value(0.0)
@@ -2715,6 +2720,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractWithoutAmendments.RecurringCredit.CommitDuration.builder()
                                 .value(0.0)
