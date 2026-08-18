@@ -1243,6 +1243,11 @@ internal class ContractV2Test {
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .name("name")
+                        .productCustomFields(
+                            ContractV2.Subscription.ProductCustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .seatConfig(
                             ContractV2.Subscription.SeatConfig.builder()
                                 .seatGroupKey("seat_group_key")
@@ -2458,6 +2463,11 @@ internal class ContractV2Test {
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .name("name")
+                    .productCustomFields(
+                        ContractV2.Subscription.ProductCustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .seatConfig(
                         ContractV2.Subscription.SeatConfig.builder()
                             .seatGroupKey("seat_group_key")
@@ -3701,6 +3711,11 @@ internal class ContractV2Test {
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .name("name")
+                        .productCustomFields(
+                            ContractV2.Subscription.ProductCustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .seatConfig(
                             ContractV2.Subscription.SeatConfig.builder()
                                 .seatGroupKey("seat_group_key")

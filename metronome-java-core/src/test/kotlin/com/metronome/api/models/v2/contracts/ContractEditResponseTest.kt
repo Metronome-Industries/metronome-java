@@ -1222,6 +1222,16 @@ internal class ContractEditResponseTest {
                                         )
                                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .name("name")
+                                        .productCustomFields(
+                                            ContractEditResponse.Data.Edit.AddSubscription
+                                                .ProductCustomFields
+                                                .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string"),
+                                                )
+                                                .build()
+                                        )
                                         .seatConfig(
                                             ContractEditResponse.Data.Edit.AddSubscription
                                                 .SeatConfig
@@ -3212,6 +3222,13 @@ internal class ContractEditResponseTest {
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .name("name")
+                                    .productCustomFields(
+                                        ContractEditResponse.Data.Edit.AddSubscription
+                                            .ProductCustomFields
+                                            .builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .seatConfig(
                                         ContractEditResponse.Data.Edit.AddSubscription.SeatConfig
                                             .builder()
@@ -5247,6 +5264,16 @@ internal class ContractEditResponseTest {
                                         )
                                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .name("name")
+                                        .productCustomFields(
+                                            ContractEditResponse.Data.Edit.AddSubscription
+                                                .ProductCustomFields
+                                                .builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string"),
+                                                )
+                                                .build()
+                                        )
                                         .seatConfig(
                                             ContractEditResponse.Data.Edit.AddSubscription
                                                 .SeatConfig

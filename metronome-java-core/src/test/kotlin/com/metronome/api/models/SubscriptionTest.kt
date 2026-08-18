@@ -90,6 +90,11 @@ internal class SubscriptionTest {
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .name("name")
+                .productCustomFields(
+                    Subscription.ProductCustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .seatConfig(
                     Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build()
                 )
@@ -178,6 +183,12 @@ internal class SubscriptionTest {
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscription.fiatCreditTypeId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(subscription.name()).contains("name")
+        assertThat(subscription.productCustomFields())
+            .contains(
+                Subscription.ProductCustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(subscription.seatConfig())
             .contains(Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build())
     }
@@ -262,6 +273,11 @@ internal class SubscriptionTest {
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .name("name")
+                .productCustomFields(
+                    Subscription.ProductCustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .seatConfig(
                     Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build()
                 )
