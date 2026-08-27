@@ -1820,6 +1820,7 @@ internal class ContractGetEditHistoryResponseTest {
                             ContractGetEditHistoryResponse.Data.UpdateSubscription.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .name("name")
                                 .addQuantityUpdate(
                                     ContractGetEditHistoryResponse.Data.UpdateSubscription
                                         .QuantityUpdate
@@ -3589,6 +3590,7 @@ internal class ContractGetEditHistoryResponseTest {
                         ContractGetEditHistoryResponse.Data.UpdateSubscription.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .name("name")
                             .addQuantityUpdate(
                                 ContractGetEditHistoryResponse.Data.UpdateSubscription
                                     .QuantityUpdate
@@ -5448,6 +5450,7 @@ internal class ContractGetEditHistoryResponseTest {
                             ContractGetEditHistoryResponse.Data.UpdateSubscription.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .name("name")
                                 .addQuantityUpdate(
                                     ContractGetEditHistoryResponse.Data.UpdateSubscription
                                         .QuantityUpdate

@@ -1648,6 +1648,7 @@ internal class ContractServiceTest {
                         ContractEditParams.UpdateSubscription.builder()
                             .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .name("name")
                             .prorationRounding(
                                 ContractEditParams.UpdateSubscription.ProrationRounding.builder()
                                     .decimalPlaces(-5.0)

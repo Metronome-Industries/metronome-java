@@ -46776,6 +46776,7 @@ private constructor(
     private constructor(
         private val subscriptionId: JsonField<String>,
         private val endingBefore: JsonField<OffsetDateTime>,
+        private val name: JsonField<String>,
         private val prorationRounding: JsonField<ProrationRounding>,
         private val quantityManagementModeUpdate: JsonField<QuantityManagementModeUpdate>,
         private val quantityUpdates: JsonField<List<QuantityUpdate>>,
@@ -46791,6 +46792,7 @@ private constructor(
             @JsonProperty("ending_before")
             @ExcludeMissing
             endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("proration_rounding")
             @ExcludeMissing
             prorationRounding: JsonField<ProrationRounding> = JsonMissing.of(),
@@ -46807,6 +46809,7 @@ private constructor(
         ) : this(
             subscriptionId,
             endingBefore,
+            name,
             prorationRounding,
             quantityManagementModeUpdate,
             quantityUpdates,
@@ -46825,6 +46828,12 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
+
+        /**
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun name(): Optional<String> = name.getOptional("name")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -46879,6 +46888,13 @@ private constructor(
         @JsonProperty("ending_before")
         @ExcludeMissing
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+        /**
+         * Returns the raw JSON value of [name].
+         *
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
          * Returns the raw JSON value of [prorationRounding].
@@ -46950,6 +46966,7 @@ private constructor(
 
             private var subscriptionId: JsonField<String>? = null
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var name: JsonField<String> = JsonMissing.of()
             private var prorationRounding: JsonField<ProrationRounding> = JsonMissing.of()
             private var quantityManagementModeUpdate: JsonField<QuantityManagementModeUpdate> =
                 JsonMissing.of()
@@ -46961,6 +46978,7 @@ private constructor(
             internal fun from(updateSubscription: UpdateSubscription) = apply {
                 subscriptionId = updateSubscription.subscriptionId
                 endingBefore = updateSubscription.endingBefore
+                name = updateSubscription.name
                 prorationRounding = updateSubscription.prorationRounding
                 quantityManagementModeUpdate = updateSubscription.quantityManagementModeUpdate
                 quantityUpdates = updateSubscription.quantityUpdates.map { it.toMutableList() }
@@ -46999,6 +47017,17 @@ private constructor(
             fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                 this.endingBefore = endingBefore
             }
+
+            fun name(name: String) = name(JsonField.of(name))
+
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             fun prorationRounding(prorationRounding: ProrationRounding?) =
                 prorationRounding(JsonField.ofNullable(prorationRounding))
@@ -47118,6 +47147,7 @@ private constructor(
                 UpdateSubscription(
                     checkRequired("subscriptionId", subscriptionId),
                     endingBefore,
+                    name,
                     prorationRounding,
                     quantityManagementModeUpdate,
                     (quantityUpdates ?: JsonMissing.of()).map { it.toImmutable() },
@@ -47144,6 +47174,7 @@ private constructor(
 
             subscriptionId()
             endingBefore()
+            name()
             prorationRounding().ifPresent { it.validate() }
             quantityManagementModeUpdate().ifPresent { it.validate() }
             quantityUpdates().ifPresent { it.forEach { it.validate() } }
@@ -47169,6 +47200,7 @@ private constructor(
         internal fun validity(): Int =
             (if (subscriptionId.asKnown().isPresent) 1 else 0) +
                 (if (endingBefore.asKnown().isPresent) 1 else 0) +
+                (if (name.asKnown().isPresent) 1 else 0) +
                 (prorationRounding.asKnown().getOrNull()?.validity() ?: 0) +
                 (quantityManagementModeUpdate.asKnown().getOrNull()?.validity() ?: 0) +
                 (quantityUpdates.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
@@ -49730,6 +49762,7 @@ private constructor(
             return other is UpdateSubscription &&
                 subscriptionId == other.subscriptionId &&
                 endingBefore == other.endingBefore &&
+                name == other.name &&
                 prorationRounding == other.prorationRounding &&
                 quantityManagementModeUpdate == other.quantityManagementModeUpdate &&
                 quantityUpdates == other.quantityUpdates &&
@@ -49741,6 +49774,7 @@ private constructor(
             Objects.hash(
                 subscriptionId,
                 endingBefore,
+                name,
                 prorationRounding,
                 quantityManagementModeUpdate,
                 quantityUpdates,
@@ -49752,7 +49786,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UpdateSubscription{subscriptionId=$subscriptionId, endingBefore=$endingBefore, prorationRounding=$prorationRounding, quantityManagementModeUpdate=$quantityManagementModeUpdate, quantityUpdates=$quantityUpdates, seatUpdates=$seatUpdates, additionalProperties=$additionalProperties}"
+            "UpdateSubscription{subscriptionId=$subscriptionId, endingBefore=$endingBefore, name=$name, prorationRounding=$prorationRounding, quantityManagementModeUpdate=$quantityManagementModeUpdate, quantityUpdates=$quantityUpdates, seatUpdates=$seatUpdates, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

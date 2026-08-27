@@ -38481,6 +38481,7 @@ private constructor(
         private constructor(
             private val id: JsonField<String>,
             private val endingBefore: JsonField<OffsetDateTime>,
+            private val name: JsonField<String>,
             private val quantityUpdates: JsonField<List<QuantityUpdate>>,
             private val seatUpdates: JsonField<SeatUpdates>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -38492,13 +38493,14 @@ private constructor(
                 @JsonProperty("ending_before")
                 @ExcludeMissing
                 endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("quantity_updates")
                 @ExcludeMissing
                 quantityUpdates: JsonField<List<QuantityUpdate>> = JsonMissing.of(),
                 @JsonProperty("seat_updates")
                 @ExcludeMissing
                 seatUpdates: JsonField<SeatUpdates> = JsonMissing.of(),
-            ) : this(id, endingBefore, quantityUpdates, seatUpdates, mutableMapOf())
+            ) : this(id, endingBefore, name, quantityUpdates, seatUpdates, mutableMapOf())
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -38512,6 +38514,12 @@ private constructor(
              *   if the server responded with an unexpected value).
              */
             fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
+
+            /**
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun name(): Optional<String> = name.getOptional("name")
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -38544,6 +38552,13 @@ private constructor(
             @JsonProperty("ending_before")
             @ExcludeMissing
             fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
+
+            /**
+             * Returns the raw JSON value of [name].
+             *
+             * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
             /**
              * Returns the raw JSON value of [quantityUpdates].
@@ -38595,6 +38610,7 @@ private constructor(
 
                 private var id: JsonField<String>? = null
                 private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var name: JsonField<String> = JsonMissing.of()
                 private var quantityUpdates: JsonField<MutableList<QuantityUpdate>>? = null
                 private var seatUpdates: JsonField<SeatUpdates> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -38603,6 +38619,7 @@ private constructor(
                 internal fun from(updateSubscription: UpdateSubscription) = apply {
                     id = updateSubscription.id
                     endingBefore = updateSubscription.endingBefore
+                    name = updateSubscription.name
                     quantityUpdates = updateSubscription.quantityUpdates.map { it.toMutableList() }
                     seatUpdates = updateSubscription.seatUpdates
                     additionalProperties = updateSubscription.additionalProperties.toMutableMap()
@@ -38632,6 +38649,17 @@ private constructor(
                 fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
                     this.endingBefore = endingBefore
                 }
+
+                fun name(name: String) = name(JsonField.of(name))
+
+                /**
+                 * Sets [Builder.name] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.name] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun name(name: JsonField<String>) = apply { this.name = name }
 
                 fun quantityUpdates(quantityUpdates: List<QuantityUpdate>) =
                     quantityUpdates(JsonField.of(quantityUpdates))
@@ -38711,6 +38739,7 @@ private constructor(
                     UpdateSubscription(
                         checkRequired("id", id),
                         endingBefore,
+                        name,
                         (quantityUpdates ?: JsonMissing.of()).map { it.toImmutable() },
                         seatUpdates,
                         additionalProperties.toMutableMap(),
@@ -38736,6 +38765,7 @@ private constructor(
 
                 id()
                 endingBefore()
+                name()
                 quantityUpdates().ifPresent { it.forEach { it.validate() } }
                 seatUpdates().ifPresent { it.validate() }
                 validated = true
@@ -38759,6 +38789,7 @@ private constructor(
             internal fun validity(): Int =
                 (if (id.asKnown().isPresent) 1 else 0) +
                     (if (endingBefore.asKnown().isPresent) 1 else 0) +
+                    (if (name.asKnown().isPresent) 1 else 0) +
                     (quantityUpdates.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                     (seatUpdates.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -40386,19 +40417,27 @@ private constructor(
                 return other is UpdateSubscription &&
                     id == other.id &&
                     endingBefore == other.endingBefore &&
+                    name == other.name &&
                     quantityUpdates == other.quantityUpdates &&
                     seatUpdates == other.seatUpdates &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(id, endingBefore, quantityUpdates, seatUpdates, additionalProperties)
+                Objects.hash(
+                    id,
+                    endingBefore,
+                    name,
+                    quantityUpdates,
+                    seatUpdates,
+                    additionalProperties,
+                )
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "UpdateSubscription{id=$id, endingBefore=$endingBefore, quantityUpdates=$quantityUpdates, seatUpdates=$seatUpdates, additionalProperties=$additionalProperties}"
+                "UpdateSubscription{id=$id, endingBefore=$endingBefore, name=$name, quantityUpdates=$quantityUpdates, seatUpdates=$seatUpdates, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
