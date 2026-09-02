@@ -24,6 +24,7 @@ internal class ContractAddManualBalanceEntryParamsTest {
                     .build()
             )
             .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .uniquenessKey("x")
             .build()
     }
 
@@ -43,6 +44,7 @@ internal class ContractAddManualBalanceEntryParamsTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .uniquenessKey("x")
                 .build()
 
         val body = params._body()
@@ -60,6 +62,7 @@ internal class ContractAddManualBalanceEntryParamsTest {
                     .build()
             )
         assertThat(body.timestamp()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.uniquenessKey()).contains("x")
     }
 
     @Test

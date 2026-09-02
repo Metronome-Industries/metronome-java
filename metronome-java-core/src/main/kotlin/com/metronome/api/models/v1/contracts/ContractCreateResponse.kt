@@ -4647,6 +4647,7 @@ private constructor(
             private constructor(
                 private val id: JsonField<String>,
                 private val accessAmount: JsonField<AccessAmount>,
+                private val anchorDate: JsonField<OffsetDateTime>,
                 private val commitDuration: JsonField<CommitDuration>,
                 private val priority: JsonField<Double>,
                 private val product: JsonField<Product>,
@@ -4676,6 +4677,9 @@ private constructor(
                     @JsonProperty("access_amount")
                     @ExcludeMissing
                     accessAmount: JsonField<AccessAmount> = JsonMissing.of(),
+                    @JsonProperty("anchor_date")
+                    @ExcludeMissing
+                    anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
                     @JsonProperty("commit_duration")
                     @ExcludeMissing
                     commitDuration: JsonField<CommitDuration> = JsonMissing.of(),
@@ -4741,6 +4745,7 @@ private constructor(
                 ) : this(
                     id,
                     accessAmount,
+                    anchorDate,
                     commitDuration,
                     priority,
                     product,
@@ -4779,6 +4784,15 @@ private constructor(
                  *   unexpected value).
                  */
                 fun accessAmount(): AccessAmount = accessAmount.getRequired("access_amount")
+
+                /**
+                 * The date this recurring commit's billing periods are anchored to.
+                 *
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun anchorDate(): OffsetDateTime = anchorDate.getRequired("anchor_date")
 
                 /**
                  * The amount of time the created commits will be valid for
@@ -4978,6 +4992,16 @@ private constructor(
                 @JsonProperty("access_amount")
                 @ExcludeMissing
                 fun _accessAmount(): JsonField<AccessAmount> = accessAmount
+
+                /**
+                 * Returns the raw JSON value of [anchorDate].
+                 *
+                 * Unlike [anchorDate], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("anchor_date")
+                @ExcludeMissing
+                fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
 
                 /**
                  * Returns the raw JSON value of [commitDuration].
@@ -5200,6 +5224,7 @@ private constructor(
                      * ```java
                      * .id()
                      * .accessAmount()
+                     * .anchorDate()
                      * .commitDuration()
                      * .priority()
                      * .product()
@@ -5215,6 +5240,7 @@ private constructor(
 
                     private var id: JsonField<String>? = null
                     private var accessAmount: JsonField<AccessAmount>? = null
+                    private var anchorDate: JsonField<OffsetDateTime>? = null
                     private var commitDuration: JsonField<CommitDuration>? = null
                     private var priority: JsonField<Double>? = null
                     private var product: JsonField<Product>? = null
@@ -5244,6 +5270,7 @@ private constructor(
                     internal fun from(recurringCommit: RecurringCommit) = apply {
                         id = recurringCommit.id
                         accessAmount = recurringCommit.accessAmount
+                        anchorDate = recurringCommit.anchorDate
                         commitDuration = recurringCommit.commitDuration
                         priority = recurringCommit.priority
                         product = recurringCommit.product
@@ -5293,6 +5320,21 @@ private constructor(
                      */
                     fun accessAmount(accessAmount: JsonField<AccessAmount>) = apply {
                         this.accessAmount = accessAmount
+                    }
+
+                    /** The date this recurring commit's billing periods are anchored to. */
+                    fun anchorDate(anchorDate: OffsetDateTime) =
+                        anchorDate(JsonField.of(anchorDate))
+
+                    /**
+                     * Sets [Builder.anchorDate] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.anchorDate] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
+                    fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                        this.anchorDate = anchorDate
                     }
 
                     /** The amount of time the created commits will be valid for */
@@ -5682,6 +5724,7 @@ private constructor(
                      * ```java
                      * .id()
                      * .accessAmount()
+                     * .anchorDate()
                      * .commitDuration()
                      * .priority()
                      * .product()
@@ -5695,6 +5738,7 @@ private constructor(
                         RecurringCommit(
                             checkRequired("id", id),
                             checkRequired("accessAmount", accessAmount),
+                            checkRequired("anchorDate", anchorDate),
                             checkRequired("commitDuration", commitDuration),
                             checkRequired("priority", priority),
                             checkRequired("product", product),
@@ -5738,6 +5782,7 @@ private constructor(
 
                     id()
                     accessAmount().validate()
+                    anchorDate()
                     commitDuration().validate()
                     priority()
                     product().validate()
@@ -5779,6 +5824,7 @@ private constructor(
                 internal fun validity(): Int =
                     (if (id.asKnown().isPresent) 1 else 0) +
                         (accessAmount.asKnown().getOrNull()?.validity() ?: 0) +
+                        (if (anchorDate.asKnown().isPresent) 1 else 0) +
                         (commitDuration.asKnown().getOrNull()?.validity() ?: 0) +
                         (if (priority.asKnown().isPresent) 1 else 0) +
                         (product.asKnown().getOrNull()?.validity() ?: 0) +
@@ -8564,6 +8610,7 @@ private constructor(
                     return other is RecurringCommit &&
                         id == other.id &&
                         accessAmount == other.accessAmount &&
+                        anchorDate == other.anchorDate &&
                         commitDuration == other.commitDuration &&
                         priority == other.priority &&
                         product == other.product &&
@@ -8591,6 +8638,7 @@ private constructor(
                     Objects.hash(
                         id,
                         accessAmount,
+                        anchorDate,
                         commitDuration,
                         priority,
                         product,
@@ -8618,7 +8666,7 @@ private constructor(
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "RecurringCommit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
+                    "RecurringCommit{id=$id, accessAmount=$accessAmount, anchorDate=$anchorDate, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
             }
 
             class RecurringCredit
@@ -8626,6 +8674,7 @@ private constructor(
             private constructor(
                 private val id: JsonField<String>,
                 private val accessAmount: JsonField<AccessAmount>,
+                private val anchorDate: JsonField<OffsetDateTime>,
                 private val commitDuration: JsonField<CommitDuration>,
                 private val priority: JsonField<Double>,
                 private val product: JsonField<Product>,
@@ -8654,6 +8703,9 @@ private constructor(
                     @JsonProperty("access_amount")
                     @ExcludeMissing
                     accessAmount: JsonField<AccessAmount> = JsonMissing.of(),
+                    @JsonProperty("anchor_date")
+                    @ExcludeMissing
+                    anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
                     @JsonProperty("commit_duration")
                     @ExcludeMissing
                     commitDuration: JsonField<CommitDuration> = JsonMissing.of(),
@@ -8716,6 +8768,7 @@ private constructor(
                 ) : this(
                     id,
                     accessAmount,
+                    anchorDate,
                     commitDuration,
                     priority,
                     product,
@@ -8753,6 +8806,15 @@ private constructor(
                  *   unexpected value).
                  */
                 fun accessAmount(): AccessAmount = accessAmount.getRequired("access_amount")
+
+                /**
+                 * The date this recurring commit's billing periods are anchored to.
+                 *
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun anchorDate(): OffsetDateTime = anchorDate.getRequired("anchor_date")
 
                 /**
                  * The amount of time the created commits will be valid for
@@ -8943,6 +9005,16 @@ private constructor(
                 @JsonProperty("access_amount")
                 @ExcludeMissing
                 fun _accessAmount(): JsonField<AccessAmount> = accessAmount
+
+                /**
+                 * Returns the raw JSON value of [anchorDate].
+                 *
+                 * Unlike [anchorDate], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("anchor_date")
+                @ExcludeMissing
+                fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
 
                 /**
                  * Returns the raw JSON value of [commitDuration].
@@ -9155,6 +9227,7 @@ private constructor(
                      * ```java
                      * .id()
                      * .accessAmount()
+                     * .anchorDate()
                      * .commitDuration()
                      * .priority()
                      * .product()
@@ -9170,6 +9243,7 @@ private constructor(
 
                     private var id: JsonField<String>? = null
                     private var accessAmount: JsonField<AccessAmount>? = null
+                    private var anchorDate: JsonField<OffsetDateTime>? = null
                     private var commitDuration: JsonField<CommitDuration>? = null
                     private var priority: JsonField<Double>? = null
                     private var product: JsonField<Product>? = null
@@ -9198,6 +9272,7 @@ private constructor(
                     internal fun from(recurringCredit: RecurringCredit) = apply {
                         id = recurringCredit.id
                         accessAmount = recurringCredit.accessAmount
+                        anchorDate = recurringCredit.anchorDate
                         commitDuration = recurringCredit.commitDuration
                         priority = recurringCredit.priority
                         product = recurringCredit.product
@@ -9246,6 +9321,21 @@ private constructor(
                      */
                     fun accessAmount(accessAmount: JsonField<AccessAmount>) = apply {
                         this.accessAmount = accessAmount
+                    }
+
+                    /** The date this recurring commit's billing periods are anchored to. */
+                    fun anchorDate(anchorDate: OffsetDateTime) =
+                        anchorDate(JsonField.of(anchorDate))
+
+                    /**
+                     * Sets [Builder.anchorDate] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.anchorDate] with a well-typed
+                     * [OffsetDateTime] value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
+                    fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                        this.anchorDate = anchorDate
                     }
 
                     /** The amount of time the created commits will be valid for */
@@ -9620,6 +9710,7 @@ private constructor(
                      * ```java
                      * .id()
                      * .accessAmount()
+                     * .anchorDate()
                      * .commitDuration()
                      * .priority()
                      * .product()
@@ -9633,6 +9724,7 @@ private constructor(
                         RecurringCredit(
                             checkRequired("id", id),
                             checkRequired("accessAmount", accessAmount),
+                            checkRequired("anchorDate", anchorDate),
                             checkRequired("commitDuration", commitDuration),
                             checkRequired("priority", priority),
                             checkRequired("product", product),
@@ -9675,6 +9767,7 @@ private constructor(
 
                     id()
                     accessAmount().validate()
+                    anchorDate()
                     commitDuration().validate()
                     priority()
                     product().validate()
@@ -9715,6 +9808,7 @@ private constructor(
                 internal fun validity(): Int =
                     (if (id.asKnown().isPresent) 1 else 0) +
                         (accessAmount.asKnown().getOrNull()?.validity() ?: 0) +
+                        (if (anchorDate.asKnown().isPresent) 1 else 0) +
                         (commitDuration.asKnown().getOrNull()?.validity() ?: 0) +
                         (if (priority.asKnown().isPresent) 1 else 0) +
                         (product.asKnown().getOrNull()?.validity() ?: 0) +
@@ -11795,6 +11889,7 @@ private constructor(
                     return other is RecurringCredit &&
                         id == other.id &&
                         accessAmount == other.accessAmount &&
+                        anchorDate == other.anchorDate &&
                         commitDuration == other.commitDuration &&
                         priority == other.priority &&
                         product == other.product &&
@@ -11821,6 +11916,7 @@ private constructor(
                     Objects.hash(
                         id,
                         accessAmount,
+                        anchorDate,
                         commitDuration,
                         priority,
                         product,
@@ -11847,7 +11943,7 @@ private constructor(
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "RecurringCredit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
+                    "RecurringCredit{id=$id, accessAmount=$accessAmount, anchorDate=$anchorDate, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
             }
 
             /**

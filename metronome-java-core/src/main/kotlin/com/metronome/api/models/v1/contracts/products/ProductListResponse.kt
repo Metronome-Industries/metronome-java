@@ -565,6 +565,7 @@ private constructor(
         private val compositeProductIds: JsonField<List<String>>,
         private val compositeTags: JsonField<List<String>>,
         private val excludeFreeUsage: JsonField<Boolean>,
+        private val includeCompositeSpend: JsonField<Boolean>,
         private val isRefundable: JsonField<Boolean>,
         private val name: JsonField<String>,
         private val netsuiteInternalItemId: JsonField<String>,
@@ -598,6 +599,9 @@ private constructor(
             @JsonProperty("exclude_free_usage")
             @ExcludeMissing
             excludeFreeUsage: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("include_composite_spend")
+            @ExcludeMissing
+            includeCompositeSpend: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("is_refundable")
             @ExcludeMissing
             isRefundable: JsonField<Boolean> = JsonMissing.of(),
@@ -631,6 +635,7 @@ private constructor(
             compositeProductIds,
             compositeTags,
             excludeFreeUsage,
+            includeCompositeSpend,
             isRefundable,
             name,
             netsuiteInternalItemId,
@@ -682,6 +687,16 @@ private constructor(
          */
         fun excludeFreeUsage(): Optional<Boolean> =
             excludeFreeUsage.getOptional("exclude_free_usage")
+
+        /**
+         * Only for composite products. If true, allows a composite to incorporate spend from other
+         * composite products. Defaults to false
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun includeCompositeSpend(): Optional<Boolean> =
+            includeCompositeSpend.getOptional("include_composite_spend")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -830,6 +845,16 @@ private constructor(
         fun _excludeFreeUsage(): JsonField<Boolean> = excludeFreeUsage
 
         /**
+         * Returns the raw JSON value of [includeCompositeSpend].
+         *
+         * Unlike [includeCompositeSpend], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("include_composite_spend")
+        @ExcludeMissing
+        fun _includeCompositeSpend(): JsonField<Boolean> = includeCompositeSpend
+
+        /**
          * Returns the raw JSON value of [isRefundable].
          *
          * Unlike [isRefundable], this method doesn't throw if the JSON field has an unexpected
@@ -957,6 +982,7 @@ private constructor(
             private var compositeProductIds: JsonField<MutableList<String>>? = null
             private var compositeTags: JsonField<MutableList<String>>? = null
             private var excludeFreeUsage: JsonField<Boolean> = JsonMissing.of()
+            private var includeCompositeSpend: JsonField<Boolean> = JsonMissing.of()
             private var isRefundable: JsonField<Boolean> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var netsuiteInternalItemId: JsonField<String> = JsonMissing.of()
@@ -977,6 +1003,7 @@ private constructor(
                 compositeProductIds = update.compositeProductIds.map { it.toMutableList() }
                 compositeTags = update.compositeTags.map { it.toMutableList() }
                 excludeFreeUsage = update.excludeFreeUsage
+                includeCompositeSpend = update.includeCompositeSpend
                 isRefundable = update.isRefundable
                 name = update.name
                 netsuiteInternalItemId = update.netsuiteInternalItemId
@@ -1092,6 +1119,24 @@ private constructor(
              */
             fun excludeFreeUsage(excludeFreeUsage: JsonField<Boolean>) = apply {
                 this.excludeFreeUsage = excludeFreeUsage
+            }
+
+            /**
+             * Only for composite products. If true, allows a composite to incorporate spend from
+             * other composite products. Defaults to false
+             */
+            fun includeCompositeSpend(includeCompositeSpend: Boolean) =
+                includeCompositeSpend(JsonField.of(includeCompositeSpend))
+
+            /**
+             * Sets [Builder.includeCompositeSpend] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.includeCompositeSpend] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun includeCompositeSpend(includeCompositeSpend: JsonField<Boolean>) = apply {
+                this.includeCompositeSpend = includeCompositeSpend
             }
 
             fun isRefundable(isRefundable: Boolean) = isRefundable(JsonField.of(isRefundable))
@@ -1342,6 +1387,7 @@ private constructor(
                     (compositeProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (compositeTags ?: JsonMissing.of()).map { it.toImmutable() },
                     excludeFreeUsage,
+                    includeCompositeSpend,
                     isRefundable,
                     name,
                     netsuiteInternalItemId,
@@ -1378,6 +1424,7 @@ private constructor(
             compositeProductIds()
             compositeTags()
             excludeFreeUsage()
+            includeCompositeSpend()
             isRefundable()
             name()
             netsuiteInternalItemId()
@@ -1413,6 +1460,7 @@ private constructor(
                 (compositeProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (compositeTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (excludeFreeUsage.asKnown().isPresent) 1 else 0) +
+                (if (includeCompositeSpend.asKnown().isPresent) 1 else 0) +
                 (if (isRefundable.asKnown().isPresent) 1 else 0) +
                 (if (name.asKnown().isPresent) 1 else 0) +
                 (if (netsuiteInternalItemId.asKnown().isPresent) 1 else 0) +
@@ -1436,6 +1484,7 @@ private constructor(
                 compositeProductIds == other.compositeProductIds &&
                 compositeTags == other.compositeTags &&
                 excludeFreeUsage == other.excludeFreeUsage &&
+                includeCompositeSpend == other.includeCompositeSpend &&
                 isRefundable == other.isRefundable &&
                 name == other.name &&
                 netsuiteInternalItemId == other.netsuiteInternalItemId &&
@@ -1457,6 +1506,7 @@ private constructor(
                 compositeProductIds,
                 compositeTags,
                 excludeFreeUsage,
+                includeCompositeSpend,
                 isRefundable,
                 name,
                 netsuiteInternalItemId,
@@ -1474,7 +1524,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Update{createdAt=$createdAt, createdBy=$createdBy, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, isRefundable=$isRefundable, name=$name, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, startingAt=$startingAt, tags=$tags, additionalProperties=$additionalProperties}"
+            "Update{createdAt=$createdAt, createdBy=$createdBy, billableMetricId=$billableMetricId, compositeProductIds=$compositeProductIds, compositeTags=$compositeTags, excludeFreeUsage=$excludeFreeUsage, includeCompositeSpend=$includeCompositeSpend, isRefundable=$isRefundable, name=$name, netsuiteInternalItemId=$netsuiteInternalItemId, netsuiteOverageItemId=$netsuiteOverageItemId, presentationGroupKey=$presentationGroupKey, pricingGroupKey=$pricingGroupKey, quantityConversion=$quantityConversion, quantityRounding=$quantityRounding, startingAt=$startingAt, tags=$tags, additionalProperties=$additionalProperties}"
     }
 
     /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */

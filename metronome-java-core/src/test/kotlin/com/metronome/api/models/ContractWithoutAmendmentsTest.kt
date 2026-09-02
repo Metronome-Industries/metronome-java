@@ -496,6 +496,20 @@ internal class ContractWithoutAmendmentsTest {
                                 .priority(0.0)
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
+                                .duration(
+                                    PrepaidBalanceThresholdConfiguration.Commit.Duration.builder()
+                                        .unit(
+                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                                .Unit
+                                                .DAYS
+                                        )
+                                        .value(0L)
+                                        .build()
+                                )
+                                .rateType(
+                                    PrepaidBalanceThresholdConfiguration.Commit.RateType.COMMIT_RATE
+                                )
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -620,6 +634,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractWithoutAmendments.RecurringCommit.CommitDuration.builder()
                                 .value(0.0)
@@ -749,6 +764,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractWithoutAmendments.RecurringCredit.CommitDuration.builder()
                                 .value(0.0)
@@ -1465,6 +1481,19 @@ internal class ContractWithoutAmendmentsTest {
                             .priority(0.0)
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
+                            .duration(
+                                PrepaidBalanceThresholdConfiguration.Commit.Duration.builder()
+                                    .unit(
+                                        PrepaidBalanceThresholdConfiguration.Commit.Duration.Unit
+                                            .DAYS
+                                    )
+                                    .value(0L)
+                                    .build()
+                            )
+                            .rateType(
+                                PrepaidBalanceThresholdConfiguration.Commit.RateType.COMMIT_RATE
+                            )
+                            .rolloverFraction(0.0)
                             .addSpecifier(
                                 CommitSpecifierInput.builder()
                                     .presentationGroupValues(
@@ -1581,6 +1610,7 @@ internal class ContractWithoutAmendmentsTest {
                             .quantity(0.0)
                             .build()
                     )
+                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .commitDuration(
                         ContractWithoutAmendments.RecurringCommit.CommitDuration.builder()
                             .value(0.0)
@@ -1706,6 +1736,7 @@ internal class ContractWithoutAmendmentsTest {
                             .quantity(0.0)
                             .build()
                     )
+                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .commitDuration(
                         ContractWithoutAmendments.RecurringCredit.CommitDuration.builder()
                             .value(0.0)
@@ -2421,6 +2452,20 @@ internal class ContractWithoutAmendmentsTest {
                                 .priority(0.0)
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
+                                .duration(
+                                    PrepaidBalanceThresholdConfiguration.Commit.Duration.builder()
+                                        .unit(
+                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                                .Unit
+                                                .DAYS
+                                        )
+                                        .value(0L)
+                                        .build()
+                                )
+                                .rateType(
+                                    PrepaidBalanceThresholdConfiguration.Commit.RateType.COMMIT_RATE
+                                )
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -2545,6 +2590,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractWithoutAmendments.RecurringCommit.CommitDuration.builder()
                                 .value(0.0)
@@ -2674,6 +2720,7 @@ internal class ContractWithoutAmendmentsTest {
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractWithoutAmendments.RecurringCredit.CommitDuration.builder()
                                 .value(0.0)

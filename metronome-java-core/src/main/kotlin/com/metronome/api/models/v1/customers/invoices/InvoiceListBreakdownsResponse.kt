@@ -272,7 +272,8 @@ private constructor(
     fun amendmentId(): Optional<String> = amendmentId.getOptional("amendment_id")
 
     /**
-     * This field's availability is dependent on your client's configuration.
+     * Indicates if the invoice has been or will be sent to the configured customer billing
+     * provider. Defaults to `billable`.
      *
      * This arbitrary value can be deserialized into a custom type using the `convert` method:
      * ```java
@@ -979,7 +980,10 @@ private constructor(
          */
         fun amendmentId(amendmentId: JsonField<String>) = apply { this.amendmentId = amendmentId }
 
-        /** This field's availability is dependent on your client's configuration. */
+        /**
+         * Indicates if the invoice has been or will be sent to the configured customer billing
+         * provider. Defaults to `billable`.
+         */
         fun billableStatus(billableStatus: JsonValue) = apply {
             this.billableStatus = billableStatus
         }

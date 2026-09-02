@@ -487,6 +487,23 @@ internal class ContractServiceTest {
                                     .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
+                                    .duration(
+                                        PrepaidBalanceThresholdConfigurationV2.Commit.Duration
+                                            .builder()
+                                            .unit(
+                                                PrepaidBalanceThresholdConfigurationV2.Commit
+                                                    .Duration
+                                                    .Unit
+                                                    .DAYS
+                                            )
+                                            .value(0L)
+                                            .build()
+                                    )
+                                    .rateType(
+                                        PrepaidBalanceThresholdConfigurationV2.Commit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .rolloverFraction(0.0)
                                     .addSpecifier(
                                         CommitSpecifierInput.builder()
                                             .presentationGroupValues(
@@ -1310,6 +1327,31 @@ internal class ContractServiceTest {
                                     .productId("product_id")
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
+                                    .duration(
+                                        ContractEditParams
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .Commit
+                                            .Duration
+                                            .builder()
+                                            .unit(
+                                                ContractEditParams
+                                                    .UpdatePrepaidBalanceThresholdConfiguration
+                                                    .Commit
+                                                    .Duration
+                                                    .Unit
+                                                    .DAYS
+                                            )
+                                            .value(0L)
+                                            .build()
+                                    )
+                                    .rateType(
+                                        ContractEditParams
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .Commit
+                                            .RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .rolloverFraction(0.0)
                                     .addSpecifier(
                                         CommitSpecifierInput.builder()
                                             .presentationGroupValues(
@@ -1606,6 +1648,7 @@ internal class ContractServiceTest {
                         ContractEditParams.UpdateSubscription.builder()
                             .subscriptionId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .name("name")
                             .prorationRounding(
                                 ContractEditParams.UpdateSubscription.ProrationRounding.builder()
                                     .decimalPlaces(-5.0)
