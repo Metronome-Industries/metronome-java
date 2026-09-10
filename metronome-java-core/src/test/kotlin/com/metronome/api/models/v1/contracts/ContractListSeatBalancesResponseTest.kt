@@ -29,6 +29,7 @@ internal class ContractListSeatBalancesResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .balance(0.0)
                                 .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addLedgerEntry(
                                     ContractListSeatBalancesResponse.Data.Commit.LedgerEntry
@@ -49,6 +50,7 @@ internal class ContractListSeatBalancesResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .balance(0.0)
                                 .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addLedgerEntry(
                                     ContractListSeatBalancesResponse.Data.Credit.LedgerEntry
@@ -91,6 +93,7 @@ internal class ContractListSeatBalancesResponseTest {
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .balance(0.0)
                             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addLedgerEntry(
                                 ContractListSeatBalancesResponse.Data.Commit.LedgerEntry.builder()
@@ -110,6 +113,7 @@ internal class ContractListSeatBalancesResponseTest {
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .balance(0.0)
                             .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addLedgerEntry(
                                 ContractListSeatBalancesResponse.Data.Credit.LedgerEntry.builder()
@@ -156,6 +160,7 @@ internal class ContractListSeatBalancesResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .balance(0.0)
                                 .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addLedgerEntry(
                                     ContractListSeatBalancesResponse.Data.Commit.LedgerEntry
@@ -176,6 +181,7 @@ internal class ContractListSeatBalancesResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .balance(0.0)
                                 .startDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .addLedgerEntry(
                                     ContractListSeatBalancesResponse.Data.Credit.LedgerEntry

@@ -214,9 +214,11 @@ interface UsageServiceAsync {
      * ### Usage guidelines:
      * - Required parameters: Must specify `customer_id`, `billable_metric_id`, and `window_size`
      * - Time windows: Set `window_size` to hour, day, or none for different granularities
-     * - Group filtering: Use `group_key` and `group_filters` to specify groups and group filters
-     * - Limits: When using compound group keys (2+ keys in `group_key`), the default and max limit
-     *   is 100
+     * - Group filtering: Use `group_key` and `group_filters` to specify groups and group filters.
+     *   Across all arrays in `group_filters`, include at most 200 filter values total. Requests
+     *   with more than 200 filter values are rejected when this limit is enforced
+     * - Response limit: When using compound group keys (2+ keys in `group_key`), the default and
+     *   maximum page size is 100
      * - Pagination: Use limit and `next_page` for large result sets
      * - Null handling: Group values may be null for events missing the group key property
      */

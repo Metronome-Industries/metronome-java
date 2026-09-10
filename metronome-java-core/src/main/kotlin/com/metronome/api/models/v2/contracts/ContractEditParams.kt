@@ -18176,31 +18176,24 @@ private constructor(
         class AccessAmount
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            private val creditTypeId: JsonField<String>,
             private val unitPrice: JsonField<Double>,
+            private val creditTypeId: JsonField<String>,
             private val quantity: JsonField<Double>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("credit_type_id")
-                @ExcludeMissing
-                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("unit_price")
                 @ExcludeMissing
                 unitPrice: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("credit_type_id")
+                @ExcludeMissing
+                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 quantity: JsonField<Double> = JsonMissing.of(),
-            ) : this(creditTypeId, unitPrice, quantity, mutableMapOf())
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+            ) : this(unitPrice, creditTypeId, quantity, mutableMapOf())
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -18208,6 +18201,14 @@ private constructor(
              *   value).
              */
             fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            /**
+             * Defaults to USD (cents) if not passed
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun creditTypeId(): Optional<String> = creditTypeId.getOptional("credit_type_id")
 
             /**
              * This field is required unless a subscription is attached via `subscription_config`.
@@ -18218,16 +18219,6 @@ private constructor(
             fun quantity(): Optional<Double> = quantity.getOptional("quantity")
 
             /**
-             * Returns the raw JSON value of [creditTypeId].
-             *
-             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("credit_type_id")
-            @ExcludeMissing
-            fun _creditTypeId(): JsonField<String> = creditTypeId
-
-            /**
              * Returns the raw JSON value of [unitPrice].
              *
              * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected
@@ -18236,6 +18227,16 @@ private constructor(
             @JsonProperty("unit_price")
             @ExcludeMissing
             fun _unitPrice(): JsonField<Double> = unitPrice
+
+            /**
+             * Returns the raw JSON value of [creditTypeId].
+             *
+             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Returns the raw JSON value of [quantity].
@@ -18264,7 +18265,6 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```java
-                 * .creditTypeId()
                  * .unitPrice()
                  * ```
                  */
@@ -18274,30 +18274,17 @@ private constructor(
             /** A builder for [AccessAmount]. */
             class Builder internal constructor() {
 
-                private var creditTypeId: JsonField<String>? = null
                 private var unitPrice: JsonField<Double>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var quantity: JsonField<Double> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessAmount: AccessAmount) = apply {
-                    creditTypeId = accessAmount.creditTypeId
                     unitPrice = accessAmount.unitPrice
+                    creditTypeId = accessAmount.creditTypeId
                     quantity = accessAmount.quantity
                     additionalProperties = accessAmount.additionalProperties.toMutableMap()
-                }
-
-                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
-
-                /**
-                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
-                    this.creditTypeId = creditTypeId
                 }
 
                 fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
@@ -18310,6 +18297,20 @@ private constructor(
                  * yet supported value.
                  */
                 fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                /** Defaults to USD (cents) if not passed */
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                /**
+                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 /**
                  * This field is required unless a subscription is attached via
@@ -18355,7 +18356,6 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```java
-                 * .creditTypeId()
                  * .unitPrice()
                  * ```
                  *
@@ -18363,8 +18363,8 @@ private constructor(
                  */
                 fun build(): AccessAmount =
                     AccessAmount(
-                        checkRequired("creditTypeId", creditTypeId),
                         checkRequired("unitPrice", unitPrice),
+                        creditTypeId,
                         quantity,
                         additionalProperties.toMutableMap(),
                     )
@@ -18387,8 +18387,8 @@ private constructor(
                     return@apply
                 }
 
-                creditTypeId()
                 unitPrice()
+                creditTypeId()
                 quantity()
                 validated = true
             }
@@ -18409,8 +18409,8 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                (if (creditTypeId.asKnown().isPresent) 1 else 0) +
-                    (if (unitPrice.asKnown().isPresent) 1 else 0) +
+                (if (unitPrice.asKnown().isPresent) 1 else 0) +
+                    (if (creditTypeId.asKnown().isPresent) 1 else 0) +
                     (if (quantity.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
@@ -18419,20 +18419,20 @@ private constructor(
                 }
 
                 return other is AccessAmount &&
-                    creditTypeId == other.creditTypeId &&
                     unitPrice == other.unitPrice &&
+                    creditTypeId == other.creditTypeId &&
                     quantity == other.quantity &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(creditTypeId, unitPrice, quantity, additionalProperties)
+                Objects.hash(unitPrice, creditTypeId, quantity, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessAmount{creditTypeId=$creditTypeId, unitPrice=$unitPrice, quantity=$quantity, additionalProperties=$additionalProperties}"
+                "AccessAmount{unitPrice=$unitPrice, creditTypeId=$creditTypeId, quantity=$quantity, additionalProperties=$additionalProperties}"
         }
 
         /**
@@ -22194,31 +22194,24 @@ private constructor(
         class AccessAmount
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            private val creditTypeId: JsonField<String>,
             private val unitPrice: JsonField<Double>,
+            private val creditTypeId: JsonField<String>,
             private val quantity: JsonField<Double>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("credit_type_id")
-                @ExcludeMissing
-                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("unit_price")
                 @ExcludeMissing
                 unitPrice: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("credit_type_id")
+                @ExcludeMissing
+                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 quantity: JsonField<Double> = JsonMissing.of(),
-            ) : this(creditTypeId, unitPrice, quantity, mutableMapOf())
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+            ) : this(unitPrice, creditTypeId, quantity, mutableMapOf())
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -22226,6 +22219,14 @@ private constructor(
              *   value).
              */
             fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            /**
+             * Defaults to USD (cents) if not passed
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun creditTypeId(): Optional<String> = creditTypeId.getOptional("credit_type_id")
 
             /**
              * This field is required unless a subscription is attached via `subscription_config`.
@@ -22236,16 +22237,6 @@ private constructor(
             fun quantity(): Optional<Double> = quantity.getOptional("quantity")
 
             /**
-             * Returns the raw JSON value of [creditTypeId].
-             *
-             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("credit_type_id")
-            @ExcludeMissing
-            fun _creditTypeId(): JsonField<String> = creditTypeId
-
-            /**
              * Returns the raw JSON value of [unitPrice].
              *
              * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected
@@ -22254,6 +22245,16 @@ private constructor(
             @JsonProperty("unit_price")
             @ExcludeMissing
             fun _unitPrice(): JsonField<Double> = unitPrice
+
+            /**
+             * Returns the raw JSON value of [creditTypeId].
+             *
+             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Returns the raw JSON value of [quantity].
@@ -22282,7 +22283,6 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```java
-                 * .creditTypeId()
                  * .unitPrice()
                  * ```
                  */
@@ -22292,30 +22292,17 @@ private constructor(
             /** A builder for [AccessAmount]. */
             class Builder internal constructor() {
 
-                private var creditTypeId: JsonField<String>? = null
                 private var unitPrice: JsonField<Double>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var quantity: JsonField<Double> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessAmount: AccessAmount) = apply {
-                    creditTypeId = accessAmount.creditTypeId
                     unitPrice = accessAmount.unitPrice
+                    creditTypeId = accessAmount.creditTypeId
                     quantity = accessAmount.quantity
                     additionalProperties = accessAmount.additionalProperties.toMutableMap()
-                }
-
-                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
-
-                /**
-                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
-                    this.creditTypeId = creditTypeId
                 }
 
                 fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
@@ -22328,6 +22315,20 @@ private constructor(
                  * yet supported value.
                  */
                 fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                /** Defaults to USD (cents) if not passed */
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                /**
+                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 /**
                  * This field is required unless a subscription is attached via
@@ -22373,7 +22374,6 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```java
-                 * .creditTypeId()
                  * .unitPrice()
                  * ```
                  *
@@ -22381,8 +22381,8 @@ private constructor(
                  */
                 fun build(): AccessAmount =
                     AccessAmount(
-                        checkRequired("creditTypeId", creditTypeId),
                         checkRequired("unitPrice", unitPrice),
+                        creditTypeId,
                         quantity,
                         additionalProperties.toMutableMap(),
                     )
@@ -22405,8 +22405,8 @@ private constructor(
                     return@apply
                 }
 
-                creditTypeId()
                 unitPrice()
+                creditTypeId()
                 quantity()
                 validated = true
             }
@@ -22427,8 +22427,8 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                (if (creditTypeId.asKnown().isPresent) 1 else 0) +
-                    (if (unitPrice.asKnown().isPresent) 1 else 0) +
+                (if (unitPrice.asKnown().isPresent) 1 else 0) +
+                    (if (creditTypeId.asKnown().isPresent) 1 else 0) +
                     (if (quantity.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
@@ -22437,20 +22437,20 @@ private constructor(
                 }
 
                 return other is AccessAmount &&
-                    creditTypeId == other.creditTypeId &&
                     unitPrice == other.unitPrice &&
+                    creditTypeId == other.creditTypeId &&
                     quantity == other.quantity &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(creditTypeId, unitPrice, quantity, additionalProperties)
+                Objects.hash(unitPrice, creditTypeId, quantity, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessAmount{creditTypeId=$creditTypeId, unitPrice=$unitPrice, quantity=$quantity, additionalProperties=$additionalProperties}"
+                "AccessAmount{unitPrice=$unitPrice, creditTypeId=$creditTypeId, quantity=$quantity, additionalProperties=$additionalProperties}"
         }
 
         /**

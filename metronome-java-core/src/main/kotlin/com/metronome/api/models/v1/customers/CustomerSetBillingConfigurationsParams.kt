@@ -558,8 +558,7 @@ private constructor(
 
         /**
          * Specifies which tax provider Metronome should use for tax calculation when billing
-         * through Stripe. This is only supported for Stripe billing provider configurations with
-         * auto_charge_payment_intent or manual_charge_payment_intent collection methods.
+         * through Stripe. This is only supported for Stripe billing provider configurations.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -759,8 +758,7 @@ private constructor(
 
             /**
              * Specifies which tax provider Metronome should use for tax calculation when billing
-             * through Stripe. This is only supported for Stripe billing provider configurations
-             * with auto_charge_payment_intent or manual_charge_payment_intent collection methods.
+             * through Stripe. This is only supported for Stripe billing provider configurations.
              */
             fun taxProvider(taxProvider: TaxProvider) = taxProvider(JsonField.of(taxProvider))
 
@@ -1332,8 +1330,7 @@ private constructor(
 
         /**
          * Specifies which tax provider Metronome should use for tax calculation when billing
-         * through Stripe. This is only supported for Stripe billing provider configurations with
-         * auto_charge_payment_intent or manual_charge_payment_intent collection methods.
+         * through Stripe. This is only supported for Stripe billing provider configurations.
          */
         class TaxProvider @JsonCreator private constructor(private val value: JsonField<String>) :
             Enum {

@@ -444,8 +444,8 @@ internal class PackageServiceAsyncTest {
                         PackageCreateParams.RecurringCommit.builder()
                             .accessAmount(
                                 PackageCreateParams.RecurringCommit.AccessAmount.builder()
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
                             )
@@ -563,8 +563,8 @@ internal class PackageServiceAsyncTest {
                         PackageCreateParams.RecurringCredit.builder()
                             .accessAmount(
                                 PackageCreateParams.RecurringCredit.AccessAmount.builder()
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
                             )
