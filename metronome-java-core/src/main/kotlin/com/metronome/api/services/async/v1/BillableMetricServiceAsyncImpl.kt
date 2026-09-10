@@ -24,6 +24,8 @@ import com.metronome.api.models.v1.billablemetrics.BillableMetricListPageRespons
 import com.metronome.api.models.v1.billablemetrics.BillableMetricListParams
 import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveParams
 import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveResponse
+import com.metronome.api.models.v1.billablemetrics.BillableMetricUpdateParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricUpdateResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -59,6 +61,13 @@ internal constructor(private val clientOptions: ClientOptions) : BillableMetricS
     ): CompletableFuture<BillableMetricRetrieveResponse> =
         // get /v1/billable-metrics/{billable_metric_id}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
+
+    override fun update(
+        params: BillableMetricUpdateParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<BillableMetricUpdateResponse> =
+        // put /v1/billable-metrics/{billable_metric_id}
+        withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
     override fun list(
         params: BillableMetricListParams,
@@ -139,6 +148,37 @@ internal constructor(private val clientOptions: ClientOptions) : BillableMetricS
                     errorHandler.handle(response).parseable {
                         response
                             .use { retrieveHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val updateHandler: Handler<BillableMetricUpdateResponse> =
+            jsonHandler<BillableMetricUpdateResponse>(clientOptions.jsonMapper)
+
+        override fun update(
+            params: BillableMetricUpdateParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<BillableMetricUpdateResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "billable-metrics", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { updateHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

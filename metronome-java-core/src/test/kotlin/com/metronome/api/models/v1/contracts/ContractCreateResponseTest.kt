@@ -667,6 +667,26 @@ internal class ContractCreateResponseTest {
                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                 )
                                                 .addApplicableProductTag("string")
+                                                .duration(
+                                                    PrepaidBalanceThresholdConfiguration.Commit
+                                                        .Duration
+                                                        .builder()
+                                                        .unit(
+                                                            PrepaidBalanceThresholdConfiguration
+                                                                .Commit
+                                                                .Duration
+                                                                .Unit
+                                                                .DAYS
+                                                        )
+                                                        .value(0L)
+                                                        .build()
+                                                )
+                                                .rateType(
+                                                    PrepaidBalanceThresholdConfiguration.Commit
+                                                        .RateType
+                                                        .COMMIT_RATE
+                                                )
+                                                .rolloverFraction(0.0)
                                                 .addSpecifier(
                                                     CommitSpecifierInput.builder()
                                                         .presentationGroupValues(
@@ -797,6 +817,9 @@ internal class ContractCreateResponseTest {
                                                 .unitPrice(0.0)
                                                 .quantity(0.0)
                                                 .build()
+                                        )
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .commitDuration(
                                             ContractCreateResponse.Data.Contract.RecurringCommit
@@ -980,6 +1003,9 @@ internal class ContractCreateResponseTest {
                                                 .unitPrice(0.0)
                                                 .quantity(0.0)
                                                 .build()
+                                        )
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .commitDuration(
                                             ContractCreateResponse.Data.Contract.RecurringCredit
@@ -1315,6 +1341,14 @@ internal class ContractCreateResponseTest {
                                         )
                                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .name("name")
+                                        .productCustomFields(
+                                            Subscription.ProductCustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string"),
+                                                )
+                                                .build()
+                                        )
                                         .seatConfig(
                                             Subscription.SeatConfig.builder()
                                                 .seatGroupKey("seat_group_key")
@@ -1914,6 +1948,23 @@ internal class ContractCreateResponseTest {
                                                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                             )
                                             .addApplicableProductTag("string")
+                                            .duration(
+                                                PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                                    .builder()
+                                                    .unit(
+                                                        PrepaidBalanceThresholdConfiguration.Commit
+                                                            .Duration
+                                                            .Unit
+                                                            .DAYS
+                                                    )
+                                                    .value(0L)
+                                                    .build()
+                                            )
+                                            .rateType(
+                                                PrepaidBalanceThresholdConfiguration.Commit.RateType
+                                                    .COMMIT_RATE
+                                            )
+                                            .rolloverFraction(0.0)
                                             .addSpecifier(
                                                 CommitSpecifierInput.builder()
                                                     .presentationGroupValues(
@@ -2037,6 +2088,7 @@ internal class ContractCreateResponseTest {
                                             .quantity(0.0)
                                             .build()
                                     )
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .commitDuration(
                                         ContractCreateResponse.Data.Contract.RecurringCommit
                                             .CommitDuration
@@ -2203,6 +2255,7 @@ internal class ContractCreateResponseTest {
                                             .quantity(0.0)
                                             .build()
                                     )
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .commitDuration(
                                         ContractCreateResponse.Data.Contract.RecurringCredit
                                             .CommitDuration
@@ -2511,6 +2564,11 @@ internal class ContractCreateResponseTest {
                                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .name("name")
+                                    .productCustomFields(
+                                        Subscription.ProductCustomFields.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .seatConfig(
                                         Subscription.SeatConfig.builder()
                                             .seatGroupKey("seat_group_key")
@@ -3163,6 +3221,26 @@ internal class ContractCreateResponseTest {
                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                 )
                                                 .addApplicableProductTag("string")
+                                                .duration(
+                                                    PrepaidBalanceThresholdConfiguration.Commit
+                                                        .Duration
+                                                        .builder()
+                                                        .unit(
+                                                            PrepaidBalanceThresholdConfiguration
+                                                                .Commit
+                                                                .Duration
+                                                                .Unit
+                                                                .DAYS
+                                                        )
+                                                        .value(0L)
+                                                        .build()
+                                                )
+                                                .rateType(
+                                                    PrepaidBalanceThresholdConfiguration.Commit
+                                                        .RateType
+                                                        .COMMIT_RATE
+                                                )
+                                                .rolloverFraction(0.0)
                                                 .addSpecifier(
                                                     CommitSpecifierInput.builder()
                                                         .presentationGroupValues(
@@ -3293,6 +3371,9 @@ internal class ContractCreateResponseTest {
                                                 .unitPrice(0.0)
                                                 .quantity(0.0)
                                                 .build()
+                                        )
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .commitDuration(
                                             ContractCreateResponse.Data.Contract.RecurringCommit
@@ -3476,6 +3557,9 @@ internal class ContractCreateResponseTest {
                                                 .unitPrice(0.0)
                                                 .quantity(0.0)
                                                 .build()
+                                        )
+                                        .anchorDate(
+                                            OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .commitDuration(
                                             ContractCreateResponse.Data.Contract.RecurringCredit
@@ -3811,6 +3895,14 @@ internal class ContractCreateResponseTest {
                                         )
                                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .name("name")
+                                        .productCustomFields(
+                                            Subscription.ProductCustomFields.builder()
+                                                .putAdditionalProperty(
+                                                    "foo",
+                                                    JsonValue.from("string"),
+                                                )
+                                                .build()
+                                        )
                                         .seatConfig(
                                             Subscription.SeatConfig.builder()
                                                 .seatGroupKey("seat_group_key")

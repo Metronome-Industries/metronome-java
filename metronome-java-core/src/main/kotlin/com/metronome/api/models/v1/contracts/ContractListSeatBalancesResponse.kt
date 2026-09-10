@@ -807,6 +807,7 @@ private constructor(
             private val id: JsonField<String>,
             private val balance: JsonField<Double>,
             private val startDate: JsonField<OffsetDateTime>,
+            private val creditTypeId: JsonField<String>,
             private val endDate: JsonField<OffsetDateTime>,
             private val ledgerEntries: JsonField<List<LedgerEntry>>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -821,13 +822,16 @@ private constructor(
                 @JsonProperty("start_date")
                 @ExcludeMissing
                 startDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("credit_type_id")
+                @ExcludeMissing
+                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("end_date")
                 @ExcludeMissing
                 endDate: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("ledger_entries")
                 @ExcludeMissing
                 ledgerEntries: JsonField<List<LedgerEntry>> = JsonMissing.of(),
-            ) : this(id, balance, startDate, endDate, ledgerEntries, mutableMapOf())
+            ) : this(id, balance, startDate, creditTypeId, endDate, ledgerEntries, mutableMapOf())
 
             /**
              * The commit or credit ID
@@ -855,6 +859,15 @@ private constructor(
              *   value).
              */
             fun startDate(): OffsetDateTime = startDate.getRequired("start_date")
+
+            /**
+             * The credit type for this commit. Quantity-based commits return the null credit type
+             * UUID.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun creditTypeId(): Optional<String> = creditTypeId.getOptional("credit_type_id")
 
             /**
              * The datetime when the commit expires
@@ -897,6 +910,16 @@ private constructor(
             @JsonProperty("start_date")
             @ExcludeMissing
             fun _startDate(): JsonField<OffsetDateTime> = startDate
+
+            /**
+             * Returns the raw JSON value of [creditTypeId].
+             *
+             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Returns the raw JSON value of [endDate].
@@ -950,6 +973,7 @@ private constructor(
                 private var id: JsonField<String>? = null
                 private var balance: JsonField<Double>? = null
                 private var startDate: JsonField<OffsetDateTime>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var endDate: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var ledgerEntries: JsonField<MutableList<LedgerEntry>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -959,6 +983,7 @@ private constructor(
                     id = commit.id
                     balance = commit.balance
                     startDate = commit.startDate
+                    creditTypeId = commit.creditTypeId
                     endDate = commit.endDate
                     ledgerEntries = commit.ledgerEntries.map { it.toMutableList() }
                     additionalProperties = commit.additionalProperties.toMutableMap()
@@ -1000,6 +1025,23 @@ private constructor(
                  */
                 fun startDate(startDate: JsonField<OffsetDateTime>) = apply {
                     this.startDate = startDate
+                }
+
+                /**
+                 * The credit type for this commit. Quantity-based commits return the null credit
+                 * type UUID.
+                 */
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                /**
+                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
                 }
 
                 /** The datetime when the commit expires */
@@ -1088,6 +1130,7 @@ private constructor(
                         checkRequired("id", id),
                         checkRequired("balance", balance),
                         checkRequired("startDate", startDate),
+                        creditTypeId,
                         endDate,
                         (ledgerEntries ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toMutableMap(),
@@ -1114,6 +1157,7 @@ private constructor(
                 id()
                 balance()
                 startDate()
+                creditTypeId()
                 endDate()
                 ledgerEntries().ifPresent { it.forEach { it.validate() } }
                 validated = true
@@ -1138,6 +1182,7 @@ private constructor(
                 (if (id.asKnown().isPresent) 1 else 0) +
                     (if (balance.asKnown().isPresent) 1 else 0) +
                     (if (startDate.asKnown().isPresent) 1 else 0) +
+                    (if (creditTypeId.asKnown().isPresent) 1 else 0) +
                     (if (endDate.asKnown().isPresent) 1 else 0) +
                     (ledgerEntries.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
@@ -1603,19 +1648,28 @@ private constructor(
                     id == other.id &&
                     balance == other.balance &&
                     startDate == other.startDate &&
+                    creditTypeId == other.creditTypeId &&
                     endDate == other.endDate &&
                     ledgerEntries == other.ledgerEntries &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(id, balance, startDate, endDate, ledgerEntries, additionalProperties)
+                Objects.hash(
+                    id,
+                    balance,
+                    startDate,
+                    creditTypeId,
+                    endDate,
+                    ledgerEntries,
+                    additionalProperties,
+                )
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Commit{id=$id, balance=$balance, startDate=$startDate, endDate=$endDate, ledgerEntries=$ledgerEntries, additionalProperties=$additionalProperties}"
+                "Commit{id=$id, balance=$balance, startDate=$startDate, creditTypeId=$creditTypeId, endDate=$endDate, ledgerEntries=$ledgerEntries, additionalProperties=$additionalProperties}"
         }
 
         class Credit
@@ -1624,6 +1678,7 @@ private constructor(
             private val id: JsonField<String>,
             private val balance: JsonField<Double>,
             private val startDate: JsonField<OffsetDateTime>,
+            private val creditTypeId: JsonField<String>,
             private val endDate: JsonField<OffsetDateTime>,
             private val ledgerEntries: JsonField<List<LedgerEntry>>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -1638,13 +1693,16 @@ private constructor(
                 @JsonProperty("start_date")
                 @ExcludeMissing
                 startDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("credit_type_id")
+                @ExcludeMissing
+                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("end_date")
                 @ExcludeMissing
                 endDate: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("ledger_entries")
                 @ExcludeMissing
                 ledgerEntries: JsonField<List<LedgerEntry>> = JsonMissing.of(),
-            ) : this(id, balance, startDate, endDate, ledgerEntries, mutableMapOf())
+            ) : this(id, balance, startDate, creditTypeId, endDate, ledgerEntries, mutableMapOf())
 
             /**
              * The credit ID
@@ -1672,6 +1730,15 @@ private constructor(
              *   value).
              */
             fun startDate(): OffsetDateTime = startDate.getRequired("start_date")
+
+            /**
+             * The credit type for this credit. Quantity-based credits return the null credit type
+             * UUID.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun creditTypeId(): Optional<String> = creditTypeId.getOptional("credit_type_id")
 
             /**
              * The datetime when the credit expires
@@ -1714,6 +1781,16 @@ private constructor(
             @JsonProperty("start_date")
             @ExcludeMissing
             fun _startDate(): JsonField<OffsetDateTime> = startDate
+
+            /**
+             * Returns the raw JSON value of [creditTypeId].
+             *
+             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Returns the raw JSON value of [endDate].
@@ -1767,6 +1844,7 @@ private constructor(
                 private var id: JsonField<String>? = null
                 private var balance: JsonField<Double>? = null
                 private var startDate: JsonField<OffsetDateTime>? = null
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var endDate: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var ledgerEntries: JsonField<MutableList<LedgerEntry>>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -1776,6 +1854,7 @@ private constructor(
                     id = credit.id
                     balance = credit.balance
                     startDate = credit.startDate
+                    creditTypeId = credit.creditTypeId
                     endDate = credit.endDate
                     ledgerEntries = credit.ledgerEntries.map { it.toMutableList() }
                     additionalProperties = credit.additionalProperties.toMutableMap()
@@ -1817,6 +1896,23 @@ private constructor(
                  */
                 fun startDate(startDate: JsonField<OffsetDateTime>) = apply {
                     this.startDate = startDate
+                }
+
+                /**
+                 * The credit type for this credit. Quantity-based credits return the null credit
+                 * type UUID.
+                 */
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                /**
+                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
                 }
 
                 /** The datetime when the credit expires */
@@ -1905,6 +2001,7 @@ private constructor(
                         checkRequired("id", id),
                         checkRequired("balance", balance),
                         checkRequired("startDate", startDate),
+                        creditTypeId,
                         endDate,
                         (ledgerEntries ?: JsonMissing.of()).map { it.toImmutable() },
                         additionalProperties.toMutableMap(),
@@ -1931,6 +2028,7 @@ private constructor(
                 id()
                 balance()
                 startDate()
+                creditTypeId()
                 endDate()
                 ledgerEntries().ifPresent { it.forEach { it.validate() } }
                 validated = true
@@ -1955,6 +2053,7 @@ private constructor(
                 (if (id.asKnown().isPresent) 1 else 0) +
                     (if (balance.asKnown().isPresent) 1 else 0) +
                     (if (startDate.asKnown().isPresent) 1 else 0) +
+                    (if (creditTypeId.asKnown().isPresent) 1 else 0) +
                     (if (endDate.asKnown().isPresent) 1 else 0) +
                     (ledgerEntries.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
@@ -2416,19 +2515,28 @@ private constructor(
                     id == other.id &&
                     balance == other.balance &&
                     startDate == other.startDate &&
+                    creditTypeId == other.creditTypeId &&
                     endDate == other.endDate &&
                     ledgerEntries == other.ledgerEntries &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(id, balance, startDate, endDate, ledgerEntries, additionalProperties)
+                Objects.hash(
+                    id,
+                    balance,
+                    startDate,
+                    creditTypeId,
+                    endDate,
+                    ledgerEntries,
+                    additionalProperties,
+                )
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Credit{id=$id, balance=$balance, startDate=$startDate, endDate=$endDate, ledgerEntries=$ledgerEntries, additionalProperties=$additionalProperties}"
+                "Credit{id=$id, balance=$balance, startDate=$startDate, creditTypeId=$creditTypeId, endDate=$endDate, ledgerEntries=$ledgerEntries, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

@@ -28026,6 +28026,7 @@ private constructor(
     private constructor(
         private val id: JsonField<String>,
         private val accessAmount: JsonField<AccessAmount>,
+        private val anchorDate: JsonField<OffsetDateTime>,
         private val commitDuration: JsonField<CommitDuration>,
         private val priority: JsonField<Double>,
         private val product: JsonField<Product>,
@@ -28055,6 +28056,9 @@ private constructor(
             @JsonProperty("access_amount")
             @ExcludeMissing
             accessAmount: JsonField<AccessAmount> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("commit_duration")
             @ExcludeMissing
             commitDuration: JsonField<CommitDuration> = JsonMissing.of(),
@@ -28114,6 +28118,7 @@ private constructor(
         ) : this(
             id,
             accessAmount,
+            anchorDate,
             commitDuration,
             priority,
             product,
@@ -28150,6 +28155,14 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun accessAmount(): AccessAmount = accessAmount.getRequired("access_amount")
+
+        /**
+         * The date this recurring commit's billing periods are anchored to.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun anchorDate(): OffsetDateTime = anchorDate.getRequired("anchor_date")
 
         /**
          * The amount of time the created commits will be valid for
@@ -28339,6 +28352,15 @@ private constructor(
         @JsonProperty("access_amount")
         @ExcludeMissing
         fun _accessAmount(): JsonField<AccessAmount> = accessAmount
+
+        /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
 
         /**
          * Returns the raw JSON value of [commitDuration].
@@ -28543,6 +28565,7 @@ private constructor(
              * ```java
              * .id()
              * .accessAmount()
+             * .anchorDate()
              * .commitDuration()
              * .priority()
              * .product()
@@ -28558,6 +28581,7 @@ private constructor(
 
             private var id: JsonField<String>? = null
             private var accessAmount: JsonField<AccessAmount>? = null
+            private var anchorDate: JsonField<OffsetDateTime>? = null
             private var commitDuration: JsonField<CommitDuration>? = null
             private var priority: JsonField<Double>? = null
             private var product: JsonField<Product>? = null
@@ -28586,6 +28610,7 @@ private constructor(
             internal fun from(recurringCommit: RecurringCommit) = apply {
                 id = recurringCommit.id
                 accessAmount = recurringCommit.accessAmount
+                anchorDate = recurringCommit.anchorDate
                 commitDuration = recurringCommit.commitDuration
                 priority = recurringCommit.priority
                 product = recurringCommit.product
@@ -28634,6 +28659,20 @@ private constructor(
              */
             fun accessAmount(accessAmount: JsonField<AccessAmount>) = apply {
                 this.accessAmount = accessAmount
+            }
+
+            /** The date this recurring commit's billing periods are anchored to. */
+            fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** The amount of time the created commits will be valid for */
@@ -29001,6 +29040,7 @@ private constructor(
              * ```java
              * .id()
              * .accessAmount()
+             * .anchorDate()
              * .commitDuration()
              * .priority()
              * .product()
@@ -29014,6 +29054,7 @@ private constructor(
                 RecurringCommit(
                     checkRequired("id", id),
                     checkRequired("accessAmount", accessAmount),
+                    checkRequired("anchorDate", anchorDate),
                     checkRequired("commitDuration", commitDuration),
                     checkRequired("priority", priority),
                     checkRequired("product", product),
@@ -29056,6 +29097,7 @@ private constructor(
 
             id()
             accessAmount().validate()
+            anchorDate()
             commitDuration().validate()
             priority()
             product().validate()
@@ -29097,6 +29139,7 @@ private constructor(
         internal fun validity(): Int =
             (if (id.asKnown().isPresent) 1 else 0) +
                 (accessAmount.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
                 (commitDuration.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (product.asKnown().getOrNull()?.validity() ?: 0) +
@@ -31795,6 +31838,7 @@ private constructor(
             return other is RecurringCommit &&
                 id == other.id &&
                 accessAmount == other.accessAmount &&
+                anchorDate == other.anchorDate &&
                 commitDuration == other.commitDuration &&
                 priority == other.priority &&
                 product == other.product &&
@@ -31822,6 +31866,7 @@ private constructor(
             Objects.hash(
                 id,
                 accessAmount,
+                anchorDate,
                 commitDuration,
                 priority,
                 product,
@@ -31849,7 +31894,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringCommit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
+            "RecurringCommit{id=$id, accessAmount=$accessAmount, anchorDate=$anchorDate, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
     }
 
     class RecurringCredit
@@ -31857,6 +31902,7 @@ private constructor(
     private constructor(
         private val id: JsonField<String>,
         private val accessAmount: JsonField<AccessAmount>,
+        private val anchorDate: JsonField<OffsetDateTime>,
         private val commitDuration: JsonField<CommitDuration>,
         private val priority: JsonField<Double>,
         private val product: JsonField<Product>,
@@ -31885,6 +31931,9 @@ private constructor(
             @JsonProperty("access_amount")
             @ExcludeMissing
             accessAmount: JsonField<AccessAmount> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("commit_duration")
             @ExcludeMissing
             commitDuration: JsonField<CommitDuration> = JsonMissing.of(),
@@ -31941,6 +31990,7 @@ private constructor(
         ) : this(
             id,
             accessAmount,
+            anchorDate,
             commitDuration,
             priority,
             product,
@@ -31976,6 +32026,14 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun accessAmount(): AccessAmount = accessAmount.getRequired("access_amount")
+
+        /**
+         * The date this recurring commit's billing periods are anchored to.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun anchorDate(): OffsetDateTime = anchorDate.getRequired("anchor_date")
 
         /**
          * The amount of time the created commits will be valid for
@@ -32157,6 +32215,15 @@ private constructor(
         @JsonProperty("access_amount")
         @ExcludeMissing
         fun _accessAmount(): JsonField<AccessAmount> = accessAmount
+
+        /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
 
         /**
          * Returns the raw JSON value of [commitDuration].
@@ -32351,6 +32418,7 @@ private constructor(
              * ```java
              * .id()
              * .accessAmount()
+             * .anchorDate()
              * .commitDuration()
              * .priority()
              * .product()
@@ -32366,6 +32434,7 @@ private constructor(
 
             private var id: JsonField<String>? = null
             private var accessAmount: JsonField<AccessAmount>? = null
+            private var anchorDate: JsonField<OffsetDateTime>? = null
             private var commitDuration: JsonField<CommitDuration>? = null
             private var priority: JsonField<Double>? = null
             private var product: JsonField<Product>? = null
@@ -32393,6 +32462,7 @@ private constructor(
             internal fun from(recurringCredit: RecurringCredit) = apply {
                 id = recurringCredit.id
                 accessAmount = recurringCredit.accessAmount
+                anchorDate = recurringCredit.anchorDate
                 commitDuration = recurringCredit.commitDuration
                 priority = recurringCredit.priority
                 product = recurringCredit.product
@@ -32440,6 +32510,20 @@ private constructor(
              */
             fun accessAmount(accessAmount: JsonField<AccessAmount>) = apply {
                 this.accessAmount = accessAmount
+            }
+
+            /** The date this recurring commit's billing periods are anchored to. */
+            fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** The amount of time the created commits will be valid for */
@@ -32792,6 +32876,7 @@ private constructor(
              * ```java
              * .id()
              * .accessAmount()
+             * .anchorDate()
              * .commitDuration()
              * .priority()
              * .product()
@@ -32805,6 +32890,7 @@ private constructor(
                 RecurringCredit(
                     checkRequired("id", id),
                     checkRequired("accessAmount", accessAmount),
+                    checkRequired("anchorDate", anchorDate),
                     checkRequired("commitDuration", commitDuration),
                     checkRequired("priority", priority),
                     checkRequired("product", product),
@@ -32846,6 +32932,7 @@ private constructor(
 
             id()
             accessAmount().validate()
+            anchorDate()
             commitDuration().validate()
             priority()
             product().validate()
@@ -32886,6 +32973,7 @@ private constructor(
         internal fun validity(): Int =
             (if (id.asKnown().isPresent) 1 else 0) +
                 (accessAmount.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
                 (commitDuration.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (product.asKnown().getOrNull()?.validity() ?: 0) +
@@ -34896,6 +34984,7 @@ private constructor(
             return other is RecurringCredit &&
                 id == other.id &&
                 accessAmount == other.accessAmount &&
+                anchorDate == other.anchorDate &&
                 commitDuration == other.commitDuration &&
                 priority == other.priority &&
                 product == other.product &&
@@ -34922,6 +35011,7 @@ private constructor(
             Objects.hash(
                 id,
                 accessAmount,
+                anchorDate,
                 commitDuration,
                 priority,
                 product,
@@ -34948,7 +35038,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringCredit{id=$id, accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
+            "RecurringCredit{id=$id, accessAmount=$accessAmount, anchorDate=$anchorDate, commitDuration=$commitDuration, priority=$priority, product=$product, rateType=$rateType, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, contract=$contract, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, additionalProperties=$additionalProperties}"
     }
 
     class ResellerRoyalty
@@ -39201,6 +39291,7 @@ private constructor(
         private val endingBefore: JsonField<OffsetDateTime>,
         private val fiatCreditTypeId: JsonField<String>,
         private val name: JsonField<String>,
+        private val productCustomFields: JsonField<ProductCustomFields>,
         private val seatConfig: JsonField<SeatConfig>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -39245,6 +39336,9 @@ private constructor(
             @ExcludeMissing
             fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("product_custom_fields")
+            @ExcludeMissing
+            productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of(),
             @JsonProperty("seat_config")
             @ExcludeMissing
             seatConfig: JsonField<SeatConfig> = JsonMissing.of(),
@@ -39263,6 +39357,7 @@ private constructor(
             endingBefore,
             fiatCreditTypeId,
             name,
+            productCustomFields,
             seatConfig,
             mutableMapOf(),
         )
@@ -39371,6 +39466,16 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun name(): Optional<String> = name.getOptional("name")
+
+        /**
+         * Custom fields from the subscription product referenced by `subscription_rate.product`.
+         * These are distinct from the subscription instance's `custom_fields`.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun productCustomFields(): Optional<ProductCustomFields> =
+            productCustomFields.getOptional("product_custom_fields")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -39510,6 +39615,16 @@ private constructor(
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
+         * Returns the raw JSON value of [productCustomFields].
+         *
+         * Unlike [productCustomFields], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("product_custom_fields")
+        @ExcludeMissing
+        fun _productCustomFields(): JsonField<ProductCustomFields> = productCustomFields
+
+        /**
          * Returns the raw JSON value of [seatConfig].
          *
          * Unlike [seatConfig], this method doesn't throw if the JSON field has an unexpected type.
@@ -39566,6 +39681,7 @@ private constructor(
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
             private var fiatCreditTypeId: JsonField<String> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
+            private var productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of()
             private var seatConfig: JsonField<SeatConfig> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -39585,6 +39701,7 @@ private constructor(
                 endingBefore = subscription.endingBefore
                 fiatCreditTypeId = subscription.fiatCreditTypeId
                 name = subscription.name
+                productCustomFields = subscription.productCustomFields
                 seatConfig = subscription.seatConfig
                 additionalProperties = subscription.additionalProperties.toMutableMap()
             }
@@ -39802,6 +39919,25 @@ private constructor(
              */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
+            /**
+             * Custom fields from the subscription product referenced by
+             * `subscription_rate.product`. These are distinct from the subscription instance's
+             * `custom_fields`.
+             */
+            fun productCustomFields(productCustomFields: ProductCustomFields) =
+                productCustomFields(JsonField.of(productCustomFields))
+
+            /**
+             * Sets [Builder.productCustomFields] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productCustomFields] with a well-typed
+             * [ProductCustomFields] value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
+             */
+            fun productCustomFields(productCustomFields: JsonField<ProductCustomFields>) = apply {
+                this.productCustomFields = productCustomFields
+            }
+
             fun seatConfig(seatConfig: SeatConfig) = seatConfig(JsonField.of(seatConfig))
 
             /**
@@ -39868,6 +40004,7 @@ private constructor(
                     endingBefore,
                     fiatCreditTypeId,
                     name,
+                    productCustomFields,
                     seatConfig,
                     additionalProperties.toMutableMap(),
                 )
@@ -39903,6 +40040,7 @@ private constructor(
             endingBefore()
             fiatCreditTypeId()
             name()
+            productCustomFields().ifPresent { it.validate() }
             seatConfig().ifPresent { it.validate() }
             validated = true
         }
@@ -39937,6 +40075,7 @@ private constructor(
                 (if (endingBefore.asKnown().isPresent) 1 else 0) +
                 (if (fiatCreditTypeId.asKnown().isPresent) 1 else 0) +
                 (if (name.asKnown().isPresent) 1 else 0) +
+                (productCustomFields.asKnown().getOrNull()?.validity() ?: 0) +
                 (seatConfig.asKnown().getOrNull()?.validity() ?: 0)
 
         /** Previous, current, and next billing periods for the subscription. */
@@ -43278,6 +43417,127 @@ private constructor(
             override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * Custom fields from the subscription product referenced by `subscription_rate.product`.
+         * These are distinct from the subscription instance's `custom_fields`.
+         */
+        class ProductCustomFields
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [ProductCustomFields].
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [ProductCustomFields]. */
+            class Builder internal constructor() {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(productCustomFields: ProductCustomFields) = apply {
+                    additionalProperties = productCustomFields.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [ProductCustomFields].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): ProductCustomFields =
+                    ProductCustomFields(additionalProperties.toImmutable())
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): ProductCustomFields = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is ProductCustomFields &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "ProductCustomFields{additionalProperties=$additionalProperties}"
+        }
+
         class SeatConfig
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -43489,6 +43749,7 @@ private constructor(
                 endingBefore == other.endingBefore &&
                 fiatCreditTypeId == other.fiatCreditTypeId &&
                 name == other.name &&
+                productCustomFields == other.productCustomFields &&
                 seatConfig == other.seatConfig &&
                 additionalProperties == other.additionalProperties
         }
@@ -43509,6 +43770,7 @@ private constructor(
                 endingBefore,
                 fiatCreditTypeId,
                 name,
+                productCustomFields,
                 seatConfig,
                 additionalProperties,
             )
@@ -43517,7 +43779,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Subscription{billingPeriods=$billingPeriods, collectionSchedule=$collectionSchedule, proration=$proration, quantityManagementMode=$quantityManagementMode, quantitySchedule=$quantitySchedule, startingAt=$startingAt, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, endingBefore=$endingBefore, fiatCreditTypeId=$fiatCreditTypeId, name=$name, seatConfig=$seatConfig, additionalProperties=$additionalProperties}"
+            "Subscription{billingPeriods=$billingPeriods, collectionSchedule=$collectionSchedule, proration=$proration, quantityManagementMode=$quantityManagementMode, quantitySchedule=$quantitySchedule, startingAt=$startingAt, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, endingBefore=$endingBefore, fiatCreditTypeId=$fiatCreditTypeId, name=$name, productCustomFields=$productCustomFields, seatConfig=$seatConfig, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

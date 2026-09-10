@@ -12,8 +12,13 @@ import com.metronome.api.core.http.HttpRequest
 import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponse.Handler
 import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.core.http.json
 import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
+import com.metronome.api.models.v1.pricingunits.PricingUnitArchiveParams
+import com.metronome.api.models.v1.pricingunits.PricingUnitArchiveResponse
+import com.metronome.api.models.v1.pricingunits.PricingUnitCreateParams
+import com.metronome.api.models.v1.pricingunits.PricingUnitCreateResponse
 import com.metronome.api.models.v1.pricingunits.PricingUnitListPage
 import com.metronome.api.models.v1.pricingunits.PricingUnitListPageResponse
 import com.metronome.api.models.v1.pricingunits.PricingUnitListParams
@@ -35,12 +40,26 @@ class PricingUnitServiceImpl internal constructor(private val clientOptions: Cli
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): PricingUnitService =
         PricingUnitServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    override fun create(
+        params: PricingUnitCreateParams,
+        requestOptions: RequestOptions,
+    ): PricingUnitCreateResponse =
+        // post /v1/credit-types/create
+        withRawResponse().create(params, requestOptions).parse()
+
     override fun list(
         params: PricingUnitListParams,
         requestOptions: RequestOptions,
     ): PricingUnitListPage =
         // get /v1/credit-types/list
         withRawResponse().list(params, requestOptions).parse()
+
+    override fun archive(
+        params: PricingUnitArchiveParams,
+        requestOptions: RequestOptions,
+    ): PricingUnitArchiveResponse =
+        // post /v1/credit-types/archive
+        withRawResponse().archive(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         PricingUnitService.WithRawResponse {
@@ -54,6 +73,34 @@ class PricingUnitServiceImpl internal constructor(private val clientOptions: Cli
             PricingUnitServiceImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
+
+        private val createHandler: Handler<PricingUnitCreateResponse> =
+            jsonHandler<PricingUnitCreateResponse>(clientOptions.jsonMapper)
+
+        override fun create(
+            params: PricingUnitCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PricingUnitCreateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "credit-types", "create")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
 
         private val listHandler: Handler<PricingUnitListPageResponse> =
             jsonHandler<PricingUnitListPageResponse>(clientOptions.jsonMapper)
@@ -85,6 +132,34 @@ class PricingUnitServiceImpl internal constructor(private val clientOptions: Cli
                             .params(params)
                             .response(it)
                             .build()
+                    }
+            }
+        }
+
+        private val archiveHandler: Handler<PricingUnitArchiveResponse> =
+            jsonHandler<PricingUnitArchiveResponse>(clientOptions.jsonMapper)
+
+        override fun archive(
+            params: PricingUnitArchiveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PricingUnitArchiveResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "credit-types", "archive")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { archiveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
             }
         }
