@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.models.v2.contracts
+package com.metronome.api.models.v1.contracts
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -14,35 +14,54 @@ import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.ContractV2
+import com.metronome.api.models.Contract
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class ContractListResponse
+class ContractListPageResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val data: JsonField<List<ContractV2>>,
+    private val cursor: JsonField<String>,
+    private val data: JsonField<List<Contract>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("data") @ExcludeMissing data: JsonField<List<ContractV2>> = JsonMissing.of()
-    ) : this(data, mutableMapOf())
+        @JsonProperty("cursor") @ExcludeMissing cursor: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("data") @ExcludeMissing data: JsonField<List<Contract>> = JsonMissing.of(),
+    ) : this(cursor, data, mutableMapOf())
+
+    /**
+     * Pass this value as `cursor` in a subsequent request to fetch the next page of contracts. Null
+     * if there are no more contracts.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun cursor(): Optional<String> = cursor.getOptional("cursor")
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun data(): List<ContractV2> = data.getRequired("data")
+    fun data(): List<Contract> = data.getRequired("data")
+
+    /**
+     * Returns the raw JSON value of [cursor].
+     *
+     * Unlike [cursor], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("cursor") @ExcludeMissing fun _cursor(): JsonField<String> = cursor
 
     /**
      * Returns the raw JSON value of [data].
      *
      * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<ContractV2>> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Contract>> = data
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -59,47 +78,67 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ContractListResponse].
+         * Returns a mutable builder for constructing an instance of [ContractListPageResponse].
          *
          * The following fields are required:
          * ```java
+         * .cursor()
          * .data()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ContractListResponse]. */
+    /** A builder for [ContractListPageResponse]. */
     class Builder internal constructor() {
 
-        private var data: JsonField<MutableList<ContractV2>>? = null
+        private var cursor: JsonField<String>? = null
+        private var data: JsonField<MutableList<Contract>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(contractListResponse: ContractListResponse) = apply {
-            data = contractListResponse.data.map { it.toMutableList() }
-            additionalProperties = contractListResponse.additionalProperties.toMutableMap()
+        internal fun from(contractListPageResponse: ContractListPageResponse) = apply {
+            cursor = contractListPageResponse.cursor
+            data = contractListPageResponse.data.map { it.toMutableList() }
+            additionalProperties = contractListPageResponse.additionalProperties.toMutableMap()
         }
 
-        fun data(data: List<ContractV2>) = data(JsonField.of(data))
+        /**
+         * Pass this value as `cursor` in a subsequent request to fetch the next page of contracts.
+         * Null if there are no more contracts.
+         */
+        fun cursor(cursor: String?) = cursor(JsonField.ofNullable(cursor))
+
+        /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
+        fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
+
+        /**
+         * Sets [Builder.cursor] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cursor] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun cursor(cursor: JsonField<String>) = apply { this.cursor = cursor }
+
+        fun data(data: List<Contract>) = data(JsonField.of(data))
 
         /**
          * Sets [Builder.data] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.data] with a well-typed `List<ContractV2>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.data] with a well-typed `List<Contract>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun data(data: JsonField<List<ContractV2>>) = apply {
+        fun data(data: JsonField<List<Contract>>) = apply {
             this.data = data.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [ContractV2] to [Builder.data].
+         * Adds a single [Contract] to [Builder.data].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addData(data: ContractV2) = apply {
+        fun addData(data: Contract) = apply {
             this.data =
                 (this.data ?: JsonField.of(mutableListOf())).also {
                     checkKnown("data", it).add(data)
@@ -126,19 +165,21 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ContractListResponse].
+         * Returns an immutable instance of [ContractListPageResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
+         * .cursor()
          * .data()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ContractListResponse =
-            ContractListResponse(
+        fun build(): ContractListPageResponse =
+            ContractListPageResponse(
+                checkRequired("cursor", cursor),
                 checkRequired("data", data).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
@@ -154,11 +195,12 @@ private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): ContractListResponse = apply {
+    fun validate(): ContractListPageResponse = apply {
         if (validated) {
             return@apply
         }
 
+        cursor()
         data().forEach { it.validate() }
         validated = true
     }
@@ -178,22 +220,24 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+        (if (cursor.asKnown().isPresent) 1 else 0) +
+            (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is ContractListResponse &&
+        return other is ContractListPageResponse &&
+            cursor == other.cursor &&
             data == other.data &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(data, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(cursor, data, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContractListResponse{data=$data, additionalProperties=$additionalProperties}"
+        "ContractListPageResponse{cursor=$cursor, data=$data, additionalProperties=$additionalProperties}"
 }

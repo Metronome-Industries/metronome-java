@@ -57,19 +57,14 @@ internal class ContractServiceTest {
                 .build()
         val contractService = client.v2().contracts()
 
-        val contracts =
+        val page =
             contractService.list(
                 ContractListParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-                    .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .includeArchived(true)
-                    .includeBalance(true)
-                    .includeLedgers(true)
-                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
 
-        contracts.validate()
+        page.response().validate()
     }
 
     @Test

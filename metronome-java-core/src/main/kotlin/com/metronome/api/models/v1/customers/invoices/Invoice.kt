@@ -1703,7 +1703,8 @@ private constructor(
 
         /**
          * Details about the credit or commit that was applied to this line item. Only present on
-         * line items with product of `USAGE`, `SUBSCRIPTION` or `COMPOSITE` types.
+         * line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or `CPU_CONVERSION`
+         * types.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -1721,9 +1722,10 @@ private constructor(
             commitCustomFields.getOptional("commit_custom_fields")
 
         /**
-         * For line items with product of `USAGE`, `SUBSCRIPTION`, or `COMPOSITE` types, the ID of
-         * the credit or commit that was applied to this line item. For line items with product type
-         * of `FIXED`, the ID of the prepaid or postpaid commit that is being paid for.
+         * For line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or `CPU_CONVERSION`
+         * types, the ID of the credit or commit that was applied to this line item. For line items
+         * with product type of `FIXED`, the ID of the prepaid or postpaid commit that is being paid
+         * for.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -2633,7 +2635,8 @@ private constructor(
 
             /**
              * Details about the credit or commit that was applied to this line item. Only present
-             * on line items with product of `USAGE`, `SUBSCRIPTION` or `COMPOSITE` types.
+             * on line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or
+             * `CPU_CONVERSION` types.
              */
             fun appliedCommitOrCredit(appliedCommitOrCredit: AppliedCommitOrCredit) =
                 appliedCommitOrCredit(JsonField.of(appliedCommitOrCredit))
@@ -2666,10 +2669,10 @@ private constructor(
             }
 
             /**
-             * For line items with product of `USAGE`, `SUBSCRIPTION`, or `COMPOSITE` types, the ID
-             * of the credit or commit that was applied to this line item. For line items with
-             * product type of `FIXED`, the ID of the prepaid or postpaid commit that is being paid
-             * for.
+             * For line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or
+             * `CPU_CONVERSION` types, the ID of the credit or commit that was applied to this line
+             * item. For line items with product type of `FIXED`, the ID of the prepaid or postpaid
+             * commit that is being paid for.
              */
             fun commitId(commitId: String) = commitId(JsonField.of(commitId))
 
@@ -3456,7 +3459,8 @@ private constructor(
 
         /**
          * Details about the credit or commit that was applied to this line item. Only present on
-         * line items with product of `USAGE`, `SUBSCRIPTION` or `COMPOSITE` types.
+         * line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or `CPU_CONVERSION`
+         * types.
          */
         class AppliedCommitOrCredit
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)

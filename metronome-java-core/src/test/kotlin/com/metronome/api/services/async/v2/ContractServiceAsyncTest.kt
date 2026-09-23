@@ -58,20 +58,15 @@ internal class ContractServiceAsyncTest {
                 .build()
         val contractServiceAsync = client.v2().contracts()
 
-        val contractsFuture =
+        val pageFuture =
             contractServiceAsync.list(
                 ContractListParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
-                    .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .includeArchived(true)
-                    .includeBalance(true)
-                    .includeLedgers(true)
-                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
 
-        val contracts = contractsFuture.get()
-        contracts.validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Test

@@ -33,12 +33,13 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class ContractListResponseTest {
+internal class ContractListPageResponseTest {
 
     @Test
     fun create() {
-        val contractListResponse =
-            ContractListResponse.builder()
+        val contractListPageResponse =
+            ContractListPageResponse.builder()
+                .cursor("cursor")
                 .addData(
                     Contract.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -444,6 +445,7 @@ internal class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -1050,6 +1052,7 @@ internal class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -2305,6 +2308,7 @@ internal class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -3523,7 +3527,8 @@ internal class ContractListResponseTest {
                 )
                 .build()
 
-        assertThat(contractListResponse.data())
+        assertThat(contractListPageResponse.cursor()).contains("cursor")
+        assertThat(contractListPageResponse.data())
             .containsExactly(
                 Contract.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -3897,6 +3902,7 @@ internal class ContractListResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
@@ -4453,6 +4459,7 @@ internal class ContractListResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
@@ -5603,6 +5610,7 @@ internal class ContractListResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
@@ -6733,8 +6741,9 @@ internal class ContractListResponseTest {
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val contractListResponse =
-            ContractListResponse.builder()
+        val contractListPageResponse =
+            ContractListPageResponse.builder()
+                .cursor("cursor")
                 .addData(
                     Contract.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -7140,6 +7149,7 @@ internal class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -7746,6 +7756,7 @@ internal class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -9001,6 +9012,7 @@ internal class ContractListResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -10219,12 +10231,12 @@ internal class ContractListResponseTest {
                 )
                 .build()
 
-        val roundtrippedContractListResponse =
+        val roundtrippedContractListPageResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(contractListResponse),
-                jacksonTypeRef<ContractListResponse>(),
+                jsonMapper.writeValueAsString(contractListPageResponse),
+                jacksonTypeRef<ContractListPageResponse>(),
             )
 
-        assertThat(roundtrippedContractListResponse).isEqualTo(contractListResponse)
+        assertThat(roundtrippedContractListPageResponse).isEqualTo(contractListPageResponse)
     }
 }

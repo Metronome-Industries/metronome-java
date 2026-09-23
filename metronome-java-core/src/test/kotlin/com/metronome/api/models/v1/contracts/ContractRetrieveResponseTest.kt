@@ -444,6 +444,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -1050,6 +1051,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -2305,6 +2307,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -3897,6 +3900,7 @@ internal class ContractRetrieveResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
@@ -4453,6 +4457,7 @@ internal class ContractRetrieveResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
@@ -5603,6 +5608,7 @@ internal class ContractRetrieveResponseTest {
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                             .build()
                                     )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .createdBy("created_by")
                                     .customFields(
                                         Credit.CustomFields.builder()
@@ -7140,6 +7146,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -7746,6 +7753,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()
@@ -9001,6 +9009,7 @@ internal class ContractRetrieveResponseTest {
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                                 .build()
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .createdBy("created_by")
                                         .customFields(
                                             Credit.CustomFields.builder()

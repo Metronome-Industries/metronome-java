@@ -25,12 +25,12 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class ContractListResponseTest {
+internal class ContractListPageResponseTest {
 
     @Test
     fun create() {
-        val contractListResponse =
-            ContractListResponse.builder()
+        val contractListPageResponse =
+            ContractListPageResponse.builder()
                 .addData(
                     ContractV2.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1332,9 +1332,10 @@ internal class ContractListResponseTest {
                         .uniquenessKey("x")
                         .build()
                 )
+                .cursor("cursor")
                 .build()
 
-        assertThat(contractListResponse.data())
+        assertThat(contractListPageResponse.data())
             .containsExactly(
                 ContractV2.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2561,13 +2562,14 @@ internal class ContractListResponseTest {
                     .uniquenessKey("x")
                     .build()
             )
+        assertThat(contractListPageResponse.cursor()).contains("cursor")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val contractListResponse =
-            ContractListResponse.builder()
+        val contractListPageResponse =
+            ContractListPageResponse.builder()
                 .addData(
                     ContractV2.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -3869,14 +3871,15 @@ internal class ContractListResponseTest {
                         .uniquenessKey("x")
                         .build()
                 )
+                .cursor("cursor")
                 .build()
 
-        val roundtrippedContractListResponse =
+        val roundtrippedContractListPageResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(contractListResponse),
-                jacksonTypeRef<ContractListResponse>(),
+                jsonMapper.writeValueAsString(contractListPageResponse),
+                jacksonTypeRef<ContractListPageResponse>(),
             )
 
-        assertThat(roundtrippedContractListResponse).isEqualTo(contractListResponse)
+        assertThat(roundtrippedContractListPageResponse).isEqualTo(contractListPageResponse)
     }
 }
