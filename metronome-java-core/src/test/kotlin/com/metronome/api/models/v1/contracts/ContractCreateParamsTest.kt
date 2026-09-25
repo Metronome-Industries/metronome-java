@@ -47,6 +47,7 @@ internal class ContractCreateParamsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ContractCreateParams.Commit.AccessSchedule.AccessType.SPEND)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
@@ -151,6 +152,7 @@ internal class ContractCreateParamsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ContractCreateParams.Credit.AccessSchedule.AccessType.SPEND)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
@@ -482,6 +484,9 @@ internal class ContractCreateParamsTest {
                     .accessAmount(
                         ContractCreateParams.RecurringCommit.AccessAmount.builder()
                             .unitPrice(0.0)
+                            .accessType(
+                                ContractCreateParams.RecurringCommit.AccessAmount.AccessType.SPEND
+                            )
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .quantity(0.0)
                             .build()
@@ -598,6 +603,9 @@ internal class ContractCreateParamsTest {
                     .accessAmount(
                         ContractCreateParams.RecurringCredit.AccessAmount.builder()
                             .unitPrice(0.0)
+                            .accessType(
+                                ContractCreateParams.RecurringCredit.AccessAmount.AccessType.SPEND
+                            )
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .quantity(0.0)
                             .build()
@@ -983,6 +991,9 @@ internal class ContractCreateParamsTest {
                                         )
                                         .build()
                                 )
+                                .accessType(
+                                    ContractCreateParams.Commit.AccessSchedule.AccessType.SPEND
+                                )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
@@ -1096,6 +1107,9 @@ internal class ContractCreateParamsTest {
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .build()
+                                )
+                                .accessType(
+                                    ContractCreateParams.Credit.AccessSchedule.AccessType.SPEND
                                 )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
@@ -1446,6 +1460,10 @@ internal class ContractCreateParamsTest {
                         .accessAmount(
                             ContractCreateParams.RecurringCommit.AccessAmount.builder()
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractCreateParams.RecurringCommit.AccessAmount.AccessType
+                                        .SPEND
+                                )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .quantity(0.0)
                                 .build()
@@ -1565,6 +1583,10 @@ internal class ContractCreateParamsTest {
                         .accessAmount(
                             ContractCreateParams.RecurringCredit.AccessAmount.builder()
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractCreateParams.RecurringCredit.AccessAmount.AccessType
+                                        .SPEND
+                                )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .quantity(0.0)
                                 .build()
@@ -1965,6 +1987,7 @@ internal class ContractCreateParamsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ContractCreateParams.Commit.AccessSchedule.AccessType.SPEND)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
@@ -2070,6 +2093,7 @@ internal class ContractCreateParamsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ContractCreateParams.Credit.AccessSchedule.AccessType.SPEND)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
@@ -2407,6 +2431,9 @@ internal class ContractCreateParamsTest {
                     .accessAmount(
                         ContractCreateParams.RecurringCommit.AccessAmount.builder()
                             .unitPrice(0.0)
+                            .accessType(
+                                ContractCreateParams.RecurringCommit.AccessAmount.AccessType.SPEND
+                            )
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .quantity(0.0)
                             .build()
@@ -2524,6 +2551,9 @@ internal class ContractCreateParamsTest {
                     .accessAmount(
                         ContractCreateParams.RecurringCredit.AccessAmount.builder()
                             .unitPrice(0.0)
+                            .accessType(
+                                ContractCreateParams.RecurringCredit.AccessAmount.AccessType.SPEND
+                            )
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .quantity(0.0)
                             .build()

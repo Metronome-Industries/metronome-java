@@ -57,6 +57,7 @@ internal class ContractGetEditHistoryResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -168,6 +169,7 @@ internal class ContractGetEditHistoryResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -535,6 +537,12 @@ internal class ContractGetEditHistoryResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractGetEditHistoryResponse.Data.AddRecurringCommit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -698,6 +706,12 @@ internal class ContractGetEditHistoryResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractGetEditHistoryResponse.Data.AddRecurringCredit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -1916,6 +1930,7 @@ internal class ContractGetEditHistoryResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(ScheduleDuration.AccessType.SPEND)
                                     .creditType(
                                         CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2020,6 +2035,7 @@ internal class ContractGetEditHistoryResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(ScheduleDuration.AccessType.SPEND)
                                     .creditType(
                                         CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2363,6 +2379,12 @@ internal class ContractGetEditHistoryResponseTest {
                                     .builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractGetEditHistoryResponse.Data.AddRecurringCommit
+                                            .AccessAmount
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
@@ -2517,6 +2539,12 @@ internal class ContractGetEditHistoryResponseTest {
                                     .builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractGetEditHistoryResponse.Data.AddRecurringCredit
+                                            .AccessAmount
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
@@ -3687,6 +3715,7 @@ internal class ContractGetEditHistoryResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -3798,6 +3827,7 @@ internal class ContractGetEditHistoryResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -4165,6 +4195,12 @@ internal class ContractGetEditHistoryResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractGetEditHistoryResponse.Data.AddRecurringCommit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -4328,6 +4364,12 @@ internal class ContractGetEditHistoryResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractGetEditHistoryResponse.Data.AddRecurringCredit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )

@@ -42,6 +42,9 @@ internal class InvoiceListBreakdownsPageResponseTest {
                                     Invoice.LineItem.AppliedCommitOrCredit.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .type(Invoice.LineItem.AppliedCommitOrCredit.Type.PREPAID)
+                                        .accessType(
+                                            Invoice.LineItem.AppliedCommitOrCredit.AccessType.SPEND
+                                        )
                                         .build()
                                 )
                                 .commitCustomFields(
@@ -398,6 +401,9 @@ internal class InvoiceListBreakdownsPageResponseTest {
                                 Invoice.LineItem.AppliedCommitOrCredit.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .type(Invoice.LineItem.AppliedCommitOrCredit.Type.PREPAID)
+                                    .accessType(
+                                        Invoice.LineItem.AppliedCommitOrCredit.AccessType.SPEND
+                                    )
                                     .build()
                             )
                             .commitCustomFields(
@@ -750,6 +756,9 @@ internal class InvoiceListBreakdownsPageResponseTest {
                                     Invoice.LineItem.AppliedCommitOrCredit.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .type(Invoice.LineItem.AppliedCommitOrCredit.Type.PREPAID)
+                                        .accessType(
+                                            Invoice.LineItem.AppliedCommitOrCredit.AccessType.SPEND
+                                        )
                                         .build()
                                 )
                                 .commitCustomFields(

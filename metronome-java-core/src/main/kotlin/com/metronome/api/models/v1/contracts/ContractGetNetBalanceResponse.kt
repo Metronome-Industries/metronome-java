@@ -187,7 +187,8 @@ private constructor(
         fun balance(): Double = balance.getRequired("balance")
 
         /**
-         * The ID of the credit type (can be fiat or a custom pricing unit) that the balance is for.
+         * This ID identifies the credit type for the balance. The credit type can be fiat or a
+         * custom pricing unit. Quantity-based balances return the null credit type UUID.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -267,8 +268,8 @@ private constructor(
             fun balance(balance: JsonField<Double>) = apply { this.balance = balance }
 
             /**
-             * The ID of the credit type (can be fiat or a custom pricing unit) that the balance is
-             * for.
+             * This ID identifies the credit type for the balance. The credit type can be fiat or a
+             * custom pricing unit. Quantity-based balances return the null credit type UUID.
              */
             fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
 

@@ -82,6 +82,9 @@ internal class PackageServiceTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        PackageCreateParams.Commit.AccessSchedule.AccessType.SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
@@ -186,6 +189,9 @@ internal class PackageServiceTest {
                                                     .build()
                                             )
                                             .build()
+                                    )
+                                    .accessType(
+                                        PackageCreateParams.Credit.AccessSchedule.AccessType.SPEND
                                     )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
@@ -445,6 +451,10 @@ internal class PackageServiceTest {
                             .accessAmount(
                                 PackageCreateParams.RecurringCommit.AccessAmount.builder()
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        PackageCreateParams.RecurringCommit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
@@ -564,6 +574,10 @@ internal class PackageServiceTest {
                             .accessAmount(
                                 PackageCreateParams.RecurringCredit.AccessAmount.builder()
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        PackageCreateParams.RecurringCredit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()

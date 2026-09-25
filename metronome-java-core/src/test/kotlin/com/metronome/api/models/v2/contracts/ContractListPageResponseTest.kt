@@ -59,6 +59,7 @@ internal class ContractListPageResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -419,6 +420,7 @@ internal class ContractListPageResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -791,6 +793,9 @@ internal class ContractListPageResponseTest {
                                     ContractV2.RecurringCommit.AccessAmount.builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractV2.RecurringCommit.AccessAmount.AccessType.SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -925,6 +930,9 @@ internal class ContractListPageResponseTest {
                                     ContractV2.RecurringCredit.AccessAmount.builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractV2.RecurringCredit.AccessAmount.AccessType.SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -1364,6 +1372,7 @@ internal class ContractListPageResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(ScheduleDuration.AccessType.SPEND)
                                     .creditType(
                                         CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1709,6 +1718,7 @@ internal class ContractListPageResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(ScheduleDuration.AccessType.SPEND)
                                     .creditType(
                                         CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2067,6 +2077,9 @@ internal class ContractListPageResponseTest {
                                 ContractV2.RecurringCommit.AccessAmount.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractV2.RecurringCommit.AccessAmount.AccessType.SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
@@ -2190,6 +2203,9 @@ internal class ContractListPageResponseTest {
                                 ContractV2.RecurringCredit.AccessAmount.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractV2.RecurringCredit.AccessAmount.AccessType.SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
@@ -2598,6 +2614,7 @@ internal class ContractListPageResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2958,6 +2975,7 @@ internal class ContractListPageResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -3330,6 +3348,9 @@ internal class ContractListPageResponseTest {
                                     ContractV2.RecurringCommit.AccessAmount.builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractV2.RecurringCommit.AccessAmount.AccessType.SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -3464,6 +3485,9 @@ internal class ContractListPageResponseTest {
                                     ContractV2.RecurringCredit.AccessAmount.builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractV2.RecurringCredit.AccessAmount.AccessType.SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )

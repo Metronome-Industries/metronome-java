@@ -81,6 +81,9 @@ internal class ContractServiceAsyncTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        ContractCreateParams.Commit.AccessSchedule.AccessType.SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
@@ -197,6 +200,9 @@ internal class ContractServiceAsyncTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .build()
+                                    )
+                                    .accessType(
+                                        ContractCreateParams.Credit.AccessSchedule.AccessType.SPEND
                                     )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
@@ -563,6 +569,10 @@ internal class ContractServiceAsyncTest {
                             .accessAmount(
                                 ContractCreateParams.RecurringCommit.AccessAmount.builder()
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractCreateParams.RecurringCommit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
@@ -687,6 +697,10 @@ internal class ContractServiceAsyncTest {
                             .accessAmount(
                                 ContractCreateParams.RecurringCredit.AccessAmount.builder()
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractCreateParams.RecurringCredit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
@@ -1181,6 +1195,9 @@ internal class ContractServiceAsyncTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        ContractAmendParams.Commit.AccessSchedule.AccessType.SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
@@ -1296,6 +1313,9 @@ internal class ContractServiceAsyncTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .build()
+                                    )
+                                    .accessType(
+                                        ContractAmendParams.Credit.AccessSchedule.AccessType.SPEND
                                     )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
@@ -1703,6 +1723,7 @@ internal class ContractServiceAsyncTest {
             contractServiceAsync.getNetBalance(
                 ContractGetNetBalanceParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .accessType(ContractGetNetBalanceParams.AccessType.SPEND)
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                     .addFilter(
                         BalanceFilter.builder()

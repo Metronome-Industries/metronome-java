@@ -135,6 +135,9 @@ internal class ContractServiceTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        ContractEditParams.AddCommit.AccessSchedule.AccessType.SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
@@ -294,6 +297,9 @@ internal class ContractServiceTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .build()
+                                    )
+                                    .accessType(
+                                        ContractEditParams.AddCredit.AccessSchedule.AccessType.SPEND
                                     )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
@@ -622,6 +628,11 @@ internal class ContractServiceTest {
                             .accessAmount(
                                 ContractEditParams.AddRecurringCommit.AccessAmount.builder()
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractEditParams.AddRecurringCommit.AccessAmount
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
@@ -746,6 +757,11 @@ internal class ContractServiceTest {
                             .accessAmount(
                                 ContractEditParams.AddRecurringCredit.AccessAmount.builder()
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractEditParams.AddRecurringCredit.AccessAmount
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()

@@ -113,6 +113,7 @@ internal class ProGuardCompatibilityTest {
                                                         )
                                                         .build()
                                                 )
+                                                .accessType(ScheduleDuration.AccessType.SPEND)
                                                 .creditType(
                                                     CreditTypeData.builder()
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -499,6 +500,7 @@ internal class ProGuardCompatibilityTest {
                                                         )
                                                         .build()
                                                 )
+                                                .accessType(ScheduleDuration.AccessType.SPEND)
                                                 .creditType(
                                                     CreditTypeData.builder()
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -860,6 +862,13 @@ internal class ProGuardCompatibilityTest {
                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                 )
                                                 .unitPrice(0.0)
+                                                .accessType(
+                                                    ContractCreateResponse.Data.Contract
+                                                        .RecurringCommit
+                                                        .AccessAmount
+                                                        .AccessType
+                                                        .SPEND
+                                                )
                                                 .quantity(0.0)
                                                 .build()
                                         )
@@ -1046,6 +1055,13 @@ internal class ProGuardCompatibilityTest {
                                                     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                                 )
                                                 .unitPrice(0.0)
+                                                .accessType(
+                                                    ContractCreateResponse.Data.Contract
+                                                        .RecurringCredit
+                                                        .AccessAmount
+                                                        .AccessType
+                                                        .SPEND
+                                                )
                                                 .quantity(0.0)
                                                 .build()
                                         )
@@ -1442,6 +1458,7 @@ internal class ProGuardCompatibilityTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ScheduleDuration.AccessType.SPEND)
                             .creditType(
                                 CreditTypeData.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

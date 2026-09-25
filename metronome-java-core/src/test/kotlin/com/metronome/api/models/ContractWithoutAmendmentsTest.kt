@@ -41,6 +41,7 @@ internal class ContractWithoutAmendmentsTest {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -329,6 +330,7 @@ internal class ContractWithoutAmendmentsTest {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -632,6 +634,11 @@ internal class ContractWithoutAmendmentsTest {
                             ContractWithoutAmendments.RecurringCommit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractWithoutAmendments.RecurringCommit.AccessAmount
+                                        .AccessType
+                                        .SPEND
+                                )
                                 .quantity(0.0)
                                 .build()
                         )
@@ -762,6 +769,11 @@ internal class ContractWithoutAmendmentsTest {
                             ContractWithoutAmendments.RecurringCredit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractWithoutAmendments.RecurringCredit.AccessAmount
+                                        .AccessType
+                                        .SPEND
+                                )
                                 .quantity(0.0)
                                 .build()
                         )
@@ -1025,6 +1037,7 @@ internal class ContractWithoutAmendmentsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ScheduleDuration.AccessType.SPEND)
                             .creditType(
                                 CreditTypeData.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1310,6 +1323,7 @@ internal class ContractWithoutAmendmentsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ScheduleDuration.AccessType.SPEND)
                             .creditType(
                                 CreditTypeData.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1609,6 +1623,10 @@ internal class ContractWithoutAmendmentsTest {
                         ContractWithoutAmendments.RecurringCommit.AccessAmount.builder()
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .unitPrice(0.0)
+                            .accessType(
+                                ContractWithoutAmendments.RecurringCommit.AccessAmount.AccessType
+                                    .SPEND
+                            )
                             .quantity(0.0)
                             .build()
                     )
@@ -1735,6 +1753,10 @@ internal class ContractWithoutAmendmentsTest {
                         ContractWithoutAmendments.RecurringCredit.AccessAmount.builder()
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .unitPrice(0.0)
+                            .accessType(
+                                ContractWithoutAmendments.RecurringCredit.AccessAmount.AccessType
+                                    .SPEND
+                            )
                             .quantity(0.0)
                             .build()
                     )
@@ -1999,6 +2021,7 @@ internal class ContractWithoutAmendmentsTest {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2287,6 +2310,7 @@ internal class ContractWithoutAmendmentsTest {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2590,6 +2614,11 @@ internal class ContractWithoutAmendmentsTest {
                             ContractWithoutAmendments.RecurringCommit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractWithoutAmendments.RecurringCommit.AccessAmount
+                                        .AccessType
+                                        .SPEND
+                                )
                                 .quantity(0.0)
                                 .build()
                         )
@@ -2720,6 +2749,11 @@ internal class ContractWithoutAmendmentsTest {
                             ContractWithoutAmendments.RecurringCredit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractWithoutAmendments.RecurringCredit.AccessAmount
+                                        .AccessType
+                                        .SPEND
+                                )
                                 .quantity(0.0)
                                 .build()
                         )

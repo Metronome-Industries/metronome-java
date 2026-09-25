@@ -87,6 +87,11 @@ internal class PackageRetrieveResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(
+                                            PackageRetrieveResponse.Data.Commit.AccessSchedule
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .build()
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -402,6 +407,11 @@ internal class PackageRetrieveResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(
+                                            PackageRetrieveResponse.Data.Credit.AccessSchedule
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .build()
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -598,6 +608,12 @@ internal class PackageRetrieveResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            PackageRetrieveResponse.Data.RecurringCommit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -755,6 +771,12 @@ internal class PackageRetrieveResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            PackageRetrieveResponse.Data.RecurringCredit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -1143,6 +1165,11 @@ internal class PackageRetrieveResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        PackageRetrieveResponse.Data.Commit.AccessSchedule
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .build()
                             )
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1432,6 +1459,11 @@ internal class PackageRetrieveResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        PackageRetrieveResponse.Data.Credit.AccessSchedule
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .build()
                             )
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1614,6 +1646,11 @@ internal class PackageRetrieveResponseTest {
                                 PackageRetrieveResponse.Data.RecurringCommit.AccessAmount.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        PackageRetrieveResponse.Data.RecurringCommit.AccessAmount
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
@@ -1756,6 +1793,11 @@ internal class PackageRetrieveResponseTest {
                                 PackageRetrieveResponse.Data.RecurringCredit.AccessAmount.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        PackageRetrieveResponse.Data.RecurringCredit.AccessAmount
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
@@ -2125,6 +2167,11 @@ internal class PackageRetrieveResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(
+                                            PackageRetrieveResponse.Data.Commit.AccessSchedule
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .build()
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2440,6 +2487,11 @@ internal class PackageRetrieveResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(
+                                            PackageRetrieveResponse.Data.Credit.AccessSchedule
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .build()
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2636,6 +2688,12 @@ internal class PackageRetrieveResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            PackageRetrieveResponse.Data.RecurringCommit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -2793,6 +2851,12 @@ internal class PackageRetrieveResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            PackageRetrieveResponse.Data.RecurringCredit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
