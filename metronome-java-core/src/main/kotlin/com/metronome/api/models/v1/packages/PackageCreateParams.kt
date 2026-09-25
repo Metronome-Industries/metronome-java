@@ -3452,6 +3452,7 @@ private constructor(
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val scheduleItems: JsonField<List<ScheduleItem>>,
+            private val accessType: JsonField<AccessType>,
             private val creditTypeId: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -3461,10 +3462,13 @@ private constructor(
                 @JsonProperty("schedule_items")
                 @ExcludeMissing
                 scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
+                @JsonProperty("access_type")
+                @ExcludeMissing
+                accessType: JsonField<AccessType> = JsonMissing.of(),
                 @JsonProperty("credit_type_id")
                 @ExcludeMissing
                 creditTypeId: JsonField<String> = JsonMissing.of(),
-            ) : this(scheduleItems, creditTypeId, mutableMapOf())
+            ) : this(scheduleItems, accessType, creditTypeId, mutableMapOf())
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -3472,6 +3476,15 @@ private constructor(
              *   value).
              */
             fun scheduleItems(): List<ScheduleItem> = scheduleItems.getRequired("schedule_items")
+
+            /**
+             * Determines how the balance is drawn down. `SPEND` deducts the dollar cost of usage.
+             * `QUANTITY` deducts the number of units used. Defaults to `SPEND` if omitted.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun accessType(): Optional<AccessType> = accessType.getOptional("access_type")
 
             /**
              * Defaults to USD (cents) if not passed
@@ -3490,6 +3503,16 @@ private constructor(
             @JsonProperty("schedule_items")
             @ExcludeMissing
             fun _scheduleItems(): JsonField<List<ScheduleItem>> = scheduleItems
+
+            /**
+             * Returns the raw JSON value of [accessType].
+             *
+             * Unlike [accessType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("access_type")
+            @ExcludeMissing
+            fun _accessType(): JsonField<AccessType> = accessType
 
             /**
              * Returns the raw JSON value of [creditTypeId].
@@ -3530,12 +3553,14 @@ private constructor(
             class Builder internal constructor() {
 
                 private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
+                private var accessType: JsonField<AccessType> = JsonMissing.of()
                 private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessSchedule: AccessSchedule) = apply {
                     scheduleItems = accessSchedule.scheduleItems.map { it.toMutableList() }
+                    accessType = accessSchedule.accessType
                     creditTypeId = accessSchedule.creditTypeId
                     additionalProperties = accessSchedule.additionalProperties.toMutableMap()
                 }
@@ -3564,6 +3589,24 @@ private constructor(
                         (scheduleItems ?: JsonField.of(mutableListOf())).also {
                             checkKnown("scheduleItems", it).add(scheduleItem)
                         }
+                }
+
+                /**
+                 * Determines how the balance is drawn down. `SPEND` deducts the dollar cost of
+                 * usage. `QUANTITY` deducts the number of units used. Defaults to `SPEND` if
+                 * omitted.
+                 */
+                fun accessType(accessType: AccessType) = accessType(JsonField.of(accessType))
+
+                /**
+                 * Sets [Builder.accessType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.accessType] with a well-typed [AccessType] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun accessType(accessType: JsonField<AccessType>) = apply {
+                    this.accessType = accessType
                 }
 
                 /** Defaults to USD (cents) if not passed */
@@ -3617,6 +3660,7 @@ private constructor(
                 fun build(): AccessSchedule =
                     AccessSchedule(
                         checkRequired("scheduleItems", scheduleItems).map { it.toImmutable() },
+                        accessType,
                         creditTypeId,
                         additionalProperties.toMutableMap(),
                     )
@@ -3640,6 +3684,7 @@ private constructor(
                 }
 
                 scheduleItems().forEach { it.validate() }
+                accessType().ifPresent { it.validate() }
                 creditTypeId()
                 validated = true
             }
@@ -3661,6 +3706,7 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (scheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (accessType.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (creditTypeId.asKnown().isPresent) 1 else 0)
 
             class ScheduleItem
@@ -4689,6 +4735,152 @@ private constructor(
                     "ScheduleItem{amount=$amount, duration=$duration, startingAtOffset=$startingAtOffset, additionalProperties=$additionalProperties}"
             }
 
+            /**
+             * Determines how the balance is drawn down. `SPEND` deducts the dollar cost of usage.
+             * `QUANTITY` deducts the number of units used. Defaults to `SPEND` if omitted.
+             */
+            class AccessType
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val SPEND = of("SPEND")
+
+                    @JvmField val QUANTITY = of("QUANTITY")
+
+                    @JvmStatic fun of(value: String) = AccessType(JsonField.of(value))
+                }
+
+                /** An enum containing [AccessType]'s known values. */
+                enum class Known {
+                    SPEND,
+                    QUANTITY,
+                }
+
+                /**
+                 * An enum containing [AccessType]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [AccessType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    SPEND,
+                    QUANTITY,
+                    /**
+                     * An enum member indicating that [AccessType] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        SPEND -> Value.SPEND
+                        QUANTITY -> Value.QUANTITY
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        SPEND -> Known.SPEND
+                        QUANTITY -> Known.QUANTITY
+                        else -> throw MetronomeInvalidDataException("Unknown AccessType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): AccessType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is AccessType && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
@@ -4696,18 +4888,19 @@ private constructor(
 
                 return other is AccessSchedule &&
                     scheduleItems == other.scheduleItems &&
+                    accessType == other.accessType &&
                     creditTypeId == other.creditTypeId &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(scheduleItems, creditTypeId, additionalProperties)
+                Objects.hash(scheduleItems, accessType, creditTypeId, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessSchedule{scheduleItems=$scheduleItems, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
+                "AccessSchedule{scheduleItems=$scheduleItems, accessType=$accessType, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
         }
 
         class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -6668,6 +6861,7 @@ private constructor(
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val scheduleItems: JsonField<List<ScheduleItem>>,
+            private val accessType: JsonField<AccessType>,
             private val creditTypeId: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -6677,10 +6871,13 @@ private constructor(
                 @JsonProperty("schedule_items")
                 @ExcludeMissing
                 scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
+                @JsonProperty("access_type")
+                @ExcludeMissing
+                accessType: JsonField<AccessType> = JsonMissing.of(),
                 @JsonProperty("credit_type_id")
                 @ExcludeMissing
                 creditTypeId: JsonField<String> = JsonMissing.of(),
-            ) : this(scheduleItems, creditTypeId, mutableMapOf())
+            ) : this(scheduleItems, accessType, creditTypeId, mutableMapOf())
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -6688,6 +6885,15 @@ private constructor(
              *   value).
              */
             fun scheduleItems(): List<ScheduleItem> = scheduleItems.getRequired("schedule_items")
+
+            /**
+             * Determines how the balance is drawn down. `SPEND` deducts the dollar cost of usage.
+             * `QUANTITY` deducts the number of units used. Defaults to `SPEND` if omitted.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun accessType(): Optional<AccessType> = accessType.getOptional("access_type")
 
             /**
              * Defaults to USD (cents) if not passed
@@ -6706,6 +6912,16 @@ private constructor(
             @JsonProperty("schedule_items")
             @ExcludeMissing
             fun _scheduleItems(): JsonField<List<ScheduleItem>> = scheduleItems
+
+            /**
+             * Returns the raw JSON value of [accessType].
+             *
+             * Unlike [accessType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("access_type")
+            @ExcludeMissing
+            fun _accessType(): JsonField<AccessType> = accessType
 
             /**
              * Returns the raw JSON value of [creditTypeId].
@@ -6746,12 +6962,14 @@ private constructor(
             class Builder internal constructor() {
 
                 private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
+                private var accessType: JsonField<AccessType> = JsonMissing.of()
                 private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessSchedule: AccessSchedule) = apply {
                     scheduleItems = accessSchedule.scheduleItems.map { it.toMutableList() }
+                    accessType = accessSchedule.accessType
                     creditTypeId = accessSchedule.creditTypeId
                     additionalProperties = accessSchedule.additionalProperties.toMutableMap()
                 }
@@ -6780,6 +6998,24 @@ private constructor(
                         (scheduleItems ?: JsonField.of(mutableListOf())).also {
                             checkKnown("scheduleItems", it).add(scheduleItem)
                         }
+                }
+
+                /**
+                 * Determines how the balance is drawn down. `SPEND` deducts the dollar cost of
+                 * usage. `QUANTITY` deducts the number of units used. Defaults to `SPEND` if
+                 * omitted.
+                 */
+                fun accessType(accessType: AccessType) = accessType(JsonField.of(accessType))
+
+                /**
+                 * Sets [Builder.accessType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.accessType] with a well-typed [AccessType] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun accessType(accessType: JsonField<AccessType>) = apply {
+                    this.accessType = accessType
                 }
 
                 /** Defaults to USD (cents) if not passed */
@@ -6833,6 +7069,7 @@ private constructor(
                 fun build(): AccessSchedule =
                     AccessSchedule(
                         checkRequired("scheduleItems", scheduleItems).map { it.toImmutable() },
+                        accessType,
                         creditTypeId,
                         additionalProperties.toMutableMap(),
                     )
@@ -6856,6 +7093,7 @@ private constructor(
                 }
 
                 scheduleItems().forEach { it.validate() }
+                accessType().ifPresent { it.validate() }
                 creditTypeId()
                 validated = true
             }
@@ -6877,6 +7115,7 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (scheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (accessType.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (creditTypeId.asKnown().isPresent) 1 else 0)
 
             class ScheduleItem
@@ -7905,6 +8144,152 @@ private constructor(
                     "ScheduleItem{amount=$amount, duration=$duration, startingAtOffset=$startingAtOffset, additionalProperties=$additionalProperties}"
             }
 
+            /**
+             * Determines how the balance is drawn down. `SPEND` deducts the dollar cost of usage.
+             * `QUANTITY` deducts the number of units used. Defaults to `SPEND` if omitted.
+             */
+            class AccessType
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val SPEND = of("SPEND")
+
+                    @JvmField val QUANTITY = of("QUANTITY")
+
+                    @JvmStatic fun of(value: String) = AccessType(JsonField.of(value))
+                }
+
+                /** An enum containing [AccessType]'s known values. */
+                enum class Known {
+                    SPEND,
+                    QUANTITY,
+                }
+
+                /**
+                 * An enum containing [AccessType]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [AccessType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    SPEND,
+                    QUANTITY,
+                    /**
+                     * An enum member indicating that [AccessType] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        SPEND -> Value.SPEND
+                        QUANTITY -> Value.QUANTITY
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        SPEND -> Known.SPEND
+                        QUANTITY -> Known.QUANTITY
+                        else -> throw MetronomeInvalidDataException("Unknown AccessType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): AccessType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is AccessType && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
@@ -7912,18 +8297,19 @@ private constructor(
 
                 return other is AccessSchedule &&
                     scheduleItems == other.scheduleItems &&
+                    accessType == other.accessType &&
                     creditTypeId == other.creditTypeId &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(scheduleItems, creditTypeId, additionalProperties)
+                Objects.hash(scheduleItems, accessType, creditTypeId, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessSchedule{scheduleItems=$scheduleItems, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
+                "AccessSchedule{scheduleItems=$scheduleItems, accessType=$accessType, creditTypeId=$creditTypeId, additionalProperties=$additionalProperties}"
         }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
@@ -13682,31 +14068,28 @@ private constructor(
         class AccessAmount
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            private val creditTypeId: JsonField<String>,
             private val unitPrice: JsonField<Double>,
+            private val accessType: JsonField<AccessType>,
+            private val creditTypeId: JsonField<String>,
             private val quantity: JsonField<Double>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("credit_type_id")
-                @ExcludeMissing
-                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("unit_price")
                 @ExcludeMissing
                 unitPrice: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("access_type")
+                @ExcludeMissing
+                accessType: JsonField<AccessType> = JsonMissing.of(),
+                @JsonProperty("credit_type_id")
+                @ExcludeMissing
+                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 quantity: JsonField<Double> = JsonMissing.of(),
-            ) : this(creditTypeId, unitPrice, quantity, mutableMapOf())
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+            ) : this(unitPrice, accessType, creditTypeId, quantity, mutableMapOf())
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -13714,6 +14097,23 @@ private constructor(
              *   value).
              */
             fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            /**
+             * Indicates how the balance of child commits is drawn down. `SPEND` deducts the dollar
+             * cost of usage. `QUANTITY` deducts the number of units used.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun accessType(): Optional<AccessType> = accessType.getOptional("access_type")
+
+            /**
+             * Defaults to USD (cents) if not passed
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun creditTypeId(): Optional<String> = creditTypeId.getOptional("credit_type_id")
 
             /**
              * This field is required unless a subscription is attached via `subscription_config`.
@@ -13724,16 +14124,6 @@ private constructor(
             fun quantity(): Optional<Double> = quantity.getOptional("quantity")
 
             /**
-             * Returns the raw JSON value of [creditTypeId].
-             *
-             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("credit_type_id")
-            @ExcludeMissing
-            fun _creditTypeId(): JsonField<String> = creditTypeId
-
-            /**
              * Returns the raw JSON value of [unitPrice].
              *
              * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected
@@ -13742,6 +14132,26 @@ private constructor(
             @JsonProperty("unit_price")
             @ExcludeMissing
             fun _unitPrice(): JsonField<Double> = unitPrice
+
+            /**
+             * Returns the raw JSON value of [accessType].
+             *
+             * Unlike [accessType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("access_type")
+            @ExcludeMissing
+            fun _accessType(): JsonField<AccessType> = accessType
+
+            /**
+             * Returns the raw JSON value of [creditTypeId].
+             *
+             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Returns the raw JSON value of [quantity].
@@ -13770,7 +14180,6 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```java
-                 * .creditTypeId()
                  * .unitPrice()
                  * ```
                  */
@@ -13780,30 +14189,19 @@ private constructor(
             /** A builder for [AccessAmount]. */
             class Builder internal constructor() {
 
-                private var creditTypeId: JsonField<String>? = null
                 private var unitPrice: JsonField<Double>? = null
+                private var accessType: JsonField<AccessType> = JsonMissing.of()
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var quantity: JsonField<Double> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessAmount: AccessAmount) = apply {
-                    creditTypeId = accessAmount.creditTypeId
                     unitPrice = accessAmount.unitPrice
+                    accessType = accessAmount.accessType
+                    creditTypeId = accessAmount.creditTypeId
                     quantity = accessAmount.quantity
                     additionalProperties = accessAmount.additionalProperties.toMutableMap()
-                }
-
-                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
-
-                /**
-                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
-                    this.creditTypeId = creditTypeId
                 }
 
                 fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
@@ -13816,6 +14214,37 @@ private constructor(
                  * yet supported value.
                  */
                 fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                /**
+                 * Indicates how the balance of child commits is drawn down. `SPEND` deducts the
+                 * dollar cost of usage. `QUANTITY` deducts the number of units used.
+                 */
+                fun accessType(accessType: AccessType) = accessType(JsonField.of(accessType))
+
+                /**
+                 * Sets [Builder.accessType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.accessType] with a well-typed [AccessType] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun accessType(accessType: JsonField<AccessType>) = apply {
+                    this.accessType = accessType
+                }
+
+                /** Defaults to USD (cents) if not passed */
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                /**
+                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 /**
                  * This field is required unless a subscription is attached via
@@ -13861,7 +14290,6 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```java
-                 * .creditTypeId()
                  * .unitPrice()
                  * ```
                  *
@@ -13869,8 +14297,9 @@ private constructor(
                  */
                 fun build(): AccessAmount =
                     AccessAmount(
-                        checkRequired("creditTypeId", creditTypeId),
                         checkRequired("unitPrice", unitPrice),
+                        accessType,
+                        creditTypeId,
                         quantity,
                         additionalProperties.toMutableMap(),
                     )
@@ -13893,8 +14322,9 @@ private constructor(
                     return@apply
                 }
 
-                creditTypeId()
                 unitPrice()
+                accessType().ifPresent { it.validate() }
+                creditTypeId()
                 quantity()
                 validated = true
             }
@@ -13915,9 +14345,156 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                (if (creditTypeId.asKnown().isPresent) 1 else 0) +
-                    (if (unitPrice.asKnown().isPresent) 1 else 0) +
+                (if (unitPrice.asKnown().isPresent) 1 else 0) +
+                    (accessType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (creditTypeId.asKnown().isPresent) 1 else 0) +
                     (if (quantity.asKnown().isPresent) 1 else 0)
+
+            /**
+             * Indicates how the balance of child commits is drawn down. `SPEND` deducts the dollar
+             * cost of usage. `QUANTITY` deducts the number of units used.
+             */
+            class AccessType
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val SPEND = of("SPEND")
+
+                    @JvmField val QUANTITY = of("QUANTITY")
+
+                    @JvmStatic fun of(value: String) = AccessType(JsonField.of(value))
+                }
+
+                /** An enum containing [AccessType]'s known values. */
+                enum class Known {
+                    SPEND,
+                    QUANTITY,
+                }
+
+                /**
+                 * An enum containing [AccessType]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [AccessType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    SPEND,
+                    QUANTITY,
+                    /**
+                     * An enum member indicating that [AccessType] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        SPEND -> Value.SPEND
+                        QUANTITY -> Value.QUANTITY
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        SPEND -> Known.SPEND
+                        QUANTITY -> Known.QUANTITY
+                        else -> throw MetronomeInvalidDataException("Unknown AccessType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): AccessType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is AccessType && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -13925,20 +14502,21 @@ private constructor(
                 }
 
                 return other is AccessAmount &&
-                    creditTypeId == other.creditTypeId &&
                     unitPrice == other.unitPrice &&
+                    accessType == other.accessType &&
+                    creditTypeId == other.creditTypeId &&
                     quantity == other.quantity &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(creditTypeId, unitPrice, quantity, additionalProperties)
+                Objects.hash(unitPrice, accessType, creditTypeId, quantity, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessAmount{creditTypeId=$creditTypeId, unitPrice=$unitPrice, quantity=$quantity, additionalProperties=$additionalProperties}"
+                "AccessAmount{unitPrice=$unitPrice, accessType=$accessType, creditTypeId=$creditTypeId, quantity=$quantity, additionalProperties=$additionalProperties}"
         }
 
         /**
@@ -18336,31 +18914,28 @@ private constructor(
         class AccessAmount
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            private val creditTypeId: JsonField<String>,
             private val unitPrice: JsonField<Double>,
+            private val accessType: JsonField<AccessType>,
+            private val creditTypeId: JsonField<String>,
             private val quantity: JsonField<Double>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("credit_type_id")
-                @ExcludeMissing
-                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("unit_price")
                 @ExcludeMissing
                 unitPrice: JsonField<Double> = JsonMissing.of(),
+                @JsonProperty("access_type")
+                @ExcludeMissing
+                accessType: JsonField<AccessType> = JsonMissing.of(),
+                @JsonProperty("credit_type_id")
+                @ExcludeMissing
+                creditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("quantity")
                 @ExcludeMissing
                 quantity: JsonField<Double> = JsonMissing.of(),
-            ) : this(creditTypeId, unitPrice, quantity, mutableMapOf())
-
-            /**
-             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun creditTypeId(): String = creditTypeId.getRequired("credit_type_id")
+            ) : this(unitPrice, accessType, creditTypeId, quantity, mutableMapOf())
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -18368,6 +18943,23 @@ private constructor(
              *   value).
              */
             fun unitPrice(): Double = unitPrice.getRequired("unit_price")
+
+            /**
+             * Indicates how the balance of child commits is drawn down. `SPEND` deducts the dollar
+             * cost of usage. `QUANTITY` deducts the number of units used.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun accessType(): Optional<AccessType> = accessType.getOptional("access_type")
+
+            /**
+             * Defaults to USD (cents) if not passed
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun creditTypeId(): Optional<String> = creditTypeId.getOptional("credit_type_id")
 
             /**
              * This field is required unless a subscription is attached via `subscription_config`.
@@ -18378,16 +18970,6 @@ private constructor(
             fun quantity(): Optional<Double> = quantity.getOptional("quantity")
 
             /**
-             * Returns the raw JSON value of [creditTypeId].
-             *
-             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("credit_type_id")
-            @ExcludeMissing
-            fun _creditTypeId(): JsonField<String> = creditTypeId
-
-            /**
              * Returns the raw JSON value of [unitPrice].
              *
              * Unlike [unitPrice], this method doesn't throw if the JSON field has an unexpected
@@ -18396,6 +18978,26 @@ private constructor(
             @JsonProperty("unit_price")
             @ExcludeMissing
             fun _unitPrice(): JsonField<Double> = unitPrice
+
+            /**
+             * Returns the raw JSON value of [accessType].
+             *
+             * Unlike [accessType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("access_type")
+            @ExcludeMissing
+            fun _accessType(): JsonField<AccessType> = accessType
+
+            /**
+             * Returns the raw JSON value of [creditTypeId].
+             *
+             * Unlike [creditTypeId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("credit_type_id")
+            @ExcludeMissing
+            fun _creditTypeId(): JsonField<String> = creditTypeId
 
             /**
              * Returns the raw JSON value of [quantity].
@@ -18424,7 +19026,6 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```java
-                 * .creditTypeId()
                  * .unitPrice()
                  * ```
                  */
@@ -18434,30 +19035,19 @@ private constructor(
             /** A builder for [AccessAmount]. */
             class Builder internal constructor() {
 
-                private var creditTypeId: JsonField<String>? = null
                 private var unitPrice: JsonField<Double>? = null
+                private var accessType: JsonField<AccessType> = JsonMissing.of()
+                private var creditTypeId: JsonField<String> = JsonMissing.of()
                 private var quantity: JsonField<Double> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(accessAmount: AccessAmount) = apply {
-                    creditTypeId = accessAmount.creditTypeId
                     unitPrice = accessAmount.unitPrice
+                    accessType = accessAmount.accessType
+                    creditTypeId = accessAmount.creditTypeId
                     quantity = accessAmount.quantity
                     additionalProperties = accessAmount.additionalProperties.toMutableMap()
-                }
-
-                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
-
-                /**
-                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
-                    this.creditTypeId = creditTypeId
                 }
 
                 fun unitPrice(unitPrice: Double) = unitPrice(JsonField.of(unitPrice))
@@ -18470,6 +19060,37 @@ private constructor(
                  * yet supported value.
                  */
                 fun unitPrice(unitPrice: JsonField<Double>) = apply { this.unitPrice = unitPrice }
+
+                /**
+                 * Indicates how the balance of child commits is drawn down. `SPEND` deducts the
+                 * dollar cost of usage. `QUANTITY` deducts the number of units used.
+                 */
+                fun accessType(accessType: AccessType) = accessType(JsonField.of(accessType))
+
+                /**
+                 * Sets [Builder.accessType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.accessType] with a well-typed [AccessType] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun accessType(accessType: JsonField<AccessType>) = apply {
+                    this.accessType = accessType
+                }
+
+                /** Defaults to USD (cents) if not passed */
+                fun creditTypeId(creditTypeId: String) = creditTypeId(JsonField.of(creditTypeId))
+
+                /**
+                 * Sets [Builder.creditTypeId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.creditTypeId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun creditTypeId(creditTypeId: JsonField<String>) = apply {
+                    this.creditTypeId = creditTypeId
+                }
 
                 /**
                  * This field is required unless a subscription is attached via
@@ -18515,7 +19136,6 @@ private constructor(
                  *
                  * The following fields are required:
                  * ```java
-                 * .creditTypeId()
                  * .unitPrice()
                  * ```
                  *
@@ -18523,8 +19143,9 @@ private constructor(
                  */
                 fun build(): AccessAmount =
                     AccessAmount(
-                        checkRequired("creditTypeId", creditTypeId),
                         checkRequired("unitPrice", unitPrice),
+                        accessType,
+                        creditTypeId,
                         quantity,
                         additionalProperties.toMutableMap(),
                     )
@@ -18547,8 +19168,9 @@ private constructor(
                     return@apply
                 }
 
-                creditTypeId()
                 unitPrice()
+                accessType().ifPresent { it.validate() }
+                creditTypeId()
                 quantity()
                 validated = true
             }
@@ -18569,9 +19191,156 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                (if (creditTypeId.asKnown().isPresent) 1 else 0) +
-                    (if (unitPrice.asKnown().isPresent) 1 else 0) +
+                (if (unitPrice.asKnown().isPresent) 1 else 0) +
+                    (accessType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (creditTypeId.asKnown().isPresent) 1 else 0) +
                     (if (quantity.asKnown().isPresent) 1 else 0)
+
+            /**
+             * Indicates how the balance of child commits is drawn down. `SPEND` deducts the dollar
+             * cost of usage. `QUANTITY` deducts the number of units used.
+             */
+            class AccessType
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val SPEND = of("SPEND")
+
+                    @JvmField val QUANTITY = of("QUANTITY")
+
+                    @JvmStatic fun of(value: String) = AccessType(JsonField.of(value))
+                }
+
+                /** An enum containing [AccessType]'s known values. */
+                enum class Known {
+                    SPEND,
+                    QUANTITY,
+                }
+
+                /**
+                 * An enum containing [AccessType]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [AccessType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    SPEND,
+                    QUANTITY,
+                    /**
+                     * An enum member indicating that [AccessType] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        SPEND -> Value.SPEND
+                        QUANTITY -> Value.QUANTITY
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        SPEND -> Known.SPEND
+                        QUANTITY -> Known.QUANTITY
+                        else -> throw MetronomeInvalidDataException("Unknown AccessType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): AccessType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is AccessType && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -18579,20 +19348,21 @@ private constructor(
                 }
 
                 return other is AccessAmount &&
-                    creditTypeId == other.creditTypeId &&
                     unitPrice == other.unitPrice &&
+                    accessType == other.accessType &&
+                    creditTypeId == other.creditTypeId &&
                     quantity == other.quantity &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(creditTypeId, unitPrice, quantity, additionalProperties)
+                Objects.hash(unitPrice, accessType, creditTypeId, quantity, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AccessAmount{creditTypeId=$creditTypeId, unitPrice=$unitPrice, quantity=$quantity, additionalProperties=$additionalProperties}"
+                "AccessAmount{unitPrice=$unitPrice, accessType=$accessType, creditTypeId=$creditTypeId, quantity=$quantity, additionalProperties=$additionalProperties}"
         }
 
         /**

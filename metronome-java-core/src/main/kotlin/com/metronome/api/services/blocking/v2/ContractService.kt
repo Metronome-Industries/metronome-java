@@ -14,8 +14,8 @@ import com.metronome.api.models.v2.contracts.ContractEditParams
 import com.metronome.api.models.v2.contracts.ContractEditResponse
 import com.metronome.api.models.v2.contracts.ContractGetEditHistoryParams
 import com.metronome.api.models.v2.contracts.ContractGetEditHistoryResponse
+import com.metronome.api.models.v2.contracts.ContractListPage
 import com.metronome.api.models.v2.contracts.ContractListParams
-import com.metronome.api.models.v2.contracts.ContractListResponse
 import com.metronome.api.models.v2.contracts.ContractRetrieveParams
 import com.metronome.api.models.v2.contracts.ContractRetrieveResponse
 import java.util.function.Consumer
@@ -61,7 +61,7 @@ interface ContractService {
     ): ContractRetrieveResponse
 
     /**
-     * For a given customer, lists all of their contracts in chronological order.
+     * For a given customer, lists a page of their contracts in chronological order.
      *
      * ### Use this endpoint to:
      * - Check if a customer is provisioned with any contract, and at which tier
@@ -73,14 +73,17 @@ interface ContractService {
      * Use the `starting_at`, `covering_date`, and `include_archived` parameters to filter the list
      * of returned contracts. For example, to list only currently active contracts, pass
      * `covering_date` equal to the current time.
+     *
+     * Results are limited to 20 contracts per page. When the response includes a non-null `cursor`,
+     * pass it back as the `cursor` parameter to fetch the next page.
      */
-    fun list(params: ContractListParams): ContractListResponse = list(params, RequestOptions.none())
+    fun list(params: ContractListParams): ContractListPage = list(params, RequestOptions.none())
 
     /** @see list */
     fun list(
         params: ContractListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ContractListResponse
+    ): ContractListPage
 
     /**
      * The ability to edit a contract helps you react quickly to the needs of your customers and
@@ -99,8 +102,8 @@ interface ContractService {
      * - When you edit a contract, any draft invoices update immediately to reflect that edit.
      *   Finalized invoices remain unchanged - you must void and regenerate them in the UI or API to
      *   reflect the edit.
-     * - Contract editing must be enabled to use this endpoint. Reach out to your Metronome
-     *   representative to learn more.
+     * - Contract editing must be enabled to use this endpoint. Contact us via the
+     *   [Metronome support portal](https://support.metronome.com/) to learn more.
      */
     fun edit(params: ContractEditParams): ContractEditResponse = edit(params, RequestOptions.none())
 
@@ -209,7 +212,7 @@ interface ContractService {
          * [ContractService.list].
          */
         @MustBeClosed
-        fun list(params: ContractListParams): HttpResponseFor<ContractListResponse> =
+        fun list(params: ContractListParams): HttpResponseFor<ContractListPage> =
             list(params, RequestOptions.none())
 
         /** @see list */
@@ -217,7 +220,7 @@ interface ContractService {
         fun list(
             params: ContractListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ContractListResponse>
+        ): HttpResponseFor<ContractListPage>
 
         /**
          * Returns a raw HTTP response for `post /v2/contracts/edit`, but is otherwise the same as

@@ -46,6 +46,7 @@ internal class CommitListPageResponseTest {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -197,6 +198,7 @@ internal class CommitListPageResponseTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ScheduleDuration.AccessType.SPEND)
                             .creditType(
                                 CreditTypeData.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -354,6 +356,7 @@ internal class CommitListPageResponseTest {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

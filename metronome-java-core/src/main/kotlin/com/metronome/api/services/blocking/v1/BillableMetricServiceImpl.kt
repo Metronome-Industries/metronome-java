@@ -24,6 +24,8 @@ import com.metronome.api.models.v1.billablemetrics.BillableMetricListPageRespons
 import com.metronome.api.models.v1.billablemetrics.BillableMetricListParams
 import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveParams
 import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveResponse
+import com.metronome.api.models.v1.billablemetrics.BillableMetricUpdateParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricUpdateResponse
 import java.util.function.Consumer
 
 /**
@@ -56,6 +58,13 @@ class BillableMetricServiceImpl internal constructor(private val clientOptions: 
     ): BillableMetricRetrieveResponse =
         // get /v1/billable-metrics/{billable_metric_id}
         withRawResponse().retrieve(params, requestOptions).parse()
+
+    override fun update(
+        params: BillableMetricUpdateParams,
+        requestOptions: RequestOptions,
+    ): BillableMetricUpdateResponse =
+        // put /v1/billable-metrics/{billable_metric_id}
+        withRawResponse().update(params, requestOptions).parse()
 
     override fun list(
         params: BillableMetricListParams,
@@ -131,6 +140,34 @@ class BillableMetricServiceImpl internal constructor(private val clientOptions: 
             return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val updateHandler: Handler<BillableMetricUpdateResponse> =
+            jsonHandler<BillableMetricUpdateResponse>(clientOptions.jsonMapper)
+
+        override fun update(
+            params: BillableMetricUpdateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BillableMetricUpdateResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "billable-metrics", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { updateHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

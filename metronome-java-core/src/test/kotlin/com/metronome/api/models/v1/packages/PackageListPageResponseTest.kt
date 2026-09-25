@@ -84,6 +84,10 @@ internal class PackageListPageResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(
+                                            PackageListResponse.Commit.AccessSchedule.AccessType
+                                                .SPEND
+                                        )
                                         .build()
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -380,6 +384,10 @@ internal class PackageListPageResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(
+                                            PackageListResponse.Credit.AccessSchedule.AccessType
+                                                .SPEND
+                                        )
                                         .build()
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -443,6 +451,23 @@ internal class PackageListPageResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                                .builder()
+                                                .unit(
+                                                    PrepaidBalanceThresholdConfiguration.Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -557,6 +582,11 @@ internal class PackageListPageResponseTest {
                                     PackageListResponse.RecurringCommit.AccessAmount.builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            PackageListResponse.RecurringCommit.AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -693,6 +723,11 @@ internal class PackageListPageResponseTest {
                                     PackageListResponse.RecurringCredit.AccessAmount.builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            PackageListResponse.RecurringCredit.AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -1045,6 +1080,9 @@ internal class PackageListPageResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        PackageListResponse.Commit.AccessSchedule.AccessType.SPEND
+                                    )
                                     .build()
                             )
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1317,6 +1355,9 @@ internal class PackageListPageResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        PackageListResponse.Credit.AccessSchedule.AccessType.SPEND
+                                    )
                                     .build()
                             )
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1370,6 +1411,22 @@ internal class PackageListPageResponseTest {
                                     .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
+                                    .duration(
+                                        PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                            .builder()
+                                            .unit(
+                                                PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                                    .Unit
+                                                    .DAYS
+                                            )
+                                            .value(0L)
+                                            .build()
+                                    )
+                                    .rateType(
+                                        PrepaidBalanceThresholdConfiguration.Commit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .rolloverFraction(0.0)
                                     .addSpecifier(
                                         CommitSpecifierInput.builder()
                                             .presentationGroupValues(
@@ -1480,6 +1537,10 @@ internal class PackageListPageResponseTest {
                                 PackageListResponse.RecurringCommit.AccessAmount.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        PackageListResponse.RecurringCommit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
@@ -1604,6 +1665,10 @@ internal class PackageListPageResponseTest {
                                 PackageListResponse.RecurringCredit.AccessAmount.builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        PackageListResponse.RecurringCredit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
@@ -1940,6 +2005,10 @@ internal class PackageListPageResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(
+                                            PackageListResponse.Commit.AccessSchedule.AccessType
+                                                .SPEND
+                                        )
                                         .build()
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2236,6 +2305,10 @@ internal class PackageListPageResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(
+                                            PackageListResponse.Credit.AccessSchedule.AccessType
+                                                .SPEND
+                                        )
                                         .build()
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2299,6 +2372,23 @@ internal class PackageListPageResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                                .builder()
+                                                .unit(
+                                                    PrepaidBalanceThresholdConfiguration.Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            PrepaidBalanceThresholdConfiguration.Commit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -2413,6 +2503,11 @@ internal class PackageListPageResponseTest {
                                     PackageListResponse.RecurringCommit.AccessAmount.builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            PackageListResponse.RecurringCommit.AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
@@ -2549,6 +2644,11 @@ internal class PackageListPageResponseTest {
                                     PackageListResponse.RecurringCredit.AccessAmount.builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            PackageListResponse.RecurringCredit.AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )

@@ -82,6 +82,9 @@ internal class PackageServiceTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        PackageCreateParams.Commit.AccessSchedule.AccessType.SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
@@ -186,6 +189,9 @@ internal class PackageServiceTest {
                                                     .build()
                                             )
                                             .build()
+                                    )
+                                    .accessType(
+                                        PackageCreateParams.Credit.AccessSchedule.AccessType.SPEND
                                     )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
@@ -320,6 +326,22 @@ internal class PackageServiceTest {
                                     .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
+                                    .duration(
+                                        PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                            .builder()
+                                            .unit(
+                                                PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                                    .Unit
+                                                    .DAYS
+                                            )
+                                            .value(0L)
+                                            .build()
+                                    )
+                                    .rateType(
+                                        PrepaidBalanceThresholdConfiguration.Commit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .rolloverFraction(0.0)
                                     .addSpecifier(
                                         CommitSpecifierInput.builder()
                                             .presentationGroupValues(
@@ -428,8 +450,12 @@ internal class PackageServiceTest {
                         PackageCreateParams.RecurringCommit.builder()
                             .accessAmount(
                                 PackageCreateParams.RecurringCommit.AccessAmount.builder()
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        PackageCreateParams.RecurringCommit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
+                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
                             )
@@ -547,8 +573,12 @@ internal class PackageServiceTest {
                         PackageCreateParams.RecurringCredit.builder()
                             .accessAmount(
                                 PackageCreateParams.RecurringCredit.AccessAmount.builder()
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        PackageCreateParams.RecurringCredit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
+                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
                             )

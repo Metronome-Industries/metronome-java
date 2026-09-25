@@ -81,6 +81,9 @@ internal class ContractServiceTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(
+                                        ContractCreateParams.Commit.AccessSchedule.AccessType.SPEND
+                                    )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
                             )
@@ -197,6 +200,9 @@ internal class ContractServiceTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .build()
+                                    )
+                                    .accessType(
+                                        ContractCreateParams.Credit.AccessSchedule.AccessType.SPEND
                                     )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
@@ -423,6 +429,22 @@ internal class ContractServiceTest {
                                     .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
+                                    .duration(
+                                        PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                            .builder()
+                                            .unit(
+                                                PrepaidBalanceThresholdConfiguration.Commit.Duration
+                                                    .Unit
+                                                    .DAYS
+                                            )
+                                            .value(0L)
+                                            .build()
+                                    )
+                                    .rateType(
+                                        PrepaidBalanceThresholdConfiguration.Commit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .rolloverFraction(0.0)
                                     .addSpecifier(
                                         CommitSpecifierInput.builder()
                                             .presentationGroupValues(
@@ -546,8 +568,12 @@ internal class ContractServiceTest {
                         ContractCreateParams.RecurringCommit.builder()
                             .accessAmount(
                                 ContractCreateParams.RecurringCommit.AccessAmount.builder()
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractCreateParams.RecurringCommit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
+                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
                             )
@@ -670,8 +696,12 @@ internal class ContractServiceTest {
                         ContractCreateParams.RecurringCredit.builder()
                             .accessAmount(
                                 ContractCreateParams.RecurringCredit.AccessAmount.builder()
-                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractCreateParams.RecurringCredit.AccessAmount.AccessType
+                                            .SPEND
+                                    )
+                                    .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .quantity(0.0)
                                     .build()
                             )
@@ -1088,19 +1118,14 @@ internal class ContractServiceTest {
                 .build()
         val contractService = client.v1().contracts()
 
-        val contracts =
+        val page =
             contractService.list(
                 ContractListParams.builder()
                     .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
-                    .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .includeArchived(true)
-                    .includeBalance(true)
-                    .includeLedgers(true)
-                    .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
 
-        contracts.validate()
+        page.response().validate()
     }
 
     @Test
@@ -1126,6 +1151,7 @@ internal class ContractServiceTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .uniquenessKey("x")
                 .build()
         )
     }
@@ -1162,6 +1188,9 @@ internal class ContractServiceTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .build()
+                                    )
+                                    .accessType(
+                                        ContractAmendParams.Commit.AccessSchedule.AccessType.SPEND
                                     )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
@@ -1278,6 +1307,9 @@ internal class ContractServiceTest {
                                                 OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                             )
                                             .build()
+                                    )
+                                    .accessType(
+                                        ContractAmendParams.Credit.AccessSchedule.AccessType.SPEND
                                     )
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .build()
@@ -1682,6 +1714,7 @@ internal class ContractServiceTest {
             contractService.getNetBalance(
                 ContractGetNetBalanceParams.builder()
                     .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .accessType(ContractGetNetBalanceParams.AccessType.SPEND)
                     .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                     .addFilter(
                         BalanceFilter.builder()

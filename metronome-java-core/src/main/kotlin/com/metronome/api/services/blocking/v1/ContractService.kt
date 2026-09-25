@@ -22,8 +22,8 @@ import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistory
 import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistoryResponse
 import com.metronome.api.models.v1.contracts.ContractListBalancesPage
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
+import com.metronome.api.models.v1.contracts.ContractListPage
 import com.metronome.api.models.v1.contracts.ContractListParams
-import com.metronome.api.models.v1.contracts.ContractListResponse
 import com.metronome.api.models.v1.contracts.ContractListSeatBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListSeatBalancesResponse
 import com.metronome.api.models.v1.contracts.ContractRetrieveParams
@@ -194,20 +194,23 @@ interface ContractService {
     ): ContractRetrieveResponse
 
     /**
-     * Retrieves all contracts for a specific customer, including pricing, terms, credits, and
+     * Retrieves a page of contracts for a specific customer, including pricing, terms, credits, and
      * commitments. Use this to view a customer's contract history and current agreements for
      * billing management. Returns contract details with optional ledgers and balance information.
+     *
+     * ### Usage guidelines:
+     * - Pagination: Results are limited to 20 contracts per page; use 'cursor' for more
      *
      * ⚠️ Note: This is the legacy v1 endpoint - new integrations should use the v2 endpoint for
      * enhanced features.
      */
-    fun list(params: ContractListParams): ContractListResponse = list(params, RequestOptions.none())
+    fun list(params: ContractListParams): ContractListPage = list(params, RequestOptions.none())
 
     /** @see list */
     fun list(
         params: ContractListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ContractListResponse
+    ): ContractListPage
 
     /**
      * Manually adjust the available balance on a commit or credit. This entry is appended to the
@@ -238,9 +241,9 @@ interface ContractService {
     /**
      * Amendments will be replaced by Contract editing. New clients should implement using the
      * `editContract` endpoint. Read more about the migration to contract editing
-     * [here](/guides/implement-metronome/migrate-amendments-to-edits/) and reach out to your
-     * Metronome representative for more details. Once contract editing is enabled, access to this
-     * endpoint will be removed.
+     * [here](/guides/implement-metronome/migrate-amendments-to-edits/) and contact us via the
+     * [Metronome support portal](https://support.metronome.com/) for more details. Once contract
+     * editing is enabled, access to this endpoint will be removed.
      */
     fun amend(params: ContractAmendParams): ContractAmendResponse =
         amend(params, RequestOptions.none())
@@ -607,7 +610,7 @@ interface ContractService {
          * [ContractService.list].
          */
         @MustBeClosed
-        fun list(params: ContractListParams): HttpResponseFor<ContractListResponse> =
+        fun list(params: ContractListParams): HttpResponseFor<ContractListPage> =
             list(params, RequestOptions.none())
 
         /** @see list */
@@ -615,7 +618,7 @@ interface ContractService {
         fun list(
             params: ContractListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ContractListResponse>
+        ): HttpResponseFor<ContractListPage>
 
         /**
          * Returns a raw HTTP response for `post /v1/contracts/addManualBalanceLedgerEntry`, but is

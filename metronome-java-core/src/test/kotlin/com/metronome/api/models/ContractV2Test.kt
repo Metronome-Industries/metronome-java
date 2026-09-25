@@ -42,6 +42,7 @@ internal class ContractV2Test {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -375,6 +376,7 @@ internal class ContractV2Test {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -582,6 +584,21 @@ internal class ContractV2Test {
                                 .priority(0.0)
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
+                                .duration(
+                                    PrepaidBalanceThresholdConfigurationV2.Commit.Duration.builder()
+                                        .unit(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.Duration
+                                                .Unit
+                                                .DAYS
+                                        )
+                                        .value(0L)
+                                        .build()
+                                )
+                                .rateType(
+                                    PrepaidBalanceThresholdConfigurationV2.Commit.RateType
+                                        .COMMIT_RATE
+                                )
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -706,9 +723,13 @@ internal class ContractV2Test {
                             ContractV2.RecurringCommit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractV2.RecurringCommit.AccessAmount.AccessType.SPEND
+                                )
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractV2.RecurringCommit.CommitDuration.builder()
                                 .value(0.0)
@@ -822,9 +843,13 @@ internal class ContractV2Test {
                             ContractV2.RecurringCredit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractV2.RecurringCredit.AccessAmount.AccessType.SPEND
+                                )
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractV2.RecurringCredit.CommitDuration.builder()
                                 .value(0.0)
@@ -1166,6 +1191,11 @@ internal class ContractV2Test {
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .name("name")
+                        .productCustomFields(
+                            ContractV2.Subscription.ProductCustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .seatConfig(
                             ContractV2.Subscription.SeatConfig.builder()
                                 .seatGroupKey("seat_group_key")
@@ -1200,6 +1230,7 @@ internal class ContractV2Test {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ScheduleDuration.AccessType.SPEND)
                             .creditType(
                                 CreditTypeData.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1535,6 +1566,7 @@ internal class ContractV2Test {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ScheduleDuration.AccessType.SPEND)
                             .creditType(
                                 CreditTypeData.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1748,6 +1780,19 @@ internal class ContractV2Test {
                             .priority(0.0)
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
+                            .duration(
+                                PrepaidBalanceThresholdConfigurationV2.Commit.Duration.builder()
+                                    .unit(
+                                        PrepaidBalanceThresholdConfigurationV2.Commit.Duration.Unit
+                                            .DAYS
+                                    )
+                                    .value(0L)
+                                    .build()
+                            )
+                            .rateType(
+                                PrepaidBalanceThresholdConfigurationV2.Commit.RateType.COMMIT_RATE
+                            )
+                            .rolloverFraction(0.0)
                             .addSpecifier(
                                 CommitSpecifierInput.builder()
                                     .presentationGroupValues(
@@ -1863,9 +1908,11 @@ internal class ContractV2Test {
                         ContractV2.RecurringCommit.AccessAmount.builder()
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .unitPrice(0.0)
+                            .accessType(ContractV2.RecurringCommit.AccessAmount.AccessType.SPEND)
                             .quantity(0.0)
                             .build()
                     )
+                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .commitDuration(
                         ContractV2.RecurringCommit.CommitDuration.builder()
                             .value(0.0)
@@ -1979,9 +2026,11 @@ internal class ContractV2Test {
                         ContractV2.RecurringCredit.AccessAmount.builder()
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .unitPrice(0.0)
+                            .accessType(ContractV2.RecurringCredit.AccessAmount.AccessType.SPEND)
                             .quantity(0.0)
                             .build()
                     )
+                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .commitDuration(
                         ContractV2.RecurringCredit.CommitDuration.builder()
                             .value(0.0)
@@ -2306,6 +2355,11 @@ internal class ContractV2Test {
                     .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .name("name")
+                    .productCustomFields(
+                        ContractV2.Subscription.ProductCustomFields.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .seatConfig(
                         ContractV2.Subscription.SeatConfig.builder()
                             .seatGroupKey("seat_group_key")
@@ -2348,6 +2402,7 @@ internal class ContractV2Test {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2681,6 +2736,7 @@ internal class ContractV2Test {
                                         )
                                         .build()
                                 )
+                                .accessType(ScheduleDuration.AccessType.SPEND)
                                 .creditType(
                                     CreditTypeData.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2888,6 +2944,21 @@ internal class ContractV2Test {
                                 .priority(0.0)
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
+                                .duration(
+                                    PrepaidBalanceThresholdConfigurationV2.Commit.Duration.builder()
+                                        .unit(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.Duration
+                                                .Unit
+                                                .DAYS
+                                        )
+                                        .value(0L)
+                                        .build()
+                                )
+                                .rateType(
+                                    PrepaidBalanceThresholdConfigurationV2.Commit.RateType
+                                        .COMMIT_RATE
+                                )
+                                .rolloverFraction(0.0)
                                 .addSpecifier(
                                     CommitSpecifierInput.builder()
                                         .presentationGroupValues(
@@ -3012,9 +3083,13 @@ internal class ContractV2Test {
                             ContractV2.RecurringCommit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractV2.RecurringCommit.AccessAmount.AccessType.SPEND
+                                )
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractV2.RecurringCommit.CommitDuration.builder()
                                 .value(0.0)
@@ -3128,9 +3203,13 @@ internal class ContractV2Test {
                             ContractV2.RecurringCredit.AccessAmount.builder()
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .unitPrice(0.0)
+                                .accessType(
+                                    ContractV2.RecurringCredit.AccessAmount.AccessType.SPEND
+                                )
                                 .quantity(0.0)
                                 .build()
                         )
+                        .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .commitDuration(
                             ContractV2.RecurringCredit.CommitDuration.builder()
                                 .value(0.0)
@@ -3472,6 +3551,11 @@ internal class ContractV2Test {
                         .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .name("name")
+                        .productCustomFields(
+                            ContractV2.Subscription.ProductCustomFields.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .seatConfig(
                             ContractV2.Subscription.SeatConfig.builder()
                                 .seatGroupKey("seat_group_key")

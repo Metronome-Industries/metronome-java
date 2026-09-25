@@ -228,7 +228,8 @@ private constructor(
     fun amendmentId(): Optional<String> = amendmentId.getOptional("amendment_id")
 
     /**
-     * This field's availability is dependent on your client's configuration.
+     * Indicates if the invoice has been or will be sent to the configured customer billing
+     * provider. Defaults to `billable`.
      *
      * This arbitrary value can be deserialized into a custom type using the `convert` method:
      * ```java
@@ -889,7 +890,10 @@ private constructor(
          */
         fun amendmentId(amendmentId: JsonField<String>) = apply { this.amendmentId = amendmentId }
 
-        /** This field's availability is dependent on your client's configuration. */
+        /**
+         * Indicates if the invoice has been or will be sent to the configured customer billing
+         * provider. Defaults to `billable`.
+         */
         fun billableStatus(billableStatus: JsonValue) = apply {
             this.billableStatus = billableStatus
         }
@@ -1465,6 +1469,7 @@ private constructor(
         private val professionalServiceCustomFields: JsonField<ProfessionalServiceCustomFields>,
         private val professionalServiceId: JsonField<String>,
         private val quantity: JsonField<Double>,
+        private val quantityConsumed: JsonField<Double>,
         private val resellerType: JsonField<ResellerType>,
         private val scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields>,
         private val scheduledChargeId: JsonField<String>,
@@ -1574,6 +1579,9 @@ private constructor(
             @JsonProperty("quantity")
             @ExcludeMissing
             quantity: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("quantity_consumed")
+            @ExcludeMissing
+            quantityConsumed: JsonField<Double> = JsonMissing.of(),
             @JsonProperty("reseller_type")
             @ExcludeMissing
             resellerType: JsonField<ResellerType> = JsonMissing.of(),
@@ -1634,6 +1642,7 @@ private constructor(
             professionalServiceCustomFields,
             professionalServiceId,
             quantity,
+            quantityConsumed,
             resellerType,
             scheduledChargeCustomFields,
             scheduledChargeId,
@@ -1694,7 +1703,8 @@ private constructor(
 
         /**
          * Details about the credit or commit that was applied to this line item. Only present on
-         * line items with product of `USAGE`, `SUBSCRIPTION` or `COMPOSITE` types.
+         * line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or `CPU_CONVERSION`
+         * types.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -1712,9 +1722,10 @@ private constructor(
             commitCustomFields.getOptional("commit_custom_fields")
 
         /**
-         * For line items with product of `USAGE`, `SUBSCRIPTION`, or `COMPOSITE` types, the ID of
-         * the credit or commit that was applied to this line item. For line items with product type
-         * of `FIXED`, the ID of the prepaid or postpaid commit that is being paid for.
+         * For line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or `CPU_CONVERSION`
+         * types, the ID of the credit or commit that was applied to this line item. For line items
+         * with product type of `FIXED`, the ID of the prepaid or postpaid commit that is being paid
+         * for.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -1941,6 +1952,15 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun quantity(): Optional<Double> = quantity.getOptional("quantity")
+
+        /**
+         * Present on applied commit line items for quantity-based commits. Represents the unit
+         * quantity deducted the commit.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun quantityConsumed(): Optional<Double> = quantityConsumed.getOptional("quantity_consumed")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -2319,6 +2339,16 @@ private constructor(
         @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Double> = quantity
 
         /**
+         * Returns the raw JSON value of [quantityConsumed].
+         *
+         * Unlike [quantityConsumed], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("quantity_consumed")
+        @ExcludeMissing
+        fun _quantityConsumed(): JsonField<Double> = quantityConsumed
+
+        /**
          * Returns the raw JSON value of [resellerType].
          *
          * Unlike [resellerType], this method doesn't throw if the JSON field has an unexpected
@@ -2471,6 +2501,7 @@ private constructor(
                 JsonMissing.of()
             private var professionalServiceId: JsonField<String> = JsonMissing.of()
             private var quantity: JsonField<Double> = JsonMissing.of()
+            private var quantityConsumed: JsonField<Double> = JsonMissing.of()
             private var resellerType: JsonField<ResellerType> = JsonMissing.of()
             private var scheduledChargeCustomFields: JsonField<ScheduledChargeCustomFields> =
                 JsonMissing.of()
@@ -2520,6 +2551,7 @@ private constructor(
                 professionalServiceCustomFields = lineItem.professionalServiceCustomFields
                 professionalServiceId = lineItem.professionalServiceId
                 quantity = lineItem.quantity
+                quantityConsumed = lineItem.quantityConsumed
                 resellerType = lineItem.resellerType
                 scheduledChargeCustomFields = lineItem.scheduledChargeCustomFields
                 scheduledChargeId = lineItem.scheduledChargeId
@@ -2603,7 +2635,8 @@ private constructor(
 
             /**
              * Details about the credit or commit that was applied to this line item. Only present
-             * on line items with product of `USAGE`, `SUBSCRIPTION` or `COMPOSITE` types.
+             * on line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or
+             * `CPU_CONVERSION` types.
              */
             fun appliedCommitOrCredit(appliedCommitOrCredit: AppliedCommitOrCredit) =
                 appliedCommitOrCredit(JsonField.of(appliedCommitOrCredit))
@@ -2636,10 +2669,10 @@ private constructor(
             }
 
             /**
-             * For line items with product of `USAGE`, `SUBSCRIPTION`, or `COMPOSITE` types, the ID
-             * of the credit or commit that was applied to this line item. For line items with
-             * product type of `FIXED`, the ID of the prepaid or postpaid commit that is being paid
-             * for.
+             * For line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or
+             * `CPU_CONVERSION` types, the ID of the credit or commit that was applied to this line
+             * item. For line items with product type of `FIXED`, the ID of the prepaid or postpaid
+             * commit that is being paid for.
              */
             fun commitId(commitId: String) = commitId(JsonField.of(commitId))
 
@@ -3057,6 +3090,24 @@ private constructor(
              */
             fun quantity(quantity: JsonField<Double>) = apply { this.quantity = quantity }
 
+            /**
+             * Present on applied commit line items for quantity-based commits. Represents the unit
+             * quantity deducted the commit.
+             */
+            fun quantityConsumed(quantityConsumed: Double) =
+                quantityConsumed(JsonField.of(quantityConsumed))
+
+            /**
+             * Sets [Builder.quantityConsumed] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantityConsumed] with a well-typed [Double] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun quantityConsumed(quantityConsumed: JsonField<Double>) = apply {
+                this.quantityConsumed = quantityConsumed
+            }
+
             fun resellerType(resellerType: ResellerType) = resellerType(JsonField.of(resellerType))
 
             /**
@@ -3268,6 +3319,7 @@ private constructor(
                     professionalServiceCustomFields,
                     professionalServiceId,
                     quantity,
+                    quantityConsumed,
                     resellerType,
                     scheduledChargeCustomFields,
                     scheduledChargeId,
@@ -3331,6 +3383,7 @@ private constructor(
             professionalServiceCustomFields().ifPresent { it.validate() }
             professionalServiceId()
             quantity()
+            quantityConsumed()
             resellerType().ifPresent { it.validate() }
             scheduledChargeCustomFields().ifPresent { it.validate() }
             scheduledChargeId()
@@ -3393,6 +3446,7 @@ private constructor(
                 (professionalServiceCustomFields.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (professionalServiceId.asKnown().isPresent) 1 else 0) +
                 (if (quantity.asKnown().isPresent) 1 else 0) +
+                (if (quantityConsumed.asKnown().isPresent) 1 else 0) +
                 (resellerType.asKnown().getOrNull()?.validity() ?: 0) +
                 (scheduledChargeCustomFields.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (scheduledChargeId.asKnown().isPresent) 1 else 0) +
@@ -3405,13 +3459,15 @@ private constructor(
 
         /**
          * Details about the credit or commit that was applied to this line item. Only present on
-         * line items with product of `USAGE`, `SUBSCRIPTION` or `COMPOSITE` types.
+         * line items with product of `USAGE`, `SUBSCRIPTION`, `COMPOSITE`, or `CPU_CONVERSION`
+         * types.
          */
         class AppliedCommitOrCredit
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val type: JsonField<Type>,
+            private val accessType: JsonField<AccessType>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -3419,7 +3475,10 @@ private constructor(
             private constructor(
                 @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-            ) : this(id, type, mutableMapOf())
+                @JsonProperty("access_type")
+                @ExcludeMissing
+                accessType: JsonField<AccessType> = JsonMissing.of(),
+            ) : this(id, type, accessType, mutableMapOf())
 
             /**
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -3436,6 +3495,15 @@ private constructor(
             fun type(): Type = type.getRequired("type")
 
             /**
+             * Indicates how the balance is drawn down. `SPEND` deducts the dollar cost of usage.
+             * `QUANTITY` deducts the number of units used.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun accessType(): Optional<AccessType> = accessType.getOptional("access_type")
+
+            /**
              * Returns the raw JSON value of [id].
              *
              * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -3448,6 +3516,16 @@ private constructor(
              * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+            /**
+             * Returns the raw JSON value of [accessType].
+             *
+             * Unlike [accessType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("access_type")
+            @ExcludeMissing
+            fun _accessType(): JsonField<AccessType> = accessType
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -3481,12 +3559,14 @@ private constructor(
 
                 private var id: JsonField<String>? = null
                 private var type: JsonField<Type>? = null
+                private var accessType: JsonField<AccessType> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(appliedCommitOrCredit: AppliedCommitOrCredit) = apply {
                     id = appliedCommitOrCredit.id
                     type = appliedCommitOrCredit.type
+                    accessType = appliedCommitOrCredit.accessType
                     additionalProperties = appliedCommitOrCredit.additionalProperties.toMutableMap()
                 }
 
@@ -3511,6 +3591,23 @@ private constructor(
                  * supported value.
                  */
                 fun type(type: JsonField<Type>) = apply { this.type = type }
+
+                /**
+                 * Indicates how the balance is drawn down. `SPEND` deducts the dollar cost of
+                 * usage. `QUANTITY` deducts the number of units used.
+                 */
+                fun accessType(accessType: AccessType) = accessType(JsonField.of(accessType))
+
+                /**
+                 * Sets [Builder.accessType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.accessType] with a well-typed [AccessType] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun accessType(accessType: JsonField<AccessType>) = apply {
+                    this.accessType = accessType
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -3551,6 +3648,7 @@ private constructor(
                     AppliedCommitOrCredit(
                         checkRequired("id", id),
                         checkRequired("type", type),
+                        accessType,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -3574,6 +3672,7 @@ private constructor(
 
                 id()
                 type().validate()
+                accessType().ifPresent { it.validate() }
                 validated = true
             }
 
@@ -3594,7 +3693,8 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (if (id.asKnown().isPresent) 1 else 0) +
-                    (type.asKnown().getOrNull()?.validity() ?: 0)
+                    (type.asKnown().getOrNull()?.validity() ?: 0) +
+                    (accessType.asKnown().getOrNull()?.validity() ?: 0)
 
             class Type @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
@@ -3742,6 +3842,152 @@ private constructor(
                 override fun toString() = value.toString()
             }
 
+            /**
+             * Indicates how the balance is drawn down. `SPEND` deducts the dollar cost of usage.
+             * `QUANTITY` deducts the number of units used.
+             */
+            class AccessType
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val SPEND = of("SPEND")
+
+                    @JvmField val QUANTITY = of("QUANTITY")
+
+                    @JvmStatic fun of(value: String) = AccessType(JsonField.of(value))
+                }
+
+                /** An enum containing [AccessType]'s known values. */
+                enum class Known {
+                    SPEND,
+                    QUANTITY,
+                }
+
+                /**
+                 * An enum containing [AccessType]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [AccessType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    SPEND,
+                    QUANTITY,
+                    /**
+                     * An enum member indicating that [AccessType] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        SPEND -> Value.SPEND
+                        QUANTITY -> Value.QUANTITY
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        SPEND -> Known.SPEND
+                        QUANTITY -> Known.QUANTITY
+                        else -> throw MetronomeInvalidDataException("Unknown AccessType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): AccessType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is AccessType && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
@@ -3750,15 +3996,18 @@ private constructor(
                 return other is AppliedCommitOrCredit &&
                     id == other.id &&
                     type == other.type &&
+                    accessType == other.accessType &&
                     additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy { Objects.hash(id, type, additionalProperties) }
+            private val hashCode: Int by lazy {
+                Objects.hash(id, type, accessType, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AppliedCommitOrCredit{id=$id, type=$type, additionalProperties=$additionalProperties}"
+                "AppliedCommitOrCredit{id=$id, type=$type, accessType=$accessType, additionalProperties=$additionalProperties}"
         }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
@@ -7006,6 +7255,7 @@ private constructor(
                 professionalServiceCustomFields == other.professionalServiceCustomFields &&
                 professionalServiceId == other.professionalServiceId &&
                 quantity == other.quantity &&
+                quantityConsumed == other.quantityConsumed &&
                 resellerType == other.resellerType &&
                 scheduledChargeCustomFields == other.scheduledChargeCustomFields &&
                 scheduledChargeId == other.scheduledChargeId &&
@@ -7054,6 +7304,7 @@ private constructor(
                 professionalServiceCustomFields,
                 professionalServiceId,
                 quantity,
+                quantityConsumed,
                 resellerType,
                 scheduledChargeCustomFields,
                 scheduledChargeId,
@@ -7070,7 +7321,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "LineItem{creditType=$creditType, name=$name, total=$total, type=$type, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitId=$commitId, commitNetsuiteItemId=$commitNetsuiteItemId, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitSegmentId=$commitSegmentId, commitType=$commitType, customFields=$customFields, discountCustomFields=$discountCustomFields, discountId=$discountId, endingBefore=$endingBefore, groupKey=$groupKey, groupValue=$groupValue, isProrated=$isProrated, listPrice=$listPrice, metadata=$metadata, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteItemId=$netsuiteItemId, origin=$origin, postpaidCommit=$postpaidCommit, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productCustomFields=$productCustomFields, productId=$productId, productTags=$productTags, productType=$productType, professionalServiceCustomFields=$professionalServiceCustomFields, professionalServiceId=$professionalServiceId, quantity=$quantity, resellerType=$resellerType, scheduledChargeCustomFields=$scheduledChargeCustomFields, scheduledChargeId=$scheduledChargeId, startingAt=$startingAt, subLineItems=$subLineItems, subscriptionCustomFields=$subscriptionCustomFields, subscriptionId=$subscriptionId, tier=$tier, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
+            "LineItem{creditType=$creditType, name=$name, total=$total, type=$type, appliedCommitOrCredit=$appliedCommitOrCredit, commitCustomFields=$commitCustomFields, commitId=$commitId, commitNetsuiteItemId=$commitNetsuiteItemId, commitNetsuiteSalesOrderId=$commitNetsuiteSalesOrderId, commitSegmentId=$commitSegmentId, commitType=$commitType, customFields=$customFields, discountCustomFields=$discountCustomFields, discountId=$discountId, endingBefore=$endingBefore, groupKey=$groupKey, groupValue=$groupValue, isProrated=$isProrated, listPrice=$listPrice, metadata=$metadata, netsuiteInvoiceBillingEnd=$netsuiteInvoiceBillingEnd, netsuiteInvoiceBillingStart=$netsuiteInvoiceBillingStart, netsuiteItemId=$netsuiteItemId, origin=$origin, postpaidCommit=$postpaidCommit, presentationGroupValues=$presentationGroupValues, pricingGroupValues=$pricingGroupValues, productCustomFields=$productCustomFields, productId=$productId, productTags=$productTags, productType=$productType, professionalServiceCustomFields=$professionalServiceCustomFields, professionalServiceId=$professionalServiceId, quantity=$quantity, quantityConsumed=$quantityConsumed, resellerType=$resellerType, scheduledChargeCustomFields=$scheduledChargeCustomFields, scheduledChargeId=$scheduledChargeId, startingAt=$startingAt, subLineItems=$subLineItems, subscriptionCustomFields=$subscriptionCustomFields, subscriptionId=$subscriptionId, tier=$tier, unitPrice=$unitPrice, additionalProperties=$additionalProperties}"
     }
 
     class ConstituentInvoice

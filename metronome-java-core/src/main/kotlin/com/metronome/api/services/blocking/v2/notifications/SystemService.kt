@@ -25,8 +25,8 @@ interface SystemService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): SystemService
 
     /**
-     * List available system lifecycle event types for notifications. These are read-only event
-     * types that can be used when creating offset notifications.
+     * List available system notification types. You can enable these notifications directly or use
+     * supported types to create offset notifications.
      */
     fun list(): SystemListResponse = list(SystemListParams.none())
 
