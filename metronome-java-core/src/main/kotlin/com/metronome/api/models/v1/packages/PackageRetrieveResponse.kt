@@ -10229,6 +10229,8 @@ private constructor(
 
                     @JvmField val CONTRACT_START = of("CONTRACT_START")
 
+                    @JvmField val CUSTOM_DATE = of("CUSTOM_DATE")
+
                     @JvmStatic fun of(value: String) = Day(JsonField.of(value))
                 }
 
@@ -10236,6 +10238,7 @@ private constructor(
                 enum class Known {
                     FIRST_OF_MONTH,
                     CONTRACT_START,
+                    CUSTOM_DATE,
                 }
 
                 /**
@@ -10250,6 +10253,7 @@ private constructor(
                 enum class Value {
                     FIRST_OF_MONTH,
                     CONTRACT_START,
+                    CUSTOM_DATE,
                     /**
                      * An enum member indicating that [Day] was instantiated with an unknown value.
                      */
@@ -10267,6 +10271,7 @@ private constructor(
                     when (this) {
                         FIRST_OF_MONTH -> Value.FIRST_OF_MONTH
                         CONTRACT_START -> Value.CONTRACT_START
+                        CUSTOM_DATE -> Value.CUSTOM_DATE
                         else -> Value._UNKNOWN
                     }
 
@@ -10283,6 +10288,7 @@ private constructor(
                     when (this) {
                         FIRST_OF_MONTH -> Known.FIRST_OF_MONTH
                         CONTRACT_START -> Known.CONTRACT_START
+                        CUSTOM_DATE -> Known.CUSTOM_DATE
                         else -> throw MetronomeInvalidDataException("Unknown Day: $value")
                     }
 
