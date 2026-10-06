@@ -81,6 +81,7 @@ internal class SubscriptionTest {
                         )
                         .build()
                 )
+                .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .customFields(
                     Subscription.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -172,6 +173,8 @@ internal class SubscriptionTest {
                     )
                     .build()
             )
+        assertThat(subscription.customCreditTypeId())
+            .contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(subscription.customFields())
             .contains(
                 Subscription.CustomFields.builder()
@@ -264,6 +267,7 @@ internal class SubscriptionTest {
                         )
                         .build()
                 )
+                .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .customFields(
                     Subscription.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

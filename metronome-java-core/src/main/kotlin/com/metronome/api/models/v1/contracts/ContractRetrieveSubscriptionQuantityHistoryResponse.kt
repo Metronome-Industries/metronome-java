@@ -173,6 +173,7 @@ private constructor(
     class Data
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val customCreditTypeId: JsonField<String>,
         private val fiatCreditTypeId: JsonField<String>,
         private val history: JsonField<List<History>>,
         private val subscriptionId: JsonField<String>,
@@ -181,6 +182,9 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("custom_credit_type_id")
+            @ExcludeMissing
+            customCreditTypeId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("fiat_credit_type_id")
             @ExcludeMissing
             fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
@@ -190,7 +194,17 @@ private constructor(
             @JsonProperty("subscription_id")
             @ExcludeMissing
             subscriptionId: JsonField<String> = JsonMissing.of(),
-        ) : this(fiatCreditTypeId, history, subscriptionId, mutableMapOf())
+        ) : this(customCreditTypeId, fiatCreditTypeId, history, subscriptionId, mutableMapOf())
+
+        /**
+         * The pricing unit for history prices when present. Otherwise prices use
+         * fiat_credit_type_id.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun customCreditTypeId(): Optional<String> =
+            customCreditTypeId.getOptional("custom_credit_type_id")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -210,6 +224,16 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun subscriptionId(): Optional<String> = subscriptionId.getOptional("subscription_id")
+
+        /**
+         * Returns the raw JSON value of [customCreditTypeId].
+         *
+         * Unlike [customCreditTypeId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("custom_credit_type_id")
+        @ExcludeMissing
+        fun _customCreditTypeId(): JsonField<String> = customCreditTypeId
 
         /**
          * Returns the raw JSON value of [fiatCreditTypeId].
@@ -259,6 +283,7 @@ private constructor(
         /** A builder for [Data]. */
         class Builder internal constructor() {
 
+            private var customCreditTypeId: JsonField<String> = JsonMissing.of()
             private var fiatCreditTypeId: JsonField<String> = JsonMissing.of()
             private var history: JsonField<MutableList<History>>? = null
             private var subscriptionId: JsonField<String> = JsonMissing.of()
@@ -266,10 +291,29 @@ private constructor(
 
             @JvmSynthetic
             internal fun from(data: Data) = apply {
+                customCreditTypeId = data.customCreditTypeId
                 fiatCreditTypeId = data.fiatCreditTypeId
                 history = data.history.map { it.toMutableList() }
                 subscriptionId = data.subscriptionId
                 additionalProperties = data.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * The pricing unit for history prices when present. Otherwise prices use
+             * fiat_credit_type_id.
+             */
+            fun customCreditTypeId(customCreditTypeId: String) =
+                customCreditTypeId(JsonField.of(customCreditTypeId))
+
+            /**
+             * Sets [Builder.customCreditTypeId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customCreditTypeId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customCreditTypeId(customCreditTypeId: JsonField<String>) = apply {
+                this.customCreditTypeId = customCreditTypeId
             }
 
             fun fiatCreditTypeId(fiatCreditTypeId: String) =
@@ -351,6 +395,7 @@ private constructor(
              */
             fun build(): Data =
                 Data(
+                    customCreditTypeId,
                     fiatCreditTypeId,
                     (history ?: JsonMissing.of()).map { it.toImmutable() },
                     subscriptionId,
@@ -374,6 +419,7 @@ private constructor(
                 return@apply
             }
 
+            customCreditTypeId()
             fiatCreditTypeId()
             history().ifPresent { it.forEach { it.validate() } }
             subscriptionId()
@@ -396,7 +442,8 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (fiatCreditTypeId.asKnown().isPresent) 1 else 0) +
+            (if (customCreditTypeId.asKnown().isPresent) 1 else 0) +
+                (if (fiatCreditTypeId.asKnown().isPresent) 1 else 0) +
                 (history.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (subscriptionId.asKnown().isPresent) 1 else 0)
 
@@ -897,6 +944,7 @@ private constructor(
             }
 
             return other is Data &&
+                customCreditTypeId == other.customCreditTypeId &&
                 fiatCreditTypeId == other.fiatCreditTypeId &&
                 history == other.history &&
                 subscriptionId == other.subscriptionId &&
@@ -904,13 +952,19 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(fiatCreditTypeId, history, subscriptionId, additionalProperties)
+            Objects.hash(
+                customCreditTypeId,
+                fiatCreditTypeId,
+                history,
+                subscriptionId,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{fiatCreditTypeId=$fiatCreditTypeId, history=$history, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
+            "Data{customCreditTypeId=$customCreditTypeId, fiatCreditTypeId=$fiatCreditTypeId, history=$history, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

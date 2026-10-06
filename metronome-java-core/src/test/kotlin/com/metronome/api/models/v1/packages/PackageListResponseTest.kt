@@ -871,6 +871,7 @@ internal class PackageListResponseTest {
                                 )
                                 .build()
                         )
+                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .customFields(
                             PackageListResponse.Subscription.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1719,6 +1720,7 @@ internal class PackageListResponseTest {
                             )
                             .build()
                     )
+                    .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .customFields(
                         PackageListResponse.Subscription.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -2604,6 +2606,7 @@ internal class PackageListResponseTest {
                                 )
                                 .build()
                         )
+                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .customFields(
                             PackageListResponse.Subscription.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))

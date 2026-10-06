@@ -1222,6 +1222,7 @@ internal class ContractEditResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .customFields(
                                             ContractEditResponse.Data.Edit.AddSubscription
                                                 .CustomFields
@@ -3243,6 +3244,7 @@ internal class ContractEditResponseTest {
                                             )
                                             .build()
                                     )
+                                    .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .customFields(
                                         ContractEditResponse.Data.Edit.AddSubscription.CustomFields
                                             .builder()
@@ -5296,6 +5298,7 @@ internal class ContractEditResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .customFields(
                                             ContractEditResponse.Data.Edit.AddSubscription
                                                 .CustomFields

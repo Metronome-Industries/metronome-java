@@ -25007,6 +25007,7 @@ private constructor(
             private val subscriptionRate: JsonField<SubscriptionRate>,
             private val id: JsonField<String>,
             private val billingCycleConfig: JsonField<BillingCycleConfig>,
+            private val customCreditTypeId: JsonField<String>,
             private val customFields: JsonField<CustomFields>,
             private val description: JsonField<String>,
             private val duration: JsonField<Duration>,
@@ -25034,6 +25035,9 @@ private constructor(
                 @JsonProperty("billing_cycle_config")
                 @ExcludeMissing
                 billingCycleConfig: JsonField<BillingCycleConfig> = JsonMissing.of(),
+                @JsonProperty("custom_credit_type_id")
+                @ExcludeMissing
+                customCreditTypeId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("custom_fields")
                 @ExcludeMissing
                 customFields: JsonField<CustomFields> = JsonMissing.of(),
@@ -25065,6 +25069,7 @@ private constructor(
                 subscriptionRate,
                 id,
                 billingCycleConfig,
+                customCreditTypeId,
                 customFields,
                 description,
                 duration,
@@ -25112,6 +25117,16 @@ private constructor(
              */
             fun billingCycleConfig(): Optional<BillingCycleConfig> =
                 billingCycleConfig.getOptional("billing_cycle_config")
+
+            /**
+             * If provided, the subscription's price will be in terms of this custom pricing unit
+             * instead of the fiat currency.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun customCreditTypeId(): Optional<String> =
+                customCreditTypeId.getOptional("custom_credit_type_id")
 
             /**
              * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
@@ -25228,6 +25243,16 @@ private constructor(
             @JsonProperty("billing_cycle_config")
             @ExcludeMissing
             fun _billingCycleConfig(): JsonField<BillingCycleConfig> = billingCycleConfig
+
+            /**
+             * Returns the raw JSON value of [customCreditTypeId].
+             *
+             * Unlike [customCreditTypeId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("custom_credit_type_id")
+            @ExcludeMissing
+            fun _customCreditTypeId(): JsonField<String> = customCreditTypeId
 
             /**
              * Returns the raw JSON value of [customFields].
@@ -25352,6 +25377,7 @@ private constructor(
                 private var subscriptionRate: JsonField<SubscriptionRate>? = null
                 private var id: JsonField<String> = JsonMissing.of()
                 private var billingCycleConfig: JsonField<BillingCycleConfig> = JsonMissing.of()
+                private var customCreditTypeId: JsonField<String> = JsonMissing.of()
                 private var customFields: JsonField<CustomFields> = JsonMissing.of()
                 private var description: JsonField<String> = JsonMissing.of()
                 private var duration: JsonField<Duration> = JsonMissing.of()
@@ -25371,6 +25397,7 @@ private constructor(
                     subscriptionRate = subscription.subscriptionRate
                     id = subscription.id
                     billingCycleConfig = subscription.billingCycleConfig
+                    customCreditTypeId = subscription.customCreditTypeId
                     customFields = subscription.customFields
                     description = subscription.description
                     duration = subscription.duration
@@ -25447,6 +25474,24 @@ private constructor(
                  */
                 fun billingCycleConfig(billingCycleConfig: JsonField<BillingCycleConfig>) = apply {
                     this.billingCycleConfig = billingCycleConfig
+                }
+
+                /**
+                 * If provided, the subscription's price will be in terms of this custom pricing
+                 * unit instead of the fiat currency.
+                 */
+                fun customCreditTypeId(customCreditTypeId: String) =
+                    customCreditTypeId(JsonField.of(customCreditTypeId))
+
+                /**
+                 * Sets [Builder.customCreditTypeId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.customCreditTypeId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun customCreditTypeId(customCreditTypeId: JsonField<String>) = apply {
+                    this.customCreditTypeId = customCreditTypeId
                 }
 
                 /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
@@ -25622,6 +25667,7 @@ private constructor(
                         checkRequired("subscriptionRate", subscriptionRate),
                         id,
                         billingCycleConfig,
+                        customCreditTypeId,
                         customFields,
                         description,
                         duration,
@@ -25657,6 +25703,7 @@ private constructor(
                 subscriptionRate().validate()
                 id()
                 billingCycleConfig().ifPresent { it.validate() }
+                customCreditTypeId()
                 customFields().ifPresent { it.validate() }
                 description()
                 duration().ifPresent { it.validate() }
@@ -25690,6 +25737,7 @@ private constructor(
                     (subscriptionRate.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (id.asKnown().isPresent) 1 else 0) +
                     (billingCycleConfig.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (customCreditTypeId.asKnown().isPresent) 1 else 0) +
                     (customFields.asKnown().getOrNull()?.validity() ?: 0) +
                     (if (description.asKnown().isPresent) 1 else 0) +
                     (duration.asKnown().getOrNull()?.validity() ?: 0) +
@@ -28781,6 +28829,7 @@ private constructor(
                     subscriptionRate == other.subscriptionRate &&
                     id == other.id &&
                     billingCycleConfig == other.billingCycleConfig &&
+                    customCreditTypeId == other.customCreditTypeId &&
                     customFields == other.customFields &&
                     description == other.description &&
                     duration == other.duration &&
@@ -28800,6 +28849,7 @@ private constructor(
                     subscriptionRate,
                     id,
                     billingCycleConfig,
+                    customCreditTypeId,
                     customFields,
                     description,
                     duration,
@@ -28816,7 +28866,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Subscription{collectionSchedule=$collectionSchedule, proration=$proration, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, duration=$duration, fiatCreditTypeId=$fiatCreditTypeId, initialQuantity=$initialQuantity, name=$name, quantityManagementMode=$quantityManagementMode, seatConfig=$seatConfig, startingAtOffset=$startingAtOffset, additionalProperties=$additionalProperties}"
+                "Subscription{collectionSchedule=$collectionSchedule, proration=$proration, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customCreditTypeId=$customCreditTypeId, customFields=$customFields, description=$description, duration=$duration, fiatCreditTypeId=$fiatCreditTypeId, initialQuantity=$initialQuantity, name=$name, quantityManagementMode=$quantityManagementMode, seatConfig=$seatConfig, startingAtOffset=$startingAtOffset, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

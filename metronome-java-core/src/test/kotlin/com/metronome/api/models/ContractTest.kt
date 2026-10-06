@@ -3062,6 +3062,7 @@ internal class ContractTest {
                                 )
                                 .build()
                         )
+                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .customFields(
                             Subscription.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -5958,6 +5959,7 @@ internal class ContractTest {
                             )
                             .build()
                     )
+                    .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .customFields(
                         Subscription.CustomFields.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -9031,6 +9033,7 @@ internal class ContractTest {
                                 )
                                 .build()
                         )
+                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .customFields(
                             Subscription.CustomFields.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
