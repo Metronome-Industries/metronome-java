@@ -90,7 +90,7 @@ interface OffsetServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<OffsetArchiveResponse>
 
-    /** Edit an existing offset lifecycle event notification configuration. */
+    /** Edit an existing offset notification, or enable/disable a system notification */
     fun edit(params: OffsetEditParams): CompletableFuture<OffsetEditResponse> =
         edit(params, RequestOptions.none())
 

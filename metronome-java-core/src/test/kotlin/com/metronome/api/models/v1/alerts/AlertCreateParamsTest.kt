@@ -14,6 +14,7 @@ internal class AlertCreateParamsTest {
             .alertType(AlertCreateParams.AlertType.SPEND_THRESHOLD_REACHED)
             .name("\$100 spend threshold reached")
             .threshold(10000.0)
+            .accessType(AlertCreateParams.AccessType.SPEND)
             .addAlertSpecifier(
                 AlertCreateParams.AlertSpecifier.builder()
                     .addCustomFieldFilter(
@@ -74,6 +75,7 @@ internal class AlertCreateParamsTest {
                 .alertType(AlertCreateParams.AlertType.SPEND_THRESHOLD_REACHED)
                 .name("\$100 spend threshold reached")
                 .threshold(10000.0)
+                .accessType(AlertCreateParams.AccessType.SPEND)
                 .addAlertSpecifier(
                     AlertCreateParams.AlertSpecifier.builder()
                         .addCustomFieldFilter(
@@ -136,6 +138,7 @@ internal class AlertCreateParamsTest {
         assertThat(body.alertType()).isEqualTo(AlertCreateParams.AlertType.SPEND_THRESHOLD_REACHED)
         assertThat(body.name()).isEqualTo("\$100 spend threshold reached")
         assertThat(body.threshold()).isEqualTo(10000.0)
+        assertThat(body.accessType()).contains(AlertCreateParams.AccessType.SPEND)
         assertThat(body.alertSpecifiers().getOrNull())
             .containsExactly(
                 AlertCreateParams.AlertSpecifier.builder()

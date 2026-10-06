@@ -11,6 +11,7 @@ on:
 jobs:
   publish:
     name: publish
+    if: github.repository == 'Metronome-Industries/metronome-java'
     runs-on: ubuntu-latest-8-cores
 
     steps:

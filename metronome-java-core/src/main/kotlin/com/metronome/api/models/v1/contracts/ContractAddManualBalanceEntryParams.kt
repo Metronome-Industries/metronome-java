@@ -112,6 +112,16 @@ private constructor(
     fun timestamp(): Optional<OffsetDateTime> = body.timestamp()
 
     /**
+     * Prevents the creation of duplicates. If a request to create a record is made with a
+     * previously used uniqueness key, a new record will not be created and the request will fail
+     * with a 409 error.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun uniquenessKey(): Optional<String> = body.uniquenessKey()
+
+    /**
      * Returns the raw JSON value of [id].
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -166,6 +176,13 @@ private constructor(
      * Unlike [timestamp], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _timestamp(): JsonField<OffsetDateTime> = body._timestamp()
+
+    /**
+     * Returns the raw JSON value of [uniquenessKey].
+     *
+     * Unlike [uniquenessKey], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _uniquenessKey(): JsonField<String> = body._uniquenessKey()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -329,6 +346,24 @@ private constructor(
          */
         fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply { body.timestamp(timestamp) }
 
+        /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         */
+        fun uniquenessKey(uniquenessKey: String) = apply { body.uniquenessKey(uniquenessKey) }
+
+        /**
+         * Sets [Builder.uniquenessKey] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.uniquenessKey] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+            body.uniquenessKey(uniquenessKey)
+        }
+
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
         }
@@ -487,6 +522,7 @@ private constructor(
         private val contractId: JsonField<String>,
         private val perGroupAmounts: JsonField<PerGroupAmounts>,
         private val timestamp: JsonField<OffsetDateTime>,
+        private val uniquenessKey: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -510,6 +546,9 @@ private constructor(
             @JsonProperty("timestamp")
             @ExcludeMissing
             timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("uniqueness_key")
+            @ExcludeMissing
+            uniquenessKey: JsonField<String> = JsonMissing.of(),
         ) : this(
             id,
             amount,
@@ -519,6 +558,7 @@ private constructor(
             contractId,
             perGroupAmounts,
             timestamp,
+            uniquenessKey,
             mutableMapOf(),
         )
 
@@ -590,6 +630,16 @@ private constructor(
         fun timestamp(): Optional<OffsetDateTime> = timestamp.getOptional("timestamp")
 
         /**
+         * Prevents the creation of duplicates. If a request to create a record is made with a
+         * previously used uniqueness key, a new record will not be created and the request will
+         * fail with a 409 error.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun uniquenessKey(): Optional<String> = uniquenessKey.getOptional("uniqueness_key")
+
+        /**
          * Returns the raw JSON value of [id].
          *
          * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -654,6 +704,16 @@ private constructor(
         @ExcludeMissing
         fun _timestamp(): JsonField<OffsetDateTime> = timestamp
 
+        /**
+         * Returns the raw JSON value of [uniquenessKey].
+         *
+         * Unlike [uniquenessKey], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("uniqueness_key")
+        @ExcludeMissing
+        fun _uniquenessKey(): JsonField<String> = uniquenessKey
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -694,6 +754,7 @@ private constructor(
             private var contractId: JsonField<String> = JsonMissing.of()
             private var perGroupAmounts: JsonField<PerGroupAmounts> = JsonMissing.of()
             private var timestamp: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var uniquenessKey: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -706,6 +767,7 @@ private constructor(
                 contractId = body.contractId
                 perGroupAmounts = body.perGroupAmounts
                 timestamp = body.timestamp
+                uniquenessKey = body.uniquenessKey
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -816,6 +878,24 @@ private constructor(
                 this.timestamp = timestamp
             }
 
+            /**
+             * Prevents the creation of duplicates. If a request to create a record is made with a
+             * previously used uniqueness key, a new record will not be created and the request will
+             * fail with a 409 error.
+             */
+            fun uniquenessKey(uniquenessKey: String) = uniquenessKey(JsonField.of(uniquenessKey))
+
+            /**
+             * Sets [Builder.uniquenessKey] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.uniquenessKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun uniquenessKey(uniquenessKey: JsonField<String>) = apply {
+                this.uniquenessKey = uniquenessKey
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -861,6 +941,7 @@ private constructor(
                     contractId,
                     perGroupAmounts,
                     timestamp,
+                    uniquenessKey,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -889,6 +970,7 @@ private constructor(
             contractId()
             perGroupAmounts().ifPresent { it.validate() }
             timestamp()
+            uniquenessKey()
             validated = true
         }
 
@@ -915,7 +997,8 @@ private constructor(
                 (if (segmentId.asKnown().isPresent) 1 else 0) +
                 (if (contractId.asKnown().isPresent) 1 else 0) +
                 (perGroupAmounts.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (timestamp.asKnown().isPresent) 1 else 0)
+                (if (timestamp.asKnown().isPresent) 1 else 0) +
+                (if (uniquenessKey.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -931,6 +1014,7 @@ private constructor(
                 contractId == other.contractId &&
                 perGroupAmounts == other.perGroupAmounts &&
                 timestamp == other.timestamp &&
+                uniquenessKey == other.uniquenessKey &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -944,6 +1028,7 @@ private constructor(
                 contractId,
                 perGroupAmounts,
                 timestamp,
+                uniquenessKey,
                 additionalProperties,
             )
         }
@@ -951,7 +1036,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{id=$id, amount=$amount, customerId=$customerId, reason=$reason, segmentId=$segmentId, contractId=$contractId, perGroupAmounts=$perGroupAmounts, timestamp=$timestamp, additionalProperties=$additionalProperties}"
+            "Body{id=$id, amount=$amount, customerId=$customerId, reason=$reason, segmentId=$segmentId, contractId=$contractId, perGroupAmounts=$perGroupAmounts, timestamp=$timestamp, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
     }
 
     /**

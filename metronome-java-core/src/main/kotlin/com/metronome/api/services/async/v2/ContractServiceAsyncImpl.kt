@@ -23,8 +23,9 @@ import com.metronome.api.models.v2.contracts.ContractEditParams
 import com.metronome.api.models.v2.contracts.ContractEditResponse
 import com.metronome.api.models.v2.contracts.ContractGetEditHistoryParams
 import com.metronome.api.models.v2.contracts.ContractGetEditHistoryResponse
+import com.metronome.api.models.v2.contracts.ContractListPageAsync
+import com.metronome.api.models.v2.contracts.ContractListPageResponse
 import com.metronome.api.models.v2.contracts.ContractListParams
-import com.metronome.api.models.v2.contracts.ContractListResponse
 import com.metronome.api.models.v2.contracts.ContractRetrieveParams
 import com.metronome.api.models.v2.contracts.ContractRetrieveResponse
 import java.util.concurrent.CompletableFuture
@@ -52,7 +53,7 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun list(
         params: ContractListParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ContractListResponse> =
+    ): CompletableFuture<ContractListPageAsync> =
         // post /v2/contracts/list
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
@@ -128,13 +129,13 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
                 }
         }
 
-        private val listHandler: Handler<ContractListResponse> =
-            jsonHandler<ContractListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ContractListPageResponse> =
+            jsonHandler<ContractListPageResponse>(clientOptions.jsonMapper)
 
         override fun list(
             params: ContractListParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ContractListResponse>> {
+        ): CompletableFuture<HttpResponseFor<ContractListPageAsync>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -154,6 +155,14 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
                                 }
+                            }
+                            .let {
+                                ContractListPageAsync.builder()
+                                    .service(ContractServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

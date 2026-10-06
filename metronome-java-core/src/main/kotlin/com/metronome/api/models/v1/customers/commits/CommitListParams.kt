@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.metronome.api.core.Enum
 import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
@@ -19,6 +20,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Retrieve all commit agreements for a customer, including both prepaid and postpaid commitments.
@@ -70,6 +72,15 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun customerId(): String = body.customerId()
+
+    /**
+     * Filters commits by how their balances are drawn down. `SPEND` deducts the dollar cost of
+     * usage. `QUANTITY` deducts the number of units used.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun accessType(): Optional<AccessType> = body.accessType()
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -155,6 +166,13 @@ private constructor(
      * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _customerId(): JsonField<String> = body._customerId()
+
+    /**
+     * Returns the raw JSON value of [accessType].
+     *
+     * Unlike [accessType], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _accessType(): JsonField<AccessType> = body._accessType()
 
     /**
      * Returns the raw JSON value of [commitId].
@@ -270,10 +288,10 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [customerId]
+         * - [accessType]
          * - [commitId]
          * - [coveringDate]
          * - [effectiveBefore]
-         * - [includeArchived]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -288,6 +306,21 @@ private constructor(
          * value.
          */
         fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
+        /**
+         * Filters commits by how their balances are drawn down. `SPEND` deducts the dollar cost of
+         * usage. `QUANTITY` deducts the number of units used.
+         */
+        fun accessType(accessType: AccessType) = apply { body.accessType(accessType) }
+
+        /**
+         * Sets [Builder.accessType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.accessType] with a well-typed [AccessType] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun accessType(accessType: JsonField<AccessType>) = apply { body.accessType(accessType) }
 
         fun commitId(commitId: String) = apply { body.commitId(commitId) }
 
@@ -573,6 +606,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val customerId: JsonField<String>,
+        private val accessType: JsonField<AccessType>,
         private val commitId: JsonField<String>,
         private val coveringDate: JsonField<OffsetDateTime>,
         private val effectiveBefore: JsonField<OffsetDateTime>,
@@ -591,6 +625,9 @@ private constructor(
             @JsonProperty("customer_id")
             @ExcludeMissing
             customerId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("access_type")
+            @ExcludeMissing
+            accessType: JsonField<AccessType> = JsonMissing.of(),
             @JsonProperty("commit_id")
             @ExcludeMissing
             commitId: JsonField<String> = JsonMissing.of(),
@@ -621,6 +658,7 @@ private constructor(
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         ) : this(
             customerId,
+            accessType,
             commitId,
             coveringDate,
             effectiveBefore,
@@ -639,6 +677,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * Filters commits by how their balances are drawn down. `SPEND` deducts the dollar cost of
+         * usage. `QUANTITY` deducts the number of units used.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun accessType(): Optional<AccessType> = accessType.getOptional("access_type")
 
         /**
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -729,6 +776,15 @@ private constructor(
         @JsonProperty("customer_id")
         @ExcludeMissing
         fun _customerId(): JsonField<String> = customerId
+
+        /**
+         * Returns the raw JSON value of [accessType].
+         *
+         * Unlike [accessType], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("access_type")
+        @ExcludeMissing
+        fun _accessType(): JsonField<AccessType> = accessType
 
         /**
          * Returns the raw JSON value of [commitId].
@@ -849,6 +905,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var customerId: JsonField<String>? = null
+            private var accessType: JsonField<AccessType> = JsonMissing.of()
             private var commitId: JsonField<String> = JsonMissing.of()
             private var coveringDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var effectiveBefore: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -864,6 +921,7 @@ private constructor(
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 customerId = body.customerId
+                accessType = body.accessType
                 commitId = body.commitId
                 coveringDate = body.coveringDate
                 effectiveBefore = body.effectiveBefore
@@ -887,6 +945,23 @@ private constructor(
              * supported value.
              */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
+            /**
+             * Filters commits by how their balances are drawn down. `SPEND` deducts the dollar cost
+             * of usage. `QUANTITY` deducts the number of units used.
+             */
+            fun accessType(accessType: AccessType) = accessType(JsonField.of(accessType))
+
+            /**
+             * Sets [Builder.accessType] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.accessType] with a well-typed [AccessType] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun accessType(accessType: JsonField<AccessType>) = apply {
+                this.accessType = accessType
+            }
 
             fun commitId(commitId: String) = commitId(JsonField.of(commitId))
 
@@ -1067,6 +1142,7 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("customerId", customerId),
+                    accessType,
                     commitId,
                     coveringDate,
                     effectiveBefore,
@@ -1098,6 +1174,7 @@ private constructor(
             }
 
             customerId()
+            accessType().ifPresent { it.validate() }
             commitId()
             coveringDate()
             effectiveBefore()
@@ -1128,6 +1205,7 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (customerId.asKnown().isPresent) 1 else 0) +
+                (accessType.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (commitId.asKnown().isPresent) 1 else 0) +
                 (if (coveringDate.asKnown().isPresent) 1 else 0) +
                 (if (effectiveBefore.asKnown().isPresent) 1 else 0) +
@@ -1146,6 +1224,7 @@ private constructor(
 
             return other is Body &&
                 customerId == other.customerId &&
+                accessType == other.accessType &&
                 commitId == other.commitId &&
                 coveringDate == other.coveringDate &&
                 effectiveBefore == other.effectiveBefore &&
@@ -1162,6 +1241,7 @@ private constructor(
         private val hashCode: Int by lazy {
             Objects.hash(
                 customerId,
+                accessType,
                 commitId,
                 coveringDate,
                 effectiveBefore,
@@ -1179,7 +1259,149 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{customerId=$customerId, commitId=$commitId, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeBalance=$includeBalance, includeContractCommits=$includeContractCommits, includeLedgers=$includeLedgers, limit=$limit, nextPage=$nextPage, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, accessType=$accessType, commitId=$commitId, coveringDate=$coveringDate, effectiveBefore=$effectiveBefore, includeArchived=$includeArchived, includeBalance=$includeBalance, includeContractCommits=$includeContractCommits, includeLedgers=$includeLedgers, limit=$limit, nextPage=$nextPage, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * Filters commits by how their balances are drawn down. `SPEND` deducts the dollar cost of
+     * usage. `QUANTITY` deducts the number of units used.
+     */
+    class AccessType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val SPEND = of("SPEND")
+
+            @JvmField val QUANTITY = of("QUANTITY")
+
+            @JvmStatic fun of(value: String) = AccessType(JsonField.of(value))
+        }
+
+        /** An enum containing [AccessType]'s known values. */
+        enum class Known {
+            SPEND,
+            QUANTITY,
+        }
+
+        /**
+         * An enum containing [AccessType]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [AccessType] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            SPEND,
+            QUANTITY,
+            /**
+             * An enum member indicating that [AccessType] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                SPEND -> Value.SPEND
+                QUANTITY -> Value.QUANTITY
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                SPEND -> Known.SPEND
+                QUANTITY -> Known.QUANTITY
+                else -> throw MetronomeInvalidDataException("Unknown AccessType: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws MetronomeInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow {
+                MetronomeInvalidDataException("Value is not a String")
+            }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): AccessType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is AccessType && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
     }
 
     override fun equals(other: Any?): Boolean {

@@ -31,6 +31,7 @@ internal class ContractAmendParamsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ContractAmendParams.Commit.AccessSchedule.AccessType.SPEND)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
@@ -133,6 +134,7 @@ internal class ContractAmendParamsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ContractAmendParams.Credit.AccessSchedule.AccessType.SPEND)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
@@ -418,6 +420,9 @@ internal class ContractAmendParamsTest {
                                         )
                                         .build()
                                 )
+                                .accessType(
+                                    ContractAmendParams.Commit.AccessSchedule.AccessType.SPEND
+                                )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
                         )
@@ -530,6 +535,9 @@ internal class ContractAmendParamsTest {
                                             OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                                         )
                                         .build()
+                                )
+                                .accessType(
+                                    ContractAmendParams.Credit.AccessSchedule.AccessType.SPEND
                                 )
                                 .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .build()
@@ -821,6 +829,7 @@ internal class ContractAmendParamsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ContractAmendParams.Commit.AccessSchedule.AccessType.SPEND)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )
@@ -924,6 +933,7 @@ internal class ContractAmendParamsTest {
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .build()
                             )
+                            .accessType(ContractAmendParams.Credit.AccessSchedule.AccessType.SPEND)
                             .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .build()
                     )

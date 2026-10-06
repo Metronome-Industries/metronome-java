@@ -23,6 +23,7 @@ internal class CustomerAlertTest {
                         .threshold(0.0)
                         .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .accessType(CustomerAlert.Alert.AccessType.SPEND)
                         .addAlertSpecifier(
                             CustomerAlert.Alert.AlertSpecifier.builder()
                                 .addCustomFieldFilter(
@@ -105,6 +106,7 @@ internal class CustomerAlertTest {
                     .threshold(0.0)
                     .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .accessType(CustomerAlert.Alert.AccessType.SPEND)
                     .addAlertSpecifier(
                         CustomerAlert.Alert.AlertSpecifier.builder()
                             .addCustomFieldFilter(
@@ -186,6 +188,7 @@ internal class CustomerAlertTest {
                         .threshold(0.0)
                         .type(CustomerAlert.Alert.Type.LOW_CREDIT_BALANCE_REACHED)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .accessType(CustomerAlert.Alert.AccessType.SPEND)
                         .addAlertSpecifier(
                             CustomerAlert.Alert.AlertSpecifier.builder()
                                 .addCustomFieldFilter(

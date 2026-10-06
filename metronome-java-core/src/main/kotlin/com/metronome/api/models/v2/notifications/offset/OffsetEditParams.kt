@@ -31,7 +31,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Edit an existing offset lifecycle event notification configuration. */
+/** Edit an existing offset notification, or enable/disable a system notification */
 class OffsetEditParams
 private constructor(
     private val body: Body,

@@ -37,6 +37,7 @@ internal class CommitServiceTest {
                                     .startingAt(OffsetDateTime.parse("2020-01-01T00:00:00.000Z"))
                                     .build()
                             )
+                            .accessType(CommitCreateParams.AccessSchedule.AccessType.SPEND)
                             .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                             .build()
                     )

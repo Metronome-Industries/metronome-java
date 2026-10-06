@@ -14,6 +14,8 @@ import com.metronome.api.models.v1.billablemetrics.BillableMetricListPageAsync
 import com.metronome.api.models.v1.billablemetrics.BillableMetricListParams
 import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveParams
 import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveResponse
+import com.metronome.api.models.v1.billablemetrics.BillableMetricUpdateParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricUpdateResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -90,6 +92,33 @@ interface BillableMetricServiceAsync {
         params: BillableMetricRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BillableMetricRetrieveResponse>
+
+    /**
+     * Updates only the display name of an existing billable metric. Use this to correct mistakes or
+     * apply standardized naming conventions across all billable metrics. Returns the billable
+     * metric ID to confirm the update.
+     *
+     * Important: Only the name can be modified via this endpoint; configurations cannot be changed
+     * after creation.
+     *
+     * #### Example workflow:
+     * If you need to make changes to a streaming billable metric, for example, Metronome supports
+     * easily rolling out these changes using a simple workflow:
+     * 1. Duplicate the billable metric
+     * 2. Make required changes
+     * 3. Save the metric
+     * 4. Navigate to the product you have associated with the incorrect metric
+     * 5. Schedule the product to reference the newly created metric on the appropriate date
+     */
+    fun update(
+        params: BillableMetricUpdateParams
+    ): CompletableFuture<BillableMetricUpdateResponse> = update(params, RequestOptions.none())
+
+    /** @see update */
+    fun update(
+        params: BillableMetricUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BillableMetricUpdateResponse>
 
     /**
      * Retrieves all billable metrics with their complete configurations. Use this for programmatic
@@ -190,6 +219,21 @@ interface BillableMetricServiceAsync {
             params: BillableMetricRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BillableMetricRetrieveResponse>>
+
+        /**
+         * Returns a raw HTTP response for `put /v1/billable-metrics/{billable_metric_id}`, but is
+         * otherwise the same as [BillableMetricServiceAsync.update].
+         */
+        fun update(
+            params: BillableMetricUpdateParams
+        ): CompletableFuture<HttpResponseFor<BillableMetricUpdateResponse>> =
+            update(params, RequestOptions.none())
+
+        /** @see update */
+        fun update(
+            params: BillableMetricUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BillableMetricUpdateResponse>>
 
         /**
          * Returns a raw HTTP response for `get /v1/billable-metrics`, but is otherwise the same as

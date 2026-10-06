@@ -13,6 +13,7 @@ internal class ContractListBalancesParamsTest {
         ContractListBalancesParams.builder()
             .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
             .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+            .accessType(ContractListBalancesParams.AccessType.SPEND)
             .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .excludeZeroBalances(true)
@@ -32,6 +33,7 @@ internal class ContractListBalancesParamsTest {
             ContractListBalancesParams.builder()
                 .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
                 .id("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+                .accessType(ContractListBalancesParams.AccessType.SPEND)
                 .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .effectiveBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .excludeZeroBalances(true)
@@ -48,6 +50,7 @@ internal class ContractListBalancesParamsTest {
 
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
         assertThat(body.id()).contains("6162d87b-e5db-4a33-b7f2-76ce6ead4e85")
+        assertThat(body.accessType()).contains(ContractListBalancesParams.AccessType.SPEND)
         assertThat(body.coveringDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.effectiveBefore())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

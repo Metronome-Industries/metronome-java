@@ -21,9 +21,12 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * Retrieves all contracts for a specific customer, including pricing, terms, credits, and
+ * Retrieves a page of contracts for a specific customer, including pricing, terms, credits, and
  * commitments. Use this to view a customer's contract history and current agreements for billing
  * management. Returns contract details with optional ledgers and balance information.
+ *
+ * ### Usage guidelines:
+ * - Pagination: Results are limited to 20 contracts per page; use 'cursor' for more
  *
  * ⚠️ Note: This is the legacy v1 endpoint - new integrations should use the v2 endpoint for
  * enhanced features.
@@ -51,6 +54,14 @@ private constructor(
     fun coveringDate(): Optional<OffsetDateTime> = body.coveringDate()
 
     /**
+     * Cursor from a previous response to fetch the next page of contracts.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun cursor(): Optional<String> = body.cursor()
+
+    /**
      * Include archived contracts in the response
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -76,8 +87,16 @@ private constructor(
     fun includeLedgers(): Optional<Boolean> = body.includeLedgers()
 
     /**
+     * Max number of contracts to return per page. Range: 1-20. Default: 20.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun limit(): Optional<Long> = body.limit()
+
+    /**
      * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
-     * effective_at is on or after the provided date. This cannot be provided if the covering_date
+     * starting_at is on or after the provided date. This cannot be provided if the covering_date
      * filter is provided.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -100,6 +119,13 @@ private constructor(
     fun _coveringDate(): JsonField<OffsetDateTime> = body._coveringDate()
 
     /**
+     * Returns the raw JSON value of [cursor].
+     *
+     * Unlike [cursor], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _cursor(): JsonField<String> = body._cursor()
+
+    /**
      * Returns the raw JSON value of [includeArchived].
      *
      * Unlike [includeArchived], this method doesn't throw if the JSON field has an unexpected type.
@@ -119,6 +145,13 @@ private constructor(
      * Unlike [includeLedgers], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _includeLedgers(): JsonField<Boolean> = body._includeLedgers()
+
+    /**
+     * Returns the raw JSON value of [limit].
+     *
+     * Unlike [limit], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _limit(): JsonField<Long> = body._limit()
 
     /**
      * Returns the raw JSON value of [startingAt].
@@ -171,9 +204,9 @@ private constructor(
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [customerId]
          * - [coveringDate]
+         * - [cursor]
          * - [includeArchived]
          * - [includeBalance]
-         * - [includeLedgers]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -206,6 +239,17 @@ private constructor(
         fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
             body.coveringDate(coveringDate)
         }
+
+        /** Cursor from a previous response to fetch the next page of contracts. */
+        fun cursor(cursor: String) = apply { body.cursor(cursor) }
+
+        /**
+         * Sets [Builder.cursor] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cursor] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun cursor(cursor: JsonField<String>) = apply { body.cursor(cursor) }
 
         /** Include archived contracts in the response */
         fun includeArchived(includeArchived: Boolean) = apply {
@@ -257,9 +301,20 @@ private constructor(
             body.includeLedgers(includeLedgers)
         }
 
+        /** Max number of contracts to return per page. Range: 1-20. Default: 20. */
+        fun limit(limit: Long) = apply { body.limit(limit) }
+
+        /**
+         * Sets [Builder.limit] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.limit] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun limit(limit: JsonField<Long>) = apply { body.limit(limit) }
+
         /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
-         * effective_at is on or after the provided date. This cannot be provided if the
+         * starting_at is on or after the provided date. This cannot be provided if the
          * covering_date filter is provided.
          */
         fun startingAt(startingAt: OffsetDateTime) = apply { body.startingAt(startingAt) }
@@ -423,9 +478,11 @@ private constructor(
     private constructor(
         private val customerId: JsonField<String>,
         private val coveringDate: JsonField<OffsetDateTime>,
+        private val cursor: JsonField<String>,
         private val includeArchived: JsonField<Boolean>,
         private val includeBalance: JsonField<Boolean>,
         private val includeLedgers: JsonField<Boolean>,
+        private val limit: JsonField<Long>,
         private val startingAt: JsonField<OffsetDateTime>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -438,6 +495,7 @@ private constructor(
             @JsonProperty("covering_date")
             @ExcludeMissing
             coveringDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("cursor") @ExcludeMissing cursor: JsonField<String> = JsonMissing.of(),
             @JsonProperty("include_archived")
             @ExcludeMissing
             includeArchived: JsonField<Boolean> = JsonMissing.of(),
@@ -447,15 +505,18 @@ private constructor(
             @JsonProperty("include_ledgers")
             @ExcludeMissing
             includeLedgers: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("limit") @ExcludeMissing limit: JsonField<Long> = JsonMissing.of(),
             @JsonProperty("starting_at")
             @ExcludeMissing
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         ) : this(
             customerId,
             coveringDate,
+            cursor,
             includeArchived,
             includeBalance,
             includeLedgers,
+            limit,
             startingAt,
             mutableMapOf(),
         )
@@ -475,6 +536,14 @@ private constructor(
          *   the server responded with an unexpected value).
          */
         fun coveringDate(): Optional<OffsetDateTime> = coveringDate.getOptional("covering_date")
+
+        /**
+         * Cursor from a previous response to fetch the next page of contracts.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun cursor(): Optional<String> = cursor.getOptional("cursor")
 
         /**
          * Include archived contracts in the response
@@ -503,8 +572,16 @@ private constructor(
         fun includeLedgers(): Optional<Boolean> = includeLedgers.getOptional("include_ledgers")
 
         /**
+         * Max number of contracts to return per page. Range: 1-20. Default: 20.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun limit(): Optional<Long> = limit.getOptional("limit")
+
+        /**
          * Optional RFC 3339 timestamp. If provided, the response will include only contracts where
-         * effective_at is on or after the provided date. This cannot be provided if the
+         * starting_at is on or after the provided date. This cannot be provided if the
          * covering_date filter is provided.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -530,6 +607,13 @@ private constructor(
         @JsonProperty("covering_date")
         @ExcludeMissing
         fun _coveringDate(): JsonField<OffsetDateTime> = coveringDate
+
+        /**
+         * Returns the raw JSON value of [cursor].
+         *
+         * Unlike [cursor], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("cursor") @ExcludeMissing fun _cursor(): JsonField<String> = cursor
 
         /**
          * Returns the raw JSON value of [includeArchived].
@@ -560,6 +644,13 @@ private constructor(
         @JsonProperty("include_ledgers")
         @ExcludeMissing
         fun _includeLedgers(): JsonField<Boolean> = includeLedgers
+
+        /**
+         * Returns the raw JSON value of [limit].
+         *
+         * Unlike [limit], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("limit") @ExcludeMissing fun _limit(): JsonField<Long> = limit
 
         /**
          * Returns the raw JSON value of [startingAt].
@@ -600,9 +691,11 @@ private constructor(
 
             private var customerId: JsonField<String>? = null
             private var coveringDate: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var cursor: JsonField<String> = JsonMissing.of()
             private var includeArchived: JsonField<Boolean> = JsonMissing.of()
             private var includeBalance: JsonField<Boolean> = JsonMissing.of()
             private var includeLedgers: JsonField<Boolean> = JsonMissing.of()
+            private var limit: JsonField<Long> = JsonMissing.of()
             private var startingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -610,9 +703,11 @@ private constructor(
             internal fun from(body: Body) = apply {
                 customerId = body.customerId
                 coveringDate = body.coveringDate
+                cursor = body.cursor
                 includeArchived = body.includeArchived
                 includeBalance = body.includeBalance
                 includeLedgers = body.includeLedgers
+                limit = body.limit
                 startingAt = body.startingAt
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -646,6 +741,18 @@ private constructor(
             fun coveringDate(coveringDate: JsonField<OffsetDateTime>) = apply {
                 this.coveringDate = coveringDate
             }
+
+            /** Cursor from a previous response to fetch the next page of contracts. */
+            fun cursor(cursor: String) = cursor(JsonField.of(cursor))
+
+            /**
+             * Sets [Builder.cursor] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cursor] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun cursor(cursor: JsonField<String>) = apply { this.cursor = cursor }
 
             /** Include archived contracts in the response */
             fun includeArchived(includeArchived: Boolean) =
@@ -698,9 +805,21 @@ private constructor(
                 this.includeLedgers = includeLedgers
             }
 
+            /** Max number of contracts to return per page. Range: 1-20. Default: 20. */
+            fun limit(limit: Long) = limit(JsonField.of(limit))
+
+            /**
+             * Sets [Builder.limit] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.limit] with a well-typed [Long] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun limit(limit: JsonField<Long>) = apply { this.limit = limit }
+
             /**
              * Optional RFC 3339 timestamp. If provided, the response will include only contracts
-             * where effective_at is on or after the provided date. This cannot be provided if the
+             * where starting_at is on or after the provided date. This cannot be provided if the
              * covering_date filter is provided.
              */
             fun startingAt(startingAt: OffsetDateTime) = startingAt(JsonField.of(startingAt))
@@ -751,9 +870,11 @@ private constructor(
                 Body(
                     checkRequired("customerId", customerId),
                     coveringDate,
+                    cursor,
                     includeArchived,
                     includeBalance,
                     includeLedgers,
+                    limit,
                     startingAt,
                     additionalProperties.toMutableMap(),
                 )
@@ -777,9 +898,11 @@ private constructor(
 
             customerId()
             coveringDate()
+            cursor()
             includeArchived()
             includeBalance()
             includeLedgers()
+            limit()
             startingAt()
             validated = true
         }
@@ -802,9 +925,11 @@ private constructor(
         internal fun validity(): Int =
             (if (customerId.asKnown().isPresent) 1 else 0) +
                 (if (coveringDate.asKnown().isPresent) 1 else 0) +
+                (if (cursor.asKnown().isPresent) 1 else 0) +
                 (if (includeArchived.asKnown().isPresent) 1 else 0) +
                 (if (includeBalance.asKnown().isPresent) 1 else 0) +
                 (if (includeLedgers.asKnown().isPresent) 1 else 0) +
+                (if (limit.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
@@ -815,9 +940,11 @@ private constructor(
             return other is Body &&
                 customerId == other.customerId &&
                 coveringDate == other.coveringDate &&
+                cursor == other.cursor &&
                 includeArchived == other.includeArchived &&
                 includeBalance == other.includeBalance &&
                 includeLedgers == other.includeLedgers &&
+                limit == other.limit &&
                 startingAt == other.startingAt &&
                 additionalProperties == other.additionalProperties
         }
@@ -826,9 +953,11 @@ private constructor(
             Objects.hash(
                 customerId,
                 coveringDate,
+                cursor,
                 includeArchived,
                 includeBalance,
                 includeLedgers,
+                limit,
                 startingAt,
                 additionalProperties,
             )
@@ -837,7 +966,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{customerId=$customerId, coveringDate=$coveringDate, includeArchived=$includeArchived, includeBalance=$includeBalance, includeLedgers=$includeLedgers, startingAt=$startingAt, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, coveringDate=$coveringDate, cursor=$cursor, includeArchived=$includeArchived, includeBalance=$includeBalance, includeLedgers=$includeLedgers, limit=$limit, startingAt=$startingAt, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

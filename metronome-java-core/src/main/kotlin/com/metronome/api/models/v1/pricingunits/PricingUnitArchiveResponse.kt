@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.metronome.api.models.v1.contracts
+package com.metronome.api.models.v1.pricingunits
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -10,39 +10,37 @@ import com.metronome.api.core.ExcludeMissing
 import com.metronome.api.core.JsonField
 import com.metronome.api.core.JsonMissing
 import com.metronome.api.core.JsonValue
-import com.metronome.api.core.checkKnown
 import com.metronome.api.core.checkRequired
-import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
-import com.metronome.api.models.Contract
+import com.metronome.api.models.Id
 import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-class ContractListResponse
+class PricingUnitArchiveResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val data: JsonField<List<Contract>>,
+    private val data: JsonField<Id>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("data") @ExcludeMissing data: JsonField<List<Contract>> = JsonMissing.of()
+        @JsonProperty("data") @ExcludeMissing data: JsonField<Id> = JsonMissing.of()
     ) : this(data, mutableMapOf())
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun data(): List<Contract> = data.getRequired("data")
+    fun data(): Id = data.getRequired("data")
 
     /**
      * Returns the raw JSON value of [data].
      *
      * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<Contract>> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Id> = data
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -59,7 +57,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ContractListResponse].
+         * Returns a mutable builder for constructing an instance of [PricingUnitArchiveResponse].
          *
          * The following fields are required:
          * ```java
@@ -69,42 +67,27 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ContractListResponse]. */
+    /** A builder for [PricingUnitArchiveResponse]. */
     class Builder internal constructor() {
 
-        private var data: JsonField<MutableList<Contract>>? = null
+        private var data: JsonField<Id>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(contractListResponse: ContractListResponse) = apply {
-            data = contractListResponse.data.map { it.toMutableList() }
-            additionalProperties = contractListResponse.additionalProperties.toMutableMap()
+        internal fun from(pricingUnitArchiveResponse: PricingUnitArchiveResponse) = apply {
+            data = pricingUnitArchiveResponse.data
+            additionalProperties = pricingUnitArchiveResponse.additionalProperties.toMutableMap()
         }
 
-        fun data(data: List<Contract>) = data(JsonField.of(data))
+        fun data(data: Id) = data(JsonField.of(data))
 
         /**
          * Sets [Builder.data] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.data] with a well-typed `List<Contract>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.data] with a well-typed [Id] value instead. This method
+         * is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun data(data: JsonField<List<Contract>>) = apply {
-            this.data = data.map { it.toMutableList() }
-        }
-
-        /**
-         * Adds a single [Contract] to [Builder.data].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addData(data: Contract) = apply {
-            this.data =
-                (this.data ?: JsonField.of(mutableListOf())).also {
-                    checkKnown("data", it).add(data)
-                }
-        }
+        fun data(data: JsonField<Id>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -126,7 +109,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ContractListResponse].
+         * Returns an immutable instance of [PricingUnitArchiveResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -137,9 +120,9 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ContractListResponse =
-            ContractListResponse(
-                checkRequired("data", data).map { it.toImmutable() },
+        fun build(): PricingUnitArchiveResponse =
+            PricingUnitArchiveResponse(
+                checkRequired("data", data),
                 additionalProperties.toMutableMap(),
             )
     }
@@ -154,12 +137,12 @@ private constructor(
      * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): ContractListResponse = apply {
+    fun validate(): PricingUnitArchiveResponse = apply {
         if (validated) {
             return@apply
         }
 
-        data().forEach { it.validate() }
+        data().validate()
         validated = true
     }
 
@@ -176,16 +159,14 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    @JvmSynthetic
-    internal fun validity(): Int =
-        (data.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+    @JvmSynthetic internal fun validity(): Int = (data.asKnown().getOrNull()?.validity() ?: 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is ContractListResponse &&
+        return other is PricingUnitArchiveResponse &&
             data == other.data &&
             additionalProperties == other.additionalProperties
     }
@@ -195,5 +176,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ContractListResponse{data=$data, additionalProperties=$additionalProperties}"
+        "PricingUnitArchiveResponse{data=$data, additionalProperties=$additionalProperties}"
 }

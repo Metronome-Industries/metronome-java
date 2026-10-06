@@ -66,12 +66,16 @@ private constructor(
     fun nextPage(): Optional<String> = Optional.ofNullable(nextPage)
 
     /**
+     * Must be aligned to UTC midnight and at least one day after `starting_on`.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun endingBefore(): OffsetDateTime = body.endingBefore()
 
     /**
+     * Must be aligned to UTC midnight, e.g. `2024-01-01T00:00:00Z`.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -201,6 +205,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
+        /** Must be aligned to UTC midnight and at least one day after `starting_on`. */
         fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         /**
@@ -214,6 +219,7 @@ private constructor(
             body.endingBefore(endingBefore)
         }
 
+        /** Must be aligned to UTC midnight, e.g. `2024-01-01T00:00:00Z`. */
         fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
 
         /**
@@ -478,12 +484,16 @@ private constructor(
         ) : this(endingBefore, startingOn, windowSize, billableMetrics, customerIds, mutableMapOf())
 
         /**
+         * Must be aligned to UTC midnight and at least one day after `starting_on`.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun endingBefore(): OffsetDateTime = endingBefore.getRequired("ending_before")
 
         /**
+         * Must be aligned to UTC midnight, e.g. `2024-01-01T00:00:00Z`.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -612,6 +622,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
+            /** Must be aligned to UTC midnight and at least one day after `starting_on`. */
             fun endingBefore(endingBefore: OffsetDateTime) =
                 endingBefore(JsonField.of(endingBefore))
 
@@ -626,6 +637,7 @@ private constructor(
                 this.endingBefore = endingBefore
             }
 
+            /** Must be aligned to UTC midnight, e.g. `2024-01-01T00:00:00Z`. */
             fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
 
             /**

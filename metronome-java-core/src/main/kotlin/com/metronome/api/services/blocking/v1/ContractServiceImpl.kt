@@ -32,8 +32,9 @@ import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistory
 import com.metronome.api.models.v1.contracts.ContractListBalancesPage
 import com.metronome.api.models.v1.contracts.ContractListBalancesPageResponse
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
+import com.metronome.api.models.v1.contracts.ContractListPage
+import com.metronome.api.models.v1.contracts.ContractListPageResponse
 import com.metronome.api.models.v1.contracts.ContractListParams
-import com.metronome.api.models.v1.contracts.ContractListResponse
 import com.metronome.api.models.v1.contracts.ContractListSeatBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListSeatBalancesResponse
 import com.metronome.api.models.v1.contracts.ContractRetrieveParams
@@ -104,7 +105,7 @@ class ContractServiceImpl internal constructor(private val clientOptions: Client
     override fun list(
         params: ContractListParams,
         requestOptions: RequestOptions,
-    ): ContractListResponse =
+    ): ContractListPage =
         // post /v1/contracts/list
         withRawResponse().list(params, requestOptions).parse()
 
@@ -294,13 +295,13 @@ class ContractServiceImpl internal constructor(private val clientOptions: Client
             }
         }
 
-        private val listHandler: Handler<ContractListResponse> =
-            jsonHandler<ContractListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ContractListPageResponse> =
+            jsonHandler<ContractListPageResponse>(clientOptions.jsonMapper)
 
         override fun list(
             params: ContractListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ContractListResponse> {
+        ): HttpResponseFor<ContractListPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -318,6 +319,13 @@ class ContractServiceImpl internal constructor(private val clientOptions: Client
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
+                    }
+                    .let {
+                        ContractListPage.builder()
+                            .service(ContractServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

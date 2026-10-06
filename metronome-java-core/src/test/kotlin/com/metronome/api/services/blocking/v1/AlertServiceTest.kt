@@ -27,6 +27,7 @@ internal class AlertServiceTest {
                     .alertType(AlertCreateParams.AlertType.SPEND_THRESHOLD_REACHED)
                     .name("\$100 spend threshold reached")
                     .threshold(10000.0)
+                    .accessType(AlertCreateParams.AccessType.SPEND)
                     .addAlertSpecifier(
                         AlertCreateParams.AlertSpecifier.builder()
                             .addCustomFieldFilter(

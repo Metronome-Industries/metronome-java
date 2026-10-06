@@ -13,9 +13,11 @@ internal class ContractListParamsTest {
         ContractListParams.builder()
             .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .cursor("cursor")
             .includeArchived(true)
             .includeBalance(true)
             .includeLedgers(true)
+            .limit(1L)
             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .build()
     }
@@ -26,9 +28,11 @@ internal class ContractListParamsTest {
             ContractListParams.builder()
                 .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .coveringDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .cursor("cursor")
                 .includeArchived(true)
                 .includeBalance(true)
                 .includeLedgers(true)
+                .limit(1L)
                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
@@ -36,9 +40,11 @@ internal class ContractListParamsTest {
 
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.coveringDate()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.cursor()).contains("cursor")
         assertThat(body.includeArchived()).contains(true)
         assertThat(body.includeBalance()).contains(true)
         assertThat(body.includeLedgers()).contains(true)
+        assertThat(body.limit()).contains(1L)
         assertThat(body.startingAt()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
 
