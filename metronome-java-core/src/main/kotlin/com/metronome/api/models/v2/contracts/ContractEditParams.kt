@@ -48,7 +48,7 @@ import kotlin.jvm.optionals.getOrNull
  *   invoices remain unchanged - you must void and regenerate them in the UI or API to reflect the
  *   edit.
  * - Contract editing must be enabled to use this endpoint. Contact us via the
- *   [Metronome support portal](https://support.metronome.com/) to learn more.
+ *   [Metronome support portal](https://app.metronome.com/support) to learn more.
  */
 class ContractEditParams
 private constructor(
