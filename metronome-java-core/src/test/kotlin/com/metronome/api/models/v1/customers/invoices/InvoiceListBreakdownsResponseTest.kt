@@ -41,6 +41,7 @@ internal class InvoiceListBreakdownsResponseTest {
                             Invoice.LineItem.AppliedCommitOrCredit.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .type(Invoice.LineItem.AppliedCommitOrCredit.Type.PREPAID)
+                                .accessType(Invoice.LineItem.AppliedCommitOrCredit.AccessType.SPEND)
                                 .build()
                         )
                         .commitCustomFields(
@@ -137,6 +138,7 @@ internal class InvoiceListBreakdownsResponseTest {
                         )
                         .professionalServiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .quantity(0.0)
+                        .quantityConsumed(0.0)
                         .resellerType(Invoice.LineItem.ResellerType.AWS)
                         .scheduledChargeCustomFields(
                             Invoice.LineItem.ScheduledChargeCustomFields.builder()
@@ -380,6 +382,7 @@ internal class InvoiceListBreakdownsResponseTest {
                         Invoice.LineItem.AppliedCommitOrCredit.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .type(Invoice.LineItem.AppliedCommitOrCredit.Type.PREPAID)
+                            .accessType(Invoice.LineItem.AppliedCommitOrCredit.AccessType.SPEND)
                             .build()
                     )
                     .commitCustomFields(
@@ -474,6 +477,7 @@ internal class InvoiceListBreakdownsResponseTest {
                     )
                     .professionalServiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .quantity(0.0)
+                    .quantityConsumed(0.0)
                     .resellerType(Invoice.LineItem.ResellerType.AWS)
                     .scheduledChargeCustomFields(
                         Invoice.LineItem.ScheduledChargeCustomFields.builder()
@@ -738,6 +742,7 @@ internal class InvoiceListBreakdownsResponseTest {
                             Invoice.LineItem.AppliedCommitOrCredit.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .type(Invoice.LineItem.AppliedCommitOrCredit.Type.PREPAID)
+                                .accessType(Invoice.LineItem.AppliedCommitOrCredit.AccessType.SPEND)
                                 .build()
                         )
                         .commitCustomFields(
@@ -834,6 +839,7 @@ internal class InvoiceListBreakdownsResponseTest {
                         )
                         .professionalServiceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .quantity(0.0)
+                        .quantityConsumed(0.0)
                         .resellerType(Invoice.LineItem.ResellerType.AWS)
                         .scheduledChargeCustomFields(
                             Invoice.LineItem.ScheduledChargeCustomFields.builder()

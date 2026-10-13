@@ -67,9 +67,11 @@ import kotlin.jvm.optionals.getOrNull
  * ### Usage guidelines:
  * - Required parameters: Must specify `customer_id`, `billable_metric_id`, and `window_size`
  * - Time windows: Set `window_size` to hour, day, or none for different granularities
- * - Group filtering: Use `group_key` and `group_filters` to specify groups and group filters
- * - Limits: When using compound group keys (2+ keys in `group_key`), the default and max limit is
- *   100
+ * - Group filtering: Use `group_key` and `group_filters` to specify groups and group filters.
+ *   Across all arrays in `group_filters`, include at most 200 filter values total. Requests with
+ *   more than 200 filter values are rejected when this limit is enforced
+ * - Response limit: When using compound group keys (2+ keys in `group_key`), the default and
+ *   maximum page size is 100
  * - Pagination: Use limit and `next_page` for large result sets
  * - Null handling: Group values may be null for events missing the group key property
  */
@@ -112,8 +114,8 @@ private constructor(
 
     /**
      * If true, will return the usage for the current billing period. Will return an error if the
-     * customer is currently uncontracted or starting_on and ending_before are specified when this
-     * is true.
+     * customer does not have an active plan, or if starting_on and ending_before are specified when
+     * this is true.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -121,6 +123,8 @@ private constructor(
     fun currentPeriod(): Optional<Boolean> = body.currentPeriod()
 
     /**
+     * Must be aligned to UTC midnight and at least one day after `starting_on`.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -138,7 +142,8 @@ private constructor(
     /**
      * Object mapping group keys to arrays of values to filter on. Only usage matching these filter
      * values will be returned. Keys must be present in group_key. Omit a key or use an empty array
-     * to include all values for that dimension.
+     * to include all values for that dimension. The combined number of entries across all value
+     * arrays may not exceed 200.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -164,6 +169,8 @@ private constructor(
     fun groupKey(): Optional<List<String>> = body.groupKey()
 
     /**
+     * Must be aligned to UTC midnight, e.g. `2024-01-01T00:00:00Z`.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -353,8 +360,8 @@ private constructor(
 
         /**
          * If true, will return the usage for the current billing period. Will return an error if
-         * the customer is currently uncontracted or starting_on and ending_before are specified
-         * when this is true.
+         * the customer does not have an active plan, or if starting_on and ending_before are
+         * specified when this is true.
          */
         fun currentPeriod(currentPeriod: Boolean) = apply { body.currentPeriod(currentPeriod) }
 
@@ -369,6 +376,7 @@ private constructor(
             body.currentPeriod(currentPeriod)
         }
 
+        /** Must be aligned to UTC midnight and at least one day after `starting_on`. */
         fun endingBefore(endingBefore: OffsetDateTime) = apply { body.endingBefore(endingBefore) }
 
         /**
@@ -400,7 +408,8 @@ private constructor(
         /**
          * Object mapping group keys to arrays of values to filter on. Only usage matching these
          * filter values will be returned. Keys must be present in group_key. Omit a key or use an
-         * empty array to include all values for that dimension.
+         * empty array to include all values for that dimension. The combined number of entries
+         * across all value arrays may not exceed 200.
          */
         fun groupFilters(groupFilters: GroupFilters) = apply { body.groupFilters(groupFilters) }
 
@@ -446,6 +455,7 @@ private constructor(
          */
         fun addGroupKey(groupKey: String) = apply { body.addGroupKey(groupKey) }
 
+        /** Must be aligned to UTC midnight, e.g. `2024-01-01T00:00:00Z`. */
         fun startingOn(startingOn: OffsetDateTime) = apply { body.startingOn(startingOn) }
 
         /**
@@ -694,8 +704,8 @@ private constructor(
 
         /**
          * If true, will return the usage for the current billing period. Will return an error if
-         * the customer is currently uncontracted or starting_on and ending_before are specified
-         * when this is true.
+         * the customer does not have an active plan, or if starting_on and ending_before are
+         * specified when this is true.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -703,6 +713,8 @@ private constructor(
         fun currentPeriod(): Optional<Boolean> = currentPeriod.getOptional("current_period")
 
         /**
+         * Must be aligned to UTC midnight and at least one day after `starting_on`.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
@@ -720,7 +732,8 @@ private constructor(
         /**
          * Object mapping group keys to arrays of values to filter on. Only usage matching these
          * filter values will be returned. Keys must be present in group_key. Omit a key or use an
-         * empty array to include all values for that dimension.
+         * empty array to include all values for that dimension. The combined number of entries
+         * across all value arrays may not exceed 200.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -746,6 +759,8 @@ private constructor(
         fun groupKey(): Optional<List<String>> = groupKey.getOptional("group_key")
 
         /**
+         * Must be aligned to UTC midnight, e.g. `2024-01-01T00:00:00Z`.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
@@ -937,7 +952,7 @@ private constructor(
 
             /**
              * If true, will return the usage for the current billing period. Will return an error
-             * if the customer is currently uncontracted or starting_on and ending_before are
+             * if the customer does not have an active plan, or if starting_on and ending_before are
              * specified when this is true.
              */
             fun currentPeriod(currentPeriod: Boolean) = currentPeriod(JsonField.of(currentPeriod))
@@ -953,6 +968,7 @@ private constructor(
                 this.currentPeriod = currentPeriod
             }
 
+            /** Must be aligned to UTC midnight and at least one day after `starting_on`. */
             fun endingBefore(endingBefore: OffsetDateTime) =
                 endingBefore(JsonField.of(endingBefore))
 
@@ -986,7 +1002,8 @@ private constructor(
             /**
              * Object mapping group keys to arrays of values to filter on. Only usage matching these
              * filter values will be returned. Keys must be present in group_key. Omit a key or use
-             * an empty array to include all values for that dimension.
+             * an empty array to include all values for that dimension. The combined number of
+             * entries across all value arrays may not exceed 200.
              */
             fun groupFilters(groupFilters: GroupFilters) = groupFilters(JsonField.of(groupFilters))
 
@@ -1039,6 +1056,7 @@ private constructor(
                     }
             }
 
+            /** Must be aligned to UTC midnight, e.g. `2024-01-01T00:00:00Z`. */
             fun startingOn(startingOn: OffsetDateTime) = startingOn(JsonField.of(startingOn))
 
             /**
@@ -1372,8 +1390,8 @@ private constructor(
         fun key(): String = key.getRequired("key")
 
         /**
-         * Values of the group_by key to return in the query. Omit this if you'd like all values for
-         * the key returned.
+         * Values of the group_by key to return in the query. Accepts at most 200 values. Omit this
+         * if you'd like all values for the key returned.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -1446,8 +1464,8 @@ private constructor(
             fun key(key: JsonField<String>) = apply { this.key = key }
 
             /**
-             * Values of the group_by key to return in the query. Omit this if you'd like all values
-             * for the key returned.
+             * Values of the group_by key to return in the query. Accepts at most 200 values. Omit
+             * this if you'd like all values for the key returned.
              */
             fun values(values: List<String>) = values(JsonField.of(values))
 
@@ -1574,7 +1592,8 @@ private constructor(
     /**
      * Object mapping group keys to arrays of values to filter on. Only usage matching these filter
      * values will be returned. Keys must be present in group_key. Omit a key or use an empty array
-     * to include all values for that dimension.
+     * to include all values for that dimension. The combined number of entries across all value
+     * arrays may not exceed 200.
      */
     class GroupFilters
     @JsonCreator

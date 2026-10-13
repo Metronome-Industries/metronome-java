@@ -89,7 +89,7 @@ interface OffsetService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): OffsetArchiveResponse
 
-    /** Edit an existing offset lifecycle event notification configuration. */
+    /** Edit an existing offset notification, or enable/disable a system notification */
     fun edit(params: OffsetEditParams): OffsetEditResponse = edit(params, RequestOptions.none())
 
     /** @see edit */

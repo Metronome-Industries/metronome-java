@@ -32,8 +32,9 @@ import com.metronome.api.models.v1.contracts.ContractGetSubscriptionSeatsHistory
 import com.metronome.api.models.v1.contracts.ContractListBalancesPageAsync
 import com.metronome.api.models.v1.contracts.ContractListBalancesPageResponse
 import com.metronome.api.models.v1.contracts.ContractListBalancesParams
+import com.metronome.api.models.v1.contracts.ContractListPageAsync
+import com.metronome.api.models.v1.contracts.ContractListPageResponse
 import com.metronome.api.models.v1.contracts.ContractListParams
-import com.metronome.api.models.v1.contracts.ContractListResponse
 import com.metronome.api.models.v1.contracts.ContractListSeatBalancesParams
 import com.metronome.api.models.v1.contracts.ContractListSeatBalancesResponse
 import com.metronome.api.models.v1.contracts.ContractRetrieveParams
@@ -105,7 +106,7 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun list(
         params: ContractListParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ContractListResponse> =
+    ): CompletableFuture<ContractListPageAsync> =
         // post /v1/contracts/list
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
@@ -305,13 +306,13 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
                 }
         }
 
-        private val listHandler: Handler<ContractListResponse> =
-            jsonHandler<ContractListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ContractListPageResponse> =
+            jsonHandler<ContractListPageResponse>(clientOptions.jsonMapper)
 
         override fun list(
             params: ContractListParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ContractListResponse>> {
+        ): CompletableFuture<HttpResponseFor<ContractListPageAsync>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -331,6 +332,14 @@ class ContractServiceAsyncImpl internal constructor(private val clientOptions: C
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
                                 }
+                            }
+                            .let {
+                                ContractListPageAsync.builder()
+                                    .service(ContractServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

@@ -10,6 +10,7 @@ import com.metronome.api.models.Id
 import com.metronome.api.models.PropertyFilter
 import com.metronome.api.models.v1.billablemetrics.BillableMetricCreateParams
 import com.metronome.api.models.v1.billablemetrics.BillableMetricRetrieveParams
+import com.metronome.api.models.v1.billablemetrics.BillableMetricUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -88,6 +89,26 @@ internal class BillableMetricServiceTest {
             billableMetricService.retrieve(
                 BillableMetricRetrieveParams.builder()
                     .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .build()
+            )
+
+        billableMetric.validate()
+    }
+
+    @Test
+    fun update() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val billableMetricService = client.v1().billableMetrics()
+
+        val billableMetric =
+            billableMetricService.update(
+                BillableMetricUpdateParams.builder()
+                    .billableMetricId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                    .name("CPU hours")
                     .build()
             )
 

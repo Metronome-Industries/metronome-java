@@ -16,6 +16,7 @@ internal class ContractRetrieveSubscriptionQuantityHistoryResponseTest {
             ContractRetrieveSubscriptionQuantityHistoryResponse.builder()
                 .data(
                     ContractRetrieveSubscriptionQuantityHistoryResponse.Data.builder()
+                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addHistory(
                             ContractRetrieveSubscriptionQuantityHistoryResponse.Data.History
@@ -40,6 +41,7 @@ internal class ContractRetrieveSubscriptionQuantityHistoryResponseTest {
         assertThat(contractRetrieveSubscriptionQuantityHistoryResponse.data())
             .isEqualTo(
                 ContractRetrieveSubscriptionQuantityHistoryResponse.Data.builder()
+                    .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addHistory(
                         ContractRetrieveSubscriptionQuantityHistoryResponse.Data.History.builder()
@@ -67,6 +69,7 @@ internal class ContractRetrieveSubscriptionQuantityHistoryResponseTest {
             ContractRetrieveSubscriptionQuantityHistoryResponse.builder()
                 .data(
                     ContractRetrieveSubscriptionQuantityHistoryResponse.Data.builder()
+                        .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .addHistory(
                             ContractRetrieveSubscriptionQuantityHistoryResponse.Data.History

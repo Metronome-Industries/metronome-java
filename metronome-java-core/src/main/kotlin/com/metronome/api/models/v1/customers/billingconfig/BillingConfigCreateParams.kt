@@ -71,8 +71,7 @@ private constructor(
     fun awsRegion(): Optional<AwsRegion> = body.awsRegion()
 
     /**
-     * The collection method for the customer's invoices. NOTE: `auto_charge_payment_intent` and
-     * `manually_charge_payment_intent` are in beta.
+     * The collection method for the customer's invoices.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -258,10 +257,7 @@ private constructor(
          */
         fun awsRegion(awsRegion: JsonField<AwsRegion>) = apply { body.awsRegion(awsRegion) }
 
-        /**
-         * The collection method for the customer's invoices. NOTE: `auto_charge_payment_intent` and
-         * `manually_charge_payment_intent` are in beta.
-         */
+        /** The collection method for the customer's invoices. */
         fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) = apply {
             body.stripeCollectionMethod(stripeCollectionMethod)
         }
@@ -509,8 +505,7 @@ private constructor(
         fun awsRegion(): Optional<AwsRegion> = awsRegion.getOptional("aws_region")
 
         /**
-         * The collection method for the customer's invoices. NOTE: `auto_charge_payment_intent` and
-         * `manually_charge_payment_intent` are in beta.
+         * The collection method for the customer's invoices.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -694,10 +689,7 @@ private constructor(
              */
             fun awsRegion(awsRegion: JsonField<AwsRegion>) = apply { this.awsRegion = awsRegion }
 
-            /**
-             * The collection method for the customer's invoices. NOTE: `auto_charge_payment_intent`
-             * and `manually_charge_payment_intent` are in beta.
-             */
+            /** The collection method for the customer's invoices. */
             fun stripeCollectionMethod(stripeCollectionMethod: StripeCollectionMethod) =
                 stripeCollectionMethod(JsonField.of(stripeCollectionMethod))
 
@@ -1113,10 +1105,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /**
-     * The collection method for the customer's invoices. NOTE: `auto_charge_payment_intent` and
-     * `manually_charge_payment_intent` are in beta.
-     */
+    /** The collection method for the customer's invoices. */
     class StripeCollectionMethod
     @JsonCreator
     private constructor(private val value: JsonField<String>) : Enum {
@@ -1137,10 +1126,6 @@ private constructor(
 
             @JvmField val SEND_INVOICE = of("send_invoice")
 
-            @JvmField val AUTO_CHARGE_PAYMENT_INTENT = of("auto_charge_payment_intent")
-
-            @JvmField val MANUALLY_CHARGE_PAYMENT_INTENT = of("manually_charge_payment_intent")
-
             @JvmStatic fun of(value: String) = StripeCollectionMethod(JsonField.of(value))
         }
 
@@ -1148,8 +1133,6 @@ private constructor(
         enum class Known {
             CHARGE_AUTOMATICALLY,
             SEND_INVOICE,
-            AUTO_CHARGE_PAYMENT_INTENT,
-            MANUALLY_CHARGE_PAYMENT_INTENT,
         }
 
         /**
@@ -1166,8 +1149,6 @@ private constructor(
         enum class Value {
             CHARGE_AUTOMATICALLY,
             SEND_INVOICE,
-            AUTO_CHARGE_PAYMENT_INTENT,
-            MANUALLY_CHARGE_PAYMENT_INTENT,
             /**
              * An enum member indicating that [StripeCollectionMethod] was instantiated with an
              * unknown value.
@@ -1186,8 +1167,6 @@ private constructor(
             when (this) {
                 CHARGE_AUTOMATICALLY -> Value.CHARGE_AUTOMATICALLY
                 SEND_INVOICE -> Value.SEND_INVOICE
-                AUTO_CHARGE_PAYMENT_INTENT -> Value.AUTO_CHARGE_PAYMENT_INTENT
-                MANUALLY_CHARGE_PAYMENT_INTENT -> Value.MANUALLY_CHARGE_PAYMENT_INTENT
                 else -> Value._UNKNOWN
             }
 
@@ -1204,8 +1183,6 @@ private constructor(
             when (this) {
                 CHARGE_AUTOMATICALLY -> Known.CHARGE_AUTOMATICALLY
                 SEND_INVOICE -> Known.SEND_INVOICE
-                AUTO_CHARGE_PAYMENT_INTENT -> Known.AUTO_CHARGE_PAYMENT_INTENT
-                MANUALLY_CHARGE_PAYMENT_INTENT -> Known.MANUALLY_CHARGE_PAYMENT_INTENT
                 else ->
                     throw MetronomeInvalidDataException("Unknown StripeCollectionMethod: $value")
             }
