@@ -26,6 +26,7 @@ class Subscription
 private constructor(
     private val billingPeriods: JsonField<BillingPeriods>,
     private val collectionSchedule: JsonField<CollectionSchedule>,
+    private val createdAt: JsonField<OffsetDateTime>,
     private val proration: JsonField<Proration>,
     private val quantityManagementMode: JsonField<QuantityManagementMode>,
     private val quantitySchedule: JsonField<List<QuantitySchedule>>,
@@ -52,6 +53,9 @@ private constructor(
         @JsonProperty("collection_schedule")
         @ExcludeMissing
         collectionSchedule: JsonField<CollectionSchedule> = JsonMissing.of(),
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("proration")
         @ExcludeMissing
         proration: JsonField<Proration> = JsonMissing.of(),
@@ -96,6 +100,7 @@ private constructor(
     ) : this(
         billingPeriods,
         collectionSchedule,
+        createdAt,
         proration,
         quantityManagementMode,
         quantitySchedule,
@@ -128,6 +133,12 @@ private constructor(
      */
     fun collectionSchedule(): CollectionSchedule =
         collectionSchedule.getRequired("collection_schedule")
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -262,6 +273,15 @@ private constructor(
     @JsonProperty("collection_schedule")
     @ExcludeMissing
     fun _collectionSchedule(): JsonField<CollectionSchedule> = collectionSchedule
+
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
     /**
      * Returns the raw JSON value of [proration].
@@ -418,6 +438,7 @@ private constructor(
          * ```java
          * .billingPeriods()
          * .collectionSchedule()
+         * .createdAt()
          * .proration()
          * .quantityManagementMode()
          * .quantitySchedule()
@@ -433,6 +454,7 @@ private constructor(
 
         private var billingPeriods: JsonField<BillingPeriods>? = null
         private var collectionSchedule: JsonField<CollectionSchedule>? = null
+        private var createdAt: JsonField<OffsetDateTime>? = null
         private var proration: JsonField<Proration>? = null
         private var quantityManagementMode: JsonField<QuantityManagementMode>? = null
         private var quantitySchedule: JsonField<MutableList<QuantitySchedule>>? = null
@@ -454,6 +476,7 @@ private constructor(
         internal fun from(subscription: Subscription) = apply {
             billingPeriods = subscription.billingPeriods
             collectionSchedule = subscription.collectionSchedule
+            createdAt = subscription.createdAt
             proration = subscription.proration
             quantityManagementMode = subscription.quantityManagementMode
             quantitySchedule = subscription.quantitySchedule.map { it.toMutableList() }
@@ -500,6 +523,17 @@ private constructor(
         fun collectionSchedule(collectionSchedule: JsonField<CollectionSchedule>) = apply {
             this.collectionSchedule = collectionSchedule
         }
+
+        fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         fun proration(proration: Proration) = proration(JsonField.of(proration))
 
@@ -755,6 +789,7 @@ private constructor(
          * ```java
          * .billingPeriods()
          * .collectionSchedule()
+         * .createdAt()
          * .proration()
          * .quantityManagementMode()
          * .quantitySchedule()
@@ -768,6 +803,7 @@ private constructor(
             Subscription(
                 checkRequired("billingPeriods", billingPeriods),
                 checkRequired("collectionSchedule", collectionSchedule),
+                checkRequired("createdAt", createdAt),
                 checkRequired("proration", proration),
                 checkRequired("quantityManagementMode", quantityManagementMode),
                 checkRequired("quantitySchedule", quantitySchedule).map { it.toImmutable() },
@@ -804,6 +840,7 @@ private constructor(
 
         billingPeriods().validate()
         collectionSchedule().validate()
+        createdAt()
         proration().validate()
         quantityManagementMode().validate()
         quantitySchedule().forEach { it.validate() }
@@ -839,6 +876,7 @@ private constructor(
     internal fun validity(): Int =
         (billingPeriods.asKnown().getOrNull()?.validity() ?: 0) +
             (collectionSchedule.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (createdAt.asKnown().isPresent) 1 else 0) +
             (proration.asKnown().getOrNull()?.validity() ?: 0) +
             (quantityManagementMode.asKnown().getOrNull()?.validity() ?: 0) +
             (quantitySchedule.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
@@ -4429,6 +4467,7 @@ private constructor(
         return other is Subscription &&
             billingPeriods == other.billingPeriods &&
             collectionSchedule == other.collectionSchedule &&
+            createdAt == other.createdAt &&
             proration == other.proration &&
             quantityManagementMode == other.quantityManagementMode &&
             quantitySchedule == other.quantitySchedule &&
@@ -4451,6 +4490,7 @@ private constructor(
         Objects.hash(
             billingPeriods,
             collectionSchedule,
+            createdAt,
             proration,
             quantityManagementMode,
             quantitySchedule,
@@ -4473,5 +4513,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{billingPeriods=$billingPeriods, collectionSchedule=$collectionSchedule, proration=$proration, quantityManagementMode=$quantityManagementMode, quantitySchedule=$quantitySchedule, startingAt=$startingAt, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customCreditTypeId=$customCreditTypeId, customFields=$customFields, description=$description, endingBefore=$endingBefore, fiatCreditTypeId=$fiatCreditTypeId, name=$name, productCustomFields=$productCustomFields, seatConfig=$seatConfig, additionalProperties=$additionalProperties}"
+        "Subscription{billingPeriods=$billingPeriods, collectionSchedule=$collectionSchedule, createdAt=$createdAt, proration=$proration, quantityManagementMode=$quantityManagementMode, quantitySchedule=$quantitySchedule, startingAt=$startingAt, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customCreditTypeId=$customCreditTypeId, customFields=$customFields, description=$description, endingBefore=$endingBefore, fiatCreditTypeId=$fiatCreditTypeId, name=$name, productCustomFields=$productCustomFields, seatConfig=$seatConfig, additionalProperties=$additionalProperties}"
 }

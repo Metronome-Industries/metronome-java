@@ -3473,6 +3473,7 @@ internal class ContractRetrieveResponseTest {
                                         .build()
                                 )
                                 .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .proration(
                                     Subscription.Proration.builder()
                                         .invoiceBehavior(
@@ -6722,6 +6723,7 @@ internal class ContractRetrieveResponseTest {
                                     .build()
                             )
                             .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .proration(
                                 Subscription.Proration.builder()
                                     .invoiceBehavior(
@@ -10237,6 +10239,7 @@ internal class ContractRetrieveResponseTest {
                                         .build()
                                 )
                                 .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .proration(
                                     Subscription.Proration.builder()
                                         .invoiceBehavior(

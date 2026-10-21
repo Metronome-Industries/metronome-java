@@ -56,7 +56,7 @@ private constructor(
     private val contractId: String?,
     private val creditTypeId: String?,
     private val endingBefore: OffsetDateTime?,
-    private val includeRetiredCommitInvoices: Boolean?,
+    private val includeHistoricalCommitInvoices: Boolean?,
     private val limit: Long?,
     private val nextPage: String?,
     private val skipZeroQtyLineItems: Boolean?,
@@ -83,9 +83,11 @@ private constructor(
      */
     fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
 
-    /** When true, includes retired commit invoices alongside active invoices. Defaults to false. */
-    fun includeRetiredCommitInvoices(): Optional<Boolean> =
-        Optional.ofNullable(includeRetiredCommitInvoices)
+    /**
+     * When true, includes historical commit invoices alongside active invoices. Defaults to false.
+     */
+    fun includeHistoricalCommitInvoices(): Optional<Boolean> =
+        Optional.ofNullable(includeHistoricalCommitInvoices)
 
     /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
@@ -144,7 +146,7 @@ private constructor(
         private var contractId: String? = null
         private var creditTypeId: String? = null
         private var endingBefore: OffsetDateTime? = null
-        private var includeRetiredCommitInvoices: Boolean? = null
+        private var includeHistoricalCommitInvoices: Boolean? = null
         private var limit: Long? = null
         private var nextPage: String? = null
         private var skipZeroQtyLineItems: Boolean? = null
@@ -162,7 +164,7 @@ private constructor(
             contractId = invoiceListParams.contractId
             creditTypeId = invoiceListParams.creditTypeId
             endingBefore = invoiceListParams.endingBefore
-            includeRetiredCommitInvoices = invoiceListParams.includeRetiredCommitInvoices
+            includeHistoricalCommitInvoices = invoiceListParams.includeHistoricalCommitInvoices
             limit = invoiceListParams.limit
             nextPage = invoiceListParams.nextPage
             skipZeroQtyLineItems = invoiceListParams.skipZeroQtyLineItems
@@ -200,26 +202,27 @@ private constructor(
             endingBefore(endingBefore.getOrNull())
 
         /**
-         * When true, includes retired commit invoices alongside active invoices. Defaults to false.
+         * When true, includes historical commit invoices alongside active invoices. Defaults to
+         * false.
          */
-        fun includeRetiredCommitInvoices(includeRetiredCommitInvoices: Boolean?) = apply {
-            this.includeRetiredCommitInvoices = includeRetiredCommitInvoices
+        fun includeHistoricalCommitInvoices(includeHistoricalCommitInvoices: Boolean?) = apply {
+            this.includeHistoricalCommitInvoices = includeHistoricalCommitInvoices
         }
 
         /**
-         * Alias for [Builder.includeRetiredCommitInvoices].
+         * Alias for [Builder.includeHistoricalCommitInvoices].
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun includeRetiredCommitInvoices(includeRetiredCommitInvoices: Boolean) =
-            includeRetiredCommitInvoices(includeRetiredCommitInvoices as Boolean?)
+        fun includeHistoricalCommitInvoices(includeHistoricalCommitInvoices: Boolean) =
+            includeHistoricalCommitInvoices(includeHistoricalCommitInvoices as Boolean?)
 
         /**
-         * Alias for calling [Builder.includeRetiredCommitInvoices] with
-         * `includeRetiredCommitInvoices.orElse(null)`.
+         * Alias for calling [Builder.includeHistoricalCommitInvoices] with
+         * `includeHistoricalCommitInvoices.orElse(null)`.
          */
-        fun includeRetiredCommitInvoices(includeRetiredCommitInvoices: Optional<Boolean>) =
-            includeRetiredCommitInvoices(includeRetiredCommitInvoices.getOrNull())
+        fun includeHistoricalCommitInvoices(includeHistoricalCommitInvoices: Optional<Boolean>) =
+            includeHistoricalCommitInvoices(includeHistoricalCommitInvoices.getOrNull())
 
         /** Max number of results that should be returned */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -418,7 +421,7 @@ private constructor(
                 contractId,
                 creditTypeId,
                 endingBefore,
-                includeRetiredCommitInvoices,
+                includeHistoricalCommitInvoices,
                 limit,
                 nextPage,
                 skipZeroQtyLineItems,
@@ -448,8 +451,8 @@ private constructor(
                 endingBefore?.let {
                     put("ending_before", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
                 }
-                includeRetiredCommitInvoices?.let {
-                    put("include_retired_commit_invoices", it.toString())
+                includeHistoricalCommitInvoices?.let {
+                    put("include_historical_commit_invoices", it.toString())
                 }
                 limit?.let { put("limit", it.toString()) }
                 nextPage?.let { put("next_page", it) }
@@ -755,7 +758,7 @@ private constructor(
             contractId == other.contractId &&
             creditTypeId == other.creditTypeId &&
             endingBefore == other.endingBefore &&
-            includeRetiredCommitInvoices == other.includeRetiredCommitInvoices &&
+            includeHistoricalCommitInvoices == other.includeHistoricalCommitInvoices &&
             limit == other.limit &&
             nextPage == other.nextPage &&
             skipZeroQtyLineItems == other.skipZeroQtyLineItems &&
@@ -774,7 +777,7 @@ private constructor(
             contractId,
             creditTypeId,
             endingBefore,
-            includeRetiredCommitInvoices,
+            includeHistoricalCommitInvoices,
             limit,
             nextPage,
             skipZeroQtyLineItems,
@@ -788,5 +791,5 @@ private constructor(
         )
 
     override fun toString() =
-        "InvoiceListParams{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, includeRetiredCommitInvoices=$includeRetiredCommitInvoices, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, type=$type, webhookNotificationId=$webhookNotificationId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvoiceListParams{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, includeHistoricalCommitInvoices=$includeHistoricalCommitInvoices, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, type=$type, webhookNotificationId=$webhookNotificationId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

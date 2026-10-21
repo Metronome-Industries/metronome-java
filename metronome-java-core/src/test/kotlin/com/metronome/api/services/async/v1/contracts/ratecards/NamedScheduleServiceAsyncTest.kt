@@ -5,6 +5,7 @@ package com.metronome.api.services.async.v1.contracts.ratecards
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClientAsync
 import com.metronome.api.core.JsonValue
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleUpdateParams
 import java.time.OffsetDateTime
@@ -30,6 +31,11 @@ internal class NamedScheduleServiceAsyncTest {
                     .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .scheduleName("my-schedule")
                     .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+                    .properties(
+                        NamedScheduleRetrieveParams.Properties.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .build()
             )
 
@@ -55,9 +61,34 @@ internal class NamedScheduleServiceAsyncTest {
                     .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                     .value(JsonValue.from(mapOf("my_key" to "my_value")))
                     .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+                    .properties(
+                        NamedScheduleUpdateParams.Properties.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .build()
             )
 
         val response = future.get()
+    }
+
+    @Test
+    fun list() {
+        val client =
+            MetronomeOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val namedScheduleServiceAsync = client.v1().contracts().rateCards().namedSchedules()
+
+        val pageFuture =
+            namedScheduleServiceAsync.list(
+                NamedScheduleListParams.builder()
+                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+                    .build()
+            )
+
+        val page = pageFuture.get()
+        page.response().validate()
     }
 }

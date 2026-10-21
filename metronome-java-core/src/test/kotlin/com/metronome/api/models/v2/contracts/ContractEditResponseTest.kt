@@ -1136,6 +1136,7 @@ internal class ContractEditResponseTest {
                                                 .CollectionSchedule
                                                 .ADVANCE
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .proration(
                                             ContractEditResponse.Data.Edit.AddSubscription.Proration
                                                 .builder()
@@ -3160,6 +3161,7 @@ internal class ContractEditResponseTest {
                                             .CollectionSchedule
                                             .ADVANCE
                                     )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .proration(
                                         ContractEditResponse.Data.Edit.AddSubscription.Proration
                                             .builder()
@@ -5212,6 +5214,7 @@ internal class ContractEditResponseTest {
                                                 .CollectionSchedule
                                                 .ADVANCE
                                         )
+                                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                         .proration(
                                             ContractEditResponse.Data.Edit.AddSubscription.Proration
                                                 .builder()

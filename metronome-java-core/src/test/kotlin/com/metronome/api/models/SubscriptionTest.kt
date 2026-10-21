@@ -38,6 +38,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .proration(
                     Subscription.Proration.builder()
                         .invoiceBehavior(Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY)
@@ -126,6 +127,8 @@ internal class SubscriptionTest {
             )
         assertThat(subscription.collectionSchedule())
             .isEqualTo(Subscription.CollectionSchedule.ADVANCE)
+        assertThat(subscription.createdAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscription.proration())
             .isEqualTo(
                 Subscription.Proration.builder()
@@ -224,6 +227,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .proration(
                     Subscription.Proration.builder()
                         .invoiceBehavior(Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY)
