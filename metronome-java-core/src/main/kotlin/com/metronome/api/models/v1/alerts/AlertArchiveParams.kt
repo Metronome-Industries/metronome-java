@@ -42,6 +42,8 @@ import java.util.Optional
  * - Immediate effect: Threshold notification evaluation stops instantly across all customers
  * - Historical preservation: Archive operation maintains threshold notification history and
  *   configuration for compliance and auditing
+ * - Idempotent: Archiving an already-archived threshold notification returns the same successful
+ *   response
  */
 class AlertArchiveParams
 private constructor(

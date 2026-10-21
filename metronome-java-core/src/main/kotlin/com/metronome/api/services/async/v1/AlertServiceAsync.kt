@@ -104,6 +104,8 @@ interface AlertServiceAsync {
      * - Immediate effect: Threshold notification evaluation stops instantly across all customers
      * - Historical preservation: Archive operation maintains threshold notification history and
      *   configuration for compliance and auditing
+     * - Idempotent: Archiving an already-archived threshold notification returns the same
+     *   successful response
      */
     fun archive(params: AlertArchiveParams): CompletableFuture<AlertArchiveResponse> =
         archive(params, RequestOptions.none())
