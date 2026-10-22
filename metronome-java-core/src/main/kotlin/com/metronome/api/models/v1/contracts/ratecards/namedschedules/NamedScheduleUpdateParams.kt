@@ -14,11 +14,13 @@ import com.metronome.api.core.Params
 import com.metronome.api.core.checkRequired
 import com.metronome.api.core.http.Headers
 import com.metronome.api.core.http.QueryParams
+import com.metronome.api.core.toImmutable
 import com.metronome.api.errors.MetronomeInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Update a named schedule for the given contract. This endpoint's availability is dependent on your
@@ -79,6 +81,15 @@ private constructor(
     fun endingBefore(): Optional<OffsetDateTime> = body.endingBefore()
 
     /**
+     * A set of key-value pairs that qualifies which schedule should be applied when looking up a
+     * schedule by name.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun properties(): Optional<Properties> = body.properties()
+
+    /**
      * Returns the raw JSON value of [contractId].
      *
      * Unlike [contractId], this method doesn't throw if the JSON field has an unexpected type.
@@ -112,6 +123,13 @@ private constructor(
      * Unlike [endingBefore], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _endingBefore(): JsonField<OffsetDateTime> = body._endingBefore()
+
+    /**
+     * Returns the raw JSON value of [properties].
+     *
+     * Unlike [properties], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _properties(): JsonField<Properties> = body._properties()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -237,6 +255,21 @@ private constructor(
         fun endingBefore(endingBefore: JsonField<OffsetDateTime>) = apply {
             body.endingBefore(endingBefore)
         }
+
+        /**
+         * A set of key-value pairs that qualifies which schedule should be applied when looking up
+         * a schedule by name.
+         */
+        fun properties(properties: Properties) = apply { body.properties(properties) }
+
+        /**
+         * Sets [Builder.properties] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.properties] with a well-typed [Properties] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun properties(properties: JsonField<Properties>) = apply { body.properties(properties) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -394,6 +427,7 @@ private constructor(
         private val startingAt: JsonField<OffsetDateTime>,
         private val value: JsonValue,
         private val endingBefore: JsonField<OffsetDateTime>,
+        private val properties: JsonField<Properties>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -415,6 +449,9 @@ private constructor(
             @JsonProperty("ending_before")
             @ExcludeMissing
             endingBefore: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("properties")
+            @ExcludeMissing
+            properties: JsonField<Properties> = JsonMissing.of(),
         ) : this(
             contractId,
             customerId,
@@ -422,6 +459,7 @@ private constructor(
             startingAt,
             value,
             endingBefore,
+            properties,
             mutableMapOf(),
         )
 
@@ -473,6 +511,15 @@ private constructor(
         fun endingBefore(): Optional<OffsetDateTime> = endingBefore.getOptional("ending_before")
 
         /**
+         * A set of key-value pairs that qualifies which schedule should be applied when looking up
+         * a schedule by name.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun properties(): Optional<Properties> = properties.getOptional("properties")
+
+        /**
          * Returns the raw JSON value of [contractId].
          *
          * Unlike [contractId], this method doesn't throw if the JSON field has an unexpected type.
@@ -519,6 +566,15 @@ private constructor(
         @ExcludeMissing
         fun _endingBefore(): JsonField<OffsetDateTime> = endingBefore
 
+        /**
+         * Returns the raw JSON value of [properties].
+         *
+         * Unlike [properties], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("properties")
+        @ExcludeMissing
+        fun _properties(): JsonField<Properties> = properties
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -557,6 +613,7 @@ private constructor(
             private var startingAt: JsonField<OffsetDateTime>? = null
             private var value: JsonValue? = null
             private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var properties: JsonField<Properties> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -567,6 +624,7 @@ private constructor(
                 startingAt = body.startingAt
                 value = body.value
                 endingBefore = body.endingBefore
+                properties = body.properties
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -641,6 +699,23 @@ private constructor(
                 this.endingBefore = endingBefore
             }
 
+            /**
+             * A set of key-value pairs that qualifies which schedule should be applied when looking
+             * up a schedule by name.
+             */
+            fun properties(properties: Properties) = properties(JsonField.of(properties))
+
+            /**
+             * Sets [Builder.properties] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.properties] with a well-typed [Properties] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun properties(properties: JsonField<Properties>) = apply {
+                this.properties = properties
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -684,6 +759,7 @@ private constructor(
                     checkRequired("startingAt", startingAt),
                     checkRequired("value", value),
                     endingBefore,
+                    properties,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -709,6 +785,7 @@ private constructor(
             scheduleName()
             startingAt()
             endingBefore()
+            properties().ifPresent { it.validate() }
             validated = true
         }
 
@@ -732,7 +809,8 @@ private constructor(
                 (if (customerId.asKnown().isPresent) 1 else 0) +
                 (if (scheduleName.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0) +
-                (if (endingBefore.asKnown().isPresent) 1 else 0)
+                (if (endingBefore.asKnown().isPresent) 1 else 0) +
+                (properties.asKnown().getOrNull()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -746,6 +824,7 @@ private constructor(
                 startingAt == other.startingAt &&
                 value == other.value &&
                 endingBefore == other.endingBefore &&
+                properties == other.properties &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -757,6 +836,7 @@ private constructor(
                 startingAt,
                 value,
                 endingBefore,
+                properties,
                 additionalProperties,
             )
         }
@@ -764,7 +844,119 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{contractId=$contractId, customerId=$customerId, scheduleName=$scheduleName, startingAt=$startingAt, value=$value, endingBefore=$endingBefore, additionalProperties=$additionalProperties}"
+            "Body{contractId=$contractId, customerId=$customerId, scheduleName=$scheduleName, startingAt=$startingAt, value=$value, endingBefore=$endingBefore, properties=$properties, additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * A set of key-value pairs that qualifies which schedule should be applied when looking up a
+     * schedule by name.
+     */
+    class Properties
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Properties]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Properties]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(properties: Properties) = apply {
+                additionalProperties = properties.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Properties].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Properties = Properties(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): Properties = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Properties && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Properties{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

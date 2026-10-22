@@ -93,8 +93,9 @@ private constructor(
     fun customerId(): String = body.customerId()
 
     /**
-     * Can be used with only `low_remaining_contract_credit_and_commit_balance_reached`
-     * notifications. Used to filter the alert by the custom field key-value pair.
+     * Can be used only with `low_remaining_contract_credit_and_commit_balance_reached` and
+     * `low_remaining_contract_credit_and_commit_percentage_reached` notifications. Used to filter
+     * the alert by the custom field key-value pair.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -247,8 +248,9 @@ private constructor(
         fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
         /**
-         * Can be used with only `low_remaining_contract_credit_and_commit_balance_reached`
-         * notifications. Used to filter the alert by the custom field key-value pair.
+         * Can be used only with `low_remaining_contract_credit_and_commit_balance_reached` and
+         * `low_remaining_contract_credit_and_commit_percentage_reached` notifications. Used to
+         * filter the alert by the custom field key-value pair.
          */
         fun alertSpecifiers(alertSpecifiers: List<AlertSpecifier>) = apply {
             body.alertSpecifiers(alertSpecifiers)
@@ -533,8 +535,9 @@ private constructor(
         fun customerId(): String = customerId.getRequired("customer_id")
 
         /**
-         * Can be used with only `low_remaining_contract_credit_and_commit_balance_reached`
-         * notifications. Used to filter the alert by the custom field key-value pair.
+         * Can be used only with `low_remaining_contract_credit_and_commit_balance_reached` and
+         * `low_remaining_contract_credit_and_commit_percentage_reached` notifications. Used to
+         * filter the alert by the custom field key-value pair.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -697,8 +700,9 @@ private constructor(
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
             /**
-             * Can be used with only `low_remaining_contract_credit_and_commit_balance_reached`
-             * notifications. Used to filter the alert by the custom field key-value pair.
+             * Can be used only with `low_remaining_contract_credit_and_commit_balance_reached` and
+             * `low_remaining_contract_credit_and_commit_percentage_reached` notifications. Used to
+             * filter the alert by the custom field key-value pair.
              */
             fun alertSpecifiers(alertSpecifiers: List<AlertSpecifier>) =
                 alertSpecifiers(JsonField.of(alertSpecifiers))

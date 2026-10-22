@@ -7,6 +7,8 @@ import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListPage
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveResponse
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleUpdateParams
@@ -56,6 +58,18 @@ interface NamedScheduleService {
     )
 
     /**
+     * List contract-level named schedules for a customer, optionally scoped to a single contract.
+     */
+    fun list(params: NamedScheduleListParams): NamedScheduleListPage =
+        list(params, RequestOptions.none())
+
+    /** @see list */
+    fun list(
+        params: NamedScheduleListParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): NamedScheduleListPage
+
+    /**
      * A view of [NamedScheduleService] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
@@ -99,5 +113,20 @@ interface NamedScheduleService {
             params: NamedScheduleUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/listNamedSchedules`, but is otherwise
+         * the same as [NamedScheduleService.list].
+         */
+        @MustBeClosed
+        fun list(params: NamedScheduleListParams): HttpResponseFor<NamedScheduleListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        @MustBeClosed
+        fun list(
+            params: NamedScheduleListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<NamedScheduleListPage>
     }
 }

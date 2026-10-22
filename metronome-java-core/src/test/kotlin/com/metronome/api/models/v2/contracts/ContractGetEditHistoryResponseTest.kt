@@ -57,6 +57,7 @@ internal class ContractGetEditHistoryResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -168,6 +169,7 @@ internal class ContractGetEditHistoryResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -387,6 +389,23 @@ internal class ContractGetEditHistoryResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.Duration
+                                                .builder()
+                                                .unit(
+                                                    PrepaidBalanceThresholdConfigurationV2.Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -518,9 +537,16 @@ internal class ContractGetEditHistoryResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractGetEditHistoryResponse.Data.AddRecurringCommit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
+                                .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .commitDuration(
                                     ContractGetEditHistoryResponse.Data.AddRecurringCommit
                                         .CommitDuration
@@ -680,9 +706,16 @@ internal class ContractGetEditHistoryResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractGetEditHistoryResponse.Data.AddRecurringCredit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
+                                .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .commitDuration(
                                     ContractGetEditHistoryResponse.Data.AddRecurringCredit
                                         .CommitDuration
@@ -973,6 +1006,7 @@ internal class ContractGetEditHistoryResponseTest {
                                         .CollectionSchedule
                                         .ADVANCE
                                 )
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .proration(
                                     ContractGetEditHistoryResponse.Data.AddSubscription.Proration
                                         .builder()
@@ -1057,6 +1091,7 @@ internal class ContractGetEditHistoryResponseTest {
                                         )
                                         .build()
                                 )
+                                .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customFields(
                                     ContractGetEditHistoryResponse.Data.AddSubscription.CustomFields
                                         .builder()
@@ -1067,6 +1102,13 @@ internal class ContractGetEditHistoryResponseTest {
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .name("name")
+                                .productCustomFields(
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .ProductCustomFields
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .seatConfig(
                                     ContractGetEditHistoryResponse.Data.AddSubscription.SeatConfig
                                         .builder()
@@ -1423,6 +1465,31 @@ internal class ContractGetEditHistoryResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .Commit
+                                                .Duration
+                                                .builder()
+                                                .unit(
+                                                    ContractGetEditHistoryResponse.Data
+                                                        .UpdatePrepaidBalanceThresholdConfiguration
+                                                        .Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .Commit
+                                                .RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -1769,6 +1836,7 @@ internal class ContractGetEditHistoryResponseTest {
                             ContractGetEditHistoryResponse.Data.UpdateSubscription.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .name("name")
                                 .addQuantityUpdate(
                                     ContractGetEditHistoryResponse.Data.UpdateSubscription
                                         .QuantityUpdate
@@ -1864,6 +1932,7 @@ internal class ContractGetEditHistoryResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(ScheduleDuration.AccessType.SPEND)
                                     .creditType(
                                         CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1968,6 +2037,7 @@ internal class ContractGetEditHistoryResponseTest {
                                             )
                                             .build()
                                     )
+                                    .accessType(ScheduleDuration.AccessType.SPEND)
                                     .creditType(
                                         CreditTypeData.builder()
                                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2167,6 +2237,23 @@ internal class ContractGetEditHistoryResponseTest {
                                     .priority(0.0)
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
+                                    .duration(
+                                        PrepaidBalanceThresholdConfigurationV2.Commit.Duration
+                                            .builder()
+                                            .unit(
+                                                PrepaidBalanceThresholdConfigurationV2.Commit
+                                                    .Duration
+                                                    .Unit
+                                                    .DAYS
+                                            )
+                                            .value(0L)
+                                            .build()
+                                    )
+                                    .rateType(
+                                        PrepaidBalanceThresholdConfigurationV2.Commit.RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .rolloverFraction(0.0)
                                     .addSpecifier(
                                         CommitSpecifierInput.builder()
                                             .presentationGroupValues(
@@ -2294,9 +2381,16 @@ internal class ContractGetEditHistoryResponseTest {
                                     .builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractGetEditHistoryResponse.Data.AddRecurringCommit
+                                            .AccessAmount
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
+                            .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .commitDuration(
                                 ContractGetEditHistoryResponse.Data.AddRecurringCommit
                                     .CommitDuration
@@ -2447,9 +2541,16 @@ internal class ContractGetEditHistoryResponseTest {
                                     .builder()
                                     .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .unitPrice(0.0)
+                                    .accessType(
+                                        ContractGetEditHistoryResponse.Data.AddRecurringCredit
+                                            .AccessAmount
+                                            .AccessType
+                                            .SPEND
+                                    )
                                     .quantity(0.0)
                                     .build()
                             )
+                            .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .commitDuration(
                                 ContractGetEditHistoryResponse.Data.AddRecurringCredit
                                     .CommitDuration
@@ -2730,6 +2831,7 @@ internal class ContractGetEditHistoryResponseTest {
                                     .CollectionSchedule
                                     .ADVANCE
                             )
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .proration(
                                 ContractGetEditHistoryResponse.Data.AddSubscription.Proration
                                     .builder()
@@ -2805,6 +2907,7 @@ internal class ContractGetEditHistoryResponseTest {
                                     )
                                     .build()
                             )
+                            .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .customFields(
                                 ContractGetEditHistoryResponse.Data.AddSubscription.CustomFields
                                     .builder()
@@ -2815,6 +2918,13 @@ internal class ContractGetEditHistoryResponseTest {
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .name("name")
+                            .productCustomFields(
+                                ContractGetEditHistoryResponse.Data.AddSubscription
+                                    .ProductCustomFields
+                                    .builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .seatConfig(
                                 ContractGetEditHistoryResponse.Data.AddSubscription.SeatConfig
                                     .builder()
@@ -3152,6 +3262,31 @@ internal class ContractGetEditHistoryResponseTest {
                                     .productId("product_id")
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
+                                    .duration(
+                                        ContractGetEditHistoryResponse.Data
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .Commit
+                                            .Duration
+                                            .builder()
+                                            .unit(
+                                                ContractGetEditHistoryResponse.Data
+                                                    .UpdatePrepaidBalanceThresholdConfiguration
+                                                    .Commit
+                                                    .Duration
+                                                    .Unit
+                                                    .DAYS
+                                            )
+                                            .value(0L)
+                                            .build()
+                                    )
+                                    .rateType(
+                                        ContractGetEditHistoryResponse.Data
+                                            .UpdatePrepaidBalanceThresholdConfiguration
+                                            .Commit
+                                            .RateType
+                                            .COMMIT_RATE
+                                    )
+                                    .rolloverFraction(0.0)
                                     .addSpecifier(
                                         CommitSpecifierInput.builder()
                                             .presentationGroupValues(
@@ -3487,6 +3622,7 @@ internal class ContractGetEditHistoryResponseTest {
                         ContractGetEditHistoryResponse.Data.UpdateSubscription.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .name("name")
                             .addQuantityUpdate(
                                 ContractGetEditHistoryResponse.Data.UpdateSubscription
                                     .QuantityUpdate
@@ -3583,6 +3719,7 @@ internal class ContractGetEditHistoryResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -3694,6 +3831,7 @@ internal class ContractGetEditHistoryResponseTest {
                                                 )
                                                 .build()
                                         )
+                                        .accessType(ScheduleDuration.AccessType.SPEND)
                                         .creditType(
                                             CreditTypeData.builder()
                                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -3913,6 +4051,23 @@ internal class ContractGetEditHistoryResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.Duration
+                                                .builder()
+                                                .unit(
+                                                    PrepaidBalanceThresholdConfigurationV2.Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            PrepaidBalanceThresholdConfigurationV2.Commit.RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -4044,9 +4199,16 @@ internal class ContractGetEditHistoryResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractGetEditHistoryResponse.Data.AddRecurringCommit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
+                                .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .commitDuration(
                                     ContractGetEditHistoryResponse.Data.AddRecurringCommit
                                         .CommitDuration
@@ -4206,9 +4368,16 @@ internal class ContractGetEditHistoryResponseTest {
                                         .builder()
                                         .creditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                         .unitPrice(0.0)
+                                        .accessType(
+                                            ContractGetEditHistoryResponse.Data.AddRecurringCredit
+                                                .AccessAmount
+                                                .AccessType
+                                                .SPEND
+                                        )
                                         .quantity(0.0)
                                         .build()
                                 )
+                                .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .commitDuration(
                                     ContractGetEditHistoryResponse.Data.AddRecurringCredit
                                         .CommitDuration
@@ -4499,6 +4668,7 @@ internal class ContractGetEditHistoryResponseTest {
                                         .CollectionSchedule
                                         .ADVANCE
                                 )
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .proration(
                                     ContractGetEditHistoryResponse.Data.AddSubscription.Proration
                                         .builder()
@@ -4583,6 +4753,7 @@ internal class ContractGetEditHistoryResponseTest {
                                         )
                                         .build()
                                 )
+                                .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .customFields(
                                     ContractGetEditHistoryResponse.Data.AddSubscription.CustomFields
                                         .builder()
@@ -4593,6 +4764,13 @@ internal class ContractGetEditHistoryResponseTest {
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .name("name")
+                                .productCustomFields(
+                                    ContractGetEditHistoryResponse.Data.AddSubscription
+                                        .ProductCustomFields
+                                        .builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .seatConfig(
                                     ContractGetEditHistoryResponse.Data.AddSubscription.SeatConfig
                                         .builder()
@@ -4949,6 +5127,31 @@ internal class ContractGetEditHistoryResponseTest {
                                             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
                                         )
                                         .addApplicableProductTag("string")
+                                        .duration(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .Commit
+                                                .Duration
+                                                .builder()
+                                                .unit(
+                                                    ContractGetEditHistoryResponse.Data
+                                                        .UpdatePrepaidBalanceThresholdConfiguration
+                                                        .Commit
+                                                        .Duration
+                                                        .Unit
+                                                        .DAYS
+                                                )
+                                                .value(0L)
+                                                .build()
+                                        )
+                                        .rateType(
+                                            ContractGetEditHistoryResponse.Data
+                                                .UpdatePrepaidBalanceThresholdConfiguration
+                                                .Commit
+                                                .RateType
+                                                .COMMIT_RATE
+                                        )
+                                        .rolloverFraction(0.0)
                                         .addSpecifier(
                                             CommitSpecifierInput.builder()
                                                 .presentationGroupValues(
@@ -5295,6 +5498,7 @@ internal class ContractGetEditHistoryResponseTest {
                             ContractGetEditHistoryResponse.Data.UpdateSubscription.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .name("name")
                                 .addQuantityUpdate(
                                     ContractGetEditHistoryResponse.Data.UpdateSubscription
                                         .QuantityUpdate

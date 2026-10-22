@@ -34,6 +34,7 @@ internal class CreditTest {
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
                         )
+                        .accessType(ScheduleDuration.AccessType.SPEND)
                         .creditType(
                             CreditTypeData.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -49,6 +50,7 @@ internal class CreditTest {
                 .contract(
                     Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                 )
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .createdBy("created_by")
                 .customFields(
                     Credit.CustomFields.builder()
@@ -141,6 +143,7 @@ internal class CreditTest {
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )
+                    .accessType(ScheduleDuration.AccessType.SPEND)
                     .creditType(
                         CreditTypeData.builder()
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -157,6 +160,7 @@ internal class CreditTest {
         assertThat(credit.balance()).contains(0.0)
         assertThat(credit.contract())
             .contains(Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build())
+        assertThat(credit.createdAt()).contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(credit.createdBy()).contains("created_by")
         assertThat(credit.customFields())
             .contains(
@@ -260,6 +264,7 @@ internal class CreditTest {
                                 .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
                         )
+                        .accessType(ScheduleDuration.AccessType.SPEND)
                         .creditType(
                             CreditTypeData.builder()
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -275,6 +280,7 @@ internal class CreditTest {
                 .contract(
                     Credit.Contract.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
                 )
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .createdBy("created_by")
                 .customFields(
                     Credit.CustomFields.builder()

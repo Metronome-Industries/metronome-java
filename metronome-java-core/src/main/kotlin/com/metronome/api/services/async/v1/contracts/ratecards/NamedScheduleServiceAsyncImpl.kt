@@ -16,6 +16,9 @@ import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.core.http.json
 import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepareAsync
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListPageAsync
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListPageResponse
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveResponse
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleUpdateParams
@@ -51,6 +54,13 @@ class NamedScheduleServiceAsyncImpl internal constructor(private val clientOptio
     ): CompletableFuture<Void?> =
         // post /v1/contracts/updateNamedSchedule
         withRawResponse().update(params, requestOptions).thenAccept {}
+
+    override fun list(
+        params: NamedScheduleListParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<NamedScheduleListPageAsync> =
+        // post /v1/contracts/listNamedSchedules
+        withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         NamedScheduleServiceAsync.WithRawResponse {
@@ -116,6 +126,45 @@ class NamedScheduleServiceAsyncImpl internal constructor(private val clientOptio
                 .thenApply { response ->
                     errorHandler.handle(response).parseable {
                         response.use { updateHandler.handle(it) }
+                    }
+                }
+        }
+
+        private val listHandler: Handler<NamedScheduleListPageResponse> =
+            jsonHandler<NamedScheduleListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: NamedScheduleListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<NamedScheduleListPageAsync>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contracts", "listNamedSchedules")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                            .let {
+                                NamedScheduleListPageAsync.builder()
+                                    .service(NamedScheduleServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
+                                    .params(params)
+                                    .response(it)
+                                    .build()
+                            }
                     }
                 }
         }

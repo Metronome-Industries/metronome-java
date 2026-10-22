@@ -26,6 +26,7 @@ class Subscription
 private constructor(
     private val billingPeriods: JsonField<BillingPeriods>,
     private val collectionSchedule: JsonField<CollectionSchedule>,
+    private val createdAt: JsonField<OffsetDateTime>,
     private val proration: JsonField<Proration>,
     private val quantityManagementMode: JsonField<QuantityManagementMode>,
     private val quantitySchedule: JsonField<List<QuantitySchedule>>,
@@ -33,11 +34,13 @@ private constructor(
     private val subscriptionRate: JsonField<SubscriptionRate>,
     private val id: JsonField<String>,
     private val billingCycleConfig: JsonField<BillingCycleConfig>,
+    private val customCreditTypeId: JsonField<String>,
     private val customFields: JsonField<CustomFields>,
     private val description: JsonField<String>,
     private val endingBefore: JsonField<OffsetDateTime>,
     private val fiatCreditTypeId: JsonField<String>,
     private val name: JsonField<String>,
+    private val productCustomFields: JsonField<ProductCustomFields>,
     private val seatConfig: JsonField<SeatConfig>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -50,6 +53,9 @@ private constructor(
         @JsonProperty("collection_schedule")
         @ExcludeMissing
         collectionSchedule: JsonField<CollectionSchedule> = JsonMissing.of(),
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("proration")
         @ExcludeMissing
         proration: JsonField<Proration> = JsonMissing.of(),
@@ -69,6 +75,9 @@ private constructor(
         @JsonProperty("billing_cycle_config")
         @ExcludeMissing
         billingCycleConfig: JsonField<BillingCycleConfig> = JsonMissing.of(),
+        @JsonProperty("custom_credit_type_id")
+        @ExcludeMissing
+        customCreditTypeId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("custom_fields")
         @ExcludeMissing
         customFields: JsonField<CustomFields> = JsonMissing.of(),
@@ -82,12 +91,16 @@ private constructor(
         @ExcludeMissing
         fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("product_custom_fields")
+        @ExcludeMissing
+        productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of(),
         @JsonProperty("seat_config")
         @ExcludeMissing
         seatConfig: JsonField<SeatConfig> = JsonMissing.of(),
     ) : this(
         billingPeriods,
         collectionSchedule,
+        createdAt,
         proration,
         quantityManagementMode,
         quantitySchedule,
@@ -95,11 +108,13 @@ private constructor(
         subscriptionRate,
         id,
         billingCycleConfig,
+        customCreditTypeId,
         customFields,
         description,
         endingBefore,
         fiatCreditTypeId,
         name,
+        productCustomFields,
         seatConfig,
         mutableMapOf(),
     )
@@ -118,6 +133,12 @@ private constructor(
      */
     fun collectionSchedule(): CollectionSchedule =
         collectionSchedule.getRequired("collection_schedule")
+
+    /**
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
@@ -177,6 +198,16 @@ private constructor(
         billingCycleConfig.getOptional("billing_cycle_config")
 
     /**
+     * If provided, the subscription's price will be in terms of this custom pricing unit instead of
+     * the fiat currency.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun customCreditTypeId(): Optional<String> =
+        customCreditTypeId.getOptional("custom_credit_type_id")
+
+    /**
      * Custom fields to be added eg. { "key1": "value1", "key2": "value2" }
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -209,6 +240,16 @@ private constructor(
     fun name(): Optional<String> = name.getOptional("name")
 
     /**
+     * Custom fields from the subscription product referenced by `subscription_rate.product`. These
+     * are distinct from the subscription instance's `custom_fields`.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun productCustomFields(): Optional<ProductCustomFields> =
+        productCustomFields.getOptional("product_custom_fields")
+
+    /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -232,6 +273,15 @@ private constructor(
     @JsonProperty("collection_schedule")
     @ExcludeMissing
     fun _collectionSchedule(): JsonField<CollectionSchedule> = collectionSchedule
+
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
     /**
      * Returns the raw JSON value of [proration].
@@ -297,6 +347,16 @@ private constructor(
     fun _billingCycleConfig(): JsonField<BillingCycleConfig> = billingCycleConfig
 
     /**
+     * Returns the raw JSON value of [customCreditTypeId].
+     *
+     * Unlike [customCreditTypeId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("custom_credit_type_id")
+    @ExcludeMissing
+    fun _customCreditTypeId(): JsonField<String> = customCreditTypeId
+
+    /**
      * Returns the raw JSON value of [customFields].
      *
      * Unlike [customFields], this method doesn't throw if the JSON field has an unexpected type.
@@ -339,6 +399,16 @@ private constructor(
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /**
+     * Returns the raw JSON value of [productCustomFields].
+     *
+     * Unlike [productCustomFields], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("product_custom_fields")
+    @ExcludeMissing
+    fun _productCustomFields(): JsonField<ProductCustomFields> = productCustomFields
+
+    /**
      * Returns the raw JSON value of [seatConfig].
      *
      * Unlike [seatConfig], this method doesn't throw if the JSON field has an unexpected type.
@@ -368,6 +438,7 @@ private constructor(
          * ```java
          * .billingPeriods()
          * .collectionSchedule()
+         * .createdAt()
          * .proration()
          * .quantityManagementMode()
          * .quantitySchedule()
@@ -383,6 +454,7 @@ private constructor(
 
         private var billingPeriods: JsonField<BillingPeriods>? = null
         private var collectionSchedule: JsonField<CollectionSchedule>? = null
+        private var createdAt: JsonField<OffsetDateTime>? = null
         private var proration: JsonField<Proration>? = null
         private var quantityManagementMode: JsonField<QuantityManagementMode>? = null
         private var quantitySchedule: JsonField<MutableList<QuantitySchedule>>? = null
@@ -390,11 +462,13 @@ private constructor(
         private var subscriptionRate: JsonField<SubscriptionRate>? = null
         private var id: JsonField<String> = JsonMissing.of()
         private var billingCycleConfig: JsonField<BillingCycleConfig> = JsonMissing.of()
+        private var customCreditTypeId: JsonField<String> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
         private var endingBefore: JsonField<OffsetDateTime> = JsonMissing.of()
         private var fiatCreditTypeId: JsonField<String> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
+        private var productCustomFields: JsonField<ProductCustomFields> = JsonMissing.of()
         private var seatConfig: JsonField<SeatConfig> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -402,6 +476,7 @@ private constructor(
         internal fun from(subscription: Subscription) = apply {
             billingPeriods = subscription.billingPeriods
             collectionSchedule = subscription.collectionSchedule
+            createdAt = subscription.createdAt
             proration = subscription.proration
             quantityManagementMode = subscription.quantityManagementMode
             quantitySchedule = subscription.quantitySchedule.map { it.toMutableList() }
@@ -409,11 +484,13 @@ private constructor(
             subscriptionRate = subscription.subscriptionRate
             id = subscription.id
             billingCycleConfig = subscription.billingCycleConfig
+            customCreditTypeId = subscription.customCreditTypeId
             customFields = subscription.customFields
             description = subscription.description
             endingBefore = subscription.endingBefore
             fiatCreditTypeId = subscription.fiatCreditTypeId
             name = subscription.name
+            productCustomFields = subscription.productCustomFields
             seatConfig = subscription.seatConfig
             additionalProperties = subscription.additionalProperties.toMutableMap()
         }
@@ -446,6 +523,17 @@ private constructor(
         fun collectionSchedule(collectionSchedule: JsonField<CollectionSchedule>) = apply {
             this.collectionSchedule = collectionSchedule
         }
+
+        fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         fun proration(proration: Proration) = proration(JsonField.of(proration))
 
@@ -564,6 +652,24 @@ private constructor(
             this.billingCycleConfig = billingCycleConfig
         }
 
+        /**
+         * If provided, the subscription's price will be in terms of this custom pricing unit
+         * instead of the fiat currency.
+         */
+        fun customCreditTypeId(customCreditTypeId: String) =
+            customCreditTypeId(JsonField.of(customCreditTypeId))
+
+        /**
+         * Sets [Builder.customCreditTypeId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customCreditTypeId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun customCreditTypeId(customCreditTypeId: JsonField<String>) = apply {
+            this.customCreditTypeId = customCreditTypeId
+        }
+
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
         fun customFields(customFields: CustomFields) = customFields(JsonField.of(customFields))
 
@@ -626,6 +732,24 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /**
+         * Custom fields from the subscription product referenced by `subscription_rate.product`.
+         * These are distinct from the subscription instance's `custom_fields`.
+         */
+        fun productCustomFields(productCustomFields: ProductCustomFields) =
+            productCustomFields(JsonField.of(productCustomFields))
+
+        /**
+         * Sets [Builder.productCustomFields] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productCustomFields] with a well-typed
+         * [ProductCustomFields] value instead. This method is primarily for setting the field to an
+         * undocumented or not yet supported value.
+         */
+        fun productCustomFields(productCustomFields: JsonField<ProductCustomFields>) = apply {
+            this.productCustomFields = productCustomFields
+        }
+
         fun seatConfig(seatConfig: SeatConfig) = seatConfig(JsonField.of(seatConfig))
 
         /**
@@ -665,6 +789,7 @@ private constructor(
          * ```java
          * .billingPeriods()
          * .collectionSchedule()
+         * .createdAt()
          * .proration()
          * .quantityManagementMode()
          * .quantitySchedule()
@@ -678,6 +803,7 @@ private constructor(
             Subscription(
                 checkRequired("billingPeriods", billingPeriods),
                 checkRequired("collectionSchedule", collectionSchedule),
+                checkRequired("createdAt", createdAt),
                 checkRequired("proration", proration),
                 checkRequired("quantityManagementMode", quantityManagementMode),
                 checkRequired("quantitySchedule", quantitySchedule).map { it.toImmutable() },
@@ -685,11 +811,13 @@ private constructor(
                 checkRequired("subscriptionRate", subscriptionRate),
                 id,
                 billingCycleConfig,
+                customCreditTypeId,
                 customFields,
                 description,
                 endingBefore,
                 fiatCreditTypeId,
                 name,
+                productCustomFields,
                 seatConfig,
                 additionalProperties.toMutableMap(),
             )
@@ -712,6 +840,7 @@ private constructor(
 
         billingPeriods().validate()
         collectionSchedule().validate()
+        createdAt()
         proration().validate()
         quantityManagementMode().validate()
         quantitySchedule().forEach { it.validate() }
@@ -719,11 +848,13 @@ private constructor(
         subscriptionRate().validate()
         id()
         billingCycleConfig().ifPresent { it.validate() }
+        customCreditTypeId()
         customFields().ifPresent { it.validate() }
         description()
         endingBefore()
         fiatCreditTypeId()
         name()
+        productCustomFields().ifPresent { it.validate() }
         seatConfig().ifPresent { it.validate() }
         validated = true
     }
@@ -745,6 +876,7 @@ private constructor(
     internal fun validity(): Int =
         (billingPeriods.asKnown().getOrNull()?.validity() ?: 0) +
             (collectionSchedule.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (createdAt.asKnown().isPresent) 1 else 0) +
             (proration.asKnown().getOrNull()?.validity() ?: 0) +
             (quantityManagementMode.asKnown().getOrNull()?.validity() ?: 0) +
             (quantitySchedule.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
@@ -752,11 +884,13 @@ private constructor(
             (subscriptionRate.asKnown().getOrNull()?.validity() ?: 0) +
             (if (id.asKnown().isPresent) 1 else 0) +
             (billingCycleConfig.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (customCreditTypeId.asKnown().isPresent) 1 else 0) +
             (customFields.asKnown().getOrNull()?.validity() ?: 0) +
             (if (description.asKnown().isPresent) 1 else 0) +
             (if (endingBefore.asKnown().isPresent) 1 else 0) +
             (if (fiatCreditTypeId.asKnown().isPresent) 1 else 0) +
             (if (name.asKnown().isPresent) 1 else 0) +
+            (productCustomFields.asKnown().getOrNull()?.validity() ?: 0) +
             (seatConfig.asKnown().getOrNull()?.validity() ?: 0)
 
     /** Previous, current, and next billing periods for the subscription. */
@@ -4025,6 +4159,120 @@ private constructor(
         override fun toString() = "CustomFields{additionalProperties=$additionalProperties}"
     }
 
+    /**
+     * Custom fields from the subscription product referenced by `subscription_rate.product`. These
+     * are distinct from the subscription instance's `custom_fields`.
+     */
+    class ProductCustomFields
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [ProductCustomFields]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [ProductCustomFields]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(productCustomFields: ProductCustomFields) = apply {
+                additionalProperties = productCustomFields.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [ProductCustomFields].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): ProductCustomFields =
+                ProductCustomFields(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws MetronomeInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): ProductCustomFields = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: MetronomeInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is ProductCustomFields &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "ProductCustomFields{additionalProperties=$additionalProperties}"
+    }
+
     class SeatConfig
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -4219,6 +4467,7 @@ private constructor(
         return other is Subscription &&
             billingPeriods == other.billingPeriods &&
             collectionSchedule == other.collectionSchedule &&
+            createdAt == other.createdAt &&
             proration == other.proration &&
             quantityManagementMode == other.quantityManagementMode &&
             quantitySchedule == other.quantitySchedule &&
@@ -4226,11 +4475,13 @@ private constructor(
             subscriptionRate == other.subscriptionRate &&
             id == other.id &&
             billingCycleConfig == other.billingCycleConfig &&
+            customCreditTypeId == other.customCreditTypeId &&
             customFields == other.customFields &&
             description == other.description &&
             endingBefore == other.endingBefore &&
             fiatCreditTypeId == other.fiatCreditTypeId &&
             name == other.name &&
+            productCustomFields == other.productCustomFields &&
             seatConfig == other.seatConfig &&
             additionalProperties == other.additionalProperties
     }
@@ -4239,6 +4490,7 @@ private constructor(
         Objects.hash(
             billingPeriods,
             collectionSchedule,
+            createdAt,
             proration,
             quantityManagementMode,
             quantitySchedule,
@@ -4246,11 +4498,13 @@ private constructor(
             subscriptionRate,
             id,
             billingCycleConfig,
+            customCreditTypeId,
             customFields,
             description,
             endingBefore,
             fiatCreditTypeId,
             name,
+            productCustomFields,
             seatConfig,
             additionalProperties,
         )
@@ -4259,5 +4513,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{billingPeriods=$billingPeriods, collectionSchedule=$collectionSchedule, proration=$proration, quantityManagementMode=$quantityManagementMode, quantitySchedule=$quantitySchedule, startingAt=$startingAt, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, endingBefore=$endingBefore, fiatCreditTypeId=$fiatCreditTypeId, name=$name, seatConfig=$seatConfig, additionalProperties=$additionalProperties}"
+        "Subscription{billingPeriods=$billingPeriods, collectionSchedule=$collectionSchedule, createdAt=$createdAt, proration=$proration, quantityManagementMode=$quantityManagementMode, quantitySchedule=$quantitySchedule, startingAt=$startingAt, subscriptionRate=$subscriptionRate, id=$id, billingCycleConfig=$billingCycleConfig, customCreditTypeId=$customCreditTypeId, customFields=$customFields, description=$description, endingBefore=$endingBefore, fiatCreditTypeId=$fiatCreditTypeId, name=$name, productCustomFields=$productCustomFields, seatConfig=$seatConfig, additionalProperties=$additionalProperties}"
 }

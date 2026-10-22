@@ -16,6 +16,9 @@ import com.metronome.api.core.http.HttpResponseFor
 import com.metronome.api.core.http.json
 import com.metronome.api.core.http.parseable
 import com.metronome.api.core.prepare
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListPage
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListPageResponse
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveResponse
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleUpdateParams
@@ -48,6 +51,13 @@ class NamedScheduleServiceImpl internal constructor(private val clientOptions: C
         // post /v1/contracts/updateNamedSchedule
         withRawResponse().update(params, requestOptions)
     }
+
+    override fun list(
+        params: NamedScheduleListParams,
+        requestOptions: RequestOptions,
+    ): NamedScheduleListPage =
+        // post /v1/contracts/listNamedSchedules
+        withRawResponse().list(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         NamedScheduleService.WithRawResponse {
@@ -108,6 +118,41 @@ class NamedScheduleServiceImpl internal constructor(private val clientOptions: C
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response.use { updateHandler.handle(it) }
+            }
+        }
+
+        private val listHandler: Handler<NamedScheduleListPageResponse> =
+            jsonHandler<NamedScheduleListPageResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: NamedScheduleListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<NamedScheduleListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("v1", "contracts", "listNamedSchedules")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        NamedScheduleListPage.builder()
+                            .service(NamedScheduleServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
     }

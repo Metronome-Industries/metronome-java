@@ -2,6 +2,7 @@
 
 package com.metronome.api.models.v1.contracts.ratecards.namedschedules
 
+import com.metronome.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,6 +16,11 @@ internal class NamedScheduleRetrieveParamsTest {
             .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
             .scheduleName("my-schedule")
             .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+            .properties(
+                NamedScheduleRetrieveParams.Properties.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .build()
     }
 
@@ -26,6 +32,11 @@ internal class NamedScheduleRetrieveParamsTest {
                 .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                 .scheduleName("my-schedule")
                 .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+                .properties(
+                    NamedScheduleRetrieveParams.Properties.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .build()
 
         val body = params._body()
@@ -34,6 +45,12 @@ internal class NamedScheduleRetrieveParamsTest {
         assertThat(body.customerId()).isEqualTo("9b85c1c1-5238-4f2a-a409-61412905e1e1")
         assertThat(body.scheduleName()).isEqualTo("my-schedule")
         assertThat(body.coveringDate()).contains(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+        assertThat(body.properties())
+            .contains(
+                NamedScheduleRetrieveParams.Properties.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
     }
 
     @Test

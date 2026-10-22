@@ -6,6 +6,8 @@ import com.metronome.api.core.ClientOptions
 import com.metronome.api.core.RequestOptions
 import com.metronome.api.core.http.HttpResponse
 import com.metronome.api.core.http.HttpResponseFor
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListPageAsync
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveResponse
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleUpdateParams
@@ -58,6 +60,18 @@ interface NamedScheduleServiceAsync {
     ): CompletableFuture<Void?>
 
     /**
+     * List contract-level named schedules for a customer, optionally scoped to a single contract.
+     */
+    fun list(params: NamedScheduleListParams): CompletableFuture<NamedScheduleListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
+    fun list(
+        params: NamedScheduleListParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<NamedScheduleListPageAsync>
+
+    /**
      * A view of [NamedScheduleServiceAsync] that provides access to raw HTTP responses for each
      * method.
      */
@@ -99,5 +113,20 @@ interface NamedScheduleServiceAsync {
             params: NamedScheduleUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponse>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/contracts/listNamedSchedules`, but is otherwise
+         * the same as [NamedScheduleServiceAsync.list].
+         */
+        fun list(
+            params: NamedScheduleListParams
+        ): CompletableFuture<HttpResponseFor<NamedScheduleListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: NamedScheduleListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<NamedScheduleListPageAsync>>
     }
 }

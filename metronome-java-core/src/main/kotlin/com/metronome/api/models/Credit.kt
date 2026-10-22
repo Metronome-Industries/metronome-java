@@ -44,6 +44,7 @@ private constructor(
     private val applicableProductTags: JsonField<List<String>>,
     private val balance: JsonField<Double>,
     private val contract: JsonField<Contract>,
+    private val createdAt: JsonField<OffsetDateTime>,
     private val createdBy: JsonField<String>,
     private val customFields: JsonField<CustomFields>,
     private val description: JsonField<String>,
@@ -81,6 +82,9 @@ private constructor(
         applicableProductTags: JsonField<List<String>> = JsonMissing.of(),
         @JsonProperty("balance") @ExcludeMissing balance: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("contract") @ExcludeMissing contract: JsonField<Contract> = JsonMissing.of(),
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("created_by") @ExcludeMissing createdBy: JsonField<String> = JsonMissing.of(),
         @JsonProperty("custom_fields")
         @ExcludeMissing
@@ -126,6 +130,7 @@ private constructor(
         applicableProductTags,
         balance,
         contract,
+        createdAt,
         createdBy,
         customFields,
         description,
@@ -210,6 +215,16 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun contract(): Optional<Contract> = contract.getOptional("contract")
+
+    /**
+     * Timestamp of when the credit was created.
+     * - Recurring credit: latter of credit service period date and parent credit start date
+     * - Rollover credit: when the new contract started
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("created_at")
 
     /**
      * The actor who created this credit. Omitted for system-generated credits such as recurring
@@ -410,6 +425,15 @@ private constructor(
     @JsonProperty("contract") @ExcludeMissing fun _contract(): JsonField<Contract> = contract
 
     /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("created_at")
+    @ExcludeMissing
+    fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+    /**
      * Returns the raw JSON value of [createdBy].
      *
      * Unlike [createdBy], this method doesn't throw if the JSON field has an unexpected type.
@@ -576,6 +600,7 @@ private constructor(
         private var applicableProductTags: JsonField<MutableList<String>>? = null
         private var balance: JsonField<Double> = JsonMissing.of()
         private var contract: JsonField<Contract> = JsonMissing.of()
+        private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var createdBy: JsonField<String> = JsonMissing.of()
         private var customFields: JsonField<CustomFields> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
@@ -605,6 +630,7 @@ private constructor(
             applicableProductTags = credit.applicableProductTags.map { it.toMutableList() }
             balance = credit.balance
             contract = credit.contract
+            createdAt = credit.createdAt
             createdBy = credit.createdBy
             customFields = credit.customFields
             description = credit.description
@@ -775,6 +801,22 @@ private constructor(
          * value.
          */
         fun contract(contract: JsonField<Contract>) = apply { this.contract = contract }
+
+        /**
+         * Timestamp of when the credit was created.
+         * - Recurring credit: latter of credit service period date and parent credit start date
+         * - Rollover credit: when the new contract started
+         */
+        fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         /**
          * The actor who created this credit. Omitted for system-generated credits such as recurring
@@ -1131,6 +1173,7 @@ private constructor(
                 (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                 balance,
                 contract,
+                createdAt,
                 createdBy,
                 customFields,
                 description,
@@ -1174,6 +1217,7 @@ private constructor(
         applicableProductTags()
         balance()
         contract().ifPresent { it.validate() }
+        createdAt()
         createdBy()
         customFields().ifPresent { it.validate() }
         description()
@@ -1216,6 +1260,7 @@ private constructor(
             (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
             (if (balance.asKnown().isPresent) 1 else 0) +
             (contract.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (createdAt.asKnown().isPresent) 1 else 0) +
             (if (createdBy.asKnown().isPresent) 1 else 0) +
             (customFields.asKnown().getOrNull()?.validity() ?: 0) +
             (if (description.asKnown().isPresent) 1 else 0) +
@@ -7018,6 +7063,7 @@ private constructor(
             applicableProductTags == other.applicableProductTags &&
             balance == other.balance &&
             contract == other.contract &&
+            createdAt == other.createdAt &&
             createdBy == other.createdBy &&
             customFields == other.customFields &&
             description == other.description &&
@@ -7047,6 +7093,7 @@ private constructor(
             applicableProductTags,
             balance,
             contract,
+            createdAt,
             createdBy,
             customFields,
             description,
@@ -7069,5 +7116,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, balance=$balance, contract=$contract, createdBy=$createdBy, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCreditId=$recurringCreditId, rolledOverFrom=$rolledOverFrom, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
+        "Credit{id=$id, product=$product, type=$type, accessSchedule=$accessSchedule, applicableContractIds=$applicableContractIds, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, balance=$balance, contract=$contract, createdAt=$createdAt, createdBy=$createdBy, customFields=$customFields, description=$description, hierarchyConfiguration=$hierarchyConfiguration, ledger=$ledger, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, priority=$priority, rateType=$rateType, recurringCreditId=$recurringCreditId, rolledOverFrom=$rolledOverFrom, salesforceOpportunityId=$salesforceOpportunityId, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, uniquenessKey=$uniquenessKey, additionalProperties=$additionalProperties}"
 }

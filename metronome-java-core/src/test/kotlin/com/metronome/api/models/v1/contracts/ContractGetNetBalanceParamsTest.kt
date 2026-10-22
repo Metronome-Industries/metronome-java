@@ -14,6 +14,7 @@ internal class ContractGetNetBalanceParamsTest {
     fun create() {
         ContractGetNetBalanceParams.builder()
             .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+            .accessType(ContractGetNetBalanceParams.AccessType.SPEND)
             .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
             .addFilter(
                 BalanceFilter.builder()
@@ -47,6 +48,7 @@ internal class ContractGetNetBalanceParamsTest {
         val params =
             ContractGetNetBalanceParams.builder()
                 .customerId("13117714-3f05-48e5-a6e9-a66093f13b4d")
+                .accessType(ContractGetNetBalanceParams.AccessType.SPEND)
                 .creditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
                 .addFilter(
                     BalanceFilter.builder()
@@ -80,6 +82,7 @@ internal class ContractGetNetBalanceParamsTest {
         val body = params._body()
 
         assertThat(body.customerId()).isEqualTo("13117714-3f05-48e5-a6e9-a66093f13b4d")
+        assertThat(body.accessType()).contains(ContractGetNetBalanceParams.AccessType.SPEND)
         assertThat(body.creditTypeId()).contains("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
         assertThat(body.filters().getOrNull())
             .containsExactly(

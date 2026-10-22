@@ -38,6 +38,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .proration(
                     Subscription.Proration.builder()
                         .invoiceBehavior(Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY)
@@ -81,6 +82,7 @@ internal class SubscriptionTest {
                         )
                         .build()
                 )
+                .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .customFields(
                     Subscription.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -90,6 +92,11 @@ internal class SubscriptionTest {
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .name("name")
+                .productCustomFields(
+                    Subscription.ProductCustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .seatConfig(
                     Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build()
                 )
@@ -120,6 +127,8 @@ internal class SubscriptionTest {
             )
         assertThat(subscription.collectionSchedule())
             .isEqualTo(Subscription.CollectionSchedule.ADVANCE)
+        assertThat(subscription.createdAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscription.proration())
             .isEqualTo(
                 Subscription.Proration.builder()
@@ -167,6 +176,8 @@ internal class SubscriptionTest {
                     )
                     .build()
             )
+        assertThat(subscription.customCreditTypeId())
+            .contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(subscription.customFields())
             .contains(
                 Subscription.CustomFields.builder()
@@ -178,6 +189,12 @@ internal class SubscriptionTest {
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscription.fiatCreditTypeId()).contains("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(subscription.name()).contains("name")
+        assertThat(subscription.productCustomFields())
+            .contains(
+                Subscription.ProductCustomFields.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(subscription.seatConfig())
             .contains(Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build())
     }
@@ -210,6 +227,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .collectionSchedule(Subscription.CollectionSchedule.ADVANCE)
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .proration(
                     Subscription.Proration.builder()
                         .invoiceBehavior(Subscription.Proration.InvoiceBehavior.BILL_IMMEDIATELY)
@@ -253,6 +271,7 @@ internal class SubscriptionTest {
                         )
                         .build()
                 )
+                .customCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .customFields(
                     Subscription.CustomFields.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -262,6 +281,11 @@ internal class SubscriptionTest {
                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .fiatCreditTypeId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .name("name")
+                .productCustomFields(
+                    Subscription.ProductCustomFields.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .seatConfig(
                     Subscription.SeatConfig.builder().seatGroupKey("seat_group_key").build()
                 )

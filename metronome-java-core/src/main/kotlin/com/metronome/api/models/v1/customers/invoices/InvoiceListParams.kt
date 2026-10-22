@@ -56,6 +56,7 @@ private constructor(
     private val contractId: String?,
     private val creditTypeId: String?,
     private val endingBefore: OffsetDateTime?,
+    private val includeHistoricalCommitInvoices: Boolean?,
     private val limit: Long?,
     private val nextPage: String?,
     private val skipZeroQtyLineItems: Boolean?,
@@ -81,6 +82,12 @@ private constructor(
      * before this time.
      */
     fun endingBefore(): Optional<OffsetDateTime> = Optional.ofNullable(endingBefore)
+
+    /**
+     * When true, includes historical commit invoices alongside active invoices. Defaults to false.
+     */
+    fun includeHistoricalCommitInvoices(): Optional<Boolean> =
+        Optional.ofNullable(includeHistoricalCommitInvoices)
 
     /** Max number of results that should be returned */
     fun limit(): Optional<Long> = Optional.ofNullable(limit)
@@ -139,6 +146,7 @@ private constructor(
         private var contractId: String? = null
         private var creditTypeId: String? = null
         private var endingBefore: OffsetDateTime? = null
+        private var includeHistoricalCommitInvoices: Boolean? = null
         private var limit: Long? = null
         private var nextPage: String? = null
         private var skipZeroQtyLineItems: Boolean? = null
@@ -156,6 +164,7 @@ private constructor(
             contractId = invoiceListParams.contractId
             creditTypeId = invoiceListParams.creditTypeId
             endingBefore = invoiceListParams.endingBefore
+            includeHistoricalCommitInvoices = invoiceListParams.includeHistoricalCommitInvoices
             limit = invoiceListParams.limit
             nextPage = invoiceListParams.nextPage
             skipZeroQtyLineItems = invoiceListParams.skipZeroQtyLineItems
@@ -191,6 +200,29 @@ private constructor(
         /** Alias for calling [Builder.endingBefore] with `endingBefore.orElse(null)`. */
         fun endingBefore(endingBefore: Optional<OffsetDateTime>) =
             endingBefore(endingBefore.getOrNull())
+
+        /**
+         * When true, includes historical commit invoices alongside active invoices. Defaults to
+         * false.
+         */
+        fun includeHistoricalCommitInvoices(includeHistoricalCommitInvoices: Boolean?) = apply {
+            this.includeHistoricalCommitInvoices = includeHistoricalCommitInvoices
+        }
+
+        /**
+         * Alias for [Builder.includeHistoricalCommitInvoices].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun includeHistoricalCommitInvoices(includeHistoricalCommitInvoices: Boolean) =
+            includeHistoricalCommitInvoices(includeHistoricalCommitInvoices as Boolean?)
+
+        /**
+         * Alias for calling [Builder.includeHistoricalCommitInvoices] with
+         * `includeHistoricalCommitInvoices.orElse(null)`.
+         */
+        fun includeHistoricalCommitInvoices(includeHistoricalCommitInvoices: Optional<Boolean>) =
+            includeHistoricalCommitInvoices(includeHistoricalCommitInvoices.getOrNull())
 
         /** Max number of results that should be returned */
         fun limit(limit: Long?) = apply { this.limit = limit }
@@ -389,6 +421,7 @@ private constructor(
                 contractId,
                 creditTypeId,
                 endingBefore,
+                includeHistoricalCommitInvoices,
                 limit,
                 nextPage,
                 skipZeroQtyLineItems,
@@ -417,6 +450,9 @@ private constructor(
                 creditTypeId?.let { put("credit_type_id", it) }
                 endingBefore?.let {
                     put("ending_before", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                includeHistoricalCommitInvoices?.let {
+                    put("include_historical_commit_invoices", it.toString())
                 }
                 limit?.let { put("limit", it.toString()) }
                 nextPage?.let { put("next_page", it) }
@@ -722,6 +758,7 @@ private constructor(
             contractId == other.contractId &&
             creditTypeId == other.creditTypeId &&
             endingBefore == other.endingBefore &&
+            includeHistoricalCommitInvoices == other.includeHistoricalCommitInvoices &&
             limit == other.limit &&
             nextPage == other.nextPage &&
             skipZeroQtyLineItems == other.skipZeroQtyLineItems &&
@@ -740,6 +777,7 @@ private constructor(
             contractId,
             creditTypeId,
             endingBefore,
+            includeHistoricalCommitInvoices,
             limit,
             nextPage,
             skipZeroQtyLineItems,
@@ -753,5 +791,5 @@ private constructor(
         )
 
     override fun toString() =
-        "InvoiceListParams{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, type=$type, webhookNotificationId=$webhookNotificationId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "InvoiceListParams{customerId=$customerId, contractId=$contractId, creditTypeId=$creditTypeId, endingBefore=$endingBefore, includeHistoricalCommitInvoices=$includeHistoricalCommitInvoices, limit=$limit, nextPage=$nextPage, skipZeroQtyLineItems=$skipZeroQtyLineItems, sort=$sort, startingOn=$startingOn, status=$status, type=$type, webhookNotificationId=$webhookNotificationId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

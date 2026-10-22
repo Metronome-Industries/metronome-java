@@ -18,6 +18,11 @@ internal class NamedScheduleUpdateParamsTest {
             .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
             .value(JsonValue.from(mapOf("my_key" to "my_value")))
             .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+            .properties(
+                NamedScheduleUpdateParams.Properties.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .build()
     }
 
@@ -31,6 +36,11 @@ internal class NamedScheduleUpdateParamsTest {
                 .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .value(JsonValue.from(mapOf("my_key" to "my_value")))
                 .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+                .properties(
+                    NamedScheduleUpdateParams.Properties.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .build()
 
         val body = params._body()
@@ -41,6 +51,12 @@ internal class NamedScheduleUpdateParamsTest {
         assertThat(body.startingAt()).isEqualTo(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
         assertThat(body._value()).isEqualTo(JsonValue.from(mapOf("my_key" to "my_value")))
         assertThat(body.endingBefore()).contains(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+        assertThat(body.properties())
+            .contains(
+                NamedScheduleUpdateParams.Properties.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
     }
 
     @Test

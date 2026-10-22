@@ -5,6 +5,7 @@ package com.metronome.api.services.blocking.v1.contracts.ratecards
 import com.metronome.api.TestServerExtension
 import com.metronome.api.client.okhttp.MetronomeOkHttpClient
 import com.metronome.api.core.JsonValue
+import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleListParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleRetrieveParams
 import com.metronome.api.models.v1.contracts.ratecards.namedschedules.NamedScheduleUpdateParams
 import java.time.OffsetDateTime
@@ -30,6 +31,11 @@ internal class NamedScheduleServiceTest {
                     .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
                     .scheduleName("my-schedule")
                     .coveringDate(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+                    .properties(
+                        NamedScheduleRetrieveParams.Properties.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .build()
             )
 
@@ -53,7 +59,31 @@ internal class NamedScheduleServiceTest {
                 .startingAt(OffsetDateTime.parse("2022-02-01T00:00:00Z"))
                 .value(JsonValue.from(mapOf("my_key" to "my_value")))
                 .endingBefore(OffsetDateTime.parse("2022-02-15T00:00:00Z"))
+                .properties(
+                    NamedScheduleUpdateParams.Properties.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .build()
         )
+    }
+
+    @Test
+    fun list() {
+        val client =
+            MetronomeOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val namedScheduleService = client.v1().contracts().rateCards().namedSchedules()
+
+        val page =
+            namedScheduleService.list(
+                NamedScheduleListParams.builder()
+                    .customerId("9b85c1c1-5238-4f2a-a409-61412905e1e1")
+                    .build()
+            )
+
+        page.response().validate()
     }
 }
