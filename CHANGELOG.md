@@ -2,43 +2,30 @@
 
 ## [0.8.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.7.0...v0.8.0) (2026-10-27)
 
+Adds public API support for quantity-based balances, pricing-unit management, and subscription updates. Contract listing now supports pagination; see the migration guidance below.
 
 ### Features
 
-* Add access type filters to balance lists ([fc6ee1b](https://github.com/Metronome-Industries/metronome-java/commit/fc6ee1b7f3fc1a9645f0531f854fc19995c35d02))
-* Add access type to commit responses ([4311508](https://github.com/Metronome-Industries/metronome-java/commit/4311508711526fbfa14c5a7413354bd07a6c5b6f))
-* add access_type to commit and credit endpoints ([2a0c0d9](https://github.com/Metronome-Industries/metronome-java/commit/2a0c0d93ffc51a85ad7df80a940b2baa1ee00a50))
-* Add access_type to commit creation requests ([0b65351](https://github.com/Metronome-Industries/metronome-java/commit/0b6535161e9a74589651924aeabadbbe64b3bfb9))
-* add Billable Metric Update method ([52f0e09](https://github.com/Metronome-Industries/metronome-java/commit/52f0e0922418fcddef668278d60d5f285054ee3e))
-* Add custom_credit_type_id to subscriptions ([6a61a93](https://github.com/Metronome-Industries/metronome-java/commit/6a61a9320ad19de428726b3b5eba4c04a0c70099))
-* allow edit subscription name via editContract ([61f48bd](https://github.com/Metronome-Industries/metronome-java/commit/61f48bd08b4120ef528815ccdcd901d4cb139f95))
-* Create package with CUSTOM_DATE option. Provision package contract with custom billing_anchor_date. ([ebf2503](https://github.com/Metronome-Industries/metronome-java/commit/ebf250345fe0450a438fd18ad30cb2ecaa94e4db))
-* expose product custom fields on contract subscription terms ([97fc15a](https://github.com/Metronome-Industries/metronome-java/commit/97fc15a99911c4a22663708a4cbfffaffe9818a6))
-* internal only ([250eebc](https://github.com/Metronome-Industries/metronome-java/commit/250eebca168efc3a75070f84df0b70c045a9ccd3))
-* internal only ([74331d6](https://github.com/Metronome-Industries/metronome-java/commit/74331d6d600e6609b0cdf7ce8eabdefe0aa9f04b))
-* internal only ([c0beca8](https://github.com/Metronome-Industries/metronome-java/commit/c0beca8941f02a201439b6232bb12c2e88d21e78))
-* Retire the MCP node package. ([babd399](https://github.com/Metronome-Industries/metronome-java/commit/babd399ad86c0ec47d961dbc5724483cd53262ea))
-
-
-### Bug Fixes
-
-* prevent SDK generation from restoring release-doctor ([9b98982](https://github.com/Metronome-Industries/metronome-java/commit/9b989820dacc15f4c64d942e8f468825d102fad6))
-* **stlc:** reject collapsed custom-code tracking ([c660d97](https://github.com/Metronome-Industries/metronome-java/commit/c660d97d2121fab565f3c75b727df6309cea14d5))
-* **workflows:** harden SDK release and promotion ([#8](https://github.com/Metronome-Industries/metronome-java/issues/8)) ([3a46585](https://github.com/Metronome-Industries/metronome-java/commit/3a465850fb5a67fbbb5a4914fc27b0c73151cf3e))
-
-
-### Chores
-
-* **api:** add feature-gated webhook delivery observability endpoint ([95b18fb](https://github.com/Metronome-Industries/metronome-java/commit/95b18fb893046cea508dbfe3fd84f69288e58ba3))
-* metronome SDK codegen flow improvements ([585a811](https://github.com/Metronome-Industries/metronome-java/commit/585a8117e54e67182d1e7fc8a506711a56cd5c98))
-* promote SDK changes from staging ([e90a70e](https://github.com/Metronome-Industries/metronome-java/commit/e90a70e063ded847aeb67ad64b3d257f79b8d72f))
-* wire package customizations field. ([87b159e](https://github.com/Metronome-Industries/metronome-java/commit/87b159e73ba7cb31f779b7ffc903035e5d09b8b4))
-
+- Set `access_type` to `SPEND` or `QUANTITY` for commit and credit access schedules, and filter commits, balances, and net balances by access type. ([2a0c0d9](https://github.com/Metronome-Industries/metronome-java/commit/2a0c0d93ffc51a85ad7df80a940b2baa1ee00a50))
+- Read the units deducted from quantity-based commits through invoice line-item `quantity_consumed`. ([ca76451](https://github.com/Metronome-Industries/metronome-java/commit/ca76451135df9c55cc39a8e1f6138789570c13e9))
+- Update a billable metric's display name. ([52f0e09](https://github.com/Metronome-Industries/metronome-java/commit/52f0e0922418fcddef668278d60d5f285054ee3e))
+- Create and archive custom pricing units. ([c0beca8](https://github.com/Metronome-Industries/metronome-java/commit/c0beca8941f02a201439b6232bb12c2e88d21e78))
+- Read subscription product custom fields in contract responses, and rename subscriptions through contract edits. ([97fc15a](https://github.com/Metronome-Industries/metronome-java/commit/97fc15a99911c4a22663708a4cbfffaffe9818a6)) ([61f48bd](https://github.com/Metronome-Industries/metronome-java/commit/61f48bd08b4120ef528815ccdcd901d4cb139f95))
+- Use `CUSTOM_DATE` as the billing-cycle anchor when creating a package. ([ebf2503](https://github.com/Metronome-Industries/metronome-java/commit/ebf250345fe0450a438fd18ad30cb2ecaa94e4db))
+- Configure the duration, rate type, and rollover fraction of commits created by prepaid-balance threshold billing. ([0a541ff](https://github.com/Metronome-Industries/metronome-java/commit/0a541ff3af194cf43759dc65d856f1bc8c99c14c))
+- Set `include_composite_spend` to include spend from other composite products. ([f0a2385](https://github.com/Metronome-Industries/metronome-java/commit/f0a23852df51a37e2d3f3e23f315a7034c7f7516))
+- Supply a `uniqueness_key` when adding a manual balance entry to prevent duplicate adjustments. ([b96e4db](https://github.com/Metronome-Industries/metronome-java/commit/b96e4db0710c0cba2d3a1ba37918c72cc8cc03c3))
+- Include historical commit invoices when listing invoices with `include_historical_commit_invoices`. ([9b98982](https://github.com/Metronome-Industries/metronome-java/commit/9b989820dacc15f4c64d942e8f468825d102fad6))
 
 ### Documentation
 
-* make /alerts/archive idempotent ([b3e4930](https://github.com/Metronome-Industries/metronome-java/commit/b3e49305db0070fdfab5ae00e59a58a71708f3d6))
-* point existing support portal link to new portal link ([d7f92d4](https://github.com/Metronome-Industries/metronome-java/commit/d7f92d451740f001209394587eb70f8a2bc51fdb))
+- Clarify that archiving an already archived threshold notification succeeds, and update links to the support portal. ([b3e4930](https://github.com/Metronome-Industries/metronome-java/commit/b3e49305db0070fdfab5ae00e59a58a71708f3d6)) ([d7f92d4](https://github.com/Metronome-Industries/metronome-java/commit/d7f92d451740f001209394587eb70f8a2bc51fdb))
+
+### Breaking changes
+
+- V1 and V2 contract `list` methods now return `ContractListPage` (`ContractListPageAsync` for asynchronous calls) instead of `ContractListResponse`. Update imports and return-type declarations; use `page.items()` for one page or `page.autoPager()` to process every contract. Requests accept `cursor` and `limit` (1–20); a single page contains at most 20 contracts. ([87b159e](https://github.com/Metronome-Industries/metronome-java/commit/87b159e73ba7cb31f779b7ffc903035e5d09b8b4))
+- Recurring commit and credit input models now return `Optional<String>` from `accessAmount().creditTypeId()`. Update callers to handle an absent credit type; the documented default is USD cents. ([250eebc](https://github.com/Metronome-Industries/metronome-java/commit/250eebca168efc3a75070f84df0b70c045a9ccd3))
+- Manually built response models now require `anchorDate` for recurring commits and credits, and `createdAt` for subscriptions. Supply these fields in response fixtures and custom model construction. ([3a3f408](https://github.com/Metronome-Industries/metronome-java/commit/3a3f4086ba100fee3ca408ef7a14930573a2e5b1)) ([9b98982](https://github.com/Metronome-Industries/metronome-java/commit/9b989820dacc15f4c64d942e8f468825d102fad6))
 
 ## [0.7.0](https://github.com/Metronome-Industries/metronome-java/compare/v0.6.0...v0.7.0) (2026-07-31)
 
