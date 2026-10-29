@@ -973,6 +973,11 @@ internal class PackageListPageResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .billingCycleConfig(
                                     PackageListResponse.Subscription.BillingCycleConfig.builder()
+                                        .billingCycleAnchor(
+                                            PackageListResponse.Subscription.BillingCycleConfig
+                                                .BillingCycleAnchor
+                                                .SUBSCRIPTION_START
+                                        )
                                         .invoicePlacement(
                                             PackageListResponse.Subscription.BillingCycleConfig
                                                 .InvoicePlacement
@@ -1014,6 +1019,7 @@ internal class PackageListPageResponseTest {
                                         .value(0L)
                                         .build()
                                 )
+                                .subscriptionAlias("subscription_alias")
                                 .build()
                         )
                         .uniquenessKey("x")
@@ -1895,6 +1901,11 @@ internal class PackageListPageResponseTest {
                             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .billingCycleConfig(
                                 PackageListResponse.Subscription.BillingCycleConfig.builder()
+                                    .billingCycleAnchor(
+                                        PackageListResponse.Subscription.BillingCycleConfig
+                                            .BillingCycleAnchor
+                                            .SUBSCRIPTION_START
+                                    )
                                     .invoicePlacement(
                                         PackageListResponse.Subscription.BillingCycleConfig
                                             .InvoicePlacement
@@ -1934,6 +1945,7 @@ internal class PackageListPageResponseTest {
                                     .value(0L)
                                     .build()
                             )
+                            .subscriptionAlias("subscription_alias")
                             .build()
                     )
                     .uniquenessKey("x")
@@ -2896,6 +2908,11 @@ internal class PackageListPageResponseTest {
                                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .billingCycleConfig(
                                     PackageListResponse.Subscription.BillingCycleConfig.builder()
+                                        .billingCycleAnchor(
+                                            PackageListResponse.Subscription.BillingCycleConfig
+                                                .BillingCycleAnchor
+                                                .SUBSCRIPTION_START
+                                        )
                                         .invoicePlacement(
                                             PackageListResponse.Subscription.BillingCycleConfig
                                                 .InvoicePlacement
@@ -2937,6 +2954,7 @@ internal class PackageListPageResponseTest {
                                         .value(0L)
                                         .build()
                                 )
+                                .subscriptionAlias("subscription_alias")
                                 .build()
                         )
                         .uniquenessKey("x")

@@ -740,6 +740,11 @@ internal class PackageCreateParamsTest {
                     )
                     .billingCycleConfig(
                         PackageCreateParams.Subscription.BillingCycleConfig.builder()
+                            .billingCycleAnchor(
+                                PackageCreateParams.Subscription.BillingCycleConfig
+                                    .BillingCycleAnchor
+                                    .SUBSCRIPTION_START
+                            )
                             .invoicePlacement(
                                 PackageCreateParams.Subscription.BillingCycleConfig.InvoicePlacement
                                     .ON_SCHEDULED_INVOICE
@@ -775,6 +780,7 @@ internal class PackageCreateParamsTest {
                             .value(0L)
                             .build()
                     )
+                    .subscriptionAlias("subscription_alias")
                     .temporaryId("temporary_id")
                     .build()
             )
@@ -1572,6 +1578,11 @@ internal class PackageCreateParamsTest {
                         )
                         .billingCycleConfig(
                             PackageCreateParams.Subscription.BillingCycleConfig.builder()
+                                .billingCycleAnchor(
+                                    PackageCreateParams.Subscription.BillingCycleConfig
+                                        .BillingCycleAnchor
+                                        .SUBSCRIPTION_START
+                                )
                                 .invoicePlacement(
                                     PackageCreateParams.Subscription.BillingCycleConfig
                                         .InvoicePlacement
@@ -1608,6 +1619,7 @@ internal class PackageCreateParamsTest {
                                 .value(0L)
                                 .build()
                         )
+                        .subscriptionAlias("subscription_alias")
                         .temporaryId("temporary_id")
                         .build()
                 )
@@ -2368,6 +2380,11 @@ internal class PackageCreateParamsTest {
                     )
                     .billingCycleConfig(
                         PackageCreateParams.Subscription.BillingCycleConfig.builder()
+                            .billingCycleAnchor(
+                                PackageCreateParams.Subscription.BillingCycleConfig
+                                    .BillingCycleAnchor
+                                    .SUBSCRIPTION_START
+                            )
                             .invoicePlacement(
                                 PackageCreateParams.Subscription.BillingCycleConfig.InvoicePlacement
                                     .ON_SCHEDULED_INVOICE
@@ -2403,6 +2420,7 @@ internal class PackageCreateParamsTest {
                             .value(0L)
                             .build()
                     )
+                    .subscriptionAlias("subscription_alias")
                     .temporaryId("temporary_id")
                     .build()
             )

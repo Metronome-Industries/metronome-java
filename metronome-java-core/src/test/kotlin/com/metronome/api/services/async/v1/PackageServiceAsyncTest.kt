@@ -831,6 +831,11 @@ internal class PackageServiceAsyncTest {
                             )
                             .billingCycleConfig(
                                 PackageCreateParams.Subscription.BillingCycleConfig.builder()
+                                    .billingCycleAnchor(
+                                        PackageCreateParams.Subscription.BillingCycleConfig
+                                            .BillingCycleAnchor
+                                            .SUBSCRIPTION_START
+                                    )
                                     .invoicePlacement(
                                         PackageCreateParams.Subscription.BillingCycleConfig
                                             .InvoicePlacement
@@ -869,6 +874,7 @@ internal class PackageServiceAsyncTest {
                                     .value(0L)
                                     .build()
                             )
+                            .subscriptionAlias("subscription_alias")
                             .temporaryId("temporary_id")
                             .build()
                     )
