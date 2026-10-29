@@ -42,6 +42,46 @@ internal class CustomerRetrieveBillingConfigurationsResponseTest {
                                 .build()
                         )
                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .unbillableInvoicesConfiguration(
+                            listOf(
+                                CustomerRetrieveBillingConfigurationsResponse.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerRetrieveBillingConfigurationsResponse.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerRetrieveBillingConfigurationsResponse.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerRetrieveBillingConfigurationsResponse.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerRetrieveBillingConfigurationsResponse.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerRetrieveBillingConfigurationsResponse.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .SCHEDULED
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                            )
+                        )
                         .build()
                 )
                 .build()
@@ -73,6 +113,46 @@ internal class CustomerRetrieveBillingConfigurationsResponseTest {
                             .build()
                     )
                     .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .unbillableInvoicesConfiguration(
+                        listOf(
+                            CustomerRetrieveBillingConfigurationsResponse.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerRetrieveBillingConfigurationsResponse.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerRetrieveBillingConfigurationsResponse.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerRetrieveBillingConfigurationsResponse.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerRetrieveBillingConfigurationsResponse.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerRetrieveBillingConfigurationsResponse.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .SCHEDULED
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                        )
+                    )
                     .build()
             )
     }
@@ -109,6 +189,46 @@ internal class CustomerRetrieveBillingConfigurationsResponseTest {
                                 .build()
                         )
                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .unbillableInvoicesConfiguration(
+                            listOf(
+                                CustomerRetrieveBillingConfigurationsResponse.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerRetrieveBillingConfigurationsResponse.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerRetrieveBillingConfigurationsResponse.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerRetrieveBillingConfigurationsResponse.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerRetrieveBillingConfigurationsResponse.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerRetrieveBillingConfigurationsResponse.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .SCHEDULED
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                            )
+                        )
                         .build()
                 )
                 .build()

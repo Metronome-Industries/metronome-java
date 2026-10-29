@@ -13699,6 +13699,8 @@ private constructor(
 
                     @JvmField val QUARTERLY = of("QUARTERLY")
 
+                    @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                     @JvmField val ANNUAL = of("ANNUAL")
 
                     @JvmField val WEEKLY = of("WEEKLY")
@@ -13710,6 +13712,7 @@ private constructor(
                 enum class Known {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                 }
@@ -13728,6 +13731,7 @@ private constructor(
                 enum class Value {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                     /**
@@ -13748,6 +13752,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Value.MONTHLY
                         QUARTERLY -> Value.QUARTERLY
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
                         ANNUAL -> Value.ANNUAL
                         WEEKLY -> Value.WEEKLY
                         else -> Value._UNKNOWN
@@ -13766,6 +13771,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Known.MONTHLY
                         QUARTERLY -> Known.QUARTERLY
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
                         ANNUAL -> Known.ANNUAL
                         WEEKLY -> Known.WEEKLY
                         else ->
@@ -16518,6 +16524,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -16529,6 +16537,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
             }
@@ -16545,6 +16554,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 /**
@@ -16565,6 +16575,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     else -> Value._UNKNOWN
@@ -16583,6 +16594,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")
@@ -16948,6 +16960,8 @@ private constructor(
             private val deliveryMethod: JsonField<DeliveryMethod>,
             private val deliveryMethodConfiguration: JsonField<DeliveryMethodConfiguration>,
             private val deliveryMethodId: JsonField<String>,
+            private val unbillableInvoicesConfiguration:
+                JsonField<List<UnbillableInvoicesConfiguration>>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -16976,6 +16990,10 @@ private constructor(
                 @JsonProperty("delivery_method_id")
                 @ExcludeMissing
                 deliveryMethodId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("unbillable_invoices_configuration")
+                @ExcludeMissing
+                unbillableInvoicesConfiguration: JsonField<List<UnbillableInvoicesConfiguration>> =
+                    JsonMissing.of(),
             ) : this(
                 id,
                 archivedAt,
@@ -16985,6 +17003,7 @@ private constructor(
                 deliveryMethod,
                 deliveryMethodConfiguration,
                 deliveryMethodId,
+                unbillableInvoicesConfiguration,
                 mutableMapOf(),
             )
 
@@ -17058,6 +17077,18 @@ private constructor(
              *   value).
              */
             fun deliveryMethodId(): String = deliveryMethodId.getRequired("delivery_method_id")
+
+            /**
+             * Rules that stop matching invoices from being sent to the billing provider. Supported
+             * for Stripe and NetSuite billing provider configurations. When omitted, every invoice
+             * is sent to the billing provider. Stripe invoices can be force-sent after a rule
+             * suppresses them.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun unbillableInvoicesConfiguration(): Optional<List<UnbillableInvoicesConfiguration>> =
+                unbillableInvoicesConfiguration.getOptional("unbillable_invoices_configuration")
 
             /**
              * Returns the raw JSON value of [id].
@@ -17137,6 +17168,17 @@ private constructor(
             @ExcludeMissing
             fun _deliveryMethodId(): JsonField<String> = deliveryMethodId
 
+            /**
+             * Returns the raw JSON value of [unbillableInvoicesConfiguration].
+             *
+             * Unlike [unbillableInvoicesConfiguration], this method doesn't throw if the JSON field
+             * has an unexpected type.
+             */
+            @JsonProperty("unbillable_invoices_configuration")
+            @ExcludeMissing
+            fun _unbillableInvoicesConfiguration():
+                JsonField<List<UnbillableInvoicesConfiguration>> = unbillableInvoicesConfiguration
+
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -17182,6 +17224,9 @@ private constructor(
                 private var deliveryMethodConfiguration: JsonField<DeliveryMethodConfiguration>? =
                     null
                 private var deliveryMethodId: JsonField<String>? = null
+                private var unbillableInvoicesConfiguration:
+                    JsonField<MutableList<UnbillableInvoicesConfiguration>>? =
+                    null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -17196,6 +17241,10 @@ private constructor(
                         deliveryMethodConfiguration =
                             billingProviderConfiguration.deliveryMethodConfiguration
                         deliveryMethodId = billingProviderConfiguration.deliveryMethodId
+                        unbillableInvoicesConfiguration =
+                            billingProviderConfiguration.unbillableInvoicesConfiguration.map {
+                                it.toMutableList()
+                            }
                         additionalProperties =
                             billingProviderConfiguration.additionalProperties.toMutableMap()
                     }
@@ -17328,6 +17377,48 @@ private constructor(
                     this.deliveryMethodId = deliveryMethodId
                 }
 
+                /**
+                 * Rules that stop matching invoices from being sent to the billing provider.
+                 * Supported for Stripe and NetSuite billing provider configurations. When omitted,
+                 * every invoice is sent to the billing provider. Stripe invoices can be force-sent
+                 * after a rule suppresses them.
+                 */
+                fun unbillableInvoicesConfiguration(
+                    unbillableInvoicesConfiguration: List<UnbillableInvoicesConfiguration>
+                ) = unbillableInvoicesConfiguration(JsonField.of(unbillableInvoicesConfiguration))
+
+                /**
+                 * Sets [Builder.unbillableInvoicesConfiguration] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.unbillableInvoicesConfiguration] with a
+                 * well-typed `List<UnbillableInvoicesConfiguration>` value instead. This method is
+                 * primarily for setting the field to an undocumented or not yet supported value.
+                 */
+                fun unbillableInvoicesConfiguration(
+                    unbillableInvoicesConfiguration:
+                        JsonField<List<UnbillableInvoicesConfiguration>>
+                ) = apply {
+                    this.unbillableInvoicesConfiguration =
+                        unbillableInvoicesConfiguration.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [UnbillableInvoicesConfiguration] to
+                 * [Builder.unbillableInvoicesConfiguration].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addUnbillableInvoicesConfiguration(
+                    unbillableInvoicesConfiguration: UnbillableInvoicesConfiguration
+                ) = apply {
+                    this.unbillableInvoicesConfiguration =
+                        (this.unbillableInvoicesConfiguration ?: JsonField.of(mutableListOf()))
+                            .also {
+                                checkKnown("unbillableInvoicesConfiguration", it)
+                                    .add(unbillableInvoicesConfiguration)
+                            }
+                }
+
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
                     putAllAdditionalProperties(additionalProperties)
@@ -17379,6 +17470,9 @@ private constructor(
                         checkRequired("deliveryMethod", deliveryMethod),
                         checkRequired("deliveryMethodConfiguration", deliveryMethodConfiguration),
                         checkRequired("deliveryMethodId", deliveryMethodId),
+                        (unbillableInvoicesConfiguration ?: JsonMissing.of()).map {
+                            it.toImmutable()
+                        },
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -17408,6 +17502,7 @@ private constructor(
                 deliveryMethod().validate()
                 deliveryMethodConfiguration().validate()
                 deliveryMethodId()
+                unbillableInvoicesConfiguration().ifPresent { it.forEach { it.validate() } }
                 validated = true
             }
 
@@ -17434,7 +17529,10 @@ private constructor(
                     (if (customerId.asKnown().isPresent) 1 else 0) +
                     (deliveryMethod.asKnown().getOrNull()?.validity() ?: 0) +
                     (deliveryMethodConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
-                    (if (deliveryMethodId.asKnown().isPresent) 1 else 0)
+                    (if (deliveryMethodId.asKnown().isPresent) 1 else 0) +
+                    (unbillableInvoicesConfiguration.asKnown().getOrNull()?.sumOf {
+                        it.validity().toInt()
+                    } ?: 0)
 
             /** The billing provider set for this configuration. */
             class BillingProvider
@@ -18030,6 +18128,451 @@ private constructor(
                     "DeliveryMethodConfiguration{additionalProperties=$additionalProperties}"
             }
 
+            /**
+             * An individual rule that, when evaluated to true, indicates that any invoices for this
+             * billing provider will not be sent to its associated destination for the associated
+             * contract. Rules only apply to the specified `invoice_type` (or all invoices if
+             * omitted) and `fiat_credit_type_id` (or all invoices if omitted). Rule precedence is
+             * evaluated from more specific to less specific. This method will fail with a 400 if
+             * multiple rules with the same specificity are included.
+             */
+            class UnbillableInvoicesConfiguration
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val invoiceType: JsonField<InvoiceType>,
+                private val fiatCreditTypeId: JsonField<String>,
+                private val maxAmount: JsonField<Double>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("invoice_type")
+                    @ExcludeMissing
+                    invoiceType: JsonField<InvoiceType> = JsonMissing.of(),
+                    @JsonProperty("fiat_credit_type_id")
+                    @ExcludeMissing
+                    fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("max_amount")
+                    @ExcludeMissing
+                    maxAmount: JsonField<Double> = JsonMissing.of(),
+                ) : this(invoiceType, fiatCreditTypeId, maxAmount, mutableMapOf())
+
+                /**
+                 * The type of invoice this rule applies to.
+                 *
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or
+                 *   is unexpectedly missing or null (e.g. if the server responded with an
+                 *   unexpected value).
+                 */
+                fun invoiceType(): InvoiceType = invoiceType.getRequired("invoice_type")
+
+                /**
+                 * Restricts the rule to invoices in this fiat currency. Omit for a catch-all rule
+                 * that applies to every currency of the `invoice_type`. Required when `max_amount`
+                 * is set.
+                 *
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun fiatCreditTypeId(): Optional<String> =
+                    fiatCreditTypeId.getOptional("fiat_credit_type_id")
+
+                /**
+                 * A positive decimal, in the units of `fiat_credit_type_id`. Only invoices whose
+                 * total is at or below this amount are suppressed; a higher total is still sent to
+                 * the billing provider. When omitted, every matching invoice is suppressed
+                 * regardless of amount.
+                 *
+                 * @throws MetronomeInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun maxAmount(): Optional<Double> = maxAmount.getOptional("max_amount")
+
+                /**
+                 * Returns the raw JSON value of [invoiceType].
+                 *
+                 * Unlike [invoiceType], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("invoice_type")
+                @ExcludeMissing
+                fun _invoiceType(): JsonField<InvoiceType> = invoiceType
+
+                /**
+                 * Returns the raw JSON value of [fiatCreditTypeId].
+                 *
+                 * Unlike [fiatCreditTypeId], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("fiat_credit_type_id")
+                @ExcludeMissing
+                fun _fiatCreditTypeId(): JsonField<String> = fiatCreditTypeId
+
+                /**
+                 * Returns the raw JSON value of [maxAmount].
+                 *
+                 * Unlike [maxAmount], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("max_amount")
+                @ExcludeMissing
+                fun _maxAmount(): JsonField<Double> = maxAmount
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [UnbillableInvoicesConfiguration].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .invoiceType()
+                     * ```
+                     */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [UnbillableInvoicesConfiguration]. */
+                class Builder internal constructor() {
+
+                    private var invoiceType: JsonField<InvoiceType>? = null
+                    private var fiatCreditTypeId: JsonField<String> = JsonMissing.of()
+                    private var maxAmount: JsonField<Double> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(
+                        unbillableInvoicesConfiguration: UnbillableInvoicesConfiguration
+                    ) = apply {
+                        invoiceType = unbillableInvoicesConfiguration.invoiceType
+                        fiatCreditTypeId = unbillableInvoicesConfiguration.fiatCreditTypeId
+                        maxAmount = unbillableInvoicesConfiguration.maxAmount
+                        additionalProperties =
+                            unbillableInvoicesConfiguration.additionalProperties.toMutableMap()
+                    }
+
+                    /** The type of invoice this rule applies to. */
+                    fun invoiceType(invoiceType: InvoiceType) =
+                        invoiceType(JsonField.of(invoiceType))
+
+                    /**
+                     * Sets [Builder.invoiceType] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.invoiceType] with a well-typed [InvoiceType]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun invoiceType(invoiceType: JsonField<InvoiceType>) = apply {
+                        this.invoiceType = invoiceType
+                    }
+
+                    /**
+                     * Restricts the rule to invoices in this fiat currency. Omit for a catch-all
+                     * rule that applies to every currency of the `invoice_type`. Required when
+                     * `max_amount` is set.
+                     */
+                    fun fiatCreditTypeId(fiatCreditTypeId: String) =
+                        fiatCreditTypeId(JsonField.of(fiatCreditTypeId))
+
+                    /**
+                     * Sets [Builder.fiatCreditTypeId] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.fiatCreditTypeId] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun fiatCreditTypeId(fiatCreditTypeId: JsonField<String>) = apply {
+                        this.fiatCreditTypeId = fiatCreditTypeId
+                    }
+
+                    /**
+                     * A positive decimal, in the units of `fiat_credit_type_id`. Only invoices
+                     * whose total is at or below this amount are suppressed; a higher total is
+                     * still sent to the billing provider. When omitted, every matching invoice is
+                     * suppressed regardless of amount.
+                     */
+                    fun maxAmount(maxAmount: Double) = maxAmount(JsonField.of(maxAmount))
+
+                    /**
+                     * Sets [Builder.maxAmount] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.maxAmount] with a well-typed [Double] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun maxAmount(maxAmount: JsonField<Double>) = apply {
+                        this.maxAmount = maxAmount
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [UnbillableInvoicesConfiguration].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .invoiceType()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): UnbillableInvoicesConfiguration =
+                        UnbillableInvoicesConfiguration(
+                            checkRequired("invoiceType", invoiceType),
+                            fiatCreditTypeId,
+                            maxAmount,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): UnbillableInvoicesConfiguration = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    invoiceType().validate()
+                    fiatCreditTypeId()
+                    maxAmount()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (invoiceType.asKnown().getOrNull()?.validity() ?: 0) +
+                        (if (fiatCreditTypeId.asKnown().isPresent) 1 else 0) +
+                        (if (maxAmount.asKnown().isPresent) 1 else 0)
+
+                /** The type of invoice this rule applies to. */
+                class InvoiceType
+                @JsonCreator
+                private constructor(private val value: JsonField<String>) : Enum {
+
+                    /**
+                     * Returns this class instance's raw value.
+                     *
+                     * This is usually only useful if this instance was deserialized from data that
+                     * doesn't match any known member, and you want to know that value. For example,
+                     * if the SDK is on an older version than the API, then the API may respond with
+                     * new members that the SDK is unaware of.
+                     */
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    fun _value(): JsonField<String> = value
+
+                    companion object {
+
+                        @JvmField val USAGE = of("USAGE")
+
+                        @JvmField val SCHEDULED = of("SCHEDULED")
+
+                        @JvmStatic fun of(value: String) = InvoiceType(JsonField.of(value))
+                    }
+
+                    /** An enum containing [InvoiceType]'s known values. */
+                    enum class Known {
+                        USAGE,
+                        SCHEDULED,
+                    }
+
+                    /**
+                     * An enum containing [InvoiceType]'s known values, as well as an [_UNKNOWN]
+                     * member.
+                     *
+                     * An instance of [InvoiceType] can contain an unknown value in a couple of
+                     * cases:
+                     * - It was deserialized from data that doesn't match any known member. For
+                     *   example, if the SDK is on an older version than the API, then the API may
+                     *   respond with new members that the SDK is unaware of.
+                     * - It was constructed with an arbitrary value using the [of] method.
+                     */
+                    enum class Value {
+                        USAGE,
+                        SCHEDULED,
+                        /**
+                         * An enum member indicating that [InvoiceType] was instantiated with an
+                         * unknown value.
+                         */
+                        _UNKNOWN,
+                    }
+
+                    /**
+                     * Returns an enum member corresponding to this class instance's value, or
+                     * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                     *
+                     * Use the [known] method instead if you're certain the value is always known or
+                     * if you want to throw for the unknown case.
+                     */
+                    fun value(): Value =
+                        when (this) {
+                            USAGE -> Value.USAGE
+                            SCHEDULED -> Value.SCHEDULED
+                            else -> Value._UNKNOWN
+                        }
+
+                    /**
+                     * Returns an enum member corresponding to this class instance's value.
+                     *
+                     * Use the [value] method instead if you're uncertain the value is always known
+                     * and don't want to throw for the unknown case.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value is a not
+                     *   a known member.
+                     */
+                    fun known(): Known =
+                        when (this) {
+                            USAGE -> Known.USAGE
+                            SCHEDULED -> Known.SCHEDULED
+                            else ->
+                                throw MetronomeInvalidDataException("Unknown InvoiceType: $value")
+                        }
+
+                    /**
+                     * Returns this class instance's primitive wire representation.
+                     *
+                     * This differs from the [toString] method because that method is primarily for
+                     * debugging and generally doesn't throw.
+                     *
+                     * @throws MetronomeInvalidDataException if this class instance's value does not
+                     *   have the expected primitive type.
+                     */
+                    fun asString(): String =
+                        _value().asString().orElseThrow {
+                            MetronomeInvalidDataException("Value is not a String")
+                        }
+
+                    private var validated: Boolean = false
+
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws MetronomeInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
+                    fun validate(): InvoiceType = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        known()
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: MetronomeInvalidDataException) {
+                            false
+                        }
+
+                    /**
+                     * Returns a score indicating how many valid values are contained in this object
+                     * recursively.
+                     *
+                     * Used for best match union deserialization.
+                     */
+                    @JvmSynthetic
+                    internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return other is InvoiceType && value == other.value
+                    }
+
+                    override fun hashCode() = value.hashCode()
+
+                    override fun toString() = value.toString()
+                }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is UnbillableInvoicesConfiguration &&
+                        invoiceType == other.invoiceType &&
+                        fiatCreditTypeId == other.fiatCreditTypeId &&
+                        maxAmount == other.maxAmount &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(invoiceType, fiatCreditTypeId, maxAmount, additionalProperties)
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "UnbillableInvoicesConfiguration{invoiceType=$invoiceType, fiatCreditTypeId=$fiatCreditTypeId, maxAmount=$maxAmount, additionalProperties=$additionalProperties}"
+            }
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
@@ -18044,6 +18587,7 @@ private constructor(
                     deliveryMethod == other.deliveryMethod &&
                     deliveryMethodConfiguration == other.deliveryMethodConfiguration &&
                     deliveryMethodId == other.deliveryMethodId &&
+                    unbillableInvoicesConfiguration == other.unbillableInvoicesConfiguration &&
                     additionalProperties == other.additionalProperties
             }
 
@@ -18057,6 +18601,7 @@ private constructor(
                     deliveryMethod,
                     deliveryMethodConfiguration,
                     deliveryMethodId,
+                    unbillableInvoicesConfiguration,
                     additionalProperties,
                 )
             }
@@ -18064,7 +18609,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BillingProviderConfiguration{id=$id, archivedAt=$archivedAt, billingProvider=$billingProvider, configuration=$configuration, customerId=$customerId, deliveryMethod=$deliveryMethod, deliveryMethodConfiguration=$deliveryMethodConfiguration, deliveryMethodId=$deliveryMethodId, additionalProperties=$additionalProperties}"
+                "BillingProviderConfiguration{id=$id, archivedAt=$archivedAt, billingProvider=$billingProvider, configuration=$configuration, customerId=$customerId, deliveryMethod=$deliveryMethod, deliveryMethodConfiguration=$deliveryMethodConfiguration, deliveryMethodId=$deliveryMethodId, unbillableInvoicesConfiguration=$unbillableInvoicesConfiguration, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {
@@ -24696,6 +25241,8 @@ private constructor(
         private val deliveryMethod: JsonField<DeliveryMethod>,
         private val deliveryMethodConfiguration: JsonField<DeliveryMethodConfiguration>,
         private val deliveryMethodId: JsonField<String>,
+        private val unbillableInvoicesConfiguration:
+            JsonField<List<UnbillableInvoicesConfiguration>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -24723,6 +25270,10 @@ private constructor(
             @JsonProperty("delivery_method_id")
             @ExcludeMissing
             deliveryMethodId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("unbillable_invoices_configuration")
+            @ExcludeMissing
+            unbillableInvoicesConfiguration: JsonField<List<UnbillableInvoicesConfiguration>> =
+                JsonMissing.of(),
         ) : this(
             id,
             archivedAt,
@@ -24732,6 +25283,7 @@ private constructor(
             deliveryMethod,
             deliveryMethodConfiguration,
             deliveryMethodId,
+            unbillableInvoicesConfiguration,
             mutableMapOf(),
         )
 
@@ -24798,6 +25350,17 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun deliveryMethodId(): String = deliveryMethodId.getRequired("delivery_method_id")
+
+        /**
+         * Rules that stop matching invoices from being sent to the billing provider. Supported for
+         * Stripe and NetSuite billing provider configurations. When omitted, every invoice is sent
+         * to the billing provider. Stripe invoices can be force-sent after a rule suppresses them.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun unbillableInvoicesConfiguration(): Optional<List<UnbillableInvoicesConfiguration>> =
+            unbillableInvoicesConfiguration.getOptional("unbillable_invoices_configuration")
 
         /**
          * Returns the raw JSON value of [id].
@@ -24875,6 +25438,17 @@ private constructor(
         @ExcludeMissing
         fun _deliveryMethodId(): JsonField<String> = deliveryMethodId
 
+        /**
+         * Returns the raw JSON value of [unbillableInvoicesConfiguration].
+         *
+         * Unlike [unbillableInvoicesConfiguration], this method doesn't throw if the JSON field has
+         * an unexpected type.
+         */
+        @JsonProperty("unbillable_invoices_configuration")
+        @ExcludeMissing
+        fun _unbillableInvoicesConfiguration(): JsonField<List<UnbillableInvoicesConfiguration>> =
+            unbillableInvoicesConfiguration
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -24919,6 +25493,9 @@ private constructor(
             private var deliveryMethod: JsonField<DeliveryMethod>? = null
             private var deliveryMethodConfiguration: JsonField<DeliveryMethodConfiguration>? = null
             private var deliveryMethodId: JsonField<String>? = null
+            private var unbillableInvoicesConfiguration:
+                JsonField<MutableList<UnbillableInvoicesConfiguration>>? =
+                null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -24934,6 +25511,10 @@ private constructor(
                 deliveryMethodConfiguration =
                     customerBillingProviderConfiguration.deliveryMethodConfiguration
                 deliveryMethodId = customerBillingProviderConfiguration.deliveryMethodId
+                unbillableInvoicesConfiguration =
+                    customerBillingProviderConfiguration.unbillableInvoicesConfiguration.map {
+                        it.toMutableList()
+                    }
                 additionalProperties =
                     customerBillingProviderConfiguration.additionalProperties.toMutableMap()
             }
@@ -25064,6 +25645,46 @@ private constructor(
                 this.deliveryMethodId = deliveryMethodId
             }
 
+            /**
+             * Rules that stop matching invoices from being sent to the billing provider. Supported
+             * for Stripe and NetSuite billing provider configurations. When omitted, every invoice
+             * is sent to the billing provider. Stripe invoices can be force-sent after a rule
+             * suppresses them.
+             */
+            fun unbillableInvoicesConfiguration(
+                unbillableInvoicesConfiguration: List<UnbillableInvoicesConfiguration>
+            ) = unbillableInvoicesConfiguration(JsonField.of(unbillableInvoicesConfiguration))
+
+            /**
+             * Sets [Builder.unbillableInvoicesConfiguration] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.unbillableInvoicesConfiguration] with a well-typed
+             * `List<UnbillableInvoicesConfiguration>` value instead. This method is primarily for
+             * setting the field to an undocumented or not yet supported value.
+             */
+            fun unbillableInvoicesConfiguration(
+                unbillableInvoicesConfiguration: JsonField<List<UnbillableInvoicesConfiguration>>
+            ) = apply {
+                this.unbillableInvoicesConfiguration =
+                    unbillableInvoicesConfiguration.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [UnbillableInvoicesConfiguration] to
+             * [Builder.unbillableInvoicesConfiguration].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addUnbillableInvoicesConfiguration(
+                unbillableInvoicesConfiguration: UnbillableInvoicesConfiguration
+            ) = apply {
+                this.unbillableInvoicesConfiguration =
+                    (this.unbillableInvoicesConfiguration ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("unbillableInvoicesConfiguration", it)
+                            .add(unbillableInvoicesConfiguration)
+                    }
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -25112,6 +25733,7 @@ private constructor(
                     checkRequired("deliveryMethod", deliveryMethod),
                     checkRequired("deliveryMethodConfiguration", deliveryMethodConfiguration),
                     checkRequired("deliveryMethodId", deliveryMethodId),
+                    (unbillableInvoicesConfiguration ?: JsonMissing.of()).map { it.toImmutable() },
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -25140,6 +25762,7 @@ private constructor(
             deliveryMethod().validate()
             deliveryMethodConfiguration().validate()
             deliveryMethodId()
+            unbillableInvoicesConfiguration().ifPresent { it.forEach { it.validate() } }
             validated = true
         }
 
@@ -25166,7 +25789,10 @@ private constructor(
                 (if (customerId.asKnown().isPresent) 1 else 0) +
                 (deliveryMethod.asKnown().getOrNull()?.validity() ?: 0) +
                 (deliveryMethodConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (deliveryMethodId.asKnown().isPresent) 1 else 0)
+                (if (deliveryMethodId.asKnown().isPresent) 1 else 0) +
+                (unbillableInvoicesConfiguration.asKnown().getOrNull()?.sumOf {
+                    it.validity().toInt()
+                } ?: 0)
 
         /** The billing provider set for this configuration. */
         class BillingProvider
@@ -25748,6 +26374,442 @@ private constructor(
                 "DeliveryMethodConfiguration{additionalProperties=$additionalProperties}"
         }
 
+        /**
+         * An individual rule that, when evaluated to true, indicates that any invoices for this
+         * billing provider will not be sent to its associated destination for the associated
+         * contract. Rules only apply to the specified `invoice_type` (or all invoices if omitted)
+         * and `fiat_credit_type_id` (or all invoices if omitted). Rule precedence is evaluated from
+         * more specific to less specific. This method will fail with a 400 if multiple rules with
+         * the same specificity are included.
+         */
+        class UnbillableInvoicesConfiguration
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val invoiceType: JsonField<InvoiceType>,
+            private val fiatCreditTypeId: JsonField<String>,
+            private val maxAmount: JsonField<Double>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("invoice_type")
+                @ExcludeMissing
+                invoiceType: JsonField<InvoiceType> = JsonMissing.of(),
+                @JsonProperty("fiat_credit_type_id")
+                @ExcludeMissing
+                fiatCreditTypeId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("max_amount")
+                @ExcludeMissing
+                maxAmount: JsonField<Double> = JsonMissing.of(),
+            ) : this(invoiceType, fiatCreditTypeId, maxAmount, mutableMapOf())
+
+            /**
+             * The type of invoice this rule applies to.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun invoiceType(): InvoiceType = invoiceType.getRequired("invoice_type")
+
+            /**
+             * Restricts the rule to invoices in this fiat currency. Omit for a catch-all rule that
+             * applies to every currency of the `invoice_type`. Required when `max_amount` is set.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun fiatCreditTypeId(): Optional<String> =
+                fiatCreditTypeId.getOptional("fiat_credit_type_id")
+
+            /**
+             * A positive decimal, in the units of `fiat_credit_type_id`. Only invoices whose total
+             * is at or below this amount are suppressed; a higher total is still sent to the
+             * billing provider. When omitted, every matching invoice is suppressed regardless of
+             * amount.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun maxAmount(): Optional<Double> = maxAmount.getOptional("max_amount")
+
+            /**
+             * Returns the raw JSON value of [invoiceType].
+             *
+             * Unlike [invoiceType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("invoice_type")
+            @ExcludeMissing
+            fun _invoiceType(): JsonField<InvoiceType> = invoiceType
+
+            /**
+             * Returns the raw JSON value of [fiatCreditTypeId].
+             *
+             * Unlike [fiatCreditTypeId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("fiat_credit_type_id")
+            @ExcludeMissing
+            fun _fiatCreditTypeId(): JsonField<String> = fiatCreditTypeId
+
+            /**
+             * Returns the raw JSON value of [maxAmount].
+             *
+             * Unlike [maxAmount], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("max_amount")
+            @ExcludeMissing
+            fun _maxAmount(): JsonField<Double> = maxAmount
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [UnbillableInvoicesConfiguration].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .invoiceType()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [UnbillableInvoicesConfiguration]. */
+            class Builder internal constructor() {
+
+                private var invoiceType: JsonField<InvoiceType>? = null
+                private var fiatCreditTypeId: JsonField<String> = JsonMissing.of()
+                private var maxAmount: JsonField<Double> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(
+                    unbillableInvoicesConfiguration: UnbillableInvoicesConfiguration
+                ) = apply {
+                    invoiceType = unbillableInvoicesConfiguration.invoiceType
+                    fiatCreditTypeId = unbillableInvoicesConfiguration.fiatCreditTypeId
+                    maxAmount = unbillableInvoicesConfiguration.maxAmount
+                    additionalProperties =
+                        unbillableInvoicesConfiguration.additionalProperties.toMutableMap()
+                }
+
+                /** The type of invoice this rule applies to. */
+                fun invoiceType(invoiceType: InvoiceType) = invoiceType(JsonField.of(invoiceType))
+
+                /**
+                 * Sets [Builder.invoiceType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.invoiceType] with a well-typed [InvoiceType]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun invoiceType(invoiceType: JsonField<InvoiceType>) = apply {
+                    this.invoiceType = invoiceType
+                }
+
+                /**
+                 * Restricts the rule to invoices in this fiat currency. Omit for a catch-all rule
+                 * that applies to every currency of the `invoice_type`. Required when `max_amount`
+                 * is set.
+                 */
+                fun fiatCreditTypeId(fiatCreditTypeId: String) =
+                    fiatCreditTypeId(JsonField.of(fiatCreditTypeId))
+
+                /**
+                 * Sets [Builder.fiatCreditTypeId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.fiatCreditTypeId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun fiatCreditTypeId(fiatCreditTypeId: JsonField<String>) = apply {
+                    this.fiatCreditTypeId = fiatCreditTypeId
+                }
+
+                /**
+                 * A positive decimal, in the units of `fiat_credit_type_id`. Only invoices whose
+                 * total is at or below this amount are suppressed; a higher total is still sent to
+                 * the billing provider. When omitted, every matching invoice is suppressed
+                 * regardless of amount.
+                 */
+                fun maxAmount(maxAmount: Double) = maxAmount(JsonField.of(maxAmount))
+
+                /**
+                 * Sets [Builder.maxAmount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.maxAmount] with a well-typed [Double] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun maxAmount(maxAmount: JsonField<Double>) = apply { this.maxAmount = maxAmount }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [UnbillableInvoicesConfiguration].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .invoiceType()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): UnbillableInvoicesConfiguration =
+                    UnbillableInvoicesConfiguration(
+                        checkRequired("invoiceType", invoiceType),
+                        fiatCreditTypeId,
+                        maxAmount,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): UnbillableInvoicesConfiguration = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                invoiceType().validate()
+                fiatCreditTypeId()
+                maxAmount()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (invoiceType.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (fiatCreditTypeId.asKnown().isPresent) 1 else 0) +
+                    (if (maxAmount.asKnown().isPresent) 1 else 0)
+
+            /** The type of invoice this rule applies to. */
+            class InvoiceType
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val USAGE = of("USAGE")
+
+                    @JvmField val SCHEDULED = of("SCHEDULED")
+
+                    @JvmStatic fun of(value: String) = InvoiceType(JsonField.of(value))
+                }
+
+                /** An enum containing [InvoiceType]'s known values. */
+                enum class Known {
+                    USAGE,
+                    SCHEDULED,
+                }
+
+                /**
+                 * An enum containing [InvoiceType]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [InvoiceType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    USAGE,
+                    SCHEDULED,
+                    /**
+                     * An enum member indicating that [InvoiceType] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        USAGE -> Value.USAGE
+                        SCHEDULED -> Value.SCHEDULED
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        USAGE -> Known.USAGE
+                        SCHEDULED -> Known.SCHEDULED
+                        else -> throw MetronomeInvalidDataException("Unknown InvoiceType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): InvoiceType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is InvoiceType && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is UnbillableInvoicesConfiguration &&
+                    invoiceType == other.invoiceType &&
+                    fiatCreditTypeId == other.fiatCreditTypeId &&
+                    maxAmount == other.maxAmount &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(invoiceType, fiatCreditTypeId, maxAmount, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "UnbillableInvoicesConfiguration{invoiceType=$invoiceType, fiatCreditTypeId=$fiatCreditTypeId, maxAmount=$maxAmount, additionalProperties=$additionalProperties}"
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -25762,6 +26824,7 @@ private constructor(
                 deliveryMethod == other.deliveryMethod &&
                 deliveryMethodConfiguration == other.deliveryMethodConfiguration &&
                 deliveryMethodId == other.deliveryMethodId &&
+                unbillableInvoicesConfiguration == other.unbillableInvoicesConfiguration &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -25775,6 +26838,7 @@ private constructor(
                 deliveryMethod,
                 deliveryMethodConfiguration,
                 deliveryMethodId,
+                unbillableInvoicesConfiguration,
                 additionalProperties,
             )
         }
@@ -25782,7 +26846,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CustomerBillingProviderConfiguration{id=$id, archivedAt=$archivedAt, billingProvider=$billingProvider, configuration=$configuration, customerId=$customerId, deliveryMethod=$deliveryMethod, deliveryMethodConfiguration=$deliveryMethodConfiguration, deliveryMethodId=$deliveryMethodId, additionalProperties=$additionalProperties}"
+            "CustomerBillingProviderConfiguration{id=$id, archivedAt=$archivedAt, billingProvider=$billingProvider, configuration=$configuration, customerId=$customerId, deliveryMethod=$deliveryMethod, deliveryMethodConfiguration=$deliveryMethodConfiguration, deliveryMethodId=$deliveryMethodId, unbillableInvoicesConfiguration=$unbillableInvoicesConfiguration, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -31886,6 +32950,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -31899,6 +32965,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -31918,6 +32985,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -31939,6 +33007,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     DAILY -> Value.DAILY
@@ -31958,6 +33027,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     DAILY -> Known.DAILY
@@ -35231,6 +36301,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -35244,6 +36316,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -35263,6 +36336,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -35284,6 +36358,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     DAILY -> Value.DAILY
@@ -35303,6 +36378,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     DAILY -> Known.DAILY
@@ -43040,6 +44116,8 @@ private constructor(
 
                     @JvmField val QUARTERLY = of("QUARTERLY")
 
+                    @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                     @JvmField val ANNUAL = of("ANNUAL")
 
                     @JvmField val WEEKLY = of("WEEKLY")
@@ -43051,6 +44129,7 @@ private constructor(
                 enum class Known {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                 }
@@ -43069,6 +44148,7 @@ private constructor(
                 enum class Value {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                     /**
@@ -43089,6 +44169,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Value.MONTHLY
                         QUARTERLY -> Value.QUARTERLY
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
                         ANNUAL -> Value.ANNUAL
                         WEEKLY -> Value.WEEKLY
                         else -> Value._UNKNOWN
@@ -43107,6 +44188,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Known.MONTHLY
                         QUARTERLY -> Known.QUARTERLY
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
                         ANNUAL -> Known.ANNUAL
                         WEEKLY -> Known.WEEKLY
                         else ->
