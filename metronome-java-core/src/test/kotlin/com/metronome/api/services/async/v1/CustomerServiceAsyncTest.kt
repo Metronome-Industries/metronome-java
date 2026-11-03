@@ -92,6 +92,49 @@ internal class CustomerServiceAsyncTest {
                                     .TaxProvider
                                     .ANROK
                             )
+                            .unbillableInvoicesConfiguration(
+                                listOf(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerCreateParams
+                                                .CustomerBillingProviderConfiguration
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerCreateParams
+                                                .CustomerBillingProviderConfiguration
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerCreateParams
+                                                .CustomerBillingProviderConfiguration
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .SCHEDULED
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                )
+                            )
                             .build()
                     )
                     .addCustomerRevenueSystemConfiguration(

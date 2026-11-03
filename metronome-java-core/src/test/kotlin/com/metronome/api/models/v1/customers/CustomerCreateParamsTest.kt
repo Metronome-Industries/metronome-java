@@ -59,6 +59,46 @@ internal class CustomerCreateParamsTest {
                     .taxProvider(
                         CustomerCreateParams.CustomerBillingProviderConfiguration.TaxProvider.ANROK
                     )
+                    .unbillableInvoicesConfiguration(
+                        listOf(
+                            CustomerCreateParams.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerCreateParams.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerCreateParams.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .SCHEDULED
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                        )
+                    )
                     .build()
             )
             .addCustomerRevenueSystemConfiguration(
@@ -137,6 +177,46 @@ internal class CustomerCreateParamsTest {
                             CustomerCreateParams.CustomerBillingProviderConfiguration.TaxProvider
                                 .ANROK
                         )
+                        .unbillableInvoicesConfiguration(
+                            listOf(
+                                CustomerCreateParams.CustomerBillingProviderConfiguration
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerCreateParams.CustomerBillingProviderConfiguration
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerCreateParams.CustomerBillingProviderConfiguration
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerCreateParams.CustomerBillingProviderConfiguration
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerCreateParams.CustomerBillingProviderConfiguration
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerCreateParams.CustomerBillingProviderConfiguration
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .SCHEDULED
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                            )
+                        )
                         .build()
                 )
                 .addCustomerRevenueSystemConfiguration(
@@ -213,6 +293,46 @@ internal class CustomerCreateParamsTest {
                     .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .taxProvider(
                         CustomerCreateParams.CustomerBillingProviderConfiguration.TaxProvider.ANROK
+                    )
+                    .unbillableInvoicesConfiguration(
+                        listOf(
+                            CustomerCreateParams.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerCreateParams.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerCreateParams.CustomerBillingProviderConfiguration
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerCreateParams.CustomerBillingProviderConfiguration
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .SCHEDULED
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                        )
                     )
                     .build()
             )

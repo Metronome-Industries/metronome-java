@@ -128,6 +128,60 @@ internal class ContractEditResponseTest {
                                         )
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                        .paymentGateConfig(
+                                            ContractEditResponse.Data.Edit.AddCommit
+                                                .PaymentGateConfig
+                                                .builder()
+                                                .paymentGateType(
+                                                    ContractEditResponse.Data.Edit.AddCommit
+                                                        .PaymentGateConfig
+                                                        .PaymentGateType
+                                                        .NONE
+                                                )
+                                                .precalculatedTaxConfig(
+                                                    ContractEditResponse.Data.Edit.AddCommit
+                                                        .PaymentGateConfig
+                                                        .PrecalculatedTaxConfig
+                                                        .builder()
+                                                        .taxAmount(0.0)
+                                                        .taxName("tax_name")
+                                                        .build()
+                                                )
+                                                .stripeConfig(
+                                                    ContractEditResponse.Data.Edit.AddCommit
+                                                        .PaymentGateConfig
+                                                        .StripeConfig
+                                                        .builder()
+                                                        .paymentType(
+                                                            ContractEditResponse.Data.Edit.AddCommit
+                                                                .PaymentGateConfig
+                                                                .StripeConfig
+                                                                .PaymentType
+                                                                .INVOICE
+                                                        )
+                                                        .invoiceMetadata(
+                                                            ContractEditResponse.Data.Edit.AddCommit
+                                                                .PaymentGateConfig
+                                                                .StripeConfig
+                                                                .InvoiceMetadata
+                                                                .builder()
+                                                                .putAdditionalProperty(
+                                                                    "foo",
+                                                                    JsonValue.from("string"),
+                                                                )
+                                                                .build()
+                                                        )
+                                                        .onSessionPayment(true)
+                                                        .build()
+                                                )
+                                                .taxType(
+                                                    ContractEditResponse.Data.Edit.AddCommit
+                                                        .PaymentGateConfig
+                                                        .TaxType
+                                                        .NONE
+                                                )
+                                                .build()
+                                        )
                                         .priority(0.0)
                                         .rateType(
                                             ContractEditResponse.Data.Edit.AddCommit.RateType
@@ -2228,6 +2282,59 @@ internal class ContractEditResponseTest {
                                     )
                                     .name("name")
                                     .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                    .paymentGateConfig(
+                                        ContractEditResponse.Data.Edit.AddCommit.PaymentGateConfig
+                                            .builder()
+                                            .paymentGateType(
+                                                ContractEditResponse.Data.Edit.AddCommit
+                                                    .PaymentGateConfig
+                                                    .PaymentGateType
+                                                    .NONE
+                                            )
+                                            .precalculatedTaxConfig(
+                                                ContractEditResponse.Data.Edit.AddCommit
+                                                    .PaymentGateConfig
+                                                    .PrecalculatedTaxConfig
+                                                    .builder()
+                                                    .taxAmount(0.0)
+                                                    .taxName("tax_name")
+                                                    .build()
+                                            )
+                                            .stripeConfig(
+                                                ContractEditResponse.Data.Edit.AddCommit
+                                                    .PaymentGateConfig
+                                                    .StripeConfig
+                                                    .builder()
+                                                    .paymentType(
+                                                        ContractEditResponse.Data.Edit.AddCommit
+                                                            .PaymentGateConfig
+                                                            .StripeConfig
+                                                            .PaymentType
+                                                            .INVOICE
+                                                    )
+                                                    .invoiceMetadata(
+                                                        ContractEditResponse.Data.Edit.AddCommit
+                                                            .PaymentGateConfig
+                                                            .StripeConfig
+                                                            .InvoiceMetadata
+                                                            .builder()
+                                                            .putAdditionalProperty(
+                                                                "foo",
+                                                                JsonValue.from("string"),
+                                                            )
+                                                            .build()
+                                                    )
+                                                    .onSessionPayment(true)
+                                                    .build()
+                                            )
+                                            .taxType(
+                                                ContractEditResponse.Data.Edit.AddCommit
+                                                    .PaymentGateConfig
+                                                    .TaxType
+                                                    .NONE
+                                            )
+                                            .build()
+                                    )
                                     .priority(0.0)
                                     .rateType(
                                         ContractEditResponse.Data.Edit.AddCommit.RateType
@@ -4206,6 +4313,60 @@ internal class ContractEditResponseTest {
                                         )
                                         .name("name")
                                         .netsuiteSalesOrderId("netsuite_sales_order_id")
+                                        .paymentGateConfig(
+                                            ContractEditResponse.Data.Edit.AddCommit
+                                                .PaymentGateConfig
+                                                .builder()
+                                                .paymentGateType(
+                                                    ContractEditResponse.Data.Edit.AddCommit
+                                                        .PaymentGateConfig
+                                                        .PaymentGateType
+                                                        .NONE
+                                                )
+                                                .precalculatedTaxConfig(
+                                                    ContractEditResponse.Data.Edit.AddCommit
+                                                        .PaymentGateConfig
+                                                        .PrecalculatedTaxConfig
+                                                        .builder()
+                                                        .taxAmount(0.0)
+                                                        .taxName("tax_name")
+                                                        .build()
+                                                )
+                                                .stripeConfig(
+                                                    ContractEditResponse.Data.Edit.AddCommit
+                                                        .PaymentGateConfig
+                                                        .StripeConfig
+                                                        .builder()
+                                                        .paymentType(
+                                                            ContractEditResponse.Data.Edit.AddCommit
+                                                                .PaymentGateConfig
+                                                                .StripeConfig
+                                                                .PaymentType
+                                                                .INVOICE
+                                                        )
+                                                        .invoiceMetadata(
+                                                            ContractEditResponse.Data.Edit.AddCommit
+                                                                .PaymentGateConfig
+                                                                .StripeConfig
+                                                                .InvoiceMetadata
+                                                                .builder()
+                                                                .putAdditionalProperty(
+                                                                    "foo",
+                                                                    JsonValue.from("string"),
+                                                                )
+                                                                .build()
+                                                        )
+                                                        .onSessionPayment(true)
+                                                        .build()
+                                                )
+                                                .taxType(
+                                                    ContractEditResponse.Data.Edit.AddCommit
+                                                        .PaymentGateConfig
+                                                        .TaxType
+                                                        .NONE
+                                                )
+                                                .build()
+                                        )
                                         .priority(0.0)
                                         .rateType(
                                             ContractEditResponse.Data.Edit.AddCommit.RateType
