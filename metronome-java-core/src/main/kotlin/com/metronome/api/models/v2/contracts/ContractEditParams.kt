@@ -74,8 +74,7 @@ private constructor(
     fun customerId(): String = body.customerId()
 
     /**
-     * Update the billing provider configuration on the contract. Currently only supports adding a
-     * billing provider configuration to a contract that does not already have one.
+     * Update the billing provider configuration on the contract.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -688,10 +687,7 @@ private constructor(
          */
         fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
-        /**
-         * Update the billing provider configuration on the contract. Currently only supports adding
-         * a billing provider configuration to a contract that does not already have one.
-         */
+        /** Update the billing provider configuration on the contract. */
         fun addBillingProviderConfigurationUpdate(
             addBillingProviderConfigurationUpdate: AddBillingProviderConfigurationUpdate
         ) = apply {
@@ -1831,8 +1827,7 @@ private constructor(
         fun customerId(): String = customerId.getRequired("customer_id")
 
         /**
-         * Update the billing provider configuration on the contract. Currently only supports adding
-         * a billing provider configuration to a contract that does not already have one.
+         * Update the billing provider configuration on the contract.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -2626,10 +2621,7 @@ private constructor(
              */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
-            /**
-             * Update the billing provider configuration on the contract. Currently only supports
-             * adding a billing provider configuration to a contract that does not already have one.
-             */
+            /** Update the billing provider configuration on the contract. */
             fun addBillingProviderConfigurationUpdate(
                 addBillingProviderConfigurationUpdate: AddBillingProviderConfigurationUpdate
             ) =
@@ -3759,10 +3751,7 @@ private constructor(
             "Body{contractId=$contractId, customerId=$customerId, addBillingProviderConfigurationUpdate=$addBillingProviderConfigurationUpdate, addCommits=$addCommits, addCredits=$addCredits, addDiscounts=$addDiscounts, addOverrides=$addOverrides, addPrepaidBalanceThresholdConfiguration=$addPrepaidBalanceThresholdConfiguration, addProfessionalServices=$addProfessionalServices, addRecurringCommits=$addRecurringCommits, addRecurringCredits=$addRecurringCredits, addResellerRoyalties=$addResellerRoyalties, addRevenueSystemConfigurationUpdate=$addRevenueSystemConfigurationUpdate, addScheduledCharges=$addScheduledCharges, addSpendThresholdConfiguration=$addSpendThresholdConfiguration, addSpendTrackers=$addSpendTrackers, addSubscriptions=$addSubscriptions, allowContractEndingBeforeFinalizedInvoice=$allowContractEndingBeforeFinalizedInvoice, archiveCommits=$archiveCommits, archiveCredits=$archiveCredits, archiveScheduledCharges=$archiveScheduledCharges, archiveSpendTrackers=$archiveSpendTrackers, removeOverrides=$removeOverrides, uniquenessKey=$uniquenessKey, updateCommits=$updateCommits, updateContractEndDate=$updateContractEndDate, updateContractName=$updateContractName, updateCredits=$updateCredits, updateNetPaymentTermsDays=$updateNetPaymentTermsDays, updatePrepaidBalanceThresholdConfiguration=$updatePrepaidBalanceThresholdConfiguration, updateRecurringCommits=$updateRecurringCommits, updateRecurringCredits=$updateRecurringCredits, updateScheduledCharges=$updateScheduledCharges, updateSpendThresholdConfiguration=$updateSpendThresholdConfiguration, updateSubscriptions=$updateSubscriptions, additionalProperties=$additionalProperties}"
     }
 
-    /**
-     * Update the billing provider configuration on the contract. Currently only supports adding a
-     * billing provider configuration to a contract that does not already have one.
-     */
+    /** Update the billing provider configuration on the contract. */
     class AddBillingProviderConfigurationUpdate
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -4781,6 +4770,8 @@ private constructor(
 
                     @JvmField val START_OF_NEXT_PERIOD = of("START_OF_NEXT_PERIOD")
 
+                    @JvmField val TODAY = of("TODAY")
+
                     @JvmStatic fun of(value: String) = EffectiveAt(JsonField.of(value))
                 }
 
@@ -4788,6 +4779,7 @@ private constructor(
                 enum class Known {
                     START_OF_CURRENT_PERIOD,
                     START_OF_NEXT_PERIOD,
+                    TODAY,
                 }
 
                 /**
@@ -4802,6 +4794,7 @@ private constructor(
                 enum class Value {
                     START_OF_CURRENT_PERIOD,
                     START_OF_NEXT_PERIOD,
+                    TODAY,
                     /**
                      * An enum member indicating that [EffectiveAt] was instantiated with an unknown
                      * value.
@@ -4820,6 +4813,7 @@ private constructor(
                     when (this) {
                         START_OF_CURRENT_PERIOD -> Value.START_OF_CURRENT_PERIOD
                         START_OF_NEXT_PERIOD -> Value.START_OF_NEXT_PERIOD
+                        TODAY -> Value.TODAY
                         else -> Value._UNKNOWN
                     }
 
@@ -4836,6 +4830,7 @@ private constructor(
                     when (this) {
                         START_OF_CURRENT_PERIOD -> Known.START_OF_CURRENT_PERIOD
                         START_OF_NEXT_PERIOD -> Known.START_OF_NEXT_PERIOD
+                        TODAY -> Known.TODAY
                         else -> throw MetronomeInvalidDataException("Unknown EffectiveAt: $value")
                     }
 

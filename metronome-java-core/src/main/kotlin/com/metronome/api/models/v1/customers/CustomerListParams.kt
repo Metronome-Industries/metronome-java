@@ -24,6 +24,7 @@ private constructor(
     private val nextPage: String?,
     private val onlyArchived: Boolean?,
     private val salesforceAccountIds: List<String>?,
+    private val stripeCustomerId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -48,6 +49,14 @@ private constructor(
 
     /** Filter the customer list by salesforce_account_id. Up to 100 ids can be provided. */
     fun salesforceAccountIds(): Optional<List<String>> = Optional.ofNullable(salesforceAccountIds)
+
+    /**
+     * Filter the customer list by the stripe_customer_id of active Stripe billing provider
+     * configurations. A Stripe customer ID can be linked to multiple customers, so it may match
+     * more than one customer. Archiving a customer also archives its billing provider
+     * configurations, so archived customers generally won't match.
+     */
+    fun stripeCustomerId(): Optional<String> = Optional.ofNullable(stripeCustomerId)
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -74,6 +83,7 @@ private constructor(
         private var nextPage: String? = null
         private var onlyArchived: Boolean? = null
         private var salesforceAccountIds: MutableList<String>? = null
+        private var stripeCustomerId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -85,6 +95,7 @@ private constructor(
             nextPage = customerListParams.nextPage
             onlyArchived = customerListParams.onlyArchived
             salesforceAccountIds = customerListParams.salesforceAccountIds?.toMutableList()
+            stripeCustomerId = customerListParams.stripeCustomerId
             additionalHeaders = customerListParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerListParams.additionalQueryParams.toBuilder()
         }
@@ -168,6 +179,20 @@ private constructor(
             salesforceAccountIds =
                 (salesforceAccountIds ?: mutableListOf()).apply { add(salesforceAccountId) }
         }
+
+        /**
+         * Filter the customer list by the stripe_customer_id of active Stripe billing provider
+         * configurations. A Stripe customer ID can be linked to multiple customers, so it may match
+         * more than one customer. Archiving a customer also archives its billing provider
+         * configurations, so archived customers generally won't match.
+         */
+        fun stripeCustomerId(stripeCustomerId: String?) = apply {
+            this.stripeCustomerId = stripeCustomerId
+        }
+
+        /** Alias for calling [Builder.stripeCustomerId] with `stripeCustomerId.orElse(null)`. */
+        fun stripeCustomerId(stripeCustomerId: Optional<String>) =
+            stripeCustomerId(stripeCustomerId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -280,6 +305,7 @@ private constructor(
                 nextPage,
                 onlyArchived,
                 salesforceAccountIds?.toImmutable(),
+                stripeCustomerId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -296,6 +322,7 @@ private constructor(
                 nextPage?.let { put("next_page", it) }
                 onlyArchived?.let { put("only_archived", it.toString()) }
                 salesforceAccountIds?.let { put("salesforce_account_ids", it.joinToString(",")) }
+                stripeCustomerId?.let { put("stripe_customer_id", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -312,6 +339,7 @@ private constructor(
             nextPage == other.nextPage &&
             onlyArchived == other.onlyArchived &&
             salesforceAccountIds == other.salesforceAccountIds &&
+            stripeCustomerId == other.stripeCustomerId &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
@@ -324,10 +352,11 @@ private constructor(
             nextPage,
             onlyArchived,
             salesforceAccountIds,
+            stripeCustomerId,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "CustomerListParams{customerIds=$customerIds, ingestAlias=$ingestAlias, limit=$limit, nextPage=$nextPage, onlyArchived=$onlyArchived, salesforceAccountIds=$salesforceAccountIds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CustomerListParams{customerIds=$customerIds, ingestAlias=$ingestAlias, limit=$limit, nextPage=$nextPage, onlyArchived=$onlyArchived, salesforceAccountIds=$salesforceAccountIds, stripeCustomerId=$stripeCustomerId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

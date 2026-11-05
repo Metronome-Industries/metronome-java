@@ -17,6 +17,7 @@ internal class CustomerListParamsTest {
             .nextPage("next_page")
             .onlyArchived(true)
             .addSalesforceAccountId("string")
+            .stripeCustomerId("stripe_customer_id")
             .build()
     }
 
@@ -30,6 +31,7 @@ internal class CustomerListParamsTest {
                 .nextPage("next_page")
                 .onlyArchived(true)
                 .addSalesforceAccountId("string")
+                .stripeCustomerId("stripe_customer_id")
                 .build()
 
         val queryParams = params._queryParams()
@@ -43,6 +45,7 @@ internal class CustomerListParamsTest {
                     .put("next_page", "next_page")
                     .put("only_archived", "true")
                     .put("salesforce_account_ids", listOf("string").joinToString(","))
+                    .put("stripe_customer_id", "stripe_customer_id")
                     .build()
             )
     }
