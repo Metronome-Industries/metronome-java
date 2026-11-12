@@ -836,6 +836,7 @@ internal class ContractServiceAsyncTest {
                                     .priority(0.0)
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
                                     .description("description")
@@ -1022,6 +1023,7 @@ internal class ContractServiceAsyncTest {
                                     .priority(0.0)
                                     .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                     .addApplicableProductTag("string")
                                     .description("description")
@@ -1354,6 +1356,24 @@ internal class ContractServiceAsyncTest {
                                     )
                                     .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .temporaryId("temporary_id")
+                                    .build()
+                            )
+                            .addModifyRecurringCommit(
+                                ContractCreateParams.PackageCustomizations.ModifyRecurringCommit
+                                    .builder()
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .templateRecurringCommitId(
+                                        "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                    )
+                                    .build()
+                            )
+                            .addModifyRecurringCredit(
+                                ContractCreateParams.PackageCustomizations.ModifyRecurringCredit
+                                    .builder()
+                                    .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .templateRecurringCreditId(
+                                        "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"
+                                    )
                                     .build()
                             )
                             .addModifySubscription(
@@ -1747,6 +1767,7 @@ internal class ContractServiceAsyncTest {
                             .priority(0.0)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
                             .description("description")
@@ -1875,6 +1896,7 @@ internal class ContractServiceAsyncTest {
                             .priority(0.0)
                             .productId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .startingAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .anchorDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
                             .description("description")

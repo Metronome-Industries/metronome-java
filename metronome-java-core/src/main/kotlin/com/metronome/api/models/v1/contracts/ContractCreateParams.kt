@@ -15978,6 +15978,8 @@ private constructor(
         private val addScheduledCharges: JsonField<List<AddScheduledCharge>>,
         private val addSpendTrackers: JsonField<List<AddSpendTracker>>,
         private val addSubscriptions: JsonField<List<AddSubscription>>,
+        private val modifyRecurringCommits: JsonField<List<ModifyRecurringCommit>>,
+        private val modifyRecurringCredits: JsonField<List<ModifyRecurringCredit>>,
         private val modifySubscriptions: JsonField<List<ModifySubscription>>,
         private val modifyUsageStatementSchedule: JsonField<ModifyUsageStatementSchedule>,
         private val setPrepaidBalanceThresholdConfiguration:
@@ -16012,6 +16014,12 @@ private constructor(
             @JsonProperty("add_subscriptions")
             @ExcludeMissing
             addSubscriptions: JsonField<List<AddSubscription>> = JsonMissing.of(),
+            @JsonProperty("modify_recurring_commits")
+            @ExcludeMissing
+            modifyRecurringCommits: JsonField<List<ModifyRecurringCommit>> = JsonMissing.of(),
+            @JsonProperty("modify_recurring_credits")
+            @ExcludeMissing
+            modifyRecurringCredits: JsonField<List<ModifyRecurringCredit>> = JsonMissing.of(),
             @JsonProperty("modify_subscriptions")
             @ExcludeMissing
             modifySubscriptions: JsonField<List<ModifySubscription>> = JsonMissing.of(),
@@ -16037,6 +16045,8 @@ private constructor(
             addScheduledCharges,
             addSpendTrackers,
             addSubscriptions,
+            modifyRecurringCommits,
+            modifyRecurringCredits,
             modifySubscriptions,
             modifyUsageStatementSchedule,
             setPrepaidBalanceThresholdConfiguration,
@@ -16126,6 +16136,26 @@ private constructor(
          */
         fun addSubscriptions(): Optional<List<AddSubscription>> =
             addSubscriptions.getOptional("add_subscriptions")
+
+        /**
+         * Per-contract values for recurring commits defined on the package. Every template
+         * recurring commit whose `anchor_date` is `CUSTOM_DATE` needs exactly one entry.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun modifyRecurringCommits(): Optional<List<ModifyRecurringCommit>> =
+            modifyRecurringCommits.getOptional("modify_recurring_commits")
+
+        /**
+         * Per-contract values for recurring credits defined on the package. Every template
+         * recurring credit whose `anchor_date` is `CUSTOM_DATE` needs exactly one entry.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun modifyRecurringCredits(): Optional<List<ModifyRecurringCredit>> =
+            modifyRecurringCredits.getOptional("modify_recurring_credits")
 
         /**
          * Per-subscription overrides for the subscriptions defined on the package template. Each
@@ -16251,6 +16281,28 @@ private constructor(
         fun _addSubscriptions(): JsonField<List<AddSubscription>> = addSubscriptions
 
         /**
+         * Returns the raw JSON value of [modifyRecurringCommits].
+         *
+         * Unlike [modifyRecurringCommits], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("modify_recurring_commits")
+        @ExcludeMissing
+        fun _modifyRecurringCommits(): JsonField<List<ModifyRecurringCommit>> =
+            modifyRecurringCommits
+
+        /**
+         * Returns the raw JSON value of [modifyRecurringCredits].
+         *
+         * Unlike [modifyRecurringCredits], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("modify_recurring_credits")
+        @ExcludeMissing
+        fun _modifyRecurringCredits(): JsonField<List<ModifyRecurringCredit>> =
+            modifyRecurringCredits
+
+        /**
          * Returns the raw JSON value of [modifySubscriptions].
          *
          * Unlike [modifySubscriptions], this method doesn't throw if the JSON field has an
@@ -16325,6 +16377,10 @@ private constructor(
             private var addScheduledCharges: JsonField<MutableList<AddScheduledCharge>>? = null
             private var addSpendTrackers: JsonField<MutableList<AddSpendTracker>>? = null
             private var addSubscriptions: JsonField<MutableList<AddSubscription>>? = null
+            private var modifyRecurringCommits: JsonField<MutableList<ModifyRecurringCommit>>? =
+                null
+            private var modifyRecurringCredits: JsonField<MutableList<ModifyRecurringCredit>>? =
+                null
             private var modifySubscriptions: JsonField<MutableList<ModifySubscription>>? = null
             private var modifyUsageStatementSchedule: JsonField<ModifyUsageStatementSchedule> =
                 JsonMissing.of()
@@ -16348,6 +16404,10 @@ private constructor(
                     packageCustomizations.addScheduledCharges.map { it.toMutableList() }
                 addSpendTrackers = packageCustomizations.addSpendTrackers.map { it.toMutableList() }
                 addSubscriptions = packageCustomizations.addSubscriptions.map { it.toMutableList() }
+                modifyRecurringCommits =
+                    packageCustomizations.modifyRecurringCommits.map { it.toMutableList() }
+                modifyRecurringCredits =
+                    packageCustomizations.modifyRecurringCredits.map { it.toMutableList() }
                 modifySubscriptions =
                     packageCustomizations.modifySubscriptions.map { it.toMutableList() }
                 modifyUsageStatementSchedule = packageCustomizations.modifyUsageStatementSchedule
@@ -16607,6 +16667,70 @@ private constructor(
             }
 
             /**
+             * Per-contract values for recurring commits defined on the package. Every template
+             * recurring commit whose `anchor_date` is `CUSTOM_DATE` needs exactly one entry.
+             */
+            fun modifyRecurringCommits(modifyRecurringCommits: List<ModifyRecurringCommit>) =
+                modifyRecurringCommits(JsonField.of(modifyRecurringCommits))
+
+            /**
+             * Sets [Builder.modifyRecurringCommits] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.modifyRecurringCommits] with a well-typed
+             * `List<ModifyRecurringCommit>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun modifyRecurringCommits(
+                modifyRecurringCommits: JsonField<List<ModifyRecurringCommit>>
+            ) = apply {
+                this.modifyRecurringCommits = modifyRecurringCommits.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [ModifyRecurringCommit] to [modifyRecurringCommits].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addModifyRecurringCommit(modifyRecurringCommit: ModifyRecurringCommit) = apply {
+                modifyRecurringCommits =
+                    (modifyRecurringCommits ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("modifyRecurringCommits", it).add(modifyRecurringCommit)
+                    }
+            }
+
+            /**
+             * Per-contract values for recurring credits defined on the package. Every template
+             * recurring credit whose `anchor_date` is `CUSTOM_DATE` needs exactly one entry.
+             */
+            fun modifyRecurringCredits(modifyRecurringCredits: List<ModifyRecurringCredit>) =
+                modifyRecurringCredits(JsonField.of(modifyRecurringCredits))
+
+            /**
+             * Sets [Builder.modifyRecurringCredits] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.modifyRecurringCredits] with a well-typed
+             * `List<ModifyRecurringCredit>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun modifyRecurringCredits(
+                modifyRecurringCredits: JsonField<List<ModifyRecurringCredit>>
+            ) = apply {
+                this.modifyRecurringCredits = modifyRecurringCredits.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [ModifyRecurringCredit] to [modifyRecurringCredits].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addModifyRecurringCredit(modifyRecurringCredit: ModifyRecurringCredit) = apply {
+                modifyRecurringCredits =
+                    (modifyRecurringCredits ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("modifyRecurringCredits", it).add(modifyRecurringCredit)
+                    }
+            }
+
+            /**
              * Per-subscription overrides for the subscriptions defined on the package template.
              * Each entry targets one template subscription and sets its starting quantity or seats.
              */
@@ -16735,6 +16859,8 @@ private constructor(
                     (addScheduledCharges ?: JsonMissing.of()).map { it.toImmutable() },
                     (addSpendTrackers ?: JsonMissing.of()).map { it.toImmutable() },
                     (addSubscriptions ?: JsonMissing.of()).map { it.toImmutable() },
+                    (modifyRecurringCommits ?: JsonMissing.of()).map { it.toImmutable() },
+                    (modifyRecurringCredits ?: JsonMissing.of()).map { it.toImmutable() },
                     (modifySubscriptions ?: JsonMissing.of()).map { it.toImmutable() },
                     modifyUsageStatementSchedule,
                     setPrepaidBalanceThresholdConfiguration,
@@ -16767,6 +16893,8 @@ private constructor(
             addScheduledCharges().ifPresent { it.forEach { it.validate() } }
             addSpendTrackers().ifPresent { it.forEach { it.validate() } }
             addSubscriptions().ifPresent { it.forEach { it.validate() } }
+            modifyRecurringCommits().ifPresent { it.forEach { it.validate() } }
+            modifyRecurringCredits().ifPresent { it.forEach { it.validate() } }
             modifySubscriptions().ifPresent { it.forEach { it.validate() } }
             modifyUsageStatementSchedule().ifPresent { it.validate() }
             setPrepaidBalanceThresholdConfiguration().ifPresent { it.validate() }
@@ -16798,6 +16926,10 @@ private constructor(
                 (addScheduledCharges.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (addSpendTrackers.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (addSubscriptions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (modifyRecurringCommits.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
+                (modifyRecurringCredits.asKnown().getOrNull()?.sumOf { it.validity().toInt() }
+                    ?: 0) +
                 (modifySubscriptions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (modifyUsageStatementSchedule.asKnown().getOrNull()?.validity() ?: 0) +
                 (setPrepaidBalanceThresholdConfiguration.asKnown().getOrNull()?.validity() ?: 0) +
@@ -25827,6 +25959,7 @@ private constructor(
             private val priority: JsonField<Double>,
             private val productId: JsonField<String>,
             private val startingAt: JsonField<OffsetDateTime>,
+            private val anchorDate: JsonField<OffsetDateTime>,
             private val applicableProductIds: JsonField<List<String>>,
             private val applicableProductTags: JsonField<List<String>>,
             private val description: JsonField<String>,
@@ -25863,6 +25996,9 @@ private constructor(
                 @JsonProperty("starting_at")
                 @ExcludeMissing
                 startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("anchor_date")
+                @ExcludeMissing
+                anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("applicable_product_ids")
                 @ExcludeMissing
                 applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -25915,6 +26051,7 @@ private constructor(
                 priority,
                 productId,
                 startingAt,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -25978,6 +26115,17 @@ private constructor(
              *   value).
              */
             fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+            /**
+             * The date this recurring commit's or credit's periods are anchored to. Must be on or
+             * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+             * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+             * otherwise.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun anchorDate(): Optional<OffsetDateTime> = anchorDate.getOptional("anchor_date")
 
             /**
              * Will be passed down to the individual commits
@@ -26179,6 +26327,16 @@ private constructor(
             fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
             /**
+             * Returns the raw JSON value of [anchorDate].
+             *
+             * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+            /**
              * Returns the raw JSON value of [applicableProductIds].
              *
              * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -26373,6 +26531,7 @@ private constructor(
                 private var priority: JsonField<Double>? = null
                 private var productId: JsonField<String>? = null
                 private var startingAt: JsonField<OffsetDateTime>? = null
+                private var anchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var applicableProductIds: JsonField<MutableList<String>>? = null
                 private var applicableProductTags: JsonField<MutableList<String>>? = null
                 private var description: JsonField<String> = JsonMissing.of()
@@ -26399,6 +26558,7 @@ private constructor(
                     priority = addRecurringCommit.priority
                     productId = addRecurringCommit.productId
                     startingAt = addRecurringCommit.startingAt
+                    anchorDate = addRecurringCommit.anchorDate
                     applicableProductIds =
                         addRecurringCommit.applicableProductIds.map { it.toMutableList() }
                     applicableProductTags =
@@ -26489,6 +26649,25 @@ private constructor(
                  */
                 fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                     this.startingAt = startingAt
+                }
+
+                /**
+                 * The date this recurring commit's or credit's periods are anchored to. Must be on
+                 * or before `starting_at`. If omitted, periods are anchored to `starting_at` when
+                 * `recurrence_frequency` is set, and to the contract's usage statement billing
+                 * anchor otherwise.
+                 */
+                fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+                /**
+                 * Sets [Builder.anchorDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                    this.anchorDate = anchorDate
                 }
 
                 /** Will be passed down to the individual commits */
@@ -26830,6 +27009,7 @@ private constructor(
                         checkRequired("priority", priority),
                         checkRequired("productId", productId),
                         checkRequired("startingAt", startingAt),
+                        anchorDate,
                         (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                         (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                         description,
@@ -26872,6 +27052,7 @@ private constructor(
                 priority()
                 productId()
                 startingAt()
+                anchorDate()
                 applicableProductIds()
                 applicableProductTags()
                 description()
@@ -26912,6 +27093,7 @@ private constructor(
                     (if (priority.asKnown().isPresent) 1 else 0) +
                     (if (productId.asKnown().isPresent) 1 else 0) +
                     (if (startingAt.asKnown().isPresent) 1 else 0) +
+                    (if (anchorDate.asKnown().isPresent) 1 else 0) +
                     (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                     (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                     (if (description.asKnown().isPresent) 1 else 0) +
@@ -30226,6 +30408,7 @@ private constructor(
                     priority == other.priority &&
                     productId == other.productId &&
                     startingAt == other.startingAt &&
+                    anchorDate == other.anchorDate &&
                     applicableProductIds == other.applicableProductIds &&
                     applicableProductTags == other.applicableProductTags &&
                     description == other.description &&
@@ -30252,6 +30435,7 @@ private constructor(
                     priority,
                     productId,
                     startingAt,
+                    anchorDate,
                     applicableProductIds,
                     applicableProductTags,
                     description,
@@ -30275,7 +30459,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AddRecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+                "AddRecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
         }
 
         class AddRecurringCredit
@@ -30286,6 +30470,7 @@ private constructor(
             private val priority: JsonField<Double>,
             private val productId: JsonField<String>,
             private val startingAt: JsonField<OffsetDateTime>,
+            private val anchorDate: JsonField<OffsetDateTime>,
             private val applicableProductIds: JsonField<List<String>>,
             private val applicableProductTags: JsonField<List<String>>,
             private val description: JsonField<String>,
@@ -30321,6 +30506,9 @@ private constructor(
                 @JsonProperty("starting_at")
                 @ExcludeMissing
                 startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("anchor_date")
+                @ExcludeMissing
+                anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("applicable_product_ids")
                 @ExcludeMissing
                 applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -30370,6 +30558,7 @@ private constructor(
                 priority,
                 productId,
                 startingAt,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -30432,6 +30621,17 @@ private constructor(
              *   value).
              */
             fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+            /**
+             * The date this recurring commit's or credit's periods are anchored to. Must be on or
+             * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+             * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+             * otherwise.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun anchorDate(): Optional<OffsetDateTime> = anchorDate.getOptional("anchor_date")
 
             /**
              * Will be passed down to the individual commits
@@ -30624,6 +30824,16 @@ private constructor(
             fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
             /**
+             * Returns the raw JSON value of [anchorDate].
+             *
+             * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+            /**
              * Returns the raw JSON value of [applicableProductIds].
              *
              * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -30808,6 +31018,7 @@ private constructor(
                 private var priority: JsonField<Double>? = null
                 private var productId: JsonField<String>? = null
                 private var startingAt: JsonField<OffsetDateTime>? = null
+                private var anchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var applicableProductIds: JsonField<MutableList<String>>? = null
                 private var applicableProductTags: JsonField<MutableList<String>>? = null
                 private var description: JsonField<String> = JsonMissing.of()
@@ -30833,6 +31044,7 @@ private constructor(
                     priority = addRecurringCredit.priority
                     productId = addRecurringCredit.productId
                     startingAt = addRecurringCredit.startingAt
+                    anchorDate = addRecurringCredit.anchorDate
                     applicableProductIds =
                         addRecurringCredit.applicableProductIds.map { it.toMutableList() }
                     applicableProductTags =
@@ -30922,6 +31134,25 @@ private constructor(
                  */
                 fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                     this.startingAt = startingAt
+                }
+
+                /**
+                 * The date this recurring commit's or credit's periods are anchored to. Must be on
+                 * or before `starting_at`. If omitted, periods are anchored to `starting_at` when
+                 * `recurrence_frequency` is set, and to the contract's usage statement billing
+                 * anchor otherwise.
+                 */
+                fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+                /**
+                 * Sets [Builder.anchorDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                    this.anchorDate = anchorDate
                 }
 
                 /** Will be passed down to the individual commits */
@@ -31248,6 +31479,7 @@ private constructor(
                         checkRequired("priority", priority),
                         checkRequired("productId", productId),
                         checkRequired("startingAt", startingAt),
+                        anchorDate,
                         (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                         (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                         description,
@@ -31289,6 +31521,7 @@ private constructor(
                 priority()
                 productId()
                 startingAt()
+                anchorDate()
                 applicableProductIds()
                 applicableProductTags()
                 description()
@@ -31328,6 +31561,7 @@ private constructor(
                     (if (priority.asKnown().isPresent) 1 else 0) +
                     (if (productId.asKnown().isPresent) 1 else 0) +
                     (if (startingAt.asKnown().isPresent) 1 else 0) +
+                    (if (anchorDate.asKnown().isPresent) 1 else 0) +
                     (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                     (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                     (if (description.asKnown().isPresent) 1 else 0) +
@@ -33944,6 +34178,7 @@ private constructor(
                     priority == other.priority &&
                     productId == other.productId &&
                     startingAt == other.startingAt &&
+                    anchorDate == other.anchorDate &&
                     applicableProductIds == other.applicableProductIds &&
                     applicableProductTags == other.applicableProductTags &&
                     description == other.description &&
@@ -33969,6 +34204,7 @@ private constructor(
                     priority,
                     productId,
                     startingAt,
+                    anchorDate,
                     applicableProductIds,
                     applicableProductTags,
                     description,
@@ -33991,7 +34227,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "AddRecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+                "AddRecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
         }
 
         class AddScheduledCharge
@@ -40184,6 +40420,484 @@ private constructor(
                 "AddSubscription{collectionSchedule=$collectionSchedule, proration=$proration, subscriptionRate=$subscriptionRate, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, endingBefore=$endingBefore, initialQuantity=$initialQuantity, name=$name, quantityManagementMode=$quantityManagementMode, seatConfig=$seatConfig, startingAt=$startingAt, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
         }
 
+        class ModifyRecurringCommit
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val anchorDate: JsonField<OffsetDateTime>,
+            private val templateRecurringCommitId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("anchor_date")
+                @ExcludeMissing
+                anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("template_recurring_commit_id")
+                @ExcludeMissing
+                templateRecurringCommitId: JsonField<String> = JsonMissing.of(),
+            ) : this(anchorDate, templateRecurringCommitId, mutableMapOf())
+
+            /**
+             * Recurring cycle anchor date for this recurring commit or credit, required when the
+             * template's `anchor_date` is `CUSTOM_DATE` and disallowed otherwise. Must be on or
+             * before the recurring commit's or credit's `starting_at`.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun anchorDate(): OffsetDateTime = anchorDate.getRequired("anchor_date")
+
+            /**
+             * ID of the template recurring commit on the package to customize.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun templateRecurringCommitId(): String =
+                templateRecurringCommitId.getRequired("template_recurring_commit_id")
+
+            /**
+             * Returns the raw JSON value of [anchorDate].
+             *
+             * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+            /**
+             * Returns the raw JSON value of [templateRecurringCommitId].
+             *
+             * Unlike [templateRecurringCommitId], this method doesn't throw if the JSON field has
+             * an unexpected type.
+             */
+            @JsonProperty("template_recurring_commit_id")
+            @ExcludeMissing
+            fun _templateRecurringCommitId(): JsonField<String> = templateRecurringCommitId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [ModifyRecurringCommit].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .anchorDate()
+                 * .templateRecurringCommitId()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [ModifyRecurringCommit]. */
+            class Builder internal constructor() {
+
+                private var anchorDate: JsonField<OffsetDateTime>? = null
+                private var templateRecurringCommitId: JsonField<String>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(modifyRecurringCommit: ModifyRecurringCommit) = apply {
+                    anchorDate = modifyRecurringCommit.anchorDate
+                    templateRecurringCommitId = modifyRecurringCommit.templateRecurringCommitId
+                    additionalProperties = modifyRecurringCommit.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * Recurring cycle anchor date for this recurring commit or credit, required when
+                 * the template's `anchor_date` is `CUSTOM_DATE` and disallowed otherwise. Must be
+                 * on or before the recurring commit's or credit's `starting_at`.
+                 */
+                fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+                /**
+                 * Sets [Builder.anchorDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                    this.anchorDate = anchorDate
+                }
+
+                /** ID of the template recurring commit on the package to customize. */
+                fun templateRecurringCommitId(templateRecurringCommitId: String) =
+                    templateRecurringCommitId(JsonField.of(templateRecurringCommitId))
+
+                /**
+                 * Sets [Builder.templateRecurringCommitId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.templateRecurringCommitId] with a well-typed
+                 * [String] value instead. This method is primarily for setting the field to an
+                 * undocumented or not yet supported value.
+                 */
+                fun templateRecurringCommitId(templateRecurringCommitId: JsonField<String>) =
+                    apply {
+                        this.templateRecurringCommitId = templateRecurringCommitId
+                    }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [ModifyRecurringCommit].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .anchorDate()
+                 * .templateRecurringCommitId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): ModifyRecurringCommit =
+                    ModifyRecurringCommit(
+                        checkRequired("anchorDate", anchorDate),
+                        checkRequired("templateRecurringCommitId", templateRecurringCommitId),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): ModifyRecurringCommit = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                anchorDate()
+                templateRecurringCommitId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
+                    (if (templateRecurringCommitId.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is ModifyRecurringCommit &&
+                    anchorDate == other.anchorDate &&
+                    templateRecurringCommitId == other.templateRecurringCommitId &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(anchorDate, templateRecurringCommitId, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "ModifyRecurringCommit{anchorDate=$anchorDate, templateRecurringCommitId=$templateRecurringCommitId, additionalProperties=$additionalProperties}"
+        }
+
+        class ModifyRecurringCredit
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val anchorDate: JsonField<OffsetDateTime>,
+            private val templateRecurringCreditId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("anchor_date")
+                @ExcludeMissing
+                anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("template_recurring_credit_id")
+                @ExcludeMissing
+                templateRecurringCreditId: JsonField<String> = JsonMissing.of(),
+            ) : this(anchorDate, templateRecurringCreditId, mutableMapOf())
+
+            /**
+             * Recurring cycle anchor date for this recurring commit or credit, required when the
+             * template's `anchor_date` is `CUSTOM_DATE` and disallowed otherwise. Must be on or
+             * before the recurring commit's or credit's `starting_at`.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun anchorDate(): OffsetDateTime = anchorDate.getRequired("anchor_date")
+
+            /**
+             * ID of the template recurring credit on the package to customize.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun templateRecurringCreditId(): String =
+                templateRecurringCreditId.getRequired("template_recurring_credit_id")
+
+            /**
+             * Returns the raw JSON value of [anchorDate].
+             *
+             * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+            /**
+             * Returns the raw JSON value of [templateRecurringCreditId].
+             *
+             * Unlike [templateRecurringCreditId], this method doesn't throw if the JSON field has
+             * an unexpected type.
+             */
+            @JsonProperty("template_recurring_credit_id")
+            @ExcludeMissing
+            fun _templateRecurringCreditId(): JsonField<String> = templateRecurringCreditId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [ModifyRecurringCredit].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .anchorDate()
+                 * .templateRecurringCreditId()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [ModifyRecurringCredit]. */
+            class Builder internal constructor() {
+
+                private var anchorDate: JsonField<OffsetDateTime>? = null
+                private var templateRecurringCreditId: JsonField<String>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(modifyRecurringCredit: ModifyRecurringCredit) = apply {
+                    anchorDate = modifyRecurringCredit.anchorDate
+                    templateRecurringCreditId = modifyRecurringCredit.templateRecurringCreditId
+                    additionalProperties = modifyRecurringCredit.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * Recurring cycle anchor date for this recurring commit or credit, required when
+                 * the template's `anchor_date` is `CUSTOM_DATE` and disallowed otherwise. Must be
+                 * on or before the recurring commit's or credit's `starting_at`.
+                 */
+                fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+                /**
+                 * Sets [Builder.anchorDate] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                    this.anchorDate = anchorDate
+                }
+
+                /** ID of the template recurring credit on the package to customize. */
+                fun templateRecurringCreditId(templateRecurringCreditId: String) =
+                    templateRecurringCreditId(JsonField.of(templateRecurringCreditId))
+
+                /**
+                 * Sets [Builder.templateRecurringCreditId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.templateRecurringCreditId] with a well-typed
+                 * [String] value instead. This method is primarily for setting the field to an
+                 * undocumented or not yet supported value.
+                 */
+                fun templateRecurringCreditId(templateRecurringCreditId: JsonField<String>) =
+                    apply {
+                        this.templateRecurringCreditId = templateRecurringCreditId
+                    }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [ModifyRecurringCredit].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .anchorDate()
+                 * .templateRecurringCreditId()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): ModifyRecurringCredit =
+                    ModifyRecurringCredit(
+                        checkRequired("anchorDate", anchorDate),
+                        checkRequired("templateRecurringCreditId", templateRecurringCreditId),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): ModifyRecurringCredit = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                anchorDate()
+                templateRecurringCreditId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
+                    (if (templateRecurringCreditId.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is ModifyRecurringCredit &&
+                    anchorDate == other.anchorDate &&
+                    templateRecurringCreditId == other.templateRecurringCreditId &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(anchorDate, templateRecurringCreditId, additionalProperties)
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "ModifyRecurringCredit{anchorDate=$anchorDate, templateRecurringCreditId=$templateRecurringCreditId, additionalProperties=$additionalProperties}"
+        }
+
         class ModifySubscription
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
@@ -40824,6 +41538,8 @@ private constructor(
                 addScheduledCharges == other.addScheduledCharges &&
                 addSpendTrackers == other.addSpendTrackers &&
                 addSubscriptions == other.addSubscriptions &&
+                modifyRecurringCommits == other.modifyRecurringCommits &&
+                modifyRecurringCredits == other.modifyRecurringCredits &&
                 modifySubscriptions == other.modifySubscriptions &&
                 modifyUsageStatementSchedule == other.modifyUsageStatementSchedule &&
                 setPrepaidBalanceThresholdConfiguration ==
@@ -40842,6 +41558,8 @@ private constructor(
                 addScheduledCharges,
                 addSpendTrackers,
                 addSubscriptions,
+                modifyRecurringCommits,
+                modifyRecurringCredits,
                 modifySubscriptions,
                 modifyUsageStatementSchedule,
                 setPrepaidBalanceThresholdConfiguration,
@@ -40853,7 +41571,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "PackageCustomizations{addCommits=$addCommits, addCredits=$addCredits, addOverrides=$addOverrides, addRecurringCommits=$addRecurringCommits, addRecurringCredits=$addRecurringCredits, addScheduledCharges=$addScheduledCharges, addSpendTrackers=$addSpendTrackers, addSubscriptions=$addSubscriptions, modifySubscriptions=$modifySubscriptions, modifyUsageStatementSchedule=$modifyUsageStatementSchedule, setPrepaidBalanceThresholdConfiguration=$setPrepaidBalanceThresholdConfiguration, setSpendThresholdConfiguration=$setSpendThresholdConfiguration, additionalProperties=$additionalProperties}"
+            "PackageCustomizations{addCommits=$addCommits, addCredits=$addCredits, addOverrides=$addOverrides, addRecurringCommits=$addRecurringCommits, addRecurringCredits=$addRecurringCredits, addScheduledCharges=$addScheduledCharges, addSpendTrackers=$addSpendTrackers, addSubscriptions=$addSubscriptions, modifyRecurringCommits=$modifyRecurringCommits, modifyRecurringCredits=$modifyRecurringCredits, modifySubscriptions=$modifySubscriptions, modifyUsageStatementSchedule=$modifyUsageStatementSchedule, setPrepaidBalanceThresholdConfiguration=$setPrepaidBalanceThresholdConfiguration, setSpendThresholdConfiguration=$setSpendThresholdConfiguration, additionalProperties=$additionalProperties}"
     }
 
     class ProfessionalService
@@ -41413,6 +42131,7 @@ private constructor(
         private val priority: JsonField<Double>,
         private val productId: JsonField<String>,
         private val startingAt: JsonField<OffsetDateTime>,
+        private val anchorDate: JsonField<OffsetDateTime>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
         private val description: JsonField<String>,
@@ -41449,6 +42168,9 @@ private constructor(
             @JsonProperty("starting_at")
             @ExcludeMissing
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("applicable_product_ids")
             @ExcludeMissing
             applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -41501,6 +42223,7 @@ private constructor(
             priority,
             productId,
             startingAt,
+            anchorDate,
             applicableProductIds,
             applicableProductTags,
             description,
@@ -41559,6 +42282,17 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /**
+         * The date this recurring commit's or credit's periods are anchored to. Must be on or
+         * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+         * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+         * otherwise.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun anchorDate(): Optional<OffsetDateTime> = anchorDate.getOptional("anchor_date")
 
         /**
          * Will be passed down to the individual commits
@@ -41751,6 +42485,15 @@ private constructor(
         fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+        /**
          * Returns the raw JSON value of [applicableProductIds].
          *
          * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -41938,6 +42681,7 @@ private constructor(
             private var priority: JsonField<Double>? = null
             private var productId: JsonField<String>? = null
             private var startingAt: JsonField<OffsetDateTime>? = null
+            private var anchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
@@ -41964,6 +42708,7 @@ private constructor(
                 priority = recurringCommit.priority
                 productId = recurringCommit.productId
                 startingAt = recurringCommit.startingAt
+                anchorDate = recurringCommit.anchorDate
                 applicableProductIds =
                     recurringCommit.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags =
@@ -42053,6 +42798,25 @@ private constructor(
              */
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
+            }
+
+            /**
+             * The date this recurring commit's or credit's periods are anchored to. Must be on or
+             * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+             * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+             * otherwise.
+             */
+            fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** Will be passed down to the individual commits */
@@ -42384,6 +43148,7 @@ private constructor(
                     checkRequired("priority", priority),
                     checkRequired("productId", productId),
                     checkRequired("startingAt", startingAt),
+                    anchorDate,
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
@@ -42425,6 +43190,7 @@ private constructor(
             priority()
             productId()
             startingAt()
+            anchorDate()
             applicableProductIds()
             applicableProductTags()
             description()
@@ -42465,6 +43231,7 @@ private constructor(
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0) +
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -45611,6 +46378,7 @@ private constructor(
                 priority == other.priority &&
                 productId == other.productId &&
                 startingAt == other.startingAt &&
+                anchorDate == other.anchorDate &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
                 description == other.description &&
@@ -45637,6 +46405,7 @@ private constructor(
                 priority,
                 productId,
                 startingAt,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -45660,7 +46429,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "RecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class RecurringCredit
@@ -45671,6 +46440,7 @@ private constructor(
         private val priority: JsonField<Double>,
         private val productId: JsonField<String>,
         private val startingAt: JsonField<OffsetDateTime>,
+        private val anchorDate: JsonField<OffsetDateTime>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
         private val description: JsonField<String>,
@@ -45706,6 +46476,9 @@ private constructor(
             @JsonProperty("starting_at")
             @ExcludeMissing
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("applicable_product_ids")
             @ExcludeMissing
             applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -45755,6 +46528,7 @@ private constructor(
             priority,
             productId,
             startingAt,
+            anchorDate,
             applicableProductIds,
             applicableProductTags,
             description,
@@ -45812,6 +46586,17 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /**
+         * The date this recurring commit's or credit's periods are anchored to. Must be on or
+         * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+         * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+         * otherwise.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun anchorDate(): Optional<OffsetDateTime> = anchorDate.getOptional("anchor_date")
 
         /**
          * Will be passed down to the individual commits
@@ -45996,6 +46781,15 @@ private constructor(
         fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+        /**
          * Returns the raw JSON value of [applicableProductIds].
          *
          * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -46173,6 +46967,7 @@ private constructor(
             private var priority: JsonField<Double>? = null
             private var productId: JsonField<String>? = null
             private var startingAt: JsonField<OffsetDateTime>? = null
+            private var anchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
@@ -46198,6 +46993,7 @@ private constructor(
                 priority = recurringCredit.priority
                 productId = recurringCredit.productId
                 startingAt = recurringCredit.startingAt
+                anchorDate = recurringCredit.anchorDate
                 applicableProductIds =
                     recurringCredit.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags =
@@ -46286,6 +47082,25 @@ private constructor(
              */
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
+            }
+
+            /**
+             * The date this recurring commit's or credit's periods are anchored to. Must be on or
+             * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+             * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+             * otherwise.
+             */
+            fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** Will be passed down to the individual commits */
@@ -46602,6 +47417,7 @@ private constructor(
                     checkRequired("priority", priority),
                     checkRequired("productId", productId),
                     checkRequired("startingAt", startingAt),
+                    anchorDate,
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
@@ -46642,6 +47458,7 @@ private constructor(
             priority()
             productId()
             startingAt()
+            anchorDate()
             applicableProductIds()
             applicableProductTags()
             description()
@@ -46681,6 +47498,7 @@ private constructor(
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0) +
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -49138,6 +49956,7 @@ private constructor(
                 priority == other.priority &&
                 productId == other.productId &&
                 startingAt == other.startingAt &&
+                anchorDate == other.anchorDate &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
                 description == other.description &&
@@ -49163,6 +49982,7 @@ private constructor(
                 priority,
                 productId,
                 startingAt,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -49185,7 +50005,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "RecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class ResellerRoyalty

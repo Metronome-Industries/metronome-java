@@ -652,6 +652,10 @@ internal class PackageRetrieveResponseTest {
                                         .value(0L)
                                         .build()
                                 )
+                                .anchorDate(
+                                    PackageRetrieveResponse.Data.RecurringCommit.AnchorDate
+                                        .SUBSCRIPTION_START
+                                )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
                                 .description("description")
@@ -814,6 +818,10 @@ internal class PackageRetrieveResponseTest {
                                         )
                                         .value(0L)
                                         .build()
+                                )
+                                .anchorDate(
+                                    PackageRetrieveResponse.Data.RecurringCredit.AnchorDate
+                                        .SUBSCRIPTION_START
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
@@ -1695,6 +1703,10 @@ internal class PackageRetrieveResponseTest {
                                     .value(0L)
                                     .build()
                             )
+                            .anchorDate(
+                                PackageRetrieveResponse.Data.RecurringCommit.AnchorDate
+                                    .SUBSCRIPTION_START
+                            )
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
                             .description("description")
@@ -1841,6 +1853,10 @@ internal class PackageRetrieveResponseTest {
                                     )
                                     .value(0L)
                                     .build()
+                            )
+                            .anchorDate(
+                                PackageRetrieveResponse.Data.RecurringCredit.AnchorDate
+                                    .SUBSCRIPTION_START
                             )
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
@@ -2747,6 +2763,10 @@ internal class PackageRetrieveResponseTest {
                                         .value(0L)
                                         .build()
                                 )
+                                .anchorDate(
+                                    PackageRetrieveResponse.Data.RecurringCommit.AnchorDate
+                                        .SUBSCRIPTION_START
+                                )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")
                                 .description("description")
@@ -2909,6 +2929,10 @@ internal class PackageRetrieveResponseTest {
                                         )
                                         .value(0L)
                                         .build()
+                                )
+                                .anchorDate(
+                                    PackageRetrieveResponse.Data.RecurringCredit.AnchorDate
+                                        .SUBSCRIPTION_START
                                 )
                                 .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .addApplicableProductTag("string")

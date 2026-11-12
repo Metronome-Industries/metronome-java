@@ -17487,6 +17487,7 @@ private constructor(
         private val priority: JsonField<Double>,
         private val productId: JsonField<String>,
         private val startingAt: JsonField<OffsetDateTime>,
+        private val anchorDate: JsonField<OffsetDateTime>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
         private val description: JsonField<String>,
@@ -17523,6 +17524,9 @@ private constructor(
             @JsonProperty("starting_at")
             @ExcludeMissing
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("applicable_product_ids")
             @ExcludeMissing
             applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -17575,6 +17579,7 @@ private constructor(
             priority,
             productId,
             startingAt,
+            anchorDate,
             applicableProductIds,
             applicableProductTags,
             description,
@@ -17633,6 +17638,17 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /**
+         * The date this recurring commit's or credit's periods are anchored to. Must be on or
+         * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+         * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+         * otherwise.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun anchorDate(): Optional<OffsetDateTime> = anchorDate.getOptional("anchor_date")
 
         /**
          * Will be passed down to the individual commits
@@ -17826,6 +17842,15 @@ private constructor(
         fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+        /**
          * Returns the raw JSON value of [applicableProductIds].
          *
          * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -18013,6 +18038,7 @@ private constructor(
             private var priority: JsonField<Double>? = null
             private var productId: JsonField<String>? = null
             private var startingAt: JsonField<OffsetDateTime>? = null
+            private var anchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
@@ -18039,6 +18065,7 @@ private constructor(
                 priority = addRecurringCommit.priority
                 productId = addRecurringCommit.productId
                 startingAt = addRecurringCommit.startingAt
+                anchorDate = addRecurringCommit.anchorDate
                 applicableProductIds =
                     addRecurringCommit.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags =
@@ -18128,6 +18155,25 @@ private constructor(
              */
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
+            }
+
+            /**
+             * The date this recurring commit's or credit's periods are anchored to. Must be on or
+             * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+             * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+             * otherwise.
+             */
+            fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** Will be passed down to the individual commits */
@@ -18461,6 +18507,7 @@ private constructor(
                     checkRequired("priority", priority),
                     checkRequired("productId", productId),
                     checkRequired("startingAt", startingAt),
+                    anchorDate,
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
@@ -18502,6 +18549,7 @@ private constructor(
             priority()
             productId()
             startingAt()
+            anchorDate()
             applicableProductIds()
             applicableProductTags()
             description()
@@ -18542,6 +18590,7 @@ private constructor(
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0) +
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -21686,6 +21735,7 @@ private constructor(
                 priority == other.priority &&
                 productId == other.productId &&
                 startingAt == other.startingAt &&
+                anchorDate == other.anchorDate &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
                 description == other.description &&
@@ -21712,6 +21762,7 @@ private constructor(
                 priority,
                 productId,
                 startingAt,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -21735,7 +21786,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AddRecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "AddRecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class AddRecurringCredit
@@ -21746,6 +21797,7 @@ private constructor(
         private val priority: JsonField<Double>,
         private val productId: JsonField<String>,
         private val startingAt: JsonField<OffsetDateTime>,
+        private val anchorDate: JsonField<OffsetDateTime>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
         private val description: JsonField<String>,
@@ -21781,6 +21833,9 @@ private constructor(
             @JsonProperty("starting_at")
             @ExcludeMissing
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("applicable_product_ids")
             @ExcludeMissing
             applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -21830,6 +21885,7 @@ private constructor(
             priority,
             productId,
             startingAt,
+            anchorDate,
             applicableProductIds,
             applicableProductTags,
             description,
@@ -21887,6 +21943,17 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /**
+         * The date this recurring commit's or credit's periods are anchored to. Must be on or
+         * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+         * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+         * otherwise.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun anchorDate(): Optional<OffsetDateTime> = anchorDate.getOptional("anchor_date")
 
         /**
          * Will be passed down to the individual commits
@@ -22072,6 +22139,15 @@ private constructor(
         fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+        /**
          * Returns the raw JSON value of [applicableProductIds].
          *
          * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -22249,6 +22325,7 @@ private constructor(
             private var priority: JsonField<Double>? = null
             private var productId: JsonField<String>? = null
             private var startingAt: JsonField<OffsetDateTime>? = null
+            private var anchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
@@ -22274,6 +22351,7 @@ private constructor(
                 priority = addRecurringCredit.priority
                 productId = addRecurringCredit.productId
                 startingAt = addRecurringCredit.startingAt
+                anchorDate = addRecurringCredit.anchorDate
                 applicableProductIds =
                     addRecurringCredit.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags =
@@ -22362,6 +22440,25 @@ private constructor(
              */
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
+            }
+
+            /**
+             * The date this recurring commit's or credit's periods are anchored to. Must be on or
+             * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+             * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+             * otherwise.
+             */
+            fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** Will be passed down to the individual commits */
@@ -22680,6 +22777,7 @@ private constructor(
                     checkRequired("priority", priority),
                     checkRequired("productId", productId),
                     checkRequired("startingAt", startingAt),
+                    anchorDate,
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
@@ -22720,6 +22818,7 @@ private constructor(
             priority()
             productId()
             startingAt()
+            anchorDate()
             applicableProductIds()
             applicableProductTags()
             description()
@@ -22759,6 +22858,7 @@ private constructor(
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0) +
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -25215,6 +25315,7 @@ private constructor(
                 priority == other.priority &&
                 productId == other.productId &&
                 startingAt == other.startingAt &&
+                anchorDate == other.anchorDate &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
                 description == other.description &&
@@ -25240,6 +25341,7 @@ private constructor(
                 priority,
                 productId,
                 startingAt,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -25262,7 +25364,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AddRecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "AddRecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class AddResellerRoyalty

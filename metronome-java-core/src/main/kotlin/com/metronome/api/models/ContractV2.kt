@@ -17080,9 +17080,9 @@ private constructor(
 
             /**
              * Rules that stop matching invoices from being sent to the billing provider. Supported
-             * for Stripe and NetSuite billing provider configurations. When omitted, every invoice
-             * is sent to the billing provider. Stripe invoices can be force-sent after a rule
-             * suppresses them.
+             * for Stripe, NetSuite, AWS Marketplace, Azure, and GCP billing provider
+             * configurations. When omitted, every invoice is sent to the billing provider. Stripe
+             * invoices can be force-sent after a rule suppresses them.
              *
              * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
              *   if the server responded with an unexpected value).
@@ -17379,9 +17379,9 @@ private constructor(
 
                 /**
                  * Rules that stop matching invoices from being sent to the billing provider.
-                 * Supported for Stripe and NetSuite billing provider configurations. When omitted,
-                 * every invoice is sent to the billing provider. Stripe invoices can be force-sent
-                 * after a rule suppresses them.
+                 * Supported for Stripe, NetSuite, AWS Marketplace, Azure, and GCP billing provider
+                 * configurations. When omitted, every invoice is sent to the billing provider.
+                 * Stripe invoices can be force-sent after a rule suppresses them.
                  */
                 fun unbillableInvoicesConfiguration(
                     unbillableInvoicesConfiguration: List<UnbillableInvoicesConfiguration>
@@ -25353,8 +25353,9 @@ private constructor(
 
         /**
          * Rules that stop matching invoices from being sent to the billing provider. Supported for
-         * Stripe and NetSuite billing provider configurations. When omitted, every invoice is sent
-         * to the billing provider. Stripe invoices can be force-sent after a rule suppresses them.
+         * Stripe, NetSuite, AWS Marketplace, Azure, and GCP billing provider configurations. When
+         * omitted, every invoice is sent to the billing provider. Stripe invoices can be force-sent
+         * after a rule suppresses them.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -25647,9 +25648,9 @@ private constructor(
 
             /**
              * Rules that stop matching invoices from being sent to the billing provider. Supported
-             * for Stripe and NetSuite billing provider configurations. When omitted, every invoice
-             * is sent to the billing provider. Stripe invoices can be force-sent after a rule
-             * suppresses them.
+             * for Stripe, NetSuite, AWS Marketplace, Azure, and GCP billing provider
+             * configurations. When omitted, every invoice is sent to the billing provider. Stripe
+             * invoices can be force-sent after a rule suppresses them.
              */
             fun unbillableInvoicesConfiguration(
                 unbillableInvoicesConfiguration: List<UnbillableInvoicesConfiguration>
