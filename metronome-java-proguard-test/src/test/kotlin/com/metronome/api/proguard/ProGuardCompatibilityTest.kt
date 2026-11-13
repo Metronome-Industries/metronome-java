@@ -641,7 +641,8 @@ internal class ProGuardCompatibilityTest {
                                                 .CustomerBillingProviderConfiguration
                                                 .Configuration
                                                 .builder()
-                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .awsCustomerAccountId("aws_customer_account_id")
+                                                .awsLicenseArn("aws_license_arn")
                                                 .build()
                                         )
                                         .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

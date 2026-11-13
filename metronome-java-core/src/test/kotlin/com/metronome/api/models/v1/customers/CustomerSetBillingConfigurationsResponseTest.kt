@@ -3,7 +3,6 @@
 package com.metronome.api.models.v1.customers
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import com.metronome.api.core.JsonValue
 import com.metronome.api.core.jsonMapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -23,7 +22,8 @@ internal class CustomerSetBillingConfigurationsResponseTest {
                         )
                         .configuration(
                             CustomerSetBillingConfigurationsResponse.Data.Configuration.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -45,7 +45,8 @@ internal class CustomerSetBillingConfigurationsResponseTest {
                     )
                     .configuration(
                         CustomerSetBillingConfigurationsResponse.Data.Configuration.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -69,7 +70,8 @@ internal class CustomerSetBillingConfigurationsResponseTest {
                         )
                         .configuration(
                             CustomerSetBillingConfigurationsResponse.Data.Configuration.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

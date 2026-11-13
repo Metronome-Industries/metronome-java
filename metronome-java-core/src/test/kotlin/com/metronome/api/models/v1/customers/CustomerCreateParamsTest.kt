@@ -44,11 +44,8 @@ internal class CustomerCreateParamsTest {
                     .configuration(
                         CustomerCreateParams.CustomerBillingProviderConfiguration.Configuration
                             .builder()
-                            .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
-                            .putAdditionalProperty(
-                                "stripe_collection_method",
-                                JsonValue.from("bar"),
-                            )
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -161,11 +158,8 @@ internal class CustomerCreateParamsTest {
                         .configuration(
                             CustomerCreateParams.CustomerBillingProviderConfiguration.Configuration
                                 .builder()
-                                .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
-                                .putAdditionalProperty(
-                                    "stripe_collection_method",
-                                    JsonValue.from("bar"),
-                                )
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -279,11 +273,8 @@ internal class CustomerCreateParamsTest {
                     .configuration(
                         CustomerCreateParams.CustomerBillingProviderConfiguration.Configuration
                             .builder()
-                            .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
-                            .putAdditionalProperty(
-                                "stripe_collection_method",
-                                JsonValue.from("bar"),
-                            )
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(

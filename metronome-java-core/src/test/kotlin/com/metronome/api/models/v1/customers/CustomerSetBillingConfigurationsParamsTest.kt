@@ -2,7 +2,6 @@
 
 package com.metronome.api.models.v1.customers
 
-import com.metronome.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,15 +19,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
-                                .putAdditionalProperty(
-                                    "stripe_collection_method",
-                                    JsonValue.from("bar"),
-                                )
-                                .putAdditionalProperty(
-                                    "leave_stripe_invoices_in_draft",
-                                    JsonValue.from("bar"),
-                                )
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -86,9 +78,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                                .putAdditionalProperty("aws_product_code", JsonValue.from("bar"))
-                                .putAdditionalProperty("aws_region", JsonValue.from("bar"))
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -146,10 +137,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty(
-                                    "azure_subscription_id",
-                                    JsonValue.from("bar"),
-                                )
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -207,13 +196,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                                .putAdditionalProperty("aws_product_code", JsonValue.from("bar"))
-                                .putAdditionalProperty("aws_region", JsonValue.from("bar"))
-                                .putAdditionalProperty(
-                                    "aws_is_subscription_product",
-                                    JsonValue.from("bar"),
-                                )
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -271,8 +255,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty("gcp_entitlement_id", JsonValue.from("bar"))
-                                .putAdditionalProperty("gcp_service_name", JsonValue.from("bar"))
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -329,10 +313,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty(
-                                    "netsuite_customer_id",
-                                    JsonValue.from("bar"),
-                                )
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -400,18 +382,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty(
-                                        "stripe_customer_id",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty(
-                                        "stripe_collection_method",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty(
-                                        "leave_stripe_invoices_in_draft",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -471,12 +443,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                                    .putAdditionalProperty(
-                                        "aws_product_code",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty("aws_region", JsonValue.from("bar"))
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -536,10 +504,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty(
-                                        "azure_subscription_id",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -599,16 +565,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                                    .putAdditionalProperty(
-                                        "aws_product_code",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty("aws_region", JsonValue.from("bar"))
-                                    .putAdditionalProperty(
-                                        "aws_is_subscription_product",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -668,14 +626,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty(
-                                        "gcp_entitlement_id",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty(
-                                        "gcp_service_name",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -734,10 +686,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty(
-                                        "netsuite_customer_id",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -804,15 +754,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
-                            .putAdditionalProperty(
-                                "stripe_collection_method",
-                                JsonValue.from("bar"),
-                            )
-                            .putAdditionalProperty(
-                                "leave_stripe_invoices_in_draft",
-                                JsonValue.from("bar"),
-                            )
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -869,9 +812,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                            .putAdditionalProperty("aws_product_code", JsonValue.from("bar"))
-                            .putAdditionalProperty("aws_region", JsonValue.from("bar"))
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -929,7 +871,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("azure_subscription_id", JsonValue.from("bar"))
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -986,13 +929,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                            .putAdditionalProperty("aws_product_code", JsonValue.from("bar"))
-                            .putAdditionalProperty("aws_region", JsonValue.from("bar"))
-                            .putAdditionalProperty(
-                                "aws_is_subscription_product",
-                                JsonValue.from("bar"),
-                            )
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -1049,8 +987,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("gcp_entitlement_id", JsonValue.from("bar"))
-                            .putAdditionalProperty("gcp_service_name", JsonValue.from("bar"))
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -1107,7 +1045,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("netsuite_customer_id", JsonValue.from("bar"))
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(

@@ -1093,16 +1093,24 @@ private constructor(
             billingProviderType.getRequired("billing_provider_type")
 
         /**
+         * Deprecated and ignored by the server. The customer ID comes from
+         * `billing_provider_customer_id`.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
+        @Deprecated("deprecated")
         fun awsCustomerAccountId(): Optional<String> =
             awsCustomerAccountId.getOptional("aws_customer_account_id")
 
         /**
+         * Deprecated and ignored by the server. The customer ID comes from
+         * `billing_provider_customer_id`.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
+        @Deprecated("deprecated")
         fun awsCustomerId(): Optional<String> = awsCustomerId.getOptional("aws_customer_id")
 
         /**
@@ -1161,6 +1169,7 @@ private constructor(
          * Unlike [awsCustomerAccountId], this method doesn't throw if the JSON field has an
          * unexpected type.
          */
+        @Deprecated("deprecated")
         @JsonProperty("aws_customer_account_id")
         @ExcludeMissing
         fun _awsCustomerAccountId(): JsonField<String> = awsCustomerAccountId
@@ -1171,6 +1180,7 @@ private constructor(
          * Unlike [awsCustomerId], this method doesn't throw if the JSON field has an unexpected
          * type.
          */
+        @Deprecated("deprecated")
         @JsonProperty("aws_customer_id")
         @ExcludeMissing
         fun _awsCustomerId(): JsonField<String> = awsCustomerId
@@ -1294,6 +1304,11 @@ private constructor(
                 this.billingProviderType = billingProviderType
             }
 
+            /**
+             * Deprecated and ignored by the server. The customer ID comes from
+             * `billing_provider_customer_id`.
+             */
+            @Deprecated("deprecated")
             fun awsCustomerAccountId(awsCustomerAccountId: String) =
                 awsCustomerAccountId(JsonField.of(awsCustomerAccountId))
 
@@ -1304,10 +1319,16 @@ private constructor(
              * value instead. This method is primarily for setting the field to an undocumented or
              * not yet supported value.
              */
+            @Deprecated("deprecated")
             fun awsCustomerAccountId(awsCustomerAccountId: JsonField<String>) = apply {
                 this.awsCustomerAccountId = awsCustomerAccountId
             }
 
+            /**
+             * Deprecated and ignored by the server. The customer ID comes from
+             * `billing_provider_customer_id`.
+             */
+            @Deprecated("deprecated")
             fun awsCustomerId(awsCustomerId: String) = awsCustomerId(JsonField.of(awsCustomerId))
 
             /**
@@ -1317,6 +1338,7 @@ private constructor(
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
+            @Deprecated("deprecated")
             fun awsCustomerId(awsCustomerId: JsonField<String>) = apply {
                 this.awsCustomerId = awsCustomerId
             }
@@ -2843,15 +2865,71 @@ private constructor(
          * configuration.
          */
         class Configuration
-        @JsonCreator
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
+            private val awsCustomerAccountId: JsonField<String>,
+            private val awsLicenseArn: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("aws_customer_account_id")
+                @ExcludeMissing
+                awsCustomerAccountId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("aws_license_arn")
+                @ExcludeMissing
+                awsLicenseArn: JsonField<String> = JsonMissing.of(),
+            ) : this(awsCustomerAccountId, awsLicenseArn, mutableMapOf())
+
+            /**
+             * AWS Marketplace only. The buyer's 12 digit AWS account ID. Must be sent together with
+             * `aws_license_arn`.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun awsCustomerAccountId(): Optional<String> =
+                awsCustomerAccountId.getOptional("aws_customer_account_id")
+
+            /**
+             * AWS Marketplace only. The ARN of the buyer's AWS License Manager license for this
+             * purchase. Must be sent together with `aws_customer_account_id`.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun awsLicenseArn(): Optional<String> = awsLicenseArn.getOptional("aws_license_arn")
+
+            /**
+             * Returns the raw JSON value of [awsCustomerAccountId].
+             *
+             * Unlike [awsCustomerAccountId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("aws_customer_account_id")
+            @ExcludeMissing
+            fun _awsCustomerAccountId(): JsonField<String> = awsCustomerAccountId
+
+            /**
+             * Returns the raw JSON value of [awsLicenseArn].
+             *
+             * Unlike [awsLicenseArn], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("aws_license_arn")
+            @ExcludeMissing
+            fun _awsLicenseArn(): JsonField<String> = awsLicenseArn
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -2864,11 +2942,51 @@ private constructor(
             /** A builder for [Configuration]. */
             class Builder internal constructor() {
 
+                private var awsCustomerAccountId: JsonField<String> = JsonMissing.of()
+                private var awsLicenseArn: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(configuration: Configuration) = apply {
+                    awsCustomerAccountId = configuration.awsCustomerAccountId
+                    awsLicenseArn = configuration.awsLicenseArn
                     additionalProperties = configuration.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * AWS Marketplace only. The buyer's 12 digit AWS account ID. Must be sent together
+                 * with `aws_license_arn`.
+                 */
+                fun awsCustomerAccountId(awsCustomerAccountId: String) =
+                    awsCustomerAccountId(JsonField.of(awsCustomerAccountId))
+
+                /**
+                 * Sets [Builder.awsCustomerAccountId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.awsCustomerAccountId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun awsCustomerAccountId(awsCustomerAccountId: JsonField<String>) = apply {
+                    this.awsCustomerAccountId = awsCustomerAccountId
+                }
+
+                /**
+                 * AWS Marketplace only. The ARN of the buyer's AWS License Manager license for this
+                 * purchase. Must be sent together with `aws_customer_account_id`.
+                 */
+                fun awsLicenseArn(awsLicenseArn: String) =
+                    awsLicenseArn(JsonField.of(awsLicenseArn))
+
+                /**
+                 * Sets [Builder.awsLicenseArn] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.awsLicenseArn] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun awsLicenseArn(awsLicenseArn: JsonField<String>) = apply {
+                    this.awsLicenseArn = awsLicenseArn
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -2898,7 +3016,12 @@ private constructor(
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): Configuration = Configuration(additionalProperties.toImmutable())
+                fun build(): Configuration =
+                    Configuration(
+                        awsCustomerAccountId,
+                        awsLicenseArn,
+                        additionalProperties.toMutableMap(),
+                    )
             }
 
             private var validated: Boolean = false
@@ -2918,6 +3041,8 @@ private constructor(
                     return@apply
                 }
 
+                awsCustomerAccountId()
+                awsLicenseArn()
                 validated = true
             }
 
@@ -2937,21 +3062,28 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+                (if (awsCustomerAccountId.asKnown().isPresent) 1 else 0) +
+                    (if (awsLicenseArn.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return other is Configuration && additionalProperties == other.additionalProperties
+                return other is Configuration &&
+                    awsCustomerAccountId == other.awsCustomerAccountId &&
+                    awsLicenseArn == other.awsLicenseArn &&
+                    additionalProperties == other.additionalProperties
             }
 
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            private val hashCode: Int by lazy {
+                Objects.hash(awsCustomerAccountId, awsLicenseArn, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "Configuration{additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "Configuration{awsCustomerAccountId=$awsCustomerAccountId, awsLicenseArn=$awsLicenseArn, additionalProperties=$additionalProperties}"
         }
 
         /**
