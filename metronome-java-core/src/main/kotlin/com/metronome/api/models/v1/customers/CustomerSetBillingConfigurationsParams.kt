@@ -43,8 +43,6 @@ import kotlin.jvm.optionals.getOrNull
  * - `direct_to_billing_provider`: Use when Metronome should send invoices directly to the billing
  *   provider's API (e.g., Stripe, NetSuite). This is the most common method for automated billing
  *   workflows.
- * - `tackle`: Use specifically for AWS Marketplace transactions that require Tackle's co-selling
- *   platform for partner attribution and commission tracking.
  * - `aws_sqs`: Use when you want invoice data delivered to an AWS SQS queue for custom processing
  *   before sending to your billing system.
  * - `aws_sns`: Use when you want invoice notifications published to an AWS SNS topic for
@@ -1384,8 +1382,6 @@ private constructor(
 
                 @JvmField val AWS_SQS = of("aws_sqs")
 
-                @JvmField val TACKLE = of("tackle")
-
                 @JvmField val AWS_SNS = of("aws_sns")
 
                 @JvmStatic fun of(value: String) = DeliveryMethod(JsonField.of(value))
@@ -1395,7 +1391,6 @@ private constructor(
             enum class Known {
                 DIRECT_TO_BILLING_PROVIDER,
                 AWS_SQS,
-                TACKLE,
                 AWS_SNS,
             }
 
@@ -1411,7 +1406,6 @@ private constructor(
             enum class Value {
                 DIRECT_TO_BILLING_PROVIDER,
                 AWS_SQS,
-                TACKLE,
                 AWS_SNS,
                 /**
                  * An enum member indicating that [DeliveryMethod] was instantiated with an unknown
@@ -1431,7 +1425,6 @@ private constructor(
                 when (this) {
                     DIRECT_TO_BILLING_PROVIDER -> Value.DIRECT_TO_BILLING_PROVIDER
                     AWS_SQS -> Value.AWS_SQS
-                    TACKLE -> Value.TACKLE
                     AWS_SNS -> Value.AWS_SNS
                     else -> Value._UNKNOWN
                 }
@@ -1449,7 +1442,6 @@ private constructor(
                 when (this) {
                     DIRECT_TO_BILLING_PROVIDER -> Known.DIRECT_TO_BILLING_PROVIDER
                     AWS_SQS -> Known.AWS_SQS
-                    TACKLE -> Known.TACKLE
                     AWS_SNS -> Known.AWS_SNS
                     else -> throw MetronomeInvalidDataException("Unknown DeliveryMethod: $value")
                 }

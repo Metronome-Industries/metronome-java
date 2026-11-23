@@ -724,8 +724,6 @@ private constructor(
 
                 @JvmField val AWS_SQS = of("aws_sqs")
 
-                @JvmField val TACKLE = of("tackle")
-
                 @JvmField val AWS_SNS = of("aws_sns")
 
                 @JvmStatic fun of(value: String) = DeliveryMethod(JsonField.of(value))
@@ -735,7 +733,6 @@ private constructor(
             enum class Known {
                 DIRECT_TO_BILLING_PROVIDER,
                 AWS_SQS,
-                TACKLE,
                 AWS_SNS,
             }
 
@@ -751,7 +748,6 @@ private constructor(
             enum class Value {
                 DIRECT_TO_BILLING_PROVIDER,
                 AWS_SQS,
-                TACKLE,
                 AWS_SNS,
                 /**
                  * An enum member indicating that [DeliveryMethod] was instantiated with an unknown
@@ -771,7 +767,6 @@ private constructor(
                 when (this) {
                     DIRECT_TO_BILLING_PROVIDER -> Value.DIRECT_TO_BILLING_PROVIDER
                     AWS_SQS -> Value.AWS_SQS
-                    TACKLE -> Value.TACKLE
                     AWS_SNS -> Value.AWS_SNS
                     else -> Value._UNKNOWN
                 }
@@ -789,7 +784,6 @@ private constructor(
                 when (this) {
                     DIRECT_TO_BILLING_PROVIDER -> Known.DIRECT_TO_BILLING_PROVIDER
                     AWS_SQS -> Known.AWS_SQS
-                    TACKLE -> Known.TACKLE
                     AWS_SNS -> Known.AWS_SNS
                     else -> throw MetronomeInvalidDataException("Unknown DeliveryMethod: $value")
                 }

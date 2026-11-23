@@ -462,6 +462,15 @@ private constructor(
          * consolidation to occur. This field cannot be modified after a Contract has been created.
          * If this field is omitted, charges will appear on a separate invoice from usage charges.
          *
+         * For recurring fixed fees, such as a monthly platform fee, use a
+         * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+         * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of recurring
+         * scheduled charges with this field set to `ALL`. Metronome recalculates a subscription's
+         * usage invoice line items from the current contract each time it invoices, so the charges
+         * stay on the correct usage invoice after contract edits such as end date changes or
+         * transitions. Use this field for one-time scheduled charges and commit purchases, which
+         * subscriptions can't represent.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
@@ -1215,6 +1224,15 @@ private constructor(
              * `ending_before` date for consolidation to occur. This field cannot be modified after
              * a Contract has been created. If this field is omitted, charges will appear on a
              * separate invoice from usage charges.
+             *
+             * For recurring fixed fees, such as a monthly platform fee, use a
+             * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+             * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of
+             * recurring scheduled charges with this field set to `ALL`. Metronome recalculates a
+             * subscription's usage invoice line items from the current contract each time it
+             * invoices, so the charges stay on the correct usage invoice after contract edits such
+             * as end date changes or transitions. Use this field for one-time scheduled charges and
+             * commit purchases, which subscriptions can't represent.
              */
             fun scheduledChargesOnUsageInvoices(
                 scheduledChargesOnUsageInvoices: ScheduledChargesOnUsageInvoices
@@ -13437,8 +13455,6 @@ private constructor(
 
                 @JvmField val AWS_SQS = of("aws_sqs")
 
-                @JvmField val TACKLE = of("tackle")
-
                 @JvmField val AWS_SNS = of("aws_sns")
 
                 @JvmStatic fun of(value: String) = DeliveryMethod(JsonField.of(value))
@@ -13448,7 +13464,6 @@ private constructor(
             enum class Known {
                 DIRECT_TO_BILLING_PROVIDER,
                 AWS_SQS,
-                TACKLE,
                 AWS_SNS,
             }
 
@@ -13464,7 +13479,6 @@ private constructor(
             enum class Value {
                 DIRECT_TO_BILLING_PROVIDER,
                 AWS_SQS,
-                TACKLE,
                 AWS_SNS,
                 /**
                  * An enum member indicating that [DeliveryMethod] was instantiated with an unknown
@@ -13484,7 +13498,6 @@ private constructor(
                 when (this) {
                     DIRECT_TO_BILLING_PROVIDER -> Value.DIRECT_TO_BILLING_PROVIDER
                     AWS_SQS -> Value.AWS_SQS
-                    TACKLE -> Value.TACKLE
                     AWS_SNS -> Value.AWS_SNS
                     else -> Value._UNKNOWN
                 }
@@ -13502,7 +13515,6 @@ private constructor(
                 when (this) {
                     DIRECT_TO_BILLING_PROVIDER -> Known.DIRECT_TO_BILLING_PROVIDER
                     AWS_SQS -> Known.AWS_SQS
-                    TACKLE -> Known.TACKLE
                     AWS_SNS -> Known.AWS_SNS
                     else -> throw MetronomeInvalidDataException("Unknown DeliveryMethod: $value")
                 }
@@ -24101,6 +24113,15 @@ private constructor(
          * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
          * consolidation to occur. This field cannot be modified after a Contract has been created.
          * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         *
+         * For recurring fixed fees, such as a monthly platform fee, use a
+         * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+         * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of recurring
+         * scheduled charges with this field set to `ALL`. Metronome recalculates a subscription's
+         * usage invoice line items from the current contract each time it invoices, so the charges
+         * stay on the correct usage invoice after contract edits such as end date changes or
+         * transitions. Use this field for one-time scheduled charges and commit purchases, which
+         * subscriptions can't represent.
          */
         class ScheduledChargesOnUsageInvoices
         @JsonCreator
