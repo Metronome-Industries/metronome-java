@@ -26,8 +26,8 @@ import kotlin.jvm.optionals.getOrNull
 
 /**
  * Associate an existing customer with a plan for a specified date range. See the
- * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
- * for details on the price adjustments. This is a Plans (deprecated) endpoint. New clients should
+ * [price adjustments documentation](https://docs.metronome.com/plans-guides/price-adjustments) for
+ * details on the price adjustments. This is a Plans (deprecated) endpoint. New clients should
  * implement using Contracts.
  */
 class PlanAddParams
@@ -84,7 +84,7 @@ private constructor(
 
     /**
      * A list of price adjustments can be applied on top of the pricing in the plans. See the
-     * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+     * [price adjustments documentation](https://docs.metronome.com/plans-guides/price-adjustments)
      * for details.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -305,7 +305,7 @@ private constructor(
 
         /**
          * A list of price adjustments can be applied on top of the pricing in the plans. See the
-         * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+         * [price adjustments documentation](https://docs.metronome.com/plans-guides/price-adjustments)
          * for details.
          */
         fun priceAdjustments(priceAdjustments: List<PriceAdjustment>) = apply {
@@ -590,7 +590,7 @@ private constructor(
 
         /**
          * A list of price adjustments can be applied on top of the pricing in the plans. See the
-         * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+         * [price adjustments documentation](https://docs.metronome.com/plans-guides/price-adjustments)
          * for details.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -825,7 +825,7 @@ private constructor(
             /**
              * A list of price adjustments can be applied on top of the pricing in the plans. See
              * the
-             * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
+             * [price adjustments documentation](https://docs.metronome.com/plans-guides/price-adjustments)
              * for details.
              */
             fun priceAdjustments(priceAdjustments: List<PriceAdjustment>) =

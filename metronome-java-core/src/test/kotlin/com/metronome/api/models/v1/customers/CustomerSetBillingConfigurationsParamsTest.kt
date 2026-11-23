@@ -2,7 +2,6 @@
 
 package com.metronome.api.models.v1.customers
 
-import com.metronome.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,15 +19,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
-                                .putAdditionalProperty(
-                                    "stripe_collection_method",
-                                    JsonValue.from("bar"),
-                                )
-                                .putAdditionalProperty(
-                                    "leave_stripe_invoices_in_draft",
-                                    JsonValue.from("bar"),
-                                )
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -37,6 +29,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         )
                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                        .unbillableInvoicesConfiguration(
+                            listOf(
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .SCHEDULED
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                            )
+                        )
                         .build(),
                     CustomerSetBillingConfigurationsParams.Data.builder()
                         .billingProvider(
@@ -46,9 +78,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                                .putAdditionalProperty("aws_product_code", JsonValue.from("bar"))
-                                .putAdditionalProperty("aws_region", JsonValue.from("bar"))
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -57,6 +88,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         )
                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                        .unbillableInvoicesConfiguration(
+                            listOf(
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .SCHEDULED
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                            )
+                        )
                         .build(),
                     CustomerSetBillingConfigurationsParams.Data.builder()
                         .billingProvider(
@@ -66,10 +137,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty(
-                                    "azure_subscription_id",
-                                    JsonValue.from("bar"),
-                                )
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -78,6 +147,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         )
                         .deliveryMethodId("5b9e3072-415b-4842-94f0-0b6700c8b6be")
                         .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                        .unbillableInvoicesConfiguration(
+                            listOf(
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .SCHEDULED
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                            )
+                        )
                         .build(),
                     CustomerSetBillingConfigurationsParams.Data.builder()
                         .billingProvider(
@@ -87,13 +196,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                                .putAdditionalProperty("aws_product_code", JsonValue.from("bar"))
-                                .putAdditionalProperty("aws_region", JsonValue.from("bar"))
-                                .putAdditionalProperty(
-                                    "aws_is_subscription_product",
-                                    JsonValue.from("bar"),
-                                )
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -102,6 +206,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         )
                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                        .unbillableInvoicesConfiguration(
+                            listOf(
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .SCHEDULED
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                            )
+                        )
                         .build(),
                     CustomerSetBillingConfigurationsParams.Data.builder()
                         .billingProvider(
@@ -111,8 +255,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty("gcp_entitlement_id", JsonValue.from("bar"))
-                                .putAdditionalProperty("gcp_service_name", JsonValue.from("bar"))
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -121,6 +265,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         )
                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                        .unbillableInvoicesConfiguration(
+                            listOf(
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .SCHEDULED
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                            )
+                        )
                         .build(),
                     CustomerSetBillingConfigurationsParams.Data.builder()
                         .billingProvider(
@@ -129,10 +313,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                         .configuration(
                             CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                .putAdditionalProperty(
-                                    "netsuite_customer_id",
-                                    JsonValue.from("bar"),
-                                )
+                                .awsCustomerAccountId("aws_customer_account_id")
+                                .awsLicenseArn("aws_license_arn")
                                 .build()
                         )
                         .deliveryMethod(
@@ -141,6 +323,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                         )
                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                        .unbillableInvoicesConfiguration(
+                            listOf(
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .USAGE
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                                CustomerSetBillingConfigurationsParams.Data
+                                    .UnbillableInvoicesConfiguration
+                                    .builder()
+                                    .invoiceType(
+                                        CustomerSetBillingConfigurationsParams.Data
+                                            .UnbillableInvoicesConfiguration
+                                            .InvoiceType
+                                            .SCHEDULED
+                                    )
+                                    .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                    .maxAmount(1000.0)
+                                    .build(),
+                            )
+                        )
                         .build(),
                 )
             )
@@ -160,18 +382,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty(
-                                        "stripe_customer_id",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty(
-                                        "stripe_collection_method",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty(
-                                        "leave_stripe_invoices_in_draft",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -181,6 +393,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .taxProvider(
                                 CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK
+                            )
+                            .unbillableInvoicesConfiguration(
+                                listOf(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .SCHEDULED
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                )
                             )
                             .build(),
                         CustomerSetBillingConfigurationsParams.Data.builder()
@@ -191,12 +443,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                                    .putAdditionalProperty(
-                                        "aws_product_code",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty("aws_region", JsonValue.from("bar"))
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -206,6 +454,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .taxProvider(
                                 CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK
+                            )
+                            .unbillableInvoicesConfiguration(
+                                listOf(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .SCHEDULED
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                )
                             )
                             .build(),
                         CustomerSetBillingConfigurationsParams.Data.builder()
@@ -216,10 +504,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty(
-                                        "azure_subscription_id",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -230,6 +516,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .taxProvider(
                                 CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK
                             )
+                            .unbillableInvoicesConfiguration(
+                                listOf(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .SCHEDULED
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                )
+                            )
                             .build(),
                         CustomerSetBillingConfigurationsParams.Data.builder()
                             .billingProvider(
@@ -239,16 +565,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                                    .putAdditionalProperty(
-                                        "aws_product_code",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty("aws_region", JsonValue.from("bar"))
-                                    .putAdditionalProperty(
-                                        "aws_is_subscription_product",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -258,6 +576,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .taxProvider(
                                 CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK
+                            )
+                            .unbillableInvoicesConfiguration(
+                                listOf(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .SCHEDULED
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                )
                             )
                             .build(),
                         CustomerSetBillingConfigurationsParams.Data.builder()
@@ -268,14 +626,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty(
-                                        "gcp_entitlement_id",
-                                        JsonValue.from("bar"),
-                                    )
-                                    .putAdditionalProperty(
-                                        "gcp_service_name",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -285,6 +637,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .taxProvider(
                                 CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK
+                            )
+                            .unbillableInvoicesConfiguration(
+                                listOf(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .SCHEDULED
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                )
                             )
                             .build(),
                         CustomerSetBillingConfigurationsParams.Data.builder()
@@ -294,10 +686,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                             .configuration(
                                 CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                                    .putAdditionalProperty(
-                                        "netsuite_customer_id",
-                                        JsonValue.from("bar"),
-                                    )
+                                    .awsCustomerAccountId("aws_customer_account_id")
+                                    .awsLicenseArn("aws_license_arn")
                                     .build()
                             )
                             .deliveryMethod(
@@ -307,6 +697,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                             .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .taxProvider(
                                 CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK
+                            )
+                            .unbillableInvoicesConfiguration(
+                                listOf(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .USAGE
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .builder()
+                                        .invoiceType(
+                                            CustomerSetBillingConfigurationsParams.Data
+                                                .UnbillableInvoicesConfiguration
+                                                .InvoiceType
+                                                .SCHEDULED
+                                        )
+                                        .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                        .maxAmount(1000.0)
+                                        .build(),
+                                )
                             )
                             .build(),
                     )
@@ -324,15 +754,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("stripe_customer_id", JsonValue.from("bar"))
-                            .putAdditionalProperty(
-                                "stripe_collection_method",
-                                JsonValue.from("bar"),
-                            )
-                            .putAdditionalProperty(
-                                "leave_stripe_invoices_in_draft",
-                                JsonValue.from("bar"),
-                            )
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -341,6 +764,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     )
                     .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                    .unbillableInvoicesConfiguration(
+                        listOf(
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .SCHEDULED
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                        )
+                    )
                     .build(),
                 CustomerSetBillingConfigurationsParams.Data.builder()
                     .billingProvider(
@@ -349,9 +812,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                            .putAdditionalProperty("aws_product_code", JsonValue.from("bar"))
-                            .putAdditionalProperty("aws_region", JsonValue.from("bar"))
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -360,6 +822,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     )
                     .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                    .unbillableInvoicesConfiguration(
+                        listOf(
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .SCHEDULED
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                        )
+                    )
                     .build(),
                 CustomerSetBillingConfigurationsParams.Data.builder()
                     .billingProvider(
@@ -369,7 +871,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("azure_subscription_id", JsonValue.from("bar"))
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -378,6 +881,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     )
                     .deliveryMethodId("5b9e3072-415b-4842-94f0-0b6700c8b6be")
                     .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                    .unbillableInvoicesConfiguration(
+                        listOf(
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .SCHEDULED
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                        )
+                    )
                     .build(),
                 CustomerSetBillingConfigurationsParams.Data.builder()
                     .billingProvider(
@@ -386,13 +929,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("aws_customer_id", JsonValue.from("bar"))
-                            .putAdditionalProperty("aws_product_code", JsonValue.from("bar"))
-                            .putAdditionalProperty("aws_region", JsonValue.from("bar"))
-                            .putAdditionalProperty(
-                                "aws_is_subscription_product",
-                                JsonValue.from("bar"),
-                            )
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -401,6 +939,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     )
                     .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                    .unbillableInvoicesConfiguration(
+                        listOf(
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .SCHEDULED
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                        )
+                    )
                     .build(),
                 CustomerSetBillingConfigurationsParams.Data.builder()
                     .billingProvider(
@@ -409,8 +987,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("gcp_entitlement_id", JsonValue.from("bar"))
-                            .putAdditionalProperty("gcp_service_name", JsonValue.from("bar"))
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -419,6 +997,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     )
                     .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                    .unbillableInvoicesConfiguration(
+                        listOf(
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .SCHEDULED
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                        )
+                    )
                     .build(),
                 CustomerSetBillingConfigurationsParams.Data.builder()
                     .billingProvider(
@@ -427,7 +1045,8 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     .customerId("4db51251-61de-4bfe-b9ce-495e244f3491")
                     .configuration(
                         CustomerSetBillingConfigurationsParams.Data.Configuration.builder()
-                            .putAdditionalProperty("netsuite_customer_id", JsonValue.from("bar"))
+                            .awsCustomerAccountId("aws_customer_account_id")
+                            .awsLicenseArn("aws_license_arn")
                             .build()
                     )
                     .deliveryMethod(
@@ -436,6 +1055,46 @@ internal class CustomerSetBillingConfigurationsParamsTest {
                     )
                     .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .taxProvider(CustomerSetBillingConfigurationsParams.Data.TaxProvider.ANROK)
+                    .unbillableInvoicesConfiguration(
+                        listOf(
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .USAGE
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                            CustomerSetBillingConfigurationsParams.Data
+                                .UnbillableInvoicesConfiguration
+                                .builder()
+                                .invoiceType(
+                                    CustomerSetBillingConfigurationsParams.Data
+                                        .UnbillableInvoicesConfiguration
+                                        .InvoiceType
+                                        .SCHEDULED
+                                )
+                                .fiatCreditTypeId("2714e483-4ff1-48e4-9e25-ac732e8f24f2")
+                                .maxAmount(1000.0)
+                                .build(),
+                        )
+                    )
                     .build(),
             )
     }

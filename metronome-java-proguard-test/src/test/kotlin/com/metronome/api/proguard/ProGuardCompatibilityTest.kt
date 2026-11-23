@@ -180,6 +180,7 @@ internal class ProGuardCompatibilityTest {
                                                         .build()
                                                 )
                                                 .doNotInvoice(true)
+                                                .quantityToFiatConversionRate(0.0)
                                                 .addScheduleItem(
                                                     SchedulePointInTime.ScheduleItem.builder()
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -402,6 +403,7 @@ internal class ProGuardCompatibilityTest {
                                                         .build()
                                                 )
                                                 .doNotInvoice(true)
+                                                .quantityToFiatConversionRate(0.0)
                                                 .addScheduleItem(
                                                     SchedulePointInTime.ScheduleItem.builder()
                                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -641,7 +643,8 @@ internal class ProGuardCompatibilityTest {
                                                 .CustomerBillingProviderConfiguration
                                                 .Configuration
                                                 .builder()
-                                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                                .awsCustomerAccountId("aws_customer_account_id")
+                                                .awsLicenseArn("aws_license_arn")
                                                 .build()
                                         )
                                         .customerId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -660,6 +663,58 @@ internal class ProGuardCompatibilityTest {
                                                 .build()
                                         )
                                         .deliveryMethodId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                        .unbillableInvoicesConfiguration(
+                                            listOf(
+                                                ContractCreateResponse.Data.Contract
+                                                    .CustomerBillingProviderConfiguration
+                                                    .UnbillableInvoicesConfiguration
+                                                    .builder()
+                                                    .invoiceType(
+                                                        ContractCreateResponse.Data.Contract
+                                                            .CustomerBillingProviderConfiguration
+                                                            .UnbillableInvoicesConfiguration
+                                                            .InvoiceType
+                                                            .USAGE
+                                                    )
+                                                    .fiatCreditTypeId(
+                                                        "2714e483-4ff1-48e4-9e25-ac732e8f24f2"
+                                                    )
+                                                    .maxAmount(1000.0)
+                                                    .build(),
+                                                ContractCreateResponse.Data.Contract
+                                                    .CustomerBillingProviderConfiguration
+                                                    .UnbillableInvoicesConfiguration
+                                                    .builder()
+                                                    .invoiceType(
+                                                        ContractCreateResponse.Data.Contract
+                                                            .CustomerBillingProviderConfiguration
+                                                            .UnbillableInvoicesConfiguration
+                                                            .InvoiceType
+                                                            .USAGE
+                                                    )
+                                                    .fiatCreditTypeId(
+                                                        "2714e483-4ff1-48e4-9e25-ac732e8f24f2"
+                                                    )
+                                                    .maxAmount(1000.0)
+                                                    .build(),
+                                                ContractCreateResponse.Data.Contract
+                                                    .CustomerBillingProviderConfiguration
+                                                    .UnbillableInvoicesConfiguration
+                                                    .builder()
+                                                    .invoiceType(
+                                                        ContractCreateResponse.Data.Contract
+                                                            .CustomerBillingProviderConfiguration
+                                                            .UnbillableInvoicesConfiguration
+                                                            .InvoiceType
+                                                            .SCHEDULED
+                                                    )
+                                                    .fiatCreditTypeId(
+                                                        "2714e483-4ff1-48e4-9e25-ac732e8f24f2"
+                                                    )
+                                                    .maxAmount(1000.0)
+                                                    .build(),
+                                            )
+                                        )
                                         .build()
                                 )
                                 .endingBefore(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1516,6 +1571,7 @@ internal class ProGuardCompatibilityTest {
                                     .build()
                             )
                             .doNotInvoice(true)
+                            .quantityToFiatConversionRate(0.0)
                             .addScheduleItem(
                                 SchedulePointInTime.ScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

@@ -74,8 +74,7 @@ private constructor(
     fun customerId(): String = body.customerId()
 
     /**
-     * Update the billing provider configuration on the contract. Currently only supports adding a
-     * billing provider configuration to a contract that does not already have one.
+     * Update the billing provider configuration on the contract.
      *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -688,10 +687,7 @@ private constructor(
          */
         fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
 
-        /**
-         * Update the billing provider configuration on the contract. Currently only supports adding
-         * a billing provider configuration to a contract that does not already have one.
-         */
+        /** Update the billing provider configuration on the contract. */
         fun addBillingProviderConfigurationUpdate(
             addBillingProviderConfigurationUpdate: AddBillingProviderConfigurationUpdate
         ) = apply {
@@ -1831,8 +1827,7 @@ private constructor(
         fun customerId(): String = customerId.getRequired("customer_id")
 
         /**
-         * Update the billing provider configuration on the contract. Currently only supports adding
-         * a billing provider configuration to a contract that does not already have one.
+         * Update the billing provider configuration on the contract.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -2626,10 +2621,7 @@ private constructor(
              */
             fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
-            /**
-             * Update the billing provider configuration on the contract. Currently only supports
-             * adding a billing provider configuration to a contract that does not already have one.
-             */
+            /** Update the billing provider configuration on the contract. */
             fun addBillingProviderConfigurationUpdate(
                 addBillingProviderConfigurationUpdate: AddBillingProviderConfigurationUpdate
             ) =
@@ -3759,10 +3751,7 @@ private constructor(
             "Body{contractId=$contractId, customerId=$customerId, addBillingProviderConfigurationUpdate=$addBillingProviderConfigurationUpdate, addCommits=$addCommits, addCredits=$addCredits, addDiscounts=$addDiscounts, addOverrides=$addOverrides, addPrepaidBalanceThresholdConfiguration=$addPrepaidBalanceThresholdConfiguration, addProfessionalServices=$addProfessionalServices, addRecurringCommits=$addRecurringCommits, addRecurringCredits=$addRecurringCredits, addResellerRoyalties=$addResellerRoyalties, addRevenueSystemConfigurationUpdate=$addRevenueSystemConfigurationUpdate, addScheduledCharges=$addScheduledCharges, addSpendThresholdConfiguration=$addSpendThresholdConfiguration, addSpendTrackers=$addSpendTrackers, addSubscriptions=$addSubscriptions, allowContractEndingBeforeFinalizedInvoice=$allowContractEndingBeforeFinalizedInvoice, archiveCommits=$archiveCommits, archiveCredits=$archiveCredits, archiveScheduledCharges=$archiveScheduledCharges, archiveSpendTrackers=$archiveSpendTrackers, removeOverrides=$removeOverrides, uniquenessKey=$uniquenessKey, updateCommits=$updateCommits, updateContractEndDate=$updateContractEndDate, updateContractName=$updateContractName, updateCredits=$updateCredits, updateNetPaymentTermsDays=$updateNetPaymentTermsDays, updatePrepaidBalanceThresholdConfiguration=$updatePrepaidBalanceThresholdConfiguration, updateRecurringCommits=$updateRecurringCommits, updateRecurringCredits=$updateRecurringCredits, updateScheduledCharges=$updateScheduledCharges, updateSpendThresholdConfiguration=$updateSpendThresholdConfiguration, updateSubscriptions=$updateSubscriptions, additionalProperties=$additionalProperties}"
     }
 
-    /**
-     * Update the billing provider configuration on the contract. Currently only supports adding a
-     * billing provider configuration to a contract that does not already have one.
-     */
+    /** Update the billing provider configuration on the contract. */
     class AddBillingProviderConfigurationUpdate
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -4429,8 +4418,6 @@ private constructor(
 
                     @JvmField val AWS_SQS = of("aws_sqs")
 
-                    @JvmField val TACKLE = of("tackle")
-
                     @JvmField val AWS_SNS = of("aws_sns")
 
                     @JvmStatic fun of(value: String) = DeliveryMethod(JsonField.of(value))
@@ -4440,7 +4427,6 @@ private constructor(
                 enum class Known {
                     DIRECT_TO_BILLING_PROVIDER,
                     AWS_SQS,
-                    TACKLE,
                     AWS_SNS,
                 }
 
@@ -4458,7 +4444,6 @@ private constructor(
                 enum class Value {
                     DIRECT_TO_BILLING_PROVIDER,
                     AWS_SQS,
-                    TACKLE,
                     AWS_SNS,
                     /**
                      * An enum member indicating that [DeliveryMethod] was instantiated with an
@@ -4478,7 +4463,6 @@ private constructor(
                     when (this) {
                         DIRECT_TO_BILLING_PROVIDER -> Value.DIRECT_TO_BILLING_PROVIDER
                         AWS_SQS -> Value.AWS_SQS
-                        TACKLE -> Value.TACKLE
                         AWS_SNS -> Value.AWS_SNS
                         else -> Value._UNKNOWN
                     }
@@ -4496,7 +4480,6 @@ private constructor(
                     when (this) {
                         DIRECT_TO_BILLING_PROVIDER -> Known.DIRECT_TO_BILLING_PROVIDER
                         AWS_SQS -> Known.AWS_SQS
-                        TACKLE -> Known.TACKLE
                         AWS_SNS -> Known.AWS_SNS
                         else ->
                             throw MetronomeInvalidDataException("Unknown DeliveryMethod: $value")
@@ -4781,6 +4764,8 @@ private constructor(
 
                     @JvmField val START_OF_NEXT_PERIOD = of("START_OF_NEXT_PERIOD")
 
+                    @JvmField val TODAY = of("TODAY")
+
                     @JvmStatic fun of(value: String) = EffectiveAt(JsonField.of(value))
                 }
 
@@ -4788,6 +4773,7 @@ private constructor(
                 enum class Known {
                     START_OF_CURRENT_PERIOD,
                     START_OF_NEXT_PERIOD,
+                    TODAY,
                 }
 
                 /**
@@ -4802,6 +4788,7 @@ private constructor(
                 enum class Value {
                     START_OF_CURRENT_PERIOD,
                     START_OF_NEXT_PERIOD,
+                    TODAY,
                     /**
                      * An enum member indicating that [EffectiveAt] was instantiated with an unknown
                      * value.
@@ -4820,6 +4807,7 @@ private constructor(
                     when (this) {
                         START_OF_CURRENT_PERIOD -> Value.START_OF_CURRENT_PERIOD
                         START_OF_NEXT_PERIOD -> Value.START_OF_NEXT_PERIOD
+                        TODAY -> Value.TODAY
                         else -> Value._UNKNOWN
                     }
 
@@ -4836,6 +4824,7 @@ private constructor(
                     when (this) {
                         START_OF_CURRENT_PERIOD -> Known.START_OF_CURRENT_PERIOD
                         START_OF_NEXT_PERIOD -> Known.START_OF_NEXT_PERIOD
+                        TODAY -> Known.TODAY
                         else -> throw MetronomeInvalidDataException("Unknown EffectiveAt: $value")
                     }
 
@@ -15010,6 +14999,8 @@ private constructor(
 
                     @JvmField val QUARTERLY = of("QUARTERLY")
 
+                    @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                     @JvmField val ANNUAL = of("ANNUAL")
 
                     @JvmField val WEEKLY = of("WEEKLY")
@@ -15021,6 +15012,7 @@ private constructor(
                 enum class Known {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                 }
@@ -15039,6 +15031,7 @@ private constructor(
                 enum class Value {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                     /**
@@ -15059,6 +15052,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Value.MONTHLY
                         QUARTERLY -> Value.QUARTERLY
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
                         ANNUAL -> Value.ANNUAL
                         WEEKLY -> Value.WEEKLY
                         else -> Value._UNKNOWN
@@ -15077,6 +15071,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Known.MONTHLY
                         QUARTERLY -> Known.QUARTERLY
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
                         ANNUAL -> Known.ANNUAL
                         WEEKLY -> Known.WEEKLY
                         else ->
@@ -17486,6 +17481,7 @@ private constructor(
         private val priority: JsonField<Double>,
         private val productId: JsonField<String>,
         private val startingAt: JsonField<OffsetDateTime>,
+        private val anchorDate: JsonField<OffsetDateTime>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
         private val description: JsonField<String>,
@@ -17522,6 +17518,9 @@ private constructor(
             @JsonProperty("starting_at")
             @ExcludeMissing
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("applicable_product_ids")
             @ExcludeMissing
             applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -17574,6 +17573,7 @@ private constructor(
             priority,
             productId,
             startingAt,
+            anchorDate,
             applicableProductIds,
             applicableProductTags,
             description,
@@ -17632,6 +17632,17 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /**
+         * The date this recurring commit's or credit's periods are anchored to. Must be on or
+         * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+         * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+         * otherwise.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun anchorDate(): Optional<OffsetDateTime> = anchorDate.getOptional("anchor_date")
 
         /**
          * Will be passed down to the individual commits
@@ -17825,6 +17836,15 @@ private constructor(
         fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+        /**
          * Returns the raw JSON value of [applicableProductIds].
          *
          * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -18012,6 +18032,7 @@ private constructor(
             private var priority: JsonField<Double>? = null
             private var productId: JsonField<String>? = null
             private var startingAt: JsonField<OffsetDateTime>? = null
+            private var anchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
@@ -18038,6 +18059,7 @@ private constructor(
                 priority = addRecurringCommit.priority
                 productId = addRecurringCommit.productId
                 startingAt = addRecurringCommit.startingAt
+                anchorDate = addRecurringCommit.anchorDate
                 applicableProductIds =
                     addRecurringCommit.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags =
@@ -18127,6 +18149,25 @@ private constructor(
              */
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
+            }
+
+            /**
+             * The date this recurring commit's or credit's periods are anchored to. Must be on or
+             * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+             * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+             * otherwise.
+             */
+            fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** Will be passed down to the individual commits */
@@ -18460,6 +18501,7 @@ private constructor(
                     checkRequired("priority", priority),
                     checkRequired("productId", productId),
                     checkRequired("startingAt", startingAt),
+                    anchorDate,
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
@@ -18501,6 +18543,7 @@ private constructor(
             priority()
             productId()
             startingAt()
+            anchorDate()
             applicableProductIds()
             applicableProductTags()
             description()
@@ -18541,6 +18584,7 @@ private constructor(
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0) +
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -20914,6 +20958,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -20927,6 +20973,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -20946,6 +20993,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -20967,6 +21015,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     DAILY -> Value.DAILY
@@ -20986,6 +21035,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     DAILY -> Known.DAILY
@@ -21679,6 +21729,7 @@ private constructor(
                 priority == other.priority &&
                 productId == other.productId &&
                 startingAt == other.startingAt &&
+                anchorDate == other.anchorDate &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
                 description == other.description &&
@@ -21705,6 +21756,7 @@ private constructor(
                 priority,
                 productId,
                 startingAt,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -21728,7 +21780,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AddRecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "AddRecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, invoiceAmount=$invoiceAmount, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class AddRecurringCredit
@@ -21739,6 +21791,7 @@ private constructor(
         private val priority: JsonField<Double>,
         private val productId: JsonField<String>,
         private val startingAt: JsonField<OffsetDateTime>,
+        private val anchorDate: JsonField<OffsetDateTime>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
         private val description: JsonField<String>,
@@ -21774,6 +21827,9 @@ private constructor(
             @JsonProperty("starting_at")
             @ExcludeMissing
             startingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("applicable_product_ids")
             @ExcludeMissing
             applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -21823,6 +21879,7 @@ private constructor(
             priority,
             productId,
             startingAt,
+            anchorDate,
             applicableProductIds,
             applicableProductTags,
             description,
@@ -21880,6 +21937,17 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun startingAt(): OffsetDateTime = startingAt.getRequired("starting_at")
+
+        /**
+         * The date this recurring commit's or credit's periods are anchored to. Must be on or
+         * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+         * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+         * otherwise.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun anchorDate(): Optional<OffsetDateTime> = anchorDate.getOptional("anchor_date")
 
         /**
          * Will be passed down to the individual commits
@@ -22065,6 +22133,15 @@ private constructor(
         fun _startingAt(): JsonField<OffsetDateTime> = startingAt
 
         /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<OffsetDateTime> = anchorDate
+
+        /**
          * Returns the raw JSON value of [applicableProductIds].
          *
          * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -22242,6 +22319,7 @@ private constructor(
             private var priority: JsonField<Double>? = null
             private var productId: JsonField<String>? = null
             private var startingAt: JsonField<OffsetDateTime>? = null
+            private var anchorDate: JsonField<OffsetDateTime> = JsonMissing.of()
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
@@ -22267,6 +22345,7 @@ private constructor(
                 priority = addRecurringCredit.priority
                 productId = addRecurringCredit.productId
                 startingAt = addRecurringCredit.startingAt
+                anchorDate = addRecurringCredit.anchorDate
                 applicableProductIds =
                     addRecurringCredit.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags =
@@ -22355,6 +22434,25 @@ private constructor(
              */
             fun startingAt(startingAt: JsonField<OffsetDateTime>) = apply {
                 this.startingAt = startingAt
+            }
+
+            /**
+             * The date this recurring commit's or credit's periods are anchored to. Must be on or
+             * before `starting_at`. If omitted, periods are anchored to `starting_at` when
+             * `recurrence_frequency` is set, and to the contract's usage statement billing anchor
+             * otherwise.
+             */
+            fun anchorDate(anchorDate: OffsetDateTime) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<OffsetDateTime>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** Will be passed down to the individual commits */
@@ -22673,6 +22771,7 @@ private constructor(
                     checkRequired("priority", priority),
                     checkRequired("productId", productId),
                     checkRequired("startingAt", startingAt),
+                    anchorDate,
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
@@ -22713,6 +22812,7 @@ private constructor(
             priority()
             productId()
             startingAt()
+            anchorDate()
             applicableProductIds()
             applicableProductTags()
             description()
@@ -22752,6 +22852,7 @@ private constructor(
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (if (startingAt.asKnown().isPresent) 1 else 0) +
+                (if (anchorDate.asKnown().isPresent) 1 else 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -24437,6 +24538,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -24450,6 +24553,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -24469,6 +24573,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -24490,6 +24595,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     DAILY -> Value.DAILY
@@ -24509,6 +24615,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     DAILY -> Known.DAILY
@@ -25202,6 +25309,7 @@ private constructor(
                 priority == other.priority &&
                 productId == other.productId &&
                 startingAt == other.startingAt &&
+                anchorDate == other.anchorDate &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
                 description == other.description &&
@@ -25227,6 +25335,7 @@ private constructor(
                 priority,
                 productId,
                 startingAt,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -25249,7 +25358,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "AddRecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "AddRecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAt=$startingAt, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, endingBefore=$endingBefore, hierarchyConfiguration=$hierarchyConfiguration, name=$name, netsuiteSalesOrderId=$netsuiteSalesOrderId, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class AddResellerRoyalty
@@ -26913,8 +27022,6 @@ private constructor(
 
                     @JvmField val AWS_SQS = of("aws_sqs")
 
-                    @JvmField val TACKLE = of("tackle")
-
                     @JvmField val AWS_SNS = of("aws_sns")
 
                     @JvmStatic fun of(value: String) = DeliveryMethod(JsonField.of(value))
@@ -26924,7 +27031,6 @@ private constructor(
                 enum class Known {
                     DIRECT_TO_BILLING_PROVIDER,
                     AWS_SQS,
-                    TACKLE,
                     AWS_SNS,
                 }
 
@@ -26942,7 +27048,6 @@ private constructor(
                 enum class Value {
                     DIRECT_TO_BILLING_PROVIDER,
                     AWS_SQS,
-                    TACKLE,
                     AWS_SNS,
                     /**
                      * An enum member indicating that [DeliveryMethod] was instantiated with an
@@ -26962,7 +27067,6 @@ private constructor(
                     when (this) {
                         DIRECT_TO_BILLING_PROVIDER -> Value.DIRECT_TO_BILLING_PROVIDER
                         AWS_SQS -> Value.AWS_SQS
-                        TACKLE -> Value.TACKLE
                         AWS_SNS -> Value.AWS_SNS
                         else -> Value._UNKNOWN
                     }
@@ -26980,7 +27084,6 @@ private constructor(
                     when (this) {
                         DIRECT_TO_BILLING_PROVIDER -> Known.DIRECT_TO_BILLING_PROVIDER
                         AWS_SQS -> Known.AWS_SQS
-                        TACKLE -> Known.TACKLE
                         AWS_SNS -> Known.AWS_SNS
                         else ->
                             throw MetronomeInvalidDataException("Unknown DeliveryMethod: $value")
@@ -32477,6 +32580,8 @@ private constructor(
 
                     @JvmField val QUARTERLY = of("QUARTERLY")
 
+                    @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                     @JvmField val ANNUAL = of("ANNUAL")
 
                     @JvmField val WEEKLY = of("WEEKLY")
@@ -32488,6 +32593,7 @@ private constructor(
                 enum class Known {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                 }
@@ -32506,6 +32612,7 @@ private constructor(
                 enum class Value {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                     /**
@@ -32526,6 +32633,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Value.MONTHLY
                         QUARTERLY -> Value.QUARTERLY
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
                         ANNUAL -> Value.ANNUAL
                         WEEKLY -> Value.WEEKLY
                         else -> Value._UNKNOWN
@@ -32544,6 +32652,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Known.MONTHLY
                         QUARTERLY -> Known.QUARTERLY
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
                         ANNUAL -> Known.ANNUAL
                         WEEKLY -> Known.WEEKLY
                         else ->

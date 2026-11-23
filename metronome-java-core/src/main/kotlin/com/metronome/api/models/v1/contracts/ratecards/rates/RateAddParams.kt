@@ -1672,6 +1672,8 @@ private constructor(
 
             @JvmField val QUARTERLY = of("QUARTERLY")
 
+            @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
             @JvmField val ANNUAL = of("ANNUAL")
 
             @JvmField val WEEKLY = of("WEEKLY")
@@ -1683,6 +1685,7 @@ private constructor(
         enum class Known {
             MONTHLY,
             QUARTERLY,
+            SEMI_ANNUAL,
             ANNUAL,
             WEEKLY,
         }
@@ -1699,6 +1702,7 @@ private constructor(
         enum class Value {
             MONTHLY,
             QUARTERLY,
+            SEMI_ANNUAL,
             ANNUAL,
             WEEKLY,
             /**
@@ -1719,6 +1723,7 @@ private constructor(
             when (this) {
                 MONTHLY -> Value.MONTHLY
                 QUARTERLY -> Value.QUARTERLY
+                SEMI_ANNUAL -> Value.SEMI_ANNUAL
                 ANNUAL -> Value.ANNUAL
                 WEEKLY -> Value.WEEKLY
                 else -> Value._UNKNOWN
@@ -1737,6 +1742,7 @@ private constructor(
             when (this) {
                 MONTHLY -> Known.MONTHLY
                 QUARTERLY -> Known.QUARTERLY
+                SEMI_ANNUAL -> Known.SEMI_ANNUAL
                 ANNUAL -> Known.ANNUAL
                 WEEKLY -> Known.WEEKLY
                 else -> throw MetronomeInvalidDataException("Unknown BillingFrequency: $value")

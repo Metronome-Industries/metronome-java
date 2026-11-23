@@ -196,6 +196,15 @@ private constructor(
      * consolidation to occur. This field cannot be modified after a Contract has been created. If
      * this field is omitted, charges will appear on a separate invoice from usage charges.
      *
+     * For recurring fixed fees, such as a monthly platform fee, use a
+     * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+     * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of recurring
+     * scheduled charges with this field set to `ALL`. Metronome recalculates a subscription's usage
+     * invoice line items from the current contract each time it invoices, so the charges stay on
+     * the correct usage invoice after contract edits such as end date changes or transitions. Use
+     * this field for one-time scheduled charges and commit purchases, which subscriptions can't
+     * represent.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -761,6 +770,15 @@ private constructor(
          * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
          * consolidation to occur. This field cannot be modified after a Contract has been created.
          * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         *
+         * For recurring fixed fees, such as a monthly platform fee, use a
+         * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+         * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of recurring
+         * scheduled charges with this field set to `ALL`. Metronome recalculates a subscription's
+         * usage invoice line items from the current contract each time it invoices, so the charges
+         * stay on the correct usage invoice after contract edits such as end date changes or
+         * transitions. Use this field for one-time scheduled charges and commit purchases, which
+         * subscriptions can't represent.
          */
         fun scheduledChargesOnUsageInvoices(
             scheduledChargesOnUsageInvoices: ScheduledChargesOnUsageInvoices
@@ -1275,6 +1293,15 @@ private constructor(
          * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
          * consolidation to occur. This field cannot be modified after a Contract has been created.
          * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         *
+         * For recurring fixed fees, such as a monthly platform fee, use a
+         * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+         * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of recurring
+         * scheduled charges with this field set to `ALL`. Metronome recalculates a subscription's
+         * usage invoice line items from the current contract each time it invoices, so the charges
+         * stay on the correct usage invoice after contract edits such as end date changes or
+         * transitions. Use this field for one-time scheduled charges and commit purchases, which
+         * subscriptions can't represent.
          *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
@@ -1960,6 +1987,15 @@ private constructor(
              * `ending_before` date for consolidation to occur. This field cannot be modified after
              * a Contract has been created. If this field is omitted, charges will appear on a
              * separate invoice from usage charges.
+             *
+             * For recurring fixed fees, such as a monthly platform fee, use a
+             * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+             * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of
+             * recurring scheduled charges with this field set to `ALL`. Metronome recalculates a
+             * subscription's usage invoice line items from the current contract each time it
+             * invoices, so the charges stay on the correct usage invoice after contract edits such
+             * as end date changes or transitions. Use this field for one-time scheduled charges and
+             * commit purchases, which subscriptions can't represent.
              */
             fun scheduledChargesOnUsageInvoices(
                 scheduledChargesOnUsageInvoices: ScheduledChargesOnUsageInvoices
@@ -8625,8 +8661,6 @@ private constructor(
 
             @JvmField val AWS_SQS = of("aws_sqs")
 
-            @JvmField val TACKLE = of("tackle")
-
             @JvmField val AWS_SNS = of("aws_sns")
 
             @JvmStatic fun of(value: String) = DeliveryMethod(JsonField.of(value))
@@ -8636,7 +8670,6 @@ private constructor(
         enum class Known {
             DIRECT_TO_BILLING_PROVIDER,
             AWS_SQS,
-            TACKLE,
             AWS_SNS,
         }
 
@@ -8652,7 +8685,6 @@ private constructor(
         enum class Value {
             DIRECT_TO_BILLING_PROVIDER,
             AWS_SQS,
-            TACKLE,
             AWS_SNS,
             /**
              * An enum member indicating that [DeliveryMethod] was instantiated with an unknown
@@ -8672,7 +8704,6 @@ private constructor(
             when (this) {
                 DIRECT_TO_BILLING_PROVIDER -> Value.DIRECT_TO_BILLING_PROVIDER
                 AWS_SQS -> Value.AWS_SQS
-                TACKLE -> Value.TACKLE
                 AWS_SNS -> Value.AWS_SNS
                 else -> Value._UNKNOWN
             }
@@ -8690,7 +8721,6 @@ private constructor(
             when (this) {
                 DIRECT_TO_BILLING_PROVIDER -> Known.DIRECT_TO_BILLING_PROVIDER
                 AWS_SQS -> Known.AWS_SQS
-                TACKLE -> Known.TACKLE
                 AWS_SNS -> Known.AWS_SNS
                 else -> throw MetronomeInvalidDataException("Unknown DeliveryMethod: $value")
             }
@@ -10431,6 +10461,8 @@ private constructor(
 
                     @JvmField val QUARTERLY = of("QUARTERLY")
 
+                    @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                     @JvmField val ANNUAL = of("ANNUAL")
 
                     @JvmField val WEEKLY = of("WEEKLY")
@@ -10442,6 +10474,7 @@ private constructor(
                 enum class Known {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                 }
@@ -10460,6 +10493,7 @@ private constructor(
                 enum class Value {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                     /**
@@ -10480,6 +10514,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Value.MONTHLY
                         QUARTERLY -> Value.QUARTERLY
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
                         ANNUAL -> Value.ANNUAL
                         WEEKLY -> Value.WEEKLY
                         else -> Value._UNKNOWN
@@ -10498,6 +10533,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Known.MONTHLY
                         QUARTERLY -> Known.QUARTERLY
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
                         ANNUAL -> Known.ANNUAL
                         WEEKLY -> Known.WEEKLY
                         else ->
@@ -13080,6 +13116,7 @@ private constructor(
         private val priority: JsonField<Double>,
         private val productId: JsonField<String>,
         private val startingAtOffset: JsonField<StartingAtOffset>,
+        private val anchorDate: JsonField<AnchorDate>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
         private val description: JsonField<String>,
@@ -13114,6 +13151,9 @@ private constructor(
             @JsonProperty("starting_at_offset")
             @ExcludeMissing
             startingAtOffset: JsonField<StartingAtOffset> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<AnchorDate> = JsonMissing.of(),
             @JsonProperty("applicable_product_ids")
             @ExcludeMissing
             applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -13160,6 +13200,7 @@ private constructor(
             priority,
             productId,
             startingAtOffset,
+            anchorDate,
             applicableProductIds,
             applicableProductTags,
             description,
@@ -13218,6 +13259,18 @@ private constructor(
          */
         fun startingAtOffset(): StartingAtOffset =
             startingAtOffset.getRequired("starting_at_offset")
+
+        /**
+         * Which date each recurring commit or credit created from this template anchors its periods
+         * to. `USAGE_STATEMENT_ANCHOR` tracks the contract's usage statement anchor.
+         * `SUBSCRIPTION_START` requires a `subscription_config`. `CUSTOM_DATE` requires an
+         * `anchor_date` supplied per contract through
+         * `package_customizations.modify_recurring_commits` or `modify_recurring_credits`.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun anchorDate(): Optional<AnchorDate> = anchorDate.getOptional("anchor_date")
 
         /**
          * Will be passed down to the individual commits
@@ -13394,6 +13447,15 @@ private constructor(
         fun _startingAtOffset(): JsonField<StartingAtOffset> = startingAtOffset
 
         /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<AnchorDate> = anchorDate
+
+        /**
          * Returns the raw JSON value of [applicableProductIds].
          *
          * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -13557,6 +13619,7 @@ private constructor(
             private var priority: JsonField<Double>? = null
             private var productId: JsonField<String>? = null
             private var startingAtOffset: JsonField<StartingAtOffset>? = null
+            private var anchorDate: JsonField<AnchorDate> = JsonMissing.of()
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
@@ -13580,6 +13643,7 @@ private constructor(
                 priority = recurringCommit.priority
                 productId = recurringCommit.productId
                 startingAtOffset = recurringCommit.startingAtOffset
+                anchorDate = recurringCommit.anchorDate
                 applicableProductIds =
                     recurringCommit.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags =
@@ -13671,6 +13735,26 @@ private constructor(
              */
             fun startingAtOffset(startingAtOffset: JsonField<StartingAtOffset>) = apply {
                 this.startingAtOffset = startingAtOffset
+            }
+
+            /**
+             * Which date each recurring commit or credit created from this template anchors its
+             * periods to. `USAGE_STATEMENT_ANCHOR` tracks the contract's usage statement anchor.
+             * `SUBSCRIPTION_START` requires a `subscription_config`. `CUSTOM_DATE` requires an
+             * `anchor_date` supplied per contract through
+             * `package_customizations.modify_recurring_commits` or `modify_recurring_credits`.
+             */
+            fun anchorDate(anchorDate: AnchorDate) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [AnchorDate] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<AnchorDate>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** Will be passed down to the individual commits */
@@ -13972,6 +14056,7 @@ private constructor(
                     checkRequired("priority", priority),
                     checkRequired("productId", productId),
                     checkRequired("startingAtOffset", startingAtOffset),
+                    anchorDate,
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
@@ -14011,6 +14096,7 @@ private constructor(
             priority()
             productId()
             startingAtOffset().validate()
+            anchorDate().ifPresent { it.validate() }
             applicableProductIds()
             applicableProductTags()
             description()
@@ -14049,6 +14135,7 @@ private constructor(
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (startingAtOffset.asKnown().getOrNull()?.validity() ?: 0) +
+                (anchorDate.asKnown().getOrNull()?.validity() ?: 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -15223,6 +15310,166 @@ private constructor(
 
             override fun toString() =
                 "StartingAtOffset{unit=$unit, value=$value, additionalProperties=$additionalProperties}"
+        }
+
+        /**
+         * Which date each recurring commit or credit created from this template anchors its periods
+         * to. `USAGE_STATEMENT_ANCHOR` tracks the contract's usage statement anchor.
+         * `SUBSCRIPTION_START` requires a `subscription_config`. `CUSTOM_DATE` requires an
+         * `anchor_date` supplied per contract through
+         * `package_customizations.modify_recurring_commits` or `modify_recurring_credits`.
+         */
+        class AnchorDate @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val SUBSCRIPTION_START = of("SUBSCRIPTION_START")
+
+                @JvmField val FIRST_OF_MONTH = of("FIRST_OF_MONTH")
+
+                @JvmField val USAGE_STATEMENT_ANCHOR = of("USAGE_STATEMENT_ANCHOR")
+
+                @JvmField val CUSTOM_DATE = of("CUSTOM_DATE")
+
+                @JvmStatic fun of(value: String) = AnchorDate(JsonField.of(value))
+            }
+
+            /** An enum containing [AnchorDate]'s known values. */
+            enum class Known {
+                SUBSCRIPTION_START,
+                FIRST_OF_MONTH,
+                USAGE_STATEMENT_ANCHOR,
+                CUSTOM_DATE,
+            }
+
+            /**
+             * An enum containing [AnchorDate]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [AnchorDate] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                SUBSCRIPTION_START,
+                FIRST_OF_MONTH,
+                USAGE_STATEMENT_ANCHOR,
+                CUSTOM_DATE,
+                /**
+                 * An enum member indicating that [AnchorDate] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    SUBSCRIPTION_START -> Value.SUBSCRIPTION_START
+                    FIRST_OF_MONTH -> Value.FIRST_OF_MONTH
+                    USAGE_STATEMENT_ANCHOR -> Value.USAGE_STATEMENT_ANCHOR
+                    CUSTOM_DATE -> Value.CUSTOM_DATE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    SUBSCRIPTION_START -> Known.SUBSCRIPTION_START
+                    FIRST_OF_MONTH -> Known.FIRST_OF_MONTH
+                    USAGE_STATEMENT_ANCHOR -> Known.USAGE_STATEMENT_ANCHOR
+                    CUSTOM_DATE -> Known.CUSTOM_DATE
+                    else -> throw MetronomeInvalidDataException("Unknown AnchorDate: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): AnchorDate = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is AnchorDate && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
         }
 
         /**
@@ -17148,6 +17395,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -17161,6 +17410,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -17180,6 +17430,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -17201,6 +17452,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     DAILY -> Value.DAILY
@@ -17220,6 +17472,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     DAILY -> Known.DAILY
@@ -17913,6 +18166,7 @@ private constructor(
                 priority == other.priority &&
                 productId == other.productId &&
                 startingAtOffset == other.startingAtOffset &&
+                anchorDate == other.anchorDate &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
                 description == other.description &&
@@ -17937,6 +18191,7 @@ private constructor(
                 priority,
                 productId,
                 startingAtOffset,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -17958,7 +18213,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAtOffset=$startingAtOffset, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, duration=$duration, invoiceAmount=$invoiceAmount, name=$name, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "RecurringCommit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAtOffset=$startingAtOffset, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, duration=$duration, invoiceAmount=$invoiceAmount, name=$name, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class RecurringCredit
@@ -17969,6 +18224,7 @@ private constructor(
         private val priority: JsonField<Double>,
         private val productId: JsonField<String>,
         private val startingAtOffset: JsonField<StartingAtOffset>,
+        private val anchorDate: JsonField<AnchorDate>,
         private val applicableProductIds: JsonField<List<String>>,
         private val applicableProductTags: JsonField<List<String>>,
         private val description: JsonField<String>,
@@ -18002,6 +18258,9 @@ private constructor(
             @JsonProperty("starting_at_offset")
             @ExcludeMissing
             startingAtOffset: JsonField<StartingAtOffset> = JsonMissing.of(),
+            @JsonProperty("anchor_date")
+            @ExcludeMissing
+            anchorDate: JsonField<AnchorDate> = JsonMissing.of(),
             @JsonProperty("applicable_product_ids")
             @ExcludeMissing
             applicableProductIds: JsonField<List<String>> = JsonMissing.of(),
@@ -18045,6 +18304,7 @@ private constructor(
             priority,
             productId,
             startingAtOffset,
+            anchorDate,
             applicableProductIds,
             applicableProductTags,
             description,
@@ -18102,6 +18362,18 @@ private constructor(
          */
         fun startingAtOffset(): StartingAtOffset =
             startingAtOffset.getRequired("starting_at_offset")
+
+        /**
+         * Which date each recurring commit or credit created from this template anchors its periods
+         * to. `USAGE_STATEMENT_ANCHOR` tracks the contract's usage statement anchor.
+         * `SUBSCRIPTION_START` requires a `subscription_config`. `CUSTOM_DATE` requires an
+         * `anchor_date` supplied per contract through
+         * `package_customizations.modify_recurring_commits` or `modify_recurring_credits`.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun anchorDate(): Optional<AnchorDate> = anchorDate.getOptional("anchor_date")
 
         /**
          * Will be passed down to the individual commits
@@ -18270,6 +18542,15 @@ private constructor(
         fun _startingAtOffset(): JsonField<StartingAtOffset> = startingAtOffset
 
         /**
+         * Returns the raw JSON value of [anchorDate].
+         *
+         * Unlike [anchorDate], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("anchor_date")
+        @ExcludeMissing
+        fun _anchorDate(): JsonField<AnchorDate> = anchorDate
+
+        /**
          * Returns the raw JSON value of [applicableProductIds].
          *
          * Unlike [applicableProductIds], this method doesn't throw if the JSON field has an
@@ -18423,6 +18704,7 @@ private constructor(
             private var priority: JsonField<Double>? = null
             private var productId: JsonField<String>? = null
             private var startingAtOffset: JsonField<StartingAtOffset>? = null
+            private var anchorDate: JsonField<AnchorDate> = JsonMissing.of()
             private var applicableProductIds: JsonField<MutableList<String>>? = null
             private var applicableProductTags: JsonField<MutableList<String>>? = null
             private var description: JsonField<String> = JsonMissing.of()
@@ -18445,6 +18727,7 @@ private constructor(
                 priority = recurringCredit.priority
                 productId = recurringCredit.productId
                 startingAtOffset = recurringCredit.startingAtOffset
+                anchorDate = recurringCredit.anchorDate
                 applicableProductIds =
                     recurringCredit.applicableProductIds.map { it.toMutableList() }
                 applicableProductTags =
@@ -18535,6 +18818,26 @@ private constructor(
              */
             fun startingAtOffset(startingAtOffset: JsonField<StartingAtOffset>) = apply {
                 this.startingAtOffset = startingAtOffset
+            }
+
+            /**
+             * Which date each recurring commit or credit created from this template anchors its
+             * periods to. `USAGE_STATEMENT_ANCHOR` tracks the contract's usage statement anchor.
+             * `SUBSCRIPTION_START` requires a `subscription_config`. `CUSTOM_DATE` requires an
+             * `anchor_date` supplied per contract through
+             * `package_customizations.modify_recurring_commits` or `modify_recurring_credits`.
+             */
+            fun anchorDate(anchorDate: AnchorDate) = anchorDate(JsonField.of(anchorDate))
+
+            /**
+             * Sets [Builder.anchorDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.anchorDate] with a well-typed [AnchorDate] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun anchorDate(anchorDate: JsonField<AnchorDate>) = apply {
+                this.anchorDate = anchorDate
             }
 
             /** Will be passed down to the individual commits */
@@ -18821,6 +19124,7 @@ private constructor(
                     checkRequired("priority", priority),
                     checkRequired("productId", productId),
                     checkRequired("startingAtOffset", startingAtOffset),
+                    anchorDate,
                     (applicableProductIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (applicableProductTags ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
@@ -18859,6 +19163,7 @@ private constructor(
             priority()
             productId()
             startingAtOffset().validate()
+            anchorDate().ifPresent { it.validate() }
             applicableProductIds()
             applicableProductTags()
             description()
@@ -18896,6 +19201,7 @@ private constructor(
                 (if (priority.asKnown().isPresent) 1 else 0) +
                 (if (productId.asKnown().isPresent) 1 else 0) +
                 (startingAtOffset.asKnown().getOrNull()?.validity() ?: 0) +
+                (anchorDate.asKnown().getOrNull()?.validity() ?: 0) +
                 (applicableProductIds.asKnown().getOrNull()?.size ?: 0) +
                 (applicableProductTags.asKnown().getOrNull()?.size ?: 0) +
                 (if (description.asKnown().isPresent) 1 else 0) +
@@ -20069,6 +20375,166 @@ private constructor(
 
             override fun toString() =
                 "StartingAtOffset{unit=$unit, value=$value, additionalProperties=$additionalProperties}"
+        }
+
+        /**
+         * Which date each recurring commit or credit created from this template anchors its periods
+         * to. `USAGE_STATEMENT_ANCHOR` tracks the contract's usage statement anchor.
+         * `SUBSCRIPTION_START` requires a `subscription_config`. `CUSTOM_DATE` requires an
+         * `anchor_date` supplied per contract through
+         * `package_customizations.modify_recurring_commits` or `modify_recurring_credits`.
+         */
+        class AnchorDate @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val SUBSCRIPTION_START = of("SUBSCRIPTION_START")
+
+                @JvmField val FIRST_OF_MONTH = of("FIRST_OF_MONTH")
+
+                @JvmField val USAGE_STATEMENT_ANCHOR = of("USAGE_STATEMENT_ANCHOR")
+
+                @JvmField val CUSTOM_DATE = of("CUSTOM_DATE")
+
+                @JvmStatic fun of(value: String) = AnchorDate(JsonField.of(value))
+            }
+
+            /** An enum containing [AnchorDate]'s known values. */
+            enum class Known {
+                SUBSCRIPTION_START,
+                FIRST_OF_MONTH,
+                USAGE_STATEMENT_ANCHOR,
+                CUSTOM_DATE,
+            }
+
+            /**
+             * An enum containing [AnchorDate]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [AnchorDate] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                SUBSCRIPTION_START,
+                FIRST_OF_MONTH,
+                USAGE_STATEMENT_ANCHOR,
+                CUSTOM_DATE,
+                /**
+                 * An enum member indicating that [AnchorDate] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    SUBSCRIPTION_START -> Value.SUBSCRIPTION_START
+                    FIRST_OF_MONTH -> Value.FIRST_OF_MONTH
+                    USAGE_STATEMENT_ANCHOR -> Value.USAGE_STATEMENT_ANCHOR
+                    CUSTOM_DATE -> Value.CUSTOM_DATE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    SUBSCRIPTION_START -> Known.SUBSCRIPTION_START
+                    FIRST_OF_MONTH -> Known.FIRST_OF_MONTH
+                    USAGE_STATEMENT_ANCHOR -> Known.USAGE_STATEMENT_ANCHOR
+                    CUSTOM_DATE -> Known.CUSTOM_DATE
+                    else -> throw MetronomeInvalidDataException("Unknown AnchorDate: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws MetronomeInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    MetronomeInvalidDataException("Value is not a String")
+                }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws MetronomeInvalidDataException if any value type in this object doesn't match
+             *   its expected type.
+             */
+            fun validate(): AnchorDate = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: MetronomeInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is AnchorDate && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
         }
 
         /**
@@ -21306,6 +21772,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -21319,6 +21787,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -21338,6 +21807,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -21359,6 +21829,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     DAILY -> Value.DAILY
@@ -21378,6 +21849,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     DAILY -> Known.DAILY
@@ -22071,6 +22543,7 @@ private constructor(
                 priority == other.priority &&
                 productId == other.productId &&
                 startingAtOffset == other.startingAtOffset &&
+                anchorDate == other.anchorDate &&
                 applicableProductIds == other.applicableProductIds &&
                 applicableProductTags == other.applicableProductTags &&
                 description == other.description &&
@@ -22094,6 +22567,7 @@ private constructor(
                 priority,
                 productId,
                 startingAtOffset,
+                anchorDate,
                 applicableProductIds,
                 applicableProductTags,
                 description,
@@ -22114,7 +22588,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAtOffset=$startingAtOffset, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, duration=$duration, name=$name, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "RecurringCredit{accessAmount=$accessAmount, commitDuration=$commitDuration, priority=$priority, productId=$productId, startingAtOffset=$startingAtOffset, anchorDate=$anchorDate, applicableProductIds=$applicableProductIds, applicableProductTags=$applicableProductTags, description=$description, duration=$duration, name=$name, proration=$proration, prorationRounding=$prorationRounding, rateType=$rateType, recurrenceFrequency=$recurrenceFrequency, rolloverFraction=$rolloverFraction, specifiers=$specifiers, subscriptionConfig=$subscriptionConfig, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class ScheduledCharge
@@ -23416,6 +23890,15 @@ private constructor(
      * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
      * consolidation to occur. This field cannot be modified after a Contract has been created. If
      * this field is omitted, charges will appear on a separate invoice from usage charges.
+     *
+     * For recurring fixed fees, such as a monthly platform fee, use a
+     * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+     * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of recurring
+     * scheduled charges with this field set to `ALL`. Metronome recalculates a subscription's usage
+     * invoice line items from the current contract each time it invoices, so the charges stay on
+     * the correct usage invoice after contract edits such as end date changes or transitions. Use
+     * this field for one-time scheduled charges and commit purchases, which subscriptions can't
+     * represent.
      */
     class ScheduledChargesOnUsageInvoices
     @JsonCreator
@@ -24740,6 +25223,7 @@ private constructor(
         private val quantityManagementMode: JsonField<QuantityManagementMode>,
         private val seatConfig: JsonField<SeatConfig>,
         private val startingAtOffset: JsonField<StartingAtOffset>,
+        private val subscriptionAlias: JsonField<String>,
         private val temporaryId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -24780,6 +25264,9 @@ private constructor(
             @JsonProperty("starting_at_offset")
             @ExcludeMissing
             startingAtOffset: JsonField<StartingAtOffset> = JsonMissing.of(),
+            @JsonProperty("subscription_alias")
+            @ExcludeMissing
+            subscriptionAlias: JsonField<String> = JsonMissing.of(),
             @JsonProperty("temporary_id")
             @ExcludeMissing
             temporaryId: JsonField<String> = JsonMissing.of(),
@@ -24796,6 +25283,7 @@ private constructor(
             quantityManagementMode,
             seatConfig,
             startingAtOffset,
+            subscriptionAlias,
             temporaryId,
             mutableMapOf(),
         )
@@ -24895,6 +25383,16 @@ private constructor(
          */
         fun startingAtOffset(): Optional<StartingAtOffset> =
             startingAtOffset.getOptional("starting_at_offset")
+
+        /**
+         * Optional human-readable, per-package-unique alias for this subscription template. Lets a
+         * contract customization reference the subscription by alias instead of its template id.
+         *
+         * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
+         *   the server responded with an unexpected value).
+         */
+        fun subscriptionAlias(): Optional<String> =
+            subscriptionAlias.getOptional("subscription_alias")
 
         /**
          * A temporary ID used to reference the subscription in recurring commit/credit subscription
@@ -25017,6 +25515,16 @@ private constructor(
         fun _startingAtOffset(): JsonField<StartingAtOffset> = startingAtOffset
 
         /**
+         * Returns the raw JSON value of [subscriptionAlias].
+         *
+         * Unlike [subscriptionAlias], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("subscription_alias")
+        @ExcludeMissing
+        fun _subscriptionAlias(): JsonField<String> = subscriptionAlias
+
+        /**
          * Returns the raw JSON value of [temporaryId].
          *
          * Unlike [temporaryId], this method doesn't throw if the JSON field has an unexpected type.
@@ -25067,6 +25575,7 @@ private constructor(
             private var quantityManagementMode: JsonField<QuantityManagementMode> = JsonMissing.of()
             private var seatConfig: JsonField<SeatConfig> = JsonMissing.of()
             private var startingAtOffset: JsonField<StartingAtOffset> = JsonMissing.of()
+            private var subscriptionAlias: JsonField<String> = JsonMissing.of()
             private var temporaryId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -25084,6 +25593,7 @@ private constructor(
                 quantityManagementMode = subscription.quantityManagementMode
                 seatConfig = subscription.seatConfig
                 startingAtOffset = subscription.startingAtOffset
+                subscriptionAlias = subscription.subscriptionAlias
                 temporaryId = subscription.temporaryId
                 additionalProperties = subscription.additionalProperties.toMutableMap()
             }
@@ -25269,6 +25779,25 @@ private constructor(
             }
 
             /**
+             * Optional human-readable, per-package-unique alias for this subscription template.
+             * Lets a contract customization reference the subscription by alias instead of its
+             * template id.
+             */
+            fun subscriptionAlias(subscriptionAlias: String) =
+                subscriptionAlias(JsonField.of(subscriptionAlias))
+
+            /**
+             * Sets [Builder.subscriptionAlias] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriptionAlias] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun subscriptionAlias(subscriptionAlias: JsonField<String>) = apply {
+                this.subscriptionAlias = subscriptionAlias
+            }
+
+            /**
              * A temporary ID used to reference the subscription in recurring commit/credit
              * subscription configs created within the same payload.
              */
@@ -25332,6 +25861,7 @@ private constructor(
                     quantityManagementMode,
                     seatConfig,
                     startingAtOffset,
+                    subscriptionAlias,
                     temporaryId,
                     additionalProperties.toMutableMap(),
                 )
@@ -25365,6 +25895,7 @@ private constructor(
             quantityManagementMode().ifPresent { it.validate() }
             seatConfig().ifPresent { it.validate() }
             startingAtOffset().ifPresent { it.validate() }
+            subscriptionAlias()
             temporaryId()
             validated = true
         }
@@ -25397,6 +25928,7 @@ private constructor(
                 (quantityManagementMode.asKnown().getOrNull()?.validity() ?: 0) +
                 (seatConfig.asKnown().getOrNull()?.validity() ?: 0) +
                 (startingAtOffset.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (subscriptionAlias.asKnown().isPresent) 1 else 0) +
                 (if (temporaryId.asKnown().isPresent) 1 else 0)
 
         class CollectionSchedule
@@ -26579,6 +27111,8 @@ private constructor(
 
                     @JvmField val QUARTERLY = of("QUARTERLY")
 
+                    @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                     @JvmField val ANNUAL = of("ANNUAL")
 
                     @JvmField val WEEKLY = of("WEEKLY")
@@ -26590,6 +27124,7 @@ private constructor(
                 enum class Known {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                 }
@@ -26608,6 +27143,7 @@ private constructor(
                 enum class Value {
                     MONTHLY,
                     QUARTERLY,
+                    SEMI_ANNUAL,
                     ANNUAL,
                     WEEKLY,
                     /**
@@ -26628,6 +27164,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Value.MONTHLY
                         QUARTERLY -> Value.QUARTERLY
+                        SEMI_ANNUAL -> Value.SEMI_ANNUAL
                         ANNUAL -> Value.ANNUAL
                         WEEKLY -> Value.WEEKLY
                         else -> Value._UNKNOWN
@@ -26646,6 +27183,7 @@ private constructor(
                     when (this) {
                         MONTHLY -> Known.MONTHLY
                         QUARTERLY -> Known.QUARTERLY
+                        SEMI_ANNUAL -> Known.SEMI_ANNUAL
                         ANNUAL -> Known.ANNUAL
                         WEEKLY -> Known.WEEKLY
                         else ->
@@ -26740,16 +27278,32 @@ private constructor(
         class BillingCycleConfig
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
+            private val billingCycleAnchor: JsonField<BillingCycleAnchor>,
             private val invoicePlacement: JsonField<InvoicePlacement>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
+                @JsonProperty("billing_cycle_anchor")
+                @ExcludeMissing
+                billingCycleAnchor: JsonField<BillingCycleAnchor> = JsonMissing.of(),
                 @JsonProperty("invoice_placement")
                 @ExcludeMissing
-                invoicePlacement: JsonField<InvoicePlacement> = JsonMissing.of()
-            ) : this(invoicePlacement, mutableMapOf())
+                invoicePlacement: JsonField<InvoicePlacement> = JsonMissing.of(),
+            ) : this(billingCycleAnchor, invoicePlacement, mutableMapOf())
+
+            /**
+             * Controls which date each subscription materialized from this template anchors its
+             * billing cycle to. CUSTOM_DATE requires a subscription_anchor_date supplied per
+             * contract via package customizations. Defaults to USAGE_STATEMENT_ANCHOR (the
+             * contract's usage statement anchor) if omitted.
+             *
+             * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g.
+             *   if the server responded with an unexpected value).
+             */
+            fun billingCycleAnchor(): Optional<BillingCycleAnchor> =
+                billingCycleAnchor.getOptional("billing_cycle_anchor")
 
             /**
              * Controls whether subscriptions consolidate onto usage invoices. Defaults to
@@ -26760,6 +27314,16 @@ private constructor(
              */
             fun invoicePlacement(): Optional<InvoicePlacement> =
                 invoicePlacement.getOptional("invoice_placement")
+
+            /**
+             * Returns the raw JSON value of [billingCycleAnchor].
+             *
+             * Unlike [billingCycleAnchor], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("billing_cycle_anchor")
+            @ExcludeMissing
+            fun _billingCycleAnchor(): JsonField<BillingCycleAnchor> = billingCycleAnchor
 
             /**
              * Returns the raw JSON value of [invoicePlacement].
@@ -26794,13 +27358,35 @@ private constructor(
             /** A builder for [BillingCycleConfig]. */
             class Builder internal constructor() {
 
+                private var billingCycleAnchor: JsonField<BillingCycleAnchor> = JsonMissing.of()
                 private var invoicePlacement: JsonField<InvoicePlacement> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(billingCycleConfig: BillingCycleConfig) = apply {
+                    billingCycleAnchor = billingCycleConfig.billingCycleAnchor
                     invoicePlacement = billingCycleConfig.invoicePlacement
                     additionalProperties = billingCycleConfig.additionalProperties.toMutableMap()
+                }
+
+                /**
+                 * Controls which date each subscription materialized from this template anchors its
+                 * billing cycle to. CUSTOM_DATE requires a subscription_anchor_date supplied per
+                 * contract via package customizations. Defaults to USAGE_STATEMENT_ANCHOR (the
+                 * contract's usage statement anchor) if omitted.
+                 */
+                fun billingCycleAnchor(billingCycleAnchor: BillingCycleAnchor) =
+                    billingCycleAnchor(JsonField.of(billingCycleAnchor))
+
+                /**
+                 * Sets [Builder.billingCycleAnchor] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.billingCycleAnchor] with a well-typed
+                 * [BillingCycleAnchor] value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun billingCycleAnchor(billingCycleAnchor: JsonField<BillingCycleAnchor>) = apply {
+                    this.billingCycleAnchor = billingCycleAnchor
                 }
 
                 /**
@@ -26849,7 +27435,11 @@ private constructor(
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
                 fun build(): BillingCycleConfig =
-                    BillingCycleConfig(invoicePlacement, additionalProperties.toMutableMap())
+                    BillingCycleConfig(
+                        billingCycleAnchor,
+                        invoicePlacement,
+                        additionalProperties.toMutableMap(),
+                    )
             }
 
             private var validated: Boolean = false
@@ -26869,6 +27459,7 @@ private constructor(
                     return@apply
                 }
 
+                billingCycleAnchor().ifPresent { it.validate() }
                 invoicePlacement().ifPresent { it.validate() }
                 validated = true
             }
@@ -26888,7 +27479,174 @@ private constructor(
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = (invoicePlacement.asKnown().getOrNull()?.validity() ?: 0)
+            internal fun validity(): Int =
+                (billingCycleAnchor.asKnown().getOrNull()?.validity() ?: 0) +
+                    (invoicePlacement.asKnown().getOrNull()?.validity() ?: 0)
+
+            /**
+             * Controls which date each subscription materialized from this template anchors its
+             * billing cycle to. CUSTOM_DATE requires a subscription_anchor_date supplied per
+             * contract via package customizations. Defaults to USAGE_STATEMENT_ANCHOR (the
+             * contract's usage statement anchor) if omitted.
+             */
+            class BillingCycleAnchor
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    @JvmField val SUBSCRIPTION_START = of("SUBSCRIPTION_START")
+
+                    @JvmField val FIRST_OF_MONTH = of("FIRST_OF_MONTH")
+
+                    @JvmField val CUSTOM_DATE = of("CUSTOM_DATE")
+
+                    @JvmField val USAGE_STATEMENT_ANCHOR = of("USAGE_STATEMENT_ANCHOR")
+
+                    @JvmStatic fun of(value: String) = BillingCycleAnchor(JsonField.of(value))
+                }
+
+                /** An enum containing [BillingCycleAnchor]'s known values. */
+                enum class Known {
+                    SUBSCRIPTION_START,
+                    FIRST_OF_MONTH,
+                    CUSTOM_DATE,
+                    USAGE_STATEMENT_ANCHOR,
+                }
+
+                /**
+                 * An enum containing [BillingCycleAnchor]'s known values, as well as an [_UNKNOWN]
+                 * member.
+                 *
+                 * An instance of [BillingCycleAnchor] can contain an unknown value in a couple of
+                 * cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    SUBSCRIPTION_START,
+                    FIRST_OF_MONTH,
+                    CUSTOM_DATE,
+                    USAGE_STATEMENT_ANCHOR,
+                    /**
+                     * An enum member indicating that [BillingCycleAnchor] was instantiated with an
+                     * unknown value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        SUBSCRIPTION_START -> Value.SUBSCRIPTION_START
+                        FIRST_OF_MONTH -> Value.FIRST_OF_MONTH
+                        CUSTOM_DATE -> Value.CUSTOM_DATE
+                        USAGE_STATEMENT_ANCHOR -> Value.USAGE_STATEMENT_ANCHOR
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value is a not a
+                 *   known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        SUBSCRIPTION_START -> Known.SUBSCRIPTION_START
+                        FIRST_OF_MONTH -> Known.FIRST_OF_MONTH
+                        CUSTOM_DATE -> Known.CUSTOM_DATE
+                        USAGE_STATEMENT_ANCHOR -> Known.USAGE_STATEMENT_ANCHOR
+                        else ->
+                            throw MetronomeInvalidDataException(
+                                "Unknown BillingCycleAnchor: $value"
+                            )
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws MetronomeInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString().orElseThrow {
+                        MetronomeInvalidDataException("Value is not a String")
+                    }
+
+                private var validated: Boolean = false
+
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws MetronomeInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
+                fun validate(): BillingCycleAnchor = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: MetronomeInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is BillingCycleAnchor && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
 
             /**
              * Controls whether subscriptions consolidate onto usage invoices. Defaults to
@@ -27045,18 +27803,19 @@ private constructor(
                 }
 
                 return other is BillingCycleConfig &&
+                    billingCycleAnchor == other.billingCycleAnchor &&
                     invoicePlacement == other.invoicePlacement &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(invoicePlacement, additionalProperties)
+                Objects.hash(billingCycleAnchor, invoicePlacement, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "BillingCycleConfig{invoicePlacement=$invoicePlacement, additionalProperties=$additionalProperties}"
+                "BillingCycleConfig{billingCycleAnchor=$billingCycleAnchor, invoicePlacement=$invoicePlacement, additionalProperties=$additionalProperties}"
         }
 
         /** Custom fields to be added eg. { "key1": "value1", "key2": "value2" } */
@@ -28311,6 +29070,7 @@ private constructor(
                 quantityManagementMode == other.quantityManagementMode &&
                 seatConfig == other.seatConfig &&
                 startingAtOffset == other.startingAtOffset &&
+                subscriptionAlias == other.subscriptionAlias &&
                 temporaryId == other.temporaryId &&
                 additionalProperties == other.additionalProperties
         }
@@ -28329,6 +29089,7 @@ private constructor(
                 quantityManagementMode,
                 seatConfig,
                 startingAtOffset,
+                subscriptionAlias,
                 temporaryId,
                 additionalProperties,
             )
@@ -28337,7 +29098,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Subscription{collectionSchedule=$collectionSchedule, proration=$proration, subscriptionRate=$subscriptionRate, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, duration=$duration, initialQuantity=$initialQuantity, name=$name, quantityManagementMode=$quantityManagementMode, seatConfig=$seatConfig, startingAtOffset=$startingAtOffset, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
+            "Subscription{collectionSchedule=$collectionSchedule, proration=$proration, subscriptionRate=$subscriptionRate, billingCycleConfig=$billingCycleConfig, customFields=$customFields, description=$description, duration=$duration, initialQuantity=$initialQuantity, name=$name, quantityManagementMode=$quantityManagementMode, seatConfig=$seatConfig, startingAtOffset=$startingAtOffset, subscriptionAlias=$subscriptionAlias, temporaryId=$temporaryId, additionalProperties=$additionalProperties}"
     }
 
     class UsageStatementSchedule
@@ -28603,6 +29364,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -28614,6 +29377,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
             }
@@ -28630,6 +29394,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 /**
@@ -28650,6 +29415,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     else -> Value._UNKNOWN
@@ -28668,6 +29434,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")

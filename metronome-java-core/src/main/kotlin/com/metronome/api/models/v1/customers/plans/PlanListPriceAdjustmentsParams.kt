@@ -12,8 +12,8 @@ import kotlin.jvm.optionals.getOrNull
 
 /**
  * Lists a customer plans adjustments. See the
- * [price adjustments documentation](https://plans-docs.metronome.com/pricing/managing-plans/#price-adjustments)
- * for details. This is a Plans (deprecated) endpoint. New clients should implement using Contracts.
+ * [price adjustments documentation](https://docs.metronome.com/plans-guides/price-adjustments) for
+ * details. This is a Plans (deprecated) endpoint. New clients should implement using Contracts.
  */
 class PlanListPriceAdjustmentsParams
 private constructor(

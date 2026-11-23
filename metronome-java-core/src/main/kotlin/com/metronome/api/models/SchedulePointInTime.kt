@@ -25,6 +25,7 @@ class SchedulePointInTime
 private constructor(
     private val creditType: JsonField<CreditTypeData>,
     private val doNotInvoice: JsonField<Boolean>,
+    private val quantityToFiatConversionRate: JsonField<Double>,
     private val scheduleItems: JsonField<List<ScheduleItem>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -37,10 +38,13 @@ private constructor(
         @JsonProperty("do_not_invoice")
         @ExcludeMissing
         doNotInvoice: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("quantity_to_fiat_conversion_rate")
+        @ExcludeMissing
+        quantityToFiatConversionRate: JsonField<Double> = JsonMissing.of(),
         @JsonProperty("schedule_items")
         @ExcludeMissing
         scheduleItems: JsonField<List<ScheduleItem>> = JsonMissing.of(),
-    ) : this(creditType, doNotInvoice, scheduleItems, mutableMapOf())
+    ) : this(creditType, doNotInvoice, quantityToFiatConversionRate, scheduleItems, mutableMapOf())
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -56,6 +60,16 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun doNotInvoice(): Optional<Boolean> = doNotInvoice.getOptional("do_not_invoice")
+
+    /**
+     * Conversion rate from unused quantity units to the invoice currency for a quantity-based
+     * postpaid commit.
+     *
+     * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun quantityToFiatConversionRate(): Optional<Double> =
+        quantityToFiatConversionRate.getOptional("quantity_to_fiat_conversion_rate")
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -80,6 +94,16 @@ private constructor(
     @JsonProperty("do_not_invoice")
     @ExcludeMissing
     fun _doNotInvoice(): JsonField<Boolean> = doNotInvoice
+
+    /**
+     * Returns the raw JSON value of [quantityToFiatConversionRate].
+     *
+     * Unlike [quantityToFiatConversionRate], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    @JsonProperty("quantity_to_fiat_conversion_rate")
+    @ExcludeMissing
+    fun _quantityToFiatConversionRate(): JsonField<Double> = quantityToFiatConversionRate
 
     /**
      * Returns the raw JSON value of [scheduleItems].
@@ -113,6 +137,7 @@ private constructor(
 
         private var creditType: JsonField<CreditTypeData> = JsonMissing.of()
         private var doNotInvoice: JsonField<Boolean> = JsonMissing.of()
+        private var quantityToFiatConversionRate: JsonField<Double> = JsonMissing.of()
         private var scheduleItems: JsonField<MutableList<ScheduleItem>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -120,6 +145,7 @@ private constructor(
         internal fun from(schedulePointInTime: SchedulePointInTime) = apply {
             creditType = schedulePointInTime.creditType
             doNotInvoice = schedulePointInTime.doNotInvoice
+            quantityToFiatConversionRate = schedulePointInTime.quantityToFiatConversionRate
             scheduleItems = schedulePointInTime.scheduleItems.map { it.toMutableList() }
             additionalProperties = schedulePointInTime.additionalProperties.toMutableMap()
         }
@@ -152,6 +178,24 @@ private constructor(
          */
         fun doNotInvoice(doNotInvoice: JsonField<Boolean>) = apply {
             this.doNotInvoice = doNotInvoice
+        }
+
+        /**
+         * Conversion rate from unused quantity units to the invoice currency for a quantity-based
+         * postpaid commit.
+         */
+        fun quantityToFiatConversionRate(quantityToFiatConversionRate: Double) =
+            quantityToFiatConversionRate(JsonField.of(quantityToFiatConversionRate))
+
+        /**
+         * Sets [Builder.quantityToFiatConversionRate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantityToFiatConversionRate] with a well-typed [Double]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun quantityToFiatConversionRate(quantityToFiatConversionRate: JsonField<Double>) = apply {
+            this.quantityToFiatConversionRate = quantityToFiatConversionRate
         }
 
         fun scheduleItems(scheduleItems: List<ScheduleItem>) =
@@ -208,6 +252,7 @@ private constructor(
             SchedulePointInTime(
                 creditType,
                 doNotInvoice,
+                quantityToFiatConversionRate,
                 (scheduleItems ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
@@ -230,6 +275,7 @@ private constructor(
 
         creditType().ifPresent { it.validate() }
         doNotInvoice()
+        quantityToFiatConversionRate()
         scheduleItems().ifPresent { it.forEach { it.validate() } }
         validated = true
     }
@@ -251,6 +297,7 @@ private constructor(
     internal fun validity(): Int =
         (creditType.asKnown().getOrNull()?.validity() ?: 0) +
             (if (doNotInvoice.asKnown().isPresent) 1 else 0) +
+            (if (quantityToFiatConversionRate.asKnown().isPresent) 1 else 0) +
             (scheduleItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     class ScheduleItem
@@ -621,16 +668,23 @@ private constructor(
         return other is SchedulePointInTime &&
             creditType == other.creditType &&
             doNotInvoice == other.doNotInvoice &&
+            quantityToFiatConversionRate == other.quantityToFiatConversionRate &&
             scheduleItems == other.scheduleItems &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(creditType, doNotInvoice, scheduleItems, additionalProperties)
+        Objects.hash(
+            creditType,
+            doNotInvoice,
+            quantityToFiatConversionRate,
+            scheduleItems,
+            additionalProperties,
+        )
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SchedulePointInTime{creditType=$creditType, doNotInvoice=$doNotInvoice, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
+        "SchedulePointInTime{creditType=$creditType, doNotInvoice=$doNotInvoice, quantityToFiatConversionRate=$quantityToFiatConversionRate, scheduleItems=$scheduleItems, additionalProperties=$additionalProperties}"
 }

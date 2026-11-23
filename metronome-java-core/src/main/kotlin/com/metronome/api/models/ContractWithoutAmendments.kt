@@ -329,6 +329,15 @@ private constructor(
      * consolidation to occur. This field cannot be modified after a Contract has been created. If
      * this field is omitted, charges will appear on a separate invoice from usage charges.
      *
+     * For recurring fixed fees, such as a monthly platform fee, use a
+     * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+     * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of recurring
+     * scheduled charges with this field set to `ALL`. Metronome recalculates a subscription's usage
+     * invoice line items from the current contract each time it invoices, so the charges stay on
+     * the correct usage invoice after contract edits such as end date changes or transitions. Use
+     * this field for one-time scheduled charges and commit purchases, which subscriptions can't
+     * represent.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -1159,6 +1168,15 @@ private constructor(
          * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
          * consolidation to occur. This field cannot be modified after a Contract has been created.
          * If this field is omitted, charges will appear on a separate invoice from usage charges.
+         *
+         * For recurring fixed fees, such as a monthly platform fee, use a
+         * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+         * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of recurring
+         * scheduled charges with this field set to `ALL`. Metronome recalculates a subscription's
+         * usage invoice line items from the current contract each time it invoices, so the charges
+         * stay on the correct usage invoice after contract edits such as end date changes or
+         * transitions. Use this field for one-time scheduled charges and commit purchases, which
+         * subscriptions can't represent.
          */
         fun scheduledChargesOnUsageInvoices(
             scheduledChargesOnUsageInvoices: ScheduledChargesOnUsageInvoices
@@ -2003,6 +2021,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -2014,6 +2034,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
             }
@@ -2030,6 +2051,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 /**
@@ -2050,6 +2072,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     else -> Value._UNKNOWN
@@ -2068,6 +2091,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     else -> throw MetronomeInvalidDataException("Unknown Frequency: $value")
@@ -6025,6 +6049,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -6038,6 +6064,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -6057,6 +6084,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -6078,6 +6106,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     DAILY -> Value.DAILY
@@ -6097,6 +6126,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     DAILY -> Known.DAILY
@@ -9371,6 +9401,8 @@ private constructor(
 
                 @JvmField val QUARTERLY = of("QUARTERLY")
 
+                @JvmField val SEMI_ANNUAL = of("SEMI_ANNUAL")
+
                 @JvmField val ANNUAL = of("ANNUAL")
 
                 @JvmField val WEEKLY = of("WEEKLY")
@@ -9384,6 +9416,7 @@ private constructor(
             enum class Known {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -9403,6 +9436,7 @@ private constructor(
             enum class Value {
                 MONTHLY,
                 QUARTERLY,
+                SEMI_ANNUAL,
                 ANNUAL,
                 WEEKLY,
                 DAILY,
@@ -9424,6 +9458,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Value.MONTHLY
                     QUARTERLY -> Value.QUARTERLY
+                    SEMI_ANNUAL -> Value.SEMI_ANNUAL
                     ANNUAL -> Value.ANNUAL
                     WEEKLY -> Value.WEEKLY
                     DAILY -> Value.DAILY
@@ -9443,6 +9478,7 @@ private constructor(
                 when (this) {
                     MONTHLY -> Known.MONTHLY
                     QUARTERLY -> Known.QUARTERLY
+                    SEMI_ANNUAL -> Known.SEMI_ANNUAL
                     ANNUAL -> Known.ANNUAL
                     WEEKLY -> Known.WEEKLY
                     DAILY -> Known.DAILY
@@ -10443,6 +10479,15 @@ private constructor(
      * invoice. The charge's `timestamp` must match the usage invoice's `ending_before` date for
      * consolidation to occur. This field cannot be modified after a Contract has been created. If
      * this field is omitted, charges will appear on a separate invoice from usage charges.
+     *
+     * For recurring fixed fees, such as a monthly platform fee, use a
+     * [subscription](/guides/pricing-packaging/subscription/provision-your-customer) with
+     * `billing_cycle_config.invoice_placement` set to `ON_USAGE_INVOICE` instead of recurring
+     * scheduled charges with this field set to `ALL`. Metronome recalculates a subscription's usage
+     * invoice line items from the current contract each time it invoices, so the charges stay on
+     * the correct usage invoice after contract edits such as end date changes or transitions. Use
+     * this field for one-time scheduled charges and commit purchases, which subscriptions can't
+     * represent.
      */
     class ScheduledChargesOnUsageInvoices
     @JsonCreator

@@ -99,6 +99,7 @@ internal class ContractWithoutAmendmentsTest {
                                         .build()
                                 )
                                 .doNotInvoice(true)
+                                .quantityToFiatConversionRate(0.0)
                                 .addScheduleItem(
                                     SchedulePointInTime.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -268,6 +269,7 @@ internal class ContractWithoutAmendmentsTest {
                                         .build()
                                 )
                                 .doNotInvoice(true)
+                                .quantityToFiatConversionRate(0.0)
                                 .addScheduleItem(
                                     SchedulePointInTime.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -443,6 +445,7 @@ internal class ContractWithoutAmendmentsTest {
                                         .build()
                                 )
                                 .doNotInvoice(true)
+                                .quantityToFiatConversionRate(0.0)
                                 .addScheduleItem(
                                     SchedulePointInTime.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1093,6 +1096,7 @@ internal class ContractWithoutAmendmentsTest {
                                     .build()
                             )
                             .doNotInvoice(true)
+                            .quantityToFiatConversionRate(0.0)
                             .addScheduleItem(
                                 SchedulePointInTime.ScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1263,6 +1267,7 @@ internal class ContractWithoutAmendmentsTest {
                                     .build()
                             )
                             .doNotInvoice(true)
+                            .quantityToFiatConversionRate(0.0)
                             .addScheduleItem(
                                 SchedulePointInTime.ScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -1435,6 +1440,7 @@ internal class ContractWithoutAmendmentsTest {
                                     .build()
                             )
                             .doNotInvoice(true)
+                            .quantityToFiatConversionRate(0.0)
                             .addScheduleItem(
                                 SchedulePointInTime.ScheduleItem.builder()
                                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2079,6 +2085,7 @@ internal class ContractWithoutAmendmentsTest {
                                         .build()
                                 )
                                 .doNotInvoice(true)
+                                .quantityToFiatConversionRate(0.0)
                                 .addScheduleItem(
                                     SchedulePointInTime.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2248,6 +2255,7 @@ internal class ContractWithoutAmendmentsTest {
                                         .build()
                                 )
                                 .doNotInvoice(true)
+                                .quantityToFiatConversionRate(0.0)
                                 .addScheduleItem(
                                     SchedulePointInTime.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -2423,6 +2431,7 @@ internal class ContractWithoutAmendmentsTest {
                                         .build()
                                 )
                                 .doNotInvoice(true)
+                                .quantityToFiatConversionRate(0.0)
                                 .addScheduleItem(
                                     SchedulePointInTime.ScheduleItem.builder()
                                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

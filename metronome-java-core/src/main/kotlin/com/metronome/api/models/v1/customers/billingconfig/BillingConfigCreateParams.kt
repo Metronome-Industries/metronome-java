@@ -47,16 +47,23 @@ private constructor(
     fun billingProviderCustomerId(): String = body.billingProviderCustomerId()
 
     /**
+     * Deprecated and ignored by the server. The customer ID comes from
+     * `billing_provider_customer_id`.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
+    @Deprecated("deprecated")
     fun awsCustomerAccountId(): Optional<String> = body.awsCustomerAccountId()
 
     /**
+     * Deprecated and ignored by the server. The customer ID comes from
+     * `billing_provider_customer_id`.
+     *
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun awsCustomerId(): Optional<String> = body.awsCustomerId()
+    @Deprecated("deprecated") fun awsCustomerId(): Optional<String> = body.awsCustomerId()
 
     /**
      * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -92,6 +99,7 @@ private constructor(
      * Unlike [awsCustomerAccountId], this method doesn't throw if the JSON field has an unexpected
      * type.
      */
+    @Deprecated("deprecated")
     fun _awsCustomerAccountId(): JsonField<String> = body._awsCustomerAccountId()
 
     /**
@@ -99,7 +107,7 @@ private constructor(
      *
      * Unlike [awsCustomerId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _awsCustomerId(): JsonField<String> = body._awsCustomerId()
+    @Deprecated("deprecated") fun _awsCustomerId(): JsonField<String> = body._awsCustomerId()
 
     /**
      * Returns the raw JSON value of [awsProductCode].
@@ -205,6 +213,11 @@ private constructor(
             body.billingProviderCustomerId(billingProviderCustomerId)
         }
 
+        /**
+         * Deprecated and ignored by the server. The customer ID comes from
+         * `billing_provider_customer_id`.
+         */
+        @Deprecated("deprecated")
         fun awsCustomerAccountId(awsCustomerAccountId: String) = apply {
             body.awsCustomerAccountId(awsCustomerAccountId)
         }
@@ -216,10 +229,16 @@ private constructor(
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
+        @Deprecated("deprecated")
         fun awsCustomerAccountId(awsCustomerAccountId: JsonField<String>) = apply {
             body.awsCustomerAccountId(awsCustomerAccountId)
         }
 
+        /**
+         * Deprecated and ignored by the server. The customer ID comes from
+         * `billing_provider_customer_id`.
+         */
+        @Deprecated("deprecated")
         fun awsCustomerId(awsCustomerId: String) = apply { body.awsCustomerId(awsCustomerId) }
 
         /**
@@ -229,6 +248,7 @@ private constructor(
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
+        @Deprecated("deprecated")
         fun awsCustomerId(awsCustomerId: JsonField<String>) = apply {
             body.awsCustomerId(awsCustomerId)
         }
@@ -480,16 +500,24 @@ private constructor(
             billingProviderCustomerId.getRequired("billing_provider_customer_id")
 
         /**
+         * Deprecated and ignored by the server. The customer ID comes from
+         * `billing_provider_customer_id`.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
+        @Deprecated("deprecated")
         fun awsCustomerAccountId(): Optional<String> =
             awsCustomerAccountId.getOptional("aws_customer_account_id")
 
         /**
+         * Deprecated and ignored by the server. The customer ID comes from
+         * `billing_provider_customer_id`.
+         *
          * @throws MetronomeInvalidDataException if the JSON field has an unexpected type (e.g. if
          *   the server responded with an unexpected value).
          */
+        @Deprecated("deprecated")
         fun awsCustomerId(): Optional<String> = awsCustomerId.getOptional("aws_customer_id")
 
         /**
@@ -529,6 +557,7 @@ private constructor(
          * Unlike [awsCustomerAccountId], this method doesn't throw if the JSON field has an
          * unexpected type.
          */
+        @Deprecated("deprecated")
         @JsonProperty("aws_customer_account_id")
         @ExcludeMissing
         fun _awsCustomerAccountId(): JsonField<String> = awsCustomerAccountId
@@ -539,6 +568,7 @@ private constructor(
          * Unlike [awsCustomerId], this method doesn't throw if the JSON field has an unexpected
          * type.
          */
+        @Deprecated("deprecated")
         @JsonProperty("aws_customer_id")
         @ExcludeMissing
         fun _awsCustomerId(): JsonField<String> = awsCustomerId
@@ -637,6 +667,11 @@ private constructor(
                 this.billingProviderCustomerId = billingProviderCustomerId
             }
 
+            /**
+             * Deprecated and ignored by the server. The customer ID comes from
+             * `billing_provider_customer_id`.
+             */
+            @Deprecated("deprecated")
             fun awsCustomerAccountId(awsCustomerAccountId: String) =
                 awsCustomerAccountId(JsonField.of(awsCustomerAccountId))
 
@@ -647,10 +682,16 @@ private constructor(
              * value instead. This method is primarily for setting the field to an undocumented or
              * not yet supported value.
              */
+            @Deprecated("deprecated")
             fun awsCustomerAccountId(awsCustomerAccountId: JsonField<String>) = apply {
                 this.awsCustomerAccountId = awsCustomerAccountId
             }
 
+            /**
+             * Deprecated and ignored by the server. The customer ID comes from
+             * `billing_provider_customer_id`.
+             */
+            @Deprecated("deprecated")
             fun awsCustomerId(awsCustomerId: String) = awsCustomerId(JsonField.of(awsCustomerId))
 
             /**
@@ -660,6 +701,7 @@ private constructor(
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
+            @Deprecated("deprecated")
             fun awsCustomerId(awsCustomerId: JsonField<String>) = apply {
                 this.awsCustomerId = awsCustomerId
             }

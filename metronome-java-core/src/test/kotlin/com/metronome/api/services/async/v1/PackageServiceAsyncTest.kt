@@ -479,6 +479,9 @@ internal class PackageServiceAsyncTest {
                                     .value(0L)
                                     .build()
                             )
+                            .anchorDate(
+                                PackageCreateParams.RecurringCommit.AnchorDate.SUBSCRIPTION_START
+                            )
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
                             .description("description")
@@ -601,6 +604,9 @@ internal class PackageServiceAsyncTest {
                                     )
                                     .value(0L)
                                     .build()
+                            )
+                            .anchorDate(
+                                PackageCreateParams.RecurringCredit.AnchorDate.SUBSCRIPTION_START
                             )
                             .addApplicableProductId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .addApplicableProductTag("string")
@@ -831,6 +837,11 @@ internal class PackageServiceAsyncTest {
                             )
                             .billingCycleConfig(
                                 PackageCreateParams.Subscription.BillingCycleConfig.builder()
+                                    .billingCycleAnchor(
+                                        PackageCreateParams.Subscription.BillingCycleConfig
+                                            .BillingCycleAnchor
+                                            .SUBSCRIPTION_START
+                                    )
                                     .invoicePlacement(
                                         PackageCreateParams.Subscription.BillingCycleConfig
                                             .InvoicePlacement
@@ -869,6 +880,7 @@ internal class PackageServiceAsyncTest {
                                     .value(0L)
                                     .build()
                             )
+                            .subscriptionAlias("subscription_alias")
                             .temporaryId("temporary_id")
                             .build()
                     )
